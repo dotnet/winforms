@@ -1,0 +1,89 @@
+variables:
+  Build.Repository.Clean: true
+  _HelixType: build/product
+  _HelixSource: pr/dotnet/arcade-minimalci-sample/$(Build.SourceBranch)
+  _enableTelemetry: true
+
+resources:
+  containers:
+  - container: LinuxContainer
+    image: microsoft/dotnet-buildtools-prereqs:ubuntu-14.04-cross-0cd4667-20170319080304
+
+trigger:
+- master
+
+# To be added in the future when VSTS supports this feature
+# pr:
+# - master
+
+# Three phases for each of the three OSes we want to run on
+phases:
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+    agentOs: Windows_NT
+    name: Windows_NT
+    enableTelemetry: $(_enableTelemetry)
+    queue:
+      name: dotnet-external-temp
+      parallel: 99
+      matrix:
+        debug_configuration:
+          _BuildConfig: Debug
+        release_configuration:
+          _BuildConfig: Release
+    steps:
+    - script: eng\common\cibuild.cmd
+        -configuration $(_BuildConfig)
+        -prepareMachine
+      name: Build
+      displayName: Build
+      condition: succeeded()
+    variables:
+      _HelixBuildConfig: $(_BuildConfig)
+
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+    agentOs: OSX
+    name: OSX
+    enableTelemetry: $(_enableTelemetry)
+    queue:
+      name: Hosted macOS Preview
+      parallel: 99
+      matrix:
+        debug_configuration:
+          _BuildConfig: Debug
+        release_configuration:
+          _BuildConfig: Release
+    steps:
+    - script: eng/common/cibuild.sh
+        --configuration $(_BuildConfig)
+        --prepareMachine
+      name: Build
+      displayName: Build
+      condition: succeeded()
+    variables:
+      _HelixBuildConfig: $(_BuildConfig)
+
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+    agentOs: Linux
+    name: Linux
+    enableTelemetry: $(_enableTelemetry)
+    queue:
+      name: Hosted Ubuntu 1604
+      parallel: 99
+      container: LinuxContainer
+      matrix:
+        debug_configuration:
+          _BuildConfig: Debug
+        release_configuration:
+          _BuildConfig: Release
+    steps:
+    - script: eng/common/cibuild.sh
+        --configuration $(_BuildConfig)
+        --prepareMachine
+      name: Build
+      displayName: Build
+      condition: succeeded()
+    variables:
+      _HelixBuildConfig: $(_BuildConfig)
