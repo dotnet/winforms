@@ -24,7 +24,7 @@ phases:
     name: Windows_NT
     enableTelemetry: $(_enableTelemetry)
     queue:
-      name: dotnet-external-temp
+      name: DotNetCore-Windows
       parallel: 99
       matrix:
         debug_configuration:
