@@ -24,7 +24,7 @@ phases:
     name: Windows_NT
     enableTelemetry: $(_enableTelemetry)
     queue:
-      name: DotNetCore-Windows
+      name: dotnet-internal-temp
       parallel: 99
       matrix:
         debug_configuration:
@@ -47,7 +47,7 @@ phases:
     name: OSX
     enableTelemetry: $(_enableTelemetry)
     queue:
-      name: Hosted macOS Preview
+      name: Hosted Mac Internal
       parallel: 99
       matrix:
         debug_configuration:
