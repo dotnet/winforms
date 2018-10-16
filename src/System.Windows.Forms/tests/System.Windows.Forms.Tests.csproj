@@ -14,7 +14,7 @@
 
   <!-- Project references -->
   <ItemGroup>
-    <ProjectReference Include="..\src\HelloWorld.csproj" />
+    <ProjectReference Include="..\src\System.Windows.Forms.csproj" />
   </ItemGroup>
 
 </Project>
