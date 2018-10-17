@@ -27,10 +27,10 @@ phases:
       name: dotnet-internal-temp
       parallel: 99
       matrix:
-        debug_configuration:
-          _BuildConfig: Debug
-        release_configuration:
-          _BuildConfig: Release
+        netcoreapp-Windows_NT-Debug:
+          _BuildConfig: netcoreapp-Windows_NT-Debug
+        netcoreapp-Windows_NT-Release:
+          _BuildConfig: netcoreapp-Windows_NT-Release
     steps:
     - script: eng\common\cibuild.cmd
         -configuration $(_BuildConfig)
@@ -41,49 +41,49 @@ phases:
     variables:
       _HelixBuildConfig: $(_BuildConfig)
 
-- template: /eng/common/templates/phases/base.yml
-  parameters:
-    agentOs: OSX
-    name: OSX
-    enableTelemetry: $(_enableTelemetry)
-    queue:
-      name: Hosted Mac Internal
-      parallel: 99
-      matrix:
-        debug_configuration:
-          _BuildConfig: Debug
-        release_configuration:
-          _BuildConfig: Release
-    steps:
-    - script: eng/common/cibuild.sh
-        --configuration $(_BuildConfig)
-        --prepareMachine
-      name: Build
-      displayName: Build
-      condition: succeeded()
-    variables:
-      _HelixBuildConfig: $(_BuildConfig)
+# - template: /eng/common/templates/phases/base.yml
+#   parameters:
+#     agentOs: OSX
+#     name: OSX
+#     enableTelemetry: $(_enableTelemetry)
+#     queue:
+#       name: Hosted Mac Internal
+#       parallel: 99
+#       matrix:
+#         debug_configuration:
+#           _BuildConfig: Debug
+#         release_configuration:
+#           _BuildConfig: Release
+#     steps:
+#     - script: eng/common/cibuild.sh
+#         --configuration $(_BuildConfig)
+#         --prepareMachine
+#       name: Build
+#       displayName: Build
+#       condition: succeeded()
+#     variables:
+#       _HelixBuildConfig: $(_BuildConfig)
 
-- template: /eng/common/templates/phases/base.yml
-  parameters:
-    agentOs: Linux
-    name: Linux
-    enableTelemetry: $(_enableTelemetry)
-    queue:
-      name: Hosted Ubuntu 1604
-      parallel: 99
-      container: LinuxContainer
-      matrix:
-        debug_configuration:
-          _BuildConfig: Debug
-        release_configuration:
-          _BuildConfig: Release
-    steps:
-    - script: eng/common/cibuild.sh
-        --configuration $(_BuildConfig)
-        --prepareMachine
-      name: Build
-      displayName: Build
-      condition: succeeded()
-    variables:
-      _HelixBuildConfig: $(_BuildConfig)
+# - template: /eng/common/templates/phases/base.yml
+#   parameters:
+#     agentOs: Linux
+#     name: Linux
+#     enableTelemetry: $(_enableTelemetry)
+#     queue:
+#       name: Hosted Ubuntu 1604
+#       parallel: 99
+#       container: LinuxContainer
+#       matrix:
+#         debug_configuration:
+#           _BuildConfig: Debug
+#         release_configuration:
+#           _BuildConfig: Release
+#     steps:
+#     - script: eng/common/cibuild.sh
+#         --configuration $(_BuildConfig)
+#         --prepareMachine
+#       name: Build
+#       displayName: Build
+#       condition: succeeded()
+#     variables:
+#       _HelixBuildConfig: $(_BuildConfig)
