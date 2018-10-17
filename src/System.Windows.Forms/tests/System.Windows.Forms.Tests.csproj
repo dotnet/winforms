@@ -7,9 +7,7 @@
 
   <!-- Package references -->
   <ItemGroup>
-    <PackageReference Include="$(XUnitStaFactPackage)">
-      <Version>$(XUnitStaFactPackageVersion)</Version>
-    </PackageReference>
+    <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />
   </ItemGroup>
 
   <!-- Project references -->
