@@ -27,9 +27,9 @@ phases:
       name: dotnet-internal-temp
       parallel: 99
       matrix:
-        netcoreapp-Windows_NT-Debug:
+        Debug:
           _BuildConfig: netcoreapp-Windows_NT-Debug
-        netcoreapp-Windows_NT-Release:
+        Release:
           _BuildConfig: netcoreapp-Windows_NT-Release
     steps:
     - script: eng\common\cibuild.cmd
