@@ -1,11 +1,14 @@
 parameters:
   dependsOn: ''
   queue: {}
+  configuration: Debug
 phases:
   - phase: Asset_Registry_Publish
     displayName: Publish to Build Asset Registry
     dependsOn: ${{ parameters.dependsOn }}
     queue: ${{ parameters.queue }}
+    variables:
+      config: ${{ parameters.configuration }}
     steps:
       - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
         - task: DownloadBuildArtifacts@0
@@ -21,6 +24,7 @@ phases:
             SecretsFilter: 'MaestroAccessToken'
           condition: succeeded()
         - script: eng\common\publishbuildassets.cmd
+            /p:Configuration=$(config)
             /p:ManifestsPath='$(Build.StagingDirectory)/Download/AssetManifests'
             /p:BuildAssetRegistryToken=$(MaestroAccessToken)
             /p:MaestroApiEndpoint=https://maestro-prod.westus2.cloudapp.azure.com

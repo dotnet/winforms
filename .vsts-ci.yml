@@ -1,89 +1,58 @@
 variables:
   Build.Repository.Clean: true
-  _HelixType: build/product
-  _HelixSource: pr/dotnet/arcade-minimalci-sample/$(Build.SourceBranch)
   _enableTelemetry: true
 
-resources:
-  containers:
-  - container: LinuxContainer
-    image: microsoft/dotnet-buildtools-prereqs:ubuntu-14.04-cross-0cd4667-20170319080304
+  _HelixType: build/product
+  ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
+    _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
+  ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+    _TeamName: DotNetCore
+    _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
 
-trigger:
-- master
+# leave this commented out for now so commits to every branch will trigger a build
+#trigger:
+#- master
 
 # To be added in the future when VSTS supports this feature
 # pr:
 # - master
 
-# Three phases for each of the three OSes we want to run on
 phases:
-- template: /eng/common/templates/phases/base.yml
+- template: /eng/build.yml
   parameters:
-    agentOs: Windows_NT
     name: Windows_NT
     enableTelemetry: $(_enableTelemetry)
     queue:
-      name: dotnet-internal-temp
+      # For public or PR jobs, use the hosted pool.  For internal jobs use the internal pool.
+      # Will eventually change this to two BYOC pools.
+      ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
+        name: dotnet-external-temp
+      ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+        name: dotnet-internal-temp
       parallel: 99
       matrix:
-        Debug:
+        Build_Debug:
           _BuildConfig: netcoreapp-Windows_NT-Debug
-        Release:
+          _PublishType: none
+          _SignType: test
+          _DotNetPublishToBlobFeed : false
+        Build_Release:
           _BuildConfig: netcoreapp-Windows_NT-Release
-    steps:
-    - script: eng\common\cibuild.cmd
-        -configuration $(_BuildConfig)
-        -prepareMachine
-      name: Build
-      displayName: Build
-      condition: succeeded()
-    variables:
-      _HelixBuildConfig: $(_BuildConfig)
+          # PRs or external builds are not signed.
+          ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
+            _PublishType: none
+            _SignType: test
+            _DotNetPublishToBlobFeed : false
+          ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+            _PublishType: blob
+            _SignType: test # set to real once our build definition has signing approval
+            _DotNetPublishToBlobFeed : true
 
-# - template: /eng/common/templates/phases/base.yml
-#   parameters:
-#     agentOs: OSX
-#     name: OSX
-#     enableTelemetry: $(_enableTelemetry)
-#     queue:
-#       name: Hosted Mac Internal
-#       parallel: 99
-#       matrix:
-#         debug_configuration:
-#           _BuildConfig: Debug
-#         release_configuration:
-#           _BuildConfig: Release
-#     steps:
-#     - script: eng/common/cibuild.sh
-#         --configuration $(_BuildConfig)
-#         --prepareMachine
-#       name: Build
-#       displayName: Build
-#       condition: succeeded()
-#     variables:
-#       _HelixBuildConfig: $(_BuildConfig)
-
-# - template: /eng/common/templates/phases/base.yml
-#   parameters:
-#     agentOs: Linux
-#     name: Linux
-#     enableTelemetry: $(_enableTelemetry)
-#     queue:
-#       name: Hosted Ubuntu 1604
-#       parallel: 99
-#       container: LinuxContainer
-#       matrix:
-#         debug_configuration:
-#           _BuildConfig: Debug
-#         release_configuration:
-#           _BuildConfig: Release
-#     steps:
-#     - script: eng/common/cibuild.sh
-#         --configuration $(_BuildConfig)
-#         --prepareMachine
-#       name: Build
-#       displayName: Build
-#       condition: succeeded()
-#     variables:
-#       _HelixBuildConfig: $(_BuildConfig)
+- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+  - template: /eng/common/templates/phases/publish-build-assets.yml
+    parameters:
+      dependsOn:
+        - Windows_NT
+      queue:
+        name: Hosted VS2017
+      configuration: netcoreapp-Windows_NT-Debug
