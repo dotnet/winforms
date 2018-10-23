@@ -1,8 +1,8 @@
 variables:
   Build.Repository.Clean: true
   _enableTelemetry: true
-
   _HelixType: build/product
+
   # Change helix sources based on build project/reason
   ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
     _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
@@ -11,8 +11,8 @@ variables:
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
 
 # leave this commented out for now so commits to every branch will trigger a build
-#trigger:
-#- master
+trigger:
+- master
 
 # To be added in the future when VSTS supports this feature
 # pr:
