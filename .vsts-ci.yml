@@ -3,8 +3,6 @@ variables:
   _enableTelemetry: true
   _HelixType: build/product
 
-${{ if not(contains(variables.Build.DefinitionName, 'github')) }}:
-
   # Change helix sources based on build project/reason
   # TODO: Once we go public, remove the build definition name check
   ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
