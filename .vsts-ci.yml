@@ -10,7 +10,7 @@ variables:
     _TeamName: DotNetCore
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
 
-# leave this commented out for now so commits to every branch will trigger a build
+# only trigger builds for the master branch
 trigger:
 - master
 
