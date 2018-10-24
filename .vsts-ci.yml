@@ -49,7 +49,7 @@ phases:
             _PublishType: none
             _SignType: test
             _DotNetPublishToBlobFeed : false
-           ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+          ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
             _PublishType: blob
             _SignType: test # set to real once our build definition has signing approval
             _DotNetPublishToBlobFeed : true
