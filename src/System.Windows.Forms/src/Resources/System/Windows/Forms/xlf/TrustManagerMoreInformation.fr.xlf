@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="fr" original="../TrustManagerMoreInformation.resx">
+    <body>
+      <trans-unit id="$this.AccessibleDescription">
+        <source>Trust Manager More Information Dialog Box</source>
+        <target state="new">Trust Manager More Information Dialog Box</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="$this.AccessibleName">
+        <source>TrustManagerMoreInformationDialog</source>
+        <target state="new">TrustManagerMoreInformationDialog</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnClose.AccessibleDescription">
+        <source>Close button to discard the dialog box</source>
+        <target state="new">Close button to discard the dialog box</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnClose.AccessibleName">
+        <source>CloseButton</source>
+        <target state="new">CloseButton</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnClose.Text">
+        <source>Close</source>
+        <target state="new">Close</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblInstallation.AccessibleDescription">
+        <source>Installation Section</source>
+        <target state="new">Installation Section</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblInstallation.AccessibleName">
+        <source>InstallationSection</source>
+        <target state="new">InstallationSection</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblInstallation.Text">
+        <source>Installation</source>
+        <target state="new">Installation</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblInstallationContent.AccessibleDescription">
+        <source>Installation Section Body</source>
+        <target state="new">Installation Section Body</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblInstallationContent.AccessibleName">
+        <source>InstallationSectionBody</source>
+        <target state="new">InstallationSectionBody</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblInstallationContent.Text">
+        <source>lblInstallationContent</source>
+        <target state="new">lblInstallationContent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblLocation.AccessibleDescription">
+        <source>Location Section</source>
+        <target state="new">Location Section</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblLocation.AccessibleName">
+        <source>LocationSection</source>
+        <target state="new">LocationSection</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblLocation.Text">
+        <source>Location</source>
+        <target state="new">Location</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblLocationContent.AccessibleDescription">
+        <source>Location Section Body</source>
+        <target state="new">Location Section Body</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblLocationContent.AccessibleName">
+        <source>LocationSectionBody</source>
+        <target state="new">LocationSectionBody</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblLocationContent.Text">
+        <source>lblLocationContent</source>
+        <target state="new">lblLocationContent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMachineAccess.AccessibleDescription">
+        <source>Machine Access Section</source>
+        <target state="new">Machine Access Section</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMachineAccess.AccessibleName">
+        <source>MachineAccessSection</source>
+        <target state="new">MachineAccessSection</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMachineAccess.Text">
+        <source>Machine Access</source>
+        <target state="new">Machine Access</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMachineAccessContent.AccessibleDescription">
+        <source>Machine Access Section Body</source>
+        <target state="new">Machine Access Section Body</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMachineAccessContent.AccessibleName">
+        <source>MachineAccessSectionBody</source>
+        <target state="new">MachineAccessSectionBody</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMachineAccessContent.Text">
+        <source>lblMachineAccessContent</source>
+        <target state="new">lblMachineAccessContent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblPublisher.AccessibleDescription">
+        <source>Publisher Section</source>
+        <target state="new">Publisher Section</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblPublisher.AccessibleName">
+        <source>PublisherSection</source>
+        <target state="new">PublisherSection</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblPublisher.Text">
+        <source>Publisher</source>
+        <target state="new">Publisher</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblPublisherContent.AccessibleDescription">
+        <source>Publisher Section Body</source>
+        <target state="new">Publisher Section Body</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblPublisherContent.AccessibleName">
+        <source>PublisherSectionBody</source>
+        <target state="new">PublisherSectionBody</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblPublisherContent.Text">
+        <source>lblPublisherContent</source>
+        <target state="new">lblPublisherContent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxInstallation.AccessibleDescription">
+        <source>Installation Warning Level Icon</source>
+        <target state="new">Installation Warning Level Icon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxInstallation.AccessibleName">
+        <source>InstallationWarningLevelIcon</source>
+        <target state="new">InstallationWarningLevelIcon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxLocation.AccessibleDescription">
+        <source>Location Warning Level Icon</source>
+        <target state="new">Location Warning Level Icon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxLocation.AccessibleName">
+        <source>LocationWarningLevelIcon</source>
+        <target state="new">LocationWarningLevelIcon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxMachineAccess.AccessibleDescription">
+        <source>Machine Access Warning Level Icon</source>
+        <target state="new">Machine Access Warning Level Icon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxMachineAccess.AccessibleName">
+        <source>MachineAccessWarningLevelIcon</source>
+        <target state="new">MachineAccessWarningLevelIcon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxPublisher.AccessibleDescription">
+        <source>Publisher Warning Level Icon</source>
+        <target state="new">Publisher Warning Level Icon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxPublisher.AccessibleName">
+        <source>PublisherWarningLevelIcon</source>
+        <target state="new">PublisherWarningLevelIcon</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

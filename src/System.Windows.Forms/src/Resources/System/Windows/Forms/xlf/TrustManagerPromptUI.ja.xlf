@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ja" original="../TrustManagerPromptUI.resx">
+    <body>
+      <trans-unit id="$this.AccessibleName">
+        <source>TrustManagerDialog</source>
+        <target state="new">TrustManagerDialog</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnCancel.AccessibleDescription">
+        <source>Do not Install or Run button</source>
+        <target state="new">Do not Install or Run button</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnCancel.AccessibleName">
+        <source>DoNotInstallOrRunButton</source>
+        <target state="new">DoNotInstallOrRunButton</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnInstall.AccessibleDescription">
+        <source>Install or Run button</source>
+        <target state="new">Install or Run button</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnInstall.AccessibleName">
+        <source>InstallOrRunButton</source>
+        <target state="new">InstallOrRunButton</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnInstall.Text">
+        <source>&amp;Install</source>
+        <target state="new">&amp;Install</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblFrom.AccessibleDescription">
+        <source>Application Source</source>
+        <target state="new">Application Source</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblFrom.AccessibleName">
+        <source>ApplicationSourceLabel</source>
+        <target state="new">ApplicationSourceLabel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblFrom.Text">
+        <source>From (Hover over the string below to see the full domain):</source>
+        <target state="new">From (Hover over the string below to see the full domain):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblName.AccessibleDescription">
+        <source>Application Name</source>
+        <target state="new">Application Name</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblName.AccessibleName">
+        <source>ApplicationNameLabel</source>
+        <target state="new">ApplicationNameLabel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblName.Text">
+        <source>&amp;Name:</source>
+        <target state="new">&amp;Name:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblPublisher.AccessibleDescription">
+        <source>Application Publisher</source>
+        <target state="new">Application Publisher</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblPublisher.AccessibleName">
+        <source>ApplicationPublisherLabel</source>
+        <target state="new">ApplicationPublisherLabel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblPublisher.Text">
+        <source>&amp;Publisher:</source>
+        <target state="new">&amp;Publisher:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblQuestion.AccessibleDescription">
+        <source>Trust Manager Question</source>
+        <target state="new">Trust Manager Question</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblQuestion.AccessibleName">
+        <source>QuestionLabel</source>
+        <target state="new">QuestionLabel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblQuestion.Text">
+        <source>lblQuestion</source>
+        <target state="new">lblQuestion</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="linkLblFromUrl.AccessibleDescription">
+        <source>Application Source Link</source>
+        <target state="new">Application Source Link</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="linkLblFromUrl.AccessibleName">
+        <source>ApplicationSourceLink</source>
+        <target state="new">ApplicationSourceLink</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="linkLblFromUrl.Text">
+        <source>linkLblFromUrl</source>
+        <target state="new">linkLblFromUrl</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="linkLblName.AccessibleDescription">
+        <source>Application Name Link</source>
+        <target state="new">Application Name Link</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="linkLblName.AccessibleName">
+        <source>ApplicationNameLink</source>
+        <target state="new">ApplicationNameLink</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="linkLblName.Text">
+        <source>linkLblName</source>
+        <target state="new">linkLblName</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="linkLblPublisher.AccessibleDescription">
+        <source>Application Publisher Link</source>
+        <target state="new">Application Publisher Link</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="linkLblPublisher.AccessibleName">
+        <source>ApplicationPublisherLink</source>
+        <target state="new">ApplicationPublisherLink</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="linkLblPublisher.Text">
+        <source>linkLblPublisher</source>
+        <target state="new">linkLblPublisher</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxQuestion.AccessibleDescription">
+        <source>Trust Manager Question Icon</source>
+        <target state="new">Trust Manager Question Icon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxQuestion.AccessibleName">
+        <source>QuestionIcon</source>
+        <target state="new">QuestionIcon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxWarning.AccessibleDescription">
+        <source>Warning Level Icon</source>
+        <target state="new">Warning Level Icon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pictureBoxWarning.AccessibleName">
+        <source>WarningLevelIcon</source>
+        <target state="new">WarningLevelIcon</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="tableLayoutPanelButtons.Text">
+        <source>tableLayoutPanelButtons</source>
+        <target state="new">tableLayoutPanelButtons</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="tableLayoutPanelInfo.Text">
+        <source>tableLayoutPanelInfo</source>
+        <target state="new">tableLayoutPanelInfo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="tableLayoutPanelOuter.Text">
+        <source>tableLayoutPanelOuter</source>
+        <target state="new">tableLayoutPanelOuter</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="tableLayoutPanelQuestion.Text">
+        <source>tableLayoutPanelQuestion</source>
+        <target state="new">tableLayoutPanelQuestion</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="warningTextTableLayoutPanel.Text">
+        <source>warningTextTableLayoutPanel</source>
+        <target state="new">warningTextTableLayoutPanel</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
