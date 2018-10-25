@@ -5,8 +5,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;WINFORMS_NAMESPACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;WIN95_SUPPORT;ISOLATION_IN_CLICKONCE;WINDOWS_FORMS_SWITCHES;CODE_ANALYSIS;RESOURCE_ANNOTATION_WORK;WINFORMS_NAMESPACE;WIN95_SUPPORT;USE_SECURITYTIP;OPTIMIZED_MEASUREMENTDC;DEBUGRESOURCES;SIGNED</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>    
+    <NoWarn>;NU5105;1701;1702;1705;1591;3019;649;618;CA2002;CA1821;CA1018;CA2229</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +19,8 @@
     <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview1-27018-01" />
     <PackageReference Include="System.Drawing.Design.Primitives" Version="4.6.0-preview1-27018-01" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Media.SoundPlayer" Version="4.6.0-alpha-27024-2" />
+    <PackageReference Include="System.Security.Cryptography.Cng" Version="4.6.0-preview1-27018-01" />
     <PackageReference Include="System.Security.Permissions" Version="4.5.0" />
   </ItemGroup>
 
