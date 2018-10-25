@@ -1,6 +1,5 @@
 variables:
   Build.Repository.Clean: true
-  _enableTelemetry: true
   _HelixType: build/product
   
   # Change helix sources based on build project/reason
@@ -23,7 +22,6 @@ phases:
 - template: /eng/build.yml
   parameters:
     name: Windows_NT
-    enableTelemetry: $(_enableTelemetry)
     queue:
       # Always use the internal pool. This is temporary while the github project is private.
       # TODO: Once we go public, remove the following line and uncomment the lines below
