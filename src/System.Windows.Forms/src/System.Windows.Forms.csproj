@@ -9,6 +9,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>    
     <NoWarn>;NU5105;1701;1702;1705;1591;3019;649;618;CA2002;CA1821;CA1018;CA2229</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <OmitResources>false</OmitResources>
+    <StringResourcesPath>Resources/Strings.resx</StringResourcesPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,21 +24,6 @@
     <PackageReference Include="System.Media.SoundPlayer" Version="4.6.0-alpha-27024-2" />
     <PackageReference Include="System.Security.Cryptography.Cng" Version="4.6.0-preview1-27018-01" />
     <PackageReference Include="System.Security.Permissions" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resources\Strings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
