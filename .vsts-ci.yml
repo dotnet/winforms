@@ -52,7 +52,7 @@ phases:
             _SignType: test # set to real once our build definition has signing approval
             _DotNetPublishToBlobFeed : true
 
-- phase: Prep for helix
+- phase: Helix_Prep
   steps:
   # prepare the helix package
   - task: CopyFiles@2
@@ -71,7 +71,7 @@ phases:
       targetFolder: $(Build.StagingDirectory)/helixPackage
       overWrite: true
 
-- phase: Helix publish
+- phase: Helix_Publish
   steps:
   # send the unit tests to helix
   - template: /eng/common/templates/steps/helix-publish.yml
