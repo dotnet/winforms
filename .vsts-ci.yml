@@ -89,7 +89,7 @@ phases:
       EnableXUnitReporter: true # required for reporting out xUnit test results to Mission Control
       IncludeDotNetCli: true # install the dot net cli
       DotNetCliPackageType: sdk
-      DotNetCliVersion: 3.0.100-alpha1-009703
+      DotNetCliVersion: 2.1.300
 
 # If the project is NOT public AND the build is NOT for a PR, publish build assets
 # TODO: Once we go public, remove the build definition name check
