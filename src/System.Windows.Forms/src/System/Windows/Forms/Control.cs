@@ -603,7 +603,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlAccessibilityObjectDescr)
+        SRDescription(nameof(SR.ControlAccessibilityObjectDescr))
         ]
         public AccessibleObject AccessibilityObject {
             get {
@@ -685,10 +685,10 @@ example usage
         ///      The default action description of the control
         /// </devdoc>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlAccessibleDefaultActionDescr)
+        SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))
         ]
         public string AccessibleDefaultActionDescription {
             get {
@@ -704,10 +704,10 @@ example usage
         ///      The accessible description of the control
         /// </devdoc>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         DefaultValue(null),
         Localizable(true),
-        SRDescription(SR.ControlAccessibleDescriptionDescr)
+        SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))
         ]
         public string AccessibleDescription {
             get {
@@ -723,10 +723,10 @@ example usage
         ///      The accessible name of the control
         /// </devdoc>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         DefaultValue(null),
         Localizable(true),
-        SRDescription(SR.ControlAccessibleNameDescr)
+        SRDescription(nameof(SR.ControlAccessibleNameDescr))
         ]
         public string AccessibleName {
             get {
@@ -743,9 +743,9 @@ example usage
         ///      The accessible role of the control
         /// </devdoc>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         DefaultValue(AccessibleRole.Default),
-        SRDescription(SR.ControlAccessibleRoleDescr)
+        SRDescription(nameof(SR.ControlAccessibleRoleDescr))
         ]
         public AccessibleRole AccessibleRole {
 
@@ -835,7 +835,7 @@ example usage
                     // as activeX controls.
                     //
                     if (GetState(STATE_TOPLEVEL)) {
-                        throw new NotSupportedException(SR.GetString(SR.AXTopLevelSource));
+                        throw new NotSupportedException(SR.AXTopLevelSource);
                     }
 
                     activeXImpl = new ActiveXImpl(this);
@@ -856,9 +856,9 @@ example usage
         ///     this control will allow drag and drop operations and events to be used.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ControlAllowDropDescr)
+        SRDescription(nameof(SR.ControlAllowDropDescr))
         ]
         public virtual bool AllowDrop {
             get {
@@ -923,10 +923,10 @@ example usage
         ///     edges.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
         DefaultValue(CommonProperties.DefaultAnchor),
-        SRDescription(SR.ControlAnchorDescr),
+        SRDescription(nameof(SR.ControlAnchorDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public virtual AnchorStyles Anchor {
@@ -939,11 +939,11 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AutoSize"]/*' />
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [RefreshProperties(RefreshProperties.All)]
         [Localizable(true)]
         [DefaultValue(CommonProperties.DefaultAutoSize)]
-        [SRDescription(SR.ControlAutoSizeDescr)]
+        [SRDescription(nameof(SR.ControlAutoSizeDescr))]
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual bool AutoSize {
@@ -968,7 +968,7 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler AutoSizeChanged {
             add {
@@ -1073,9 +1073,9 @@ example usage
         ///     will always return a non-null value.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DispId(NativeMethods.ActiveX.DISPID_BACKCOLOR),
-        SRDescription(SR.ControlBackColorDescr)
+        SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public virtual Color BackColor {
             get {
@@ -1112,7 +1112,7 @@ example usage
 
             set {
                 if (!value.Equals(Color.Empty) && !GetStyle(ControlStyles.SupportsTransparentBackColor) && value.A < 255)
-                    throw new ArgumentException(SR.GetString(SR.TransparentBackColorNotAllowed));
+                    throw new ArgumentException(SR.TransparentBackColorNotAllowed);
 
                 Color c = BackColor;
                 if (!value.IsEmpty || Properties.ContainsObject(PropBackColor)) {
@@ -1129,7 +1129,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnBackColorChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
             add {
                 Events.AddHandler(EventBackColor, value);
@@ -1144,10 +1144,10 @@ example usage
         ///     The background image of the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(null),
         Localizable(true),
-        SRDescription(SR.ControlBackgroundImageDescr)
+        SRDescription(nameof(SR.ControlBackgroundImageDescr))
         ]
         public virtual Image BackgroundImage {
             get {
@@ -1165,7 +1165,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnBackgroundImageChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
         public event EventHandler BackgroundImageChanged {
             add {
                 Events.AddHandler(EventBackgroundImage, value);
@@ -1180,10 +1180,10 @@ example usage
         ///     The BackgroundImageLayout of the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ImageLayout.Tile),
         Localizable(true),
-        SRDescription(SR.ControlBackgroundImageLayoutDescr)
+        SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))
         ]
         public virtual ImageLayout BackgroundImageLayout {
             get {
@@ -1220,7 +1220,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnBackgroundImageLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
         public event EventHandler BackgroundImageLayoutChanged {
             add {
                 Events.AddHandler(EventBackgroundImageLayout, value);
@@ -1314,7 +1314,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlBindingContextDescr)
+        SRDescription(nameof(SR.ControlBindingContextDescr))
         ]
         public virtual BindingContext BindingContext {
             get {
@@ -1329,7 +1329,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnBindingContextChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
         public event EventHandler BindingContextChanged {
             add {
                 Events.AddHandler(EventBindingContext, value);
@@ -1346,8 +1346,8 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlBottomDescr),
-        SRCategory(SR.CatLayout)
+        SRDescription(nameof(SR.ControlBottomDescr)),
+        SRCategory(nameof(SR.CatLayout))
         ]
         public int Bottom {
             get {
@@ -1363,8 +1363,8 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlBoundsDescr),
-        SRCategory(SR.CatLayout)
+        SRDescription(nameof(SR.ControlBoundsDescr)),
+        SRCategory(nameof(SR.CatLayout))
         ]
         public Rectangle Bounds {
             get {
@@ -1393,8 +1393,8 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatFocus),
-        SRDescription(SR.ControlCanFocusDescr)
+        SRCategory(nameof(SR.CatFocus)),
+        SRDescription(nameof(SR.ControlCanFocusDescr))
         ]
         public bool CanFocus {
             get {
@@ -1432,8 +1432,8 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatFocus),
-        SRDescription(SR.ControlCanSelectDescr)
+        SRCategory(nameof(SR.CatFocus)),
+        SRDescription(nameof(SR.ControlCanSelectDescr))
         ]
         public bool CanSelect {
             // We implement this to allow only AxHost to override canSelectCore, but still
@@ -1451,8 +1451,8 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatFocus),
-        SRDescription(SR.ControlCaptureDescr)
+        SRCategory(nameof(SR.CatFocus)),
+        SRDescription(nameof(SR.ControlCaptureDescr))
         ]
         public bool Capture {
             get {
@@ -1491,9 +1491,9 @@ example usage
         ///       Indicates whether entering the control causes validation on the controls requiring validation.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatFocus),
+        SRCategory(nameof(SR.CatFocus)),
         DefaultValue(true),
-        SRDescription(SR.ControlCausesValidationDescr)
+        SRDescription(nameof(SR.ControlCausesValidationDescr))
         ]
         public bool CausesValidation {
             get {
@@ -1512,7 +1512,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnCausesValidationChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
         public event EventHandler CausesValidationChanged {
             add {
                 Events.AddHandler(EventCausesValidation, value);
@@ -1573,7 +1573,7 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CheckForIllegalCrossThreadCalls"]/*' />
         [ Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-          SRDescription(SR.ControlCheckForIllegalCrossThreadCalls),
+          SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
           DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public static bool CheckForIllegalCrossThreadCalls {
@@ -1588,8 +1588,8 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatLayout),
-        SRDescription(SR.ControlClientRectangleDescr)
+        SRCategory(nameof(SR.CatLayout)),
+        SRDescription(nameof(SR.ControlClientRectangleDescr))
         ]
         public Rectangle ClientRectangle {
             get {
@@ -1602,10 +1602,10 @@ example usage
         ///     The size of the clientRect.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlClientSizeDescr)
+        SRDescription(nameof(SR.ControlClientSizeDescr))
         ]
         public Size ClientSize {
             get {
@@ -1621,7 +1621,7 @@ example usage
         /// <devdoc>
         ///    Fired when ClientSize changes.
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnClientSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnClientSizeChangedDescr))]
         public event EventHandler ClientSizeChanged {
             add {
                 Events.AddHandler(EventClientSize, value);
@@ -1638,7 +1638,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        DescriptionAttribute(SR.ControlCompanyNameDescr)
+        DescriptionAttribute(nameof(SR.ControlCompanyNameDescr))
         ]
         public string CompanyName {
             [ResourceExposure(ResourceScope.Machine)]
@@ -1656,7 +1656,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlContainsFocusDescr)
+        SRDescription(nameof(SR.ControlContainsFocusDescr))
         ]
         public bool ContainsFocus {
             get {
@@ -1691,9 +1691,9 @@ example usage
         ///     and a context menu strip are assigned, context menu will be shown instead of context menu strip.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ControlContextMenuDescr),
+        SRDescription(nameof(SR.ControlContextMenuDescr)),
         Browsable(false)
         ]
         public virtual ContextMenu ContextMenu {
@@ -1726,8 +1726,8 @@ example usage
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatPropertyChanged),
-        SRDescription(SR.ControlOnContextMenuChangedDescr),
+        SRCategory(nameof(SR.CatPropertyChanged)),
+        SRDescription(nameof(SR.ControlOnContextMenuChangedDescr)),
         Browsable(false)
         ]
         public event EventHandler ContextMenuChanged {
@@ -1747,9 +1747,9 @@ example usage
        ///     Note: if a context menu is also assigned, it will take precidence over this property.
        /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ControlContextMenuDescr)
+        SRDescription(nameof(SR.ControlContextMenuDescr))
         ]
         public virtual ContextMenuStrip ContextMenuStrip {
             get {
@@ -1780,7 +1780,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlContextMenuStripChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged {
             add {
                 Events.AddHandler(EventContextMenuStrip, value);
@@ -1797,7 +1797,7 @@ example usage
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(SR.ControlControlsDescr)
+        SRDescription(nameof(SR.ControlControlsDescr))
         ]
         public ControlCollection Controls {
             get {
@@ -1818,7 +1818,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlCreatedDescr)
+        SRDescription(nameof(SR.ControlCreatedDescr))
         ]
         public bool Created {
             get {
@@ -1846,7 +1846,7 @@ example usage
                         needToLoadComCtl = false;
                     } else {
                         int lastWin32Error = Marshal.GetLastWin32Error();
-                        throw new Win32Exception(lastWin32Error, SR.GetString(SR.LoadDLLError, ExternDll.Comctl32));
+                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, ExternDll.Comctl32));
                     }
                 }
 
@@ -2030,8 +2030,8 @@ example usage
         ///     control.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ControlCursorDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ControlCursorDescr)),
         AmbientValue(null)
         ]
         public virtual Cursor Cursor {
@@ -2101,7 +2101,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnCursorChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
         public event EventHandler CursorChanged {
             add {
                 Events.AddHandler(EventCursor, value);
@@ -2117,8 +2117,8 @@ example usage
         /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRCategory(SR.CatData),
-        SRDescription(SR.ControlBindingsDescr),
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.ControlBindingsDescr)),
         RefreshProperties(RefreshProperties.All),
         ParenthesizePropertyName(true)
         ]
@@ -2277,7 +2277,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlDisplayRectangleDescr)
+        SRDescription(nameof(SR.ControlDisplayRectangleDescr))
         ]
         public virtual Rectangle DisplayRectangle {
             [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
@@ -2294,7 +2294,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlDisposedDescr)
+        SRDescription(nameof(SR.ControlDisposedDescr))
         ]
         public bool IsDisposed {
             get {
@@ -2323,7 +2323,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlDisposingDescr)
+        SRDescription(nameof(SR.ControlDisposingDescr))
         ]
         public bool Disposing {
             get {
@@ -2339,11 +2339,11 @@ example usage
         ///     top of the container, extending the length of the container.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(CommonProperties.DefaultDock),
-        SRDescription(SR.ControlDockDescr)
+        SRDescription(nameof(SR.ControlDockDescr))
         ]
         public virtual DockStyle Dock {
             get {
@@ -2372,7 +2372,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnDockChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnDockChangedDescr))]
         public event EventHandler DockChanged {
             add {
                 Events.AddHandler(EventDock, value);
@@ -2387,8 +2387,8 @@ example usage
         ///    <para>This will enable or disable double buffering.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ControlDoubleBufferedDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ControlDoubleBufferedDescr))
         ]
         protected virtual bool DoubleBuffered {
             get {
@@ -2420,10 +2420,10 @@ example usage
         ///    <para>Indicates whether the control is currently enabled.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DispId(NativeMethods.ActiveX.DISPID_ENABLED),
-        SRDescription(SR.ControlEnabledDescr)
+        SRDescription(nameof(SR.ControlEnabledDescr))
         ]
         public bool Enabled {
             get {
@@ -2455,7 +2455,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is enabled.</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnEnabledChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnEnabledChangedDescr))]
         public event EventHandler EnabledChanged {
             add {
                 Events.AddHandler(EventEnabled, value);
@@ -2472,7 +2472,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlFocusedDescr)
+        SRDescription(nameof(SR.ControlFocusedDescr))
         ]
         public virtual bool Focused {
             get {
@@ -2486,11 +2486,11 @@ example usage
         ///     by default for painting and text in the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DispId(NativeMethods.ActiveX.DISPID_FONT),
         AmbientValue(null),
-        SRDescription(SR.ControlFontDescr)
+        SRDescription(nameof(SR.ControlFontDescr))
         ]
         public virtual Font Font {
             [return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(ActiveXFontMarshaler))]
@@ -2599,7 +2599,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnFontChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnFontChangedDescr))]
         public event EventHandler FontChanged {
             add {
                 Events.AddHandler(EventFont, value);
@@ -2702,9 +2702,9 @@ example usage
         ///     The foreground color of the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DispId(NativeMethods.ActiveX.DISPID_FORECOLOR),
-        SRDescription(SR.ControlForeColorDescr)
+        SRDescription(nameof(SR.ControlForeColorDescr))
         ]
         public virtual Color ForeColor {
             get {
@@ -2751,7 +2751,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnForeColorChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
             add {
                 Events.AddHandler(EventForeColor, value);
@@ -2847,14 +2847,14 @@ example usage
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         DispId(NativeMethods.ActiveX.DISPID_HWND),
-        SRDescription(SR.ControlHandleDescr)
+        SRDescription(nameof(SR.ControlHandleDescr))
         ]
         public IntPtr Handle {
             get {
                 if (checkForIllegalCrossThreadCalls &&
                     !inCrossThreadSafeCall &&
                     InvokeRequired) {
-                    throw new InvalidOperationException(SR.GetString(SR.IllegalCrossThreadCall,
+                    throw new InvalidOperationException(string.Format(SR.IllegalCrossThreadCall,
                                                                      Name));
                 }
 
@@ -2882,7 +2882,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlHasChildrenDescr)
+        SRDescription(nameof(SR.ControlHasChildrenDescr))
         ]
         public bool HasChildren {
             get {
@@ -2902,10 +2902,10 @@ example usage
         ///     The height of this control
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlHeightDescr)
+        SRDescription(nameof(SR.ControlHeightDescr))
         ]
         public int Height {
             get {
@@ -2963,7 +2963,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlHandleCreatedDescr)
+        SRDescription(nameof(SR.ControlHandleCreatedDescr))
         ]
         public bool IsHandleCreated {
             get { return window.Handle != IntPtr.Zero; }
@@ -3073,7 +3073,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlInvokeRequiredDescr)
+        SRDescription(nameof(SR.ControlInvokeRequiredDescr))
         ]
         public bool InvokeRequired {
             get {
@@ -3108,10 +3108,10 @@ example usage
         ///      i.e. whether it should be visible to accessibility applications.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlIsAccessibleDescr)
+        SRDescription(nameof(SR.ControlIsAccessibleDescr))
         ]
         public bool IsAccessible {
             get {
@@ -3159,11 +3159,11 @@ example usage
         ///     since we might call CreateParams here - you dig!
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),        
+        SRCategory(nameof(SR.CatLayout)),        
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.IsMirroredDescr)        
+        SRDescription(nameof(SR.IsMirroredDescr))        
         ]
         public bool IsMirrored {
             get {
@@ -3203,10 +3203,10 @@ example usage
         ///     The left coordinate of this control.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlLeftDescr)
+        SRDescription(nameof(SR.ControlLeftDescr))
         ]
         public int Left {
             get {
@@ -3222,9 +3222,9 @@ example usage
         ///     The location of this control.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
-        SRDescription(SR.ControlLocationDescr)
+        SRDescription(nameof(SR.ControlLocationDescr))
         ]
         public Point Location {
             get {
@@ -3239,7 +3239,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnLocationChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
         public event EventHandler LocationChanged {
             add {
                 Events.AddHandler(EventLocation, value);
@@ -3251,8 +3251,8 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Margin"]/*' />
         [
-        SRDescription(SR.ControlMarginDescr),
-        SRCategory(SR.CatLayout),
+        SRDescription(nameof(SR.ControlMarginDescr)),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true)
         ]
         public Padding Margin
@@ -3278,7 +3278,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.ControlOnMarginChangedDescr)]
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
         public event EventHandler MarginChanged
         {
             add
@@ -3292,9 +3292,9 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MaximumSize"]/*' />
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
-        [SRDescription(SR.ControlMaximumSizeDescr)]
+        [SRDescription(nameof(SR.ControlMaximumSizeDescr))]
         [AmbientValue(typeof(Size), "0, 0")]
         public virtual Size MaximumSize {
             get { return CommonProperties.GetMaximumSize(this, DefaultMaximumSize); }
@@ -3313,9 +3313,9 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MinimumSize"]/*' />
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
-        [SRDescription(SR.ControlMinimumSizeDescr)]
+        [SRDescription(nameof(SR.ControlMinimumSizeDescr))]
         public virtual Size MinimumSize {
             get { return CommonProperties.GetMinimumSize(this, DefaultMinimumSize); }
             set {
@@ -3420,10 +3420,10 @@ example usage
         ///     The parent of this control.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlParentDescr)
+        SRDescription(nameof(SR.ControlParentDescr))
         ]
         public Control Parent {
             get {
@@ -3461,7 +3461,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlProductNameDescr)
+        SRDescription(nameof(SR.ControlProductNameDescr))
         ]
         public string ProductName {
             [ResourceExposure(ResourceScope.Machine)]
@@ -3478,7 +3478,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlProductVersionDescr)
+        SRDescription(nameof(SR.ControlProductVersionDescr))
         ]
         public string ProductVersion {
             [ResourceExposure(ResourceScope.Machine)]
@@ -3512,10 +3512,10 @@ example usage
         ///       property is read-only.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlRecreatingHandleDescr)
+        SRDescription(nameof(SR.ControlRecreatingHandleDescr))
         ]
         public bool RecreatingHandle {
             get {
@@ -3552,10 +3552,10 @@ example usage
         ///     outline/silhouette/boundary of control)
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlRegionDescr)
+        SRDescription(nameof(SR.ControlRegionDescr))
         ]
         public Region Region {
             get {
@@ -3608,7 +3608,7 @@ example usage
         /// <devdoc>
         ///     Event fired when the value of Region property is changed on Control
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlRegionChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlRegionChangedDescr))]
         public event EventHandler RegionChanged {
             add {
                Events.AddHandler(EventRegionChanged, value);
@@ -3697,7 +3697,7 @@ example usage
         ///     Indicates whether the control should redraw itself when resized.
         /// </devdoc>
         [
-        SRDescription(SR.ControlResizeRedrawDescr)
+        SRDescription(nameof(SR.ControlResizeRedrawDescr))
         ]
         protected bool ResizeRedraw {
             get {
@@ -3713,10 +3713,10 @@ example usage
         ///    <para>The right coordinate of the control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlRightDescr)
+        SRDescription(nameof(SR.ControlRightDescr))
         ]
         public int Right {
             get {
@@ -3731,10 +3731,10 @@ example usage
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         AmbientValue(RightToLeft.Inherit),
-        SRDescription(SR.ControlRightToLeftDescr)
+        SRDescription(nameof(SR.ControlRightToLeftDescr))
         ]
         public virtual RightToLeft RightToLeft {
             get {
@@ -3784,7 +3784,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
             add {
                 Events.AddHandler(EventRightToLeft, value);
@@ -3882,9 +3882,9 @@ example usage
         ///    <para>The size of the control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
-        SRDescription(SR.ControlSizeDescr)
+        SRDescription(nameof(SR.ControlSizeDescr))
         ]
         public Size Size {
             get {
@@ -3899,7 +3899,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
         public event EventHandler SizeChanged {
             add {
                 Events.AddHandler(EventSize, value);
@@ -3916,10 +3916,10 @@ example usage
         ///       this control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         MergableProperty(false),
-        SRDescription(SR.ControlTabIndexDescr)
+        SRDescription(nameof(SR.ControlTabIndexDescr))
         ]
         public int TabIndex {
             get {
@@ -3927,7 +3927,7 @@ example usage
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("TabIndex", SR.GetString(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("TabIndex", string.Format(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (tabIndex != value) {
@@ -3942,7 +3942,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnTabIndexChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
         public event EventHandler TabIndexChanged {
             add {
                 Events.AddHandler(EventTabIndex, value);
@@ -3958,10 +3958,10 @@ example usage
         ///       key. This property is read-only.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         DispId(NativeMethods.ActiveX.DISPID_TABSTOP),
-        SRDescription(SR.ControlTabStopDescr)
+        SRDescription(nameof(SR.ControlTabStopDescr))
         ]
         public bool TabStop {
             get {
@@ -3992,7 +3992,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnTabStopChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
         public event EventHandler TabStopChanged {
             add {
                 Events.AddHandler(EventTabStop, value);
@@ -4006,10 +4006,10 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -4027,11 +4027,11 @@ example usage
         ///     The current text associated with this control.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         Bindable(true),
         DispId(NativeMethods.ActiveX.DISPID_TEXT),
-        SRDescription(SR.ControlTextDescr)
+        SRDescription(nameof(SR.ControlTextDescr))
         ]
         public virtual string Text {
             get {
@@ -4075,7 +4075,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnTextChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTextChangedDescr))]
         public event EventHandler TextChanged {
             add {
                 Events.AddHandler(EventText, value);
@@ -4090,10 +4090,10 @@ example usage
         ///     Top coordinate of this control.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlTopDescr)
+        SRDescription(nameof(SR.ControlTopDescr))
         ]
         public int Top {
             get {
@@ -4111,10 +4111,10 @@ example usage
         ///     can be parented to other controls.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlTopLevelControlDescr)
+        SRDescription(nameof(SR.ControlTopLevelControlDescr))
         ]
         public Control TopLevelControl {
             get {
@@ -4278,8 +4278,8 @@ example usage
         DefaultValue(false),
         EditorBrowsable(EditorBrowsableState.Always),
         Browsable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ControlUseWaitCursorDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ControlUseWaitCursorDescr)),
         ]
         public bool UseWaitCursor {
             get { return GetState(STATE_USEWAITCURSOR); }
@@ -4356,9 +4356,9 @@ example usage
         ///    <para>Indicates whether the control is visible.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        SRDescription(SR.ControlVisibleDescr)
+        SRDescription(nameof(SR.ControlVisibleDescr))
         ]
         public bool Visible {
             get {
@@ -4373,7 +4373,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control becomes visible.</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnVisibleChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged {
             add {
                 Events.AddHandler(EventVisible, value);
@@ -4412,7 +4412,7 @@ example usage
                     if (waitHandle.WaitOne(1, false)) {
                         break;
                     }
-                    throw new InvalidAsynchronousStateException(SR.GetString(SR.ThreadNoLongerValid));
+                    throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
                 }
 
                 if (IsDisposed && threadCallbackList != null && threadCallbackList.Count > 0) {
@@ -4436,10 +4436,10 @@ example usage
         ///     The width of this control.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlWidthDescr)
+        SRDescription(nameof(SR.ControlWidthDescr))
         ]
         public int Width {
             get {
@@ -4482,10 +4482,10 @@ example usage
         /// </devdoc>
         /// <internalonly/>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlWindowTargetDescr)
+        SRDescription(nameof(SR.ControlWindowTargetDescr))
         ]
         public IWindowTarget WindowTarget {
             [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
@@ -4558,7 +4558,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is clicked.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ControlOnClickDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
         public event EventHandler Click {
             add {
                 Events.AddHandler(EventClick, value);
@@ -4575,10 +4575,10 @@ example usage
         ///    <para>Occurs when a new control is added.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Advanced),
-        SRDescription(SR.ControlOnControlAddedDescr)
+        SRDescription(nameof(SR.ControlOnControlAddedDescr))
         ]
         public event ControlEventHandler ControlAdded {
             add {
@@ -4595,10 +4595,10 @@ example usage
         ///    <para>Occurs when a control is removed.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Advanced),
-        SRDescription(SR.ControlOnControlRemovedDescr)
+        SRDescription(nameof(SR.ControlOnControlRemovedDescr))
         ]
         public event ControlEventHandler ControlRemoved {
             add {
@@ -4613,7 +4613,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatDragDrop), SRDescription(SR.ControlOnDragDropDescr)]
+        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragDropDescr))]
         public event DragEventHandler DragDrop {
             add {
                 Events.AddHandler(EventDragDrop, value);
@@ -4628,7 +4628,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatDragDrop), SRDescription(SR.ControlOnDragEnterDescr)]
+        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragEnterDescr))]
         public event DragEventHandler DragEnter {
             add {
                 Events.AddHandler(EventDragEnter, value);
@@ -4643,7 +4643,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatDragDrop), SRDescription(SR.ControlOnDragOverDescr)]
+        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragOverDescr))]
         public event DragEventHandler DragOver {
             add {
                 Events.AddHandler(EventDragOver, value);
@@ -4658,7 +4658,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatDragDrop), SRDescription(SR.ControlOnDragLeaveDescr)]
+        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
         public event EventHandler DragLeave {
             add {
                 Events.AddHandler(EventDragLeave, value);
@@ -4672,7 +4672,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatDragDrop), SRDescription(SR.ControlOnGiveFeedbackDescr)]
+        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
         public event GiveFeedbackEventHandler GiveFeedback {
             add {
                 Events.AddHandler(EventGiveFeedback, value);
@@ -4687,7 +4687,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when a handle is created for the control.</para>
         /// </devdoc>
-        [SRCategory(SR.CatPrivate), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(SR.ControlOnCreateHandleDescr)]
+        [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnCreateHandleDescr))]
         public event EventHandler HandleCreated {
             add {
                 Events.AddHandler(EventHandleCreated, value);
@@ -4702,7 +4702,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control's handle is destroyed.</para>
         /// </devdoc>
-        [SRCategory(SR.CatPrivate), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(SR.ControlOnDestroyHandleDescr)]
+        [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnDestroyHandleDescr))]
         public event EventHandler HandleDestroyed {
             add {
                 Events.AddHandler(EventHandleDestroyed, value);
@@ -4717,7 +4717,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ControlOnHelpDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnHelpDescr))]
         public event HelpEventHandler HelpRequested {
             add {
                 Events.AddHandler(EventHelpRequested, value);
@@ -4732,7 +4732,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAppearance), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(SR.ControlOnInvalidateDescr)]
+        [SRCategory(nameof(SR.CatAppearance)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnInvalidateDescr))]
         public event InvalidateEventHandler Invalidated {
             add {
                 Events.AddHandler(EventInvalidated, value);
@@ -4750,8 +4750,8 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Padding"]/*' />
         [
-        SRDescription(SR.ControlPaddingDescr),
-        SRCategory(SR.CatLayout),
+        SRDescription(nameof(SR.ControlPaddingDescr)),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true)
         ]
         public Padding Padding {
@@ -4780,7 +4780,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.ControlOnPaddingChangedDescr)]
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public event EventHandler PaddingChanged {
             add {
                 Events.AddHandler(EventPaddingChanged, value);
@@ -4795,7 +4795,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAppearance), SRDescription(SR.ControlOnPaintDescr)]
+        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ControlOnPaintDescr))]
         public event PaintEventHandler Paint {
             add {
                 Events.AddHandler(EventPaint, value);
@@ -4810,7 +4810,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatDragDrop), SRDescription(SR.ControlOnQueryContinueDragDescr)]
+        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
         public event QueryContinueDragEventHandler QueryContinueDrag {
             add {
                 Events.AddHandler(EventQueryContinueDrag, value);
@@ -4824,7 +4824,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ControlOnQueryAccessibilityHelpDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
             add {
                 Events.AddHandler(EventQueryAccessibilityHelp, value);
@@ -4838,7 +4838,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is double clicked.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ControlOnDoubleClickDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick {
             add {
                 Events.AddHandler(EventDoubleClick, value);
@@ -4852,7 +4852,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is entered.</para>
         /// </devdoc>
-        [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnEnterDescr)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter {
             add {
                 Events.AddHandler(EventEnter, value);
@@ -4866,7 +4866,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control receives focus.</para>
         /// </devdoc>
-        [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnGotFocusDescr), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnGotFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler GotFocus {
             add {
                 Events.AddHandler(EventGotFocus, value);
@@ -4880,7 +4880,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when a key is pressed down while the control has focus.</para>
         /// </devdoc>
-        [SRCategory(SR.CatKey), SRDescription(SR.ControlOnKeyDownDescr)]
+        [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
         public event KeyEventHandler KeyDown {
             add {
                 Events.AddHandler(EventKeyDown, value);
@@ -4895,7 +4895,7 @@ example usage
         /// <devdoc>
         ///    <para> Occurs when a key is pressed while the control has focus.</para>
         /// </devdoc>
-        [SRCategory(SR.CatKey), SRDescription(SR.ControlOnKeyPressDescr)]
+        [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
         public event KeyPressEventHandler KeyPress {
             add {
                 Events.AddHandler(EventKeyPress, value);
@@ -4910,7 +4910,7 @@ example usage
         /// <devdoc>
         ///    <para> Occurs when a key is released while the control has focus.</para>
         /// </devdoc>
-        [SRCategory(SR.CatKey), SRDescription(SR.ControlOnKeyUpDescr)]
+        [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
         public event KeyEventHandler KeyUp {
             add {
                 Events.AddHandler(EventKeyUp, value);
@@ -4924,7 +4924,7 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Layout"]/*' />
         /// <devdoc>
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.ControlOnLayoutDescr)]
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnLayoutDescr))]
         public event LayoutEventHandler Layout {
             add {
                 Events.AddHandler(EventLayout, value);
@@ -4939,7 +4939,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is left.</para>
         /// </devdoc>
-        [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnLeaveDescr)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
         public event EventHandler Leave {
             add {
                 Events.AddHandler(EventLeave, value);
@@ -4953,7 +4953,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control loses focus.</para>
         /// </devdoc>
-        [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnLostFocusDescr), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLostFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler LostFocus {
             add {
                 Events.AddHandler(EventLostFocus, value);
@@ -4967,7 +4967,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is mouse clicked.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ControlOnMouseClickDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseClickDescr))]
         public event MouseEventHandler MouseClick {
             add {
                 Events.AddHandler(EventMouseClick, value);
@@ -4982,7 +4982,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is mouse double clicked.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ControlOnMouseDoubleClickDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseDoubleClickDescr))]
         public event MouseEventHandler MouseDoubleClick {
             add {
                 Events.AddHandler(EventMouseDoubleClick, value);
@@ -4997,7 +4997,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control loses mouse Capture.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ControlOnMouseCaptureChangedDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseCaptureChangedDescr))]
         public event EventHandler MouseCaptureChanged {
             add {
                 Events.AddHandler(EventMouseCaptureChanged, value);
@@ -5012,7 +5012,7 @@ example usage
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is
         ///       pressed.</para>
         /// </devdoc>
-        [SRCategory(SR.CatMouse), SRDescription(SR.ControlOnMouseDownDescr)]
+        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
         public event MouseEventHandler MouseDown {
             add {
                 Events.AddHandler(EventMouseDown, value);
@@ -5027,7 +5027,7 @@ example usage
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer enters the control.</para>
         /// </devdoc>
-        [SRCategory(SR.CatMouse), SRDescription(SR.ControlOnMouseEnterDescr)]
+        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseEnterDescr))]
         public event EventHandler MouseEnter {
             add {
                 Events.AddHandler(EventMouseEnter, value);
@@ -5041,7 +5041,7 @@ example usage
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer leaves the control.</para>
         /// </devdoc>
-        [SRCategory(SR.CatMouse), SRDescription(SR.ControlOnMouseLeaveDescr)]
+        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseLeaveDescr))]
         public event EventHandler MouseLeave {
             add {
                 Events.AddHandler(EventMouseLeave, value);
@@ -5058,7 +5058,7 @@ example usage
         ///    This event is raised before the top level parent window recieves WM_DPICHANGED message.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.ControlOnDpiChangedBeforeParentDescr)]
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedBeforeParentDescr))]
         public event EventHandler DpiChangedBeforeParent {
             add {
                 Events.AddHandler(EventDpiChangedBeforeParent, value);
@@ -5075,7 +5075,7 @@ example usage
         ///    This message is received after the top levet parent window recieves WM_DPICHANGED message.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.ControlOnDpiChangedAfterParentDescr)]
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedAfterParentDescr))]
         public event EventHandler DpiChangedAfterParent {
             add {
                 Events.AddHandler(EventDpiChangedAfterParent, value);
@@ -5089,7 +5089,7 @@ example usage
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer hovers over the contro.</para>
         /// </devdoc>
-        [SRCategory(SR.CatMouse), SRDescription(SR.ControlOnMouseHoverDescr)]
+        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseHoverDescr))]
         public event EventHandler MouseHover {
             add {
                 Events.AddHandler(EventMouseHover, value);
@@ -5104,7 +5104,7 @@ example usage
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer is moved over the control.</para>
         /// </devdoc>
-        [SRCategory(SR.CatMouse), SRDescription(SR.ControlOnMouseMoveDescr)]
+        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
         public event MouseEventHandler MouseMove {
             add {
                 Events.AddHandler(EventMouseMove, value);
@@ -5119,7 +5119,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is released.</para>
         /// </devdoc>
-        [SRCategory(SR.CatMouse), SRDescription(SR.ControlOnMouseUpDescr)]
+        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
         public event MouseEventHandler MouseUp {
             add {
                 Events.AddHandler(EventMouseUp, value);
@@ -5134,7 +5134,7 @@ example usage
         /// <devdoc>
         ///    <para> Occurs when the mouse wheel moves while the control has focus.</para>
         /// </devdoc>
-        [SRCategory(SR.CatMouse), SRDescription(SR.ControlOnMouseWheelDescr), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseWheelDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event MouseEventHandler MouseWheel {
             add {
                 Events.AddHandler(EventMouseWheel, value);
@@ -5149,7 +5149,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is moved.</para>
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.ControlOnMoveDescr)]
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMoveDescr))]
         public event EventHandler Move {
             add {
                 Events.AddHandler(EventMove, value);
@@ -5162,7 +5162,7 @@ example usage
         /// <devdoc>
         ///    <para>Raised to preview a key down event</para>
         /// </devdoc>
-        [SRCategory(SR.CatKey), SRDescription(SR.PreviewKeyDownDescr)]
+        [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.PreviewKeyDownDescr))]
         public event PreviewKeyDownEventHandler PreviewKeyDown {
             [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             add {
@@ -5179,7 +5179,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is resized.</para>
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.ControlOnResizeDescr),
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnResizeDescr)),
          EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler Resize {
             add {
@@ -5194,7 +5194,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ControlOnChangeUICuesDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
         public event UICuesEventHandler ChangeUICues {
             add {
                 Events.AddHandler(EventChangeUICues, value);
@@ -5208,7 +5208,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ControlOnStyleChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
         public event EventHandler StyleChanged {
             add {
                 Events.AddHandler(EventStyleChanged, value);
@@ -5222,7 +5222,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ControlOnSystemColorsChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
         public event EventHandler SystemColorsChanged {
             add {
                 Events.AddHandler(EventSystemColorsChanged, value);
@@ -5236,7 +5236,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is validating.</para>
         /// </devdoc>
-        [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnValidatingDescr)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating {
             add {
                 Events.AddHandler(EventValidating, value);
@@ -5251,7 +5251,7 @@ example usage
         /// <devdoc>
         ///    <para>Occurs when the control is done validating.</para>
         /// </devdoc>
-        [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnValidatedDescr)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated {
             add {
                 Events.AddHandler(EventValidated, value);
@@ -5524,7 +5524,7 @@ example usage
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnParentChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnParentChangedDescr))]
         public event EventHandler ParentChanged {
             add {
                 Events.AddHandler(EventParent, value);
@@ -5651,7 +5651,7 @@ example usage
             for (Control ctl = bottom; ctl != null; ctl = ctl.ParentInternal) {
                 lastParent = ctl;
                 if (ctl == toFind) {
-                    throw new ArgumentException(SR.GetString(SR.CircularOwner));
+                    throw new ArgumentException(SR.CircularOwner);
                 }
             }
 
@@ -5661,7 +5661,7 @@ example usage
                     for (Form form = f; form != null; form = form.OwnerInternal) {
                         lastOwner = form;
                         if (form == toFind) {
-                            throw new ArgumentException(SR.GetString(SR.CircularOwner));
+                            throw new ArgumentException(SR.CircularOwner);
                         }
                     }
                 }
@@ -5997,7 +5997,7 @@ example usage
                 }
 
                 if (GetState(STATE_CREATINGHANDLE)) {
-                    throw new InvalidOperationException(SR.GetString(SR.ClosingWhileCreatingHandle, "Dispose"));
+                    throw new InvalidOperationException(string.Format(SR.ClosingWhileCreatingHandle, "Dispose"));
                     // I imagine most subclasses will get themselves in a half disposed state
                     // if this exception is thrown, but things will be equally broken if we ignore this error,
                     // and this way at least the user knows what they did wrong.
@@ -6190,7 +6190,7 @@ example usage
 
                 ThreadMethodEntry entry = asyncResult as ThreadMethodEntry;
                 if (entry == null) {
-                    throw new ArgumentException(SR.GetString(SR.ControlBadAsyncResult),"asyncResult");
+                    throw new ArgumentException(SR.ControlBadAsyncResult,"asyncResult");
                 }
                 Debug.Assert(this == entry.caller, "Called BeginInvoke on one control, and the corresponding EndInvoke on a different control");
 
@@ -7575,7 +7575,7 @@ example usage
 
             // else - it's an un-lockable key.
             // Actually get the exception string from the system resource.
-            throw new NotSupportedException(SR.GetString(SR.ControlIsKeyLockedNumCapsScrollLockKeysSupportedOnly));
+            throw new NotSupportedException(SR.ControlIsKeyLockedNumCapsScrollLockKeysSupportedOnly);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsInputChar"]/*' />
@@ -7768,7 +7768,7 @@ example usage
             //
 
             if (!IsHandleCreated) {
-                throw new InvalidOperationException(SR.GetString(SR.ErrorNoMarshalingThread));
+                throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
             }
 
             // We have to demand unmanaged code permission here for the control hosted in
@@ -11199,7 +11199,7 @@ example usage
             if (accept != GetState(STATE_DROPTARGET) && IsHandleCreated) {
                 try {
                     if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                        throw new ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                        throw new ThreadStateException(SR.ThreadMustBeSTA);
                     }
                     if (accept) {
                         IntSecurity.ClipboardRead.Demand();
@@ -11224,7 +11224,7 @@ example usage
                     SetState(STATE_DROPTARGET, accept);
                 }
                 catch (Exception e) {
-                    throw new InvalidOperationException(SR.GetString(SR.DragDropRegFailed), e);
+                    throw new InvalidOperationException(SR.DragDropRegFailed, e);
                 }
             }
         }
@@ -12026,7 +12026,7 @@ example usage
         /// </devdoc>
         protected void SetTopLevel(bool value) {
             if (value && IsActiveX) {
-                throw new InvalidOperationException(SR.GetString(SR.TopLevelNotAllowedIfActiveX));
+                throw new InvalidOperationException(SR.TopLevelNotAllowedIfActiveX);
             }
             else {
                 if (value) {
@@ -12049,7 +12049,7 @@ example usage
 
             if (GetTopLevel() != value) {
                 if (parent != null) {
-                    throw new ArgumentException(SR.GetString(SR.TopLevelParentedControl), "value");
+                    throw new ArgumentException(SR.TopLevelParentedControl, "value");
                 }
                 SetState(STATE_TOPLEVEL, value);
                 // make sure the handle is created before hooking, otherwise a toplevel control that never
@@ -13043,7 +13043,7 @@ example usage
                     object tempObject = intAccessibleObject;
                     IAccessible iAccCheck = tempObject as IAccessible;
                     if (iAccCheck != null) {
-                        throw new InvalidOperationException(SR.GetString(SR.ControlAccessibileObjectInvalid));
+                        throw new InvalidOperationException(SR.ControlAccessibileObjectInvalid);
                     }
 
                     // Check that we have an IAccessibleInternal implementation and return this
@@ -13077,7 +13077,7 @@ example usage
                     }
                 }
                 catch (Exception e) {
-                    throw new InvalidOperationException(SR.GetString(SR.RichControlLresult), e);
+                    throw new InvalidOperationException(SR.RichControlLresult, e);
                 }
             }
             else {  // some accessible object requested that we don't care about, so do default message processing
@@ -14691,14 +14691,14 @@ example usage
                 if (value == null)
                     return;
                 if (value.GetTopLevel()) {
-                    throw new ArgumentException(SR.GetString(SR.TopLevelControlAdd));
+                    throw new ArgumentException(SR.TopLevelControlAdd);
                 }
 
                 // Verify that the control being added is on the same thread as
                 // us...or our parent chain.
                 //
                 if (owner.CreateThreadId != value.CreateThreadId) {
-                    throw new ArgumentException(SR.GetString(SR.AddDifferentThreads));
+                    throw new ArgumentException(SR.AddDifferentThreads);
                 }
 
                 CheckParentingCycle(owner, value);
@@ -14783,7 +14783,7 @@ example usage
                     return IndexOf((Control)control);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ControlBadControl), "control");
+                    throw new ArgumentException(SR.ControlBadControl, "control");
                 }
             }
 
@@ -14844,7 +14844,7 @@ example usage
             /// </devdoc>
             public Control[] Find(string key, bool searchAllChildren) {
                 if (String.IsNullOrEmpty(key)) {
-                   throw new System.ArgumentNullException("key", SR.GetString(SR.FindKeyMayNotBeEmptyOrNull));
+                   throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
                 ArrayList foundControls =  FindInternal(key, searchAllChildren, this, new ArrayList());
@@ -15036,7 +15036,7 @@ example usage
                 get {
                     //do some bounds checking here...
                     if (index < 0 || index >= Count) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
                     }
 
                     Control control = (Control) InnerList[index];
@@ -15114,7 +15114,7 @@ example usage
             public virtual int GetChildIndex(Control child, bool throwException) {
                 int index = IndexOf(child);
                 if (index == -1 && throwException) {
-                    throw new ArgumentException(SR.GetString(SR.ControlNotChild));
+                    throw new ArgumentException(SR.ControlNotChild);
                 }
                 return index;
             }
@@ -16692,7 +16692,7 @@ example usage
                     verbHide.lVerb = NativeMethods.OLEIVERB_HIDE;
                     verbPrimary.lVerb = NativeMethods.OLEIVERB_PRIMARY;
                     verbProperties.lVerb = NativeMethods.OLEIVERB_PROPERTIES;
-                    verbProperties.lpszVerbName = SR.GetString(SR.AXProperties);
+                    verbProperties.lpszVerbName = SR.AXProperties;
                     verbProperties.grfAttribs = NativeMethods.ActiveX.OLEVERBATTRIB_ONCONTAINERMENU;
 
                     axVerbs = new NativeMethods.tagOLEVERB[] {
@@ -17775,7 +17775,7 @@ example usage
                         IntPtr ppv;
                         int hresult = Marshal.QueryInterface(pUnk, ref iid, out ppv);
                         if (hresult != 0 || ppv == IntPtr.Zero) {
-                            throw new InvalidCastException(SR.GetString(SR.AxInterfaceNotSupported));
+                            throw new InvalidCastException(SR.AxInterfaceNotSupported);
                         }
                         return ppv;
                     }
@@ -17847,7 +17847,7 @@ example usage
                         Guid iid = eventInterface.GUID;
                         int hresult = findConnectionPoint.Invoke(this.handle, ref iid, out result);
                         if (hresult != 0 || result == IntPtr.Zero) {
-                            throw new ArgumentException(SR.GetString(SR.AXNoConnectionPoint, eventInterface.Name));
+                            throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
                         }
 
                         return new ComConnectionPoint(result, false);   // result is already ref-counted as an out-param so pass in false
@@ -18423,7 +18423,7 @@ example usage
             ///      Throws the given hresult.  This is used by ActiveX sourcing.
             /// </devdoc>
             internal static void ThrowHr(int hr) {
-                ExternalException e = new ExternalException(SR.GetString(SR.ExternalException), hr);
+                ExternalException e = new ExternalException(SR.ExternalException, hr);
                 throw e;
             }
 
@@ -19050,7 +19050,7 @@ example usage
                     form = new Form();
                     grid = new PropertyGrid();
 
-                    form.Text = SR.GetString(SR.AXProperties);
+                    form.Text = SR.AXProperties;
                     form.StartPosition = FormStartPosition.CenterParent;
                     form.Size = new Size(300, 350);
                     form.FormBorderStyle = FormBorderStyle.Sizable;
@@ -19186,7 +19186,7 @@ example usage
 
                 // Security fix: make sure the size has non-negative width and height.
                 if (size.Width < 0 || size.Height < 0) {
-                    throw new ArgumentException("size", SR.GetString(SR.ControlMetaFileDCWrapperSizeInvalid));
+                    throw new ArgumentException("size", SR.ControlMetaFileDCWrapperSizeInvalid);
                 }
 
                 hMetafileDC = hOriginalDC;
@@ -19856,7 +19856,7 @@ example usage
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged() {
                 if (!(this.Owner is IAutomationLiveRegion)) {
-                    throw new InvalidOperationException(SR.GetString(SR.OwnerControlIsNotALiveRegion));
+                    throw new InvalidOperationException(SR.OwnerControlIsNotALiveRegion);
                 }
 
                 return RaiseAutomationEvent(NativeMethods.UIA_LiveRegionChangedEventId);

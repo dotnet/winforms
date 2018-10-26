@@ -29,7 +29,8 @@ phases:
       ${{ insert }}: ${{ parameters.variables }}
       _HelixBuildConfig: $(_BuildConfig)
       # Only enable publishing in non-public, non PR scenarios.
-      ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+      # TODO: Once we go public, remove the build definition name check
+      ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
         # This should be changed to an isolated blob feed per-build.
         # Right now a manual build of a random branch would get published alongside the normal branch artifacts.
         _PublishBlobFeedUrl: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
@@ -41,13 +42,15 @@ phases:
           /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
         _OfficialBuildIdArgs: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
       # else
-      ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
+      # TODO: Once we go public, remove the build definition name check
+      ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
         _PublishArgs: ''
         _OfficialBuildIdArgs: ''
         _SignArgs: ''
 
     steps:
-    - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+    # TODO: Once we go public, remove the build definition name check
+    - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
         - task: AzureKeyVault@1
           inputs:
             azureSubscription: 'DotNet-Engineering-Services_KeyVault'

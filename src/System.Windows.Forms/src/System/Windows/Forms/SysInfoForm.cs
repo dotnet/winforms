@@ -142,10 +142,10 @@ namespace System.Windows.Forms {
 
             MinimumSize = Size;
             if (windowIsRestricted) {
-                securityLabel.Text = SR.GetString(SR.SecurityRestrictedText);
+                securityLabel.Text = SR.SecurityRestrictedText;
             }
             else {
-                securityLabel.Text = SR.GetString(SR.SecurityUnrestrictedText);
+                securityLabel.Text = SR.SecurityUnrestrictedText;
             }
         }
 
@@ -238,12 +238,12 @@ namespace System.Windows.Forms {
         }
 
         private void SubmitBugReport(object sender, EventArgs e) {
-            UnsafeNativeMethods.ShellExecute(NativeMethods.NullHandleRef, null, SR.GetString(SR.SecuritySubmitBugUrl), null, null, NativeMethods.SW_NORMAL);
+            UnsafeNativeMethods.ShellExecute(NativeMethods.NullHandleRef, null, SR.SecuritySubmitBugUrl, null, null, NativeMethods.SW_NORMAL);
         }
 
         private void SaveBugReport(object sender, EventArgs e) {
             SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = SR.GetString(SR.SecuritySaveFilter);
+            dialog.Filter = SR.SecuritySaveFilter;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Stream output = dialog.OpenFile();
                 StreamWriter writer = new StreamWriter(output);
@@ -377,7 +377,7 @@ namespace System.Windows.Forms {
             //@design this.TrayAutoArrange = true;
             //@design this.TrayHeight = 0;
             //@design this.GridSize = new System.Drawing.Size(4, 4);
-            this.Text = SR.GetString(SR.SecurityAboutDialog);
+            this.Text = SR.SecurityAboutDialog;
             this.AutoScaleDimensions = new System.Drawing.Size(6, 13);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(442, 273);
@@ -389,13 +389,13 @@ namespace System.Windows.Forms {
 
             sysInfo.Size = new System.Drawing.Size(428, 210);
             sysInfo.TabIndex = 1;
-            sysInfo.Text = SR.GetString(SR.SecurityAssembliesTab);
+            sysInfo.Text = SR.SecurityAssembliesTab;
 
-            versionColumn.Text = SR.GetString(SR.SecurityVersionColumn);
+            versionColumn.Text = SR.SecurityVersionColumn;
             versionColumn.Width = 100;
             versionColumn.TextAlign = HorizontalAlignment.Left;
 
-            fileVersionColumn.Text = SR.GetString(SR.SecurityFileVersionColumn);
+            fileVersionColumn.Text = SR.SecurityFileVersionColumn;
             fileVersionColumn.Width = 100;
             fileVersionColumn.TextAlign = HorizontalAlignment.Left;
 
@@ -412,7 +412,7 @@ namespace System.Windows.Forms {
 
             switchLabel.Size = new Size(428, 25);
             switchLabel.Dock = DockStyle.Bottom;
-            switchLabel.Text = SR.GetString(SR.SecuritySwitchLabel);
+            switchLabel.Text = SR.SecuritySwitchLabel;
 
             switchesList.Size = new System.Drawing.Size(428, 210);
             switchesList.Dock = DockStyle.Fill;
@@ -427,12 +427,12 @@ namespace System.Windows.Forms {
 
             appInfo.Size = new System.Drawing.Size(428, 210);
             appInfo.TabIndex = 2;
-            appInfo.Text = SR.GetString(SR.SecurityApplication);
+            appInfo.Text = SR.SecurityApplication;
             appInfo.DockPadding.All = 2;
 
             switchInfo.Size = new System.Drawing.Size(428, 210);
             switchInfo.TabIndex = 4;
-            switchInfo.Text = SR.GetString(SR.SecuritySwitchesTab);
+            switchInfo.Text = SR.SecuritySwitchesTab;
             
             bugReportDescription.Multiline = true;
             bugReportDescription.Dock = DockStyle.Fill;
@@ -440,25 +440,25 @@ namespace System.Windows.Forms {
 
             bugReportLabel.Dock = DockStyle.Top;
             bugReportLabel.Size = new System.Drawing.Size(428, 36);
-            bugReportLabel.Text = SR.GetString(SR.SecurityBugReportLabel);
+            bugReportLabel.Text = SR.SecurityBugReportLabel;
 
             includeSystemInformation.Checked = true;
             includeSystemInformation.Dock = DockStyle.Bottom;
             includeSystemInformation.FlatStyle = FlatStyle.System;
-            includeSystemInformation.Text = SR.GetString(SR.SecurityIncludeSysInfo);
+            includeSystemInformation.Text = SR.SecurityIncludeSysInfo;
 
             includeApplicationInformation.Checked = true;
             includeApplicationInformation.Dock = DockStyle.Bottom;
             includeApplicationInformation.FlatStyle = FlatStyle.System;
-            includeApplicationInformation.Text = SR.GetString(SR.SecurityIncludeAppInfo);
+            includeApplicationInformation.Text = SR.SecurityIncludeAppInfo;
             
-            saveBugReport.Text = SR.GetString(SR.SecuritySaveBug);
+            saveBugReport.Text = SR.SecuritySaveBug;
             saveBugReport.Location = new Point(2, 2);
             saveBugReport.FlatStyle = FlatStyle.System;
             saveBugReport.Size = new Size(75, 23);
             saveBugReport.Click += new EventHandler(SaveBugReport);
 
-            submitBugReport.Text = SR.GetString(SR.SecuritySubmitBug);
+            submitBugReport.Text = SR.SecuritySubmitBug;
             submitBugReport.Location = new Point(79, 2);
             submitBugReport.FlatStyle = FlatStyle.System;
             submitBugReport.Size = new Size(75, 23);
@@ -477,29 +477,29 @@ namespace System.Windows.Forms {
             tabControl1.TabIndex = 0;
             tabControl1.SelectedIndexChanged += new EventHandler(TabSelectionChanged);
 
-            asmNameColumn.Text = SR.GetString(SR.SecurityAsmNameColumn);
+            asmNameColumn.Text = SR.SecurityAsmNameColumn;
             asmNameColumn.Width = 150;
             asmNameColumn.TextAlign = HorizontalAlignment.Left;
 
-            switchNameColumn.Text = SR.GetString(SR.SecuritySwitchNameColumn);
+            switchNameColumn.Text = SR.SecuritySwitchNameColumn;
             switchNameColumn.Width = 150;
             switchNameColumn.TextAlign = HorizontalAlignment.Left;
 
-            displayNameColumn.Text = SR.GetString(SR.SecuritySwitchDescrColumn);
+            displayNameColumn.Text = SR.SecuritySwitchDescrColumn;
             displayNameColumn.Width = 300;
             displayNameColumn.TextAlign = HorizontalAlignment.Left;
 
-            codeBaseColumn.Text = SR.GetString(SR.SecurityCodeBaseColumn);
+            codeBaseColumn.Text = SR.SecurityCodeBaseColumn;
             codeBaseColumn.Width = 400;
             codeBaseColumn.TextAlign = HorizontalAlignment.Left;
 
             secInfo.Size = new System.Drawing.Size(428, 210);
             secInfo.TabIndex = 0;
-            secInfo.Text = SR.GetString(SR.SecurityInfoTab);
+            secInfo.Text = SR.SecurityInfoTab;
 
             bugReportInfo.Size = new System.Drawing.Size(428, 210);
             bugReportInfo.TabIndex = 0;
-            bugReportInfo.Text = SR.GetString(SR.SecurityBugReportTab);
+            bugReportInfo.Text = SR.SecurityBugReportTab;
 
             securityLabel.Dock = DockStyle.Fill;
 
@@ -507,7 +507,7 @@ namespace System.Windows.Forms {
             closeButton.FlatStyle = FlatStyle.System;
             closeButton.TabIndex = 1;
             closeButton.Location = new System.Drawing.Point(344, 248);
-            closeButton.Text = SR.GetString(SR.SecurityClose);
+            closeButton.Text = SR.SecurityClose;
             closeButton.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
             closeButton.DialogResult = DialogResult.OK;
 

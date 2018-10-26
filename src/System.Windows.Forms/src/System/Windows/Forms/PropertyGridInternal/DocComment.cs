@@ -57,7 +57,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             Size = new Size(CXDEF, cydef);
 
-            this.Text = SR.GetString(SR.PBRSDocCommentPaneTitle);
+            this.Text = SR.PBRSDocCommentPaneTitle;
             SetStyle(ControlStyles.Selectable, false);
             ResumeLayout(false);
         }

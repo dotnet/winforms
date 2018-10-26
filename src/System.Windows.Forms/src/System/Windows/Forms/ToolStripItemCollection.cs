@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("toolStripItems");
             }
             if (IsReadOnly) {
-                throw new NotSupportedException(SR.GetString(SR.ToolStripItemCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
 
             // ToolStripDropDown will look for PropertyNames.Items to determine if it needs
@@ -158,7 +158,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("toolStripItems");
             }
             if (IsReadOnly) {
-                throw new NotSupportedException(SR.GetString(SR.ToolStripItemCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
 
             // ToolStripDropDown will look for PropertyNames.Items to determine if it needs
@@ -187,7 +187,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public virtual void Clear() {
             if (IsReadOnly) {
-               throw new NotSupportedException(SR.GetString(SR.ToolStripItemCollectionIsReadOnly));
+               throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
             if (Count == 0) {
                 return;
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("value");
             }
             if (IsReadOnly) {
-                throw new NotSupportedException(SR.GetString(SR.ToolStripItemCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
             
            
@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
                 // as we dont want anything on a dropdown to get keyboard messages in the Internet.
 
                 if (dropDown.OwnerItem == value) {
-                   throw new NotSupportedException(SR.GetString(SR.ToolStripItemCircularReference)); 
+                   throw new NotSupportedException(SR.ToolStripItemCircularReference); 
                 }
                 
                 // VSWhidbey 496526: ScrollButton is the only allowed control host as it correctly eats key messages.
@@ -260,7 +260,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public ToolStripItem[] Find(string key, bool searchAllChildren) {            
             if ((key == null) || (key.Length == 0)) {
-              throw new System.ArgumentNullException("key", SR.GetString(SR.FindKeyMayNotBeEmptyOrNull));
+              throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
             }
 
             ArrayList foundItems =  FindInternal(key, searchAllChildren, this, new ArrayList());
@@ -348,7 +348,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         object IList.this[int index] {
             get { return InnerList[index]; }            
-            set { throw new NotSupportedException(SR.GetString(SR.ToolStripCollectionMustInsertAndRemove)); /* InnerList[index] = value; */ }
+            set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
         }
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Insert"]/*' />
         /// <devdoc>
@@ -453,7 +453,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Remove(ToolStripItem value) {
             if (IsReadOnly) {
-               throw new NotSupportedException(SR.GetString(SR.ToolStripItemCollectionIsReadOnly));
+               throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
             InnerList.Remove(value);
             OnAfterRemove(value);
@@ -465,7 +465,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void RemoveAt(int index) {
             if (IsReadOnly) {
-               throw new NotSupportedException(SR.GetString(SR.ToolStripItemCollectionIsReadOnly));
+               throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
             ToolStripItem item = null;
             if (index < Count && index >= 0)  {
@@ -481,7 +481,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public virtual void RemoveByKey(string key) {
             if (IsReadOnly) {
-               throw new NotSupportedException(SR.GetString(SR.ToolStripItemCollectionIsReadOnly));
+               throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
             int index = IndexOfKey(key);
             if (IsValidIndex(index)) {

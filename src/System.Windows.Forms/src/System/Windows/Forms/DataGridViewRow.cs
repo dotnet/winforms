@@ -85,8 +85,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.ContextMenuStrip"]/*' />
         [
             DefaultValue(null),
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_RowContextMenuStripDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_RowContextMenuStripDescr))
         ]
         public override ContextMenuStrip ContextMenuStrip
         {
@@ -128,8 +128,8 @@ namespace System.Windows.Forms
             Browsable(true),
             NotifyParentProperty(true),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_RowDefaultCellStyleDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_RowDefaultCellStyleDescr))
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
@@ -141,7 +141,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertySetOnSharedRow, "DefaultCellStyle"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "DefaultCellStyle"));
                 }
                 base.DefaultCellStyle = value;
             }
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Displayed"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Displayed"));
                 }
                 return GetDisplayed(this.Index);
             }
@@ -167,8 +167,8 @@ namespace System.Windows.Forms
         [
             DefaultValue(0),
             NotifyParentProperty(true),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_RowDividerHeightDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_RowDividerHeightDescr))
         ]
         public int DividerHeight
         {
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertySetOnSharedRow, "DividerHeight"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "DividerHeight"));
                 }
                 this.DividerThickness = value;
             }
@@ -190,8 +190,8 @@ namespace System.Windows.Forms
         [
             DefaultValue(""),
             NotifyParentProperty(true),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_RowErrorTextDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_RowErrorTextDescr))
         ]
         public string ErrorText
         {
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Frozen"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Frozen"));
                 }
                 return GetFrozen(this.Index);
             }
@@ -245,7 +245,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertySetOnSharedRow, "Frozen"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "Frozen"));
                 }
                 base.Frozen = value;
             }
@@ -280,8 +280,8 @@ namespace System.Windows.Forms
         [
             DefaultValue(22),
             NotifyParentProperty(true),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_RowHeightDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_RowHeightDescr))
         ]
         public int Height
         {
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertySetOnSharedRow, "Height"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "Height"));
                 }
                 this.Thickness = value;
             }
@@ -306,7 +306,7 @@ namespace System.Windows.Forms
             {
                 if (this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertyGetOnSharedRow, "InheritedStyle"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "InheritedStyle"));
                 }
 
                 DataGridViewCellStyle inheritedRowStyle = new DataGridViewCellStyle();
@@ -343,7 +343,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertySetOnSharedRow, "MinimumHeight"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "MinimumHeight"));
                 }
                 this.MinimumThickness = value;
             }
@@ -354,8 +354,8 @@ namespace System.Windows.Forms
             Browsable(true),
             DefaultValue(false),
             NotifyParentProperty(true),
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_RowReadOnlyDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_RowReadOnlyDescr))
         ]
         public override bool ReadOnly
         {
@@ -363,7 +363,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertyGetOnSharedRow, "ReadOnly"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "ReadOnly"));
                 }
                 return GetReadOnly(this.Index);
             }
@@ -376,8 +376,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Resizable"]/*' />
         [
             NotifyParentProperty(true),
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_RowResizableDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_RowResizableDescr))
         ]
         public override DataGridViewTriState Resizable
         {
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Resizable"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Resizable"));
                 }
                 return GetResizable(this.Index);
             }
@@ -402,7 +402,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Selected"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Selected"));
                 }
                 return GetSelected(this.Index);
             }
@@ -419,7 +419,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertyGetOnSharedRow, "State"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "State"));
                 }
                 return GetState(this.Index);
             }
@@ -435,7 +435,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Visible"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Visible"));
                 }
                 return GetVisible(this.Index);
             }
@@ -443,7 +443,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView != null && this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertySetOnSharedRow, "Visible"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "Visible"));
                 }
                 base.Visible = value;
             }
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms
             }
             if (this.DataGridView != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowAlreadyBelongsToDataGridView));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_RowAlreadyBelongsToDataGridView));
             }
             DataGridViewCellCollection cells = this.Cells;
             // Clearing up the potential existing cells. We fill up the cells collection from scratch.
@@ -1199,7 +1199,7 @@ namespace System.Windows.Forms
             {
                 if (dataGridViewColumn.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_AColumnHasNoCellTemplate));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_AColumnHasNoCellTemplate));
                 }
                 DataGridViewCell dgvcNew = (DataGridViewCell)dataGridViewColumn.CellTemplate.Clone();
                 cells.Add(dgvcNew);
@@ -1217,7 +1217,7 @@ namespace System.Windows.Forms
             /* Intentionally not being strict about this. We just take what we get.
             if (dataGridView.Columns.Count != values.Length)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_WrongValueCount), "values");
+                throw new ArgumentException(string.Format(SR.DataGridView_WrongValueCount), "values");
             }*/
 
             CreateCells(dataGridView);
@@ -1276,7 +1276,7 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView == null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
             }
             if (graphics == null)
             {
@@ -1306,7 +1306,7 @@ namespace System.Windows.Forms
             {
                 if (rowIndex == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationOnSharedRow));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedRow));
                 }
                 if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
                 {
@@ -1336,7 +1336,7 @@ namespace System.Windows.Forms
             {
                 if (rowIndex == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationOnSharedRow));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedRow));
                 }
                 if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
                 {
@@ -1477,7 +1477,7 @@ namespace System.Windows.Forms
             {
                 if (rowIndex != this.Index)
                 {
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
                 }
                 return base.State;
             }
@@ -1517,7 +1517,7 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView == null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
             }
             DataGridView dataGridView = this.DataGridView;
             Rectangle updatedClipBounds = clipBounds;
@@ -1592,11 +1592,11 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView == null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
             }
             if ((int) paintParts < (int) DataGridViewPaintParts.None || (int) paintParts > (int) DataGridViewPaintParts.All)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, "paintParts"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, "paintParts"));
             }
 
             DataGridView dataGridView = this.DataGridView;
@@ -1780,7 +1780,7 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView == null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
             }
             
             // not using ClientUtils.IsValidEnum here because this is a flags enum.  
@@ -1855,11 +1855,11 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView.VirtualMode)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationInVirtualMode));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationInVirtualMode));
                 }
                 if (this.Index == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationOnSharedRow));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedRow));
                 }
             }
 
@@ -1927,7 +1927,7 @@ namespace System.Windows.Forms
                     Rectangle rowRect;
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                     }
                     if (this.owner.Index < this.owner.DataGridView.FirstDisplayedScrollingRowIndex)
                     {
@@ -1985,9 +1985,9 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                     }
-                    return SR.GetString(SR.DataGridView_AccRowName, this.owner.Index.ToString(CultureInfo.CurrentCulture));
+                    return string.Format(SR.DataGridView_AccRowName, this.owner.Index.ToString(CultureInfo.CurrentCulture));
                 }
             }
 
@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner != null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerAlreadySet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerAlreadySet));
                     }
                     this.owner = value;
                 }
@@ -2024,7 +2024,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                     }
                     return this.owner.DataGridView.AccessibilityObject;
                 }
@@ -2061,7 +2061,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                     }
                     if (this.selectedCellsAccessibilityObject == null)
                     {
@@ -2078,7 +2078,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                     }
 
                     AccessibleStates accState = AccessibleStates.Selectable;
@@ -2123,11 +2123,11 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                     }
                     if (this.owner.DataGridView.AllowUserToAddRows && this.owner.Index == this.owner.DataGridView.NewRowIndex)
                     {
-                        return SR.GetString(SR.DataGridView_AccRowCreateNew);
+                        return string.Format(SR.DataGridView_AccRowCreateNew);
                     }
 
                     StringBuilder sb = new StringBuilder(1024);
@@ -2164,7 +2164,7 @@ namespace System.Windows.Forms
                 }
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                 }
                 if (index == 0 && this.owner.DataGridView.RowHeadersVisible)
                 {
@@ -2188,7 +2188,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                 }
                 int result = this.owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible);
 
@@ -2212,7 +2212,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                 }
                 if (this.owner.DataGridView.Focused && this.owner.DataGridView.CurrentCell != null && this.owner.DataGridView.CurrentCell.RowIndex == this.owner.Index)
                 {
@@ -2230,7 +2230,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                 }
                 switch (navigationDirection)
                 {
@@ -2308,7 +2308,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                 }
 
                 DataGridView dataGridView = this.owner.DataGridView;
@@ -2359,7 +2359,7 @@ namespace System.Windows.Forms
                 {
                     if (Owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
                     }
 
                     var dataGridView = this.Owner.DataGridView;
@@ -2438,7 +2438,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return SR.GetString(SR.DataGridView_AccSelectedRowCellsName);
+                    return string.Format(SR.DataGridView_AccSelectedRowCellsName);
                 }
             }
 

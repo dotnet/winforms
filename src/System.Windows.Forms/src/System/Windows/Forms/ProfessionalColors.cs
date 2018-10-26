@@ -51,114 +51,114 @@ namespace System.Windows.Forms {
 
 #region Colors
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedHighlightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedHighlightDescr))]
         public static Color ButtonSelectedHighlight {
             get { return ColorTable.ButtonSelectedHighlight; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedHighlightBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedHighlightBorderDescr))]
         public static Color ButtonSelectedHighlightBorder {
             get { return ColorTable.ButtonSelectedHighlightBorder; }
         }
 
 
-        [SRDescription(SR.ProfessionalColorsButtonPressedHighlightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedHighlightDescr))]
         public static Color ButtonPressedHighlight {
              get { return ColorTable.ButtonPressedHighlight; }
         }
 
 
-        [SRDescription(SR.ProfessionalColorsButtonPressedHighlightBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedHighlightBorderDescr))]
         public static Color ButtonPressedHighlightBorder {
            get { return ColorTable.ButtonPressedHighlightBorder; }
         }
         
-        [SRDescription(SR.ProfessionalColorsButtonCheckedHighlightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedHighlightDescr))]
         public static Color ButtonCheckedHighlight {
             get { return ColorTable.ButtonCheckedHighlight; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonCheckedHighlightBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedHighlightBorderDescr))]
         public static Color ButtonCheckedHighlightBorder {
             get { return ColorTable.ButtonCheckedHighlightBorder; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonPressedBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedBorderDescr))]
         public static Color ButtonPressedBorder {
             get { return ColorTable.ButtonPressedBorder; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedBorderDescr))]
         public static Color ButtonSelectedBorder {
             get { return ColorTable.ButtonSelectedBorder; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonCheckedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientBeginDescr))]
         public static Color ButtonCheckedGradientBegin {
             get { return ColorTable.ButtonCheckedGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonCheckedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientMiddleDescr))]
         public static Color ButtonCheckedGradientMiddle {
             get { return ColorTable.ButtonCheckedGradientMiddle; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonCheckedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientEndDescr))]
         public static Color ButtonCheckedGradientEnd {
             get { return ColorTable.ButtonCheckedGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientBeginDescr))]
         public static Color ButtonSelectedGradientBegin {
             get { return ColorTable.ButtonSelectedGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientMiddleDescr))]
         public static Color ButtonSelectedGradientMiddle {
             get { return ColorTable.ButtonSelectedGradientMiddle; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientEndDescr))]
         public static Color ButtonSelectedGradientEnd {
             get { return ColorTable.ButtonSelectedGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonPressedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientBeginDescr))]
         public static Color ButtonPressedGradientBegin {
             get { return ColorTable.ButtonPressedGradientBegin; }
         }
      
-        [SRDescription(SR.ProfessionalColorsButtonPressedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientMiddleDescr))]
         public static Color ButtonPressedGradientMiddle {
             get { return ColorTable.ButtonPressedGradientMiddle; }
         }
         
-        [SRDescription(SR.ProfessionalColorsButtonPressedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientEndDescr))]
         public static Color ButtonPressedGradientEnd {
             get { return ColorTable.ButtonPressedGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsCheckBackgroundDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsCheckBackgroundDescr))]
         public static Color CheckBackground {
             get { return ColorTable.CheckBackground; }
         }
             
-        [SRDescription(SR.ProfessionalColorsCheckSelectedBackgroundDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsCheckSelectedBackgroundDescr))]
         public static Color CheckSelectedBackground {
             get { return ColorTable.CheckSelectedBackground; }
         }
         
-        [SRDescription(SR.ProfessionalColorsCheckPressedBackgroundDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsCheckPressedBackgroundDescr))]
         public static Color CheckPressedBackground {
             get { return ColorTable.CheckPressedBackground; }
         }
         
-        [SRDescription(SR.ProfessionalColorsGripDarkDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsGripDarkDescr))]
         public static Color GripDark {
             get { return ColorTable.GripDark; }
         }
 
-        [SRDescription(SR.ProfessionalColorsGripLightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsGripLightDescr))]
         public static Color GripLight {
             get { return ColorTable.GripLight; }
         }
@@ -185,172 +185,172 @@ namespace System.Windows.Forms {
         
  
 
-        [SRDescription(SR.ProfessionalColorsImageMarginGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientBeginDescr))]
         public static Color ImageMarginGradientBegin {
             get { return ColorTable.ImageMarginGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientMiddleDescr))]
         public static Color ImageMarginGradientMiddle {
             get { return ColorTable.ImageMarginGradientMiddle; }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientEndDescr))]
         public static Color ImageMarginGradientEnd {
             get { return ColorTable.ImageMarginGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginRevealedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientBeginDescr))]
         public static Color ImageMarginRevealedGradientBegin {
             get { return ColorTable.ImageMarginRevealedGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginRevealedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientMiddleDescr))]
         public static Color ImageMarginRevealedGradientMiddle {
             get { return ColorTable.ImageMarginRevealedGradientMiddle; }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginRevealedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientEndDescr))]
         public static Color ImageMarginRevealedGradientEnd {
             get { return ColorTable.ImageMarginRevealedGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuStripGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuStripGradientBeginDescr))]
         public static Color MenuStripGradientBegin {
             get { return ColorTable.MenuStripGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuStripGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuStripGradientEndDescr))]
         public static Color MenuStripGradientEnd{
             get { return ColorTable.MenuStripGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuBorderDescr))]
         public static Color MenuBorder  {
             get { return ColorTable.MenuBorder; }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemSelectedDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedDescr))]
         public static Color MenuItemSelected {
             get { return ColorTable.MenuItemSelected; }  
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemBorderDescr))]
         public static Color MenuItemBorder {
             get { return ColorTable.MenuItemBorder; }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemSelectedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedGradientBeginDescr))]
         public static Color MenuItemSelectedGradientBegin {
             get { return ColorTable.MenuItemSelectedGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemSelectedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedGradientEndDescr))]
         public static Color MenuItemSelectedGradientEnd {
             get { return ColorTable.MenuItemSelectedGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemPressedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemPressedGradientBeginDescr))]
         public static Color MenuItemPressedGradientBegin {
             get { return ColorTable.MenuItemPressedGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemPressedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemPressedGradientMiddleDescr))]
         public static Color MenuItemPressedGradientMiddle {
             get { return ColorTable.MenuItemPressedGradientMiddle; }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemPressedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemPressedGradientEndDescr))]
         public static Color MenuItemPressedGradientEnd {
             get { return ColorTable.MenuItemPressedGradientEnd; }
         }
 
    
-        [SRDescription(SR.ProfessionalColorsRaftingContainerGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsRaftingContainerGradientBeginDescr))]
         public static Color RaftingContainerGradientBegin {
             get { return ColorTable.RaftingContainerGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsRaftingContainerGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsRaftingContainerGradientEndDescr))]
         public static Color RaftingContainerGradientEnd {
             get { return ColorTable.RaftingContainerGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsSeparatorDarkDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsSeparatorDarkDescr))]
         public static Color SeparatorDark {
             get { return ColorTable.SeparatorDark; }
         }
 
-        [SRDescription(SR.ProfessionalColorsSeparatorLightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsSeparatorLightDescr))]
         public static Color SeparatorLight {
             get { return ColorTable.SeparatorLight; }
         }
-        [SRDescription(SR.ProfessionalColorsStatusStripGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
         public static Color StatusStripGradientBegin {
             get { return ColorTable.StatusStripGradientBegin; }
         }
    
-        [SRDescription(SR.ProfessionalColorsStatusStripGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientEndDescr))]
         public static Color StatusStripGradientEnd {
             get { return ColorTable.StatusStripGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripBorderDescr))]
         public static Color ToolStripBorder {
             get { return ColorTable.ToolStripBorder; }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripDropDownBackgroundDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripDropDownBackgroundDescr))]
         public static Color ToolStripDropDownBackground {
             get { return ColorTable.ToolStripDropDownBackground; }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripGradientBeginDescr))]
         public static Color ToolStripGradientBegin {
             get { return ColorTable.ToolStripGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripGradientMiddleDescr))]
         public static Color ToolStripGradientMiddle {
             get { return ColorTable.ToolStripGradientMiddle; }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripGradientEndDescr))]
         public static Color ToolStripGradientEnd {
             get { return ColorTable.ToolStripGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripContentPanelGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripContentPanelGradientBeginDescr))]
         public static Color ToolStripContentPanelGradientBegin {
             get { return ColorTable.ToolStripContentPanelGradientBegin; }
         }
    
-        [SRDescription(SR.ProfessionalColorsToolStripContentPanelGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripContentPanelGradientEndDescr))]
         public static Color ToolStripContentPanelGradientEnd {
             get { return ColorTable.ToolStripContentPanelGradientEnd; }
         }
         
-        [SRDescription(SR.ProfessionalColorsToolStripPanelGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripPanelGradientBeginDescr))]
         public static Color ToolStripPanelGradientBegin {
             get { return ColorTable.ToolStripPanelGradientBegin; }
         }
   
-        [SRDescription(SR.ProfessionalColorsToolStripPanelGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripPanelGradientEndDescr))]
         public static Color ToolStripPanelGradientEnd {
             get { return ColorTable.ToolStripPanelGradientEnd; }
         }
 
-        [SRDescription(SR.ProfessionalColorsOverflowButtonGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientBeginDescr))]
         public static Color OverflowButtonGradientBegin {
             get { return ColorTable.OverflowButtonGradientBegin; }
         }
 
-        [SRDescription(SR.ProfessionalColorsOverflowButtonGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientMiddleDescr))]
         public static Color OverflowButtonGradientMiddle {
             get { return ColorTable.OverflowButtonGradientMiddle; }
         }
 
-        [SRDescription(SR.ProfessionalColorsOverflowButtonGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientEndDescr))]
         public static Color OverflowButtonGradientEnd {
             get { return ColorTable.OverflowButtonGradientEnd; }
         }

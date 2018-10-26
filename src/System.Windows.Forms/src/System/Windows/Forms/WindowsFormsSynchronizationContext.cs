@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         public override void Send(SendOrPostCallback d, Object state) {
             Thread destinationThread = DestinationThread;
             if (destinationThread == null || !destinationThread.IsAlive) {
-                throw new InvalidAsynchronousStateException(SR.GetString(SR.ThreadNoLongerValid));
+                throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
             }
 
             Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");

@@ -36,12 +36,12 @@ namespace System.Windows.Forms {
             }
                 
             if (destinationType == typeof(string) && (value == null)) {
-                return SR.GetString(SR.toStringDefault);
+                return SR.toStringDefault;
             }
             else {
                 string strValue = value as string;
                 if (strValue != null && (strValue.Length == 0)) {
-                    return SR.GetString(SR.toStringDefault);
+                    return SR.toStringDefault;
                 }
             }
 

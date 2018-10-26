@@ -119,7 +119,7 @@ namespace System.Windows.Forms {
                     // show the More Windows... item if necessary.
                     if (visibleChildren > maxMenuForms) {
                         ToolStripMenuItem moreWindowsMenuItem = new ToolStripMenuItem();
-                        moreWindowsMenuItem.Text = SR.GetString(SR.MDIMenuMoreWindows);
+                        moreWindowsMenuItem.Text = SR.MDIMenuMoreWindows;
                         Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "\tPopulateItems: Added " + moreWindowsMenuItem.Text);
                         moreWindowsMenuItem.Click += new EventHandler(OnMoreWindowsMenuItemClick);
                         moreWindowsMenuItem.MergeAction = MergeAction.Append;

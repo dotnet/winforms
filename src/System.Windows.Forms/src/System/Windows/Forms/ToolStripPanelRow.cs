@@ -89,7 +89,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(SR.ControlControlsDescr), SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(nameof(SR.ControlControlsDescr)), SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public Control[] Controls {
             get {
                 Control[] controls = new Control[ControlsInternal.Count];
@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Collection of child controls.
         /// </devdoc>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(SR.ControlControlsDescr)]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(nameof(SR.ControlControlsDescr))]
         internal ToolStripPanelRowControlCollection ControlsInternal {
             get {
                 ToolStripPanelRowControlCollection controlsCollection = (ToolStripPanelRowControlCollection)Properties.GetObject(PropControlsCollection);
@@ -2037,7 +2037,7 @@ namespace System.Windows.Forms {
                     throw new ArgumentNullException("value");
                 }
                 if (control == null) {
-                    throw new NotSupportedException(SR.GetString(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));                 
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));                 
                 }
 
                 int index = InnerList.Add(control.ToolStripPanelCell);
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms {
                 }
                 ISupportToolStripPanel control = value as ISupportToolStripPanel;
                 if (control == null) {
-                    throw new NotSupportedException(SR.GetString(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
                 }
 
                 InnerList.Insert(index, control.ToolStripPanelCell);
@@ -2271,7 +2271,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index >= array.Length || InnerList.Count > array.Length - index) {
-                    throw new ArgumentException(SR.GetString(SR.ToolStripPanelRowControlCollectionIncorrectIndexLength));
+                    throw new ArgumentException(SR.ToolStripPanelRowControlCollectionIncorrectIndexLength);
                 }
 
                 for (int i = 0; i < InnerList.Count; i++) {

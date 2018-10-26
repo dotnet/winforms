@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
     ClassInterface(ClassInterfaceType.AutoDispatch),
     DefaultProperty("Value"),
     DefaultBindingProperty("Value"),
-    SRDescription(SR.DescriptionProgressBar)
+    SRDescription(nameof(SR.DescriptionProgressBar))
     ]
     public class ProgressBar : Control {
 
@@ -146,8 +146,8 @@ namespace System.Windows.Forms {
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(ProgressBarStyle.Blocks),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ProgressBarStyleDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ProgressBarStyleDescr))
         ]
         public ProgressBarStyle Style {
             get {
@@ -328,8 +328,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(100), 
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.ProgressBarMarqueeAnimationSpeed)]
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))]
         public int MarqueeAnimationSpeed {
             get {
                 return marqueeSpeed;
@@ -376,9 +376,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(100),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ProgressBarMaximumDescr)
+        SRDescription(nameof(SR.ProgressBarMaximumDescr))
         ]
         public int Maximum {
             get {
@@ -390,7 +390,7 @@ namespace System.Windows.Forms {
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("Maximum", SR.GetString(SR.InvalidLowBoundArgumentEx, "Maximum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("Maximum", string.Format(SR.InvalidLowBoundArgumentEx, "Maximum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
 
                     if (minimum > value) minimum = value;
 
@@ -414,9 +414,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(0),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ProgressBarMinimumDescr)
+        SRDescription(nameof(SR.ProgressBarMinimumDescr))
         ]
         public int Minimum {
             get {
@@ -428,7 +428,7 @@ namespace System.Windows.Forms {
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("Minimum", SR.GetString(SR.InvalidLowBoundArgumentEx, "Minimum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("Minimum", string.Format(SR.InvalidLowBoundArgumentEx, "Minimum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     if (maximum < value) maximum = value;
 
                     minimum = value;
@@ -494,10 +494,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -520,7 +520,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 onRightToLeftLayoutChanged += value;
@@ -539,8 +539,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(10),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ProgressBarStepDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ProgressBarStepDescr))
         ]
         public int Step {
             get {
@@ -612,9 +612,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(0),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Bindable(true),
-        SRDescription(SR.ProgressBarValueDescr)
+        SRDescription(nameof(SR.ProgressBarValueDescr))
         ]
         public int Value {
             get {
@@ -623,7 +623,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if ((value < minimum) || (value > maximum))
-                        throw new ArgumentOutOfRangeException("Value", SR.GetString(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
+                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
                     this.value = value;
                     UpdatePos() ;
                 }
@@ -758,7 +758,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Increment(int value) {
             if (this.Style == ProgressBarStyle.Marquee) {
-                throw new InvalidOperationException(SR.GetString(SR.ProgressBarIncrementMarqueeException));
+                throw new InvalidOperationException(SR.ProgressBarIncrementMarqueeException);
             }
             this.value += value;
 
@@ -831,7 +831,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void PerformStep() {
             if (this.Style == ProgressBarStyle.Marquee) {
-                throw new InvalidOperationException(SR.GetString(SR.ProgressBarPerformStepMarqueeException));
+                throw new InvalidOperationException(SR.ProgressBarPerformStepMarqueeException);
             }
             Increment(step);
         }

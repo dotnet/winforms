@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     ///       cannot be inherited.
     ///    </para>
     /// </devdoc>
-    [SRDescription(SR.DescriptionOpenFileDialog)]
+    [SRDescription(nameof(SR.DescriptionOpenFileDialog))]
     public sealed class OpenFileDialog : FileDialog
     {
 
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         [
         DefaultValue(true),
-        SRDescription(SR.OFDcheckFileExistsDescr)
+        SRDescription(nameof(SR.OFDcheckFileExistsDescr))
         ]
         public override bool CheckFileExists
         {
@@ -60,9 +60,9 @@ namespace System.Windows.Forms
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.OFDmultiSelectDescr)
+        SRDescription(nameof(SR.OFDmultiSelectDescr))
         ]
         public bool Multiselect
         {
@@ -84,9 +84,9 @@ namespace System.Windows.Forms
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.OFDreadOnlyCheckedDescr)
+        SRDescription(nameof(SR.OFDreadOnlyCheckedDescr))
         ]
         public bool ReadOnlyChecked
         {
@@ -107,9 +107,9 @@ namespace System.Windows.Forms
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.OFDshowReadOnlyDescr)
+        SRDescription(nameof(SR.OFDshowReadOnlyDescr))
         ]
         public bool ShowReadOnly
         {
@@ -203,13 +203,13 @@ namespace System.Windows.Forms
                 switch (errorCode)
                 {
                     case NativeMethods.FNERR_INVALIDFILENAME:
-                        throw new InvalidOperationException(SR.GetString(SR.FileDialogInvalidFileName, FileName));
+                        throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
 
                     case NativeMethods.FNERR_SUBCLASSFAILURE:
-                        throw new InvalidOperationException(SR.GetString(SR.FileDialogSubLassFailure));
+                        throw new InvalidOperationException(SR.FileDialogSubLassFailure);
 
                     case NativeMethods.FNERR_BUFFERTOOSMALL:
-                        throw new InvalidOperationException(SR.GetString(SR.FileDialogBufferTooSmall));
+                        throw new InvalidOperationException(SR.FileDialogBufferTooSmall);
                 }
             }
             return result;

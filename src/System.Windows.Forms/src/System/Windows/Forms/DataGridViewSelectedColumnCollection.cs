@@ -26,14 +26,14 @@ namespace System.Windows.Forms
         /// <internalonly/>
         int IList.Add(object value)
         {
-            throw new NotSupportedException(SR.GetString(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedColumnCollection.uex' path='docs/doc[@for="DataGridViewSelectedColumnCollection.IList.Clear"]/*' />
         /// <internalonly/>
         void IList.Clear()
         {
-            throw new NotSupportedException(SR.GetString(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedColumnCollection.uex' path='docs/doc[@for="DataGridViewSelectedColumnCollection.IList.Contains"]/*' />
@@ -54,21 +54,21 @@ namespace System.Windows.Forms
         /// <internalonly/>
         void IList.Insert(int index, object value)
         {
-            throw new NotSupportedException(SR.GetString(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedColumnCollection.uex' path='docs/doc[@for="DataGridViewSelectedColumnCollection.IList.Remove"]/*' />
         /// <internalonly/>
         void IList.Remove(object value)
         {
-            throw new NotSupportedException(SR.GetString(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedColumnCollection.uex' path='docs/doc[@for="DataGridViewSelectedColumnCollection.IList.RemoveAt"]/*' />
         /// <internalonly/>
         void IList.RemoveAt(int index)
         {
-            throw new NotSupportedException(SR.GetString(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedColumnCollection.uex' path='docs/doc[@for="DataGridViewSelectedColumnCollection.IList.IsFixedSize"]/*' />
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
         object IList.this[int index]
         {
             get { return this.items[index]; }
-            set { throw new NotSupportedException(SR.GetString(SR.DataGridView_ReadOnlyCollection)); }
+            set { throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection)); }
         }
 
         /// <include file='doc\DataGridViewSelectedColumnCollection.uex' path='docs/doc[@for="DataGridViewSelectedColumnCollection.ICollection.CopyTo"]/*' />
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
         ]
         public void Clear()
         {
-            throw new NotSupportedException(SR.GetString(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedColumnCollection.uex' path='docs/doc[@for="DataGridViewSelectedColumnCollection.Contains"]/*' />
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
         ]
         public void Insert(int index, DataGridViewColumn dataGridViewColumn)
         {
-            throw new NotSupportedException(SR.GetString(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
     }
 }

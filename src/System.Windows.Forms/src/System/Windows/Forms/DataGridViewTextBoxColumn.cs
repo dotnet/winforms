@@ -38,7 +38,7 @@ namespace System.Windows.Forms
             {
                 if (value != null && !(value is System.Windows.Forms.DataGridViewTextBoxCell))
                 {
-                    throw new InvalidCastException(SR.GetString(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewTextBoxCell"));
+                    throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewTextBoxCell"));
                 }
                 base.CellTemplate = value;
             }
@@ -47,8 +47,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewTextBoxColumn.uex' path='docs/doc[@for="DataGridViewTextBoxColumn.MaxInputLength"]/*' />
         [
             DefaultValue(DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength),
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_TextBoxColumnMaxInputLengthDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_TextBoxColumnMaxInputLengthDescr))
         ]
         public int MaxInputLength
         {
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             {
                 if (this.TextBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.TextBoxCellTemplate.MaxInputLength;
             }

@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripContainerDesigner, " + AssemblyRef.SystemDesign)]
-    [SRDescription(SR.ToolStripContainerDesc)]
+    [SRDescription(nameof(SR.ToolStripContainerDesc))]
     public class ToolStripContainer : ContainerControl {
 
         private ToolStripPanel topPanel;
@@ -167,8 +167,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerBottomToolStripPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerBottomToolStripPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -179,8 +179,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerBottomToolStripPanelVisibleDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerBottomToolStripPanelVisibleDescr)),
         DefaultValue(true)
         ]
         public bool BottomToolStripPanelVisible {
@@ -193,8 +193,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerContentPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerContentPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -300,8 +300,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerLeftToolStripPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerLeftToolStripPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -313,8 +313,8 @@ namespace System.Windows.Forms {
 
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerLeftToolStripPanelVisibleDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerLeftToolStripPanelVisibleDescr)),
         DefaultValue(true)
         ]
         public bool LeftToolStripPanelVisible {
@@ -328,8 +328,8 @@ namespace System.Windows.Forms {
 
        
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerRightToolStripPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerRightToolStripPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -340,8 +340,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerRightToolStripPanelVisibleDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerRightToolStripPanelVisibleDescr)),
         DefaultValue(true)
         ]
         public bool RightToolStripPanelVisible {
@@ -354,8 +354,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerTopToolStripPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerTopToolStripPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -366,8 +366,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerTopToolStripPanelVisibleDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerTopToolStripPanelVisibleDescr)),
         DefaultValue(true)
         ]
         public bool TopToolStripPanelVisible {
@@ -455,19 +455,19 @@ namespace System.Windows.Forms {
                     throw new ArgumentNullException("value");
                 }
                 if (IsReadOnly) {
-                    throw new NotSupportedException(SR.GetString(SR.ToolStripContainerUseContentPanel));
+                    throw new NotSupportedException(SR.ToolStripContainerUseContentPanel);
                 }
 
                 Type controlType = value.GetType();
                 if (!contentPanelType.IsAssignableFrom(controlType) && !panelType.IsAssignableFrom(controlType)) {
-                    throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.TypedControlCollectionShouldBeOfTypes, contentPanelType.Name, panelType.Name)), value.GetType().Name);
+                    throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, contentPanelType.Name, panelType.Name)), value.GetType().Name);
                 }
                 base.Add(value);
             }
             public override void Remove(Control value) {
                 if (value is ToolStripPanel || value is ToolStripContentPanel) {
                     if (!owner.DesignMode) {
-                        if (IsReadOnly) throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                        if (IsReadOnly) throw new NotSupportedException(SR.ReadonlyControlsCollection);
                     }
                 }
                 base.Remove(value);
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
                 if (child is ToolStripPanel || child is ToolStripContentPanel) {
                     if (!owner.DesignMode) {
                         if (IsReadOnly) {
-                            throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
                         }
                     }
                     else {

@@ -109,8 +109,8 @@ namespace System.Windows.Forms {
 	[
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
-	SRCategory(SR.CatBehavior),
-	SRDescription(SR.ColumnHeaderDisplayIndexDescr)
+	SRCategory(nameof(SR.CatBehavior)),
+	SRDescription(nameof(SR.ColumnHeaderDisplayIndexDescr))
 	]
         public int DisplayIndex {
             get {
@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
                 }
 
 	        if (value < 0 || value> (this.listview.Columns.Count - 1)) {
-                    throw new ArgumentOutOfRangeException("DisplayIndex", SR.GetString(SR.ColumnHeaderBadDisplayIndex));
+                    throw new ArgumentOutOfRangeException("DisplayIndex", SR.ColumnHeaderBadDisplayIndex);
 	        }
 
                 int lowDI = Math.Min(this.DisplayIndexInternal, value);
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", SR.GetString(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (imageIndexer.Index != value) {
@@ -261,7 +261,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Browsable(false),
-        SRDescription(SR.ColumnHeaderNameDescr)
+        SRDescription(nameof(SR.ColumnHeaderNameDescr))
         ]
         public string Name {
             get {
@@ -287,7 +287,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRDescription(SR.ColumnCaption)
+        SRDescription(nameof(SR.ColumnCaption))
         ]
         public string Text {
             get {
@@ -312,7 +312,7 @@ namespace System.Windows.Forms {
         ///     The horizontal alignment of the text contained in this column
         /// </devdoc>
         [
-        SRDescription(SR.ColumnAlignment),
+        SRDescription(nameof(SR.ColumnAlignment)),
         Localizable(true),
         DefaultValue(HorizontalAlignment.Left)
         ]
@@ -352,10 +352,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -378,7 +378,7 @@ namespace System.Windows.Forms {
         ///     The width of the column in pixels.
         /// </devdoc>
         [
-        SRDescription(SR.ColumnWidth),
+        SRDescription(nameof(SR.ColumnWidth)),
         Localizable(true),
         DefaultValue(60)
         ]

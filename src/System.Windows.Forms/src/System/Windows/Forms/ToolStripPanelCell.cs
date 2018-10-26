@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("control");
             }
             else if (_wrappedToolStrip == null) {
-               throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
+               throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
             }
             CommonProperties.SetAutoSize(this, true);
              _wrappedToolStrip.LocationChanging += new ToolStripLocationCancelEventHandler(this.OnToolStripLocationChanging);
@@ -348,7 +348,8 @@ namespace System.Windows.Forms {
         private void OnToolStripVisibleChanged(object sender, EventArgs e) {
 
             if (_wrappedToolStrip != null 
-                && !_wrappedToolStrip.IsInDesignMode                 
+                && !_wrappedToolStrip.IsInDesignMode 
+                
                 && !_wrappedToolStrip.IsCurrentlyDragging 
                 && !_wrappedToolStrip.IsDisposed      // ensure we have a live-runtime only toolstrip.
                 && !_wrappedToolStrip.Disposing) {

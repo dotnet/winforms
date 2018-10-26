@@ -43,15 +43,15 @@ namespace System.Windows.Forms {
             keyNames = new Hashtable(34);
             displayOrder = new List<string>(34);
 
-            AddKey(SR.GetString(SR.toStringEnter), Keys.Return);
+            AddKey(SR.toStringEnter, Keys.Return);
             AddKey("F12", Keys.F12);
             AddKey("F11", Keys.F11);
             AddKey("F10", Keys.F10);
-            AddKey(SR.GetString(SR.toStringEnd), Keys.End);
-            AddKey(SR.GetString(SR.toStringControl), Keys.Control);
+            AddKey(SR.toStringEnd, Keys.End);
+            AddKey(SR.toStringControl, Keys.Control);
             AddKey("F8", Keys.F8);
             AddKey("F9", Keys.F9);
-            AddKey(SR.GetString(SR.toStringAlt), Keys.Alt);
+            AddKey(SR.toStringAlt, Keys.Alt);
             AddKey("F4", Keys.F4);
             AddKey("F5", Keys.F5);
             AddKey("F6", Keys.F6);
@@ -59,13 +59,13 @@ namespace System.Windows.Forms {
             AddKey("F1", Keys.F1);
             AddKey("F2", Keys.F2);
             AddKey("F3", Keys.F3);
-            AddKey(SR.GetString(SR.toStringPageDown), Keys.Next);
-            AddKey(SR.GetString(SR.toStringInsert), Keys.Insert);
-            AddKey(SR.GetString(SR.toStringHome), Keys.Home);
-            AddKey(SR.GetString(SR.toStringDelete), Keys.Delete);
-            AddKey(SR.GetString(SR.toStringShift), Keys.Shift);
-            AddKey(SR.GetString(SR.toStringPageUp), Keys.Prior);
-            AddKey(SR.GetString(SR.toStringBack), Keys.Back);
+            AddKey(SR.toStringPageDown, Keys.Next);
+            AddKey(SR.toStringInsert, Keys.Insert);
+            AddKey(SR.toStringHome, Keys.Home);
+            AddKey(SR.toStringDelete, Keys.Delete);
+            AddKey(SR.toStringShift, Keys.Shift);
+            AddKey(SR.toStringPageUp, Keys.Prior);
+            AddKey(SR.toStringBack, Keys.Back);
 
             //new whidbey keys follow here...
             // VSWhidbey 95006: Add string mappings for these values (numbers 0-9) so that the keyboard shortcuts
@@ -190,7 +190,7 @@ namespace System.Windows.Forms {
                                 // "A + B"
                                 //
                                 if (foundKeyCode) {
-                                    throw new FormatException(SR.GetString(SR.KeysConverterInvalidKeyCombination));
+                                    throw new FormatException(SR.KeysConverterInvalidKeyCombination);
                                 }
                                 foundKeyCode = true;
                             }
@@ -203,7 +203,7 @@ namespace System.Windows.Forms {
                         
                             // We did not match this key.  Report this as an error too.
                             //
-                            throw new FormatException(SR.GetString(SR.KeysConverterInvalidKeyName, tokens[i]));
+                            throw new FormatException(string.Format(SR.KeysConverterInvalidKeyName, tokens[i]));
                             
                         }
                     }

@@ -293,7 +293,7 @@ namespace System.Windows.Forms {
         //
         internal void AddControl(Control ctl) {
             if (containerCache.Contains(ctl))
-                throw new ArgumentException(SR.GetString(SR.AXDuplicateControl, GetNameForControl(ctl)), "ctl");
+                throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), "ctl");
 
             containerCache.Add(ctl, ctl);
                 

@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
     DefaultEvent("CurrentChanged"),
     ComplexBindingProperties("DataSource", "DataMember"),
     Designer("System.Windows.Forms.Design.BindingSourceDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionBindingSource),
+    SRDescription(nameof(SR.DescriptionBindingSource)),
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1035:ICollectionImplementationsHaveStronglyTypedMembers"), // ICollection.CopyTo: Its just a wrapper class, it doesn't have a specific member type
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), // ICollection: We don't want class name to have to end in 'Collection'
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1039:ListsAreStronglyTyped"), // IList.Add: Its just a wrapper class, it doesn't have a specific member type
@@ -229,11 +229,11 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(""),
         RefreshProperties(RefreshProperties.Repaint),
         Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
-        SRDescription(SR.BindingSourceDataMemberDescr)
+        SRDescription(nameof(SR.BindingSourceDataMemberDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataMember"]/* />
         public string DataMember {
@@ -255,11 +255,11 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         RefreshProperties(RefreshProperties.Repaint),
         AttributeProvider(typeof(IListSource)),
-        SRDescription(SR.BindingSourceDataSourceDescr)
+        SRDescription(nameof(SR.BindingSourceDataSourceDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataSource"]/* />
         public object DataSource {
@@ -442,9 +442,9 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
-        SRDescription(SR.BindingSourceSortDescr)
+        SRDescription(nameof(SR.BindingSourceSortDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Sort"]/*' />
         public string Sort {
@@ -465,8 +465,8 @@ namespace System.Windows.Forms {
         ///////////////////////////////////////////////////////////////////////////////
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceAddingNewEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceAddingNewEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.AddingNew"]/*' />
         public event AddingNewEventHandler AddingNew {
@@ -480,8 +480,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.BindingComplete"]/*' />
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceBindingCompleteEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceBindingCompleteEventHandlerDescr))
         ]
         public event BindingCompleteEventHandler BindingComplete {
             add {
@@ -493,8 +493,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceDataErrorEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceDataErrorEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataError"]/*' />
         public event BindingManagerDataErrorEventHandler DataError {
@@ -507,8 +507,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceDataSourceChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceDataSourceChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataSourceChanged"]/*' />
         public event EventHandler DataSourceChanged {
@@ -521,8 +521,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceDataMemberChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceDataMemberChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataMemberChanged"]/*' />
         public event EventHandler DataMemberChanged {
@@ -535,8 +535,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceCurrentChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceCurrentChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.CurrentChanged"]/*' />
         public event EventHandler CurrentChanged {
@@ -549,8 +549,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceCurrentItemChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceCurrentItemChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.CurrentItemChanged"]/*' />
         public event EventHandler CurrentItemChanged {
@@ -563,8 +563,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceListChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceListChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.ListChanged"]/*' />
         public event ListChangedEventHandler ListChanged {
@@ -577,8 +577,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourcePositionChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourcePositionChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.PositionChanged"]/*' />
         public event EventHandler PositionChanged {
@@ -668,7 +668,7 @@ namespace System.Windows.Forms {
 
             while (bindingSource != null) {
                 if (bindingSource == this) {
-                    throw new InvalidOperationException(SR.GetString(SR.BindingSourceRecursionDetected));
+                    throw new InvalidOperationException(SR.BindingSourceRecursionDetected);
                 }
                 bindingSource = bindingSource.DataSource as BindingSource;
             }
@@ -708,7 +708,7 @@ namespace System.Windows.Forms {
             }
 
             if (instanceException != null) {
-                throw new NotSupportedException(SR.GetString(SR.BindingSourceInstanceError), instanceException);
+                throw new NotSupportedException(SR.BindingSourceInstanceError, instanceException);
             }
 
             return instancedObject;
@@ -796,7 +796,7 @@ namespace System.Windows.Forms {
             PropertyDescriptor pd = (itemShape == null) ? null : itemShape.Find(propertyName, true);
 
             if (pd == null) {
-                throw new System.ArgumentException(SR.GetString(SR.DataSourceDataMemberPropNotFound, propertyName));
+                throw new System.ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, propertyName));
             }
 
             return (this as IBindingList).Find(pd, key);
@@ -1141,14 +1141,14 @@ namespace System.Windows.Forms {
                         current = current.Substring(1, current.Length - 2);
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.BindingSourceBadSortString));
+                        throw new ArgumentException(SR.BindingSourceBadSortString);
                     }
                 }
 
                 // Find the property
                 PropertyDescriptor prop = props.Find(current, true);
                 if (prop == null) {
-                    throw new ArgumentException(SR.GetString(SR.BindingSourceSortStringPropertyNotInIBindingList));
+                    throw new ArgumentException(SR.BindingSourceSortStringPropertyNotInIBindingList);
                 }
 
                 // Add the sort description
@@ -1163,11 +1163,11 @@ namespace System.Windows.Forms {
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.RemoveCurrent"]/*' />
         public void RemoveCurrent() {
             if (!(this as IBindingList).AllowRemove) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceRemoveCurrentNotAllowed));
+                throw new InvalidOperationException(SR.BindingSourceRemoveCurrentNotAllowed);
             }
 
             if (Position < 0 || Position >= Count) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceRemoveCurrentNoCurrentItem));
+                throw new InvalidOperationException(SR.BindingSourceRemoveCurrentNoCurrentItem);
             }
 
             RemoveAt(Position);
@@ -1595,7 +1595,7 @@ namespace System.Windows.Forms {
                     }
                     if (recursionDetectionFlag) 
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.BindingSourceRecursionDetected));
+                        throw new InvalidOperationException(SR.BindingSourceRecursionDetected);
                     }
                     recursionDetectionFlag = true;
 
@@ -1645,11 +1645,11 @@ namespace System.Windows.Forms {
 
             // Throw if user tries to add items to list that don't match the current item type
             if (value != null && !itemType.IsAssignableFrom(value.GetType())) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceItemTypeMismatchOnAdd));
+                throw new InvalidOperationException(SR.BindingSourceItemTypeMismatchOnAdd);
             }
 
             if (value == null && itemType.IsValueType) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceItemTypeIsValueType));
+                throw new InvalidOperationException(SR.BindingSourceItemTypeIsValueType);
             }
 
             ret = List.Add(value);
@@ -1763,11 +1763,11 @@ namespace System.Windows.Forms {
         public virtual object AddNew() {
             // Throw if adding new items has been disabled
             if (!AllowNewInternal(false)) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceBindingListWrapperAddToReadOnlyList));
+                throw new InvalidOperationException(SR.BindingSourceBindingListWrapperAddToReadOnlyList);
             }
 
             if (!AllowNewInternal(true)) {
-                throw new InvalidOperationException(SR.GetString(
+                throw new InvalidOperationException(string.Format(
                     SR.BindingSourceBindingListWrapperNeedToSetAllowNew,
                     itemType == null ? "(null)" : itemType.FullName
                     ));
@@ -1805,7 +1805,7 @@ namespace System.Windows.Forms {
 
                 // Throw if we don't know how to create items of the current item type
                 if (this.itemConstructor == null) {
-                    throw new InvalidOperationException(SR.GetString(
+                    throw new InvalidOperationException(string.Format(
                         SR.BindingSourceBindingListWrapperNeedAParameterlessConstructor,
                         itemType == null ? "(null)" : itemType.FullName
                         ));
@@ -1842,8 +1842,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.BindingSourceAllowNewDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.BindingSourceAllowNewDescr)),
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.AllowNew"]/*' />
         public virtual bool AllowNew {
@@ -1862,7 +1862,7 @@ namespace System.Windows.Forms {
                 // do NOT check for a default constructor because someone will set AllowNew=True
                 // when they have overridden OnAddingNew (which we cannot detect).
                 if (value == true && !isBindingList && !IsListWriteable(false)) {
-                    throw new InvalidOperationException(SR.GetString(SR.NoAllowNewOnReadOnlyList));
+                    throw new InvalidOperationException(SR.NoAllowNewOnReadOnlyList);
                 }
 
                 // Record new value, which will now override inner list's value
@@ -1958,7 +1958,7 @@ namespace System.Windows.Forms {
                 ((IBindingList) List).AddIndex(property);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingList));
+                throw new NotSupportedException(SR.OperationRequiresIBindingList);
             }
         }
 
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms {
                 ((IBindingList) List).ApplySort(property, sort);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingList));
+                throw new NotSupportedException(SR.OperationRequiresIBindingList);
             }
         }
 
@@ -1977,7 +1977,7 @@ namespace System.Windows.Forms {
                 return ((IBindingList) List).Find(prop, key);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingList));
+                throw new NotSupportedException(SR.OperationRequiresIBindingList);
             }
         }
 
@@ -1986,7 +1986,7 @@ namespace System.Windows.Forms {
                 ((IBindingList) List).RemoveIndex(prop);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingList));
+                throw new NotSupportedException(SR.OperationRequiresIBindingList);
             }
         }
 
@@ -2013,7 +2013,7 @@ namespace System.Windows.Forms {
                 iblw.ApplySort(sorts);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingListView));
+                throw new NotSupportedException(SR.OperationRequiresIBindingListView);
             }
         }
 
@@ -2031,9 +2031,9 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
-        SRDescription(SR.BindingSourceFilterDescr)
+        SRDescription(nameof(SR.BindingSourceFilterDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Filter"]/* />
         public virtual string Filter

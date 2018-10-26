@@ -81,10 +81,10 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Alignment"]/*' />
         [
-            SRDescription(SR.DataGridViewCellStyleAlignmentDescr),
+            SRDescription(nameof(SR.DataGridViewCellStyleAlignmentDescr)),
             //Localizable(true),
             DefaultValue(DataGridViewContentAlignment.NotSet),
-            SRCategory(SR.CatLayout)
+            SRCategory(nameof(SR.CatLayout))
         ]
         public DataGridViewContentAlignment Alignment
         {
@@ -138,7 +138,7 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.BackColor"]/*' />
         [
-            SRCategory(SR.CatAppearance)
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public Color BackColor
         {
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Font"]/*' />
         [
-            SRCategory(SR.CatAppearance)
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public Font Font
         {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
         
         /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.ForeColor"]/*' />
         [
-            SRCategory(SR.CatAppearance)
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public Color ForeColor
         {
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(""),
             EditorAttribute("System.Windows.Forms.Design.FormatStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-            SRCategory(SR.CatBehavior),
+            SRCategory(nameof(SR.CatBehavior)),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public string Format
@@ -371,7 +371,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(DATAGRIDVIEWCELLSTYLE_nullText),
             TypeConverter(typeof(StringConverter)),
-            SRCategory(SR.CatData)
+            SRCategory(nameof(SR.CatData))
         ]
         public object NullValue
         {
@@ -414,7 +414,7 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Padding"]/*' />
         [
-            SRCategory(SR.CatLayout)
+            SRCategory(nameof(SR.CatLayout))
         ]
         public Padding Padding
         {
@@ -481,7 +481,7 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.SelectionBackColor"]/*' />
         [
-            SRCategory(SR.CatAppearance)
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public Color SelectionBackColor
         {
@@ -505,7 +505,7 @@ namespace System.Windows.Forms
         
         /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.SelectionForeColor"]/*' />
         [
-            SRCategory(SR.CatAppearance)
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public Color SelectionForeColor
         {
@@ -550,7 +550,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.WrapMode"]/*' />
         [
             DefaultValue(DataGridViewTriState.NotSet),
-            SRCategory(SR.CatLayout)
+            SRCategory(nameof(SR.CatLayout))
 
         ]
         public DataGridViewTriState WrapMode

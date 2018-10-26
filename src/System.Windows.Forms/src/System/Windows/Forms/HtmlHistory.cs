@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Back(int numberBack) {
             if (numberBack < 0) {
-                throw new ArgumentOutOfRangeException("numberBack", SR.GetString(SR.InvalidLowBoundArgumentEx, "numberBack", numberBack.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("numberBack", string.Format(SR.InvalidLowBoundArgumentEx, "numberBack", numberBack.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
             else if (numberBack > 0) {
                 object oNumForward = (object)(-numberBack);
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Forward(int numberForward) {
             if (numberForward < 0) {
-                throw new ArgumentOutOfRangeException("numberForward", SR.GetString(SR.InvalidLowBoundArgumentEx, "numberForward", numberForward.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("numberForward", string.Format(SR.InvalidLowBoundArgumentEx, "numberForward", numberForward.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
             else if (numberForward > 0) {
                 object oNumForward = (object)numberForward;

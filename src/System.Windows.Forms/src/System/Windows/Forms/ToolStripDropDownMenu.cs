@@ -215,8 +215,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\WinBarDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.ShowImageMargin"]/*' />
             [
             DefaultValue(true),
-            SRDescription(SR.ToolStripDropDownMenuShowImageMarginDescr),
-            SRCategory(SR.CatAppearance)
+            SRDescription(nameof(SR.ToolStripDropDownMenuShowImageMarginDescr)),
+            SRCategory(nameof(SR.CatAppearance))
             ]
             public bool ShowImageMargin {
                 get {
@@ -233,8 +233,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\WinBarDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.ShowCheckMargin"]/*' />
             [
             DefaultValue(false),
-            SRDescription(SR.ToolStripDropDownMenuShowCheckMarginDescr),
-            SRCategory(SR.CatAppearance)
+            SRDescription(nameof(SR.ToolStripDropDownMenuShowCheckMarginDescr)),
+            SRCategory(nameof(SR.CatAppearance))
             ]
             public bool ShowCheckMargin {
                 get {

@@ -19,12 +19,12 @@ namespace System.Windows.Forms {
         {
             if (seconds < 0)
             {
-                throw new ArgumentOutOfRangeException("seconds", seconds, SR.GetString(SR.NumericUpDownLessThanZeroError));
+                throw new ArgumentOutOfRangeException("seconds", seconds, SR.NumericUpDownLessThanZeroError);
             }
 
             if (increment < Decimal.Zero)
             {
-                throw new ArgumentOutOfRangeException("increment", increment, SR.GetString(SR.NumericUpDownLessThanZeroError));
+                throw new ArgumentOutOfRangeException("increment", increment, SR.NumericUpDownLessThanZeroError);
             }
 
             this.seconds   = seconds;
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("seconds", value, SR.GetString(SR.NumericUpDownLessThanZeroError));
+                    throw new ArgumentOutOfRangeException("seconds", value, SR.NumericUpDownLessThanZeroError);
                 }
                 this.seconds = value;
             }
@@ -65,7 +65,7 @@ namespace System.Windows.Forms {
             {
                 if (value < Decimal.Zero)
                 {
-                    throw new ArgumentOutOfRangeException("increment", value, SR.GetString(SR.NumericUpDownLessThanZeroError));
+                    throw new ArgumentOutOfRangeException("increment", value, SR.NumericUpDownLessThanZeroError);
                 }
                 this.increment = value;
             }

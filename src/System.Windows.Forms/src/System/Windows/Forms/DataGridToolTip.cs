@@ -59,7 +59,7 @@ namespace System.Windows.Forms {
             if (toolTipString == null)
                 throw new ArgumentNullException("toolTipString");
             if (iconBounds.IsEmpty)
-                throw new ArgumentNullException("iconBounds", SR.GetString(SR.DataGridToolTipEmptyIcon));
+                throw new ArgumentNullException("iconBounds", SR.DataGridToolTipEmptyIcon);
 
             NativeMethods.TOOLINFO_T toolInfo = new NativeMethods.TOOLINFO_T();
             toolInfo.cbSize = Marshal.SizeOf(toolInfo);

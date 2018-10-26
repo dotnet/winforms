@@ -103,12 +103,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     }
 
                     if (failed) {
-                        String errString = SR.GetString(SR.ErrorPropertyPageFailed);
+                        String errString = SR.ErrorPropertyPageFailed;
 
                         IUIService uiSvc = (context != null) ? ((IUIService) context.GetService(typeof(IUIService))) : null;
                         
                         if (uiSvc == null) {
-                            RTLAwareMessageBox.Show(null, errString, SR.GetString(SR.PropertyGridTitle),
+                            RTLAwareMessageBox.Show(null, errString, SR.PropertyGridTitle,
                                     MessageBoxButtons.OK, MessageBoxIcon.Error,
                                     MessageBoxDefaultButton.Button1, 0);
                         }

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
+  <PropertyGroup>
+    <ProjectGuid>{25F923F2-C15E-4066-976A-35FFF66EA98E}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'netcoreapp-Windows_NT-Debug|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'netcoreapp-Windows_NT-Release|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'netfx-Windows_NT-Debug|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'netfx-Windows_NT-Release|AnyCPU'" />
+  <PropertyGroup>
+    <RootNamespace>System.Windows.Forms.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Button.cs" />
+    <Compile Include="BindingNavigator.cs" />
+    <Compile Include="Form.cs" />
+    <Compile Include="GroupBox.cs" />
+    <Compile Include="TableLayoutPanel.cs" />
+    <Compile Include="SplitContainer.cs" />
+    <Compile Include="Panel.cs" />
+    <Compile Include="FlowLayoutPanel.cs" />
+    <Compile Include="Splitter.cs" />
+    <Compile Include="VScrollBar.cs" />
+    <Compile Include="MenuStrip.cs" />
+    <Compile Include="ListView.cs" />
+    <Compile Include="ListBox.cs" />
+    <Compile Include="ImageList.cs" />
+    <Compile Include="HScrollBar.cs" />
+    <Compile Include="ErrorProvider.cs" />
+    <Compile Include="DataGridView.cs" />
+    <Compile Include="ContextMenuStrip.cs" />
+    <Compile Include="StatusStrip.cs" />
+    <Compile Include="PropertyGrid.cs" />
+    <Compile Include="ToolStripContainer.cs" />
+    <Compile Include="ToolStripDropDownMenu.cs" />
+    <Compile Include="ToolStripDropDown.cs" />
+    <Compile Include="ToolStrip.cs" />
+    <Compile Include="TabControl.cs" />
+    <Compile Include="TrackBar.cs" />
+    <Compile Include="WebBrowser.cs" />
+    <Compile Include="TreeView.cs" />
+    <Compile Include="ToolTip.cs" />
+    <Compile Include="TextBox.cs" />
+    <Compile Include="RichTextBox.cs" />
+    <Compile Include="RadioButton.cs" />
+    <Compile Include="ProgressBar.cs" />
+    <Compile Include="PictureBox.cs" />
+    <Compile Include="NumericUpDown.cs" />
+    <Compile Include="NotifyIcon.cs" />
+    <Compile Include="MonthCalendar.cs" />
+    <Compile Include="MaskedTextBox.cs" />
+    <Compile Include="LinkLabel.cs" />
+    <Compile Include="Label.cs" />
+    <Compile Include="DateTimePicker.cs" />
+    <Compile Include="ComboBox.cs" />
+    <Compile Include="CheckedListBox.cs" />
+    <Compile Include="TestHelper.cs" />
+    <Compile Include="CheckBox.cs" />
+    <Compile Include="VisualStyleElement.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Some internal types are needed, so we reference the implementation assembly, rather than the reference assembly. -->
+    <TargetingPackExclusions Include="System.Windows.Forms" />
+    <ReferenceFromRuntime Include="System.Windows.Forms" />
+    <ReferenceFromRuntime Include="Moq" />
+    <ReferenceFromRuntime Include="xunit.stafact" />
+  </ItemGroup>
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
+</Project>

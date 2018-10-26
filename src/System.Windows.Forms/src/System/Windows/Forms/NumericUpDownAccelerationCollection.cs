@@ -137,7 +137,7 @@ namespace System.Windows.Forms
             {
                 if (acceleration == null)
                 {
-                    throw new ArgumentNullException(SR.GetString(SR.NumericUpDownAccelerationCollectionAtLeastOneEntryIsNull));
+                    throw new ArgumentNullException(SR.NumericUpDownAccelerationCollectionAtLeastOneEntryIsNull);
                 }
             }
 

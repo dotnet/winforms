@@ -83,8 +83,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripItemImageDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripItemImageDescr)),
         DefaultValue(null)
         ]
         public override Image BackgroundImage {
@@ -98,10 +98,10 @@ namespace System.Windows.Forms {
  
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackgroundImageLayout"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ImageLayout.Tile),
         Localizable(true),
-        SRDescription(SR.ControlBackgroundImageLayoutDescr)
+        SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))
         ]
         public override ImageLayout BackgroundImageLayout {
           get {
@@ -125,9 +125,9 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatFocus),
+        SRCategory(nameof(SR.CatFocus)),
         DefaultValue(true),
-        SRDescription(SR.ControlCausesValidationDescr)
+        SRDescription(nameof(SR.ControlCausesValidationDescr))
         ]
         public bool CausesValidation {
             get { return Control.CausesValidation; }
@@ -233,7 +233,7 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.GotFocus"]/*' />
-        [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnEnterDescr)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter {
             add {
                 Events.AddHandler(EventEnter, value);
@@ -265,8 +265,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.GotFocus"]/*' />
         [
-        SRCategory(SR.CatFocus), 
-        SRDescription(SR.ToolStripItemOnGotFocusDescr), 
+        SRCategory(nameof(SR.CatFocus)), 
+        SRDescription(nameof(SR.ToolStripItemOnGotFocusDescr)), 
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
             }
         }
 
-         [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnLeaveDescr)]
+         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
          public event EventHandler Leave {
              add {
                  Events.AddHandler(EventLeave, value);
@@ -351,8 +351,8 @@ namespace System.Windows.Forms {
          /// <para>Occurs when the control loses focus.</para>
          /// </devdoc>
          [
-         SRCategory(SR.CatFocus), 
-         SRDescription(SR.ToolStripItemOnLostFocusDescr), 
+         SRCategory(nameof(SR.CatFocus)), 
+         SRDescription(nameof(SR.ToolStripItemOnLostFocusDescr)), 
          Browsable(false), 
          EditorBrowsable(EditorBrowsableState.Advanced)
          ]
@@ -370,7 +370,7 @@ namespace System.Windows.Forms {
          /// <devdoc>
          /// <para>Occurs when a key is pressed down while the control has focus.</para>
          /// </devdoc>
-         [SRCategory(SR.CatKey), SRDescription(SR.ControlOnKeyDownDescr)]
+         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
          public event KeyEventHandler KeyDown {
              add {
                  Events.AddHandler(EventKeyDown, value);
@@ -384,7 +384,7 @@ namespace System.Windows.Forms {
          /// <devdoc>
          /// <para> Occurs when a key is pressed while the control has focus.</para>
          /// </devdoc>
-         [SRCategory(SR.CatKey), SRDescription(SR.ControlOnKeyPressDescr)]
+         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
          public event KeyPressEventHandler KeyPress {
              add {
                  Events.AddHandler(EventKeyPress, value);
@@ -398,7 +398,7 @@ namespace System.Windows.Forms {
          /// <devdoc>
          /// <para> Occurs when a key is released while the control has focus.</para>
          /// </devdoc>
-         [SRCategory(SR.CatKey), SRDescription(SR.ControlOnKeyUpDescr)]
+         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
          public event KeyEventHandler KeyUp {
              add {
                  Events.AddHandler(EventKeyUp, value);
@@ -548,7 +548,7 @@ namespace System.Windows.Forms {
            }
         }
 
-        [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnValidatingDescr)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating {
             add {
                 Events.AddHandler(EventValidating, value);
@@ -559,7 +559,7 @@ namespace System.Windows.Forms {
         }
 
 
-        [SRCategory(SR.CatFocus), SRDescription(SR.ControlOnValidatedDescr)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated {
             add {
                 Events.AddHandler(EventValidated, value);

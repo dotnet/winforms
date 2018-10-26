@@ -178,10 +178,10 @@ namespace System.Windows.Forms {
         ///     The height of this SplitterPanel
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlHeightDescr)
+        SRDescription(nameof(SR.ControlHeightDescr))
         ]
         public new int Height {
             get {
@@ -191,7 +191,7 @@ namespace System.Windows.Forms {
                 return base.Height;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.SplitContainerPanelHeight)); 
+                throw new NotSupportedException(SR.SplitContainerPanelHeight); 
             }
         }
 
@@ -400,10 +400,10 @@ namespace System.Windows.Forms {
         ///     The width of this control.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlWidthDescr)
+        SRDescription(nameof(SR.ControlWidthDescr))
         ]
         public new int Width {
             get {
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
                 return base.Width;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.SplitContainerPanelWidth));
+                throw new NotSupportedException(SR.SplitContainerPanelWidth);
             }
         }
 

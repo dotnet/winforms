@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
-     SRDescription(SR.DescriptionHScrollBar)
+     SRDescription(nameof(SR.DescriptionHScrollBar))
     ]
     public class HScrollBar : ScrollBar {
         

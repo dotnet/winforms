@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
                         }
                         if (nativeImageList.Handle == IntPtr.Zero)
                         {
-                            throw new InvalidOperationException(SR.GetString(SR.ImageListStreamerLoadFailed));
+                            throw new InvalidOperationException(SR.ImageListStreamerLoadFailed);
                         }
                     }
 #if DEBUG
@@ -219,7 +219,7 @@ namespace System.Windows.Forms {
             }
 
             if (handle == IntPtr.Zero || !WriteImageList(handle, stream))
-                throw new InvalidOperationException(SR.GetString(SR.ImageListStreamerSaveFailed));
+                throw new InvalidOperationException(SR.ImageListStreamerSaveFailed);
 
             si.AddValue("Data", Compress(stream.ToArray()));
         }

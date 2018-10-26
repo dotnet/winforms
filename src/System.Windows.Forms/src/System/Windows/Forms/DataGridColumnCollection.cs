@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
                 return;
             for (int i = 0; i < items.Count; i++)
                 if ( ((DataGridColumnStyle)items[i]).MappingName.Equals(column.MappingName) && column != items[i])
-                    throw new ArgumentException(SR.GetString(SR.DataGridColumnStyleDuplicateMappingName), "column");
+                    throw new ArgumentException(SR.DataGridColumnStyleDuplicateMappingName, "column");
         }
 
         private void ColumnStyleMappingNameChanged(object sender, EventArgs pcea) {
@@ -272,7 +272,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public virtual int Add(DataGridColumnStyle column) {
             if (this.isDefault) {
-                throw new ArgumentException(SR.GetString(SR.DataGridDefaultColumnCollectionChanged));
+                throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
             }
 
             CheckForMappingNameDuplicates(column);
@@ -485,7 +485,7 @@ namespace System.Windows.Forms {
             if (!allowRemove)
                 return GetEnumerator();
             else
-                throw new NotSupportedException(SR.GetString(SR.DataGridColumnCollectionGetEnumerator));
+                throw new NotSupportedException(SR.DataGridColumnCollectionGetEnumerator);
         }
         */
 
@@ -523,7 +523,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Remove(DataGridColumnStyle column) {
             if (this.isDefault) {
-                throw new ArgumentException(SR.GetString(SR.DataGridDefaultColumnCollectionChanged));
+                throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
             }
 
             int columnIndex = -1;
@@ -534,7 +534,7 @@ namespace System.Windows.Forms {
                     break;
                 }
             if (columnIndex == -1)
-                throw new InvalidOperationException(SR.GetString(SR.DataGridColumnCollectionMissing));
+                throw new InvalidOperationException(SR.DataGridColumnCollectionMissing);
             else
                 RemoveAt(columnIndex);
         }
@@ -545,7 +545,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void RemoveAt(int index) {
             if (this.isDefault) {
-                throw new ArgumentException(SR.GetString(SR.DataGridDefaultColumnCollectionChanged));
+                throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
             }
 
             DataGridColumnStyle toRemove = (DataGridColumnStyle)items[index];

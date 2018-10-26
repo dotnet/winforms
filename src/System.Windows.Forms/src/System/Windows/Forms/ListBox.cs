@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
     DefaultEvent("SelectedIndexChanged"),
     DefaultProperty("Items"),
     DefaultBindingProperty("SelectedValue"),
-    SRDescription(SR.DescriptionListBox)
+    SRDescription(nameof(SR.DescriptionListBox))
     ]
     public class ListBox : ListControl {
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.NoMatches"]/*' />
@@ -255,10 +255,10 @@ namespace System.Windows.Forms {
         ///     The System.Windows.Forms.BorderStyle enumeration.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.ListBoxBorderDescr)
+        SRDescription(nameof(SR.ListBoxBorderDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -291,10 +291,10 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(0),
-        SRDescription(SR.ListBoxColumnWidthDescr)
+        SRDescription(nameof(SR.ListBoxColumnWidthDescr))
         ]
         public int ColumnWidth {
             get {
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 0) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidLowBoundArgumentEx, "value",
+                    throw new ArgumentException(string.Format(SR.InvalidLowBoundArgumentEx, "value",
                                                              (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (columnWidth != value) {
@@ -391,7 +391,7 @@ namespace System.Windows.Forms {
         ///     its strings using the CustomTabOffsets integer array.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Browsable(false)
         ]
@@ -421,9 +421,9 @@ namespace System.Windows.Forms {
         ///     whether or not items have to be of the same height.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DrawMode.Normal),
-        SRDescription(SR.ListBoxDrawModeDescr),
+        SRDescription(nameof(SR.ListBoxDrawModeDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public virtual DrawMode DrawMode {
@@ -439,7 +439,7 @@ namespace System.Windows.Forms {
                 }
                 if (drawMode != value) {
                     if (MultiColumn && value == DrawMode.OwnerDrawVariable) {
-                        throw new ArgumentException(SR.GetString(SR.ListBoxVarHeightMultiCol), "value");
+                        throw new ArgumentException(SR.ListBoxVarHeightMultiCol, "value");
                     }
                     drawMode = value;
                     RecreateHandle();
@@ -506,10 +506,10 @@ namespace System.Windows.Forms {
         ///     This property will only have an effect if HorizontalScrollbars is true.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Localizable(true),
-        SRDescription(SR.ListBoxHorizontalExtentDescr)
+        SRDescription(nameof(SR.ListBoxHorizontalExtentDescr))
         ]
         public int HorizontalExtent {
             get {
@@ -533,10 +533,10 @@ namespace System.Windows.Forms {
         ///     which case HorizontalExtent will need to be explicitly set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Localizable(true),
-        SRDescription(SR.ListBoxHorizontalScrollbarDescr)
+        SRDescription(nameof(SR.ListBoxHorizontalScrollbarDescr))
         ]
         public bool HorizontalScrollbar {
             get {
@@ -571,10 +571,10 @@ namespace System.Windows.Forms {
         ///     shown
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.ListBoxIntegralHeightDescr),
+        SRDescription(nameof(SR.ListBoxIntegralHeightDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public bool IntegralHeight {
@@ -607,10 +607,10 @@ namespace System.Windows.Forms {
         ///       the height of an item in an owner-draw list box.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DefaultItemHeight),
         Localizable(true),
-        SRDescription(SR.ListBoxItemHeightDescr),
+        SRDescription(nameof(SR.ListBoxItemHeightDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public virtual int ItemHeight {
@@ -625,7 +625,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1 || value > 255) {
-                    throw new ArgumentOutOfRangeException("ItemHeight", SR.GetString(SR.InvalidExBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture), "256"));
+                    throw new ArgumentOutOfRangeException("ItemHeight", string.Format(SR.InvalidExBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture), "256"));
                 }
                 if (itemHeight != value) {
                     itemHeight = value;
@@ -652,10 +652,10 @@ namespace System.Windows.Forms {
         ///     Collection of items in this listbox.
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
-        SRDescription(SR.ListBoxItemsDescr),
+        SRDescription(nameof(SR.ListBoxItemsDescr)),
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         MergableProperty(false)
         ]
@@ -702,9 +702,9 @@ namespace System.Windows.Forms {
         ///       or not.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListBoxMultiColumnDescr)
+        SRDescription(nameof(SR.ListBoxMultiColumnDescr))
         ]
         public bool MultiColumn {
             get {
@@ -713,7 +713,7 @@ namespace System.Windows.Forms {
             set {
                 if (multiColumn != value) {
                     if (value && drawMode == DrawMode.OwnerDrawVariable) {
-                        throw new ArgumentException(SR.GetString(SR.ListBoxVarHeightMultiCol), "value");
+                        throw new ArgumentException(SR.ListBoxVarHeightMultiCol, "value");
                     }
                     multiColumn = value;
                     RecreateHandle();
@@ -728,7 +728,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxPreferredHeightDescr)
+        SRDescription(nameof(SR.ListBoxPreferredHeightDescr))
         ]
         public int PreferredHeight {
             get {
@@ -817,10 +817,10 @@ namespace System.Windows.Forms {
         ///       Gets or sets whether the scrollbar is shown at all times.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Localizable(true),
-        SRDescription(SR.ListBoxScrollIsVisibleDescr)
+        SRDescription(nameof(SR.ListBoxScrollIsVisibleDescr))
         ]
         public bool ScrollAlwaysVisible {
             get {
@@ -858,7 +858,7 @@ namespace System.Windows.Forms {
         Browsable(false),
         Bindable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxSelectedIndexDescr)
+        SRDescription(nameof(SR.ListBoxSelectedIndexDescr))
         ]
         public override int SelectedIndex {
             get {
@@ -884,11 +884,11 @@ namespace System.Windows.Forms {
                 int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
 
                 if (value < -1 || value >= itemCount) {
-                    throw new ArgumentOutOfRangeException("SelectedIndex", SR.GetString(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("SelectedIndex", string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (selectionMode == SelectionMode.None) {
-                    throw new ArgumentException(SR.GetString(SR.ListBoxInvalidSelectionMode), "SelectedIndex");
+                    throw new ArgumentException(SR.ListBoxInvalidSelectionMode, "SelectedIndex");
                 }
 
                 if (selectionMode == SelectionMode.One && value != -1) {
@@ -939,7 +939,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxSelectedIndicesDescr)
+        SRDescription(nameof(SR.ListBoxSelectedIndicesDescr))
         ]
         public SelectedIndexCollection SelectedIndices {
             get {
@@ -963,7 +963,7 @@ namespace System.Windows.Forms {
         Browsable(false),
         Bindable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxSelectedItemDescr)
+        SRDescription(nameof(SR.ListBoxSelectedItemDescr))
         ]
         public object SelectedItem {
             get {
@@ -995,7 +995,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxSelectedItemsDescr)
+        SRDescription(nameof(SR.ListBoxSelectedItemsDescr))
         ]
         public SelectedObjectCollection SelectedItems {
             get {
@@ -1012,9 +1012,9 @@ namespace System.Windows.Forms {
         ///     values are from the System.Windows.Forms.SelectionMode enumeration.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(SelectionMode.One),
-        SRDescription(SR.ListBoxSelectionModeDescr)
+        SRDescription(nameof(SR.ListBoxSelectionModeDescr))
         ]
         public virtual SelectionMode SelectionMode {
             get {
@@ -1054,9 +1054,9 @@ namespace System.Windows.Forms {
         ///     the list will be sorted alphabetically
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListBoxSortedDescr)
+        SRDescription(nameof(SR.ListBoxSortedDescr))
         ]
         public bool Sorted {
             get {
@@ -1135,7 +1135,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxTopIndexDescr)
+        SRDescription(nameof(SR.ListBoxTopIndexDescr))
         ]
         public int TopIndex {
             get {
@@ -1162,9 +1162,9 @@ namespace System.Windows.Forms {
         ///     its strings.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListBoxUseTabStopsDescr)
+        SRDescription(nameof(SR.ListBoxUseTabStopsDescr))
         ]
         public bool UseTabStops {
             get {
@@ -1183,8 +1183,8 @@ namespace System.Windows.Forms {
         ///     The integer array should have the tab spaces in the ascending order.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ListBoxCustomTabOffsetsDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ListBoxCustomTabOffsetsDescr)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Browsable(false)
         ]
@@ -1276,7 +1276,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.drawItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
             add {
                 Events.AddHandler(EVENT_DRAWITEM, value);
@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.measureItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
             add {
                 Events.AddHandler(EVENT_MEASUREITEM, value);
@@ -1306,7 +1306,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.selectedIndexChangedEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
                 Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
@@ -1333,12 +1333,12 @@ namespace System.Windows.Forms {
 
         private void CheckIndex(int index) {
             if (index < 0 || index >= Items.Count)
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
         }
 
         private void CheckNoDataSource() {
             if (DataSource != null)
-                throw new ArgumentException(SR.GetString(SR.DataSourceLocksItems));
+                throw new ArgumentException(SR.DataSourceLocksItems);
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.CreateItemCollection"]/*' />
@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms {
             // no items.
             //
             if (index < 0 || (index > 0 && index >= itemCount))
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
             if (drawMode != DrawMode.OwnerDrawVariable) index = 0;
 
@@ -1593,7 +1593,7 @@ namespace System.Windows.Forms {
                 // so we'll have to assume that LB_ERR corresponds to item
                 // overflow.
                 //
-                throw new OutOfMemoryException(SR.GetString(SR.ListBoxItemOverflow));
+                throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 
             return insertIndex;
@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms {
                 // so we'll have to assume that LB_ERR corresponds to item
                 // overflow.
                 //
-                throw new OutOfMemoryException(SR.GetString(SR.ListBoxItemOverflow));
+                throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 
             Debug.Assert(insertIndex == index, "NativeListBox inserted at " + insertIndex + " not the requested index of " + index);
@@ -2128,10 +2128,10 @@ namespace System.Windows.Forms {
         public void SetSelected(int index, bool value) {
             int itemCount = (itemsCollection == null) ? 0: itemsCollection.Count;
             if (index < 0 || index >= itemCount)
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
             if (selectionMode == SelectionMode.None)
-                throw new InvalidOperationException(SR.GetString(SR.ListBoxInvalidSelectionMode));
+                throw new InvalidOperationException(SR.ListBoxInvalidSelectionMode);
 
             SelectedItems.SetSelected(index, value);
             if (IsHandleCreated) {
@@ -2871,7 +2871,7 @@ namespace System.Windows.Forms {
                 ///     Moves to the next element, or returns false if at the end.
                 /// </devdoc>
                 bool IEnumerator.MoveNext() {
-                    if(version != items.version) throw new InvalidOperationException(SR.GetString(SR.ListEnumVersionMismatch));
+                    if(version != items.version) throw new InvalidOperationException(SR.ListEnumVersionMismatch);
 
                     while(true) {
                         if (current < items.count - 1) {
@@ -2898,7 +2898,7 @@ namespace System.Windows.Forms {
                 ///     Resets the enumeration back to the beginning.
                 /// </devdoc>
                 void IEnumerator.Reset() {
-                    if(version != items.version) throw new InvalidOperationException(SR.GetString(SR.ListEnumVersionMismatch));
+                    if(version != items.version) throw new InvalidOperationException(SR.ListEnumVersionMismatch);
                     current = -1;
                 }
 
@@ -2908,7 +2908,7 @@ namespace System.Windows.Forms {
                 object IEnumerator.Current {
                     get {
                         if (current == -1 || current == items.count) {
-                            throw new InvalidOperationException(SR.GetString(SR.ListEnumCurrentOutOfRange));
+                            throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                         }
 
                         return items.entries[current].item;
@@ -3160,7 +3160,7 @@ namespace System.Windows.Forms {
             public virtual object this[int index] {
                 get {
                     if (index < 0 || index >= InnerArray.GetCount(0)) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     return InnerArray.GetItem(index, 0);
@@ -3277,7 +3277,7 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index > InnerArray.GetCount(0)) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (item == null) {
@@ -3333,7 +3333,7 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerArray.GetCount(0)) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
@@ -3355,7 +3355,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index >= InnerArray.GetCount(0)) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
@@ -3628,7 +3628,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Insert"]/*' />
             /// <internalonly/>
             void IList.Insert(int index, object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxCantInsertIntoIntegerCollection));
+                throw new NotSupportedException(SR.ListBoxCantInsertIntoIntegerCollection);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Remove"]/*' />
@@ -3671,7 +3671,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void RemoveAt(int index) {
                 if (index < 0 || index >= count) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 count--;
@@ -3699,7 +3699,7 @@ namespace System.Windows.Forms {
                 set {
 
                     if (index < 0 || index >= count) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
                     innerArray[index] = (int)value;
                     owner.UpdateCustomTabOffsets();
@@ -3795,7 +3795,7 @@ namespace System.Windows.Forms {
                 object IEnumerator.Current {
                     get {
                         if (current == -1 || current == items.Count) {
-                            throw new InvalidOperationException(SR.GetString(SR.ListEnumCurrentOutOfRange));
+                            throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                         }
 
                         return items[current];
@@ -3921,31 +3921,31 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Clear"]/*' />
             /// <internalonly/>
             void IList.Clear() {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Insert"]/*' />
             /// <internalonly/>
             void IList.Insert(int index, object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Remove"]/*' />
             /// <internalonly/>
             void IList.Remove(object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.RemoveAt"]/*' />
             /// <internalonly/>
             void IList.RemoveAt(int index) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.this"]/*' />
@@ -3966,7 +3966,7 @@ namespace System.Windows.Forms {
                     return this[index];
                 }
                 set {
-                    throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                    throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
                 }
             }
 
@@ -4084,7 +4084,7 @@ namespace System.Windows.Forms {
                 object IEnumerator.Current {
                     get {
                         if (current == -1 || current == items.Count) {
-                            throw new InvalidOperationException(SR.GetString(SR.ListEnumCurrentOutOfRange));
+                            throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                         }
 
                         return items[current];
@@ -4245,31 +4245,31 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Clear"]/*' />
             /// <internalonly/>
             void IList.Clear() {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Insert"]/*' />
             /// <internalonly/>
             void IList.Insert(int index, object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Remove"]/*' />
             /// <internalonly/>
             void IList.Remove(object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.RemoveAt"]/*' />
             /// <internalonly/>
             void IList.RemoveAt(int index) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             // A new internal method used in SelectedIndex getter...
@@ -4294,7 +4294,7 @@ namespace System.Windows.Forms {
                     return InnerArray.GetItem(index, SelectedObjectMask);
                 }
                 set {
-                    throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                    throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
                 }
             }
 

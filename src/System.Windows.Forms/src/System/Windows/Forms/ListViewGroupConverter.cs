@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
                 }
             }                        
 
-            if (value == null || value.Equals(SR.GetString(SR.toStringNone))) {
+            if (value == null || value.Equals(SR.toStringNone)) {
                 return null;
             }
 
@@ -108,7 +108,7 @@ namespace System.Windows.Forms {
             }
 
             if (destinationType == typeof(string) && value == null) {
-                return SR.GetString(SR.toStringNone);
+                return SR.toStringNone;
             }
             
             return base.ConvertTo(context, culture, value, destinationType);

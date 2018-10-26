@@ -65,7 +65,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             if (names == null ||
                 values == null ||
                 names.Length != values.Length) {
-                throw new ArgumentException(SR.GetString(SR.COM2NamesAndValuesNotEqual));
+                throw new ArgumentException(SR.COM2NamesAndValuesNotEqual);
             }
 
             PopulateArrays(names, values);

@@ -89,10 +89,10 @@ namespace System.Windows.Forms {
             internal const int IgnoreThreadModel     = 0x10000000;
         }
 
-        private static COMException E_NOTIMPL = new COMException(SR.GetString(SR.AXNotImplemented), unchecked((int)0x80000001));
-        private static COMException E_INVALIDARG = new COMException(SR.GetString(SR.AXInvalidArgument), unchecked((int)0x80070057));
-        private static COMException E_FAIL   = new COMException(SR.GetString(SR.AXUnknownError), unchecked((int)0x80004005));
-        private static COMException E_NOINTERFACE = new COMException(SR.GetString(SR.AxInterfaceNotSupported), unchecked((int)0x80004002));
+        private static COMException E_NOTIMPL = new COMException(SR.AXNotImplemented, unchecked((int)0x80000001));
+        private static COMException E_INVALIDARG = new COMException(SR.AXInvalidArgument, unchecked((int)0x80070057));
+        private static COMException E_FAIL   = new COMException(SR.AXUnknownError, unchecked((int)0x80004005));
+        private static COMException E_NOINTERFACE = new COMException(SR.AxInterfaceNotSupported, unchecked((int)0x80004002));
 
         private const int INPROC_SERVER = 1;
         private const int OC_PASSIVE = 0;
@@ -281,7 +281,7 @@ namespace System.Windows.Forms {
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         protected AxHost(string clsid, int flags) : base() {
             if (Application.OleRequired() != ApartmentState.STA) {
-                throw new ThreadStateException(SR.GetString(SR.AXMTAThread, clsid));
+                throw new ThreadStateException(string.Format(SR.AXMTAThread, clsid));
             }
 
             this.oleSite = new OleInterfaces(this);
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseClick {
             add { 
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "MouseClick"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
             }
             remove {
             }
@@ -431,7 +431,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseDoubleClick {
             add { 
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "MouseDoubleClick"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
             }
             remove {
             }
@@ -688,7 +688,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "BackColorChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
             }
             remove {
             }
@@ -701,7 +701,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
             }
             remove {
             }
@@ -714,7 +714,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
             }
             remove {
             }
@@ -727,7 +727,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BindingContextChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "BindingContextChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
             }
             remove {
             }
@@ -740,7 +740,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ContextMenuChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "ContextMenuChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ContextMenuChanged"));
             }
             remove {
             }
@@ -753,7 +753,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "CursorChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
             }
             remove {
             }
@@ -766,7 +766,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "EnabledChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
             }
             remove {
             }
@@ -779,7 +779,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "FontChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
             }
             remove {
             }
@@ -792,7 +792,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "ForeColorChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
             }
             remove {
             }
@@ -805,7 +805,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler RightToLeftChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "RightToLeftChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
             }
             remove {
             }
@@ -818,7 +818,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "TextChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
             }
             remove {
             }
@@ -831,7 +831,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Click {
             add { 
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "Click"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
             }
             remove {
             }
@@ -844,7 +844,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragDrop {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "DragDrop"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
             }
             remove {
             }
@@ -858,7 +858,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragEnter {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "DragEnter"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
             }
             remove {
             }
@@ -871,7 +871,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragOver {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "DragOver"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
             }
             remove {
             }
@@ -885,7 +885,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DragLeave {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "DragLeave"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
             }
             remove {
             }
@@ -898,7 +898,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event GiveFeedbackEventHandler GiveFeedback {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "GiveFeedback"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
             }
             remove {
             }
@@ -911,7 +911,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event HelpEventHandler HelpRequested {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "HelpRequested"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
             }
             remove {
             }
@@ -924,7 +924,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event PaintEventHandler Paint {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "Paint"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
             }
             remove {
             }
@@ -937,7 +937,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryContinueDragEventHandler QueryContinueDrag {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "QueryContinueDrag"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
             }
             remove {
             }
@@ -950,7 +950,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
             }
             remove {
             }
@@ -963,7 +963,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DoubleClick {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "DoubleClick"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
             }
             remove {
             }
@@ -976,7 +976,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ImeModeChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "ImeModeChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
             }
             remove {
             }
@@ -990,7 +990,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyDown {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "KeyDown"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
             }
             remove {
             }
@@ -1004,7 +1004,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyPressEventHandler KeyPress {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "KeyPress"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
             }
             remove {
             }
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyUp {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "KeyUp"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
             }
             remove {
             }
@@ -1031,7 +1031,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event LayoutEventHandler Layout {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "Layout"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
             }
             remove {
             }
@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDown {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "MouseDown"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
             }
             remove {
             }
@@ -1058,7 +1058,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseEnter {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "MouseEnter"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
             }
             remove {
             }
@@ -1071,7 +1071,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseLeave {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "MouseLeave"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
             }
             remove {
             }
@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseHover {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "MouseHover"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
             }
             remove {
             }
@@ -1097,7 +1097,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseMove {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "MouseMove"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
             }
             remove {
             }
@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseUp {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "MouseUp"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
             }
             remove {
             }
@@ -1123,7 +1123,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseWheel {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "MouseWheel"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
             }
             remove {
             }
@@ -1136,7 +1136,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event UICuesEventHandler ChangeUICues {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "ChangeUICues"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
             }
             remove {
             }
@@ -1149,7 +1149,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler StyleChanged {
             add {
-                throw new NotSupportedException(SR.GetString(SR.AXAddInvalidEvent, "StyleChanged"));
+                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
             }
             remove {
             }
@@ -1815,7 +1815,7 @@ namespace System.Windows.Forms {
             }
             catch (Exception t) {
                 Debug.Fail(t.ToString());
-                throw new TargetInvocationException(SR.GetString(SR.AXNohWnd,GetType().Name), t);
+                throw new TargetInvocationException(string.Format(SR.AXNohWnd,GetType().Name), t);
             }
             EnsureWindowPresent();
         }
@@ -1875,7 +1875,7 @@ namespace System.Windows.Forms {
 
             if (ParentInternal != null) {    // ==> we are in a valid state
                 Debug.Fail("extremely naughty ctl is refusing to give us an hWnd... giving up...");
-                throw new NotSupportedException(SR.GetString(SR.AXNohWnd,GetType().Name));
+                throw new NotSupportedException(string.Format(SR.AXNohWnd,GetType().Name));
             }
         }
 
@@ -1940,7 +1940,7 @@ namespace System.Windows.Forms {
             }
             catch (Exception t) {
                 Debug.Fail(t.ToString());
-                throw new TargetInvocationException(SR.GetString(SR.AXNohWnd,GetType().Name), t);
+                throw new TargetInvocationException(string.Format(SR.AXNohWnd,GetType().Name), t);
             }
 
             EnsureWindowPresent();
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms {
 
                 if (storageType != STG_UNKNOWN && storageType != value.type) {
                     Debug.Fail("Trying to reload with a OcxState that is of a different type.");
-                    throw new InvalidOperationException(SR.GetString(SR.AXOcxStateLoaded));
+                    throw new InvalidOperationException(SR.AXOcxStateLoaded);
                 }
                 
                 if (this.ocxState == value)
@@ -2593,7 +2593,7 @@ namespace System.Windows.Forms {
             }
             catch (ExternalException e) {
                 if (e.ErrorCode == unchecked((int)0x80040112)) { // CLASS_E_NOTLICENSED
-                    throw new LicenseException(GetType(), this, SR.GetString(SR.AXNoLicenseToUse));
+                    throw new LicenseException(GetType(), this, SR.AXNoLicenseToUse);
                 }
                 throw;
             }
@@ -3044,7 +3044,7 @@ namespace System.Windows.Forms {
                 }
                 catch (Exception t) {
                     Debug.Fail(t.ToString());
-                    throw new InvalidOperationException(SR.GetString(SR.AXNoThreadInfo));
+                    throw new InvalidOperationException(SR.AXNoThreadInfo);
                 }
             }
             finally {
@@ -3052,7 +3052,7 @@ namespace System.Windows.Forms {
             }
 
             if (singleThreaded) {
-                throw new InvalidOperationException(SR.GetString(SR.AXSingleThreaded));
+                throw new InvalidOperationException(SR.AXSingleThreaded);
             }
         }
 #endif
@@ -3145,7 +3145,7 @@ namespace System.Windows.Forms {
                 }
                 
                 Debug.Fail("no implemented persitance interfaces on object");
-                throw new InvalidOperationException(SR.GetString(SR.UnableToInitComponent));
+                throw new InvalidOperationException(SR.UnableToInitComponent);
             }
             
             // Otherwise, we have state to deperist from:
@@ -3187,7 +3187,7 @@ namespace System.Windows.Forms {
                     break;
                 default:
                     Debug.Fail("unknown storage type.");
-                    throw new InvalidOperationException(SR.GetString(SR.UnableToInitComponent));
+                    throw new InvalidOperationException(SR.UnableToInitComponent);
             }
         
             if (ocxState.GetPropBag() != null) {
@@ -3371,7 +3371,7 @@ namespace System.Windows.Forms {
                 DesignerTransaction trans = null;
                 try {
                     if (host != null)
-                        trans = host.CreateTransaction(SR.GetString(SR.AXEditProperties));
+                        trans = host.CreateTransaction(SR.AXEditProperties);
 
                     string name = null;
                     object o = GetOcx();
@@ -3637,7 +3637,7 @@ namespace System.Windows.Forms {
             // that is not good enough for DragDrop.
             //
             if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                throw new ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                throw new ThreadStateException(SR.ThreadMustBeSTA);
             }
 
             SetAcceptDrops(AllowDrop);
@@ -3718,12 +3718,12 @@ namespace System.Windows.Forms {
 
                     if (connectionPoint == null) {
                         if (throwException) {
-                            throw new ArgumentException(SR.GetString(SR.AXNoEventInterface, eventInterface.Name));
+                            throw new ArgumentException(string.Format(SR.AXNoEventInterface, eventInterface.Name));
                         }
                     }
                     else if (sink == null || !eventInterface.IsInstanceOfType(sink)) {
                         if (throwException) {
-                            throw new InvalidCastException(SR.GetString(SR.AXNoSinkImplementation, eventInterface.Name));
+                            throw new InvalidCastException(string.Format(SR.AXNoSinkImplementation, eventInterface.Name));
                         }
                     }
                     else {
@@ -3736,14 +3736,14 @@ namespace System.Windows.Forms {
                             Marshal.ReleaseComObject(connectionPoint);
                             connectionPoint = null;
                             if (throwException) {
-                                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.AXNoSinkAdvise, eventInterface.Name), hr));
+                                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.AXNoSinkAdvise, eventInterface.Name), hr));
                             }
                         }
                     }
                 }
                 else {
                     if (throwException) {
-                        throw new InvalidCastException(SR.GetString(SR.AXNoConnectionPointContainer));
+                        throw new InvalidCastException(SR.AXNoConnectionPointContainer);
                     }
                 }
 
@@ -3754,7 +3754,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (throwException) {
-                        throw new ArgumentException(SR.GetString(SR.AXNoConnectionPoint, eventInterface.Name));
+                        throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
                     }
                 }
 #if DEBUG
@@ -3864,11 +3864,11 @@ namespace System.Windows.Forms {
             public override string ToString() {
                 switch (kind) {
                     case ActiveXInvokeKind.MethodInvoke:
-                        return SR.GetString(SR.AXInvalidMethodInvoke, name);
+                        return string.Format(SR.AXInvalidMethodInvoke, name);
                     case ActiveXInvokeKind.PropertyGet:
-                        return SR.GetString(SR.AXInvalidPropertyGet, name);
+                        return string.Format(SR.AXInvalidPropertyGet, name);
                     case ActiveXInvokeKind.PropertySet:
-                        return SR.GetString(SR.AXInvalidPropertySet, name);
+                        return string.Format(SR.AXInvalidPropertySet, name);
                     default:
                         return base.ToString();
                 }
@@ -4197,7 +4197,7 @@ namespace System.Windows.Forms {
                 }
                 else if (host.GetInPlaceObject() is UnsafeNativeMethods.IOleInPlaceObjectWindowless) {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Windowless control.");
-                    throw new InvalidOperationException(SR.GetString(SR.AXWindowlessControl));
+                    throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
 
                 return NativeMethods.S_OK;
@@ -4751,7 +4751,7 @@ namespace System.Windows.Forms {
             {
                 return new NativeMethods.PICTDESCemf(mf);
             }
-            throw new ArgumentException(SR.GetString(SR.AXUnknownImage), "image");
+            throw new ArgumentException(SR.AXUnknownImage, "image");
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIPictureFromPicture"]/*' />
@@ -4859,7 +4859,7 @@ namespace System.Windows.Forms {
                     return null;
                 default:
                     Debug.Fail("Invalid image type "+ type.ToString(CultureInfo.InvariantCulture));
-                    throw new ArgumentException(SR.GetString(SR.AXUnknownImage), "type");
+                    throw new ArgumentException(SR.AXUnknownImage, "type");
             }
         }
 
@@ -4920,7 +4920,7 @@ namespace System.Windows.Forms {
             if (font == null) return null;
 
             if (font.Unit != GraphicsUnit.Point)
-                throw new ArgumentException(SR.GetString(SR.AXFontUnitNotPoint), "font");
+                throw new ArgumentException(SR.AXFontUnitNotPoint, "font");
 
             try {
                 return (UnsafeNativeMethods.IFont)UnsafeNativeMethods.OleCreateIFontIndirect(GetFONTDESCFromFont(font), ref ifont_Guid);
@@ -4965,7 +4965,7 @@ namespace System.Windows.Forms {
             if (font == null) return null;
             
             if (font.Unit != GraphicsUnit.Point)
-                throw new ArgumentException(SR.GetString(SR.AXFontUnitNotPoint), "font");
+                throw new ArgumentException(SR.AXFontUnitNotPoint, "font");
 
             SafeNativeMethods.IFontDisp rval = SafeNativeMethods.OleCreateIFontDispIndirect(GetFONTDESCFromFont(font), ref ifontDisp_Guid);
             return rval;
@@ -5390,7 +5390,7 @@ namespace System.Windows.Forms {
                 // 
                 lock(this) { 
                     if (containerCache.Contains(ctl))
-                        throw new ArgumentException(SR.GetString(SR.AXDuplicateControl, GetNameForControl(ctl)), "ctl");
+                        throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), "ctl");
 
                     containerCache.Add(ctl, ctl);
                     
@@ -7330,7 +7330,7 @@ namespace System.Windows.Forms {
                     if (provider != null) {
                           IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
                           if (uiSvc != null){
-                            uiSvc.ShowError(ex1, SR.GetString(SR.ErrorTypeConverterFailed));
+                            uiSvc.ShowError(ex1, SR.ErrorTypeConverterFailed);
                           }
                     }
                 }

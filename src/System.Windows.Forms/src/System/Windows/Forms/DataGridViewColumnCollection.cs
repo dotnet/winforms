@@ -278,12 +278,12 @@ namespace System.Windows.Forms
             Debug.Assert(this.DataGridView != null);
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
             if (this.DataGridView.InDisplayIndexAdjustments)
             {
                 // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
             }
 
             this.DataGridView.OnAddingColumn(dataGridViewColumn);   // will throw an exception if the addition is illegal
@@ -312,12 +312,12 @@ namespace System.Windows.Forms
             Debug.Assert(this.DataGridView != null);
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
             if (this.DataGridView.InDisplayIndexAdjustments)
             {
                 // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
             }
 
             // Order the columns by ascending DisplayIndex so that their display indexes are not altered by the operation.
@@ -399,12 +399,12 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView.NoDimensionChangeAllowed)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
                 }
                 if (this.DataGridView.InDisplayIndexAdjustments)
                 {
                     // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
                 }
 
                 for (int columnIndex = 0; columnIndex < this.Count; columnIndex++)
@@ -524,7 +524,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
 
             // cache returned value and reuse it as long as none
@@ -655,7 +655,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
 
             // cache returned value and reuse it as long as none
@@ -703,7 +703,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
 
             if (this.itemsSorted == null)
@@ -738,12 +738,12 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
             if ((excludeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
             }
 
             if (this.itemsSorted == null)
@@ -775,12 +775,12 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
             if ((excludeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
             }
 
             if (this.itemsSorted == null)
@@ -817,12 +817,12 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
             if ((excludeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
             }
 
             if (this.itemsSorted == null)
@@ -889,12 +889,12 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
             if ((excludeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
             }
 
             if (this.itemsSorted == null)
@@ -963,12 +963,12 @@ namespace System.Windows.Forms
             Debug.Assert(this.DataGridView != null);
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
             if (this.DataGridView.InDisplayIndexAdjustments)
             {
                 // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
             }
             if (dataGridViewColumn == null)
             {
@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewColumn.DataGridView != this.DataGridView)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_ColumnDoesNotBelongToDataGridView), "dataGridViewColumn");
+                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView), "dataGridViewColumn");
             }
 
             int itemsCount = this.items.Count;
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            throw new ArgumentException(SR.GetString(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), "columnName");
+            throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), "columnName");
         }
 
         /// <include file='doc\DataGridViewColumnCollection.uex' path='docs/doc[@for="DataGridViewColumnCollection.RemoveAt"]/*' />
@@ -1154,18 +1154,18 @@ namespace System.Windows.Forms
         {
             if (index < 0 || index >= this.Count)
             {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             if (this.DataGridView.InDisplayIndexAdjustments)
             {
                 // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
             }
 
             RemoveAtInternal(index, false /*force*/);

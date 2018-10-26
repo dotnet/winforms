@@ -106,8 +106,8 @@ namespace System.Windows.Forms {
 
         [
         DefaultValue(100),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ProgressBarMarqueeAnimationSpeed)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))
         ]
         public int MarqueeAnimationSpeed {
             get { return ProgressBar.MarqueeAnimationSpeed; }
@@ -117,9 +117,9 @@ namespace System.Windows.Forms {
 
         [
        DefaultValue(100),
-       SRCategory(SR.CatBehavior),
+       SRCategory(nameof(SR.CatBehavior)),
        RefreshProperties(RefreshProperties.Repaint),
-       SRDescription(SR.ProgressBarMaximumDescr)
+       SRDescription(nameof(SR.ProgressBarMaximumDescr))
        ]
         public int Maximum {
             get {
@@ -131,9 +131,9 @@ namespace System.Windows.Forms {
         }
         [
         DefaultValue(0),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ProgressBarMinimumDescr)
+        SRDescription(nameof(SR.ProgressBarMinimumDescr))
         ]
         public int Minimum {
             get {
@@ -152,10 +152,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -175,8 +175,8 @@ namespace System.Windows.Forms {
         /// <value></value>
         [
         DefaultValue(10),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ProgressBarStepDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ProgressBarStepDescr))
         ]
         public int Step {
             get {
@@ -194,8 +194,8 @@ namespace System.Windows.Forms {
         /// <value></value>
         [
         DefaultValue(ProgressBarStyle.Blocks),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ProgressBarStyleDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ProgressBarStyleDescr))
         ]
         public ProgressBarStyle Style {
             get {
@@ -235,9 +235,9 @@ namespace System.Windows.Forms {
         /// <value></value>
         [
         DefaultValue(0),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Bindable(true),
-        SRDescription(SR.ProgressBarValueDescr)
+        SRDescription(nameof(SR.ProgressBarValueDescr))
         ]
         public int Value {
             get {
@@ -389,7 +389,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.RightToLeftLayoutChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 Events.AddHandler(EventRightToLeftLayoutChanged, value);

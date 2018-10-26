@@ -101,10 +101,10 @@ namespace System.Windows.Forms.VisualStyles {
 
             if (!IsSupported) {
                 if (!VisualStyleInformation.IsEnabledByUser) {
-                    throw new InvalidOperationException(SR.GetString(SR.VisualStyleNotActive));
+                    throw new InvalidOperationException(SR.VisualStyleNotActive);
                 }
                 else {
-                    throw new InvalidOperationException(SR.GetString(SR.VisualStylesDisabledInClientArea));
+                    throw new InvalidOperationException(SR.VisualStylesDisabledInClientArea);
                 }
             }
 
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public VisualStyleRenderer(string className, int part, int state) {
             if (!IsCombinationDefined(className, part)) { //internally this call takes care of IsSupported. 
-                throw new ArgumentException(SR.GetString(SR.VisualStylesInvalidCombination));
+                throw new ArgumentException(SR.VisualStylesInvalidCombination);
             }
 
             this._class = className;
@@ -218,10 +218,10 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (!IsSupported) {
                     if (!VisualStyleInformation.IsEnabledByUser) {
-                        throw new InvalidOperationException(SR.GetString(SR.VisualStyleNotActive)); 
+                        throw new InvalidOperationException(SR.VisualStyleNotActive); 
                     }
                     else {
-                        throw new InvalidOperationException(SR.GetString(SR.VisualStylesDisabledInClientArea));
+                        throw new InvalidOperationException(SR.VisualStylesDisabledInClientArea);
                     }
                 }
         
@@ -253,7 +253,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public void SetParameters(string className, int part, int state) {
             if (!IsCombinationDefined(className, part)) { //internally this call takes care of IsSupported.
-                throw new ArgumentException(SR.GetString(SR.VisualStylesInvalidCombination)); 
+                throw new ArgumentException(SR.VisualStylesInvalidCombination); 
             }
 
             this._class = className;
@@ -399,7 +399,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
             
             if (imageIndex < 0 || imageIndex >= imageList.Images.Count) {
-                throw new ArgumentOutOfRangeException("imageIndex", SR.GetString(SR.InvalidArgument, "imageIndex", imageIndex.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("imageIndex", string.Format(SR.InvalidArgument, "imageIndex", imageIndex.ToString(CultureInfo.CurrentCulture)));
             }
 
             if (bounds.Width < 0 || bounds.Height < 0) {
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms.VisualStyles {
 
                     if (throwExceptionOnFail)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.VisualStyleHandleCreationFailed), e);
+                        throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed, e);
                     }
                     else
                     {
@@ -1156,7 +1156,7 @@ namespace System.Windows.Forms.VisualStyles {
 
                 if (hTheme == IntPtr.Zero) {
                     if (throwExceptionOnFail) {
-                        throw new InvalidOperationException(SR.GetString(SR.VisualStyleHandleCreationFailed));
+                        throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                     }
                     else {
                         return null;

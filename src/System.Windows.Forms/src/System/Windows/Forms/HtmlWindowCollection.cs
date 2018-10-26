@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
         public HtmlWindow this[int index] {
             get {
                 if (index < 0 || index >= this.Count) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidBoundArgument, "index", index, 0, this.Count - 1));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidBoundArgument, "index", index, 0, this.Count - 1));
                 }
 
                 object oIndex = (object)index;
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
                             as UnsafeNativeMethods.IHTMLWindow2;
                 }
                 catch (COMException) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument, "windowId", windowId));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, "windowId", windowId));
                 }
                 return (htmlWindow2 != null) ? new HtmlWindow(shimManager, htmlWindow2) : null;
             }

@@ -87,10 +87,10 @@ namespace System.Windows.Forms {
             }
 
             if (destinationType == typeof(string) && value != null && value is string && ((string)value).Length == 0) {
-                return SR.GetString(SR.toStringNone);
+                return SR.toStringNone;
             }
             else if (destinationType == typeof(string) && (value == null)) {
-                return SR.GetString(SR.toStringNone);
+                return SR.toStringNone;
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

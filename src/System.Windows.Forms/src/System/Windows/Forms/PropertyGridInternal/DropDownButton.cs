@@ -107,10 +107,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         private void SetAccessibleName() {
             if (AccessibilityImprovements.Level1 && useComboBoxTheme) {
-                this.AccessibleName = SR.GetString(SR.PropertyGridDropDownButtonComboBoxAccessibleName);
+                this.AccessibleName = SR.PropertyGridDropDownButtonComboBoxAccessibleName;
             }
             else {
-                this.AccessibleName = SR.GetString(SR.PropertyGridDropDownButtonAccessibleName);
+                this.AccessibleName = SR.PropertyGridDropDownButtonAccessibleName;
             }
         }
 

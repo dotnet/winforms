@@ -65,9 +65,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ScrollBarEnableDescr)
+        SRDescription(nameof(SR.ScrollBarEnableDescr))
         ]
         public bool Enabled {
             get {
@@ -93,9 +93,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(10),
-        SRDescription(SR.ScrollBarLargeChangeDescr),
+        SRDescription(nameof(SR.ScrollBarLargeChangeDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int LargeChange {
@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
             set {
                 if (largeChange != value ) {
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("LargeChange", SR.GetString(SR.InvalidLowBoundArgumentEx, "LargeChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("LargeChange", string.Format(SR.InvalidLowBoundArgumentEx, "LargeChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                     largeChange = value;
                     largeChangeSetExternally = true;
@@ -126,9 +126,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(100),
-        SRDescription(SR.ScrollBarMaximumDescr),
+        SRDescription(nameof(SR.ScrollBarMaximumDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int Maximum {
@@ -159,9 +159,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
-        SRDescription(SR.ScrollBarMinimumDescr),
+        SRDescription(nameof(SR.ScrollBarMinimumDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int Minimum {
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
                 }
                 if (minimum != value) {
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("Minimum", SR.GetString(SR.InvalidLowBoundArgumentEx, "Minimum", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("Minimum", string.Format(SR.InvalidLowBoundArgumentEx, "Minimum", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (maximum < value)
                         maximum = value;
@@ -215,9 +215,9 @@ namespace System.Windows.Forms {
         /// </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(1),
-        SRDescription(SR.ScrollBarSmallChangeDescr)
+        SRDescription(nameof(SR.ScrollBarSmallChangeDescr))
         ]
         public int SmallChange {
             get {
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
                 if (smallChange != value) {
                 
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("SmallChange", SR.GetString(SR.InvalidLowBoundArgumentEx, "SmallChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("SmallChange", string.Format(SR.InvalidLowBoundArgumentEx, "SmallChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                 
                     smallChange = value;
@@ -251,10 +251,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Bindable(true),
-        SRDescription(SR.ScrollBarValueDescr)
+        SRDescription(nameof(SR.ScrollBarValueDescr))
         ]
         public int Value {
             get {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if (value < minimum || value > maximum) {
-                        throw new ArgumentOutOfRangeException("Value", SR.GetString(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
+                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
                     }
                     this.value = value;
                     UpdateScrollInfo();
@@ -280,9 +280,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ScrollBarVisibleDescr)
+        SRDescription(nameof(SR.ScrollBarVisibleDescr))
         ]
         public bool Visible {
             get {

@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the collection has changed.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.collectionChangedEventDescr), EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+        [SRDescription(nameof(SR.collectionChangedEventDescr)), EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
         public event CollectionChangeEventHandler CollectionChanged {
             /* !!THIS EVENT IS OBSOLETE AND UNUSED!! */
             [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
@@ -361,7 +361,7 @@ namespace System.Windows.Forms {
 
                 PropertyDescriptor prop = formerManager.GetItemProperties().Find(dataField, true);
                 if (prop == null)
-                    throw new ArgumentException(SR.GetString(SR.RelatedListManagerChild, dataField));
+                    throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
 
                 if (typeof(IList).IsAssignableFrom(prop.PropertyType))
                     bindingManagerBase = new RelatedCurrencyManager(formerManager, dataField);
@@ -394,7 +394,7 @@ namespace System.Windows.Forms {
                     Binding binding = bindingManagerBase.Bindings[i];
                     if (binding.DataSource == propBinding.BindableComponent) {
                         if (propBinding.BindToObject.BindingMemberInfo.BindingMember.Equals(binding.PropertyName))
-                            throw new ArgumentException(SR.GetString(SR.DataBindingCycle, binding.PropertyName), "propBinding");
+                            throw new ArgumentException(string.Format(SR.DataBindingCycle, binding.PropertyName), "propBinding");
                     } else if (propBinding.BindToObject.BindingManagerBase is PropertyManager)
                         CheckPropertyBindingCycles(newBindingContext, binding);
                 }

@@ -26,8 +26,8 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.ActiveLinkColor"]/*' />
         [
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_LinkColumnActiveLinkColorDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_LinkColumnActiveLinkColorDescr))
         ]
         public Color ActiveLinkColor
         {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewLinkCell)this.CellTemplate).ActiveLinkColor;
             }
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
             {
                 if (value != null && !(value is System.Windows.Forms.DataGridViewLinkCell))
                 {
-                    throw new InvalidCastException(SR.GetString(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewLinkCell"));
+                    throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewLinkCell"));
                 }
                 base.CellTemplate = value;
             }
@@ -97,8 +97,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.LinkBehavior"]/*' />
         [
             DefaultValue(LinkBehavior.SystemDefault),
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_LinkColumnLinkBehaviorDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_LinkColumnLinkBehaviorDescr))
         ]
         public LinkBehavior LinkBehavior
         {
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewLinkCell)this.CellTemplate).LinkBehavior;
             }
@@ -136,8 +136,8 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.LinkColor"]/*' />
         [
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_LinkColumnLinkColorDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_LinkColumnLinkColorDescr))
         ]
         public Color LinkColor
         {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewLinkCell)this.CellTemplate).LinkColor;
             }
@@ -186,8 +186,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.Text"]/*' />
         [
             DefaultValue(null),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_LinkColumnTextDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_LinkColumnTextDescr))
         ]
         public string Text
         {
@@ -230,8 +230,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.TrackVisitedState"]/*' />
         [
             DefaultValue(true),
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_LinkColumnTrackVisitedStateDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_LinkColumnTrackVisitedStateDescr))
         ]
         public bool TrackVisitedState
         {
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewLinkCell)this.CellTemplate).TrackVisitedState;
             }
@@ -270,8 +270,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.UseColumnTextForLinkValue"]/*' />
         [
             DefaultValue(false),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_LinkColumnUseColumnTextForLinkValueDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_LinkColumnUseColumnTextForLinkValueDescr))
         ]
         public bool UseColumnTextForLinkValue
         {
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewLinkCell)this.CellTemplate).UseColumnTextForLinkValue;
             }
@@ -309,8 +309,8 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.VisitedLinkColor"]/*' />
         [
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_LinkColumnVisitedLinkColorDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_LinkColumnVisitedLinkColorDescr))
         ]
         public Color VisitedLinkColor
         {
@@ -318,7 +318,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewLinkCell)this.CellTemplate).VisitedLinkColor;
             }

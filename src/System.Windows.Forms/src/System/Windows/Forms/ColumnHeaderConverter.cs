@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
                         return new InstanceDescriptor(ctor, new object[0], false);
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.NoDefaultConstructor, t.FullName));
+                        throw new ArgumentException(string.Format(SR.NoDefaultConstructor, t.FullName));
                     }
                 }
                 return id;                

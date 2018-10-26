@@ -22,10 +22,10 @@ namespace System.Windows.Forms
 
         /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
                 return false;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.GridItemNotExpandable));
+                throw new NotSupportedException(SR.GridItemNotExpandable);
             }
         }
         

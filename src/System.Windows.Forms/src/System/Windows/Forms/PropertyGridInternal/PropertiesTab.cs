@@ -30,7 +30,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </devdoc>
         public override string TabName {
             get {
-                return SR.GetString(SR.PBRSToolTipProperties);
+                return SR.PBRSToolTipProperties;
             }
         }
         

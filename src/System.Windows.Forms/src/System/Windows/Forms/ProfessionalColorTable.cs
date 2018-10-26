@@ -106,282 +106,282 @@ namespace System.Windows.Forms {
        
 #region Colors
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedHighlightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedHighlightDescr))]
         public virtual Color ButtonSelectedHighlight {
             get { return FromKnownColor(KnownColors.ButtonSelectedHighlight); }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedHighlightBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedHighlightBorderDescr))]
         public virtual Color ButtonSelectedHighlightBorder {
             get { return ButtonPressedBorder; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonPressedHighlightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedHighlightDescr))]
         public virtual Color ButtonPressedHighlight {
             get { return FromKnownColor(KnownColors.ButtonPressedHighlight); }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonPressedHighlightBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedHighlightBorderDescr))]
         public virtual Color ButtonPressedHighlightBorder {
            get { return SystemColors.Highlight; }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonCheckedHighlightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedHighlightDescr))]
         public virtual Color ButtonCheckedHighlight {
             get { return FromKnownColor(KnownColors.ButtonCheckedHighlight); }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonCheckedHighlightBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedHighlightBorderDescr))]
         public virtual Color ButtonCheckedHighlightBorder {
             get { return SystemColors.Highlight; }
         }
 
-       [SRDescription(SR.ProfessionalColorsButtonPressedBorderDescr)]     
+       [SRDescription(nameof(SR.ProfessionalColorsButtonPressedBorderDescr))]     
         public virtual Color ButtonPressedBorder {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBdrMouseOver); }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedBorderDescr))]
         public virtual Color ButtonSelectedBorder {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBdrMouseOver); }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonCheckedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientBeginDescr))]
         public virtual Color ButtonCheckedGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradSelectedBegin); }
         }  
         
-        [SRDescription(SR.ProfessionalColorsButtonCheckedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientMiddleDescr))]
         public virtual Color ButtonCheckedGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradSelectedMiddle); }
         }
         
-        [SRDescription(SR.ProfessionalColorsButtonCheckedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientEndDescr))]
         public virtual Color ButtonCheckedGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradSelectedEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientBeginDescr))]
         public virtual Color ButtonSelectedGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonSelectedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientMiddleDescr))]
         public virtual Color ButtonSelectedGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverMiddle); }
         }
         
-        [SRDescription(SR.ProfessionalColorsButtonSelectedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientEndDescr))]
         public virtual Color ButtonSelectedGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverEnd); }
         }
         
-        [SRDescription(SR.ProfessionalColorsButtonPressedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientBeginDescr))]
         public virtual Color ButtonPressedGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseDownBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonPressedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientMiddleDescr))]
         public virtual Color ButtonPressedGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseDownMiddle); }
         }
 
-        [SRDescription(SR.ProfessionalColorsButtonPressedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientEndDescr))]
         public virtual Color ButtonPressedGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseDownEnd); }
         }
-        [SRDescription(SR.ProfessionalColorsCheckBackgroundDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsCheckBackgroundDescr))]
         public virtual Color CheckBackground {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelected); }
         }
         
-        [SRDescription(SR.ProfessionalColorsCheckSelectedBackgroundDescr)]        
+        [SRDescription(nameof(SR.ProfessionalColorsCheckSelectedBackgroundDescr))]        
         public virtual Color CheckSelectedBackground {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver); }
         }
 
-        [SRDescription(SR.ProfessionalColorsCheckPressedBackgroundDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsCheckPressedBackgroundDescr))]
         public virtual Color CheckPressedBackground {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver); }
         }
 
-        [SRDescription(SR.ProfessionalColorsGripDarkDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsGripDarkDescr))]
         public virtual Color GripDark {
             get { return FromKnownColor(KnownColors.msocbvcrCBDragHandle); }
         }
 
-        [SRDescription(SR.ProfessionalColorsGripLightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsGripLightDescr))]
         public virtual Color GripLight {
             get { return FromKnownColor(KnownColors.msocbvcrCBDragHandleShadow); }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientBeginDescr))]
         public virtual Color ImageMarginGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradVertBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientMiddleDescr))]
         public virtual Color ImageMarginGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradVertMiddle); }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientEndDescr))]
         public virtual Color ImageMarginGradientEnd {
             get { return (usingSystemColors) ? SystemColors.Control : FromKnownColor(KnownColors.msocbvcrCBGradVertEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginRevealedGradientBeginDescr)]       
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientBeginDescr))]       
         public virtual Color ImageMarginRevealedGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginRevealedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientMiddleDescr))]
         public virtual Color ImageMarginRevealedGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedMiddle); }
         }
 
-        [SRDescription(SR.ProfessionalColorsImageMarginRevealedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientEndDescr))]
         public virtual Color ImageMarginRevealedGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuStripGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuStripGradientBeginDescr))]
         public virtual Color MenuStripGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuStripGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuStripGradientEndDescr))]
         public virtual Color MenuStripGradientEnd{
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemSelectedDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedDescr))]
         public virtual Color MenuItemSelected {
            get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdMouseOver); }  
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemBorderDescr))]
         public virtual Color MenuItemBorder {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBdrSelected); }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuBorderDescr))]
         public virtual Color MenuBorder  {
             get { return FromKnownColor(KnownColors.msocbvcrCBMenuBdrOuter); }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemSelectedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedGradientBeginDescr))]
         public virtual Color MenuItemSelectedGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemSelectedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedGradientEndDescr))]
         public virtual Color MenuItemSelectedGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemPressedGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemPressedGradientBeginDescr))]
         public virtual Color MenuItemPressedGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuTitleBkgdBegin); }
         }
 
 
-        [SRDescription(SR.ProfessionalColorsMenuItemPressedGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemPressedGradientMiddleDescr))]
         public virtual Color MenuItemPressedGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedMiddle); }
         }
 
-        [SRDescription(SR.ProfessionalColorsMenuItemPressedGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsMenuItemPressedGradientEndDescr))]
         public virtual Color MenuItemPressedGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuTitleBkgdEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsRaftingContainerGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsRaftingContainerGradientBeginDescr))]
         public virtual Color RaftingContainerGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsRaftingContainerGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsRaftingContainerGradientEndDescr))]
         public virtual Color RaftingContainerGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsSeparatorDarkDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsSeparatorDarkDescr))]
         public virtual Color SeparatorDark {
             get { return FromKnownColor(KnownColors.msocbvcrCBSplitterLine); }
         }
 
-        [SRDescription(SR.ProfessionalColorsSeparatorLightDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsSeparatorLightDescr))]
         public virtual Color SeparatorLight {
             get { return FromKnownColor(KnownColors.msocbvcrCBSplitterLineLight); }
         }
       
-        [SRDescription(SR.ProfessionalColorsStatusStripGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
         public virtual Color StatusStripGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
         }
    
-        [SRDescription(SR.ProfessionalColorsStatusStripGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientEndDescr))]
         public virtual Color StatusStripGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripBorderDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripBorderDescr))]
         public virtual Color ToolStripBorder {
             get { return FromKnownColor(KnownColors.msocbvcrCBShadow); }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripDropDownBackgroundDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripDropDownBackgroundDescr))]
         public virtual Color ToolStripDropDownBackground {
             get { return FromKnownColor(KnownColors.msocbvcrCBMenuBkgd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripGradientBeginDescr))]
         public virtual Color ToolStripGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradVertBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripGradientMiddleDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripGradientMiddleDescr))]
         public virtual Color ToolStripGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradVertMiddle); }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripGradientEndDescr))]
         public virtual Color ToolStripGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradVertEnd); }
         }
    
-        [SRDescription(SR.ProfessionalColorsToolStripContentPanelGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripContentPanelGradientBeginDescr))]
         public virtual Color ToolStripContentPanelGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripContentPanelGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripContentPanelGradientEndDescr))]
         public virtual Color ToolStripContentPanelGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripPanelGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripPanelGradientBeginDescr))]
         public virtual Color ToolStripPanelGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsToolStripPanelGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsToolStripPanelGradientEndDescr))]
         public virtual Color ToolStripPanelGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
         }
 
-        [SRDescription(SR.ProfessionalColorsOverflowButtonGradientBeginDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientBeginDescr))]
         public virtual Color OverflowButtonGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradOptionsBegin); }
         }
 
-        [SRDescription(SR.ProfessionalColorsOverflowButtonGradientMiddleDescr)]  
+        [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientMiddleDescr))]  
         public virtual Color OverflowButtonGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradOptionsMiddle); }
         }
 
-        [SRDescription(SR.ProfessionalColorsOverflowButtonGradientEndDescr)]
+        [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientEndDescr))]
         public virtual Color OverflowButtonGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradOptionsEnd); }
         }

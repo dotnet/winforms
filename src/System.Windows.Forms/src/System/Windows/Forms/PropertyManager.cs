@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             if (this.dataSource != null && !String.IsNullOrEmpty(this.propName)) {
                 propInfo = TypeDescriptor.GetProperties(dataSource).Find(propName, true);
                 if (propInfo == null)
-                    throw new ArgumentException(SR.GetString(SR.PropertyManagerPropDoesNotExist, propName, dataSource.ToString()));
+                    throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, propName, dataSource.ToString()));
                 propInfo.AddValueChanged(dataSource, new EventHandler(PropertyChanged));
             }
         }
@@ -227,7 +227,7 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public override void AddNew() {
-            throw new NotSupportedException(SR.GetString(SR.DataBindingAddNewNotSupportedOnPropertyManager));
+            throw new NotSupportedException(SR.DataBindingAddNewNotSupportedOnPropertyManager);
         }
 
         // no-op on the propertyManager
@@ -236,7 +236,7 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public override void RemoveAt(int index) {
-            throw new NotSupportedException(SR.GetString(SR.DataBindingRemoveAtNotSupportedOnPropertyManager));
+            throw new NotSupportedException(SR.DataBindingRemoveAtNotSupportedOnPropertyManager);
         }
     }
 }

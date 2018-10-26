@@ -114,9 +114,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(defaultAllowSorting),
-        SRDescription(SR.DataGridAllowSortingDescr)
+        SRDescription(nameof(SR.DataGridAllowSortingDescr))
         ]
         public bool AllowSorting {
             get {
@@ -124,7 +124,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "AllowSorting"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AllowSorting"));
                 }
 
                 if (allowSorting != value) {
@@ -152,8 +152,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridAlternatingBackColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridAlternatingBackColorDescr))
         ]
         public Color AlternatingBackColor {
             get {
@@ -161,13 +161,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "AlternatingBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AlternatingBackColor"));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
-                    throw new ArgumentException(SR.GetString(SR.DataGridTableStyleTransparentAlternatingBackColorNotAllowed));
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentAlternatingBackColorNotAllowed);
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor,
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
                                                               "AlternatingBackColor"));
                 }
                 if (!alternatingBackBrush.Color.Equals(value)) {
@@ -243,8 +243,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.ControlBackColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public Color BackColor {
             get {
@@ -252,13 +252,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "BackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "BackColor"));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
-                    throw new ArgumentException(SR.GetString(SR.DataGridTableStyleTransparentBackColorNotAllowed));
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentBackColorNotAllowed);
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor,
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
                                                               "BackColor"));
                 }
                 if (!backBrush.Color.Equals(value)) {
@@ -396,8 +396,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.ControlForeColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.ControlForeColorDescr))
         ]
         public Color ForeColor {
             get {
@@ -405,11 +405,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "ForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "ForeColor"));
                 }
 
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor,
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
                                                               "BackColor"));
                 }
                 if (!foreBrush.Color.Equals(value)) {
@@ -454,8 +454,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridGridLineColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridGridLineColorDescr))
         ]
         public Color GridLineColor {
             get {
@@ -463,12 +463,12 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "GridLineColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineColor"));
                 }
 
                 if (gridLineBrush.Color != value) {
                     if (value.IsEmpty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "GridLineColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "GridLineColor"));
                     gridLineBrush = new SolidBrush(value);
 
                     // Invalidate(layout.Data);
@@ -527,9 +527,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatAppearance),
+         SRCategory(nameof(SR.CatAppearance)),
          DefaultValue(defaultGridLineStyle),
-         SRDescription(SR.DataGridGridLineStyleDescr)
+         SRDescription(nameof(SR.DataGridGridLineStyleDescr))
         ]
         public DataGridLineStyle GridLineStyle {
             get {
@@ -537,7 +537,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "GridLineStyle"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineStyle"));
                 }
                 
                 //valid values are 0x0 to 0x1. 
@@ -570,8 +570,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridHeaderBackColorDescr)         
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridHeaderBackColorDescr))         
         ]
         public Color HeaderBackColor {
             get {
@@ -579,13 +579,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "HeaderBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderBackColor"));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
-                    throw new ArgumentException(SR.GetString(SR.DataGridTableStyleTransparentHeaderBackColorNotAllowed));
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentHeaderBackColorNotAllowed);
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "HeaderBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderBackColor"));
                 if (!value.Equals(headerBackBrush.Color)) {
                     headerBackBrush = new SolidBrush(value);
 
@@ -644,10 +644,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatAppearance),
+         SRCategory(nameof(SR.CatAppearance)),
          Localizable(true),
          AmbientValue(null),
-         SRDescription(SR.DataGridHeaderFontDescr)
+         SRDescription(nameof(SR.DataGridHeaderFontDescr))
         ]
         public Font HeaderFont {
             get {
@@ -655,7 +655,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "HeaderFont"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderFont"));
                 }
 
                 if (value == null && headerFont != null || (value != null && !value.Equals(headerFont))) {
@@ -712,8 +712,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridHeaderForeColorDescr)         
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridHeaderForeColorDescr))         
         ]
         public Color HeaderForeColor {
             get {
@@ -721,11 +721,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "HeaderForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderForeColor"));
                 }
 
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "HeaderForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderForeColor"));
                 if (!value.Equals(headerForePen.Color)) {
                     headerForePen = new Pen(value);
                     headerForeBrush = new SolidBrush(value);
@@ -788,8 +788,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridLinkColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridLinkColorDescr))
         ]
         public Color LinkColor {
             get {
@@ -797,11 +797,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "LinkColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "LinkColor"));
                 }
 
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "LinkColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "LinkColor"));
                 if (!linkBrush.Color.Equals(value)) {
                     linkBrush = new SolidBrush(value);
                     // Invalidate(layout.Data);
@@ -853,8 +853,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRDescription(SR.DataGridLinkHoverColorDescr),
-         SRCategory(SR.CatColors),
+         SRDescription(nameof(SR.DataGridLinkHoverColorDescr)),
+         SRCategory(nameof(SR.CatColors)),
          Browsable(false),
          EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -958,9 +958,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
          DefaultValue(defaultPreferredColumnWidth),
-         SRCategory(SR.CatLayout),
+         SRCategory(nameof(SR.CatLayout)),
          Localizable(true),
-         SRDescription(SR.DataGridPreferredColumnWidthDescr),
+         SRDescription(nameof(SR.DataGridPreferredColumnWidthDescr)),
          TypeConverter(typeof(DataGridPreferredColumnWidthTypeConverter))
         ]
         public int PreferredColumnWidth {
@@ -969,11 +969,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "PreferredColumnWidth"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PreferredColumnWidth"));
                 }
 
                 if (value < 0)
-                    throw new ArgumentException(SR.GetString(SR.DataGridColumnWidth), "PreferredColumnWidth");
+                    throw new ArgumentException(SR.DataGridColumnWidth, "PreferredColumnWidth");
                 if (preferredColumnWidth != value) {
                     preferredColumnWidth = value;
 
@@ -1009,9 +1009,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatLayout),
+         SRCategory(nameof(SR.CatLayout)),
          Localizable(true),
-         SRDescription(SR.DataGridPreferredRowHeightDescr)
+         SRDescription(nameof(SR.DataGridPreferredRowHeightDescr))
         ]
         public int PreferredRowHeight {
             get {
@@ -1019,11 +1019,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "PrefferedRowHeight"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PrefferedRowHeight"));
                 }
 
                 if (value < 0)
-                    throw new ArgumentException(SR.GetString(SR.DataGridRowRowHeight));
+                    throw new ArgumentException(SR.DataGridRowRowHeight);
                 prefferedRowHeight = value;
 
                 /*
@@ -1083,9 +1083,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatDisplay),
+         SRCategory(nameof(SR.CatDisplay)),
          DefaultValue(true),
-         SRDescription(SR.DataGridColumnHeadersVisibleDescr)
+         SRDescription(nameof(SR.DataGridColumnHeadersVisibleDescr))
         ]
         public bool ColumnHeadersVisible {
             get {
@@ -1121,9 +1121,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatDisplay),
+         SRCategory(nameof(SR.CatDisplay)),
          DefaultValue(true),
-         SRDescription(SR.DataGridRowHeadersVisibleDescr)
+         SRDescription(nameof(SR.DataGridRowHeadersVisibleDescr))
         ]
         public bool RowHeadersVisible {
             get {
@@ -1159,10 +1159,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatLayout),
+         SRCategory(nameof(SR.CatLayout)),
          DefaultValue(defaultRowHeaderWidth),
          Localizable(true),
-         SRDescription(SR.DataGridRowHeaderWidthDescr)
+         SRDescription(nameof(SR.DataGridRowHeaderWidthDescr))
         ]
         public int RowHeaderWidth {
             get {
@@ -1204,8 +1204,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridSelectionBackColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridSelectionBackColorDescr))
         ]
         public Color SelectionBackColor {
             get {
@@ -1213,13 +1213,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "SelectionBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionBackColor"));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
-                    throw new ArgumentException(SR.GetString(SR.DataGridTableStyleTransparentSelectionBackColorNotAllowed));
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentSelectionBackColorNotAllowed);
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "SelectionBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionBackColor"));
                 if (!value.Equals(selectionBackBrush.Color)) {
                     selectionBackBrush = new SolidBrush(value);
 
@@ -1279,8 +1279,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
          Description("The foreground color for the current data grid row"),
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridSelectionForeColorDescr)        
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridSelectionForeColorDescr))        
         ]
         public Color SelectionForeColor {
             get {
@@ -1288,11 +1288,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "SelectionForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionForeColor"));
                 }
 
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "SelectionForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionForeColor"));
                 if (!value.Equals(selectionForeBrush.Color)) {
                     selectionForeBrush = new SolidBrush(value);
 

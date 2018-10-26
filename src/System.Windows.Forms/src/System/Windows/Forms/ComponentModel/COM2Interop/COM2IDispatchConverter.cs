@@ -19,7 +19,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         ///     What we return textually for null.
         /// </devdoc>
-        protected static readonly string none = SR.GetString(SR.toStringNone);
+        protected static readonly string none = SR.toStringNone;
 
         private bool allowExpand;
 

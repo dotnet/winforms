@@ -254,7 +254,7 @@ namespace System.Windows.Forms {
                 SafeNativeMethods.HtmlHelp(handle, pathAndFileName, HH_DISPLAY_TEXT_POPUP, (NativeMethods.HH_POPUP)param);
             }
             else if (param.GetType() == typeof(Int32)) {
-                throw new ArgumentException(SR.GetString(SR.InvalidArgument, "param", "Integer"));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, "param", "Integer"));
             }
         }
 
@@ -274,7 +274,7 @@ namespace System.Windows.Forms {
             Uri file = Resolve(url);
 
             if (file == null) {
-                throw new ArgumentException(SR.GetString(SR.HelpInvalidURL, url), "url");
+                throw new ArgumentException(string.Format(SR.HelpInvalidURL, url), "url");
             }
 
             switch (file.Scheme) {

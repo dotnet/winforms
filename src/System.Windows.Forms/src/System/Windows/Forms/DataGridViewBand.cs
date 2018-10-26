@@ -190,7 +190,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        throw new ArgumentException(SR.GetString(SR.DataGridView_WrongType, "DefaultHeaderCellType", "System.Windows.Forms.DataGridViewHeaderCell"));
+                        throw new ArgumentException(string.Format(SR.DataGridView_WrongType, "DefaultHeaderCellType", "System.Windows.Forms.DataGridViewHeaderCell"));
                     }
                 }
             }
@@ -247,22 +247,22 @@ namespace System.Windows.Forms
                 {
                     if (this.bandIsRow)
                     {
-                        throw new ArgumentOutOfRangeException("DividerHeight", SR.GetString(SR.InvalidLowBoundArgumentEx, "DividerHeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("DividerHeight", string.Format(SR.InvalidLowBoundArgumentEx, "DividerHeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                     else
                     {
-                        throw new ArgumentOutOfRangeException("DividerWidth", SR.GetString(SR.InvalidLowBoundArgumentEx, "DividerWidth", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("DividerWidth", string.Format(SR.InvalidLowBoundArgumentEx, "DividerWidth", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                 }
                 if (value > maxBandThickness)
                 {
                     if (this.bandIsRow)
                     {
-                        throw new ArgumentOutOfRangeException("DividerHeight", SR.GetString(SR.InvalidHighBoundArgumentEx, "DividerHeight", (value).ToString(CultureInfo.CurrentCulture), (maxBandThickness).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("DividerHeight", string.Format(SR.InvalidHighBoundArgumentEx, "DividerHeight", (value).ToString(CultureInfo.CurrentCulture), (maxBandThickness).ToString(CultureInfo.CurrentCulture)));
                     }
                     else
                     {
-                        throw new ArgumentOutOfRangeException("DividerWidth", SR.GetString(SR.InvalidHighBoundArgumentEx, "DividerWidth", (value).ToString(CultureInfo.CurrentCulture), (maxBandThickness).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("DividerWidth", string.Format(SR.InvalidHighBoundArgumentEx, "DividerWidth", (value).ToString(CultureInfo.CurrentCulture), (maxBandThickness).ToString(CultureInfo.CurrentCulture)));
                     }
                 }
                 if (value != this.DividerThickness)
@@ -396,7 +396,7 @@ namespace System.Windows.Forms
                         {
                             if (!(value is DataGridViewRowHeaderCell))
                             {
-                                throw new ArgumentException(SR.GetString(SR.DataGridView_WrongType, "HeaderCell", "System.Windows.Forms.DataGridViewRowHeaderCell"));
+                                throw new ArgumentException(string.Format(SR.DataGridView_WrongType, "HeaderCell", "System.Windows.Forms.DataGridViewRowHeaderCell"));
                             }
                             // A HeaderCell can only be used by one band.
                             if (value.OwningRow != null)
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                             DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell = value as DataGridViewColumnHeaderCell;
                             if (dataGridViewColumnHeaderCell == null)
                             {
-                                throw new ArgumentException(SR.GetString(SR.DataGridView_WrongType, "HeaderCell", "System.Windows.Forms.DataGridViewColumnHeaderCell"));
+                                throw new ArgumentException(string.Format(SR.DataGridView_WrongType, "HeaderCell", "System.Windows.Forms.DataGridViewColumnHeaderCell"));
                             }
                             // A HeaderCell can only be used by one band.
                             if (value.OwningColumn != null)
@@ -499,11 +499,11 @@ namespace System.Windows.Forms
                     {
                         if (this.bandIsRow)
                         {
-                            throw new ArgumentOutOfRangeException("MinimumHeight", value, SR.GetString(SR.DataGridViewBand_MinimumHeightSmallerThanOne, (DataGridViewBand.minBandThickness).ToString(CultureInfo.CurrentCulture)));
+                            throw new ArgumentOutOfRangeException("MinimumHeight", value, string.Format(SR.DataGridViewBand_MinimumHeightSmallerThanOne, (DataGridViewBand.minBandThickness).ToString(CultureInfo.CurrentCulture)));
                         }
                         else
                         {
-                            throw new ArgumentOutOfRangeException("MinimumWidth", value, SR.GetString(SR.DataGridViewBand_MinimumWidthSmallerThanOne, (DataGridViewBand.minBandThickness).ToString(CultureInfo.CurrentCulture)));
+                            throw new ArgumentOutOfRangeException("MinimumWidth", value, string.Format(SR.DataGridViewBand_MinimumWidthSmallerThanOne, (DataGridViewBand.minBandThickness).ToString(CultureInfo.CurrentCulture)));
                         }
                     }
                     if (this.Thickness < value)
@@ -561,7 +561,7 @@ namespace System.Windows.Forms
                     {
                         if (this.bandIndex == -1)
                         {
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertySetOnSharedRow, "ReadOnly"));
+                            throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "ReadOnly"));
                         }
                         OnStateChanging(DataGridViewElementStates.ReadOnly);
                         this.DataGridView.SetReadOnlyRowCore(this.bandIndex, value);
@@ -691,7 +691,7 @@ namespace System.Windows.Forms
                     {
                         if (this.bandIndex == -1)
                         {
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertySetOnSharedRow, "Selected"));
+                            throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "Selected"));
                         }
                         if (this.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect || this.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                         {
@@ -710,7 +710,7 @@ namespace System.Windows.Forms
                 else if (value)
                 {
                     // We do not allow the selection of a band before it gets added to the dataGridView.
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewBand_CannotSelect));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewBand_CannotSelect));
                 }
             }
         }
@@ -778,11 +778,11 @@ namespace System.Windows.Forms
                 {
                     if (this.bandIsRow)
                     {
-                        throw new ArgumentOutOfRangeException("Height", SR.GetString(SR.InvalidHighBoundArgumentEx, "Height", (value).ToString(CultureInfo.CurrentCulture), (maxBandThickness).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("Height", string.Format(SR.InvalidHighBoundArgumentEx, "Height", (value).ToString(CultureInfo.CurrentCulture), (maxBandThickness).ToString(CultureInfo.CurrentCulture)));
                     }
                     else
                     {
-                        throw new ArgumentOutOfRangeException("Width", SR.GetString(SR.InvalidHighBoundArgumentEx, "Width", (value).ToString(CultureInfo.CurrentCulture), (maxBandThickness).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("Width", string.Format(SR.InvalidHighBoundArgumentEx, "Width", (value).ToString(CultureInfo.CurrentCulture), (maxBandThickness).ToString(CultureInfo.CurrentCulture)));
                     }
                 }
                 bool setThickness = true;
@@ -869,7 +869,7 @@ namespace System.Windows.Forms
                         !value)
                     {
                         // the 'new' row cannot be made invisble.
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewBand_NewRowCannotBeInvisible));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewBand_NewRowCannotBeInvisible));
                     }
                     OnStateChanging(DataGridViewElementStates.Visible);
                     if (value)

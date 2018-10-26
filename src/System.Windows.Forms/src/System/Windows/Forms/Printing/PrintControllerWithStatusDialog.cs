@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public PrintControllerWithStatusDialog(PrintController underlyingController) 
-        : this(underlyingController, SR.GetString(SR.PrintControllerWithStatusDialog_DialogTitlePrint)) {
+        : this(underlyingController, string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePrint)) {
         }
 
         /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.PrintControllerWithStatusDialog1"]/*' />
@@ -216,7 +216,7 @@ namespace System.Windows.Forms {
             // on correct thread
             private void ThreadUnsafeUpdateLabel() {
                 // "page {0} of {1}"
-                dialog.label1.Text = SR.GetString(SR.PrintControllerWithStatusDialog_NowPrinting, 
+                dialog.label1.Text = string.Format(SR.PrintControllerWithStatusDialog_NowPrinting, 
                                                    parent.pageNumber, parent.document.DocumentName);
             }
 
@@ -249,7 +249,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private static bool IsRTLResources {
                 get {
-                    return SR.GetString(SR.RTL) != "RTL_False";
+                    return SR.RTL != "RTL_False";
                 }
             }
 
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
                 button1.AutoSize = true;
                 button1.Size = new Size(75, 23);
                 button1.TabIndex = 0;
-                button1.Text = SR.GetString(SR.PrintControllerWithStatusDialog_Cancel);
+                button1.Text = string.Format(SR.PrintControllerWithStatusDialog_Cancel);
                 button1.Location = new Point(88, 88);
                 button1.Anchor = AnchorStyles.None;
                 button1.Click += new EventHandler(button1_Click);
@@ -308,7 +308,7 @@ namespace System.Windows.Forms {
             }
             private void button1_Click(object sender, System.EventArgs e) {
                 button1.Enabled = false;
-                label1.Text = SR.GetString(SR.PrintControllerWithStatusDialog_Canceling);
+                label1.Text = string.Format(SR.PrintControllerWithStatusDialog_Canceling);
                 backgroundThread.canceled = true;
             }
         }

@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-    [SRDescription(SR.DescriptionVScrollBar)]
+    [SRDescription(nameof(SR.DescriptionVScrollBar))]
     public class VScrollBar : ScrollBar {
 
         private const int VERTICAL_SCROLLBAR_HEIGHT = 80;

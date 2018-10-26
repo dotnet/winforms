@@ -83,13 +83,13 @@ namespace System.Windows.Forms
                 }
                 if (this.OwningColumn == null || this.DataGridView == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_CellDoesNotYetBelongToDataGridView));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_CellDoesNotYetBelongToDataGridView));
                 }
                 if (value != this.sortGlyphDirection)
                 {
                     if (this.OwningColumn.SortMode == DataGridViewColumnSortMode.NotSortable && value != SortOrder.None)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumnHeaderCell_SortModeAndSortGlyphDirectionClash, (value).ToString()));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewColumnHeaderCell_SortModeAndSortGlyphDirectionClash, (value).ToString()));
                     }
                     this.sortGlyphDirection = value;
                     this.DataGridView.OnSortGlyphDirectionChanged(this);
@@ -1284,12 +1284,12 @@ namespace System.Windows.Forms
                     {
                         if (this.Owner.OwningColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                         {
-                            return SR.GetString(SR.DataGridView_AccColumnHeaderCellDefaultAction);
+                            return string.Format(SR.DataGridView_AccColumnHeaderCellDefaultAction);
                         }
                         else if (this.Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect||
                                  this.Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                         {
-                            return SR.GetString(SR.DataGridView_AccColumnHeaderCellSelectDefaultAction);
+                            return string.Format(SR.DataGridView_AccColumnHeaderCellSelectDefaultAction);
                         }
                         else
                         {
@@ -1520,7 +1520,7 @@ namespace System.Windows.Forms
             {
                 if (this.Owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
                 DataGridViewColumnHeaderCell dataGridViewCell = (DataGridViewColumnHeaderCell)this.Owner;

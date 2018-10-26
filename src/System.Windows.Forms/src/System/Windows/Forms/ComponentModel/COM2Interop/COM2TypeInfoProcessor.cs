@@ -280,7 +280,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             IntPtr pTypeAttr = IntPtr.Zero;
             int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
             if (!NativeMethods.Succeeded(hr)) {
-                throw new ExternalException(SR.GetString(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
             Guid g = Guid.Empty;
@@ -374,7 +374,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
             hr = typeInfo.GetRefTypeInfo(hreftype, ref refTypeInfo);
             if (!NativeMethods.Succeeded(hr)) {
-                throw new ExternalException(SR.GetString(SR.TYPEINFOPROCESSORGetRefTypeInfoFailed, hr), hr);
+                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetRefTypeInfoFailed, hr), hr);
             }
 
             try {
@@ -388,7 +388,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     if (!NativeMethods.Succeeded(hr)) {
                         
-                        throw new ExternalException(SR.GetString(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                        throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
                     }
 
                     NativeMethods.tagTYPEATTR refTypeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pRefTypeAttr, typeof(tagTYPEATTR));
@@ -531,7 +531,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
 
             if (!NativeMethods.Succeeded(hr)) {
-                throw new COMException(SR.GetString(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, cnd.GetClassName(typeInfo)), hr);
+                throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, cnd.GetClassName(typeInfo)), hr);
             }
 
             if (pPropName == null){
@@ -619,7 +619,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
 
             if (!NativeMethods.Succeeded(hr) || pTypeAttr == IntPtr.Zero) {
-                throw new ExternalException(SR.GetString(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
             NativeMethods.tagTYPEATTR         typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
@@ -724,7 +724,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 int hr = enumTypeInfo.GetTypeAttr(ref pTypeAttr);
 
                 if (!NativeMethods.Succeeded(hr) || pTypeAttr == IntPtr.Zero) {
-                        throw new ExternalException(SR.GetString(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                        throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
                 }
 
                 NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
@@ -882,7 +882,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
 
             if (!NativeMethods.Succeeded(hr) || pTypeAttr == IntPtr.Zero) {
-                throw new ExternalException(SR.GetString(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
             NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
@@ -998,7 +998,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return typeof(NativeMethods.FILETIME);
 
             case NativeMethods.tagVT.VT_USERDEFINED:
-                throw new ArgumentException(SR.GetString(SR.COM2UnhandledVT, "VT_USERDEFINED"));
+                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));
 
                 /*case VT_ENUM:
                     if (enumNames != null || null != pPropertyInfo.GetEnum()) {
@@ -1024,7 +1024,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             case NativeMethods.tagVT.VT_BYREF:
             case NativeMethods.tagVT.VT_RESERVED:
             default:
-                throw new ArgumentException(SR.GetString(SR.COM2UnhandledVT, ((int)vt).ToString(CultureInfo.InvariantCulture)));
+                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, ((int)vt).ToString(CultureInfo.InvariantCulture)));
             }
         }
 

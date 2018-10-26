@@ -494,7 +494,7 @@ namespace System.Windows.Forms {
 
             public override void Add(Control value) {
                 if (IsReadOnly) {
-                    throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                    throw new NotSupportedException(SR.ReadonlyControlsCollection);
                 }
                 AddInternal(value);
             }
@@ -505,7 +505,7 @@ namespace System.Windows.Forms {
 
             public override void Clear() {
                 if (IsReadOnly) {
-                    throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                    throw new NotSupportedException(SR.ReadonlyControlsCollection);
                 }
                 base.Clear();
             }
@@ -516,7 +516,7 @@ namespace System.Windows.Forms {
             
             public override void RemoveByKey(string key) {
                 if (IsReadOnly) {
-                    throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                    throw new NotSupportedException(SR.ReadonlyControlsCollection);
                 }
                 base.RemoveByKey(key);
             }
@@ -553,10 +553,10 @@ namespace System.Windows.Forms {
                     throw new ArgumentNullException("value");
                 }
                 if (IsReadOnly) {
-                    throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                    throw new NotSupportedException(SR.ReadonlyControlsCollection);
                 }
                 if (!typeOfControl.IsAssignableFrom(value.GetType())) {
-                    throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.TypedControlCollectionShouldBeOfType, typeOfControl.Name)), value.GetType().Name);
+                    throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeOfControl.Name)), value.GetType().Name);
                 }
                 base.Add(value);
             }

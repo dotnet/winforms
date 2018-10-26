@@ -2638,7 +2638,7 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <returns>True if operation succeeds, False otherwise.</returns>
         public virtual bool RaiseLiveRegionChanged() {
-            throw new NotSupportedException(SR.GetString(SR.AccessibleObjectLiveRegionNotSupported));
+            throw new NotSupportedException(SR.AccessibleObjectLiveRegionNotSupported);
         }
 
         internal bool RaiseAutomationEvent(int eventId) {

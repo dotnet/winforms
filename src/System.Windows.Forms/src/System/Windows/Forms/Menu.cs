@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlHandleDescr)
+        SRDescription(nameof(SR.ControlHandleDescr))
         ]
         public IntPtr Handle {
             get {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.MenuIsParentDescr)
+        SRDescription(nameof(SR.MenuIsParentDescr))
         ]
         public virtual bool IsParent {
             [System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)]
@@ -114,7 +114,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.MenuMDIListItemDescr)
+        SRDescription(nameof(SR.MenuMDIListItemDescr))
         ]
         public MenuItem MdiListItem {
             get {
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(SR.MenuMenuItemsDescr),
+        SRDescription(nameof(SR.MenuMenuItemsDescr)),
         MergableProperty(false)
         ]
         public MenuItemCollection MenuItems {
@@ -189,10 +189,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -506,7 +506,7 @@ namespace System.Windows.Forms {
             MenuItem itemDst;
 
             if (menuSrc == this)
-                throw new ArgumentException(SR.GetString(SR.MenuMergeWithSelf), "menuSrc");
+                throw new ArgumentException(SR.MenuMergeWithSelf, "menuSrc");
 
             if (menuSrc.items != null && items == null) {
                 MenuItems.Clear();                
@@ -697,7 +697,7 @@ namespace System.Windows.Forms {
             public virtual MenuItem this[int index] {
                 get {
                     if (index < 0 || index >= owner.ItemCount)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     return owner.items[index];
                 }
                 // set not supported
@@ -842,7 +842,7 @@ namespace System.Windows.Forms {
                         MenuItem parent = (MenuItem)owner;
                         while (parent != null) {
                             if (parent.Equals(item)) {
-                                throw new ArgumentException(SR.GetString(SR.MenuItemAlreadyExists, item.Text), "item");
+                                throw new ArgumentException(string.Format(SR.MenuItemAlreadyExists, item.Text), "item");
                             }
                             if (parent.Parent is MenuItem)
                                 parent = (MenuItem)parent.Parent;
@@ -863,7 +863,7 @@ namespace System.Windows.Forms {
 
                 // Validate our index
                 if (index < 0 || index > owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
                 }
                                 
                 if (owner.items == null || owner.items.Length == owner.ItemCount) {
@@ -903,7 +903,7 @@ namespace System.Windows.Forms {
                     return Add((MenuItem)value);
                 }
                 else {  
-                    throw new ArgumentException(SR.GetString(SR.MenuBadMenuItem), "value");
+                    throw new ArgumentException(SR.MenuBadMenuItem, "value");
                 }
             }
            
@@ -943,7 +943,7 @@ namespace System.Windows.Forms {
             public MenuItem [] Find(string key, bool searchAllChildren) {
 
                 if ((key == null) || (key.Length == 0)) {
-                    throw new System.ArgumentNullException("key", SR.GetString(SR.FindKeyMayNotBeEmptyOrNull));
+                    throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
                 
@@ -1059,7 +1059,7 @@ namespace System.Windows.Forms {
                     Add(index, (MenuItem)value);                    
                 }
                 else {  
-                    throw new ArgumentException(SR.GetString(SR.MenuBadMenuItem),"value");
+                    throw new ArgumentException(SR.MenuBadMenuItem,"value");
                 }
             }
             
@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 MenuItem item = owner.items[index];

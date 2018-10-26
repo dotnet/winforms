@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
     DefaultProperty("Items"),
     DefaultEvent("SelectedItemChanged"),
     DefaultBindingProperty("SelectedItem"),
-    SRDescription(SR.DescriptionDomainUpDown)
+    SRDescription(nameof(SR.DescriptionDomainUpDown))
     ]
     public class DomainUpDown : UpDownBase {
 
@@ -79,9 +79,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(SR.DomainUpDownItemsDescr),
+        SRDescription(nameof(SR.DomainUpDownItemsDescr)),
         Localizable(true),
         Editor("System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
@@ -129,8 +129,8 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DefaultValue(-1),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.DomainUpDownSelectedIndexDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.DomainUpDownSelectedIndexDescr))
         ]
         public int SelectedIndex {
 
@@ -145,7 +145,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < -1 || value >= Items.Count) {
-                    throw new ArgumentOutOfRangeException("SelectedIndex", SR.GetString(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("SelectedIndex", string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
                 }
                 
                 if (value != SelectedIndex) {    
@@ -165,7 +165,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.DomainUpDownSelectedItemDescr)
+        SRDescription(nameof(SR.DomainUpDownSelectedItemDescr))
         ]
         public object SelectedItem {
             get {
@@ -199,9 +199,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.DomainUpDownSortedDescr)
+        SRDescription(nameof(SR.DomainUpDownSortedDescr))
         ]
         public bool Sorted {
 
@@ -225,10 +225,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.DomainUpDownWrapDescr)
+        SRDescription(nameof(SR.DomainUpDownWrapDescr))
         ]
         public bool Wrap {
 
@@ -253,7 +253,7 @@ namespace System.Windows.Forms {
         ///       been changed.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.DomainUpDownOnSelectedItemChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.DomainUpDownOnSelectedItemChangedDescr))]
         public event EventHandler SelectedItemChanged {
             add {
                 onSelectedItemChanged += value;
@@ -665,7 +665,7 @@ namespace System.Windows.Forms {
                 int index = IndexOf(item);
                 
                 if (index == -1) {
-                    throw new ArgumentOutOfRangeException("item", SR.GetString(SR.InvalidArgument, "item", item.ToString()));
+                    throw new ArgumentOutOfRangeException("item", string.Format(SR.InvalidArgument, "item", item.ToString()));
                 }
                 else {
                     RemoveAt(index);    

@@ -544,10 +544,10 @@ namespace System.Windows.Forms {
                 }
 
                 if (tempPropInfo == null) {
-                    throw new ArgumentException(SR.GetString(SR.ListBindingBindProperty, propertyName), "PropertyName");
+                    throw new ArgumentException(string.Format(SR.ListBindingBindProperty, propertyName), "PropertyName");
                 }
                 if (tempPropInfo.IsReadOnly && this.controlUpdateMode != ControlUpdateMode.Never) {
-                    throw new ArgumentException(SR.GetString(SR.ListBindingBindPropertyReadOnly, propertyName), "PropertyName");
+                    throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, propertyName), "PropertyName");
                 }
 
                 propInfo = tempPropInfo;
@@ -823,7 +823,7 @@ namespace System.Windows.Forms {
                 }
 
                 // time to fail:
-                throw new FormatException(SR.GetString(SR.ListBindingFormatFailed));
+                throw new FormatException(SR.ListBindingFormatFailed);
             }
         }
 

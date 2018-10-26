@@ -48,7 +48,7 @@ namespace System.Windows.Forms{
         private string       mappingName       = "";
         private string       headerName       = "";
         private bool         invalid              = false;
-        private string       nullText            = SR.GetString(SR.DataGridNullText);
+        private string       nullText            = SR.DataGridNullText;
         private bool         readOnly             = false;
         private bool         updating             = false;
         //private bool        visible              = true;
@@ -107,7 +107,7 @@ namespace System.Windows.Forms{
         /// <devdoc>
         ///       Gets or sets the alignment of text in a column.
         /// </devdoc>
-        [SRCategory(SR.CatDisplay),
+        [SRCategory(nameof(SR.CatDisplay)),
         Localizable(true),
         DefaultValue(HorizontalAlignment.Left)]
         public virtual HorizontalAlignment Alignment {        
@@ -168,7 +168,7 @@ namespace System.Windows.Forms{
         /// </example>
         /// <seealso cref='System.Windows.Forms.DataGrid.AlternatingBackColor'/>
         /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/>
-        [SRCategory(SR.CatColors)]
+        [SRCategory(nameof(SR.CatColors))]
         public virtual Color AlternatingBackColor {
             get {
                 if (alternatingBackBrush != null) {
@@ -593,7 +593,7 @@ namespace System.Windows.Forms{
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatDisplay)
+        SRCategory(nameof(SR.CatDisplay))
         ]
         public virtual string HeaderText {
             get {
@@ -694,7 +694,7 @@ namespace System.Windows.Forms{
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatDisplay)
+        SRCategory(nameof(SR.CatDisplay))
         ]
         public virtual string NullText {
             get {
@@ -775,7 +775,7 @@ namespace System.Windows.Forms{
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
         DefaultValue(100)
         ]
@@ -852,12 +852,12 @@ namespace System.Windows.Forms{
         }
 
 	private void ResetNullText() {
-		NullText = SR.GetString(SR.DataGridNullText);
+		NullText = SR.DataGridNullText;
 	}
 		
 
         private bool ShouldSerializeNullText() {
-            return (!SR.GetString(SR.DataGridNullText).Equals(nullText));
+            return (!SR.DataGridNullText.Equals(nullText));
         }
 
         /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.GetPreferredSize"]/*' />
@@ -890,7 +890,7 @@ namespace System.Windows.Forms{
         protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum) {
             CheckValidDataSource(source);
             if (PropertyDescriptor == null) {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridColumnNoPropertyDescriptor));
+                throw new InvalidOperationException(SR.DataGridColumnNoPropertyDescriptor);
             }
             object value = PropertyDescriptor.GetValue(source[rowNum]);
             return value;
@@ -927,23 +927,23 @@ namespace System.Windows.Forms{
             // DataGridTableStyle myTable = this.DataGridTableStyle;
             PropertyDescriptor myPropDesc = this.PropertyDescriptor;
             if (myPropDesc == null) {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridColumnUnbound, HeaderText));
+                throw new InvalidOperationException(string.Format(SR.DataGridColumnUnbound, HeaderText));
             }
 
 #if false
             DataTable myDataTable = myTable.DataTable;
             if (myDataColumn.Table != myDataTable) {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridColumnDataSourceMismatch, Header));
+                throw new InvalidOperationException(string.Format(SR.DataGridColumnDataSourceMismatch, Header));
             }
 
             /* FOR DEMO: Microsoft: DataGridColumnStyle::CheckValidDataSource: make the check better */
             if (((DataView) value.DataSource).Table == null) {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridColumnNoDataTable, Header));
+                throw new InvalidOperationException(string.Format(SR.DataGridColumnNoDataTable, Header));
             }
             else {
                 /* FOR DEMO: Microsoft: DataGridColumnStyle::CheckValidDataSource: make the check better */
                 if (!myTable.DataTable.Equals(((DataView) value.DataSource).Table)) {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridColumnNoDataSource, Header, myTable.DataTable.TableName));
+                    throw new InvalidOperationException(string.Format(SR.DataGridColumnNoDataSource, Header, myTable.DataTable.TableName));
                 }
             }
 #endif // false
@@ -1138,7 +1138,7 @@ namespace System.Windows.Forms{
             CheckValidDataSource(source);
 
             if (source.Position != rowNum)
-                throw new ArgumentException(SR.GetString(SR.DataGridColumnListManagerPosition), "rowNum");
+                throw new ArgumentException(SR.DataGridColumnListManagerPosition, "rowNum");
             if (source[rowNum] is IEditableObject)
                 ((IEditableObject)source[rowNum]).BeginEdit();
             this.PropertyDescriptor.SetValue(source[rowNum], value);

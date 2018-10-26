@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
                         return new LinkLabel.Link(values[0], values[1]);
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.TextParseFailedFormat,
+                        throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
                                                                   text,
                                                                   "Start, Length"));
                     }

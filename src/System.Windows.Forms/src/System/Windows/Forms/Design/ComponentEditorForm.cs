@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Design {
         public ComponentEditorForm(object component, Type[] pageTypes) : base() {
         
             if (!(component is IComponent)) {
-               throw new ArgumentException(SR.GetString(SR.ComponentEditorFormBadComponent),"component");
+               throw new ArgumentException(SR.ComponentEditorFormBadComponent,"component");
             }
             this.component = (IComponent)component;
             this.pageTypes = pageTypes;
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Design {
                 }
 
                 applyButton.Enabled = false;
-                cancelButton.Text = SR.GetString(SR.CloseCaption);
+                cancelButton.Text = SR.CloseCaption;
                 dirty = false;
 
                 if (lastApply == false) {
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Design {
         /*
         private void CreateNewTransaction() {
             IDesignerHost host = component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            transaction = host.CreateTransaction(SR.GetString(SR.ComponentEditorFormEditTransaction, component.Site.Name));            
+            transaction = host.CreateTransaction(string.Format(SR.ComponentEditorFormEditTransaction, component.Site.Name));            
         }
         */
 
@@ -255,10 +255,10 @@ namespace System.Windows.Forms.Design {
             string caption = String.Empty;
             ISite site = component.Site;
             if (site != null) {
-                caption = SR.GetString(SR.ComponentEditorFormProperties, site.Name);
+                caption = string.Format(SR.ComponentEditorFormProperties, site.Name);
             }
             else {
-                caption = SR.GetString(SR.ComponentEditorFormPropertiesNoName);
+                caption = SR.ComponentEditorFormPropertiesNoName;
             }
             this.Text = caption;
 
@@ -293,28 +293,28 @@ namespace System.Windows.Forms.Design {
             bounds.Height = BUTTON_HEIGHT;
 
             helpButton.Bounds = bounds;
-            helpButton.Text = SR.GetString(SR.HelpCaption);
+            helpButton.Text = SR.HelpCaption;
             helpButton.Click += new EventHandler(this.OnButtonClick);
             helpButton.Enabled = false;
             helpButton.FlatStyle = FlatStyle.System;
 
             bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
             applyButton.Bounds = bounds;
-            applyButton.Text = SR.GetString(SR.ApplyCaption);
+            applyButton.Text = SR.ApplyCaption;
             applyButton.Click += new EventHandler(this.OnButtonClick);
             applyButton.Enabled = false;
             applyButton.FlatStyle = FlatStyle.System;
 
             bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
             cancelButton.Bounds = bounds;
-            cancelButton.Text = SR.GetString(SR.CancelCaption);
+            cancelButton.Text = SR.CancelCaption;
             cancelButton.Click += new EventHandler(this.OnButtonClick);
             cancelButton.FlatStyle = FlatStyle.System;
             this.CancelButton = cancelButton;
 
             bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
             okButton.Bounds = bounds;
-            okButton.Text = SR.GetString(SR.OKCaption);
+            okButton.Text = SR.OKCaption;
             okButton.Click += new EventHandler(this.OnButtonClick);
             okButton.FlatStyle = FlatStyle.System;
             this.AcceptButton = okButton;
@@ -453,7 +453,7 @@ namespace System.Windows.Forms.Design {
         internal virtual void SetDirty() {
             dirty = true;
             applyButton.Enabled = true;
-            cancelButton.Text = SR.GetString(SR.CancelCaption);
+            cancelButton.Text = SR.CancelCaption;
         }
 
         /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ShowForm"]/*' />
@@ -554,7 +554,7 @@ namespace System.Windows.Forms.Design {
                 }
                 catch (TargetInvocationException e) {
                     Debug.Fail(e.ToString());
-                    throw new TargetInvocationException(SR.GetString(SR.ExceptionCreatingCompEditorControl, e.ToString()), e.InnerException);
+                    throw new TargetInvocationException(string.Format(SR.ExceptionCreatingCompEditorControl, e.ToString()), e.InnerException);
                 }
 
                 pageControl.SetSite(this);

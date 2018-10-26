@@ -299,13 +299,13 @@ namespace System.Windows.Forms {
                                              bounds.Width - rect.right, bounds.Height - rect.bottom);
                 try {
                     if (rgn1 == IntPtr.Zero || rgn2 == IntPtr.Zero)
-                        throw new InvalidOperationException(SR.GetString(SR.ErrorSettingWindowRegion));
+                        throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
 
                     if (SafeNativeMethods.CombineRgn(new HandleRef(null, rgn1), new HandleRef(null, rgn1), new HandleRef(null, rgn2), NativeMethods.RGN_DIFF) == 0)
-                        throw new InvalidOperationException(SR.GetString(SR.ErrorSettingWindowRegion));
+                        throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
 
                     if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(null, rgn1), true) == 0) {
-                        throw new InvalidOperationException(SR.GetString(SR.ErrorSettingWindowRegion));
+                        throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
                     else {
                         // The hwnd now owns the region.
@@ -430,10 +430,10 @@ namespace System.Windows.Forms {
                     return;
                 }
                 if (!(value is Form) || !((Form)value).IsMdiChild) {
-                    throw new ArgumentException(SR.GetString(SR.MDIChildAddToNonMDIParent), "value");
+                    throw new ArgumentException(SR.MDIChildAddToNonMDIParent, "value");
                 }
                 if (owner.CreateThreadId != value.CreateThreadId) {
-                    throw new ArgumentException(SR.GetString(SR.AddDifferentThreads), "value");
+                    throw new ArgumentException(SR.AddDifferentThreads, "value");
                 }
                 owner.children.Add((Form)value);
                 base.Add(value);

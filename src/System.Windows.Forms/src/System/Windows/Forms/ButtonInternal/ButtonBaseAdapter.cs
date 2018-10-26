@@ -986,7 +986,7 @@ namespace System.Windows.Forms.ButtonInternal {
                     case Composition.AllCombined:
                         return Math.Max(Math.Max(checkSize, imageSize), textSize);
                     default:
-                        Debug.Fail(SR.GetString(SR.InvalidArgument, "composition", composition.ToString()));
+                        Debug.Fail(string.Format(SR.InvalidArgument, "composition", composition.ToString()));
                         return -7107;
                 }
             }
@@ -1013,7 +1013,7 @@ namespace System.Windows.Forms.ButtonInternal {
                     case Composition.AllCombined:
                         return proposedSize;
                     default:
-                        Debug.Fail(SR.GetString(SR.InvalidArgument, "composition", composition.ToString()));
+                        Debug.Fail(string.Format(SR.InvalidArgument, "composition", composition.ToString()));
                         return -7109;
                 }
             }

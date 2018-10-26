@@ -896,7 +896,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 //PrintExceptionInfo(pExcepInfo);
                 return null;
             default:
-                throw new ExternalException(SR.GetString(SR.DispInvokeFailed, "GetValue" , hr), hr);
+                throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue" , hr), hr);
             }
         }
 
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override void SetValue(Object component, Object value) {
 
             if (this.readOnly) {
-                throw new NotSupportedException(SR.GetString(SR.COM2ReadonlyProperty, this.Name ));
+                throw new NotSupportedException(string.Format(SR.COM2ReadonlyProperty, this.Name ));
             }
 
             object owner = component;
@@ -1301,7 +1301,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             
                             
                             if (result == 0) {   
-                                errorInfo = String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.DispInvokeFailed, "SetValue", hr));
+                                errorInfo = String.Format(CultureInfo.CurrentCulture, string.Format(SR.DispInvokeFailed, "SetValue", hr));
                             }
                             else {       
                                 errorInfo = strMessage.ToString();

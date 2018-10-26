@@ -334,7 +334,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public Color BackColor {
             get {
@@ -376,7 +376,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(false),
         RefreshPropertiesAttribute(RefreshProperties.Repaint),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public bool Checked {
             get {
@@ -434,7 +434,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public Font Font {
             get {
@@ -459,7 +459,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public Color ForeColor {
             get {
@@ -485,7 +485,7 @@ namespace System.Windows.Forms {
         [
             DefaultValue(null),
             Localizable(true),
-            SRCategory(SR.CatBehavior)
+            SRCategory(nameof(SR.CatBehavior))
         ]
         public ListViewGroup Group {
             get
@@ -519,8 +519,8 @@ namespace System.Windows.Forms {
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ListViewItemImageIndexDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ListViewItemImageIndexDescr)),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter))
         ]        
         public int ImageIndex {
@@ -532,7 +532,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", SR.GetString(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
             
                 ImageIndexer.Index = value;
@@ -562,7 +562,7 @@ namespace System.Windows.Forms {
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true)
         ]        
         public string ImageKey {
@@ -600,8 +600,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.IndentCount"]/*' />
         [
         DefaultValue(0),
-        SRDescription(SR.ListViewItemIndentCountDescr),
-        SRCategory(SR.CatDisplay)
+        SRDescription(nameof(SR.ListViewItemIndentCountDescr)),
+        SRCategory(nameof(SR.CatDisplay))
         ]
         public int IndentCount {
             get {
@@ -611,7 +611,7 @@ namespace System.Windows.Forms {
                 if (value == indentCount)
                     return;
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("IndentCount", SR.GetString(SR.ListViewIndentCountCantBeNegative));
+                    throw new ArgumentOutOfRangeException("IndentCount", SR.ListViewIndentCountCantBeNegative);
                 }
                 indentCount = value;
                 if (listView != null && listView.IsHandleCreated) {
@@ -680,7 +680,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Position"]/*' />
         [
-        SRCategory(SR.CatDisplay),
+        SRCategory(nameof(SR.CatDisplay)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false)
         ]
@@ -772,8 +772,8 @@ namespace System.Windows.Forms {
         Localizable(true),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
         DefaultValue(-1),
-        SRDescription(SR.ListViewItemStateImageIndexDescr),
-        SRCategory(SR.CatBehavior),
+        SRDescription(nameof(SR.ListViewItemStateImageIndexDescr)),
+        SRCategory(nameof(SR.CatBehavior)),
         RefreshProperties(RefreshProperties.Repaint),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RelatedImageList("ListView.StateImageList")
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1 || value > 14)
-                    throw new ArgumentOutOfRangeException("StateImageIndex", SR.GetString(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("StateImageIndex", string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
 
                 if (listView != null && listView.IsHandleCreated) {
                     this.state[StateImageMaskSet] = (value == -1 ? 0 : 1);
@@ -836,9 +836,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),        
-        SRDescription(SR.ListViewItemSubItemsDescr),
+        SRDescription(nameof(SR.ListViewItemSubItemsDescr)),
         Editor("System.Windows.Forms.Design.ListViewSubItemCollectionEditor, " + AssemblyRef.SystemDesign,typeof(UITypeEditor)),
         ]
         public ListViewSubItemCollection SubItems {
@@ -858,10 +858,10 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -881,7 +881,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public string Text {
             get {
@@ -902,7 +902,7 @@ namespace System.Windows.Forms {
         ///     Tool tip text associated with this ListViewItem
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue("")
         ]
         public string ToolTipText {
@@ -934,7 +934,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(true),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public bool UseItemStyleForSubItems {
             get {
@@ -954,7 +954,7 @@ namespace System.Windows.Forms {
             if (Index >= 0) {
                 ListView lv = ListView;
                 if (lv.LabelEdit == false)
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewBeginEditFailed));
+                    throw new InvalidOperationException(SR.ListViewBeginEditFailed);
                 if (!lv.Focused)
                     lv.FocusInternal();
                 UnsafeNativeMethods.SendMessage(new HandleRef(lv, lv.Handle), NativeMethods.LVM_EDITLABEL, Index, 0);
@@ -1587,10 +1587,10 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ListViewSubItem.uex' path='docs/doc[@for="ListViewSubItem.Tag"]/*' />
             [
-            SRCategory(SR.CatData),
+            SRCategory(nameof(SR.CatData)),
             Localizable(false),
             Bindable(true),
-            SRDescription(SR.ControlTagDescr),
+            SRDescription(nameof(SR.ControlTagDescr)),
             DefaultValue(null),
             TypeConverter(typeof(StringConverter)),
             ]
@@ -1772,13 +1772,13 @@ namespace System.Windows.Forms {
             public ListViewSubItem this[int index] {
                 get {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                     return owner.subItems[index];
                 }
                 set {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                     owner.subItems[index] = value;
                     owner.UpdateSubItems(index);                    
@@ -1796,7 +1796,7 @@ namespace System.Windows.Forms {
                         this[index] = (ListViewSubItem)value;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.ListViewBadListViewSubItem),"value");
+                        throw new ArgumentException(SR.ListViewBadListViewSubItem,"value");
                     }
                 }
             }
@@ -1904,7 +1904,7 @@ namespace System.Windows.Forms {
                     return IndexOf(Add((ListViewSubItem)item));
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ListViewSubItemCollectionInvalidArgument));
+                    throw new ArgumentException(SR.ListViewSubItemCollectionInvalidArgument);
                 }
             }
             
@@ -1960,7 +1960,7 @@ namespace System.Windows.Forms {
             
                 // Range check subItems.
                 if (owner.SubItemCount == ListViewItem.MAX_SUBITEMS) {
-                    throw new InvalidOperationException(SR.GetString(SR.ErrorCollectionFull));
+                    throw new InvalidOperationException(SR.ErrorCollectionFull);
                 }
                 
                 if (owner.SubItemCount + size > owner.subItems.Length) {
@@ -2096,7 +2096,7 @@ namespace System.Windows.Forms {
                     Insert(index, (ListViewSubItem)item);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ListViewBadListViewSubItem),"item");
+                    throw new ArgumentException(SR.ListViewBadListViewSubItem,"item");
                 }
             }
             

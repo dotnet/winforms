@@ -65,7 +65,7 @@ namespace System.Windows.Forms {
             PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
             PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
             if (dmProp == null) {
-                throw new System.ArgumentException(SR.GetString(SR.DataSourceDataMemberPropNotFound, dataMember));
+                throw new System.ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
             }
 
             object currentItem;
@@ -203,7 +203,7 @@ namespace System.Windows.Forms {
 
                 // Error: Property not found - data member is invalid
                 if (dmProp == null) {
-                    throw new System.ArgumentException(SR.GetString(SR.DataSourceDataMemberPropNotFound, dataMember));
+                    throw new System.ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
                 }
 
                 // Add the data member property to the list accessors
@@ -280,7 +280,7 @@ namespace System.Windows.Forms {
             }
 
             if (instanceException != null) {
-                throw new NotSupportedException(SR.GetString(SR.BindingSourceInstanceError), instanceException);
+                throw new NotSupportedException(SR.BindingSourceInstanceError, instanceException);
             }
 
             return instancedObject;

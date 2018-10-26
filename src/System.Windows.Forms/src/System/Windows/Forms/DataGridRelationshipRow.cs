@@ -842,10 +842,10 @@ namespace System.Windows.Forms {
                 get {
                     if (RelationshipRow.dgTable.RelationsList.Count > 0) {
                         if (RelationshipRow.Expanded) {
-                            return SR.GetString(SR.AccDGCollapse);
+                            return SR.AccDGCollapse;
                         }
                         else {
-                            return SR.GetString(SR.AccDGExpand);
+                            return SR.AccDGExpand;
                         }
                     }
                     return null;
@@ -984,7 +984,7 @@ namespace System.Windows.Forms {
 
             public override string DefaultAction {
                 get {
-                    return SR.GetString(SR.AccDGNavigate);
+                    return SR.AccDGNavigate;
                 }
             }
 

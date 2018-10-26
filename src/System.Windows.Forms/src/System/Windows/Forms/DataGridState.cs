@@ -167,7 +167,7 @@ namespace System.Windows.Forms {
 
             public override string Name {
                 get {
-                    return SR.GetString(SR.AccDGParentRow);
+                    return SR.AccDGParentRow;
                 }
             }
 

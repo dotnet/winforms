@@ -420,9 +420,9 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets a value indicating whether null values are allowed.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.DataGridBoolColumnAllowNullValue)
+        SRDescription(nameof(SR.DataGridBoolColumnAllowNullValue))
         ]
         public bool AllowNull {
             get {

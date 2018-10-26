@@ -163,32 +163,32 @@ namespace System.Windows.Forms {
                 messageText = t.GetType().Name;
             }
             if (t is SecurityException) {
-                messageText = SR.GetString(messageRes, t.GetType().Name, Trim(messageText));
+                messageText = string.Format(messageRes, t.GetType().Name, Trim(messageText));
             }
             else {
-                messageText = SR.GetString(messageRes, Trim(messageText));
+                messageText = string.Format(messageRes, Trim(messageText));
             }
 
             StringBuilder detailsTextBuilder = new StringBuilder();
             string newline = "\r\n";
-            string separator = SR.GetString(SR.ExDlgMsgSeperator);
-            string sectionseparator = SR.GetString(SR.ExDlgMsgSectionSeperator);
+            string separator = SR.ExDlgMsgSeperator;
+            string sectionseparator = SR.ExDlgMsgSectionSeperator;
             if (Application.CustomThreadExceptionHandlerAttached) {
-                detailsTextBuilder.Append(SR.GetString(SR.ExDlgMsgHeaderNonSwitchable));
+                detailsTextBuilder.Append(SR.ExDlgMsgHeaderNonSwitchable);
             }
             else {
-                detailsTextBuilder.Append(SR.GetString(SR.ExDlgMsgHeaderSwitchable));
+                detailsTextBuilder.Append(SR.ExDlgMsgHeaderSwitchable);
             }
-            detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.GetString(SR.ExDlgMsgExceptionSection)));
+            detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgExceptionSection));
             detailsTextBuilder.Append(t.ToString());
             detailsTextBuilder.Append(newline);
             detailsTextBuilder.Append(newline);
-            detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.GetString(SR.ExDlgMsgLoadedAssembliesSection)));
+            detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgLoadedAssembliesSection));
             new FileIOPermission(PermissionState.Unrestricted).Assert();
             try {
                 foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies()) {
                     AssemblyName name = asm.GetName();
-                    string fileVer = SR.GetString(SR.NotAvailable);
+                    string fileVer = SR.NotAvailable;
 
                     try {
                         
@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
                     }
                     catch(System.IO.FileNotFoundException){
                     }
-                    detailsTextBuilder.Append(SR.GetString(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
+                    detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
                     detailsTextBuilder.Append(separator);
                 }
             }
@@ -215,12 +215,12 @@ namespace System.Windows.Forms {
                 CodeAccessPermission.RevertAssert();
             }
             
-            detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.GetString(SR.ExDlgMsgJITDebuggingSection)));
+            detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgJITDebuggingSection));
             if (Application.CustomThreadExceptionHandlerAttached) {
-                detailsTextBuilder.Append(SR.GetString(SR.ExDlgMsgFooterNonSwitchable));
+                detailsTextBuilder.Append(SR.ExDlgMsgFooterNonSwitchable);
             }
             else {
-                detailsTextBuilder.Append(SR.GetString(SR.ExDlgMsgFooterSwitchable));
+                detailsTextBuilder.Append(SR.ExDlgMsgFooterSwitchable);
             }
 
             detailsTextBuilder.Append(newline);
@@ -257,10 +257,10 @@ namespace System.Windows.Forms {
             try {
                 Form activeForm = Form.ActiveForm;
                 if (activeForm == null || activeForm.Text.Length == 0) {
-                    Text = SR.GetString(SR.ExDlgCaption);
+                    Text = SR.ExDlgCaption;
                 }
                 else {
-                    Text = SR.GetString(SR.ExDlgCaption2, activeForm.Text);
+                    Text = string.Format(SR.ExDlgCaption2, activeForm.Text);
                 }
             }
             finally {
@@ -292,19 +292,19 @@ namespace System.Windows.Forms {
             message.Text = messageText;
             Controls.Add(message);
 
-            continueButton.Text = SR.GetString(SR.ExDlgContinue);
+            continueButton.Text = SR.ExDlgContinue;
             continueButton.FlatStyle = FlatStyle.Standard;
             continueButton.DialogResult = DialogResult.Cancel;
 
-            quitButton.Text = SR.GetString(SR.ExDlgQuit);
+            quitButton.Text = SR.ExDlgQuit;
             quitButton.FlatStyle = FlatStyle.Standard;
             quitButton.DialogResult = DialogResult.Abort;
 
-            helpButton.Text = SR.GetString(SR.ExDlgHelp);
+            helpButton.Text = SR.ExDlgHelp;
             helpButton.FlatStyle = FlatStyle.Standard;
             helpButton.DialogResult = DialogResult.Yes;
 
-            detailsButton.Text = SR.GetString(SR.ExDlgShowDetails);
+            detailsButton.Text = SR.ExDlgShowDetails;
             detailsButton.FlatStyle = FlatStyle.Standard;
             detailsButton.Click += new EventHandler(DetailsClick);
 

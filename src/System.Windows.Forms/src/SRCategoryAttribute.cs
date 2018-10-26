@@ -16,7 +16,7 @@ namespace System.Windows.Forms
 
         protected override string GetLocalizedString(string value)
         {
-            return SR.GetString(value);
+            return value;
         }
     }
 }

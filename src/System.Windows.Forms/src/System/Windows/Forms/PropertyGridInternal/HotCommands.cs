@@ -105,7 +105,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
             catch (Exception ex)
             {
-                RTLAwareMessageBox.Show(this, ex.Message, SR.GetString(SR.PBRSErrorTitle), MessageBoxButtons.OK, MessageBoxIcon.Warning,
+                RTLAwareMessageBox.Show(this, ex.Message, SR.PBRSErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning,
                         MessageBoxDefaultButton.Button1, 0);
             }
         }

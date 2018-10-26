@@ -152,7 +152,7 @@ namespace System.Windows.Forms {
                         return name;
                     }
                     if (string.IsNullOrEmpty(stockName)) {
-                        stockName = SR.GetString(SR.ToolStripOptions);
+                        stockName = SR.ToolStripOptions;
                     }
                     return stockName;
                 }

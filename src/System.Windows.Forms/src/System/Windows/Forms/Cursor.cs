@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
         public Cursor(IntPtr handle) {
             IntSecurity.UnmanagedCode.Demand();
             if (handle == IntPtr.Zero) {
-                throw new ArgumentException(SR.GetString(SR.InvalidGDIHandle, (typeof(Cursor)).Name));
+                throw new ArgumentException(string.Format(SR.InvalidGDIHandle, (typeof(Cursor)).Name));
             }
 
             this.handle = handle;
@@ -240,7 +240,7 @@ namespace System.Windows.Forms {
         public IntPtr Handle {
             get {
                 if (handle == IntPtr.Zero) {
-                    throw new ObjectDisposedException(SR.GetString(SR.ObjectDisposed, GetType().Name));
+                    throw new ObjectDisposedException(string.Format(SR.ObjectDisposed, GetType().Name));
                 }
                 return handle;
             }
@@ -338,10 +338,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\CurSor.uex' path='docs/doc[@for="CurSor.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -548,7 +548,7 @@ namespace System.Windows.Forms {
             }
             else {
                 Debug.Fail("Why are we trying to serialize an empty cursor?");
-                throw new SerializationException(SR.GetString(SR.CursorNonSerializableHandle));
+                throw new SerializationException(SR.CursorNonSerializableHandle);
             }
         }
 
@@ -640,7 +640,7 @@ namespace System.Windows.Forms {
                         ownHandle = true;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.InvalidPictureType,
+                        throw new ArgumentException(string.Format(SR.InvalidPictureType,
                                                           "picture",
                                                           "Cursor"), "picture");
                     }
@@ -655,7 +655,7 @@ namespace System.Windows.Forms {
             }
             catch (COMException e) {
                 Debug.Fail(e.ToString());
-                throw new ArgumentException(SR.GetString(SR.InvalidPictureFormat), "stream", e);
+                throw new ArgumentException(SR.InvalidPictureFormat, "stream", e);
             }
         }
 
@@ -667,7 +667,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("stream");
             }
             if(this.resourceId != 0) {
-                throw new FormatException(SR.GetString(SR.CursorCannotCovertToBytes));
+                throw new FormatException(SR.CursorCannotCovertToBytes);
             }
             try {
                 stream.Write(cursorData, 0, cursorData.Length);
@@ -678,7 +678,7 @@ namespace System.Windows.Forms {
             }
             catch (Exception e) {
                 Debug.Fail(e.ToString());
-                throw new InvalidOperationException(SR.GetString(SR.InvalidPictureFormat));
+                throw new InvalidOperationException(SR.InvalidPictureFormat);
             }
         }
 

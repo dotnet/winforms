@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static bool IsRTLResources {
             get {
-                return SR.GetString(SR.RTL) != "RTL_False";
+                return SR.RTL != "RTL_False";
             }
         }
     }

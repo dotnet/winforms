@@ -93,12 +93,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             pictureBox.Image = SystemIcons.Warning.ToBitmap();
-            detailsBtn.Text = " " + SR.GetString(SR.ExDlgShowDetails);
+            detailsBtn.Text = " " + SR.ExDlgShowDetails;
 
-            details.AccessibleName = SR.GetString(SR.ExDlgDetailsText);
+            details.AccessibleName = SR.ExDlgDetailsText;
             
-            okBtn.Text = SR.GetString(SR.ExDlgOk);
-            cancelBtn.Text = SR.GetString(SR.ExDlgCancel);
+            okBtn.Text = SR.ExDlgOk;
+            cancelBtn.Text = SR.ExDlgCancel;
             detailsBtn.Image = expandImage;
         }
 
@@ -140,7 +140,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </devdoc>
         private static bool IsRTLResources {
             get {
-                return SR.GetString(SR.RTL) != "RTL_False";
+                return SR.RTL != "RTL_False";
             }
         }
 

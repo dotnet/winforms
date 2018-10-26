@@ -245,9 +245,9 @@ namespace System.Windows.Forms {
         [
         Bindable(true),
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.CheckBoxCheckedDescr)
+        SRDescription(nameof(SR.CheckBoxCheckedDescr))
         ]
         public bool Checked {
             get {
@@ -358,8 +358,8 @@ namespace System.Windows.Forms {
          /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckOnClick"]/*' />
          [
          DefaultValue(false),
-         SRCategory(SR.CatBehavior),
-         SRDescription(SR.ToolStripButtonCheckOnClickDescr)
+         SRCategory(nameof(SR.CatBehavior)),
+         SRDescription(nameof(SR.ToolStripButtonCheckOnClickDescr))
          ]
          public bool CheckOnClick {
              get {
@@ -377,10 +377,10 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Bindable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(CheckState.Unchecked),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.CheckBoxCheckStateDescr)
+        SRDescription(nameof(SR.CheckBoxCheckStateDescr))
         ]
         public CheckState CheckState {
             get {
@@ -410,7 +410,7 @@ namespace System.Windows.Forms {
         /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
         /// property changes.</para>
         /// </devdoc>
-        [SRDescription(SR.CheckBoxOnCheckedChangedDescr)]
+        [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
             add {
                 Events.AddHandler(EventCheckedChanged, value);
@@ -425,7 +425,7 @@ namespace System.Windows.Forms {
         /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         /// property changes.</para>
         /// </devdoc>
-        [SRDescription(SR.CheckBoxOnCheckStateChangedDescr)]
+        [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
             add {
                 Events.AddHandler(EventCheckStateChanged, value);
@@ -443,8 +443,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(ToolStripItemOverflow.Never),
-        SRDescription(SR.ToolStripItemOverflowDescr),
-        SRCategory(SR.CatLayout)
+        SRDescription(nameof(SR.ToolStripItemOverflowDescr)),
+        SRCategory(nameof(SR.CatLayout))
      	]
         public new ToolStripItemOverflow Overflow {
             get { 
@@ -465,7 +465,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DefaultValue(Keys.None),
-        SRDescription(SR.MenuItemShortCutDescr)
+        SRDescription(nameof(SR.MenuItemShortCutDescr))
         ]
         public Keys ShortcutKeys {
             get {
@@ -510,8 +510,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRDescription(SR.ToolStripMenuItemShortcutKeyDisplayStringDescr),
-        SRCategory(SR.CatAppearance),
+        SRDescription(nameof(SR.ToolStripMenuItemShortcutKeyDisplayStringDescr)),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(null),
         Localizable(true)
         ]
@@ -546,7 +546,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.MenuItemShowShortCutDescr)
+        SRDescription(nameof(SR.MenuItemShowShortCutDescr))
         ]
         public bool ShowShortcutKeys {
             get {

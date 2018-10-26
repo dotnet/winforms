@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
                             return new LinkArea(values[0], values[1]);
                         }
                         else {
-                            throw new ArgumentException(SR.GetString(SR.TextParseFailedFormat,
+                            throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
                                                                       text,
                                                                       "start, length"));
                         }

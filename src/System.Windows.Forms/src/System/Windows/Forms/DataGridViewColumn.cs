@@ -88,9 +88,9 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.AutoSizeMode"]/*' />
         [
-            SRCategory(SR.CatLayout),
+            SRCategory(nameof(SR.CatLayout)),
             DefaultValue(DataGridViewAutoSizeColumnMode.NotSet),
-            SRDescription(SR.DataGridViewColumn_AutoSizeModeDescr),
+            SRDescription(nameof(SR.DataGridViewColumn_AutoSizeModeDescr)),
             RefreshProperties(RefreshProperties.Repaint)
         ]
         public DataGridViewAutoSizeColumnMode AutoSizeMode
@@ -123,14 +123,14 @@ namespace System.Windows.Forms
                             (value == DataGridViewAutoSizeColumnMode.ColumnHeader ||
                              (value == DataGridViewAutoSizeColumnMode.NotSet && this.DataGridView.AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.ColumnHeader)))
                         {
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_AutoSizeCriteriaCannotUseInvisibleHeaders));
+                            throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_AutoSizeCriteriaCannotUseInvisibleHeaders));
                         }
                         if (this.Frozen &&
                             (value == DataGridViewAutoSizeColumnMode.Fill ||
                              (value == DataGridViewAutoSizeColumnMode.NotSet && this.DataGridView.AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.Fill)))
                         {
                             // Cannot set the inherited auto size mode to Fill when the column is frozen
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_FrozenColumnCannotAutoFill));
+                            throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_FrozenColumnCannotAutoFill));
                         }
                     }
                     DataGridViewAutoSizeColumnMode previousInheritedMode = this.InheritedAutoSizeMode;
@@ -234,8 +234,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ContextMenuStrip"]/*' />
         [
             DefaultValue(null),
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_ColumnContextMenuStripDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_ColumnContextMenuStripDescr))
         ]
         public override ContextMenuStrip ContextMenuStrip
         {
@@ -255,8 +255,8 @@ namespace System.Windows.Forms
             DefaultValue(""),
             TypeConverterAttribute("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
             Editor("System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
-            SRDescription(SR.DataGridView_ColumnDataPropertyNameDescr),
-            SRCategory(SR.CatData)
+            SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameDescr)),
+            SRCategory(nameof(SR.CatData))
         ]
         public string DataPropertyName
         {
@@ -284,8 +284,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DefaultCellStyle"]/*' />
         [
             Browsable(true),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_ColumnDefaultCellStyleDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
@@ -365,17 +365,17 @@ namespace System.Windows.Forms
                 {
                     if (value == Int32.MaxValue)
                     {
-                        throw new ArgumentOutOfRangeException("DisplayIndex", value, SR.GetString(SR.DataGridViewColumn_DisplayIndexTooLarge, Int32.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("DisplayIndex", value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, Int32.MaxValue.ToString(CultureInfo.CurrentCulture)));
                     }
                     if (this.DataGridView != null)
                     {
                         if (value < 0)
                         {
-                            throw new ArgumentOutOfRangeException("DisplayIndex", value, SR.GetString(SR.DataGridViewColumn_DisplayIndexNegative));
+                            throw new ArgumentOutOfRangeException("DisplayIndex", value, string.Format(SR.DataGridViewColumn_DisplayIndexNegative));
                         }
                         if (value >= this.DataGridView.Columns.Count)
                         {
-                            throw new ArgumentOutOfRangeException("DisplayIndex", value, SR.GetString(SR.DataGridViewColumn_DisplayIndexExceedsColumnCount));
+                            throw new ArgumentOutOfRangeException("DisplayIndex", value, string.Format(SR.DataGridViewColumn_DisplayIndexExceedsColumnCount));
                         }
                         // Will throw an error if a visible frozen column is placed inside a non-frozen area or vice-versa.
                         this.DataGridView.OnColumnDisplayIndexChanging(this, value);
@@ -396,7 +396,7 @@ namespace System.Windows.Forms
                     {
                         if (value < -1)
                         {
-                            throw new ArgumentOutOfRangeException("DisplayIndex", value, SR.GetString(SR.DataGridViewColumn_DisplayIndexTooNegative));
+                            throw new ArgumentOutOfRangeException("DisplayIndex", value, string.Format(SR.DataGridViewColumn_DisplayIndexTooNegative));
                         }
                         this.displayIndex = value;
                     }
@@ -454,8 +454,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DividerWidth"]/*' />
         [
             DefaultValue(0),
-            SRCategory(SR.CatLayout),
-            SRDescription(SR.DataGridView_ColumnDividerWidthDescr)
+            SRCategory(nameof(SR.CatLayout)),
+            SRDescription(nameof(SR.DataGridView_ColumnDividerWidthDescr))
         ]
         public int DividerWidth
         {
@@ -471,9 +471,9 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.FillWeight"]/*' />
         [
-            SRCategory(SR.CatLayout),
+            SRCategory(nameof(SR.CatLayout)),
             DefaultValue(DATAGRIDVIEWCOLUMN_defaultFillWeight),
-            SRDescription(SR.DataGridViewColumn_FillWeightDescr),
+            SRDescription(nameof(SR.DataGridViewColumn_FillWeightDescr)),
         ]
         public float FillWeight
         {
@@ -485,11 +485,11 @@ namespace System.Windows.Forms
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException("FillWeight", SR.GetString(SR.InvalidLowBoundArgument, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("FillWeight", string.Format(SR.InvalidLowBoundArgument, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (value > (float)ushort.MaxValue)
                 {
-                    throw new ArgumentOutOfRangeException("FillWeight", SR.GetString(SR.InvalidHighBoundArgumentEx, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("FillWeight", string.Format(SR.InvalidHighBoundArgumentEx, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.DataGridView != null)
                 {
@@ -517,8 +517,8 @@ namespace System.Windows.Forms
         [
             DefaultValue(false),
             RefreshProperties(RefreshProperties.All),
-            SRCategory(SR.CatLayout),
-            SRDescription(SR.DataGridView_ColumnFrozenDescr)
+            SRCategory(nameof(SR.CatLayout)),
+            SRDescription(nameof(SR.DataGridView_ColumnFrozenDescr))
         ]
         public override bool Frozen
         {
@@ -551,8 +551,8 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.HeaderText"]/*' />
         [
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_ColumnHeaderTextDescr),
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_ColumnHeaderTextDescr)),
             Localizable(true)
         ]
         public string HeaderText
@@ -809,8 +809,8 @@ namespace System.Windows.Forms
         [
             DefaultValue(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness),
             Localizable(true), 
-            SRCategory(SR.CatLayout),
-            SRDescription(SR.DataGridView_ColumnMinimumWidthDescr),
+            SRCategory(nameof(SR.CatLayout)),
+            SRDescription(nameof(SR.DataGridView_ColumnMinimumWidthDescr)),
             RefreshProperties(RefreshProperties.Repaint)
         ]
         public int MinimumWidth
@@ -879,8 +879,8 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ReadOnly"]/*' />
         [
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_ColumnReadOnlyDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_ColumnReadOnlyDescr))
         ]
         public override bool ReadOnly
         {
@@ -897,7 +897,7 @@ namespace System.Windows.Forms
                     this.DataGridView.DataConnection.DataFieldIsReadOnly(this.boundColumnIndex) &&
                     !value)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_ColumnBoundToAReadOnlyFieldMustRemainReadOnly));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnBoundToAReadOnlyFieldMustRemainReadOnly));
                 }
                 base.ReadOnly = value;
             }
@@ -905,8 +905,8 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Resizable"]/*' />
         [
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_ColumnResizableDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_ColumnResizableDescr))
         ]
         public override DataGridViewTriState Resizable
         {
@@ -940,8 +940,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.SortMode"]/*' />
         [
             DefaultValue(DataGridViewColumnSortMode.NotSortable),
-            SRCategory(SR.CatBehavior),
-            SRDescription(SR.DataGridView_ColumnSortModeDescr)
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.DataGridView_ColumnSortModeDescr))
         ]
         public DataGridViewColumnSortMode SortMode
         {
@@ -972,7 +972,7 @@ namespace System.Windows.Forms
                             (this.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                             this.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect))
                         {
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_SortModeAndSelectionModeClash, (value).ToString(), this.DataGridView.SelectionMode.ToString()));
+                            throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_SortModeAndSelectionModeClash, (value).ToString(), this.DataGridView.SelectionMode.ToString()));
                         }
                         if (value == DataGridViewColumnSortMode.Automatic)
                         {
@@ -1002,8 +1002,8 @@ namespace System.Windows.Forms
         [
             DefaultValue(""),
             Localizable(true), 
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_ColumnToolTipTextDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_ColumnToolTipTextDescr))
         ]
         public string ToolTipText
         {
@@ -1061,8 +1061,8 @@ namespace System.Windows.Forms
         [
             DefaultValue(true),
             Localizable(true), 
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_ColumnVisibleDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_ColumnVisibleDescr))
         ]
         public override bool Visible
         {
@@ -1078,9 +1078,9 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Width"]/*' />
         [
-            SRCategory(SR.CatLayout),
+            SRCategory(nameof(SR.CatLayout)),
             Localizable(true), 
-            SRDescription(SR.DataGridView_ColumnWidthDescr),
+            SRDescription(nameof(SR.DataGridView_ColumnWidthDescr)),
             RefreshProperties(RefreshProperties.Repaint)
         ]
         public int Width
@@ -1202,7 +1202,7 @@ namespace System.Windows.Forms
                 autoSizeColumnMode == DataGridViewAutoSizeColumnMode.None ||
                 autoSizeColumnMode == DataGridViewAutoSizeColumnMode.Fill)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_NeedColumnAutoSizingCriteria, "autoSizeColumnMode"));
+                throw new ArgumentException(string.Format(SR.DataGridView_NeedColumnAutoSizingCriteria, "autoSizeColumnMode"));
             }
             switch (autoSizeColumnMode) { 
                 case DataGridViewAutoSizeColumnMode.NotSet:

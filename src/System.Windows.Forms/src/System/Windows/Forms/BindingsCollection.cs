@@ -91,7 +91,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the collection is about to change.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.collectionChangingEventDescr)]
+        [SRDescription(nameof(SR.collectionChangingEventDescr))]
         public event CollectionChangeEventHandler CollectionChanging {
             add {
                 onCollectionChanging += value;
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the collection is changed.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.collectionChangedEventDescr)]
+        [SRDescription(nameof(SR.collectionChangedEventDescr))]
         public event CollectionChangeEventHandler CollectionChanged {
             add {
                 onCollectionChanged += value;

@@ -149,10 +149,10 @@ namespace System.Windows.Forms {
         ///       control and its buttons.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(ToolBarAppearance.Normal),
         Localizable(true),
-        SRDescription(SR.ToolBarAppearanceDescr)
+        SRDescription(nameof(SR.ToolBarAppearanceDescr))
         ]
         public ToolBarAppearance Appearance {
             get {
@@ -179,10 +179,10 @@ namespace System.Windows.Forms {
         ///       dock style.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.ToolBarAutoSizeDescr),
+        SRDescription(nameof(SR.ToolBarAutoSizeDescr)),
         Browsable(true), 
         EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
@@ -313,10 +313,10 @@ namespace System.Windows.Forms {
         ///       the border style of the toolbar control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.None),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.ToolBarBorderStyleDescr)
+        SRDescription(nameof(SR.ToolBarBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -345,10 +345,10 @@ namespace System.Windows.Forms {
         ///    toolbar control. The property is read-only.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
-        SRDescription(SR.ToolBarButtonsDescr),
+        SRDescription(nameof(SR.ToolBarButtonsDescr)),
         MergableProperty(false)
         ]
         public ToolBarButtonCollection Buttons {
@@ -363,10 +363,10 @@ namespace System.Windows.Forms {
         ///       the size of the buttons on the toolbar control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         RefreshProperties(RefreshProperties.All),
         Localizable(true),
-        SRDescription(SR.ToolBarButtonSizeDescr)
+        SRDescription(nameof(SR.ToolBarButtonSizeDescr))
         ]
         public Size ButtonSize {
             get {
@@ -395,7 +395,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value.Width < 0 || value.Height < 0)
-                    throw new ArgumentOutOfRangeException("ButtonSize", SR.GetString(SR.InvalidArgument, "ButtonSize", value.ToString()));
+                    throw new ArgumentOutOfRangeException("ButtonSize", string.Format(SR.InvalidArgument, "ButtonSize", value.ToString()));
 
                 if (buttonSize != value) {
                     buttonSize = value;
@@ -485,9 +485,9 @@ namespace System.Windows.Forms {
         ///       whether the toolbar displays a divider.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
-        SRDescription(SR.ToolBarDividerDescr)
+        SRDescription(nameof(SR.ToolBarDividerDescr))
         ]
         public bool Divider {
             get {
@@ -561,9 +561,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
-        SRDescription(SR.ToolBarDropDownArrowsDescr)
+        SRDescription(nameof(SR.ToolBarDropDownArrowsDescr))
         ]
         public bool DropDownArrows {
             get {
@@ -611,9 +611,9 @@ namespace System.Windows.Forms {
         ///       controls.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ToolBarImageListDescr)
+        SRDescription(nameof(SR.ToolBarImageListDescr))
         ]
         public ImageList ImageList {
             get {
@@ -648,10 +648,10 @@ namespace System.Windows.Forms {
         ///       toolbar.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ToolBarImageSizeDescr)
+        SRDescription(nameof(SR.ToolBarImageSizeDescr))
         ]
         public Size ImageSize {
             get {
@@ -848,10 +848,10 @@ namespace System.Windows.Forms {
         ///       tool tip for each button.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Localizable(true),
-        SRDescription(SR.ToolBarShowToolTipsDescr)
+        SRDescription(nameof(SR.ToolBarShowToolTipsDescr))
         ]
         public bool ShowToolTips {
             get {
@@ -917,10 +917,10 @@ namespace System.Windows.Forms {
         ///       the toolbar button controls.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ToolBarTextAlign.Underneath),
         Localizable(true),
-        SRDescription(SR.ToolBarTextAlignDescr)
+        SRDescription(nameof(SR.ToolBarTextAlignDescr))
         ]
         public ToolBarTextAlign TextAlign {
             get {
@@ -947,10 +947,10 @@ namespace System.Windows.Forms {
         ///       on the same line.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.ToolBarWrappableDescr)
+        SRDescription(nameof(SR.ToolBarWrappableDescr))
         ]
         public bool Wrappable {
             get {
@@ -968,7 +968,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>Occurs when a <see cref='System.Windows.Forms.ToolBarButton'/> on the <see cref='System.Windows.Forms.ToolBar'/> is clicked.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ToolBarButtonClickDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonClickDescr))]
         public event ToolBarButtonClickEventHandler ButtonClick {
             add {
                 onButtonClick += value;
@@ -982,7 +982,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>Occurs when a drop-down style <see cref='System.Windows.Forms.ToolBarButton'/> or its down arrow is clicked.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ToolBarButtonDropDownDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonDropDownDescr))]
         public event ToolBarButtonClickEventHandler ButtonDropDown {
             add {
                 onButtonDropDown += value;
@@ -1187,7 +1187,7 @@ namespace System.Windows.Forms {
             if (value == null)
                 throw new ArgumentNullException("value");
             if (index < 0 || ((buttons != null) && (index > buttonCount)))
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
             // insert the button into our local array, and then into the
             // real windows ToolBar control
@@ -1531,7 +1531,7 @@ namespace System.Windows.Forms {
 
             ToolBarButton tbb = (ToolBarButton)buttons[nmTB.iItem];
             if (tbb == null)
-                throw new InvalidOperationException(SR.GetString(SR.ToolBarButtonNotFound));
+                throw new InvalidOperationException(SR.ToolBarButtonNotFound);
 
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
@@ -1800,7 +1800,7 @@ namespace System.Windows.Forms {
             public virtual ToolBarButton this[int index] {
                 get {
                     if (index < 0 || ((owner.buttons != null) && (index >= owner.buttonCount)))
-                         throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                         throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                    return owner.buttons[index];
                 }
                 set {
@@ -1808,7 +1808,7 @@ namespace System.Windows.Forms {
                     // Sanity check parameters
                     //
                     if (index < 0 || ((owner.buttons != null) && index >= owner.buttonCount)) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value == null) {
                         throw new ArgumentNullException("value");
@@ -1829,7 +1829,7 @@ namespace System.Windows.Forms {
                         this[index] = (ToolBarButton)value;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.ToolBarBadToolBarButton),"value");
+                        throw new ArgumentException(SR.ToolBarBadToolBarButton,"value");
                     }
                 }
             }
@@ -1932,7 +1932,7 @@ namespace System.Windows.Forms {
                     return Add((ToolBarButton)button);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ToolBarBadToolBarButton),"button");
+                    throw new ArgumentException(SR.ToolBarBadToolBarButton,"button");
                 }
             }
 
@@ -2089,7 +2089,7 @@ namespace System.Windows.Forms {
                     Insert(index, (ToolBarButton)button);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ToolBarBadToolBarButton),"button");
+                    throw new ArgumentException(SR.ToolBarBadToolBarButton,"button");
                 }
             }
 
@@ -2111,7 +2111,7 @@ namespace System.Windows.Forms {
                 int count = (owner.buttons == null) ? 0 : owner.buttonCount;
 
                 if (index < 0 || index >= count)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                 if (owner.IsHandleCreated) {
                     owner.SendMessage(NativeMethods.TB_DELETEBUTTON, index, 0);

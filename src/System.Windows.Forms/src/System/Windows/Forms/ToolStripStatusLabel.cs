@@ -96,8 +96,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.BorderStyle"]/*' />
         [
         DefaultValue(Border3DStyle.Flat),
-        SRDescription(SR.ToolStripStatusLabelBorderStyleDescr),
-        SRCategory(SR.CatAppearance)
+        SRDescription(nameof(SR.ToolStripStatusLabelBorderStyleDescr)),
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public Border3DStyle BorderStyle {
             get {
@@ -130,8 +130,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.BorderSides"]/*' />
         [
         DefaultValue(ToolStripStatusLabelBorderSides.None),
-        SRDescription(SR.ToolStripStatusLabelBorderSidesDescr),
-        SRCategory(SR.CatAppearance)
+        SRDescription(nameof(SR.ToolStripStatusLabelBorderSidesDescr)),
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public ToolStripStatusLabelBorderSides BorderSides {
             get {
@@ -165,8 +165,8 @@ namespace System.Windows.Forms {
 
         [
         DefaultValue(false),
-        SRDescription(SR.ToolStripStatusLabelSpringDescr),
-        SRCategory(SR.CatAppearance)
+        SRDescription(nameof(SR.ToolStripStatusLabelSpringDescr)),
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public bool Spring {
             get { return spring; }
@@ -186,9 +186,9 @@ namespace System.Windows.Forms {
         /// to notify the user of changes to the live region.
         /// </summary>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         DefaultValue(AutomationLiveSetting.Off),
-        SRDescription(SR.LiveRegionAutomationLiveSettingDescr),
+        SRDescription(nameof(SR.LiveRegionAutomationLiveSettingDescr)),
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always)
         ]

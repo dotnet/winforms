@@ -336,11 +336,11 @@ namespace System.Windows.Forms.Layout {
             if (growStyle == TableLayoutPanelGrowStyle.FixedSize) {
                 //if we're a fixed size - check to see if we have enough room 
                 if (containerInfo.MinRowsAndColumns > numCols * numRows) {
-                    throw new ArgumentException(SR.GetString(SR.TableLayoutPanelFullDesc));
+                    throw new ArgumentException(SR.TableLayoutPanelFullDesc);
                 }    
 
                 if ((minColumn > numCols) || (minRow > numRows)) {
-                    throw new ArgumentException(SR.GetString(SR.TableLayoutPanelSpanDesc));
+                    throw new ArgumentException(SR.TableLayoutPanelSpanDesc);
                 }
                 
                 numRows = Math.Max(1, numRows);
@@ -1251,10 +1251,10 @@ namespace System.Windows.Forms.Layout {
 
         internal IArrangedElement GetControlFromPosition (IArrangedElement container, int column, int row) {
             if (row < 0) {
-                throw new ArgumentException(SR.GetString(SR.InvalidArgument, "RowPosition", row.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, "RowPosition", row.ToString(CultureInfo.CurrentCulture)));
             }
             if (column < 0) {
-                throw new ArgumentException(SR.GetString(SR.InvalidArgument, "ColumnPosition", column.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, "ColumnPosition", column.ToString(CultureInfo.CurrentCulture)));
             }
             ArrangedElementCollection children = container.Children;
             ContainerInfo containerInfo = GetContainerInfo(container);

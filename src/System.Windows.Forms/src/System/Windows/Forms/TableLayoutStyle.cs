@@ -43,7 +43,7 @@ namespace System.Windows.Forms {
             get { return _size; }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("Size", SR.GetString(SR.InvalidLowBoundArgumentEx, "Size", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("Size", string.Format(SR.InvalidLowBoundArgumentEx, "Size", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (_size != value) {
                     _size = value;

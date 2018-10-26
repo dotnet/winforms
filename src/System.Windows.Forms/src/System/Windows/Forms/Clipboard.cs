@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
         [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         public static void SetDataObject(object data, bool copy, int retryTimes, int retryDelay) {
             if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                throw new System.Threading.ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                throw new System.Threading.ThreadStateException(SR.ThreadMustBeSTA);
             }
 
             if (data == null) {
@@ -115,11 +115,11 @@ namespace System.Windows.Forms {
             }
 
             if (retryTimes < 0) {
-                throw new ArgumentOutOfRangeException("retryTimes", SR.GetString(SR.InvalidLowBoundArgumentEx, "retryTimes", retryTimes.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("retryTimes", string.Format(SR.InvalidLowBoundArgumentEx, "retryTimes", retryTimes.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             if (retryDelay < 0) {
-                throw new ArgumentOutOfRangeException("retryDelay", SR.GetString(SR.InvalidLowBoundArgumentEx, "retryDelay", retryDelay.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("retryDelay", string.Format(SR.InvalidLowBoundArgumentEx, "retryDelay", retryDelay.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             
@@ -153,7 +153,7 @@ namespace System.Windows.Forms {
                 }
                 if (!IsFormatValid(dataObject))
                 {
-                    throw new SecurityException(SR.GetString(SR.ClipboardSecurityException));
+                    throw new SecurityException(SR.ClipboardSecurityException);
                 }
             }
 
@@ -224,7 +224,7 @@ namespace System.Windows.Forms {
                 // an error to aid in debugging.
                 //
                 if (Application.MessageLoop) {
-                    throw new System.Threading.ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                    throw new System.Threading.ThreadStateException(SR.ThreadMustBeSTA);
                 }
                 else {
                     return null;
@@ -498,7 +498,7 @@ namespace System.Windows.Forms {
             // VsWhidbey:432618 throw Argument exception for zero-length filepath collection.
             if (filePaths.Count == 0)
             {
-                throw new ArgumentException(SR.GetString(SR.CollectionEmptyException));
+                throw new ArgumentException(SR.CollectionEmptyException);
             }
 
             //VSWhidbey #163538 - Validate the paths to make sure they don't contain invalid characters
@@ -511,7 +511,7 @@ namespace System.Windows.Forms {
                         throw;
                     }
 
-                    throw new ArgumentException(SR.GetString(SR.Clipboard_InvalidPath, path, "filePaths"), e);
+                    throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, "filePaths"), e);
                 }
             }
 
@@ -599,7 +599,7 @@ namespace System.Windows.Forms {
         private static void ThrowIfFailed(int hr) {
             // 
             if (hr != 0) {
-                ExternalException e = new ExternalException(SR.GetString(SR.ClipboardOperationFailed), hr);
+                ExternalException e = new ExternalException(SR.ClipboardOperationFailed, hr);
                 throw e;
             }
         }

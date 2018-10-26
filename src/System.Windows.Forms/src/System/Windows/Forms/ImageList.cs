@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
     DefaultProperty("Images"),
     TypeConverter(typeof(ImageListConverter)),
     DesignerSerializer("System.Windows.Forms.Design.ImageListCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionImageList)
+    SRDescription(nameof(SR.DescriptionImageList))
     ]
     public sealed class ImageList : Component {
 
@@ -156,8 +156,8 @@ namespace System.Windows.Forms {
         ///     Retrieves the color depth of the imagelist.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ImageListColorDepthDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ImageListColorDepthDescr))
         ]
         public ColorDepth ColorDepth {
             get {
@@ -197,7 +197,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ImageListHandleDescr)
+        SRDescription(nameof(SR.ImageListHandleDescr))
         ]
         public IntPtr Handle {
             get {
@@ -215,7 +215,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ImageListHandleCreatedDescr)
+        SRDescription(nameof(SR.ImageListHandleCreatedDescr))
         ]
         public bool HandleCreated {
             get { return nativeImageList != null; }
@@ -226,10 +226,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(null),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ImageListImagesDescr),
+        SRDescription(nameof(SR.ImageListImagesDescr)),
         MergableProperty(false)
         ]
         public ImageCollection Images {
@@ -245,9 +245,9 @@ namespace System.Windows.Forms {
         ///     Returns the size of the images in the ImageList
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        SRDescription(SR.ImageListSizeDescr)
+        SRDescription(nameof(SR.ImageListSizeDescr))
         ]
         public Size ImageSize {
             get {
@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument, "ImageSize", "Size.Empty"));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, "ImageSize", "Size.Empty"));
                 }
 
                 // ImageList appears to consume an exponential amount of memory
@@ -263,11 +263,11 @@ namespace System.Windows.Forms {
                 // to keep people's systems from crashing.
                 //
                 if (value.Width <= 0 || value.Width > maxImageWidth) {
-                    throw new ArgumentOutOfRangeException("ImageSize", SR.GetString(SR.InvalidBoundArgument, "ImageSize.Width", value.Width.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageWidth.ToString()));
+                    throw new ArgumentOutOfRangeException("ImageSize", string.Format(SR.InvalidBoundArgument, "ImageSize.Width", value.Width.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageWidth.ToString()));
                 }
 
                 if (value.Height <= 0 || value.Height > maxImageHeight) {
-                    throw new ArgumentOutOfRangeException("ImageSize", SR.GetString(SR.InvalidBoundArgument, "ImageSize.Height", value.Height.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageHeight.ToString()));
+                    throw new ArgumentOutOfRangeException("ImageSize", string.Format(SR.InvalidBoundArgument, "ImageSize.Height", value.Height.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageHeight.ToString()));
                 }
 
                 if (imageSize.Width != value.Width || imageSize.Height != value.Height) {
@@ -288,7 +288,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DefaultValue(null),
-        SRDescription(SR.ImageListImageStreamDescr)
+        SRDescription(nameof(SR.ImageListImageStreamDescr))
         ]
         public ImageListStreamer ImageStream {
             get {
@@ -356,10 +356,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -377,8 +377,8 @@ namespace System.Windows.Forms {
         ///     The color to treat as transparent.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ImageListTransparentColorDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ImageListTransparentColorDescr))
         ]
         public Color TransparentColor {
             get {
@@ -401,7 +401,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        SRDescription(SR.ImageListOnRecreateHandleDescr)
+        SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))
         ]
         public event EventHandler RecreateHandle {
             add {
@@ -460,9 +460,9 @@ namespace System.Windows.Forms {
             if ((original.options & OriginalOptions.ImageStrip) != 0) {
                 // strip width must be a positive multiple of image list width
                 if (size.Width == 0 || (size.Width % imageSize.Width) != 0)
-                    throw new ArgumentException(SR.GetString(SR.ImageListStripBadWidth), "original");
+                    throw new ArgumentException(SR.ImageListStripBadWidth, "original");
                 if (size.Height != imageSize.Height)
-                    throw new ArgumentException(SR.GetString(SR.ImageListImageTooShort), "original");
+                    throw new ArgumentException(SR.ImageListImageTooShort, "original");
             }
             else if (!size.Equals(ImageSize)) {
                 Bitmap source = bitmap;
@@ -479,7 +479,7 @@ namespace System.Windows.Forms {
             try {
                 Debug.Assert(HandleCreated, "Calling AddIconToHandle when there is no handle");
                 int index = SafeNativeMethods.ImageList_ReplaceIcon(new HandleRef(this, Handle), -1, new HandleRef(icon, icon.Handle));
-                if (index == -1) throw new InvalidOperationException(SR.GetString(SR.ImageListAddFailed));
+                if (index == -1) throw new InvalidOperationException(SR.ImageListAddFailed);
                 return index;
             } finally {
                 if((original.options & OriginalOptions.OwnsImage) != 0) { /// this is to handle the case were we clone the icon (see WHY WHY WHY below)
@@ -498,7 +498,7 @@ namespace System.Windows.Forms {
             SafeNativeMethods.DeleteObject(new HandleRef(null, hBitmap));
             SafeNativeMethods.DeleteObject(new HandleRef(null, hMask));
 
-            if (index == -1) throw new InvalidOperationException(SR.GetString(SR.ImageListAddFailed));
+            if (index == -1) throw new InvalidOperationException(SR.ImageListAddFailed);
             return index;
         }
 
@@ -545,7 +545,7 @@ namespace System.Windows.Forms {
                 UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
             }
 
-            if (Handle == IntPtr.Zero) throw new InvalidOperationException(SR.GetString(SR.ImageListCreateFailed));
+            if (Handle == IntPtr.Zero) throw new InvalidOperationException(SR.ImageListCreateFailed);
             SafeNativeMethods.ImageList_SetBkColor(new HandleRef(this, Handle), NativeMethods.CLR_NONE);
 
             Debug.Assert(originals != null, "Handle not yet created, yet original images are gone");
@@ -620,7 +620,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Draw(Graphics g, int x, int y, int width, int height, int index) {
             if (index < 0 || index >= Images.Count)
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             IntPtr dc = g.GetHdc();
             try {
                 SafeNativeMethods.ImageList_DrawEx(new HandleRef(this, Handle), index, new HandleRef(g, dc), x, y,
@@ -687,7 +687,7 @@ namespace System.Windows.Forms {
         [ResourceConsumption(ResourceScope.Machine | ResourceScope.Process, ResourceScope.Machine | ResourceScope.Process)]
         private Bitmap GetBitmap(int index) {
             if (index < 0 || index >= Images.Count)
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
             Bitmap result=null;
 
@@ -820,7 +820,7 @@ namespace System.Windows.Forms {
             int count = SafeNativeMethods.ImageList_GetImageCount(handleUse);
 
             if (index < 0 || index >= count)
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString()));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString()));
 
             if (temp != null) {
                 Size size = temp.Size;
@@ -873,7 +873,7 @@ namespace System.Windows.Forms {
                 originals = new ArrayList(); // spoof it into thinking this is the first CreateHandle
 
             if (originals == null)
-                throw new InvalidOperationException(SR.GetString(SR.ImageListCantRecreate, reason));
+                throw new InvalidOperationException(string.Format(SR.ImageListCantRecreate, reason));
 
             DestroyHandle();
             CreateHandle();
@@ -973,7 +973,7 @@ namespace System.Windows.Forms {
             internal Original(object image, OriginalOptions options, Color customTransparentColor) {
                 Debug.Assert(image != null, "image is null");
                 if (!(image is Icon) && !(image is Image)) {
-                    throw new InvalidOperationException(SR.GetString(SR.ImageListEntryType));
+                    throw new InvalidOperationException(SR.ImageListEntryType);
                 }
                 this.image = image;
                 this.options = options;
@@ -1134,19 +1134,19 @@ namespace System.Windows.Forms {
                 [ResourceConsumption(ResourceScope.Machine)]
                 get {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                     return owner.GetBitmap(index);
                 }
                 set {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                     if (value == null) {
                         throw new ArgumentNullException("value");
                     }
 
                    if (!(value is Bitmap))
-                        throw new ArgumentException(SR.GetString(SR.ImageListBitmap));
+                        throw new ArgumentException(SR.ImageListBitmap);
 
                     AssertInvariant();
                     Bitmap bitmap = (Bitmap)value;
@@ -1169,7 +1169,7 @@ namespace System.Windows.Forms {
                         SafeNativeMethods.DeleteObject(new HandleRef(null, hMask));
 
                         if (!ok)
-                            throw new InvalidOperationException(SR.GetString(SR.ImageListReplaceFailed));
+                            throw new InvalidOperationException(SR.ImageListReplaceFailed);
                         
                     } finally {
                         if(ownsImage) {
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms {
                         this[index] = (Image)value;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.ImageListBadImage), "value");
+                        throw new ArgumentException(SR.ImageListBadImage, "value");
                     }
                 }
             }
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
                     return Count - 1;
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ImageListBadImage), "value");
+                    throw new ArgumentException(SR.ImageListBadImage, "value");
                 }
             }
 
@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms {
                     }
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ImageListBitmap));
+                    throw new ArgumentException(SR.ImageListBitmap);
                 }
 
                 // update the imageInfoCollection
@@ -1394,9 +1394,9 @@ namespace System.Windows.Forms {
                 // strip width must be a positive multiple of image list width
                 //
                 if (value.Width == 0 || (value.Width % owner.ImageSize.Width) != 0)
-                    throw new ArgumentException(SR.GetString(SR.ImageListStripBadWidth), "value");
+                    throw new ArgumentException(SR.ImageListStripBadWidth, "value");
                 if (value.Height != owner.ImageSize.Height)
-                    throw new ArgumentException(SR.GetString(SR.ImageListImageTooShort), "value");
+                    throw new ArgumentException(SR.ImageListImageTooShort, "value");
 
                 int nImages = value.Width / owner.ImageSize.Width;
 
@@ -1570,12 +1570,12 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void RemoveAt(int index) {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                 AssertInvariant();
                 bool ok = SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), index);
                 if (!ok) {
-                    throw new InvalidOperationException(SR.GetString(SR.ImageListRemoveFailed));
+                    throw new InvalidOperationException(SR.ImageListRemoveFailed);
                 } else {
                     if ((imageInfoCollection != null) && (index >= 0  && index < imageInfoCollection.Count)) {
                          imageInfoCollection.RemoveAt(index);

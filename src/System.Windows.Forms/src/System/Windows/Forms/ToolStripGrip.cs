@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
                         return name;
                     }
                     if (string.IsNullOrEmpty(stockName)) {
-                        stockName = SR.GetString(SR.ToolStripGripAccessibleName);
+                        stockName = SR.ToolStripGripAccessibleName;
                     }
                     return stockName;
                 }

@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
-     SRDescription(SR.DescriptionButton),
+     SRDescription(nameof(SR.DescriptionButton)),
      Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)
     ]
     public class Button : ButtonBase, IButtonControl {
@@ -68,11 +68,11 @@ namespace System.Windows.Forms {
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(true),
         DefaultValue(AutoSizeMode.GrowOnly),
         Localizable(true),
-        SRDescription(SR.ControlAutoSizeModeDescr)
+        SRDescription(nameof(SR.ControlAutoSizeModeDescr))
         ]
         public AutoSizeMode AutoSizeMode {
             get {
@@ -173,9 +173,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DialogResult.None),
-        SRDescription(SR.ButtonDialogResultDescr)
+        SRDescription(nameof(SR.ButtonDialogResultDescr))
         ]
         public virtual DialogResult DialogResult {
             get {

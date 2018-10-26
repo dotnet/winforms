@@ -1245,7 +1245,7 @@ namespace System.Windows.Forms {
                     return data;
                 }
                 else {
-                    throw new NotSupportedException(SR.GetString(SR.SystemInformationFeatureNotSupported));
+                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
                 }
             }
         }
@@ -1264,7 +1264,7 @@ namespace System.Windows.Forms {
                     return data;
                 }
                 else {
-                    throw new NotSupportedException(SR.GetString(SR.SystemInformationFeatureNotSupported));
+                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
                 }
             }
         }
@@ -1700,7 +1700,7 @@ namespace System.Windows.Forms {
                     return data;
                 }
                 else {
-                    throw new NotSupportedException(SR.GetString(SR.SystemInformationFeatureNotSupported));
+                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
                 }
             }
 
@@ -1732,7 +1732,7 @@ namespace System.Windows.Forms {
                     return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFOCUSBORDER);
                 }
                 else {
-                    throw new NotSupportedException(SR.GetString(SR.SystemInformationFeatureNotSupported));
+                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
                 }
             }
 
@@ -1750,7 +1750,7 @@ namespace System.Windows.Forms {
                     return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFOCUSBORDER);
                 }
                 else {
-                    throw new NotSupportedException(SR.GetString(SR.SystemInformationFeatureNotSupported));
+                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
                 }
             }
 

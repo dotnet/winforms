@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     [DefaultProperty("Color")]
-    [SRDescription(SR.DescriptionColorDialog)]
+    [SRDescription(nameof(SR.DescriptionColorDialog))]
     // The only event this dialog has is HelpRequest, which isn't very useful
     public class ColorDialog : CommonDialog {
 
@@ -65,9 +65,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.CDallowFullOpenDescr)
+        SRDescription(nameof(SR.CDallowFullOpenDescr))
         ]
         public virtual bool AllowFullOpen {
             get {
@@ -87,9 +87,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.CDanyColorDescr)
+        SRDescription(nameof(SR.CDanyColorDescr))
         ]
         public virtual bool AnyColor {
             get {
@@ -108,8 +108,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
-        SRDescription(SR.CDcolorDescr)
+        SRCategory(nameof(SR.CatData)), 
+        SRDescription(nameof(SR.CDcolorDescr))
         ]
         public Color Color {
             get {
@@ -135,7 +135,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.CDcustomColorsDescr)
+        SRDescription(nameof(SR.CDcustomColorsDescr))
         ]
         public int[] CustomColors {
             get { return(int[]) customColors.Clone();}
@@ -154,9 +154,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance), 
+        SRCategory(nameof(SR.CatAppearance)), 
         DefaultValue(false),
-        SRDescription(SR.CDfullOpenDescr)
+        SRDescription(nameof(SR.CDfullOpenDescr))
         ]
         public virtual bool FullOpen {
             get {
@@ -205,9 +205,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.CDshowHelpDescr)
+        SRDescription(nameof(SR.CDshowHelpDescr))
         ]
         public virtual bool ShowHelp {
             get {
@@ -228,9 +228,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.CDsolidColorOnlyDescr)
+        SRDescription(nameof(SR.CDsolidColorOnlyDescr))
         ]
         public virtual bool SolidColorOnly {
             get {

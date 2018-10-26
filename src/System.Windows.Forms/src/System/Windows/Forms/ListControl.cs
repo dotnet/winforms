@@ -65,11 +65,11 @@ namespace System.Windows.Forms {
         ///     When set, a user can not modify the Items collection.
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         RefreshProperties(RefreshProperties.Repaint),
         AttributeProvider(typeof(IListSource)),
-        SRDescription(SR.ListControlDataSourceDescr)
+        SRDescription(nameof(SR.ListControlDataSourceDescr))
         ]
         public object DataSource {
             get {
@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value != null && !(value is IList || value is IListSource))
-                    throw new ArgumentException(SR.GetString(SR.BadDataSourceForComplexBinding));
+                    throw new ArgumentException(SR.BadDataSourceForComplexBinding);
                 if (dataSource == value)
                     return;
                 // When we change the dataSource to null, we should reset
@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListControlOnDataSourceChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlOnDataSourceChangedDescr))]
         public event EventHandler DataSourceChanged {
             add {
                 Events.AddHandler(EVENT_DATASOURCECHANGED, value);
@@ -125,11 +125,11 @@ namespace System.Windows.Forms {
         ///     which property of the object to show.  If "", the object shows it's ToString().
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(""),
         TypeConverterAttribute("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
         Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
-        SRDescription(SR.ListControlDisplayMemberDescr)
+        SRDescription(nameof(SR.ListControlDisplayMemberDescr))
         ]
         public string DisplayMember {
             get {
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListControlOnDisplayMemberChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlOnDisplayMemberChangedDescr))]
         public event EventHandler DisplayMemberChanged {
             add {
                 Events.AddHandler(EVENT_DISPLAYMEMBERCHANGED, value);
@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.Format"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListControlFormatDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlFormatDescr))]
         public event ListControlConvertEventHandler Format
         {
             add {
@@ -215,8 +215,8 @@ namespace System.Windows.Forms {
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
-            SRCategory(SR.CatPropertyChanged),
-            SRDescription(SR.ListControlFormatInfoChangedDescr)
+            SRCategory(nameof(SR.CatPropertyChanged)),
+            SRDescription(nameof(SR.ListControlFormatInfoChangedDescr))
         ]
         public event EventHandler FormatInfoChanged {
             add {
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
 
         [
             DefaultValue(""), 
-            SRDescription(SR.ListControlFormatStringDescr),
+            SRDescription(nameof(SR.ListControlFormatStringDescr)),
             EditorAttribute("System.Windows.Forms.Design.FormatStringEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
             MergableProperty(false)
         ]
@@ -251,8 +251,8 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FormatStringChanged"]/*' />
         [
-            SRCategory(SR.CatPropertyChanged),
-            SRDescription(SR.ListControlFormatStringChangedDescr)
+            SRCategory(nameof(SR.CatPropertyChanged)),
+            SRDescription(nameof(SR.ListControlFormatStringChangedDescr))
         ]
         public event EventHandler FormatStringChanged {
             add {
@@ -266,7 +266,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FormattingEnabled"]/*' />
         [
             DefaultValue(false), 
-            SRDescription(SR.ListControlFormattingEnabledDescr)
+            SRDescription(nameof(SR.ListControlFormattingEnabledDescr))
         ]
         public bool FormattingEnabled {
             get {
@@ -283,8 +283,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FormattingEnabledChanged"]/*' />
         [
-            SRCategory(SR.CatPropertyChanged),
-            SRDescription(SR.ListControlFormattingEnabledChangedDescr)
+            SRCategory(nameof(SR.CatPropertyChanged)),
+            SRDescription(nameof(SR.ListControlFormattingEnabledChangedDescr))
         ]
         public event EventHandler FormattingEnabledChanged {
             add {
@@ -325,10 +325,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(""),
         Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
-        SRDescription(SR.ListControlValueMemberDescr)
+        SRDescription(nameof(SR.ListControlValueMemberDescr))
         ]
         public string ValueMember {
             get {
@@ -348,7 +348,7 @@ namespace System.Windows.Forms {
                     // the properties in the dataManager
                     if (this.dataManager != null && value != null && value.Length != 0)
                         if (!BindingMemberInfoInDataManager(newValueMember)) {
-                            throw new ArgumentException(SR.GetString(SR.ListControlWrongValueMember), "value");
+                            throw new ArgumentException(SR.ListControlWrongValueMember, "value");
                         }
 
                     valueMember = newValueMember;
@@ -362,7 +362,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListControlOnValueMemberChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlOnValueMemberChangedDescr))]
         public event EventHandler ValueMemberChanged {
             add {
                 Events.AddHandler(EVENT_VALUEMEMBERCHANGED, value);
@@ -396,11 +396,11 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListControlSelectedValueDescr),
+        SRDescription(nameof(SR.ListControlSelectedValueDescr)),
         Bindable(true)
         ]        
         public object SelectedValue {
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
                     // we can't set the SelectedValue property when the listManager does not
                     // have a ValueMember set.
                     if (string.IsNullOrEmpty(propertyName))
-                        throw new InvalidOperationException(SR.GetString(SR.ListControlEmptyValueMemberInSettingSelectedValue));
+                        throw new InvalidOperationException(SR.ListControlEmptyValueMemberInSettingSelectedValue);
                     PropertyDescriptorCollection props = dataManager.GetItemProperties();
                     PropertyDescriptor property = props.Find(propertyName, true);
                     int index = dataManager.Find(property, value, true);
@@ -431,7 +431,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListControlOnSelectedValueChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlOnSelectedValueChangedDescr))]
         public event EventHandler SelectedValueChanged {
             add {
                 Events.AddHandler(EVENT_SELECTEDVALUECHANGED, value);
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
                         if (dataManager != null && (displayMemberChanged || dataSourceChanged) && displayMember.BindingMember != null && displayMember.BindingMember.Length != 0) {
 
                             if (!BindingMemberInfoInDataManager(displayMember))
-                                throw new ArgumentException(SR.GetString(SR.ListControlWrongDisplayMember), "newDisplayMember");
+                                throw new ArgumentException(SR.ListControlWrongDisplayMember, "newDisplayMember");
                         }
 
                         if (dataManager != null && (dataSourceChanged || displayMemberChanged || force)) {

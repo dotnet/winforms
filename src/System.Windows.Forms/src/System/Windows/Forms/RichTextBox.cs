@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
      ComVisible(true),
      Docking(DockingBehavior.Ask),
      Designer("System.Windows.Forms.Design.RichTextBoxDesigner, " + AssemblyRef.SystemDesign),
-     SRDescription(SR.DescriptionRichTextBox)
+     SRDescription(nameof(SR.DescriptionRichTextBox))
    ]
     public class RichTextBox : TextBoxBase {
         static TraceSwitch richTextDbg;
@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
                     }
                     catch (Exception e)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DragDropRegFailed), e);
+                        throw new InvalidOperationException(SR.DragDropRegFailed, e);
                     }
                 }
                 richTextBoxFlags[allowOleDropSection] = value ? 1 : 0;
@@ -218,9 +218,9 @@ namespace System.Windows.Forms {
         ///     Controls whether whether mouse selection snaps to whole words.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.RichTextBoxAutoWordSelection)
+        SRDescription(nameof(SR.RichTextBoxAutoWordSelection))
         ]
         public bool AutoWordSelection {
             get { return richTextBoxFlags[autoWordSelectionSection] != 0; }
@@ -292,10 +292,10 @@ namespace System.Windows.Forms {
         ///     SelectionBullet is set to true.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Localizable(true),
-        SRDescription(SR.RichTextBoxBulletIndent)
+        SRDescription(nameof(SR.RichTextBoxBulletIndent))
         ]
         public int BulletIndent {
             get {
@@ -305,7 +305,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("BulletIndent", SR.GetString(SR.InvalidArgument, "BulletIndent", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("BulletIndent", string.Format(SR.InvalidArgument, "BulletIndent", (value).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 this.bulletIndent = value;
@@ -334,7 +334,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxCanRedoDescr)
+        SRDescription(nameof(SR.RichTextBoxCanRedoDescr))
         ]
         public bool CanRedo {
             get {
@@ -366,7 +366,7 @@ namespace System.Windows.Forms {
                     // we can’t determine why we have to compare w/ 32 here.
                     // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space) (see Dev10 
                     if ((ulong)moduleHandle < (ulong)32) {
-                        throw new Win32Exception(lastWin32Error, SR.GetString(SR.LoadDLLError, richEditControlDllVersion));
+                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
                     }
 
                     //Determine whether we're Rich Edit 2.0 or 3.0: see 
@@ -436,9 +436,9 @@ namespace System.Windows.Forms {
         ///     property is changed.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.RichTextBoxDetectURLs)
+        SRDescription(nameof(SR.RichTextBoxDetectURLs))
         ]
         public bool DetectUrls {
             get {
@@ -468,9 +468,9 @@ namespace System.Windows.Forms {
         ///     375177).  Should be false by default.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.RichTextBoxEnableAutoDragDrop)
+        SRDescription(nameof(SR.RichTextBoxEnableAutoDragDrop))
         ]
         public bool EnableAutoDragDrop
         {
@@ -488,7 +488,7 @@ namespace System.Windows.Forms {
                     }
                     catch (Exception e)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DragDropRegFailed), e);
+                        throw new InvalidOperationException(SR.DragDropRegFailed, e);
                     }
                 }
                 richTextBoxFlags[enableAutoDragDropSection] = value ? 1 : 0;
@@ -656,10 +656,10 @@ namespace System.Windows.Forms {
         //NOTE: This is overridable, because we want people to be able to
         //      mess with the names if necessary...?
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxRedoActionNameDescr)
+        SRDescription(nameof(SR.RichTextBoxRedoActionNameDescr))
         ]
         public string RedoActionName {
             get {
@@ -692,10 +692,10 @@ namespace System.Windows.Forms {
         ///     The right margin of a RichTextBox control.  A nonzero margin implies WordWrap.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Localizable(true),
-        SRDescription(SR.RichTextBoxRightMargin)
+        SRDescription(nameof(SR.RichTextBoxRightMargin))
         ]
         public int RightMargin {
             get {
@@ -704,7 +704,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.rightMargin != value) {
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("RightMargin", SR.GetString(SR.InvalidLowBoundArgumentEx, "RightMargin", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("RightMargin", string.Format(SR.InvalidLowBoundArgumentEx, "RightMargin", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     this.rightMargin = value;
 
                     if (value == 0) {
@@ -734,7 +734,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxRTF),
+        SRDescription(nameof(SR.RichTextBoxRTF)),
         RefreshProperties(RefreshProperties.All)
         ]
         public string Rtf {
@@ -774,10 +774,10 @@ namespace System.Windows.Forms {
         ///     Possible return values are given by the RichTextBoxScrollBars enumeration.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(RichTextBoxScrollBars.Both),
         Localizable(true),
-        SRDescription(SR.RichTextBoxScrollBars)
+        SRDescription(nameof(SR.RichTextBoxScrollBars))
         ]
         public RichTextBoxScrollBars ScrollBars {
             get {
@@ -816,7 +816,7 @@ namespace System.Windows.Forms {
         DefaultValue(HorizontalAlignment.Left),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelAlignment)
+        SRDescription(nameof(SR.RichTextBoxSelAlignment))
         ]
         public HorizontalAlignment SelectionAlignment {
             get {
@@ -887,7 +887,7 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelBullet)
+        SRDescription(nameof(SR.RichTextBoxSelBullet))
         ]
         public bool SelectionBullet {
             get {
@@ -942,7 +942,7 @@ namespace System.Windows.Forms {
         DefaultValue(0),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelCharOffset)
+        SRDescription(nameof(SR.RichTextBoxSelCharOffset))
         ]
         public int SelectionCharOffset {
             get {
@@ -964,7 +964,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value > 2000 || value < -2000)
-                    throw new ArgumentOutOfRangeException("SelectionCharOffset", SR.GetString(SR.InvalidBoundArgument, "SelectionCharOffset", value, -2000, 2000));
+                    throw new ArgumentOutOfRangeException("SelectionCharOffset", string.Format(SR.InvalidBoundArgument, "SelectionCharOffset", value, -2000, 2000));
 
                 ForceHandleCreate();
                 NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA();
@@ -989,7 +989,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelColor)
+        SRDescription(nameof(SR.RichTextBoxSelColor))
         ]
         public Color SelectionColor {
             get {
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelBackColor)
+        SRDescription(nameof(SR.RichTextBoxSelBackColor))
         ]
         public Color SelectionBackColor {
             get {
@@ -1076,7 +1076,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelFont)
+        SRDescription(nameof(SR.RichTextBoxSelFont))
         ]
         public Font SelectionFont {
             get {
@@ -1098,7 +1098,7 @@ namespace System.Windows.Forms {
         DefaultValue(0),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelHangingIndent)
+        SRDescription(nameof(SR.RichTextBoxSelHangingIndent))
         ]
         public int SelectionHangingIndent {
             get {
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms {
         DefaultValue(0),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelIndent)
+        SRDescription(nameof(SR.RichTextBoxSelIndent))
         ]
         public int SelectionIndent {
             get {
@@ -1178,10 +1178,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TextBoxSelectionLengthDescr)
+        SRDescription(nameof(SR.TextBoxSelectionLengthDescr))
         ]
         public override int SelectionLength {
             get {
@@ -1209,7 +1209,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.RichTextBoxSelProtected),
+        SRDescription(nameof(SR.RichTextBoxSelProtected)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -1243,7 +1243,7 @@ namespace System.Windows.Forms {
         DefaultValue(""),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelRTF)
+        SRDescription(nameof(SR.RichTextBoxSelRTF))
         ]
         public string SelectedRtf {
             get {
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
         DefaultValue(0),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelRightIndent)
+        SRDescription(nameof(SR.RichTextBoxSelRightIndent))
         ]
         public int SelectionRightIndent {
             get {
@@ -1289,7 +1289,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException("SelectionRightIndent", SR.GetString(SR.InvalidLowBoundArgumentEx, "SelectionRightIndent", value, 0));
+                    throw new ArgumentOutOfRangeException("SelectionRightIndent", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionRightIndent", value, 0));
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
@@ -1308,7 +1308,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelTabs)
+        SRDescription(nameof(SR.RichTextBoxSelTabs))
         ]
         public int[] SelectionTabs {
             get {
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms {
             set {
                 // Verify the argument, and throw an error if is bad
                 if (value != null && value.Length > RichTextBoxConstants.MAX_TAB_STOPS)
-                    throw new ArgumentOutOfRangeException("SelectionTabs", SR.GetString(SR.SelTabCountRange));
+                    throw new ArgumentOutOfRangeException("SelectionTabs", SR.SelTabCountRange);
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms {
         DefaultValue(""),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelText)
+        SRDescription(nameof(SR.RichTextBoxSelText))
         ]
         public override string SelectedText {
             get {
@@ -1383,10 +1383,10 @@ namespace System.Windows.Forms {
         ///     of the values enumerated in RichTextBoxSelectionType.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelTypeDescr)
+        SRDescription(nameof(SR.RichTextBoxSelTypeDescr))
         ]
         public RichTextBoxSelectionTypes SelectionType {
             get {
@@ -1408,9 +1408,9 @@ namespace System.Windows.Forms {
         ///     can be used to select entire lines
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.RichTextBoxSelMargin)
+        SRDescription(nameof(SR.RichTextBoxSelMargin))
         ]
         public bool ShowSelectionMargin {
             get { return richTextBoxFlags[showSelBarSection] != 0; }
@@ -1526,10 +1526,10 @@ namespace System.Windows.Forms {
         //NOTE: This is overridable, because we want people to be able to
         //      mess with the names if necessary...?
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxUndoActionNameDescr)
+        SRDescription(nameof(SR.RichTextBoxUndoActionNameDescr))
         ]
         public string UndoActionName {
             get {
@@ -1543,17 +1543,17 @@ namespace System.Windows.Forms {
         private string GetEditorActionName(int actionID) {
             switch (actionID) {
                 case 0:
-                    return SR.GetString(SR.RichTextBox_IDUnknown);
+                    return string.Format(SR.RichTextBox_IDUnknown);
                 case 1:
-                    return SR.GetString(SR.RichTextBox_IDTyping);
+                    return string.Format(SR.RichTextBox_IDTyping);
                 case 2:
-                    return SR.GetString(SR.RichTextBox_IDDelete);
+                    return string.Format(SR.RichTextBox_IDDelete);
                 case 3:
-                    return SR.GetString(SR.RichTextBox_IDDragDrop);
+                    return string.Format(SR.RichTextBox_IDDragDrop);
                 case 4:
-                    return SR.GetString(SR.RichTextBox_IDCut);
+                    return string.Format(SR.RichTextBox_IDCut);
                 case 5:
-                    return SR.GetString(SR.RichTextBox_IDPaste);
+                    return string.Format(SR.RichTextBox_IDPaste);
                 default:
                     goto
                 case 0;
@@ -1567,10 +1567,10 @@ namespace System.Windows.Forms {
         ///     for non-TrueType fonts, ZoomFactor will be treated as the nearest whole number.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(1.0f),
         Localizable(true),
-        SRDescription(SR.RichTextBoxZoomFactor)
+        SRDescription(nameof(SR.RichTextBoxZoomFactor))
         ]
         public float ZoomFactor {
             get {
@@ -1593,7 +1593,7 @@ namespace System.Windows.Forms {
                 if (zoomMultiplier == value) return;
 
                 if (value <= 0.015625f || value >= 64.0f)
-                    throw new ArgumentOutOfRangeException("ZoomFactor", SR.GetString(SR.InvalidExBoundArgument, "ZoomFactor", (value).ToString(CultureInfo.CurrentCulture), (0.015625f).ToString(CultureInfo.CurrentCulture), (64.0f).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ZoomFactor", string.Format(SR.InvalidExBoundArgument, "ZoomFactor", (value).ToString(CultureInfo.CurrentCulture), (0.015625f).ToString(CultureInfo.CurrentCulture), (64.0f).ToString(CultureInfo.CurrentCulture)));
                 SendZoomFactor(value);
             }
         }
@@ -1603,7 +1603,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxContentsResized)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxContentsResized))]
         public event ContentsResizedEventHandler ContentsResized {
             add {
                 Events.AddHandler(EVENT_REQUESTRESIZE, value);
@@ -1704,7 +1704,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxHScroll)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxHScroll))]
         public event EventHandler HScroll {
             add {
                 Events.AddHandler(EVENT_HSCROLL, value);
@@ -1718,7 +1718,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxLinkClick)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxLinkClick))]
         public event LinkClickedEventHandler LinkClicked {
             add {
                 Events.AddHandler(EVENT_LINKACTIVATE, value);
@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxIMEChange)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxIMEChange))]
         public event EventHandler ImeChange {
             add {
                 Events.AddHandler(EVENT_IMECHANGE, value);
@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxProtected)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxProtected))]
         public event EventHandler Protected {
             add {
                 Events.AddHandler(EVENT_PROTECTED, value);
@@ -1763,7 +1763,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxSelChange)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxSelChange))]
         public event EventHandler SelectionChanged {
             add {
                 Events.AddHandler(EVENT_SELCHANGE, value);
@@ -1778,7 +1778,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxVScroll)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxVScroll))]
         public event EventHandler VScroll {
             add {
                 Events.AddHandler(EVENT_VSCROLL, value);
@@ -1962,9 +1962,9 @@ namespace System.Windows.Forms {
             if (str == null)
                 throw new ArgumentNullException("str");
             if (start < 0 || start > textLen)
-                throw new ArgumentOutOfRangeException("start", SR.GetString(SR.InvalidBoundArgument, "start", start, 0, textLen));
+                throw new ArgumentOutOfRangeException("start", string.Format(SR.InvalidBoundArgument, "start", start, 0, textLen));
             if (end < -1)
-                throw new ArgumentOutOfRangeException("end", SR.GetString(SR.RichTextFindEndInvalid, end));
+                throw new ArgumentOutOfRangeException("end", string.Format(SR.RichTextFindEndInvalid, end));
 
             bool selectWord = true;
             NativeMethods.FINDTEXT ft = new NativeMethods.FINDTEXT();
@@ -1978,7 +1978,7 @@ namespace System.Windows.Forms {
             }
 
             if (start > end) {
-                throw new ArgumentException(SR.GetString(SR.RichTextFindEndInvalid, end));
+                throw new ArgumentException(string.Format(SR.RichTextFindEndInvalid, end));
             }
 
             if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse) {
@@ -2100,9 +2100,9 @@ namespace System.Windows.Forms {
             if (characterSet == null)
                 throw new ArgumentNullException("characterSet");
             if (start < 0 || start > textLength)
-                throw new ArgumentOutOfRangeException("start", SR.GetString(SR.InvalidBoundArgument, "start", start, 0, textLength));
+                throw new ArgumentOutOfRangeException("start", string.Format(SR.InvalidBoundArgument, "start", start, 0, textLength));
             if (end < start && end != -1)
-                throw new ArgumentOutOfRangeException("end", SR.GetString(SR.InvalidLowBoundArgumentEx, "end", end, "start"));
+                throw new ArgumentOutOfRangeException("end", string.Format(SR.InvalidLowBoundArgumentEx, "end", end, "start"));
 
             // Don't do anything if we get nothing to look for
             if (characterSet.Length == 0)
@@ -2445,7 +2445,7 @@ namespace System.Windows.Forms {
                     flags = RichTextBoxConstants.SF_UNICODE | RichTextBoxConstants.SF_TEXT;
                     break;
                 default:
-                    throw new ArgumentException(SR.GetString(SR.InvalidFileType));
+                    throw new ArgumentException(SR.InvalidFileType);
             }
 
             StreamIn(data, flags);
@@ -2864,7 +2864,7 @@ namespace System.Windows.Forms {
                         cf.dwEffects = 0;
                         break;
                     default:
-                        throw new ArgumentException(SR.GetString(SR.UnknownAttr));
+                        throw new ArgumentException(SR.UnknownAttr);
                 }
 
                 // set the format information
@@ -3028,7 +3028,7 @@ namespace System.Windows.Forms {
                     editStream.Read(bytes, (int)streamStart, SZ_RTF_TAG.Length);
                     string str = Encoding.Default.GetString(bytes);
                     if (!SZ_RTF_TAG.Equals(str))
-                        throw new ArgumentException(SR.GetString(SR.InvalidFileFormat));
+                        throw new ArgumentException(SR.InvalidFileFormat);
 
                     // put us back at the start of the file
                     editStream.Position = streamStart;
@@ -3081,7 +3081,7 @@ namespace System.Windows.Forms {
                     return;
 
                 if (es.dwError != 0)
-                    throw new InvalidOperationException(SR.GetString(SR.LoadTextError));
+                    throw new InvalidOperationException(SR.LoadTextError);
 
                 // set the modify tag on the control
                 SendMessage(NativeMethods.EM_SETMODIFY, -1, 0);
@@ -3171,7 +3171,7 @@ namespace System.Windows.Forms {
 
                 // check to make sure things went well
                 if (es.dwError != 0)
-                    throw new InvalidOperationException(SR.GetString(SR.SaveTextError));
+                    throw new InvalidOperationException(SR.SaveTextError);
             }
             finally {
                 // release any storage space held.
@@ -3375,7 +3375,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.CharBuffer charBuffer = UnsafeNativeMethods.CharBuffer.CreateBuffer(characters);
             IntPtr unmanagedBuffer = charBuffer.AllocCoTaskMem();
             if (unmanagedBuffer == IntPtr.Zero)
-                throw new OutOfMemoryException(SR.GetString(SR.OutOfMemory));
+                throw new OutOfMemoryException(SR.OutOfMemory);
 
             txrg.lpstrText = unmanagedBuffer;
             int len = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETTEXTRANGE, 0, txrg);

@@ -248,7 +248,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         DesignerTransaction trans = null;
             
                         if (host != null) {
-                            trans = host.CreateTransaction(SR.GetString(SR.PropertyGridResetValue, this.PropertyName));
+                            trans = host.CreateTransaction(string.Format(SR.PropertyGridResetValue, this.PropertyName));
                         }
                         try {
                             

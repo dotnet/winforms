@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             {
                 if (value && this.exception == null)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_CannotThrowNullException));
+                    throw new ArgumentException(string.Format(SR.DataGridView_CannotThrowNullException));
                 }
                 this.throwException = value;
             }

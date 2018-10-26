@@ -1,7 +1,9 @@
 parameters:
   dependsOn: ''
   queue: {}
-  configuration: Debug
+  configuration: 'Debug'
+  condition: succeeded()
+  continueOnError: false
 phases:
   - phase: Asset_Registry_Publish
     displayName: Publish to Build Asset Registry
@@ -14,18 +16,22 @@ phases:
         - task: DownloadBuildArtifacts@0
           displayName: Download artifact
           inputs:
-            artifactName: AssetManifests    
+            artifactName: AssetManifests
             downloadPath: '$(Build.StagingDirectory)/Download'
-          condition: succeeded()
+          condition: ${{ parameters.condition }}
+          continueOnError: ${{ parameters.continueOnError }}
         - task: AzureKeyVault@1
           inputs:
             azureSubscription: 'DotNet-Engineering-Services_KeyVault'
             KeyVaultName: EngKeyVault
             SecretsFilter: 'MaestroAccessToken'
-          condition: succeeded()
+          condition: ${{ parameters.condition }}
+          continueOnError: ${{ parameters.continueOnError }}
         - script: eng\common\publishbuildassets.cmd
-            /p:Configuration=$(config)
             /p:ManifestsPath='$(Build.StagingDirectory)/Download/AssetManifests'
             /p:BuildAssetRegistryToken=$(MaestroAccessToken)
             /p:MaestroApiEndpoint=https://maestro-prod.westus2.cloudapp.azure.com
+            /p:Configuration=$(config)
           displayName: Publish Build Assets
+          condition: ${{ parameters.condition }}
+          continueOnError: ${{ parameters.continueOnError }}

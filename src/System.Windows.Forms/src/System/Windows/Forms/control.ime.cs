@@ -229,10 +229,10 @@ namespace System.Windows.Forms {
         ///     object when that object is selected.
         /// </devdoc>
         [
-        SRCategory( SR.CatBehavior ),
+        SRCategory( nameof(SR.CatBehavior)),
         Localizable( true ),
         AmbientValue( ImeMode.Inherit ),
-        SRDescription( SR.ControlIMEModeDescr )
+        SRDescription( nameof(SR.ControlIMEModeDescr))
         ]
         public ImeMode ImeMode {
             get {
@@ -325,7 +325,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [WinCategory( "Behavior" ), SRDescription( SR.ControlOnImeModeChangedDescr )]
+        [WinCategory( "Behavior" ), SRDescription( nameof(SR.ControlOnImeModeChangedDescr) )]
         public event EventHandler ImeModeChanged {
             add {
                 Events.AddHandler( EventImeModeChanged, value );

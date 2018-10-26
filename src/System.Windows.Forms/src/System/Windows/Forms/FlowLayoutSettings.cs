@@ -21,9 +21,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\FlowLayoutSettings.uex' path='docs/doc[@for="FlowLayoutSettings.FlowDirection"]/*' />
-        [SRDescription(SR.FlowPanelFlowDirectionDescr)]
+        [SRDescription(nameof(SR.FlowPanelFlowDirectionDescr))]
         [DefaultValue(FlowDirection.LeftToRight)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         public FlowDirection FlowDirection {
             get { return FlowLayout.GetFlowDirection(Owner); }
             set { 
@@ -33,9 +33,9 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\FlowLayoutSettings.uex' path='docs/doc[@for="FlowLayoutSettings.WrapContents"]/*' />
-        [SRDescription(SR.FlowPanelWrapContentsDescr)]
+        [SRDescription(nameof(SR.FlowPanelWrapContentsDescr))]
         [DefaultValue(true)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         public bool WrapContents {
             get { return FlowLayout.GetWrapContents(Owner); }
             set { 

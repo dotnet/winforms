@@ -4372,7 +4372,7 @@ namespace System.Windows.Forms {
                         v.data1 = Marshal.GetIUnknownForObject(var);
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.ConnPointUnhandledType, t.Name));
+                        throw new ArgumentException(string.Format(SR.ConnPointUnhandledType, t.Name));
                     }
                 }
                 return v;
@@ -4479,14 +4479,14 @@ namespace System.Windows.Forms {
                 case (int)tagVT.VT_R8:
 
                     // can I use unsafe here?
-                    throw new FormatException(SR.GetString(SR.CannotConvertIntToFloat));
+                    throw new FormatException(SR.CannotConvertIntToFloat);
 
                 case (int)tagVT.VT_CY:
                     // internally currency is 8-byte int scaled by 10,000
                     longVal = ((uint)data1 & 0xffffffff) | ((uint)data2 << 32);
                     return new Decimal(longVal);
                 case (int)tagVT.VT_DATE:
-                    throw new FormatException(SR.GetString(SR.CannotConvertDoubleToDate));
+                    throw new FormatException(SR.CannotConvertDoubleToDate);
 
                 case (int)tagVT.VT_BSTR:
                 case (int)tagVT.VT_LPWSTR:
@@ -4524,7 +4524,7 @@ namespace System.Windows.Forms {
                     return new DateTime(longVal);
 
                 case (int)tagVT.VT_USERDEFINED:
-                    throw new ArgumentException(SR.GetString(SR.COM2UnhandledVT, "VT_USERDEFINED"));
+                    throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));
 
                 case (int)tagVT.VT_ARRAY:
                     //gSAFEARRAY sa = (tagSAFEARRAY)Marshal.PtrToStructure(val), typeof(tagSAFEARRAY));
@@ -4549,7 +4549,7 @@ namespace System.Windows.Forms {
                     //case (int)tagVT.VT_RESERVED:
                 default:
                     int iVt = this.vt;
-                    throw new ArgumentException(SR.GetString(SR.COM2UnhandledVT, iVt.ToString(CultureInfo.InvariantCulture)));
+                    throw new ArgumentException(string.Format(SR.COM2UnhandledVT, iVt.ToString(CultureInfo.InvariantCulture)));
                 }
             }
 

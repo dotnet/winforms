@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.ListViewDesigner, " + AssemblyRef.SystemDesign),
     DefaultProperty("Items"),
     DefaultEvent("SelectedIndexChanged"),
-    SRDescription(SR.DescriptionListView)
+    SRDescription(nameof(SR.DescriptionListView))
     ]
     public class ListView : Control {
 
@@ -257,9 +257,9 @@ namespace System.Windows.Forms {
         ///     activate an item.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(ItemActivation.Standard),
-        SRDescription(SR.ListViewActivationDescr)
+        SRDescription(nameof(SR.ListViewActivationDescr))
         ]
         public ItemActivation Activation {
             get {
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (this.HotTracking && value != ItemActivation.OneClick) {
-                    throw new ArgumentException(SR.GetString(SR.ListViewActivationMustBeOnWhenHotTrackingIsOn), "value");
+                    throw new ArgumentException(SR.ListViewActivationMustBeOnWhenHotTrackingIsOn, "value");
                 }
 
                 if (activation != value) {
@@ -289,10 +289,10 @@ namespace System.Windows.Forms {
         ///     to by default
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(ListViewAlignment.Top),
         Localizable(true),
-        SRDescription(SR.ListViewAlignmentDescr)
+        SRDescription(nameof(SR.ListViewAlignmentDescr))
         ]
         public ListViewAlignment Alignment {
             get {
@@ -324,9 +324,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Details view.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewAllowColumnReorderDescr)
+        SRDescription(nameof(SR.ListViewAllowColumnReorderDescr))
         ]
         public bool AllowColumnReorder {
             get {
@@ -348,9 +348,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Large Icon or Small Icon views.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewAutoArrangeDescr)
+        SRDescription(nameof(SR.ListViewAutoArrangeDescr))
         ]
         public bool AutoArrange {
             get {
@@ -414,9 +414,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.BackgroundImageTiled"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.ListViewBackgroundImageTiledDescr)
+        SRDescription(nameof(SR.ListViewBackgroundImageTiledDescr))
         ]
         public bool BackgroundImageTiled {
             get {
@@ -452,10 +452,10 @@ namespace System.Windows.Forms {
         ///     Describes the border style of the window.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.borderStyleDescr)
+        SRDescription(nameof(SR.borderStyleDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -482,9 +482,9 @@ namespace System.Windows.Forms {
         ///     to it.  The user can change the state of the item by clicking the checkbox.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.ListViewCheckBoxesDescr)
+        SRDescription(nameof(SR.ListViewCheckBoxesDescr))
         ]
         public bool CheckBoxes {
             get {
@@ -496,7 +496,7 @@ namespace System.Windows.Forms {
                     if (CheckBoxes != value) {
                         
                         if (value && this.View == View.Tile) {
-                            throw new NotSupportedException(SR.GetString(SR.ListViewCheckBoxesNotSupportedInTileView));
+                            throw new NotSupportedException(SR.ListViewCheckBoxesNotSupportedInTileView);
                         }
 
                         if (CheckBoxes) {
@@ -532,7 +532,7 @@ namespace System.Windows.Forms {
                     if (CheckBoxes != value) {
 
                         if (value && this.View == View.Tile) {
-                            throw new NotSupportedException(SR.GetString(SR.ListViewCheckBoxesNotSupportedInTileView));
+                            throw new NotSupportedException(SR.ListViewCheckBoxesNotSupportedInTileView);
                         }
 
                         if (CheckBoxes) {
@@ -640,10 +640,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Editor("System.Windows.Forms.Design.ColumnHeaderCollectionEditor, " + AssemblyRef.SystemDesign,typeof(UITypeEditor)),
-        SRDescription(SR.ListViewColumnsDescr),
+        SRDescription(nameof(SR.ListViewColumnsDescr)),
         Localizable(true),
         MergableProperty(false)
         ]
@@ -766,7 +766,7 @@ namespace System.Windows.Forms {
             get
             {
                 if (defaultGroup == null) {
-                    defaultGroup = new ListViewGroup(SR.GetString(SR.ListViewGroupDefaultGroup, "1"));
+                    defaultGroup = new ListViewGroup(string.Format(SR.ListViewGroupDefaultGroup, "1"));
                 }
                 return defaultGroup;
             }
@@ -812,10 +812,10 @@ namespace System.Windows.Forms {
         ///     Returns null if no item is currently focused.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewFocusedItemDescr)
+        SRDescription(nameof(SR.ListViewFocusedItemDescr))
         ]
         public ListViewItem FocusedItem {
             get {
@@ -879,9 +879,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Details view
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.ListViewFullRowSelectDescr)
+        SRDescription(nameof(SR.ListViewFullRowSelectDescr))
         ]
         public bool FullRowSelect {
             get {
@@ -901,9 +901,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Details view
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.ListViewGridLinesDescr)
+        SRDescription(nameof(SR.ListViewGridLinesDescr))
         ]
         public bool GridLines {
             get {
@@ -923,11 +923,11 @@ namespace System.Windows.Forms {
         ///     The collection of groups belonging to this ListView
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
         Editor("System.Windows.Forms.Design.ListViewGroupCollectionEditor, " + AssemblyRef.SystemDesign,typeof(UITypeEditor)),
-        SRDescription(SR.ListViewGroupsDescr),
+        SRDescription(nameof(SR.ListViewGroupsDescr)),
         MergableProperty(false)
         ]
         public ListViewGroupCollection Groups {
@@ -955,9 +955,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Details view
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(ColumnHeaderStyle.Clickable),
-        SRDescription(SR.ListViewHeaderStyleDescr)
+        SRDescription(nameof(SR.ListViewHeaderStyleDescr))
         ]
         public ColumnHeaderStyle HeaderStyle {
             get { return headerStyle;}
@@ -990,9 +990,9 @@ namespace System.Windows.Forms {
         ///     different color) when focus is moved away from the ListView.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewHideSelectionDescr)
+        SRDescription(nameof(SR.ListViewHideSelectionDescr))
         ]
         public bool HideSelection {
             get {
@@ -1011,9 +1011,9 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewHotTrackingDescr)
+        SRDescription(nameof(SR.ListViewHotTrackingDescr))
         ]
         public bool HotTracking {
             get {
@@ -1037,9 +1037,9 @@ namespace System.Windows.Forms {
         ///     Determines whether items can be selected by hovering over them with the mouse.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewHoverSelectDescr)
+        SRDescription(nameof(SR.ListViewHoverSelectDescr))
         ]
         public bool HoverSelection {
             get {
@@ -1049,7 +1049,7 @@ namespace System.Windows.Forms {
             set {
                 if (HoverSelection != value) {
                     if (HotTracking && !value) {
-                        throw new ArgumentException(SR.GetString(SR.ListViewHoverMustBeOnWhenHotTrackingIsOn), "value");
+                        throw new ArgumentException(SR.ListViewHoverMustBeOnWhenHotTrackingIsOn, "value");
                     }
 
                     listViewState[LISTVIEWSTATE_hoverSelection] = value;
@@ -1073,7 +1073,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewInsertionMarkDescr)
+        SRDescription(nameof(SR.ListViewInsertionMarkDescr))
         ]
         public ListViewInsertionMark InsertionMark {
             get
@@ -1099,11 +1099,11 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
         Editor("System.Windows.Forms.Design.ListViewItemCollectionEditor, " + AssemblyRef.SystemDesign,typeof(UITypeEditor)),
-        SRDescription(SR.ListViewItemsDescr),
+        SRDescription(nameof(SR.ListViewItemsDescr)),
         MergableProperty(false)
         ]
         public ListViewItemCollection Items {
@@ -1117,9 +1117,9 @@ namespace System.Windows.Forms {
         ///     Tells whether the EditLabels style is currently set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewLabelEditDescr)
+        SRDescription(nameof(SR.ListViewLabelEditDescr))
         ]
         public bool LabelEdit {
             get {
@@ -1138,10 +1138,10 @@ namespace System.Windows.Forms {
         ///     Tells whether the LabelWrap style is currently set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.ListViewLabelWrapDescr)
+        SRDescription(nameof(SR.ListViewLabelWrapDescr))
         ]
         public bool LabelWrap {
             get {
@@ -1160,9 +1160,9 @@ namespace System.Windows.Forms {
         ///     The Currently set ImageList for Large Icon mode.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ListViewLargeImageListDescr)
+        SRDescription(nameof(SR.ListViewLargeImageListDescr))
         ]
         public ImageList LargeImageList {
             get {
@@ -1217,10 +1217,10 @@ namespace System.Windows.Forms {
         ///     The sorting comparer for this ListView.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewItemSorterDescr)
+        SRDescription(nameof(SR.ListViewItemSorterDescr))
         ]
         public IComparer ListViewItemSorter {
             get {
@@ -1242,9 +1242,9 @@ namespace System.Windows.Forms {
         ///     Tells whether the MultiSelect style is currently set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewMultiSelectDescr)
+        SRDescription(nameof(SR.ListViewMultiSelectDescr))
         ]
         public bool MultiSelect {
             get {
@@ -1264,9 +1264,9 @@ namespace System.Windows.Forms {
         ///     drawn by the system or the user. This includes the column header when item index = -1.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewOwnerDrawDescr)
+        SRDescription(nameof(SR.ListViewOwnerDrawDescr))
         ]
         public bool OwnerDraw {
             get {
@@ -1290,10 +1290,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -1315,7 +1315,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
@@ -1331,9 +1331,9 @@ namespace System.Windows.Forms {
         ///     Tells whether the ScrollBars are visible or not.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewScrollableDescr)
+        SRDescription(nameof(SR.ListViewScrollableDescr))
         ]
         public bool Scrollable {
             get {
@@ -1369,10 +1369,10 @@ namespace System.Windows.Forms {
         ///     The currently selected list items.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewSelectedItemsDescr)
+        SRDescription(nameof(SR.ListViewSelectedItemsDescr))
         ]
         public SelectedListViewItemCollection SelectedItems {
             get {
@@ -1385,9 +1385,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ShowGroups"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewShowGroupsDescr)
+        SRDescription(nameof(SR.ListViewShowGroupsDescr))
         ]
         public bool ShowGroups {
             get {
@@ -1408,9 +1408,9 @@ namespace System.Windows.Forms {
         ///     The currently set SmallIcon image list.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ListViewSmallImageListDescr)
+        SRDescription(nameof(SR.ListViewSmallImageListDescr))
         ]
         public ImageList SmallImageList {
             get {
@@ -1456,9 +1456,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewShowItemToolTipsDescr)
+        SRDescription(nameof(SR.ListViewShowItemToolTipsDescr))
         ]
         public bool ShowItemToolTips {
             get {
@@ -1477,9 +1477,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(SortOrder.None),
-        SRDescription(SR.ListViewSortingDescr)
+        SRDescription(nameof(SR.ListViewSortingDescr))
         ]
         public SortOrder Sorting {
             get {
@@ -1520,9 +1520,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ListViewStateImageListDescr)
+        SRDescription(nameof(SR.ListViewStateImageListDescr))
         ]
         public ImageList StateImageList {
             get {
@@ -1625,9 +1625,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-            SRCategory(SR.CatAppearance),
+            SRCategory(nameof(SR.CatAppearance)),
             Browsable(true),
-            SRDescription(SR.ListViewTileSizeDescr),
+            SRDescription(nameof(SR.ListViewTileSizeDescr)),
         ]
         public Size TileSize {
             get {
@@ -1649,7 +1649,7 @@ namespace System.Windows.Forms {
             set {
                 if (tileSize != value) {
                     if (value.IsEmpty || value.Height <= 0 || value.Width <= 0) {
-                        throw new ArgumentOutOfRangeException("TileSize", SR.GetString(SR.ListViewTileSizeMustBePositive));
+                        throw new ArgumentOutOfRangeException("TileSize", SR.ListViewTileSizeMustBePositive);
                     }
 
                     tileSize = value;
@@ -1677,15 +1677,15 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewTopItemDescr)
+        SRDescription(nameof(SR.ListViewTopItemDescr))
         ]
         public ListViewItem TopItem {
             get {
                 if (viewStyle == View.LargeIcon || viewStyle == View.SmallIcon || viewStyle == View.Tile)
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewGetTopItem));
+                    throw new InvalidOperationException(SR.ListViewGetTopItem);
 
                 if (!IsHandleCreated) {
                     if (Items.Count > 0) {
@@ -1703,7 +1703,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (viewStyle == View.LargeIcon || viewStyle == View.SmallIcon || viewStyle == View.Tile)
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewSetTopItem));
+                    throw new InvalidOperationException(SR.ListViewSetTopItem);
 
                 if (value == null)
                     return;
@@ -1759,9 +1759,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(View.LargeIcon),
-        SRDescription(SR.ListViewViewDescr)
+        SRDescription(nameof(SR.ListViewViewDescr))
         ]
         public View View {
             get {
@@ -1769,7 +1769,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == View.Tile && this.CheckBoxes) {
-                    throw new NotSupportedException(SR.GetString(SR.ListViewTileViewDoesNotSupportCheckBoxes));
+                    throw new NotSupportedException(SR.ListViewTileViewDoesNotSupportCheckBoxes);
                 }
 
                 this.FlipViewToLargeIconAndSmallIcon = false;
@@ -1781,7 +1781,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value == View.Tile && VirtualMode) {
-                    throw new NotSupportedException(SR.GetString(SR.ListViewCantSetViewToTileViewInVirtualMode));
+                    throw new NotSupportedException(SR.ListViewCantSetViewToTileViewInVirtualMode);
                 }
 
                 if (viewStyle != value) {
@@ -1809,10 +1809,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ListViewVirtualListSizeDescr)
+        SRDescription(nameof(SR.ListViewVirtualListSizeDescr))
         ]
         public int VirtualListSize {
             get {
@@ -1820,7 +1820,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0)
-                    throw new System.ArgumentException(SR.GetString(SR.ListViewVirtualListSizeInvalidArgument, "value", (value.ToString(CultureInfo.CurrentCulture))));
+                    throw new System.ArgumentException(string.Format(SR.ListViewVirtualListSizeInvalidArgument, "value", (value.ToString(CultureInfo.CurrentCulture))));
                 if (value == virtualListSize)
                     return;
                 bool keepTopItem = this.IsHandleCreated && VirtualMode && this.View == View.Details && !this.DesignMode;
@@ -1851,10 +1851,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ListViewVirtualModeDescr)
+        SRDescription(nameof(SR.ListViewVirtualModeDescr))
         ]
         public bool VirtualMode {
             get {
@@ -1865,19 +1865,19 @@ namespace System.Windows.Forms {
                     return;
 
                 if (value && Items.Count > 0)
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewVirtualListViewRequiresNoItems));
+                    throw new InvalidOperationException(SR.ListViewVirtualListViewRequiresNoItems);
 
                 if (value && CheckedItems.Count > 0) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewVirtualListViewRequiresNoCheckedItems));
+                    throw new InvalidOperationException(SR.ListViewVirtualListViewRequiresNoCheckedItems);
                 }
 
                 if (value && SelectedItems.Count > 0) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewVirtualListViewRequiresNoSelectedItems));
+                    throw new InvalidOperationException(SR.ListViewVirtualListViewRequiresNoSelectedItems);
                 }
 
                 // Tile view does not work w/ VirtualMode.
                 if (value && View == View.Tile) {
-                    throw new NotSupportedException(SR.GetString(SR.ListViewCantSetVirtualModeWhenInTileView));
+                    throw new NotSupportedException(SR.ListViewCantSetVirtualModeWhenInTileView);
                 }
 
                 listViewState[LISTVIEWSTATE_virtualMode] = value;
@@ -1891,7 +1891,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewAfterLabelEditDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewAfterLabelEditDescr))]
         public event LabelEditEventHandler AfterLabelEdit {
             add {
                 onAfterLabelEdit += value;
@@ -1905,7 +1905,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewBeforeLabelEditDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewBeforeLabelEditDescr))]
         public event LabelEditEventHandler BeforeLabelEdit {
             add {
                 onBeforeLabelEdit += value;
@@ -1919,7 +1919,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewCacheVirtualItemsEventDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewCacheVirtualItemsEventDescr))]
         public event CacheVirtualItemsEventHandler CacheVirtualItems {
             add {
                 Events.AddHandler(EVENT_CACHEVIRTUALITEMS, value);
@@ -1933,7 +1933,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewColumnClickDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewColumnClickDescr))]
         public event ColumnClickEventHandler ColumnClick {
             add {
                 onColumnClick += value;
@@ -1947,7 +1947,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Tell the user that the column headers are being rearranged
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListViewColumnReorderedDscr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnReorderedDscr))]
         public event ColumnReorderedEventHandler ColumnReordered {
             add {
                 Events.AddHandler(EVENT_COLUMNREORDERED, value);
@@ -1961,7 +1961,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Tell the user that the column width changed
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListViewColumnWidthChangedDscr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnWidthChangedDscr))]
         public event ColumnWidthChangedEventHandler ColumnWidthChanged {
             add {
                 Events.AddHandler(EVENT_COLUMNWIDTHCHANGED, value);
@@ -1975,7 +1975,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Tell the user that the column width is being changed
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListViewColumnWidthChangingDscr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnWidthChangingDscr))]
         public event ColumnWidthChangingEventHandler ColumnWidthChanging {
             add {
                 Events.AddHandler(EVENT_COLUMNWIDTHCHANGING, value);
@@ -1989,7 +1989,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Fires in owner draw + Details mode when a column header needs to be drawn.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewDrawColumnHeaderEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawColumnHeaderEventDescr))]
         public event DrawListViewColumnHeaderEventHandler DrawColumnHeader {
             add {
                 Events.AddHandler(EVENT_DRAWCOLUMNHEADER, value);
@@ -2003,7 +2003,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Fires in owner draw mode when a ListView item needs to be drawn.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewDrawItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawItemEventDescr))]
         public event DrawListViewItemEventHandler DrawItem {
             add {
                 Events.AddHandler(EVENT_DRAWITEM, value);
@@ -2017,7 +2017,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///      <para>Fires in owner draw mode and Details view when a ListView sub-item needs to be drawn.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewDrawSubItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawSubItemEventDescr))]
         public event DrawListViewSubItemEventHandler DrawSubItem {
             add {
                 Events.AddHandler(EVENT_DRAWSUBITEM, value);
@@ -2031,7 +2031,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewItemClickDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemClickDescr))]
         public event EventHandler ItemActivate {
             add {
                 onItemActivate += value;
@@ -2045,7 +2045,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.CheckedListBoxItemCheckDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
             add {
                 onItemCheck += value;
@@ -2059,7 +2059,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewItemCheckedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewItemCheckedDescr))]
         public event ItemCheckedEventHandler ItemChecked {
             add {
                 onItemChecked += value;
@@ -2073,7 +2073,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewItemDragDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemDragDescr))]
         public event ItemDragEventHandler ItemDrag {
             add {
                 onItemDrag += value;
@@ -2087,7 +2087,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewItemMouseHoverDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemMouseHoverDescr))]
         public event ListViewItemMouseHoverEventHandler ItemMouseHover {
             add {
                 onItemMouseHover += value;
@@ -2098,7 +2098,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexChanged"]/*' />
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewItemSelectionChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewItemSelectionChangedDescr))]
         public event ListViewItemSelectionChangedEventHandler ItemSelectionChanged {
             add {
                 Events.AddHandler(EVENT_ITEMSELECTIONCHANGED, value);
@@ -2151,7 +2151,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewRetrieveVirtualItemEventDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewRetrieveVirtualItemEventDescr))]
         public event RetrieveVirtualItemEventHandler RetrieveVirtualItem {
             add {
                 Events.AddHandler(EVENT_RETRIEVEVIRTUALITEM, value);
@@ -2164,7 +2164,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SearchForVirtualItem"]/*' />
         /// <devdoc>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewSearchForVirtualItemDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewSearchForVirtualItemDescr))]
         public event SearchForVirtualItemEventHandler SearchForVirtualItem {
             add {
                 Events.AddHandler(EVENT_SEARCHFORVIRTUALITEM, value);
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewSelectedIndexChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewSelectedIndexChangedDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
                 Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
@@ -2189,7 +2189,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.VirtualItemsSelectionRangeChanged"]/*' />
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewVirtualItemsSelectionRangeChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewVirtualItemsSelectionRangeChangedDescr))]
         public event ListViewVirtualItemsSelectionRangeChangedEventHandler VirtualItemsSelectionRangeChanged {
             add {
                 Events.AddHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);
@@ -2242,7 +2242,7 @@ namespace System.Windows.Forms {
                     break;
 
                 default:
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidArgument,
                                                               "value",
                                                               ((value).ToString())));
             }
@@ -3055,7 +3055,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void EnsureVisible(int index) {
             if (index < 0 || index >= Items.Count) {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             if (IsHandleCreated)
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_ENSUREVISIBLE, index, 0);
@@ -3086,7 +3086,7 @@ namespace System.Windows.Forms {
         public ListViewItem FindItemWithText(string text, bool includeSubItemsInSearch, int startIndex, bool isPrefixSearch) {
             if (startIndex < 0 || startIndex >= this.Items.Count)
             {
-                throw new ArgumentOutOfRangeException("startIndex", SR.GetString(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("startIndex", string.Format(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
             }
             return FindItem(true, text, isPrefixSearch, new Point(0,0), SearchDirectionHint.Down, startIndex, includeSubItemsInSearch);
         }
@@ -3104,11 +3104,11 @@ namespace System.Windows.Forms {
         public ListViewItem FindNearestItem(SearchDirectionHint searchDirection, int x, int y)
         {
             if (this.View != View.SmallIcon && this.View != View.LargeIcon) {
-                throw new InvalidOperationException(SR.GetString(SR.ListViewFindNearestItemWorksOnlyInIconView));
+                throw new InvalidOperationException(SR.ListViewFindNearestItemWorksOnlyInIconView);
             }
 
             if ( searchDirection < SearchDirectionHint.Left || searchDirection > SearchDirectionHint.Down) {
-                throw new ArgumentOutOfRangeException("searchDirection", SR.GetString(SR.InvalidArgument, "searchDirection", (searchDirection).ToString()));
+                throw new ArgumentOutOfRangeException("searchDirection", string.Format(SR.InvalidArgument, "searchDirection", (searchDirection).ToString()));
             }
 
             // the win32 ListView::FindNearestItem does some pretty weird things to determine the nearest item.
@@ -3387,7 +3387,7 @@ namespace System.Windows.Forms {
 
         internal int GetItemState(int index, int mask) {
             if (index < 0 || ((this.VirtualMode && index >= this.VirtualListSize) || (!this.VirtualMode && index >= itemCount))) {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
@@ -3408,7 +3408,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public Rectangle GetItemRect(int index, ItemBoundsPortion portion) {
             if (index < 0 || index >= this.Items.Count) {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             //valid values are 0x0 to 0x3
             if (!ClientUtils.IsEnumValid(portion, (int)portion, (int)ItemBoundsPortion.Entire, (int)ItemBoundsPortion.ItemOnly)){
@@ -3423,7 +3423,7 @@ namespace System.Windows.Forms {
             NativeMethods.RECT itemrect = new NativeMethods.RECT();
             itemrect.left = (int)portion;
             if (unchecked( (int) (long)SendMessage(NativeMethods.LVM_GETITEMRECT, index, ref itemrect)) == 0)
-                throw new ArgumentException(SR.GetString(SR.InvalidArgument,
+                throw new ArgumentException(string.Format(SR.InvalidArgument,
                                                           "index",
                                                           (index).ToString(CultureInfo.CurrentCulture)));
 
@@ -3496,12 +3496,12 @@ namespace System.Windows.Forms {
                 return Rectangle.Empty;
             }
             if (itemIndex < 0 || itemIndex >= this.Items.Count) {
-                throw new ArgumentOutOfRangeException("itemIndex", SR.GetString(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
             }
             int subItemCount = Items[itemIndex].SubItems.Count;
 
             if (subItemIndex < 0 || subItemIndex >= subItemCount) {
-                throw new ArgumentOutOfRangeException("subItemIndex", SR.GetString(SR.InvalidArgument, "subItemIndex", (subItemIndex).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("subItemIndex", string.Format(SR.InvalidArgument, "subItemIndex", (subItemIndex).ToString(CultureInfo.CurrentCulture)));
             }
             //valid values are 0x0 to 0x3
             if (!ClientUtils.IsEnumValid(portion, (int)portion, (int)ItemBoundsPortion.Entire, (int)ItemBoundsPortion.ItemOnly))
@@ -3517,7 +3517,7 @@ namespace System.Windows.Forms {
             itemrect.left = (int)portion;
             itemrect.top = subItemIndex;
             if (unchecked( (int) (long)SendMessage(NativeMethods.LVM_GETSUBITEMRECT, itemIndex, ref itemrect)) == 0)
-                throw new ArgumentException(SR.GetString(SR.InvalidArgument,
+                throw new ArgumentException(string.Format(SR.InvalidArgument,
                                                           "itemIndex",
                                                           (itemIndex).ToString(CultureInfo.CurrentCulture)));
 
@@ -3603,7 +3603,7 @@ namespace System.Windows.Forms {
             if (ch == null)
                 throw new ArgumentNullException("ch");
             if (ch.OwnerListview != null)
-                throw new ArgumentException(SR.GetString(SR.OnlyOneControl, ch.Text), "ch");
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, ch.Text), "ch");
 
 
             int idx;
@@ -3619,7 +3619,7 @@ namespace System.Windows.Forms {
             // First column must be left aligned
 
             if (-1 == idx)
-                throw new InvalidOperationException(SR.GetString(SR.ListViewAddColumnFailed));
+                throw new InvalidOperationException(SR.ListViewAddColumnFailed);
 
             // Add the column to our internal array
             int columnCount = (columnHeaders == null ? 0 : columnHeaders.Length);
@@ -3772,7 +3772,7 @@ namespace System.Windows.Forms {
                 if (checkHosting) {
                     for (int i = 0; i < items.Length; i ++) {
                         if (items[i].listView != null) {
-                            throw new ArgumentException(SR.GetString(SR.OnlyOneControl, items[i].Text), "item");
+                            throw new ArgumentException(string.Format(SR.OnlyOneControl, items[i].Text), "item");
                         }
                     }
                 }
@@ -3800,7 +3800,7 @@ namespace System.Windows.Forms {
                 ListViewItem item = items[i];
 
                 if (checkHosting && item.listView != null) {
-                    throw new ArgumentException(SR.GetString(SR.OnlyOneControl, item.Text), "item");
+                    throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text), "item");
                 }
 
                 // create an ID..
@@ -3950,7 +3950,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (-1 == insertIndex) {
-                        throw new InvalidOperationException(SR.GetString(SR.ListViewAddItemFailed));
+                        throw new InvalidOperationException(SR.ListViewAddItemFailed);
                     }
 
                     // add all sub items
@@ -4667,27 +4667,27 @@ namespace System.Windows.Forms {
             {
                 if (startIndex < 0 || startIndex >= this.VirtualListSize)
                 {
-                    throw new ArgumentOutOfRangeException("startIndex", SR.GetString(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("startIndex", string.Format(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (endIndex < 0 || endIndex >= this.VirtualListSize)
                 {
-                    throw new ArgumentOutOfRangeException("endIndex", SR.GetString(SR.InvalidArgument, "endIndex", (endIndex).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("endIndex", string.Format(SR.InvalidArgument, "endIndex", (endIndex).ToString(CultureInfo.CurrentCulture)));
                 }
             }
             else
             {
                 if (startIndex < 0 || startIndex >= this.Items.Count)
                 {
-                    throw new ArgumentOutOfRangeException("startIndex", SR.GetString(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("startIndex", string.Format(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (endIndex < 0 || endIndex >= this.Items.Count)
                 {
-                    throw new ArgumentOutOfRangeException("endIndex", SR.GetString(SR.InvalidArgument, "endIndex", (endIndex).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("endIndex", string.Format(SR.InvalidArgument, "endIndex", (endIndex).ToString(CultureInfo.CurrentCulture)));
                 }
             }
             if (startIndex > endIndex)
             {
-                throw new ArgumentException(SR.GetString(SR.ListViewStartIndexCannotBeLargerThanEndIndex));
+                throw new ArgumentException(SR.ListViewStartIndexCannotBeLargerThanEndIndex);
             }
             if (this.IsHandleCreated)
             {
@@ -4895,7 +4895,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (0 == retval)
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewColumnInfoSet));
+                    throw new InvalidOperationException(SR.ListViewColumnInfoSet);
                 // vsw 383220: when running on AMD64 the list view does not invalidate the column header.
                 // So we do it ourselves.
                 InvalidateColumnHeaders();
@@ -4912,7 +4912,7 @@ namespace System.Windows.Forms {
             if ((columnIndex < 0) ||
                 (columnIndex >= 0 && this.columnHeaders == null) ||
                 (columnIndex >= this.columnHeaders.Length)) {
-                throw new ArgumentOutOfRangeException("columnIndex", SR.GetString(SR.InvalidArgument, "columnIndex", (columnIndex).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("columnIndex", string.Format(SR.InvalidArgument, "columnIndex", (columnIndex).ToString(CultureInfo.CurrentCulture)));
             }
 
             //valid values are 0x0 to 0x2
@@ -5045,7 +5045,7 @@ namespace System.Windows.Forms {
 
         internal void SetItemImage(int index, int image) {
             if (index < 0 || ((this.VirtualMode && index >= this.VirtualListSize) || (!this.VirtualMode && index >= itemCount))) {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             if (this.IsHandleCreated) {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
@@ -5058,7 +5058,7 @@ namespace System.Windows.Forms {
 
         internal void SetItemIndentCount(int index, int indentCount) {
             if (index < 0 || ((this.VirtualMode && index >= this.VirtualListSize) || (!this.VirtualMode && index >= itemCount))) {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             if (this.IsHandleCreated) {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
@@ -5073,7 +5073,7 @@ namespace System.Windows.Forms {
             if (VirtualMode)
                 return;
             if (index < 0 || index >= itemCount)
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
@@ -5085,7 +5085,7 @@ namespace System.Windows.Forms {
 
         internal void SetItemState(int index, int state, int mask) {
             if (index < -1 || ((this.VirtualMode && index >= this.VirtualListSize) || (!this.VirtualMode && index >= itemCount))) {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             Debug.Assert(index == -1 || this.IsHandleCreated, "How did we add items without a handle?");
 
@@ -5168,7 +5168,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Sort() {
             if (VirtualMode) {
-                throw new InvalidOperationException(SR.GetString(SR.ListViewSortNotAllowedInVirtualListView));
+                throw new InvalidOperationException(SR.ListViewSortNotAllowedInVirtualListView);
             }
 
             ApplyUpdateCachedItems();
@@ -6037,7 +6037,7 @@ namespace System.Windows.Forms {
                             ListViewItem lvItem = rVI.Item;
                             if (lvItem == null)
                             {
-                                throw new InvalidOperationException(SR.GetString(SR.ListViewVirtualItemRequired));
+                                throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
                             }
 
                             lvItem.SetItemIndex(this, dispInfo.item.iItem);
@@ -6048,7 +6048,7 @@ namespace System.Windows.Forms {
                                 }
                                 else {
                                     if (lvItem.SubItems.Count <= dispInfo.item.iSubItem) {
-                                        throw new InvalidOperationException(SR.GetString(SR.ListViewVirtualModeCantAccessSubItem));
+                                        throw new InvalidOperationException(SR.ListViewVirtualModeCantAccessSubItem);
                                     }
                                     else {
                                         text = lvItem.SubItems[dispInfo.item.iSubItem].Text;            // we want the sub item
@@ -6462,7 +6462,7 @@ namespace System.Windows.Forms {
                 get {
 
                     if (index < 0) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     // Loop through the main collection until we find the right index.
@@ -6481,7 +6481,7 @@ namespace System.Windows.Forms {
                     }
 
                     // Should never get to this point.
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
             }
 
@@ -6662,7 +6662,7 @@ namespace System.Windows.Forms {
             public int Count {
                 get {
                     if (owner.VirtualMode) {
-                        throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                        throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                     }
 
                     return owner.CheckedIndices.Count;
@@ -6689,7 +6689,7 @@ namespace System.Windows.Forms {
             public ListViewItem this[int index] {
                 get {
                     if (owner.VirtualMode) {
-                        throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                        throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                     }
 
                     int itemIndex = owner.CheckedIndices[index];
@@ -6702,7 +6702,7 @@ namespace System.Windows.Forms {
             object IList.this[int index] {
                 get {
                     if (owner.VirtualMode) {
-                        throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                        throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                     }
 
                     return this[index];
@@ -6719,7 +6719,7 @@ namespace System.Windows.Forms {
                public virtual ListViewItem this[string key] {
                     get {
                         if (owner.VirtualMode) {
-                            throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                            throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                         }
 
                          // We do not support null and empty string as valid keys.
@@ -6780,7 +6780,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public bool Contains(ListViewItem item) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
                 if (item != null && item.ListView == owner && item.Checked) {
@@ -6795,7 +6795,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             bool IList.Contains(object item) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
                 if (item is ListViewItem) {
@@ -6812,7 +6812,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual bool ContainsKey(string key) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
                  return IsValidIndex(IndexOfKey(key));
@@ -6824,7 +6824,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public int IndexOf(ListViewItem item) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
                 ListViewItem[] items = ItemArray;
@@ -6842,7 +6842,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual int IndexOfKey(String key) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
                 // Step 0 - Arg validation
@@ -6885,7 +6885,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             int IList.IndexOf(object item) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
                 if (item is ListViewItem) {
@@ -6929,7 +6929,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListView.uex' path='docs/doc[@for="CheckedListViewItemCollection.CopyTo"]/*' />
             public void CopyTo(Array dest, int index) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
                 if (Count > 0) {
@@ -6943,7 +6943,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public IEnumerator GetEnumerator() {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
                 ListViewItem[] items = ItemArray;
@@ -7008,7 +7008,7 @@ namespace System.Windows.Forms {
                                 displayIndex = fidx;
                             }
                             else
-                                throw new InvalidOperationException(SR.GetString(SR.SelectedNotEqualActual));
+                                throw new InvalidOperationException(SR.SelectedNotEqualActual);
                         }
                     }
                     else {
@@ -7030,7 +7030,7 @@ namespace System.Windows.Forms {
                 get {
 
                     if (index < 0 || index >= Count) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     if (owner.IsHandleCreated) {
@@ -7152,7 +7152,7 @@ namespace System.Windows.Forms {
                 }
                 else
                 {
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument, "value", ((value).ToString())));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, "value", ((value).ToString())));
                 }
             }
 
@@ -7178,7 +7178,7 @@ namespace System.Windows.Forms {
                 }
                 else
                 {
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument, "value", ((value).ToString())));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, "value", ((value).ToString())));
                 }
             }
 
@@ -7195,7 +7195,7 @@ namespace System.Windows.Forms {
                 {
                     if (itemIndex < 0 || itemIndex >= this.owner.VirtualListSize)
                     {
-                        throw new ArgumentOutOfRangeException("itemIndex", SR.GetString(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (this.owner.IsHandleCreated)
                     {
@@ -7211,7 +7211,7 @@ namespace System.Windows.Forms {
                 {
                     if (itemIndex < 0 || itemIndex >= this.owner.Items.Count)
                     {
-                        throw new ArgumentOutOfRangeException("itemIndex", SR.GetString(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
                     }
                     this.owner.Items[itemIndex].Selected = true;
                     return this.Count;
@@ -7259,7 +7259,7 @@ namespace System.Windows.Forms {
                 {
                     if (itemIndex < 0 || itemIndex >= this.owner.VirtualListSize)
                     {
-                        throw new ArgumentOutOfRangeException("itemIndex", SR.GetString(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (this.owner.IsHandleCreated)
                     {
@@ -7270,7 +7270,7 @@ namespace System.Windows.Forms {
                 {
                     if (itemIndex < 0 || itemIndex >= this.owner.Items.Count)
                     {
-                        throw new ArgumentOutOfRangeException("itemIndex", SR.GetString(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
                     }
                     this.owner.Items[itemIndex].Selected = false;
                 }
@@ -7316,7 +7316,7 @@ namespace System.Windows.Forms {
                                 displayIndex = fidx;
                             }
                             else
-                                throw new InvalidOperationException(SR.GetString(SR.SelectedNotEqualActual));
+                                throw new InvalidOperationException(SR.SelectedNotEqualActual);
                         }
 
                         return lvitems;
@@ -7345,7 +7345,7 @@ namespace System.Windows.Forms {
             public int Count {
                 get {
                     if (owner.VirtualMode) {
-                        throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                        throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                     }
 
                     if (owner.IsHandleCreated) {
@@ -7368,11 +7368,11 @@ namespace System.Windows.Forms {
                 get {
 
                     if (owner.VirtualMode) {
-                        throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                        throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                     }
 
                     if (index < 0 || index >= Count) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     if (owner.IsHandleCreated) {
@@ -7402,7 +7402,7 @@ namespace System.Windows.Forms {
             public virtual ListViewItem this[string key] {
                 get {
                     if (owner.VirtualMode) {
-                        throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                        throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                     }
 
                     // We do not support null and empty string as valid keys.
@@ -7427,7 +7427,7 @@ namespace System.Windows.Forms {
             object IList.this[int index] {
                 get {
                     if (owner.VirtualMode) {
-                        throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                        throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                     }
 
                     return this[index];
@@ -7515,7 +7515,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void Clear() {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
                 ListViewItem[] items = SelectedItemArray;
@@ -7530,7 +7530,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual bool ContainsKey(string key) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
                 return IsValidIndex(IndexOfKey(key));
@@ -7542,7 +7542,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public bool Contains(ListViewItem item) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
                 return (IndexOf(item) != -1);
@@ -7552,7 +7552,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             bool IList.Contains(object item) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
                 if (item is ListViewItem) {
@@ -7569,7 +7569,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void CopyTo(Array dest, int index) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
                 if (Count > 0) {
@@ -7583,7 +7583,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public IEnumerator GetEnumerator() {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
                 ListViewItem[] items = SelectedItemArray;
@@ -7601,7 +7601,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public int IndexOf(ListViewItem item) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
                 ListViewItem[] items = SelectedItemArray;
@@ -7617,7 +7617,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             int IList.IndexOf(object item) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
                 if (item is ListViewItem) {
@@ -7634,7 +7634,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual int  IndexOfKey(String key) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
                 // Step 0 - Arg validation
@@ -7689,7 +7689,7 @@ namespace System.Windows.Forms {
             public virtual ColumnHeader this[int index] {
                 get {
                     if (owner.columnHeaders == null || index < 0 || index >= owner.columnHeaders.Length)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     return owner.columnHeaders[index];
                 }
             }
@@ -7971,7 +7971,7 @@ namespace System.Windows.Forms {
                     return Add((ColumnHeader)value);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ColumnHeaderCollectionInvalidArgument));
+                    throw new ArgumentException(SR.ColumnHeaderCollectionInvalidArgument);
                 }
             }
 
@@ -8066,7 +8066,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void Insert(int index, ColumnHeader value) {
                 if (index < 0 || index > Count) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
                 owner.InsertColumn(index, value);
             }
@@ -8172,7 +8172,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= owner.columnHeaders.Length)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                 int w = owner.columnHeaders[index].Width; // Update width before detaching from ListView
 
@@ -8181,7 +8181,7 @@ namespace System.Windows.Forms {
                     int retval = unchecked( (int) (long)owner.SendMessage(NativeMethods.LVM_DELETECOLUMN, index, 0));
 
                     if (0 == retval)
-                        throw new ArgumentException(SR.GetString(SR.InvalidArgument,
+                        throw new ArgumentException(string.Format(SR.InvalidArgument,
                                                                   "index",
                                                                   (index).ToString(CultureInfo.CurrentCulture)));
                 }
@@ -8366,14 +8366,14 @@ namespace System.Windows.Forms {
             public virtual ListViewItem this[int index] {
                 get {
                     if (index < 0 || index >= InnerList.Count) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     return InnerList[index];
                 }
                 set {
                     if (index < 0 || index >= InnerList.Count) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     InnerList[index] = value;
@@ -8631,7 +8631,7 @@ namespace System.Windows.Forms {
             public IEnumerator GetEnumerator() {
                 if (this.InnerList.OwnerIsVirtualListView && !this.InnerList.OwnerIsDesignMode) {
                     // Throw the exception only at runtime.
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantGetEnumeratorInVirtualMode));
+                    throw new InvalidOperationException(SR.ListViewCantGetEnumeratorInVirtualMode);
                 }
                 return InnerList.GetEnumerator();
             }
@@ -8705,7 +8705,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public ListViewItem Insert(int index, ListViewItem item) {
                 if (index < 0 || index > Count) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
                 InnerList.Insert(index, item);
                 return item;
@@ -8784,7 +8784,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= Count) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 InnerList.RemoveAt(index);
@@ -8860,7 +8860,7 @@ namespace System.Windows.Forms {
                     }
                     else {
                         if (displayIndex < 0 || displayIndex >= owner.itemCount)
-                            throw new ArgumentOutOfRangeException("displayIndex", SR.GetString(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
+                            throw new ArgumentOutOfRangeException("displayIndex", string.Format(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
 
                         if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed) {
                             Debug.Assert(owner.listItemsArray == null, "listItemsArray not null, even though handle created");
@@ -8875,11 +8875,11 @@ namespace System.Windows.Forms {
                 set {
                     owner.ApplyUpdateCachedItems();
                     if (owner.VirtualMode) {
-                        throw new InvalidOperationException(SR.GetString(SR.ListViewCantModifyTheItemCollInAVirtualListView));
+                        throw new InvalidOperationException(SR.ListViewCantModifyTheItemCollInAVirtualListView);
                     }
 
                     if (displayIndex < 0 || displayIndex >= owner.itemCount)
-                        throw new ArgumentOutOfRangeException("displayIndex", SR.GetString(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("displayIndex", string.Format(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
 
                     if (this.owner.ExpectingMouseUp) {
                         this.owner.ItemCollectionChangedInMouseDown = true;
@@ -8892,7 +8892,7 @@ namespace System.Windows.Forms {
 
             public ListViewItem Add(ListViewItem value) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAddItemsToAVirtualListView));
+                    throw new InvalidOperationException(SR.ListViewCantAddItemsToAVirtualListView);
                 } else {
                     Debug.Assert(!this.owner.FlipViewToLargeIconAndSmallIcon || this.Count == 0, "the FlipView... bit is turned off after adding 1 item.");
 
@@ -8921,7 +8921,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAddItemsToAVirtualListView));
+                    throw new InvalidOperationException(SR.ListViewCantAddItemsToAVirtualListView);
                 }
 
                 IComparer comparer = owner.listItemSorter;
@@ -9083,11 +9083,11 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index > count) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantAddItemsToAVirtualListView));
+                    throw new InvalidOperationException(SR.ListViewCantAddItemsToAVirtualListView);
                 }
 
                 Debug.Assert(!this.owner.FlipViewToLargeIconAndSmallIcon || this.Count == 0, "the FlipView... bit is turned off after adding 1 item.");
@@ -9126,7 +9126,7 @@ namespace System.Windows.Forms {
                 Debug.Assert(!this.owner.FlipViewToLargeIconAndSmallIcon || this.Count == 0, "the FlipView... bit is turned off after adding 1 item.");
 
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantRemoveItemsFromAVirtualListView));
+                    throw new InvalidOperationException(SR.ListViewCantRemoveItemsFromAVirtualListView);
                 }
             
                 if (index != -1) {
@@ -9136,11 +9136,11 @@ namespace System.Windows.Forms {
 
             public void RemoveAt(int index) {
                 if (owner.VirtualMode) {
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewCantRemoveItemsFromAVirtualListView));
+                    throw new InvalidOperationException(SR.ListViewCantRemoveItemsFromAVirtualListView);
                 }
 
                 if (index < 0 || index >= owner.itemCount)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                 Debug.Assert(!this.owner.FlipViewToLargeIconAndSmallIcon || this.Count == 0, "the FlipView... bit is turned off after adding 1 item.");
                 
@@ -9158,7 +9158,7 @@ namespace System.Windows.Forms {
                     int retval = unchecked( (int) (long)owner.SendMessage(NativeMethods.LVM_DELETEITEM, index, 0));
 
                     if (0 == retval)
-                        throw new ArgumentException(SR.GetString(SR.InvalidArgument,
+                        throw new ArgumentException(string.Format(SR.InvalidArgument,
                                                                   "index",
                                                                   (index).ToString(CultureInfo.CurrentCulture)));
                 }
@@ -9230,11 +9230,11 @@ namespace System.Windows.Forms {
                 if (propertyID == NativeMethods.UIA_ItemStatusPropertyId) {
                     switch (owner.Sorting) {
                         case SortOrder.None:
-                            return SR.GetString(SR.NotSortedAccessibleStatus);
+                            return SR.NotSortedAccessibleStatus;
                         case SortOrder.Ascending:
-                            return SR.GetString(SR.SortedAscendingAccessibleStatus);
+                            return SR.SortedAscendingAccessibleStatus;
                         case SortOrder.Descending:
-                            return SR.GetString(SR.SortedDescendingAccessibleStatus);
+                            return SR.SortedDescendingAccessibleStatus;
                     }
                 }
 

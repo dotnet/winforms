@@ -213,7 +213,7 @@ namespace System.Windows.Forms
                 {
                     if (ex.ErrorCode == unchecked((int)0x800a0258))
                     {
-                        throw new NotSupportedException(SR.GetString(SR.HtmlElementPropertyNotSupported));
+                        throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
                     }
                     throw;
                 }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
                 {
                     if (ex.ErrorCode == unchecked((int)0x800a0258))
                     {
-                        throw new NotSupportedException(SR.GetString(SR.HtmlElementPropertyNotSupported));
+                        throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
                     }
                     throw;
                 }
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
                 {
                     if (ex.ErrorCode == unchecked((int)0x800a0258))
                     {
-                        throw new NotSupportedException(SR.GetString(SR.HtmlElementPropertyNotSupported));
+                        throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
                     }
                     throw;
                 }
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
                 {
                     if (ex.ErrorCode == unchecked((int)0x800a0258))
                     {
-                        throw new NotSupportedException(SR.GetString(SR.HtmlElementPropertyNotSupported));
+                        throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
                     }
                     throw;
                 }
@@ -541,7 +541,7 @@ namespace System.Windows.Forms
             {
                 if (ex.ErrorCode == unchecked((int)0x800a083e))
                 {
-                    throw new NotSupportedException(SR.GetString(SR.HtmlElementMethodNotSupported));
+                    throw new NotSupportedException(SR.HtmlElementMethodNotSupported);
                 }
                 throw;
             }
@@ -693,7 +693,7 @@ namespace System.Windows.Forms
             {
                 if (comException.ErrorCode == unchecked((int)0x80020009))
                 {
-                    throw new NotSupportedException(SR.GetString(SR.HtmlElementAttributeNotSupported));
+                    throw new NotSupportedException(SR.HtmlElementAttributeNotSupported);
                 }
                 throw;
             }

@@ -130,9 +130,9 @@ namespace System.Windows.Forms {
             if (dataBinding == null)
                 throw new ArgumentNullException("dataBinding");
             if (dataBinding.BindableComponent == control)
-                throw new ArgumentException(SR.GetString(SR.BindingsCollectionAdd1));
+                throw new ArgumentException(SR.BindingsCollectionAdd1);
             if (dataBinding.BindableComponent != null)
-                throw new ArgumentException(SR.GetString(SR.BindingsCollectionAdd2));
+                throw new ArgumentException(SR.BindingsCollectionAdd2);
 
             // important to set prop first for error checking.
             dataBinding.SetBindableComponent(control);
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
             for (int i = 0; i < Count; i++) {
                 if (binding != this[i] && this[i].PropertyName.Length > 0 &&
                     (String.Compare(binding.PropertyName, this[i].PropertyName, false, CultureInfo.InvariantCulture) == 0)) {
-                    throw new ArgumentException(SR.GetString(SR.BindingsCollectionDup), "binding");
+                    throw new ArgumentException(SR.BindingsCollectionDup, "binding");
                 }
             }
         }
@@ -217,7 +217,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void RemoveCore(Binding dataBinding) {
             if (dataBinding.BindableComponent != control)
-                throw new ArgumentException(SR.GetString(SR.BindingsCollectionForeign));
+                throw new ArgumentException(SR.BindingsCollectionForeign);
             dataBinding.SetBindableComponent(null);
             base.RemoveCore(dataBinding);
         }

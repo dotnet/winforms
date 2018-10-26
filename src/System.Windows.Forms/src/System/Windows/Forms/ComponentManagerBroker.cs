@@ -450,7 +450,7 @@ namespace System.Windows.Forms {
                 _nextComponentId++;
                 if (_nextComponentId == int.MaxValue) {
                     if (outofMemory) {
-                        throw new InvalidOperationException(SR.GetString(SR.ComponentManagerProxyOutOfMemory));
+                        throw new InvalidOperationException(SR.ComponentManagerProxyOutOfMemory);
                     }
                     outofMemory = true;
                     _nextComponentId = 1;

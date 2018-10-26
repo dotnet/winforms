@@ -506,7 +506,7 @@ namespace System.Windows.Forms {
                         Renderer = CreateRenderer(value);
                         break;
                     case ToolStripManagerRenderMode.Custom:
-                        throw new NotSupportedException(SR.GetString(SR.ToolStripRenderModeUseRendererPropertyInstead));
+                        throw new NotSupportedException(SR.ToolStripRenderModeUseRendererPropertyInstead);
                 }
             }
         }
@@ -1837,7 +1837,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("targetToolStrip");
             }
             if (targetToolStrip == sourceToolStrip) {
-                throw new ArgumentException(SR.GetString(SR.ToolStripMergeImpossibleIdentical));
+                throw new ArgumentException(SR.ToolStripMergeImpossibleIdentical);
             }
 
             // we only do this if the source and target toolstrips are the same
@@ -2022,7 +2022,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("targetToolStrip");
             }
             if (targetToolStrip == sourceToolStrip) {
-                throw new ArgumentException(SR.GetString(SR.ToolStripMergeImpossibleIdentical));
+                throw new ArgumentException(SR.ToolStripMergeImpossibleIdentical);
             }
             bool foundToolStrip = false;
 

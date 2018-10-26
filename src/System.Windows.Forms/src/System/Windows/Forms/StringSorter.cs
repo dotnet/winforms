@@ -375,7 +375,7 @@ namespace System.Windows.Forms {
             //
             if ((items == null)
                 || ((keys != null) && (keys.Length != items.Length)))
-                throw new ArgumentException(SR.GetString(SR.ArraysNotSameSize,
+                throw new ArgumentException(string.Format(SR.ArraysNotSameSize,
                                                                    "keys",
                                                                    "items"));
             if (count > 1) {

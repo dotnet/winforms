@@ -47,7 +47,7 @@ namespace System.Windows.Forms
             {
                 if (value != null && !(value is System.Windows.Forms.DataGridViewButtonCell))
                 {
-                    throw new InvalidCastException(SR.GetString(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewButtonCell"));
+                    throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewButtonCell"));
                 }
                 base.CellTemplate = value;
             }
@@ -56,8 +56,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.DefaultCellStyle"]/*' />
         [
             Browsable(true),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_ColumnDefaultCellStyleDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
@@ -74,8 +74,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.FlatStyle"]/*' />
         [
             DefaultValue(FlatStyle.Standard),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_ButtonColumnFlatStyleDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_ButtonColumnFlatStyleDescr))
         ]
         public FlatStyle FlatStyle
         {
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewButtonCell) this.CellTemplate).FlatStyle;
             }
@@ -114,8 +114,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.Text"]/*' />
         [
             DefaultValue(null),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_ButtonColumnTextDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_ButtonColumnTextDescr))
         ]
         public string Text
         {
@@ -158,8 +158,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.UseColumnTextForButtonValue"]/*' />
         [
             DefaultValue(false),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.DataGridView_ButtonColumnUseColumnTextForButtonValueDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.DataGridView_ButtonColumnUseColumnTextForButtonValueDescr))
         ]
         public bool UseColumnTextForButtonValue
         {
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewButtonCell)this.CellTemplate).UseColumnTextForButtonValue;
             }

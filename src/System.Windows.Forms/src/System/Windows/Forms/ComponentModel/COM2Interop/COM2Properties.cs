@@ -285,7 +285,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         handler.SetupPropertyHandlers(props);
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.COM2BadHandlerType, t.Name, handler.Interface.Name));
+                        throw new ArgumentException(string.Format(SR.COM2BadHandlerType, t.Name, handler.Interface.Name));
                     }
                 }
             }
@@ -299,7 +299,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
            if (props != null) {
 
-                if (Disposed != null) {
+                if (Disposed != null) {
+
                     Disposed(this, EventArgs.Empty);
                 }
             

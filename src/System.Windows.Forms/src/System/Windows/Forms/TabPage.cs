@@ -87,7 +87,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
@@ -108,8 +108,8 @@ namespace System.Windows.Forms {
         ///     will always return a non-null value.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ControlBackColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public override Color BackColor {
             get {
@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
         Localizable (true),
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue (-1),
-        SRDescription (SR.TabItemImageIndexDescr)
+        SRDescription (nameof(SR.TabItemImageIndexDescr))
         ]
         public int ImageIndex {
             get {
@@ -187,7 +187,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException ("ImageIndex", SR.GetString (SR.InvalidLowBoundArgumentEx,  "imageIndex", (value).ToString (CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException ("ImageIndex", string.Format (SR.InvalidLowBoundArgumentEx,  "imageIndex", (value).ToString (CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
                 TabControl parent = ParentInternal as TabControl;
 
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
         Localizable (true),
         DefaultValue (""),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.TabItemImageIndexDescr)
+        SRDescription(nameof(SR.TabItemImageIndexDescr))
         ]
         public string ImageKey {
             get {
@@ -308,8 +308,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [
         DefaultValue (false),
-        SRCategory(SR.CatAppearance),
-        SRDescription (SR.TabItemUseVisualStyleBackColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.TabItemUseVisualStyleBackColorDescr))
         ]
         public bool UseVisualStyleBackColor {
             get {
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue (""),
         Localizable (true),
-        SRDescription (SR.TabItemToolTipTextDescr)
+        SRDescription (nameof(SR.TabItemToolTipTextDescr))
         ]
         public string ToolTipText {
             get {
@@ -528,7 +528,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal override void AssignParent (Control value) {
             if (value != null && !(value is TabControl)) {
-                throw new ArgumentException (SR.GetString (SR.TABCONTROLTabPageNotOnTabControl, value.GetType ().FullName));
+                throw new ArgumentException (string.Format (SR.TABCONTROLTabPageNotOnTabControl, value.GetType ().FullName));
             }
 
             base.AssignParent (value);
@@ -801,7 +801,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public override void Add (Control value) {
                 if (value is TabPage) {
-                    throw new ArgumentException (SR.GetString (SR.TABCONTROLTabPageOnTabPage));
+                    throw new ArgumentException (string.Format (SR.TABCONTROLTabPageOnTabPage));
                 }
 
                 base.Add (value);

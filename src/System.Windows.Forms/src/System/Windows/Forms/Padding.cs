@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
                         return new Padding(values[0], values[1], values[2], values[3]);
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.TextParseFailedFormat,
+                        throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
                                                                   "value",
                                                                   valueStr,
                                                                   "left, top, right, bottom"));

@@ -364,9 +364,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(SR.StatusBarPanelsDescr),
+        SRDescription(nameof(SR.StatusBarPanelsDescr)),
         Localizable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         MergableProperty(false)
         ]
         public StatusBarPanelCollection Panels {
@@ -423,9 +423,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.StatusBarShowPanelsDescr)
+        SRDescription(nameof(SR.StatusBarShowPanelsDescr))
         ]
         public bool ShowPanels {
             get {
@@ -466,9 +466,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
-        SRDescription(SR.StatusBarSizingGripDescr)
+        SRDescription(nameof(SR.StatusBarSizingGripDescr))
         ]
         public bool SizingGrip {
             get {
@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
         ///       Occurs when a visual aspect of an owner-drawn status bar changes.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.StatusBarDrawItem)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.StatusBarDrawItem))]
         public event StatusBarDrawItemEventHandler DrawItem {
             add {
                 Events.AddHandler(EVENT_SBDRAWITEM, value);
@@ -533,7 +533,7 @@ namespace System.Windows.Forms {
         ///       Occurs when a panel on the status bar is clicked.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatMouse), SRDescription(SR.StatusBarOnPanelClickDescr)]
+        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.StatusBarOnPanelClickDescr))]
         public event StatusBarPanelClickEventHandler PanelClick {
             add {
                 Events.AddHandler(EVENT_PANELCLICK, value);
@@ -1231,13 +1231,13 @@ namespace System.Windows.Forms {
                     owner.layoutDirty = true;
 
                     if (value.Parent != null) {
-                        throw new ArgumentException(SR.GetString(SR.ObjectHasParent), "value");
+                        throw new ArgumentException(SR.ObjectHasParent, "value");
                     }
 
                     int length = owner.panels.Count;
 
                     if (index < 0|| index >= length)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                     StatusBarPanel oldPanel = (StatusBarPanel) owner.panels[index];
                     oldPanel.ParentInternal = null;
@@ -1266,7 +1266,7 @@ namespace System.Windows.Forms {
                         this[index] = (StatusBarPanel)value;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.StatusBarBadStatusBarPanel), "value");
+                        throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
                     }
                 }
             }
@@ -1373,7 +1373,7 @@ namespace System.Windows.Forms {
                     return Add((StatusBarPanel)value);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.StatusBarBadStatusBarPanel), "value");
+                    throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
                 }
             }
 
@@ -1490,12 +1490,12 @@ namespace System.Windows.Forms {
 
                 owner.layoutDirty = true;
                 if (value.Parent != owner && value.Parent != null)
-                    throw new ArgumentException(SR.GetString(SR.ObjectHasParent), "value");
+                    throw new ArgumentException(SR.ObjectHasParent, "value");
 
                 int length = owner.panels.Count;
 
                 if (index < 0 || index > length)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                 value.ParentInternal = owner;
 
                 switch (value.AutoSize) {
@@ -1520,7 +1520,7 @@ namespace System.Windows.Forms {
                     Insert(index, (StatusBarPanel)value);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.StatusBarBadStatusBarPanel), "value");
+                    throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
                 }
             }
 
@@ -1582,7 +1582,7 @@ namespace System.Windows.Forms {
             public virtual void RemoveAt(int index) {
                 int length = Count;
                 if (index < 0 || index >= length)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                 // clear any tooltip
                 //
@@ -1784,7 +1784,7 @@ namespace System.Windows.Forms {
                         ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(tool));
                     }
                     if (ret == 0) {
-                        throw new InvalidOperationException(SR.GetString(SR.StatusBarAddFailed));
+                        throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
                 }
             }

@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty("Document")]
-    [SRDescription(SR.DescriptionPrintPreviewControl)]
+    [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
     public class PrintPreviewControl : Control {
         Size virtualSize = new Size(1,1);
         Point position = new Point(0,0);
@@ -76,9 +76,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.UseAntiAlias"]/*' />
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.PrintPreviewAntiAliasDescr)
+        SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))
         ]
         public bool UseAntiAlias {
             get {
@@ -97,9 +97,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.PrintPreviewAutoZoomDescr)
+        SRDescription(nameof(SR.PrintPreviewAutoZoomDescr))
         ]
         public bool AutoZoom {
             get { return autoZoom;}
@@ -119,9 +119,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.PrintPreviewDocumentDescr)
+        SRDescription(nameof(SR.PrintPreviewDocumentDescr))
         ]
         public PrintDocument Document {
             get { return document;}
@@ -140,14 +140,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(1),
-        SRCategory(SR.CatLayout),
-        SRDescription(SR.PrintPreviewColumnsDescr)
+        SRCategory(nameof(SR.CatLayout)),
+        SRDescription(nameof(SR.PrintPreviewColumnsDescr))
         ]
         public int Columns {
             get { return columns;}
             set {
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException("Columns", SR.GetString(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("Columns", string.Format(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 columns = value;
@@ -180,10 +180,10 @@ namespace System.Windows.Forms {
         /// </devdoc>
 
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlWithScrollbarsPositionDescr)
+        SRDescription(nameof(SR.ControlWithScrollbarsPositionDescr))
         ]
         private Point Position {
             get { return position;}
@@ -201,15 +201,15 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(1),
-        SRDescription(SR.PrintPreviewRowsDescr),
-        SRCategory(SR.CatBehavior)
+        SRDescription(nameof(SR.PrintPreviewRowsDescr)),
+        SRCategory(nameof(SR.CatBehavior))
         ]
         public int Rows {
             get { return rows;}
             set {
                 
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException("Rows", SR.GetString(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("Rows", string.Format(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 rows = value;
@@ -224,10 +224,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         AmbientValue(RightToLeft.Inherit),
-        SRDescription(SR.ControlRightToLeftDescr)
+        SRDescription(nameof(SR.ControlRightToLeftDescr))
         ]
         public override RightToLeft RightToLeft {
             get {
@@ -275,8 +275,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(0),
-        SRDescription(SR.PrintPreviewStartPageDescr),
-        SRCategory(SR.CatBehavior)
+        SRDescription(nameof(SR.PrintPreviewStartPageDescr)),
+        SRCategory(nameof(SR.CatBehavior))
         ]
         public int StartPage {
             get { 
@@ -290,7 +290,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0 ) {
-                    throw new ArgumentOutOfRangeException("StartPage", SR.GetString(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("StartPage", string.Format(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 int oldValue = StartPage;
                 startPage = value;
@@ -307,7 +307,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.RadioButtonOnStartPageChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
         public event EventHandler StartPageChanged {
             add {
                 Events.AddHandler(EVENT_STARTPAGECHANGED, value);
@@ -322,10 +322,10 @@ namespace System.Windows.Forms {
         ///     How big the control would be if the screen was infinitely large.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlWithScrollbarsVirtualSizeDescr)
+        SRDescription(nameof(SR.ControlWithScrollbarsVirtualSizeDescr))
         ]
         private Size VirtualSize {
             get { return virtualSize;}
@@ -342,15 +342,15 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.PrintPreviewZoomDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.PrintPreviewZoomDescr)),
         DefaultValue(DefaultZoom)
         ]
         public double Zoom {
             get { return zoom;}
             set {
                 if (value <= 0)
-                    throw new ArgumentException(SR.GetString(SR.PrintPreviewControlZoomNegative));
+                    throw new ArgumentException(SR.PrintPreviewControlZoomNegative);
                 autoZoom = false;
                 zoom = value;
                 InvalidateLayout();
@@ -456,7 +456,7 @@ namespace System.Windows.Forms {
                 PreviewPrintController previewController = new PreviewPrintController();
                 previewController.UseAntiAlias = UseAntiAlias;
                 document.PrintController = new PrintControllerWithStatusDialog(previewController, 
-                                                                               SR.GetString(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
+                                                                               string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
 
                 // Want to make sure we've reverted any security asserts before we call Print -- that calls into user code
                 document.Print();
@@ -550,10 +550,10 @@ namespace System.Windows.Forms {
                         SolidBrush brush = new SolidBrush(ForeColor);
                         try {
                             if (exceptionPrinting) {
-                                pevent.Graphics.DrawString(SR.GetString(SR.PrintPreviewExceptionPrinting), Font, brush, ClientRectangle, format);
+                                pevent.Graphics.DrawString(SR.PrintPreviewExceptionPrinting, Font, brush, ClientRectangle, format);
                             }
                             else {
-                                pevent.Graphics.DrawString(SR.GetString(SR.PrintPreviewNoPages), Font, brush, ClientRectangle, format);
+                                pevent.Graphics.DrawString(SR.PrintPreviewNoPages, Font, brush, ClientRectangle, format);
                             }
                         }
                         finally {

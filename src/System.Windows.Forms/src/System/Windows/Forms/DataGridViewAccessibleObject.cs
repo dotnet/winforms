@@ -311,11 +311,11 @@ namespace System.Windows.Forms
                                 switch (owner.SortOrder)
                                 {
                                     case SortOrder.None:
-                                        return SR.GetString(SR.NotSortedAccessibleStatus);
+                                        return SR.NotSortedAccessibleStatus;
                                     case SortOrder.Ascending:
-                                        return SR.GetString(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
+                                        return string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                                     case SortOrder.Descending:
-                                        return SR.GetString(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
+                                        return string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                                 }
                             }
 
@@ -557,7 +557,7 @@ namespace System.Windows.Forms
                 switch (propertyId)
                 {
                     case NativeMethods.UIA_NamePropertyId:
-                        return SR.GetString(SR.DataGridView_AccEditingPanelAccName);
+                        return string.Format(SR.DataGridView_AccEditingPanelAccName);
                     case NativeMethods.UIA_ControlTypePropertyId:
                         return NativeMethods.UIA_PaneControlTypeId;
                     case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
@@ -580,7 +580,7 @@ namespace System.Windows.Forms
                     case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
                         return true;
                     case NativeMethods.UIA_ProviderDescriptionPropertyId:
-                        return SR.GetString(SR.DataGridViewEditingPanelUiaProviderDescription);
+                        return SR.DataGridViewEditingPanelUiaProviderDescription;
                 }
 
                 return base.GetPropertyValue(propertyId);

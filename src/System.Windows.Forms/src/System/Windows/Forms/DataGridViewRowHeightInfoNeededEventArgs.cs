@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 }
                 if (value > DataGridViewBand.maxBandThickness)
                 {
-                    throw new ArgumentOutOfRangeException("Height", SR.GetString(SR.InvalidHighBoundArgumentEx, "Height", (value).ToString(CultureInfo.CurrentCulture), (DataGridViewBand.maxBandThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("Height", string.Format(SR.InvalidHighBoundArgumentEx, "Height", (value).ToString(CultureInfo.CurrentCulture), (DataGridViewBand.maxBandThickness).ToString(CultureInfo.CurrentCulture)));
                 }
                 this.height = value;
             }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             {
                 if (value < DataGridViewBand.minBandThickness)
                 {
-                    throw new ArgumentOutOfRangeException("MinimumHeight", value, SR.GetString(SR.DataGridViewBand_MinimumHeightSmallerThanOne, (DataGridViewBand.minBandThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("MinimumHeight", value, string.Format(SR.DataGridViewBand_MinimumHeightSmallerThanOne, (DataGridViewBand.minBandThickness).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.height < value)
                 {
