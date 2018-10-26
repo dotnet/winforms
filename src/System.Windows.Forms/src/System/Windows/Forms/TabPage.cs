@@ -187,7 +187,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException ("ImageIndex", SR.GetString (SR.InvalidLowBoundArgumentEx,  "imageIndex", (value).ToString (CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException ("ImageIndex", string.Format (SR.InvalidLowBoundArgumentEx,  "imageIndex", (value).ToString (CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
                 TabControl parent = ParentInternal as TabControl;
 
@@ -528,7 +528,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal override void AssignParent (Control value) {
             if (value != null && !(value is TabControl)) {
-                throw new ArgumentException (SR.GetString (SR.TABCONTROLTabPageNotOnTabControl, value.GetType ().FullName));
+                throw new ArgumentException (string.Format (SR.TABCONTROLTabPageNotOnTabControl, value.GetType ().FullName));
             }
 
             base.AssignParent (value);
@@ -801,7 +801,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public override void Add (Control value) {
                 if (value is TabPage) {
-                    throw new ArgumentException (SR.GetString (SR.TABCONTROLTabPageOnTabPage));
+                    throw new ArgumentException (string.Format (SR.TABCONTROLTabPageOnTabPage));
                 }
 
                 base.Add (value);

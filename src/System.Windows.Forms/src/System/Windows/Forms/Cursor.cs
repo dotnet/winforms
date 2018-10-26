@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
         public Cursor(IntPtr handle) {
             IntSecurity.UnmanagedCode.Demand();
             if (handle == IntPtr.Zero) {
-                throw new ArgumentException(SR.GetString(SR.InvalidGDIHandle, (typeof(Cursor)).Name));
+                throw new ArgumentException(string.Format(SR.InvalidGDIHandle, (typeof(Cursor)).Name));
             }
 
             this.handle = handle;
@@ -240,7 +240,7 @@ namespace System.Windows.Forms {
         public IntPtr Handle {
             get {
                 if (handle == IntPtr.Zero) {
-                    throw new ObjectDisposedException(SR.GetString(SR.ObjectDisposed, GetType().Name));
+                    throw new ObjectDisposedException(string.Format(SR.ObjectDisposed, GetType().Name));
                 }
                 return handle;
             }
@@ -640,7 +640,7 @@ namespace System.Windows.Forms {
                         ownHandle = true;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.InvalidPictureType,
+                        throw new ArgumentException(string.Format(SR.InvalidPictureType,
                                                           "picture",
                                                           "Cursor"), "picture");
                     }

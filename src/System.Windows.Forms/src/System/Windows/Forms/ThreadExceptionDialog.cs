@@ -163,10 +163,10 @@ namespace System.Windows.Forms {
                 messageText = t.GetType().Name;
             }
             if (t is SecurityException) {
-                messageText = SR.GetString(messageRes, t.GetType().Name, Trim(messageText));
+                messageText = string.Format(messageRes, t.GetType().Name, Trim(messageText));
             }
             else {
-                messageText = SR.GetString(messageRes, Trim(messageText));
+                messageText = string.Format(messageRes, Trim(messageText));
             }
 
             StringBuilder detailsTextBuilder = new StringBuilder();
@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
                     }
                     catch(System.IO.FileNotFoundException){
                     }
-                    detailsTextBuilder.Append(SR.GetString(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
+                    detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
                     detailsTextBuilder.Append(separator);
                 }
             }
@@ -260,7 +260,7 @@ namespace System.Windows.Forms {
                     Text = SR.ExDlgCaption;
                 }
                 else {
-                    Text = SR.GetString(SR.ExDlgCaption2, activeForm.Text);
+                    Text = string.Format(SR.ExDlgCaption2, activeForm.Text);
                 }
             }
             finally {

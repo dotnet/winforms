@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Design {
         /*
         private void CreateNewTransaction() {
             IDesignerHost host = component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            transaction = host.CreateTransaction(SR.GetString(SR.ComponentEditorFormEditTransaction, component.Site.Name));            
+            transaction = host.CreateTransaction(string.Format(SR.ComponentEditorFormEditTransaction, component.Site.Name));            
         }
         */
 
@@ -255,7 +255,7 @@ namespace System.Windows.Forms.Design {
             string caption = String.Empty;
             ISite site = component.Site;
             if (site != null) {
-                caption = SR.GetString(SR.ComponentEditorFormProperties, site.Name);
+                caption = string.Format(SR.ComponentEditorFormProperties, site.Name);
             }
             else {
                 caption = SR.ComponentEditorFormPropertiesNoName;
@@ -554,7 +554,7 @@ namespace System.Windows.Forms.Design {
                 }
                 catch (TargetInvocationException e) {
                     Debug.Fail(e.ToString());
-                    throw new TargetInvocationException(SR.GetString(SR.ExceptionCreatingCompEditorControl, e.ToString()), e.InnerException);
+                    throw new TargetInvocationException(string.Format(SR.ExceptionCreatingCompEditorControl, e.ToString()), e.InnerException);
                 }
 
                 pageControl.SetSite(this);

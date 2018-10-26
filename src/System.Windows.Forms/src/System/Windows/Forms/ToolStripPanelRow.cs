@@ -2037,7 +2037,7 @@ namespace System.Windows.Forms {
                     throw new ArgumentNullException("value");
                 }
                 if (control == null) {
-                    throw new NotSupportedException(SR.GetString(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));                 
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));                 
                 }
 
                 int index = InnerList.Add(control.ToolStripPanelCell);
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms {
                 }
                 ISupportToolStripPanel control = value as ISupportToolStripPanel;
                 if (control == null) {
-                    throw new NotSupportedException(SR.GetString(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
                 }
 
                 InnerList.Insert(index, control.ToolStripPanelCell);

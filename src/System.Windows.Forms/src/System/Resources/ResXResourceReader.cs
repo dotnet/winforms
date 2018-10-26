@@ -402,7 +402,7 @@ namespace System.Resources {
                 }
                 catch (SerializationException se) {
                     Point pt = GetPosition(reader);
-                    string newMessage = SR.GetString(SR.SerializationException, reader[ResXResourceWriter.TypeStr], pt.Y, pt.X, se.Message);
+                    string newMessage = string.Format(SR.SerializationException, reader[ResXResourceWriter.TypeStr], pt.Y, pt.X, se.Message);
                     XmlException xml = new XmlException(newMessage, se, pt.Y, pt.X);
                     SerializationException newSe = new SerializationException(newMessage, xml);
 
@@ -410,14 +410,14 @@ namespace System.Resources {
                 }
                 catch (TargetInvocationException tie) {
                     Point pt = GetPosition(reader);
-                    string newMessage = SR.GetString(SR.InvocationException, reader[ResXResourceWriter.TypeStr], pt.Y, pt.X, tie.InnerException.Message);
+                    string newMessage = string.Format(SR.InvocationException, reader[ResXResourceWriter.TypeStr], pt.Y, pt.X, tie.InnerException.Message);
                     XmlException xml = new XmlException(newMessage, tie.InnerException, pt.Y, pt.X);
                     TargetInvocationException newTie = new TargetInvocationException(newMessage, xml);
 
                     throw newTie;
                 }
                 catch (XmlException e) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidResXFile, e.Message), e);
+                    throw new ArgumentException(string.Format(SR.InvalidResXFile, e.Message), e);
                 }
                 catch (Exception e) {
                     if (ClientUtils.IsSecurityOrCriticalException(e)) {
@@ -425,7 +425,7 @@ namespace System.Resources {
                     } else {
                         Point pt = GetPosition(reader);
                         XmlException xmlEx = new XmlException(e.Message, e, pt.Y, pt.X);
-                        throw new ArgumentException(SR.GetString(SR.InvalidResXFile, xmlEx.Message), xmlEx);
+                        throw new ArgumentException(string.Format(SR.InvalidResXFile, xmlEx.Message), xmlEx);
                     }
                 }
             }
@@ -638,7 +638,7 @@ namespace System.Resources {
             }            
 
             if (nodeInfo.Name==null) {
-                throw new ArgumentException(SR.GetString(SR.InvalidResXResourceNoName, nodeInfo.ValueData));
+                throw new ArgumentException(string.Format(SR.InvalidResXResourceNoName, nodeInfo.ValueData));
             }
 
             ResXDataNode dataNode = new ResXDataNode(nodeInfo, BasePath);

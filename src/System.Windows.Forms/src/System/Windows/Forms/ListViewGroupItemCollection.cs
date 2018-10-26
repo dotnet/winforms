@@ -106,7 +106,7 @@ namespace System.Windows.Forms
                 // Microsoft: maybe we should throw an InvalidOperationException when we add an item from another listView
                 // into this group's collection.
                 // But in a similar situation, ListViewCollection throws an ArgumentException. This is the v1.* behavior
-                throw new ArgumentException(SR.GetString(SR.OnlyOneControl, item.Text), "item");
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text), "item");
             }
         }
         

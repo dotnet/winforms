@@ -5603,7 +5603,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                             // make sure we got what we asked for.
                             //
                             if (!createType.IsInstanceOfType(newValue)) {
-                                throw new InvalidCastException(SR.GetString(SR.PropertyGridViewEditorCreatedInvalidObject, createType));
+                                throw new InvalidCastException(string.Format(SR.PropertyGridViewEditorCreatedInvalidObject, createType));
                             }
 
                             gridView.CommitValue(newValue);

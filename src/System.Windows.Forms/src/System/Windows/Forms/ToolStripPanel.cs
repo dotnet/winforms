@@ -913,7 +913,7 @@ namespace System.Windows.Forms {
 
         public void Join(ToolStrip toolStripToDrag, int row) {
             if (row < 0) {
-                throw new ArgumentOutOfRangeException("row", SR.GetString(SR.IndexOutOfRange, row.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("row", string.Format(SR.IndexOutOfRange, row.ToString(CultureInfo.CurrentCulture)));
             }
 
             Point location = Point.Empty;

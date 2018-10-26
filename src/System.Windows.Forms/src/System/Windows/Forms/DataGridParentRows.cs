@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "Parent Rows BackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Parent Rows BackColor"));
                 if (value != backBrush.Color) {
                     backBrush = new SolidBrush(value);
                     Invalidate();
@@ -221,7 +221,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "Parent Rows ForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Parent Rows ForeColor"));
                 if (value != foreBrush.Color) {
                     foreBrush = new SolidBrush(value);
                     Invalidate();

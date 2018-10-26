@@ -796,7 +796,7 @@ namespace System.Windows.Forms {
             PropertyDescriptor pd = (itemShape == null) ? null : itemShape.Find(propertyName, true);
 
             if (pd == null) {
-                throw new System.ArgumentException(SR.GetString(SR.DataSourceDataMemberPropNotFound, propertyName));
+                throw new System.ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, propertyName));
             }
 
             return (this as IBindingList).Find(pd, key);
@@ -1767,7 +1767,7 @@ namespace System.Windows.Forms {
             }
 
             if (!AllowNewInternal(true)) {
-                throw new InvalidOperationException(SR.GetString(
+                throw new InvalidOperationException(string.Format(
                     SR.BindingSourceBindingListWrapperNeedToSetAllowNew,
                     itemType == null ? "(null)" : itemType.FullName
                     ));
@@ -1805,7 +1805,7 @@ namespace System.Windows.Forms {
 
                 // Throw if we don't know how to create items of the current item type
                 if (this.itemConstructor == null) {
-                    throw new InvalidOperationException(SR.GetString(
+                    throw new InvalidOperationException(string.Format(
                         SR.BindingSourceBindingListWrapperNeedAParameterlessConstructor,
                         itemType == null ? "(null)" : itemType.FullName
                         ));

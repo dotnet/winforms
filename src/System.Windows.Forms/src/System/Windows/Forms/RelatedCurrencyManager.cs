@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
             this.dataField = dataField;
             this.fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
             if (fieldInfo == null || !typeof(IList).IsAssignableFrom(fieldInfo.PropertyType)) {
-                throw new ArgumentException(SR.GetString(SR.RelatedListManagerChild, dataField));
+                throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
             }
             this.finalType = fieldInfo.PropertyType;
 

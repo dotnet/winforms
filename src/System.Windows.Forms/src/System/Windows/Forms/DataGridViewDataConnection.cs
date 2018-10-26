@@ -1338,7 +1338,7 @@ namespace System.Windows.Forms
                                                               false, /*validateCurrentCell*/
                                                               false  /*throughMouseClick*/))
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
                     }
                 }
                 else if (rowIndex < this.owner.Rows.Count)
@@ -1373,7 +1373,7 @@ namespace System.Windows.Forms
                                                                    clearSelection,
                                                                    false /*forceCurrentCellSelection*/)))
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
                     }
                 }
             }

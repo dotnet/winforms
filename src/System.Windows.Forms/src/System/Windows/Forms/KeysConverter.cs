@@ -203,7 +203,7 @@ namespace System.Windows.Forms {
                         
                             // We did not match this key.  Report this as an error too.
                             //
-                            throw new FormatException(SR.GetString(SR.KeysConverterInvalidKeyName, tokens[i]));
+                            throw new FormatException(string.Format(SR.KeysConverterInvalidKeyName, tokens[i]));
                             
                         }
                     }

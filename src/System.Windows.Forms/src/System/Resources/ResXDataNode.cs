@@ -116,7 +116,7 @@ namespace System.Resources {
 
             Type valueType = (value == null) ? typeof(object) : value.GetType();
             if (value != null && !valueType.IsSerializable) {
-                throw new InvalidOperationException(SR.GetString(SR.NotSerializableType, name, valueType.FullName));
+                throw new InvalidOperationException(string.Format(SR.NotSerializableType, name, valueType.FullName));
             } else if (value!= null) {
                 this.typeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, this.typeNameConverter);
             } 
@@ -362,7 +362,7 @@ namespace System.Resources {
             else {
                 Type valueType = (value == null) ? typeof(object) : value.GetType();
                 if (value != null && !valueType.IsSerializable) {
-                    throw new InvalidOperationException(SR.GetString(SR.NotSerializableType, name, valueType.FullName));
+                    throw new InvalidOperationException(string.Format(SR.NotSerializableType, name, valueType.FullName));
                 }
                 TypeConverter tc = TypeDescriptor.GetConverter(valueType);
                 bool toString = tc.CanConvertTo(typeof(string));
@@ -479,7 +479,7 @@ namespace System.Resources {
                             }
                         }
                         else {
-                            string newMessage = SR.GetString(SR.TypeLoadException, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
+                            string newMessage = string.Format(SR.TypeLoadException, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
                             XmlException xml = new XmlException(newMessage, null, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
                             TypeLoadException newTle = new TypeLoadException(newMessage, xml);
 
@@ -507,7 +507,7 @@ namespace System.Resources {
                             try {
                             result = tc.ConvertFromInvariantString(text);
                             } catch (NotSupportedException nse) {
-                                string newMessage = SR.GetString(SR.NotSupported, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X, nse.Message);
+                                string newMessage = string.Format(SR.NotSupported, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X, nse.Message);
                                 XmlException xml = new XmlException(newMessage, nse, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
                                 NotSupportedException newNse = new NotSupportedException(newMessage, xml);
                                 throw newNse;
@@ -519,7 +519,7 @@ namespace System.Resources {
                     }
                 }
                 else {
-                    string newMessage = SR.GetString(SR.TypeLoadException, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
+                    string newMessage = string.Format(SR.TypeLoadException, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
                     XmlException xml = new XmlException(newMessage, null, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
                     TypeLoadException newTle = new TypeLoadException(newMessage, xml);
 
@@ -669,7 +669,7 @@ namespace System.Resources {
                     TypeConverter tc = TypeDescriptor.GetConverter(typeof(ResXFileRef));
                     result = tc.ConvertFrom(fileRef.ToString());
                 } else {
-                    string newMessage = SR.GetString(SR.TypeLoadExceptionShort, FileRefType);
+                    string newMessage = string.Format(SR.TypeLoadExceptionShort, FileRefType);
                     TypeLoadException newTle = new TypeLoadException(newMessage);
                     throw (newTle);
                 }
@@ -1033,7 +1033,7 @@ namespace System.Resources {
             }
 
             if(result == null && throwOnError) {
-                throw new ArgumentException(SR.GetString(SR.InvalidResXNoType, name));
+                throw new ArgumentException(string.Format(SR.InvalidResXNoType, name));
             }
 
             if(result != null) {

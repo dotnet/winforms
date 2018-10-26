@@ -296,7 +296,7 @@ namespace System.Windows.Forms {
                 if (value == null) value = "";
                 if (value != null && !value.Equals(this.text)) {
                     if (value != null && value.Length > 63) {
-                        throw new ArgumentOutOfRangeException("Text", value, SR.GetString(SR.TrayIcon_TextTooLong));
+                        throw new ArgumentOutOfRangeException("Text", value, string.Format(SR.TrayIcon_TextTooLong));
                     }
                     this.text = value;
                     if (added) {
@@ -667,7 +667,7 @@ namespace System.Windows.Forms {
         public void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon) {
 
             if (timeout < 0) {
-               throw new ArgumentOutOfRangeException("timeout", SR.GetString(SR.InvalidArgument, "timeout", (timeout).ToString(CultureInfo.CurrentCulture)));
+               throw new ArgumentOutOfRangeException("timeout", string.Format(SR.InvalidArgument, "timeout", (timeout).ToString(CultureInfo.CurrentCulture)));
             }
 
             if (string.IsNullOrEmpty(tipText))

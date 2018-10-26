@@ -927,23 +927,23 @@ namespace System.Windows.Forms{
             // DataGridTableStyle myTable = this.DataGridTableStyle;
             PropertyDescriptor myPropDesc = this.PropertyDescriptor;
             if (myPropDesc == null) {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridColumnUnbound, HeaderText));
+                throw new InvalidOperationException(string.Format(SR.DataGridColumnUnbound, HeaderText));
             }
 
 #if false
             DataTable myDataTable = myTable.DataTable;
             if (myDataColumn.Table != myDataTable) {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridColumnDataSourceMismatch, Header));
+                throw new InvalidOperationException(string.Format(SR.DataGridColumnDataSourceMismatch, Header));
             }
 
             /* FOR DEMO: Microsoft: DataGridColumnStyle::CheckValidDataSource: make the check better */
             if (((DataView) value.DataSource).Table == null) {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridColumnNoDataTable, Header));
+                throw new InvalidOperationException(string.Format(SR.DataGridColumnNoDataTable, Header));
             }
             else {
                 /* FOR DEMO: Microsoft: DataGridColumnStyle::CheckValidDataSource: make the check better */
                 if (!myTable.DataTable.Equals(((DataView) value.DataSource).Table)) {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridColumnNoDataSource, Header, myTable.DataTable.TableName));
+                    throw new InvalidOperationException(string.Format(SR.DataGridColumnNoDataSource, Header, myTable.DataTable.TableName));
                 }
             }
 #endif // false

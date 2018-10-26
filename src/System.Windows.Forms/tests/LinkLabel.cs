@@ -1,0 +1,24 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using Xunit;
+
+namespace System.Windows.Forms.Tests
+{
+    public class LinkLabelTests
+    {
+        [Fact]
+        public void Constructor()
+        {
+            // act
+            var label = new LinkLabel();
+
+            // assert
+            Assert.NotNull(label);
+            Assert.NotNull(label.LinkArea);
+            Assert.Equal(0, label.LinkArea.Start);
+            Assert.Equal(0, label.LinkArea.Length);
+        }
+    }
+}

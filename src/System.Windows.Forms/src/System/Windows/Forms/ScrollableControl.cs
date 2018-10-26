@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.Width < 0 || value.Height < 0) {
-                    throw new ArgumentOutOfRangeException("AutoScrollMargin", SR.GetString(SR.InvalidArgument, "AutoScrollMargin", value.ToString()));
+                    throw new ArgumentOutOfRangeException("AutoScrollMargin", string.Format(SR.InvalidArgument, "AutoScrollMargin", value.ToString()));
                 }
                 SetAutoScrollMargin(value.Width, value.Height);
             }

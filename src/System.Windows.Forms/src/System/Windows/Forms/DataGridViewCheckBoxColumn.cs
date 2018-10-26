@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             {
                 if (value != null && !(value is System.Windows.Forms.DataGridViewCheckBoxCell))
                 {
-                    throw new InvalidCastException(SR.GetString(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewCheckBoxCell"));
+                    throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewCheckBoxCell"));
                 }
                 base.CellTemplate = value;
             }
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
             {
                 if (this.CheckBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.CheckBoxCellTemplate.FalseValue;
             }
@@ -141,7 +141,7 @@ namespace System.Windows.Forms
             {
                 if (this.CheckBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.CheckBoxCellTemplate.FlatStyle;
             }
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
             {
                 if (this.CheckBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.CheckBoxCellTemplate.IndeterminateValue;
             }
@@ -222,7 +222,7 @@ namespace System.Windows.Forms
             {
                 if (this.CheckBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.CheckBoxCellTemplate.ThreeState;
             }
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
             {
                 if (this.CheckBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.CheckBoxCellTemplate.TrueValue;
             }

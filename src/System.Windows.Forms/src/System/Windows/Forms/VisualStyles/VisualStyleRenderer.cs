@@ -399,7 +399,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
             
             if (imageIndex < 0 || imageIndex >= imageList.Images.Count) {
-                throw new ArgumentOutOfRangeException("imageIndex", SR.GetString(SR.InvalidArgument, "imageIndex", imageIndex.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("imageIndex", string.Format(SR.InvalidArgument, "imageIndex", imageIndex.ToString(CultureInfo.CurrentCulture)));
             }
 
             if (bounds.Width < 0 || bounds.Height < 0) {

@@ -1227,7 +1227,7 @@ namespace System.Windows.Forms
                     if (this.Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
                         this.Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                     {
-                        return SR.GetString(SR.DataGridView_RowHeaderCellAccDefaultAction);
+                        return string.Format(SR.DataGridView_RowHeaderCellAccDefaultAction);
                     }
                     else
                     {
@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms
             {
                 if (this.Owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
                 
                 DataGridViewRowHeaderCell dataGridViewCell = (DataGridViewRowHeaderCell)this.Owner;

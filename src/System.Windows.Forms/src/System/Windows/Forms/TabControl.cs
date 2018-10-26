@@ -570,7 +570,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.Width < 0 || value.Height < 0) {
-                    throw new ArgumentOutOfRangeException("ItemSize", SR.GetString(SR.InvalidArgument, "ItemSize", value.ToString()));
+                    throw new ArgumentOutOfRangeException("ItemSize", string.Format(SR.InvalidArgument, "ItemSize", value.ToString()));
                 }
                 itemSize = value;
                 ApplyItemSize();
@@ -640,7 +640,7 @@ namespace System.Windows.Forms {
                 //do some validation checking here, against min & max GridSize
                 //
                 if ( value.X < 0 || value.Y < 0 )
-                    throw new ArgumentOutOfRangeException("Padding", SR.GetString(SR.InvalidArgument, "Padding", value.ToString()));
+                    throw new ArgumentOutOfRangeException("Padding", string.Format(SR.InvalidArgument, "Padding", value.ToString()));
 
                 if (padding != value) {
                     padding = value;
@@ -729,7 +729,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("SelectedIndex", SR.GetString(SR.InvalidLowBoundArgumentEx, "SelectedIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("SelectedIndex", string.Format(SR.InvalidLowBoundArgumentEx, "SelectedIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (SelectedIndex != value) {
@@ -1199,7 +1199,7 @@ namespace System.Windows.Forms {
         internal TabPage GetTabPage(int index) {
 
             if (index < 0 || index >= tabPageCount) {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             }
             return tabPages[index];
         }
@@ -1236,7 +1236,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public Rectangle GetTabRect(int index) {
             if (index < 0 || (index >= tabPageCount && !tabControlState[TABCONTROLSTATE_getTabRectfromItemSize])) {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             }
             tabControlState[TABCONTROLSTATE_getTabRectfromItemSize] = false ;
             NativeMethods.RECT rect = new NativeMethods.RECT();
@@ -1296,7 +1296,7 @@ namespace System.Windows.Forms {
         private void InsertItem(int index, TabPage tabPage) {
 
             if (index < 0 || ((tabPages != null) && index > tabPageCount))
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             if (tabPage == null)
                 throw new ArgumentNullException("tabPage");
 
@@ -1698,7 +1698,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         internal void RemoveTabPage(int index) {
             if (index < 0 || index >= tabPageCount)
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             tabPageCount--;
             if (index < tabPageCount) {
                 Array.Copy(tabPages, index + 1, tabPages, index, tabPageCount - index);
@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem) {
             if (index < 0 || index >= tabPageCount)
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             if (IsHandleCreated)
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETITEM, index, tcitem);
             // Make the Updated tab page the currently selected tab page
@@ -2730,7 +2730,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public override void Add(Control value) {
                 if (!(value is TabPage)) {
-                    throw new ArgumentException(SR.GetString(SR.TabControlInvalidTabPageType, value.GetType().Name));
+                    throw new ArgumentException(string.Format(SR.TabControlInvalidTabPageType, value.GetType().Name));
                 }
 
                 TabPage tabPage = (TabPage)value;

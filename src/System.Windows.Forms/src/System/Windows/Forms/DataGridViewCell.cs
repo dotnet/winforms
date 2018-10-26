@@ -494,7 +494,7 @@ namespace System.Windows.Forms
                 }
                 if (this.RowIndex == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationOnSharedCell));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
                 }
                 Point ptCurrentCell = this.DataGridView.CurrentCellAddress;
                 return ptCurrentCell.X != -1 &&
@@ -596,7 +596,7 @@ namespace System.Windows.Forms
                 {
                     if (this.RowIndex == -1)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationOnSharedCell));
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
                     }
                     Debug.Assert(this.ColumnIndex >= 0);
                     // When the whole grid is read-only, we ignore the request.
@@ -613,7 +613,7 @@ namespace System.Windows.Forms
                         if (value != this.ReadOnly)
                         {
                             // We do not allow the read-only flag of a cell to be changed before it is added to a row.
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridViewCell_CannotSetReadOnlyState));
+                            throw new InvalidOperationException(string.Format(SR.DataGridViewCell_CannotSetReadOnlyState));
                         }
                     }
                     else
@@ -721,7 +721,7 @@ namespace System.Windows.Forms
                 {
                     if (this.RowIndex == -1)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationOnSharedCell));
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
                     }
                     Debug.Assert(this.ColumnIndex >= 0);
                     this.DataGridView.SetSelectedCellCoreInternal(this.ColumnIndex, this.RowIndex, value); // this may trigger a call to set_SelectedInternal
@@ -729,7 +729,7 @@ namespace System.Windows.Forms
                 else if (value)
                 {
                     // We do not allow the selection of a cell to be set before the row gets added to the dataGridView.
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCell_CannotSetSelectedState));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCell_CannotSetSelectedState));
                 }
             }
         }
@@ -1928,11 +1928,11 @@ namespace System.Windows.Forms
                 Exception exception = null;
                 if (this.FormattedValueType == null)
                 {
-                    exception = new FormatException(SR.GetString(SR.DataGridViewCell_FormattedValueTypeNull));
+                    exception = new FormatException(string.Format(SR.DataGridViewCell_FormattedValueTypeNull));
                 }
                 else
                 {
-                    exception = new FormatException(SR.GetString(SR.DataGridViewCell_FormattedValueHasWrongType));
+                    exception = new FormatException(string.Format(SR.DataGridViewCell_FormattedValueHasWrongType));
                 }
                 DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception,
                     this.ColumnIndex,
@@ -1951,7 +1951,7 @@ namespace System.Windows.Forms
         {
             if (constraintSize.Width < 0 || constraintSize.Height < 0)
             {
-                throw new ArgumentException(SR.GetString(SR.InvalidArgument, "constraintSize", constraintSize.ToString()));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, "constraintSize", constraintSize.ToString()));
             }
             if (constraintSize.Width == 0)
             {
@@ -1972,7 +1972,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument, "constraintSize", constraintSize.ToString()));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, "constraintSize", constraintSize.ToString()));
                 }
             }
         }
@@ -2047,7 +2047,7 @@ namespace System.Windows.Forms
                 Debug.Assert(this.RowIndex == -1);
                 if (rowIndex != -1)
                 {
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.owningRow != null)
                 {
@@ -2072,7 +2072,7 @@ namespace System.Windows.Forms
 
             if (this.DataGridView.Rows.SharedRow(rowIndex) != this.owningRow)
             {
-                throw new ArgumentException(SR.GetString(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
             }
 
             DataGridViewElementStates rowEffectiveState = this.DataGridView.Rows.GetRowState(rowIndex);
@@ -2133,7 +2133,7 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView == null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_CellNeedsDataGridViewForInheritedStyle));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_CellNeedsDataGridViewForInheritedStyle));
             }
             if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
             {
@@ -2621,7 +2621,7 @@ namespace System.Windows.Forms
             }
             if (rowIndex == -1)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidPropertyGetOnSharedCell, "Size"));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedCell, "Size"));
             }
             Debug.Assert(this.owningColumn != null);
             Debug.Assert(this.owningRow != null);
@@ -2814,7 +2814,7 @@ namespace System.Windows.Forms
 
             if (maxWidth <= 0)
             {
-                throw new ArgumentOutOfRangeException("maxWidth", SR.GetString(SR.InvalidLowBoundArgument, "maxWidth", (maxWidth).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("maxWidth", string.Format(SR.InvalidLowBoundArgument, "maxWidth", (maxWidth).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
@@ -2847,7 +2847,7 @@ namespace System.Windows.Forms
 
             if (maxRatio <= 0.0F)
             {
-                throw new ArgumentOutOfRangeException("maxRatio", SR.GetString(SR.InvalidLowBoundArgument, "maxRatio", (maxRatio).ToString(CultureInfo.CurrentCulture), "0.0"));
+                throw new ArgumentOutOfRangeException("maxRatio", string.Format(SR.InvalidLowBoundArgument, "maxRatio", (maxRatio).ToString(CultureInfo.CurrentCulture), "0.0"));
             }
 
             if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
@@ -2918,7 +2918,7 @@ namespace System.Windows.Forms
         {
             if (maxHeight <= 0)
             {
-                throw new ArgumentOutOfRangeException("maxHeight", SR.GetString(SR.InvalidLowBoundArgument, "maxHeight", (maxHeight).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("maxHeight", string.Format(SR.InvalidLowBoundArgument, "maxHeight", (maxHeight).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             Size oneLineSize = DataGridViewCell.MeasureTextSize(graphics, text, font, flags);
@@ -4418,16 +4418,16 @@ namespace System.Windows.Forms
             }
             if (this.FormattedValueType == null)
             {
-                throw new FormatException(SR.GetString(SR.DataGridViewCell_FormattedValueTypeNull));
+                throw new FormatException(string.Format(SR.DataGridViewCell_FormattedValueTypeNull));
             }
             if (valueType == null)
             {
-                throw new FormatException(SR.GetString(SR.DataGridViewCell_ValueTypeNull));
+                throw new FormatException(string.Format(SR.DataGridViewCell_ValueTypeNull));
             }
             if (formattedValue == null ||
                 !this.FormattedValueType.IsAssignableFrom(formattedValue.GetType()))
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridViewCell_FormattedValueHasWrongType), "formattedValue");
+                throw new ArgumentException(string.Format(SR.DataGridViewCell_FormattedValueHasWrongType), "formattedValue");
             }
             return Formatter.ParseObject(formattedValue,
                                          valueType,
@@ -4730,11 +4730,11 @@ namespace System.Windows.Forms
                 {
                     if (this.Owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                     }
                     if (!this.Owner.ReadOnly)
                     {
-                        return SR.GetString(SR.DataGridView_AccCellDefaultAction);
+                        return string.Format(SR.DataGridView_AccCellDefaultAction);
                     }
                     else
                     {
@@ -4764,11 +4764,11 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                     }
                     if (this.owner.OwningColumn != null)
                     {
-                        string name = SR.GetString(SR.DataGridView_AccDataGridViewCellName, this.owner.OwningColumn.HeaderText, this.owner.OwningRow.Index);
+                        string name = string.Format(SR.DataGridView_AccDataGridViewCellName, this.owner.OwningColumn.HeaderText, this.owner.OwningRow.Index);
 
                         if (AccessibilityImprovements.Level3 && owner.OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                         {
@@ -4808,7 +4808,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner != null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerAlreadySet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerAlreadySet));
                     }
                     this.owner = value;
                 }
@@ -4830,7 +4830,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                     }
                     if (this.owner.OwningRow == null)
                     {
@@ -4859,7 +4859,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                     }
 
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable;
@@ -4913,14 +4913,14 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                     }
 
                     object formattedValue = this.owner.FormattedValue;
                     string formattedValueAsString = formattedValue as string;
                     if (formattedValue == null || (formattedValueAsString  != null && String.IsNullOrEmpty(formattedValueAsString)))
                     {
-                        return SR.GetString(SR.DataGridView_AccNullValue);
+                        return string.Format(SR.DataGridView_AccNullValue);
                     }
                     else if (formattedValueAsString != null)
                     {
@@ -4992,7 +4992,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
                 DataGridViewCell dataGridViewCell = (DataGridViewCell)this.Owner;
@@ -5005,7 +5005,7 @@ namespace System.Windows.Forms
 
                 if (dataGridView != null && dataGridViewCell.RowIndex == -1)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationOnSharedCell));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
                 }
 
                 Select(AccessibleSelection.TakeFocus | AccessibleSelection.TakeSelection);
@@ -5042,7 +5042,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
                 if (this.owner.OwningColumn == null)
@@ -5141,7 +5141,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
                 if (this.owner.DataGridView.EditingControl != null &&
@@ -5162,7 +5162,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
                 if (this.owner.DataGridView.EditingControl != null &&
@@ -5195,7 +5195,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
                 if (this.owner.OwningColumn == null || this.owner.OwningRow == null)
@@ -5347,7 +5347,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
@@ -5417,7 +5417,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
                 if (this.owner.OwningColumn == null || this.owner.OwningRow == null)

@@ -21,7 +21,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return SR.GetString(SR.DataGridView_AccSelectedCellsName);
+                    return string.Format(SR.DataGridView_AccSelectedCellsName);
                 }
             }
 

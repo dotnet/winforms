@@ -254,7 +254,7 @@ namespace System.Windows.Forms
             // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
             if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
             {
-                throw new System.Threading.ThreadStateException(SR.GetString(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+                throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
             }
     
             IntPtr pidlRet = IntPtr.Zero;

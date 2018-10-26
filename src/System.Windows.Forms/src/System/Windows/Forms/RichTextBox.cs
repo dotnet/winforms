@@ -305,7 +305,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("BulletIndent", SR.GetString(SR.InvalidArgument, "BulletIndent", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("BulletIndent", string.Format(SR.InvalidArgument, "BulletIndent", (value).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 this.bulletIndent = value;
@@ -366,7 +366,7 @@ namespace System.Windows.Forms {
                     // we can’t determine why we have to compare w/ 32 here.
                     // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space) (see Dev10 
                     if ((ulong)moduleHandle < (ulong)32) {
-                        throw new Win32Exception(lastWin32Error, SR.GetString(SR.LoadDLLError, richEditControlDllVersion));
+                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
                     }
 
                     //Determine whether we're Rich Edit 2.0 or 3.0: see 
@@ -704,7 +704,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.rightMargin != value) {
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("RightMargin", SR.GetString(SR.InvalidLowBoundArgumentEx, "RightMargin", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("RightMargin", string.Format(SR.InvalidLowBoundArgumentEx, "RightMargin", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     this.rightMargin = value;
 
                     if (value == 0) {
@@ -964,7 +964,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value > 2000 || value < -2000)
-                    throw new ArgumentOutOfRangeException("SelectionCharOffset", SR.GetString(SR.InvalidBoundArgument, "SelectionCharOffset", value, -2000, 2000));
+                    throw new ArgumentOutOfRangeException("SelectionCharOffset", string.Format(SR.InvalidBoundArgument, "SelectionCharOffset", value, -2000, 2000));
 
                 ForceHandleCreate();
                 NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA();
@@ -1289,7 +1289,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException("SelectionRightIndent", SR.GetString(SR.InvalidLowBoundArgumentEx, "SelectionRightIndent", value, 0));
+                    throw new ArgumentOutOfRangeException("SelectionRightIndent", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionRightIndent", value, 0));
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
@@ -1543,17 +1543,17 @@ namespace System.Windows.Forms {
         private string GetEditorActionName(int actionID) {
             switch (actionID) {
                 case 0:
-                    return SR.GetString(SR.RichTextBox_IDUnknown);
+                    return string.Format(SR.RichTextBox_IDUnknown);
                 case 1:
-                    return SR.GetString(SR.RichTextBox_IDTyping);
+                    return string.Format(SR.RichTextBox_IDTyping);
                 case 2:
-                    return SR.GetString(SR.RichTextBox_IDDelete);
+                    return string.Format(SR.RichTextBox_IDDelete);
                 case 3:
-                    return SR.GetString(SR.RichTextBox_IDDragDrop);
+                    return string.Format(SR.RichTextBox_IDDragDrop);
                 case 4:
-                    return SR.GetString(SR.RichTextBox_IDCut);
+                    return string.Format(SR.RichTextBox_IDCut);
                 case 5:
-                    return SR.GetString(SR.RichTextBox_IDPaste);
+                    return string.Format(SR.RichTextBox_IDPaste);
                 default:
                     goto
                 case 0;
@@ -1593,7 +1593,7 @@ namespace System.Windows.Forms {
                 if (zoomMultiplier == value) return;
 
                 if (value <= 0.015625f || value >= 64.0f)
-                    throw new ArgumentOutOfRangeException("ZoomFactor", SR.GetString(SR.InvalidExBoundArgument, "ZoomFactor", (value).ToString(CultureInfo.CurrentCulture), (0.015625f).ToString(CultureInfo.CurrentCulture), (64.0f).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ZoomFactor", string.Format(SR.InvalidExBoundArgument, "ZoomFactor", (value).ToString(CultureInfo.CurrentCulture), (0.015625f).ToString(CultureInfo.CurrentCulture), (64.0f).ToString(CultureInfo.CurrentCulture)));
                 SendZoomFactor(value);
             }
         }
@@ -1962,9 +1962,9 @@ namespace System.Windows.Forms {
             if (str == null)
                 throw new ArgumentNullException("str");
             if (start < 0 || start > textLen)
-                throw new ArgumentOutOfRangeException("start", SR.GetString(SR.InvalidBoundArgument, "start", start, 0, textLen));
+                throw new ArgumentOutOfRangeException("start", string.Format(SR.InvalidBoundArgument, "start", start, 0, textLen));
             if (end < -1)
-                throw new ArgumentOutOfRangeException("end", SR.GetString(SR.RichTextFindEndInvalid, end));
+                throw new ArgumentOutOfRangeException("end", string.Format(SR.RichTextFindEndInvalid, end));
 
             bool selectWord = true;
             NativeMethods.FINDTEXT ft = new NativeMethods.FINDTEXT();
@@ -1978,7 +1978,7 @@ namespace System.Windows.Forms {
             }
 
             if (start > end) {
-                throw new ArgumentException(SR.GetString(SR.RichTextFindEndInvalid, end));
+                throw new ArgumentException(string.Format(SR.RichTextFindEndInvalid, end));
             }
 
             if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse) {
@@ -2100,9 +2100,9 @@ namespace System.Windows.Forms {
             if (characterSet == null)
                 throw new ArgumentNullException("characterSet");
             if (start < 0 || start > textLength)
-                throw new ArgumentOutOfRangeException("start", SR.GetString(SR.InvalidBoundArgument, "start", start, 0, textLength));
+                throw new ArgumentOutOfRangeException("start", string.Format(SR.InvalidBoundArgument, "start", start, 0, textLength));
             if (end < start && end != -1)
-                throw new ArgumentOutOfRangeException("end", SR.GetString(SR.InvalidLowBoundArgumentEx, "end", end, "start"));
+                throw new ArgumentOutOfRangeException("end", string.Format(SR.InvalidLowBoundArgumentEx, "end", end, "start"));
 
             // Don't do anything if we get nothing to look for
             if (characterSet.Length == 0)

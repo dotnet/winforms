@@ -136,7 +136,7 @@ namespace System.Windows.Forms
             {
                 if ((value & ~DataGridViewPaintParts.All) != 0)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, "value"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, "value"));
                 }
                 this.paintParts = value;
             }
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
             }
             this.dataGridView.Rows.SharedRow(this.rowIndex).DrawFocus(this.graphics, 
                                                                       this.clipBounds, 
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
             }
             this.dataGridView.Rows.SharedRow(this.rowIndex).PaintCells(this.graphics,
                                                                        clipBounds,
@@ -207,7 +207,7 @@ namespace System.Windows.Forms
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
             }
             DataGridViewPaintParts paintParts = DataGridViewPaintParts.Background | DataGridViewPaintParts.Border;
             if (cellsPaintSelectionBackground)
@@ -229,7 +229,7 @@ namespace System.Windows.Forms
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
             }
             this.dataGridView.Rows.SharedRow(this.rowIndex).PaintCells(this.graphics,
                                                                        clipBounds,
@@ -257,7 +257,7 @@ namespace System.Windows.Forms
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
             }
             this.dataGridView.Rows.SharedRow(this.rowIndex).PaintHeader(this.graphics,
                                                                         this.clipBounds, 

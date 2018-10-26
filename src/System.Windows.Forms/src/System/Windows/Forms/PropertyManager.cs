@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             if (this.dataSource != null && !String.IsNullOrEmpty(this.propName)) {
                 propInfo = TypeDescriptor.GetProperties(dataSource).Find(propName, true);
                 if (propInfo == null)
-                    throw new ArgumentException(SR.GetString(SR.PropertyManagerPropDoesNotExist, propName, dataSource.ToString()));
+                    throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, propName, dataSource.ToString()));
                 propInfo.AddValueChanged(dataSource, new EventHandler(PropertyChanged));
             }
         }

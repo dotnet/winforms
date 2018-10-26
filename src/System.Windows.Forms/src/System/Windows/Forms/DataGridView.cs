@@ -498,7 +498,7 @@ namespace System.Windows.Forms
             this.scrollBars = ScrollBars.Both;
 
             this.horizScrollBar.RightToLeft = RightToLeft.Inherit;
-            this.horizScrollBar.AccessibleName = SR.GetString(SR.DataGridView_AccHorizontalScrollBarAccName);
+            this.horizScrollBar.AccessibleName = string.Format(SR.DataGridView_AccHorizontalScrollBarAccName);
             this.horizScrollBar.Top = this.ClientRectangle.Height - horizScrollBar.Height;
             this.horizScrollBar.Left = 0;
             this.horizScrollBar.Visible = false;
@@ -506,7 +506,7 @@ namespace System.Windows.Forms
             this.Controls.Add(this.horizScrollBar);
 
             this.vertScrollBar.Top = 0;
-            this.vertScrollBar.AccessibleName = SR.GetString(SR.DataGridView_AccVerticalScrollBarAccName);
+            this.vertScrollBar.AccessibleName = string.Format(SR.DataGridView_AccVerticalScrollBarAccName);
             this.vertScrollBar.Left = this.ClientRectangle.Width - vertScrollBar.Width;
             this.vertScrollBar.Visible = false;
             this.vertScrollBar.Scroll += new ScrollEventHandler(DataGridViewVScrolled);
@@ -1124,12 +1124,12 @@ namespace System.Windows.Forms
                             // Make sure there is no visible column which would have an inherited autosize mode based on the header only.
                             if (value == DataGridViewAutoSizeColumnsMode.ColumnHeader && !this.ColumnHeadersVisible)
                             {
-                                throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotAutoSizeColumnsInvisibleColumnHeaders));
+                                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeColumnsInvisibleColumnHeaders));
                             }
                             // Make sure there is no visible frozen column which would have a Fill inherited autosize mode.
                             if (value == DataGridViewAutoSizeColumnsMode.Fill && dataGridViewColumn.Frozen)
                             {
-                                throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotAutoFillFrozenColumns));
+                                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoFillFrozenColumns));
                             }
                         }
                     }
@@ -1199,7 +1199,7 @@ namespace System.Windows.Forms
                 if ((value == DataGridViewAutoSizeRowsMode.AllHeaders || value == DataGridViewAutoSizeRowsMode.DisplayedHeaders) && 
                     !this.RowHeadersVisible)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader));
                 }
                 if (this.autoSizeRowsMode != value)
                 {
@@ -1290,11 +1290,11 @@ namespace System.Windows.Forms
             {
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_EmptyColor, "BackgroundColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_EmptyColor, "BackgroundColor"));
                 }
                 if (value.A < 255)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_TransparentColor, "BackgroundColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_TransparentColor, "BackgroundColor"));
                 }
                 if (!value.Equals(this.backgroundBrush.Color)) 
                 {
@@ -1587,7 +1587,7 @@ namespace System.Windows.Forms
                 {
                     if (value == DataGridViewCellBorderStyle.Custom)
                     {
-                        throw new ArgumentException(SR.GetString(SR.DataGridView_CustomCellBorderStyleInvalid, "CellBorderStyle"));
+                        throw new ArgumentException(string.Format(SR.DataGridView_CustomCellBorderStyleInvalid, "CellBorderStyle"));
                     }
                     this.dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = true;
                     try
@@ -1767,11 +1767,11 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("ColumnCount", SR.GetString(SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ColumnCount", string.Format(SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.DataSource != null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotSetColumnCountOnDataBoundDataGridView));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotSetColumnCountOnDataBoundDataGridView));
                 }
                 if (value != this.Columns.Count)
                 {
@@ -1855,7 +1855,7 @@ namespace System.Windows.Forms
                 {
                     if (value == DataGridViewHeaderBorderStyle.Custom)
                     {
-                        throw new ArgumentException(SR.GetString(SR.DataGridView_CustomCellBorderStyleInvalid, "ColumnHeadersBorderStyle"));
+                        throw new ArgumentException(string.Format(SR.DataGridView_CustomCellBorderStyleInvalid, "ColumnHeadersBorderStyle"));
                     }
                     this.dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = true;
                     try
@@ -1991,11 +1991,11 @@ namespace System.Windows.Forms
             {
                 if (value < minimumColumnHeadersHeight)
                 {
-                    throw new ArgumentOutOfRangeException("ColumnHeadersHeight", SR.GetString(SR.InvalidLowBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (minimumColumnHeadersHeight).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ColumnHeadersHeight", string.Format(SR.InvalidLowBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (minimumColumnHeadersHeight).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (value > maxHeadersThickness)
                 {
-                    throw new ArgumentOutOfRangeException("ColumnHeadersHeight", SR.GetString(SR.InvalidHighBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ColumnHeadersHeight", string.Format(SR.InvalidHighBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
                 {
@@ -2115,7 +2115,7 @@ namespace System.Windows.Forms
                         {
                             if (dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.ColumnHeader)
                             {
-                                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ColumnHeadersCannotBeInvisible));
+                                throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnHeadersCannotBeInvisible));
                             }
                             dataGridViewColumn = this.Columns.GetNextColumn(dataGridViewColumn,
                                 DataGridViewElementStates.Visible,
@@ -2186,23 +2186,23 @@ namespace System.Windows.Forms
                         if (!SetCurrentCellAddressCore(-1, -1, true /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*throughMouseClick*/))
                         {
                             // Edited value couldn't be committed or aborted
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                            throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
                         }
                     }
                     else
                     {
                         if (value.DataGridView != this)
                         {
-                            throw new ArgumentException(SR.GetString(SR.DataGridView_CellDoesNotBelongToDataGridView));
+                            throw new ArgumentException(string.Format(SR.DataGridView_CellDoesNotBelongToDataGridView));
                         }
                         if (!this.Columns[value.ColumnIndex].Visible ||
                             (this.Rows.GetRowState(value.RowIndex) & DataGridViewElementStates.Visible) == 0)
                         {
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridView_CurrentCellCannotBeInvisible));
+                            throw new InvalidOperationException(string.Format(SR.DataGridView_CurrentCellCannotBeInvisible));
                         }
                         if (!ScrollIntoView(value.ColumnIndex, value.RowIndex, true))
                         {
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                            throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
                         }
                         if (IsInnerCellOutOfBounds(value.ColumnIndex, value.RowIndex))
                         {
@@ -2211,7 +2211,7 @@ namespace System.Windows.Forms
                         ClearSelection(value.ColumnIndex, value.RowIndex, true /*selectExceptionElement*/);
                         if (!SetCurrentCellAddressCore(value.ColumnIndex, value.RowIndex, true, false, false))
                         {
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                            throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
                         }
                     }
                 }
@@ -2825,7 +2825,7 @@ namespace System.Windows.Forms
                 if (this.editingPanel == null)
                 {
                     this.editingPanel = AccessibilityImprovements.Level3 ? new DataGridViewEditingPanel(this) : new Panel();
-                    this.editingPanel.AccessibleName = SR.GetString(SR.DataGridView_AccEditingPanelAccName);
+                    this.editingPanel.AccessibleName = string.Format(SR.DataGridView_AccEditingPanelAccName);
                 }
                 return this.editingPanel;
             }
@@ -2905,11 +2905,11 @@ namespace System.Windows.Forms
                     DataGridViewCell firstDisplayedCell = value;
                     if (firstDisplayedCell.DataGridView != this)
                     {
-                        throw new ArgumentException(SR.GetString(SR.DataGridView_CellDoesNotBelongToDataGridView));
+                        throw new ArgumentException(string.Format(SR.DataGridView_CellDoesNotBelongToDataGridView));
                     }
                     if (firstDisplayedCell.RowIndex == -1 || firstDisplayedCell.ColumnIndex == -1)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell));
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell));
                     }
 
                     Debug.Assert(firstDisplayedCell.RowIndex >= 0 &&
@@ -2919,7 +2919,7 @@ namespace System.Windows.Forms
 
                     if (!firstDisplayedCell.Visible)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridView_FirstDisplayedCellCannotBeInvisible));
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedCellCannotBeInvisible));
                     }
 
                     if (!firstDisplayedCell.Frozen)
@@ -3085,11 +3085,11 @@ namespace System.Windows.Forms
                 }
                 if (!this.Columns[value].Visible)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeInvisible));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeInvisible));
                 }
                 if (this.Columns[value].Frozen)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeFrozen));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeFrozen));
                 }
 
                 if (!this.IsHandleCreated)
@@ -3100,14 +3100,14 @@ namespace System.Windows.Forms
                 int displayWidth = this.layout.Data.Width;
                 if (displayWidth <= 0)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_NoRoomForDisplayedColumns));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_NoRoomForDisplayedColumns));
                 }
 
                 int totalVisibleFrozenWidth = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                 if (totalVisibleFrozenWidth >= displayWidth)
                 {
                     Debug.Assert(totalVisibleFrozenWidth > 0);
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_FrozenColumnsPreventFirstDisplayedScrollingColumn));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_FrozenColumnsPreventFirstDisplayedScrollingColumn));
                 }
 
                 if (value == this.displayedBandsInfo.FirstDisplayedScrollingCol)
@@ -3161,11 +3161,11 @@ namespace System.Windows.Forms
                 }
                 if ((this.Rows.GetRowState(value) & DataGridViewElementStates.Visible) == 0)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_FirstDisplayedScrollingRowCannotBeInvisible));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingRowCannotBeInvisible));
                 }
                 if ((this.Rows.GetRowState(value) & DataGridViewElementStates.Frozen) != 0)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_FirstDisplayedScrollingRowCannotBeFrozen));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingRowCannotBeFrozen));
                 }
 
                 if (!this.IsHandleCreated)
@@ -3176,14 +3176,14 @@ namespace System.Windows.Forms
                 int displayHeight = this.layout.Data.Height;
                 if (displayHeight <= 0)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_NoRoomForDisplayedRows));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_NoRoomForDisplayedRows));
                 }
 
                 int totalVisibleFrozenHeight = this.Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                 if (totalVisibleFrozenHeight >= displayHeight)
                 {
                     Debug.Assert(totalVisibleFrozenHeight > 0);
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_FrozenRowsPreventFirstDisplayedScrollingRow));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_FrozenRowsPreventFirstDisplayedScrollingRow));
                 }
 
                 if (value == this.displayedBandsInfo.FirstDisplayedScrollingRow)
@@ -3311,11 +3311,11 @@ namespace System.Windows.Forms
             {
                 if (value.IsEmpty)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_EmptyColor, "GridColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_EmptyColor, "GridColor"));
                 }
                 if (value.A < 255)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_TransparentColor, "GridColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_TransparentColor, "GridColor"));
                 }
                 if (!value.Equals(this.gridPen.Color)) 
                 {
@@ -3492,17 +3492,17 @@ namespace System.Windows.Forms
                 // int widthNotVisible = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width;
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("HorizontalScrollingOffset", SR.GetString(SR.InvalidLowBoundArgumentEx, "HorizontalScrollingOffset", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("HorizontalScrollingOffset", string.Format(SR.InvalidLowBoundArgumentEx, "HorizontalScrollingOffset", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 // Intentionally ignoring the out of range situation. 
                 // else if (value > widthNotVisible && widthNotVisible > 0)
                 //{
-                //    throw new ArgumentOutOfRangeException(SR.GetString(SR.DataGridView_PropertyTooLarge, "HorizontalScrollingOffset", (widthNotVisible).ToString()));
+                //    throw new ArgumentOutOfRangeException(string.Format(SR.DataGridView_PropertyTooLarge, "HorizontalScrollingOffset", (widthNotVisible).ToString()));
                 //}
                 else if (value > 0 && (this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width) <= 0)
                 {
                     // Intentionally ignoring the case where dev tries to set value while there is no horizontal scrolling possible.
-                    // throw new ArgumentOutOfRangeException("HorizontalScrollingOffset", SR.GetString(SR.DataGridView_PropertyMustBeZero));
+                    // throw new ArgumentOutOfRangeException("HorizontalScrollingOffset", string.Format(SR.DataGridView_PropertyMustBeZero));
                     Debug.Assert(this.horizontalOffset == 0);
                     return;
                 }
@@ -3921,7 +3921,7 @@ namespace System.Windows.Forms
                                      false /*resetCurrentCell*/,
                                      false /*resetAnchorCell*/))
                         {
-                            throw new InvalidOperationException(SR.GetString(SR.DataGridView_CommitFailedCannotCompleteOperation));
+                            throw new InvalidOperationException(string.Format(SR.DataGridView_CommitFailedCannotCompleteOperation));
                         }
                     }
 
@@ -3990,7 +3990,7 @@ namespace System.Windows.Forms
                 !SetCurrentCellAddressCore(-1, -1, true /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*throughMouseClick*/))
             {
                 // Edited value couldn't be committed or aborted
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
             }
         }
 
@@ -4035,19 +4035,19 @@ namespace System.Windows.Forms
                 {
                     if (value < 1)
                     {
-                        throw new ArgumentOutOfRangeException("RowCount", SR.GetString(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("RowCount", string.Format(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                     }
                 }
                 else
                 {
                     if (value < 0)
                     {
-                        throw new ArgumentOutOfRangeException("RowCount", SR.GetString(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("RowCount", string.Format(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                 }
                 if (this.DataSource != null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_CannotSetRowCountOnDataBoundDataGridView));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotSetRowCountOnDataBoundDataGridView));
                 }
                 if (value != this.Rows.Count)
                 {
@@ -4133,7 +4133,7 @@ namespace System.Windows.Forms
                 {
                     if (value == DataGridViewHeaderBorderStyle.Custom)
                     {
-                        throw new ArgumentException(SR.GetString(SR.DataGridView_CustomCellBorderStyleInvalid, "RowHeadersBorderStyle"));
+                        throw new ArgumentException(string.Format(SR.DataGridView_CustomCellBorderStyleInvalid, "RowHeadersBorderStyle"));
                     }
                     this.dataGridViewOper[DATAGRIDVIEWOPER_inBorderStyleChange] = true;
                     try
@@ -4259,7 +4259,7 @@ namespace System.Windows.Forms
                     if (!value &&
                         (this.autoSizeRowsMode == DataGridViewAutoSizeRowsMode.AllHeaders || this.autoSizeRowsMode == DataGridViewAutoSizeRowsMode.DisplayedHeaders))
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowHeadersCannotBeInvisible));
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_RowHeadersCannotBeInvisible));
                     }
                     using (LayoutTransaction.CreateTransactionIf(this.AutoSize, this.ParentInternal, this, PropertyNames.RowHeadersVisible))
                     {
@@ -4293,11 +4293,11 @@ namespace System.Windows.Forms
             {
                 if (value < minimumRowHeadersWidth)
                 {
-                    throw new ArgumentOutOfRangeException("RowHeadersWidth", SR.GetString(SR.InvalidLowBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (minimumRowHeadersWidth).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("RowHeadersWidth", string.Format(SR.InvalidLowBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (minimumRowHeadersWidth).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (value > maxHeadersThickness)
                 {
-                    throw new ArgumentOutOfRangeException("RowHeadersWidth", SR.GetString(SR.InvalidHighBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("RowHeadersWidth", string.Format(SR.InvalidHighBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
                     this.RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.DisableResizing)
@@ -4509,11 +4509,11 @@ namespace System.Windows.Forms
                 {
                     if (dataGridViewRow.DataGridView != null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowAlreadyBelongsToDataGridView));
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_RowAlreadyBelongsToDataGridView));
                     }
                     //if (dataGridViewRow.Selected)
                     //{
-                    //    throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowTemplateCannotBeSelected));
+                    //    throw new InvalidOperationException(string.Format(SR.DataGridView_RowTemplateCannotBeSelected));
                     //}
                 }
                 this.rowTemplate = dataGridViewRow;
@@ -4572,7 +4572,7 @@ namespace System.Windows.Forms
                         {
                             if (!ScrollIntoView(dataGridViewColumn.Index, firstVisibleRowIndex, false))
                             {
-                                throw new InvalidOperationException(SR.GetString(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                                throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
                             }
                         }
                         Debug.Assert(this.HorizontalOffset == 0);
@@ -4741,7 +4741,7 @@ namespace System.Windows.Forms
                         {
                             if (dataGridViewColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                             {
-                                throw new InvalidOperationException(SR.GetString(SR.DataGridView_SelectionModeAndSortModeClash, (value).ToString()));
+                                throw new InvalidOperationException(string.Format(SR.DataGridView_SelectionModeAndSortModeClash, (value).ToString()));
                             }
                         }
                     }
@@ -6982,8 +6982,8 @@ namespace System.Windows.Forms
                     {
                         // Resetting SelectionMode to its acceptable default value. We don't want the control to ever end up in an invalid state.
                         this.SelectionMode = defaultSelectionMode; // DataGridViewSelectionMode.RowHeaderSelect
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridView_SelectionModeReset, 
-                                                                         SR.GetString(SR.DataGridView_SelectionModeAndSortModeClash, (selectionMode).ToString()), 
+                        throw new InvalidOperationException(string.Format(SR.DataGridView_SelectionModeReset, 
+                                                                         string.Format(SR.DataGridView_SelectionModeAndSortModeClash, (selectionMode).ToString()), 
                                                                          (defaultSelectionMode).ToString()));
                     }
                 }

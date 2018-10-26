@@ -1651,7 +1651,7 @@ namespace System.Windows.Forms {
                 
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ShouldSerializeText"]/*' />
         internal override bool ShouldSerializeText() {
-            return !Text.Equals(SR.GetString(SR.PrintPreviewDialog_PrintPreview));
+            return !Text.Equals(string.Format(SR.PrintPreviewDialog_PrintPreview));
         }
 
         void OncloseToolStripButtonClick(object sender, System.EventArgs e) {

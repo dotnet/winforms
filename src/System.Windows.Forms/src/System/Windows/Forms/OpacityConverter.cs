@@ -63,7 +63,7 @@ namespace System.Windows.Forms {
                     }
                 }
                 catch (FormatException e) {
-                    throw new FormatException(SR.GetString(SR.InvalidBoundArgument,
+                    throw new FormatException(string.Format(SR.InvalidBoundArgument,
                                                                     "Opacity",
                                                                     text,
                                                                     "0%",
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
                 // Now check to see if it is within our bounds.
                 //
                 if (percent < 0.0 || percent > 1.0) {
-                    throw new FormatException(SR.GetString(SR.InvalidBoundArgument,
+                    throw new FormatException(string.Format(SR.InvalidBoundArgument,
                                                                     "Opacity",
                                                                     text,
                                                                     "0%",

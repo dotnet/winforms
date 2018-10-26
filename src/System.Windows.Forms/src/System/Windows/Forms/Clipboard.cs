@@ -115,11 +115,11 @@ namespace System.Windows.Forms {
             }
 
             if (retryTimes < 0) {
-                throw new ArgumentOutOfRangeException("retryTimes", SR.GetString(SR.InvalidLowBoundArgumentEx, "retryTimes", retryTimes.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("retryTimes", string.Format(SR.InvalidLowBoundArgumentEx, "retryTimes", retryTimes.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             if (retryDelay < 0) {
-                throw new ArgumentOutOfRangeException("retryDelay", SR.GetString(SR.InvalidLowBoundArgumentEx, "retryDelay", retryDelay.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("retryDelay", string.Format(SR.InvalidLowBoundArgumentEx, "retryDelay", retryDelay.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             
@@ -511,7 +511,7 @@ namespace System.Windows.Forms {
                         throw;
                     }
 
-                    throw new ArgumentException(SR.GetString(SR.Clipboard_InvalidPath, path, "filePaths"), e);
+                    throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, "filePaths"), e);
                 }
             }
 

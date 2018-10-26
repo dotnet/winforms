@@ -1677,7 +1677,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     w.Write(b.ToString());
                     w.Close();
                     s.Close();
-                    RTLAwareMessageBox.Show(null, b.ToString(), SR.GetString(SR.PropertyGridInternalNoProp, path),
+                    RTLAwareMessageBox.Show(null, b.ToString(), string.Format(SR.PropertyGridInternalNoProp, path),
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                 }
 #endif

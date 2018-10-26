@@ -415,7 +415,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value.IsEmpty) {
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor,
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
                                                                   "AlternatingBackColor"));
                     }
                     if (IsTransparentColor(value))
@@ -1069,7 +1069,7 @@ namespace System.Windows.Forms {
                     
                     if (errorMessage != null) {
                         DialogResult result = RTLAwareMessageBox.Show(null,
-                            SR.GetString(SR.DataGridPushedIncorrectValueIntoColumn, errorMessage),
+                            string.Format(SR.DataGridPushedIncorrectValueIntoColumn, errorMessage),
                             SR.DataGridErrorMessageBoxCaption, MessageBoxButtons.YesNo,
                             MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                         
@@ -1188,7 +1188,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value.IsEmpty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "SelectionBackColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionBackColor"));
                     if (IsTransparentColor(value))
                         throw new ArgumentException(SR.DataGridTransparentSelectionBackColorNotAllowed);
                     if (!value.Equals(selectionBackBrush.Color)) {
@@ -1243,7 +1243,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value.IsEmpty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "SelectionForeColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionForeColor"));
                     if (!value.Equals(selectionForeBrush.Color)) {
                         selectionForeBrush = new SolidBrush(value);
     
@@ -1802,7 +1802,7 @@ namespace System.Windows.Forms {
                 set {
                     if (gridLineBrush.Color != value) {
                         if (value.IsEmpty)
-                            throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "GridLineColor"));
+                            throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "GridLineColor"));
                         gridLineBrush = new SolidBrush(value);
     
                         Invalidate(layout.Data);
@@ -2000,7 +2000,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value.IsEmpty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "HeaderBackColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderBackColor"));
                     if (IsTransparentColor(value))
                         throw new ArgumentException(SR.DataGridTransparentHeaderBackColorNotAllowed);
                     if (!value.Equals(headerBackBrush.Color)) {
@@ -2078,7 +2078,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value.IsEmpty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "BackgroundColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "BackgroundColor"));
                     if (!value.Equals(backgroundBrush.Color)) {
 
    		   	   if (backgroundBrush != null && BackgroundBrush != DefaultBackgroundBrush) {
@@ -2177,7 +2177,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value.IsEmpty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "HeaderForeColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderForeColor"));
                     if (!value.Equals(headerForePen.Color)) {
                         headerForePen = new Pen(value);
                         headerForeBrush = new SolidBrush(value);
@@ -2351,7 +2351,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value.IsEmpty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "LinkColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "LinkColor"));
                     if (!linkBrush.Color.Equals(value)) {
                         linkBrush = new SolidBrush(value);
                         Invalidate(layout.Data);
@@ -3677,7 +3677,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (errorMessage != null) {
-                    DialogResult result = RTLAwareMessageBox.Show(null, SR.GetString(SR.DataGridPushedIncorrectValueIntoColumn,
+                    DialogResult result = RTLAwareMessageBox.Show(null, string.Format(SR.DataGridPushedIncorrectValueIntoColumn,
                             errorMessage), SR.DataGridErrorMessageBoxCaption, MessageBoxButtons.YesNo,
                             MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                     

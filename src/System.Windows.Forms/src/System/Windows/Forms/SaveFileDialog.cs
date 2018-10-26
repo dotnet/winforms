@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private bool PromptFileCreate(string fileName) 
         {
-            return MessageBoxWithFocusRestore(SR.GetString(SR.FileDialogCreatePrompt, fileName),
+            return MessageBoxWithFocusRestore(string.Format(SR.FileDialogCreatePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
 
@@ -143,7 +143,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         private bool PromptFileOverwrite(string fileName) {
-            return MessageBoxWithFocusRestore(SR.GetString(SR.FileDialogOverwritePrompt, fileName),
+            return MessageBoxWithFocusRestore(string.Format(SR.FileDialogOverwritePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
 
@@ -206,7 +206,7 @@ namespace System.Windows.Forms {
                 int errorCode = SafeNativeMethods.CommDlgExtendedError();
                 switch(errorCode) {
                     case NativeMethods.FNERR_INVALIDFILENAME:
-                        throw new InvalidOperationException(SR.GetString(SR.FileDialogInvalidFileName, FileName));
+                        throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
                 }
             }
             

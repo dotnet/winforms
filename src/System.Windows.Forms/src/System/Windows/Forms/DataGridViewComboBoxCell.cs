@@ -445,7 +445,7 @@ namespace System.Windows.Forms
                 //CheckNoSharedCell(); VSWhidbey 515823
                 if (value < 1)
                 {
-                    throw new ArgumentOutOfRangeException("DropDownWidth", value, SR.GetString(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("DropDownWidth", value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, (1).ToString(CultureInfo.CurrentCulture)));
                 }
                 this.Properties.SetInteger(PropComboBoxCellDropDownWidth, (int)value);
                 if (OwnsEditingComboBox(this.RowIndex))
@@ -566,7 +566,7 @@ namespace System.Windows.Forms
                 //CheckNoSharedCell(); VSWhidbey 515823
                 if (value < 1 || value > 100)
                 {
-                    throw new ArgumentOutOfRangeException("MaxDropDownItems", value, SR.GetString(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, (1).ToString(CultureInfo.CurrentCulture), (100).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("MaxDropDownItems", value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, (1).ToString(CultureInfo.CurrentCulture), (100).ToString(CultureInfo.CurrentCulture)));
                 }
                 this.Properties.SetInteger(PropComboBoxCellMaxDropDownItems, (int)value);
                 if (OwnsEditingComboBox(this.RowIndex))
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
         //{
         //    if (this.DataGridView != null && this.RowIndex == -1)
         //    {
-        //        throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationOnSharedCell));
+        //        throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
         //    }
         //}
         
@@ -1155,7 +1155,7 @@ namespace System.Windows.Forms
                 if (this.DataGridView != null)
                 {
                     DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                        new FormatException(SR.GetString(SR.DataGridViewComboBoxCell_InvalidValue)), this.ColumnIndex,
+                        new FormatException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), this.ColumnIndex,
                         rowIndex, context);
                     RaiseDataError(dgvdee);
                     if (dgvdee.ThrowException)
@@ -1184,7 +1184,7 @@ namespace System.Windows.Forms
                     else if (this.DataGridView != null)
                     {
                         DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                            new ArgumentException(SR.GetString(SR.DataGridViewComboBoxCell_InvalidValue)), this.ColumnIndex,
+                            new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), this.ColumnIndex,
                             rowIndex, context);
                         RaiseDataError(dgvdee);
                         if (dgvdee.ThrowException)
@@ -1210,7 +1210,7 @@ namespace System.Windows.Forms
                     if (this.DataGridView != null)
                     {
                         DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                            new ArgumentException(SR.GetString(SR.DataGridViewComboBoxCell_InvalidValue)), this.ColumnIndex,
+                            new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), this.ColumnIndex,
                             rowIndex, context);
                         RaiseDataError(dgvdee);
                         if (dgvdee.ThrowException)
@@ -1604,7 +1604,7 @@ namespace System.Windows.Forms
                     PropertyDescriptor displayMemberProperty = props.Find(displayBindingMember.BindingField, true);
                     if (displayMemberProperty == null)
                     {
-                        throw new ArgumentException(SR.GetString(SR.DataGridViewComboBoxCell_FieldNotFound, displayMember));
+                        throw new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_FieldNotFound, displayMember));
                     }
                     else
                     {
@@ -1632,7 +1632,7 @@ namespace System.Windows.Forms
                     PropertyDescriptor valueMemberProperty = props.Find(valueBindingMember.BindingField, true);
                     if (valueMemberProperty == null)
                     {
-                        throw new ArgumentException(SR.GetString(SR.DataGridViewComboBoxCell_FieldNotFound, valueMember));
+                        throw new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_FieldNotFound, valueMember));
                     }
                     else
                     {
@@ -2684,7 +2684,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        throw new FormatException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.Formatter_CantConvert), value, this.DisplayType));
+                        throw new FormatException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.Formatter_CantConvert), value, this.DisplayType));
                     }
                 }
                 return value;
@@ -2955,7 +2955,7 @@ namespace System.Windows.Forms
                 {
                     if (index < 0 || index >= this.InnerArray.Count) 
                     {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
                     return this.InnerArray[index];
                 }
@@ -2971,7 +2971,7 @@ namespace System.Windows.Forms
 
                     if (index < 0 || index >= this.InnerArray.Count)
                     {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     this.InnerArray[index] = value;
@@ -3074,7 +3074,7 @@ namespace System.Windows.Forms
                 
                 if (index < 0 || index > this.InnerArray.Count) 
                 {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
                 
                 // If the combo box is sorted, then just treat this like an add
@@ -3116,7 +3116,7 @@ namespace System.Windows.Forms
                 
                 if (index < 0 || index >= this.InnerArray.Count) 
                 {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
                 this.InnerArray.RemoveAt(index);
                 this.owner.OnItemsCollectionChanged();

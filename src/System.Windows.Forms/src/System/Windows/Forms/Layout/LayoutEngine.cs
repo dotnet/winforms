@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Layout {
         internal IArrangedElement CastToArrangedElement(object obj) {
             IArrangedElement element = obj as IArrangedElement;
             if(obj == null) {
-                throw new NotSupportedException(SR.GetString(SR.LayoutEngineUnsupportedType, obj.GetType()));
+                throw new NotSupportedException(string.Format(SR.LayoutEngineUnsupportedType, obj.GetType()));
             }
             return element;
         }

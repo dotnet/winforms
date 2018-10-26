@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidNullArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
                 if (!value.Equals(calendarForeColor)) {
@@ -313,7 +313,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidNullArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
                 if (!value.Equals(calendarTitleBackColor)) {
@@ -338,7 +338,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidNullArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
                 if (!value.Equals(calendarTitleForeColor)) {
@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidNullArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
                 if (!value.Equals(calendarTrailingText)) {
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidNullArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
                 if (!value.Equals(calendarMonthBackground)) {
@@ -721,12 +721,12 @@ namespace System.Windows.Forms {
                 if (value != max) {
                     if (value < EffectiveMinDate(min))
                     {
-                        throw new ArgumentOutOfRangeException("MaxDate", SR.GetString(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDateTime(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException("MaxDate", string.Format(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDateTime(value), "MinDate"));
                     }
 
                     // If trying to set the maximum greater than MaxDateTime, throw.
                     if (value > MaximumDateTime) {
-                        throw new ArgumentOutOfRangeException("MaxDate", SR.GetString(SR.DateTimePickerMaxDate, FormatDateTime(DateTimePicker.MaxDateTime)));
+                        throw new ArgumentOutOfRangeException("MaxDate", string.Format(SR.DateTimePickerMaxDate, FormatDateTime(DateTimePicker.MaxDateTime)));
                     }
 
                     max = value;
@@ -775,13 +775,13 @@ namespace System.Windows.Forms {
                 {
                     if (value > EffectiveMaxDate(max))
                     {
-                        throw new ArgumentOutOfRangeException("MinDate", SR.GetString(SR.InvalidHighBoundArgument, "MinDate", FormatDateTime(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException("MinDate", string.Format(SR.InvalidHighBoundArgument, "MinDate", FormatDateTime(value), "MaxDate"));
                     }
 
                     // If trying to set the minimum less than MinimumDateTime, throw.
                     if (value < MinimumDateTime)
                     {
-                        throw new ArgumentOutOfRangeException("MinDate", SR.GetString(SR.DateTimePickerMinDate, FormatDateTime(DateTimePicker.MinimumDateTime)));
+                        throw new ArgumentOutOfRangeException("MinDate", string.Format(SR.DateTimePickerMinDate, FormatDateTime(DateTimePicker.MinimumDateTime)));
                     }
 
                     min = value;
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms {
                 // update anyway.
                 if (!userHasSetValue || valueChanged) {
                     if ((value < MinDate) || (value > MaxDate)) {
-                        throw new ArgumentOutOfRangeException("Value", SR.GetString(SR.InvalidBoundArgument, "Value", FormatDateTime(value), "'MinDate'", "'MaxDate'"));
+                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", FormatDateTime(value), "'MinDate'", "'MaxDate'"));
                     }
 
                     string oldText = this.Text;

@@ -1846,7 +1846,7 @@ example usage
                         needToLoadComCtl = false;
                     } else {
                         int lastWin32Error = Marshal.GetLastWin32Error();
-                        throw new Win32Exception(lastWin32Error, SR.GetString(SR.LoadDLLError, ExternDll.Comctl32));
+                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, ExternDll.Comctl32));
                     }
                 }
 
@@ -2854,7 +2854,7 @@ example usage
                 if (checkForIllegalCrossThreadCalls &&
                     !inCrossThreadSafeCall &&
                     InvokeRequired) {
-                    throw new InvalidOperationException(SR.GetString(SR.IllegalCrossThreadCall,
+                    throw new InvalidOperationException(string.Format(SR.IllegalCrossThreadCall,
                                                                      Name));
                 }
 
@@ -3927,7 +3927,7 @@ example usage
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("TabIndex", SR.GetString(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("TabIndex", string.Format(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (tabIndex != value) {
@@ -5997,7 +5997,7 @@ example usage
                 }
 
                 if (GetState(STATE_CREATINGHANDLE)) {
-                    throw new InvalidOperationException(SR.GetString(SR.ClosingWhileCreatingHandle, "Dispose"));
+                    throw new InvalidOperationException(string.Format(SR.ClosingWhileCreatingHandle, "Dispose"));
                     // I imagine most subclasses will get themselves in a half disposed state
                     // if this exception is thrown, but things will be equally broken if we ignore this error,
                     // and this way at least the user knows what they did wrong.
@@ -15036,7 +15036,7 @@ example usage
                 get {
                     //do some bounds checking here...
                     if (index < 0 || index >= Count) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
                     }
 
                     Control control = (Control) InnerList[index];
@@ -17847,7 +17847,7 @@ example usage
                         Guid iid = eventInterface.GUID;
                         int hresult = findConnectionPoint.Invoke(this.handle, ref iid, out result);
                         if (hresult != 0 || result == IntPtr.Zero) {
-                            throw new ArgumentException(SR.GetString(SR.AXNoConnectionPoint, eventInterface.Name));
+                            throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
                         }
 
                         return new ComConnectionPoint(result, false);   // result is already ref-counted as an out-param so pass in false

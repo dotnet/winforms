@@ -487,7 +487,7 @@ namespace System.Windows.Forms
                 {
                     if (this.Owner.DataGridView.MultiSelect)
                     {
-                        return SR.GetString(SR.DataGridView_AccTopLeftColumnHeaderCellDefaultAction);
+                        return string.Format(SR.DataGridView_AccTopLeftColumnHeaderCellDefaultAction);
                     }
                     else
                     {
@@ -517,11 +517,11 @@ namespace System.Windows.Forms
                         {
                             if (this.Owner.DataGridView.RightToLeft == RightToLeft.No)
                             {
-                                return SR.GetString(SR.DataGridView_AccTopLeftColumnHeaderCellName);
+                                return string.Format(SR.DataGridView_AccTopLeftColumnHeaderCellName);
                             }
                             else
                             {
-                                return SR.GetString(SR.DataGridView_AccTopLeftColumnHeaderCellNameRTL);
+                                return string.Format(SR.DataGridView_AccTopLeftColumnHeaderCellNameRTL);
                             }
                         }
                         else
@@ -630,7 +630,7 @@ namespace System.Windows.Forms
             {
                 if (this.Owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
                 // AccessibleSelection.TakeFocus should focus the grid and then focus the first data grid view data cell

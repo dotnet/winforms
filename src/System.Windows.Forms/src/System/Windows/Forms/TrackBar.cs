@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("LargeChange", SR.GetString(SR.TrackBarLargeChangeError, value));
+                    throw new ArgumentOutOfRangeException("LargeChange", string.Format(SR.TrackBarLargeChangeError, value));
                 }
 
                 if (largeChange != value) {
@@ -565,7 +565,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("SmallChange", SR.GetString(SR.TrackBarSmallChangeError, value));
+                    throw new ArgumentOutOfRangeException("SmallChange", string.Format(SR.TrackBarSmallChangeError, value));
                 }
                 if (smallChange != value) {
                     smallChange = value;
@@ -681,7 +681,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if (!initializing && ((value < minimum) || (value > maximum)))
-                        throw new ArgumentOutOfRangeException("Value", SR.GetString(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
+                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
                     this.value = value;
                     SetTrackBarPosition();
                     OnValueChanged(EventArgs.Empty);

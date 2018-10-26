@@ -313,9 +313,9 @@ namespace System.Windows.Forms
                                     case SortOrder.None:
                                         return SR.NotSortedAccessibleStatus;
                                     case SortOrder.Ascending:
-                                        return SR.GetString(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
+                                        return string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                                     case SortOrder.Descending:
-                                        return SR.GetString(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
+                                        return string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                                 }
                             }
 
@@ -557,7 +557,7 @@ namespace System.Windows.Forms
                 switch (propertyId)
                 {
                     case NativeMethods.UIA_NamePropertyId:
-                        return SR.GetString(SR.DataGridView_AccEditingPanelAccName);
+                        return string.Format(SR.DataGridView_AccEditingPanelAccName);
                     case NativeMethods.UIA_ControlTypePropertyId:
                         return NativeMethods.UIA_PaneControlTypeId;
                     case NativeMethods.UIA_IsKeyboardFocusablePropertyId:

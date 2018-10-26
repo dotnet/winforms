@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                 switch (errorCode)
                 {
                     case NativeMethods.FNERR_INVALIDFILENAME:
-                        throw new InvalidOperationException(SR.GetString(SR.FileDialogInvalidFileName, FileName));
+                        throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
 
                     case NativeMethods.FNERR_SUBCLASSFAILURE:
                         throw new InvalidOperationException(SR.FileDialogSubLassFailure);

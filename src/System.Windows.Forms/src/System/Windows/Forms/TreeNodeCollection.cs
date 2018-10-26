@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (index < 0 || index >= owner.childCount)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;
@@ -318,7 +318,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("node");
             }
             if (node.handle != IntPtr.Zero)
-                throw new ArgumentException(SR.GetString(SR.OnlyOneControl, node.Text), "node");
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
@@ -456,7 +456,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public virtual void Insert(int index, TreeNode node) {
             if (node.handle != IntPtr.Zero)
-                throw new ArgumentException(SR.GetString(SR.OnlyOneControl, node.Text), "node");
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;

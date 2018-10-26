@@ -124,7 +124,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "AllowSorting"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AllowSorting"));
                 }
 
                 if (allowSorting != value) {
@@ -161,13 +161,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "AlternatingBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AlternatingBackColor"));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
                     throw new ArgumentException(SR.DataGridTableStyleTransparentAlternatingBackColorNotAllowed);
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor,
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
                                                               "AlternatingBackColor"));
                 }
                 if (!alternatingBackBrush.Color.Equals(value)) {
@@ -252,13 +252,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "BackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "BackColor"));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
                     throw new ArgumentException(SR.DataGridTableStyleTransparentBackColorNotAllowed);
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor,
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
                                                               "BackColor"));
                 }
                 if (!backBrush.Color.Equals(value)) {
@@ -405,11 +405,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "ForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "ForeColor"));
                 }
 
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor,
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
                                                               "BackColor"));
                 }
                 if (!foreBrush.Color.Equals(value)) {
@@ -463,12 +463,12 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "GridLineColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineColor"));
                 }
 
                 if (gridLineBrush.Color != value) {
                     if (value.IsEmpty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "GridLineColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "GridLineColor"));
                     gridLineBrush = new SolidBrush(value);
 
                     // Invalidate(layout.Data);
@@ -537,7 +537,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "GridLineStyle"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineStyle"));
                 }
                 
                 //valid values are 0x0 to 0x1. 
@@ -579,13 +579,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "HeaderBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderBackColor"));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
                     throw new ArgumentException(SR.DataGridTableStyleTransparentHeaderBackColorNotAllowed);
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "HeaderBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderBackColor"));
                 if (!value.Equals(headerBackBrush.Color)) {
                     headerBackBrush = new SolidBrush(value);
 
@@ -655,7 +655,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "HeaderFont"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderFont"));
                 }
 
                 if (value == null && headerFont != null || (value != null && !value.Equals(headerFont))) {
@@ -721,11 +721,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "HeaderForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderForeColor"));
                 }
 
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "HeaderForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderForeColor"));
                 if (!value.Equals(headerForePen.Color)) {
                     headerForePen = new Pen(value);
                     headerForeBrush = new SolidBrush(value);
@@ -797,11 +797,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "LinkColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "LinkColor"));
                 }
 
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "LinkColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "LinkColor"));
                 if (!linkBrush.Color.Equals(value)) {
                     linkBrush = new SolidBrush(value);
                     // Invalidate(layout.Data);
@@ -969,7 +969,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "PreferredColumnWidth"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PreferredColumnWidth"));
                 }
 
                 if (value < 0)
@@ -1019,7 +1019,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "PrefferedRowHeight"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PrefferedRowHeight"));
                 }
 
                 if (value < 0)
@@ -1213,13 +1213,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "SelectionBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionBackColor"));
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
                     throw new ArgumentException(SR.DataGridTableStyleTransparentSelectionBackColorNotAllowed);
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "SelectionBackColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionBackColor"));
                 if (!value.Equals(selectionBackBrush.Color)) {
                     selectionBackBrush = new SolidBrush(value);
 
@@ -1288,11 +1288,11 @@ namespace System.Windows.Forms {
             }
             set {
                 if (this.isDefaultTableStyle) {
-                    throw new ArgumentException(SR.GetString(SR.DataGridDefaultTableSet, "SelectionForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionForeColor"));
                 }
 
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "SelectionForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionForeColor"));
                 if (!value.Equals(selectionForeBrush.Color)) {
                     selectionForeBrush = new SolidBrush(value);
 

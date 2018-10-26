@@ -572,7 +572,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", SR.GetString(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (ImageIndexer.Index != value) {
@@ -759,10 +759,10 @@ namespace System.Windows.Forms {
             set {
                 if (indent != value) {
                     if (value < 0) {
-                        throw new ArgumentOutOfRangeException("Indent", SR.GetString(SR.InvalidLowBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("Indent", string.Format(SR.InvalidLowBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value > MaxIndent) {
-                        throw new ArgumentOutOfRangeException("Indent", SR.GetString(SR.InvalidHighBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (MaxIndent).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("Indent", string.Format(SR.InvalidHighBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (MaxIndent).ToString(CultureInfo.CurrentCulture)));
                     }
                     indent = value;
                     if (IsHandleCreated) {
@@ -801,10 +801,10 @@ namespace System.Windows.Forms {
             set {
                 if (itemHeight != value) {
                     if (value < 1) {
-                        throw new ArgumentOutOfRangeException("ItemHeight", SR.GetString(SR.InvalidLowBoundArgumentEx, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("ItemHeight", string.Format(SR.InvalidLowBoundArgumentEx, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value >= Int16.MaxValue) {
-                        throw new ArgumentOutOfRangeException("ItemHeight", SR.GetString(SR.InvalidHighBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), Int16.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("ItemHeight", string.Format(SR.InvalidHighBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), Int16.MaxValue.ToString(CultureInfo.CurrentCulture)));
                     }
                     itemHeight = value;
                     if (IsHandleCreated) {
@@ -1061,7 +1061,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("SelectedImageIndex", SR.GetString(SR.InvalidLowBoundArgumentEx, "SelectedImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("SelectedImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "SelectedImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (SelectedImageIndexer.Index != value) {
                     SelectedImageIndexer.Index = value;

@@ -1144,10 +1144,10 @@ namespace System.Windows.Forms {
                     if (value != null && value.Length > 0) {
                        for (int count = 0; count < value.Length; count++) {
                            if (value[count] == null) {
-                               throw new ArgumentException(SR.GetString(SR.PropertyGridSetNull, count.ToString(CultureInfo.CurrentCulture), value.Length.ToString(CultureInfo.CurrentCulture)));
+                               throw new ArgumentException(string.Format(SR.PropertyGridSetNull, count.ToString(CultureInfo.CurrentCulture), value.Length.ToString(CultureInfo.CurrentCulture)));
                            }
                            else if (value[count] is IUnimplemented) {
-                               throw new NotSupportedException(SR.GetString(SR.PropertyGridRemotedObject, value[count].GetType().FullName));
+                               throw new NotSupportedException(string.Format(SR.PropertyGridRemotedObject, value[count].GetType().FullName));
                            }
                        }
                     }
@@ -1981,7 +1981,7 @@ namespace System.Windows.Forms {
                 Bitmap bitmap = tab.Bitmap;
                 
                 if (bitmap == null)
-                    throw new ArgumentException(SR.GetString(SR.PropertyGridNoBitmap, tab.GetType().FullName));
+                    throw new ArgumentException(string.Format(SR.PropertyGridNoBitmap, tab.GetType().FullName));
 
                 Size size = bitmap.Size;
                 if (size.Width != 16 || size.Height != 16) {
@@ -1992,7 +1992,7 @@ namespace System.Windows.Forms {
 
                 string name = tab.TabName;
                 if (name == null || name.Length == 0)
-                    throw new ArgumentException(SR.GetString(SR.PropertyGridTabName, tab.GetType().FullName));
+                    throw new ArgumentException(string.Format(SR.PropertyGridTabName, tab.GetType().FullName));
 
                 // we're good to go!
             }
@@ -3270,7 +3270,7 @@ namespace System.Windows.Forms {
                     this.AccessibilityObject.RaiseAutomationNotification(
                         Automation.AutomationNotificationKind.ActionCompleted,
                         Automation.AutomationNotificationProcessing.All,
-                        string.Format(CultureInfo.CurrentCulture, SR.GetString(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value)));
+                        string.Format(CultureInfo.CurrentCulture, string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value)));
                 }
             }
         }

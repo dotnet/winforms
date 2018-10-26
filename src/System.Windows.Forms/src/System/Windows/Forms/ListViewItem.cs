@@ -532,7 +532,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", SR.GetString(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
             
                 ImageIndexer.Index = value;
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1 || value > 14)
-                    throw new ArgumentOutOfRangeException("StateImageIndex", SR.GetString(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("StateImageIndex", string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
 
                 if (listView != null && listView.IsHandleCreated) {
                     this.state[StateImageMaskSet] = (value == -1 ? 0 : 1);
@@ -1772,13 +1772,13 @@ namespace System.Windows.Forms {
             public ListViewSubItem this[int index] {
                 get {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                     return owner.subItems[index];
                 }
                 set {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                     owner.subItems[index] = value;
                     owner.UpdateSubItems(index);                    

@@ -3557,7 +3557,7 @@ namespace System.Windows.Forms {
         public void Close() {
 
             if (GetState(STATE_CREATINGHANDLE))
-                throw new InvalidOperationException(SR.GetString(SR.ClosingWhileCreatingHandle, "Close"));
+                throw new InvalidOperationException(string.Format(SR.ClosingWhileCreatingHandle, "Close"));
 
             if (IsHandleCreated) {
                 closeReason = CloseReason.UserClosing;
@@ -6055,19 +6055,19 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Show(IWin32Window owner) {
             if (owner == this) {
-                throw new InvalidOperationException(SR.GetString(SR.OwnsSelfOrOwner,
+                throw new InvalidOperationException(string.Format(SR.OwnsSelfOrOwner,
                                                   "Show"));
             }
             else if (Visible) {
-                throw new InvalidOperationException(SR.GetString(SR.ShowDialogOnVisible,
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible,
                                                   "Show"));
             }
             else if (!Enabled) {
-                throw new InvalidOperationException(SR.GetString(SR.ShowDialogOnDisabled,
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled,
                                                   "Show"));
             }
             else if (!TopLevel) {
-                throw new InvalidOperationException(SR.GetString(SR.ShowDialogOnNonTopLevel,
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel,
                                                   "Show"));
             }
             else if (!SystemInformation.UserInteractive) {
@@ -6090,7 +6090,7 @@ namespace System.Windows.Forms {
             if (hWndOwner != IntPtr.Zero && hWndOwner != Handle) {
                 // Catch the case of a window trying to own its owner
                 if (UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, hWndOwner), NativeMethods.GWL_HWNDPARENT) == Handle) {
-                    throw new ArgumentException(SR.GetString(SR.OwnsSelfOrOwner,
+                    throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner,
                                                       "show"), "owner");
                 }
 
@@ -6116,23 +6116,23 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public DialogResult ShowDialog(IWin32Window owner) {
             if (owner == this) {
-                throw new ArgumentException(SR.GetString(SR.OwnsSelfOrOwner,
+                throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner,
                                                   "showDialog"), "owner");
             }
             else if (Visible) {
-                throw new InvalidOperationException(SR.GetString(SR.ShowDialogOnVisible,
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible,
                                                   "showDialog"));
             }
             else if (!Enabled) {
-                throw new InvalidOperationException(SR.GetString(SR.ShowDialogOnDisabled,
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled,
                                                   "showDialog"));
             }
             else if (!TopLevel) {
-                throw new InvalidOperationException(SR.GetString(SR.ShowDialogOnNonTopLevel,
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel,
                                                   "showDialog"));
             }
             else if (Modal) {
-                throw new InvalidOperationException(SR.GetString(SR.ShowDialogOnModal,
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnModal,
                                                   "showDialog"));
             }
             else if (!SystemInformation.UserInteractive) {
@@ -6191,7 +6191,7 @@ namespace System.Windows.Forms {
                 if (hWndOwner != IntPtr.Zero && hWndOwner != Handle) {
                     // Catch the case of a window trying to own its owner
                     if (UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, hWndOwner), NativeMethods.GWL_HWNDPARENT) == Handle) {
-                        throw new ArgumentException(SR.GetString(SR.OwnsSelfOrOwner,
+                        throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner,
                                                           "showDialog"), "owner");
                     }
 
@@ -7842,8 +7842,8 @@ namespace System.Windows.Forms {
             private void SetupText() {
                 owner.EnsureSecurityInformation();
                 string mainText = SR.SecurityToolTipMainText;
-                string sourceInfo = SR.GetString(SR.SecurityToolTipSourceInformation, owner.securitySite);
-                this.toolTipText =  SR.GetString(SR.SecurityToolTipTextFormat, mainText, sourceInfo);
+                string sourceInfo = string.Format(SR.SecurityToolTipSourceInformation, owner.securitySite);
+                this.toolTipText =  string.Format(SR.SecurityToolTipTextFormat, mainText, sourceInfo);
             }
 
             private void SetupToolTip() {

@@ -322,12 +322,12 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             return AddInternal(false /*newRow*/, null);
@@ -339,12 +339,12 @@ namespace System.Windows.Forms
 
             if (this.DataGridView.Columns.Count == 0)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoColumns));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoColumns));
             }
 
             if (this.DataGridView.RowTemplate.Cells.Count > this.DataGridView.Columns.Count)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_RowTemplateTooManyCells));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_RowTemplateTooManyCells));
             }
 
             DataGridViewRow dataGridViewRow = this.DataGridView.RowTemplateClone;
@@ -426,22 +426,22 @@ namespace System.Windows.Forms
             if (values.Length != this.DataGridView.Columns.Count)
             {
                 // DataGridView_WrongValueCount=The array of cell values provided does not contain as many items as there are columns.
-                throw new ArgumentException(SR.GetString(SR.DataGridView_WrongValueCount), "values");
+                throw new ArgumentException(string.Format(SR.DataGridView_WrongValueCount), "values");
             }*/
 
             if (this.DataGridView.VirtualMode)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationInVirtualMode));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationInVirtualMode));
             }
 
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             /* Microsoft: Add once databinding is implemented
@@ -449,7 +449,7 @@ namespace System.Windows.Forms
             {
                 if (dataGridViewColumn.DataBound)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationInDataBoundMode));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationInDataBoundMode));
                 }
             }*/
             return AddInternal(false /*newRow*/, values);
@@ -463,17 +463,17 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView.Columns.Count == 0)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoColumns));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoColumns));
             }
 
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             return AddInternal(dataGridViewRow);
@@ -487,27 +487,27 @@ namespace System.Windows.Forms
 
             if (count <= 0)
             {
-                throw new ArgumentOutOfRangeException("count", SR.GetString(SR.DataGridViewRowCollection_CountOutOfRange));
+                throw new ArgumentOutOfRangeException("count", string.Format(SR.DataGridViewRowCollection_CountOutOfRange));
             }
 
             if (this.DataGridView.Columns.Count == 0)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoColumns));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoColumns));
             }
 
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             if (this.DataGridView.RowTemplate.Cells.Count > this.DataGridView.Columns.Count)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_RowTemplateTooManyCells));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_RowTemplateTooManyCells));
             }
 
             DataGridViewRow rowTemplate = this.DataGridView.RowTemplateClone;
@@ -551,20 +551,20 @@ namespace System.Windows.Forms
             }
             if (dataGridViewRow.DataGridView != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowAlreadyBelongsToDataGridView));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_RowAlreadyBelongsToDataGridView));
             }
             if (this.DataGridView.Columns.Count == 0)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoColumns));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoColumns));
             }
             if (dataGridViewRow.Cells.Count > this.DataGridView.Columns.Count)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridViewRowCollection_TooManyCells), "dataGridViewRow");
+                throw new ArgumentException(string.Format(SR.DataGridViewRowCollection_TooManyCells), "dataGridViewRow");
             }
 
             if (dataGridViewRow.Selected)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_CannotAddOrInsertSelectedRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_CannotAddOrInsertSelectedRow));
             }
 
             if (this.DataGridView.NewRowIndex != -1)
@@ -623,12 +623,12 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             return AddCopyInternal(indexSource, DataGridViewElementStates.None, DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed, false /*newRow*/);
@@ -650,7 +650,7 @@ namespace System.Windows.Forms
 
             if (indexSource < 0 || indexSource >= this.Count)
             {
-                throw new ArgumentOutOfRangeException("indexSource", SR.GetString(SR.DataGridViewRowCollection_IndexSourceOutOfRange));
+                throw new ArgumentOutOfRangeException("indexSource", string.Format(SR.DataGridViewRowCollection_IndexSourceOutOfRange));
             }
 
             int index;
@@ -689,12 +689,12 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             return AddCopiesInternal(indexSource, count);
@@ -718,12 +718,12 @@ namespace System.Windows.Forms
         {
             if (indexSource < 0 || this.Count <= indexSource)
             {
-                throw new ArgumentOutOfRangeException("indexSource", SR.GetString(SR.DataGridViewRowCollection_IndexSourceOutOfRange));
+                throw new ArgumentOutOfRangeException("indexSource", string.Format(SR.DataGridViewRowCollection_IndexSourceOutOfRange));
             }
 
             if (count <= 0)
             {
-                throw new ArgumentOutOfRangeException("count", SR.GetString(SR.DataGridViewRowCollection_CountOutOfRange));
+                throw new ArgumentOutOfRangeException("count", string.Format(SR.DataGridViewRowCollection_CountOutOfRange));
             }
 
             DataGridViewElementStates rowTemplateState = this.rowStates[indexSource] & ~dgvesRemove;
@@ -862,12 +862,12 @@ namespace System.Windows.Forms
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.NewRowIndex != -1)
@@ -880,7 +880,7 @@ namespace System.Windows.Forms
 
             if (this.DataGridView.Columns.Count == 0)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoColumns));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoColumns));
             }
 
             int indexStart = this.items.Count;
@@ -930,7 +930,7 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
             if (this.DataGridView.DataSource != null)
             {
@@ -941,7 +941,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_CantClearRowCollectionWithWrongSource));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_CantClearRowCollectionWithWrongSource));
                 }
             }
             else
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
 #if DEBUG
             Debug.Assert(this.cachedRowCountsAccessAllowed);
@@ -1071,12 +1071,12 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
             if ((excludeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
             }
 #if DEBUG
             Debug.Assert(this.cachedRowCountsAccessAllowed);
@@ -1117,7 +1117,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
 #if DEBUG
             Debug.Assert(this.cachedRowCountsAccessAllowed);
@@ -1173,11 +1173,11 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
             if (indexStart < -1)
             {
-                throw new ArgumentOutOfRangeException("indexStart", SR.GetString(SR.InvalidLowBoundArgumentEx, "indexStart", (indexStart).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("indexStart", string.Format(SR.InvalidLowBoundArgumentEx, "indexStart", (indexStart).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
             }
 
             int index = indexStart + 1;
@@ -1200,16 +1200,16 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
             if ((excludeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
             }
             if (indexStart < -1)
             {
-                throw new ArgumentOutOfRangeException("indexStart", SR.GetString(SR.InvalidLowBoundArgumentEx, "indexStart", (indexStart).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("indexStart", string.Format(SR.InvalidLowBoundArgumentEx, "indexStart", (indexStart).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
             }
 
             int index = indexStart + 1;
@@ -1226,11 +1226,11 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
             if (indexStart > this.items.Count)
             {
-                throw new ArgumentOutOfRangeException("indexStart", SR.GetString(SR.InvalidHighBoundArgumentEx, "indexStart", (indexStart).ToString(CultureInfo.CurrentCulture), (this.items.Count).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("indexStart", string.Format(SR.InvalidHighBoundArgumentEx, "indexStart", (indexStart).ToString(CultureInfo.CurrentCulture), (this.items.Count).ToString(CultureInfo.CurrentCulture)));
             }
 
             int index = indexStart - 1;
@@ -1253,16 +1253,16 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
             if ((excludeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "excludeFilter"));
             }
             if (indexStart > this.items.Count)
             {
-                throw new ArgumentOutOfRangeException("indexStart", SR.GetString(SR.InvalidHighBoundArgumentEx, "indexStart", (indexStart).ToString(CultureInfo.CurrentCulture), (this.items.Count).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("indexStart", string.Format(SR.InvalidHighBoundArgumentEx, "indexStart", (indexStart).ToString(CultureInfo.CurrentCulture), (this.items.Count).ToString(CultureInfo.CurrentCulture)));
             }
 
             int index = indexStart - 1;
@@ -1279,7 +1279,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
 #if DEBUG
             Debug.Assert(this.cachedRowCountsAccessAllowed);
@@ -1355,7 +1355,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
             }
 #if DEBUG
             Debug.Assert(this.cachedRowHeightsAccessAllowed);
@@ -1442,7 +1442,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex < 0 || rowIndex >= this.items.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex", SR.GetString(SR.DataGridViewRowCollection_RowIndexOutOfRange));
+                throw new ArgumentOutOfRangeException("rowIndex", string.Format(SR.DataGridViewRowCollection_RowIndexOutOfRange));
             }
             DataGridViewRow dataGridViewRow = SharedRow(rowIndex);
             if (dataGridViewRow.Index == -1)
@@ -1476,17 +1476,17 @@ namespace System.Windows.Forms
             if (values.Length != this.DataGridView.Columns.Count)
             {
                 // DataGridView_WrongValueCount=The array of cell values provided does not contain as many items as there are columns.
-                throw new ArgumentException(SR.GetString(SR.DataGridView_WrongValueCount), "values");
+                throw new ArgumentException(string.Format(SR.DataGridView_WrongValueCount), "values");
             }*/
 
             if (this.DataGridView.VirtualMode)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationInVirtualMode));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationInVirtualMode));
             }
 
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             DataGridViewRow dataGridViewRow = this.DataGridView.RowTemplateClone;
@@ -1502,12 +1502,12 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
             
             InsertInternal(rowIndex, dataGridViewRow);
@@ -1518,39 +1518,39 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (rowIndex < 0 || this.Count < rowIndex)
             {
-                throw new ArgumentOutOfRangeException("rowIndex", SR.GetString(SR.DataGridViewRowCollection_IndexDestinationOutOfRange));
+                throw new ArgumentOutOfRangeException("rowIndex", string.Format(SR.DataGridViewRowCollection_IndexDestinationOutOfRange));
             }
 
             if (count <= 0)
             {
-                throw new ArgumentOutOfRangeException("count", SR.GetString(SR.DataGridViewRowCollection_CountOutOfRange));
+                throw new ArgumentOutOfRangeException("count", string.Format(SR.DataGridViewRowCollection_CountOutOfRange));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             if (this.DataGridView.Columns.Count == 0)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoColumns));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoColumns));
             }
 
             if (this.DataGridView.RowTemplate.Cells.Count > this.DataGridView.Columns.Count)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_RowTemplateTooManyCells));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_RowTemplateTooManyCells));
             }
 
             if (this.DataGridView.NewRowIndex != -1 && rowIndex == this.Count)
             {
                 // Trying to insert after the 'new' row.
                 Debug.Assert(this.DataGridView.AllowUserToAddRowsInternal);
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoInsertionAfterNewRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoInsertionAfterNewRow));
             }
 
             DataGridViewRow rowTemplate = this.DataGridView.RowTemplateClone;
@@ -1580,7 +1580,7 @@ namespace System.Windows.Forms
             Debug.Assert(this.DataGridView != null);
             if (rowIndex < 0 || this.Count < rowIndex)
             {
-                throw new ArgumentOutOfRangeException("rowIndex", SR.GetString(SR.DataGridViewRowCollection_RowIndexOutOfRange));
+                throw new ArgumentOutOfRangeException("rowIndex", string.Format(SR.DataGridViewRowCollection_RowIndexOutOfRange));
             }
 
             if (dataGridViewRow == null)
@@ -1590,29 +1590,29 @@ namespace System.Windows.Forms
 
             if (dataGridViewRow.DataGridView != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_RowAlreadyBelongsToDataGridView));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_RowAlreadyBelongsToDataGridView));
             }
 
             if (this.DataGridView.NewRowIndex != -1 && rowIndex == this.Count)
             {
                 // Trying to insert after the 'new' row.
                 Debug.Assert(this.DataGridView.AllowUserToAddRowsInternal);
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoInsertionAfterNewRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoInsertionAfterNewRow));
             }
 
             if (this.DataGridView.Columns.Count == 0)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoColumns));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoColumns));
             }
 
             if (dataGridViewRow.Cells.Count > this.DataGridView.Columns.Count)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridViewRowCollection_TooManyCells), "dataGridViewRow");
+                throw new ArgumentException(string.Format(SR.DataGridViewRowCollection_TooManyCells), "dataGridViewRow");
             }
 
             if (dataGridViewRow.Selected)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_CannotAddOrInsertSelectedRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_CannotAddOrInsertSelectedRow));
             }
 
             InsertInternal(rowIndex, dataGridViewRow, false);
@@ -1634,11 +1634,11 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView.Columns.Count == 0)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoColumns));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoColumns));
                 }
                 if (dataGridViewRow.Cells.Count > this.DataGridView.Columns.Count)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridViewRowCollection_TooManyCells), "dataGridViewRow");
+                    throw new ArgumentException(string.Format(SR.DataGridViewRowCollection_TooManyCells), "dataGridViewRow");
                 }
             }
             this.DataGridView.CompleteCellsCollection(dataGridViewRow);
@@ -1693,12 +1693,12 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             InsertCopiesPrivate(indexSource, indexDestination, count);
@@ -1710,24 +1710,24 @@ namespace System.Windows.Forms
 
             if (indexSource < 0 || this.Count <= indexSource)
             {
-                throw new ArgumentOutOfRangeException("indexSource", SR.GetString(SR.DataGridViewRowCollection_IndexSourceOutOfRange));
+                throw new ArgumentOutOfRangeException("indexSource", string.Format(SR.DataGridViewRowCollection_IndexSourceOutOfRange));
             }
 
             if (indexDestination < 0 || this.Count < indexDestination)
             {
-                throw new ArgumentOutOfRangeException("indexDestination", SR.GetString(SR.DataGridViewRowCollection_IndexDestinationOutOfRange));
+                throw new ArgumentOutOfRangeException("indexDestination", string.Format(SR.DataGridViewRowCollection_IndexDestinationOutOfRange));
             }
 
             if (count <= 0)
             {
-                throw new ArgumentOutOfRangeException("count", SR.GetString(SR.DataGridViewRowCollection_CountOutOfRange));
+                throw new ArgumentOutOfRangeException("count", string.Format(SR.DataGridViewRowCollection_CountOutOfRange));
             }
 
             if (this.DataGridView.NewRowIndex != -1 && indexDestination == this.Count)
             {
                 // Trying to insert after the 'new' row.
                 Debug.Assert(this.DataGridView.AllowUserToAddRowsInternal);
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoInsertionAfterNewRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoInsertionAfterNewRow));
             }
 
             DataGridViewElementStates rowTemplateState = GetRowState(indexSource) & ~(DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
@@ -1885,29 +1885,29 @@ namespace System.Windows.Forms
 
             if (rowIndex < 0 || rowIndex > this.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex", SR.GetString(SR.DataGridViewRowCollection_IndexDestinationOutOfRange));
+                throw new ArgumentOutOfRangeException("rowIndex", string.Format(SR.DataGridViewRowCollection_IndexDestinationOutOfRange));
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             if (this.DataGridView.NewRowIndex != -1 && rowIndex == this.Count)
             {
                 // Trying to insert after the 'new' row.
                 Debug.Assert(this.DataGridView.AllowUserToAddRowsInternal);
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoInsertionAfterNewRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoInsertionAfterNewRow));
             }
 
             if (this.DataGridView.DataSource != null)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_AddUnboundRow));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_AddUnboundRow));
             }
 
             if (this.DataGridView.Columns.Count == 0)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_NoColumns));
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_NoColumns));
             }
 
             Point newCurrentCell = new Point(-1, -1);
@@ -2269,12 +2269,12 @@ namespace System.Windows.Forms
 
             if (dataGridViewRow.DataGridView != this.DataGridView)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_RowDoesNotBelongToDataGridView), "dataGridViewRow");
+                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "dataGridViewRow");
             }
 
             if (dataGridViewRow.Index == -1)
             {
-                throw new ArgumentException(SR.GetString(SR.DataGridView_RowMustBeUnshared), "dataGridViewRow");
+                throw new ArgumentException(string.Format(SR.DataGridView_RowMustBeUnshared), "dataGridViewRow");
             }
             else
             {
@@ -2287,18 +2287,18 @@ namespace System.Windows.Forms
         {
             if (index < 0 || index >= this.Count)
             {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.DataGridViewRowCollection_RowIndexOutOfRange));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.DataGridViewRowCollection_RowIndexOutOfRange));
             }
 
             if (this.DataGridView.NewRowIndex == index)
             {
                 Debug.Assert(this.DataGridView.AllowUserToAddRowsInternal);
-                throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_CannotDeleteNewRow)); 
+                throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_CannotDeleteNewRow)); 
             }
 
             if (this.DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
             }
 
             if (this.DataGridView.DataSource != null)
@@ -2310,7 +2310,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_CantRemoveRowsWithWrongSource));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_CantRemoveRowsWithWrongSource));
                 }
             }
             else
@@ -2949,11 +2949,11 @@ namespace System.Windows.Forms
                 {
                     if (this.current == -1) 
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_EnumNotStarted));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_EnumNotStarted));
                     }
                     if (this.current == this.owner.Count)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewRowCollection_EnumFinished));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_EnumFinished));
                     }
                     return this.owner[this.current];
                 }

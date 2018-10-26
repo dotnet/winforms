@@ -38,7 +38,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
                     }
                     if (this.owner.ColumnHeadersVisible)
                     {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return SR.GetString(SR.DataGridView_AccTopRow);
+                    return string.Format(SR.DataGridView_AccTopRow);
                 }
             }
 
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner != null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewTopRowAccessibleObject_OwnerAlreadySet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewTopRowAccessibleObject_OwnerAlreadySet));
                     }
                     this.owner = value;
                 }
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
                 {
                     if (this.owner == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(string.Format(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
                     }
                     return this.owner.AccessibilityObject;
                 }
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
                 }
                 
                 if (index < 0)
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
                 }
                 int result = this.owner.Columns.GetColumnCount(DataGridViewElementStates.Visible);
                 if (this.owner.RowHeadersVisible)
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
             {
                 if (this.owner == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
                 }
                 switch (navigationDirection)
                 {
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                     switch (propertyId)
                     {
                         case NativeMethods.UIA_NamePropertyId:
-                            return SR.GetString(SR.DataGridView_AccTopRow);
+                            return string.Format(SR.DataGridView_AccTopRow);
                         case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
                         case NativeMethods.UIA_HasKeyboardFocusPropertyId:
                             return false;

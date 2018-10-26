@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
                     if (tempList == null) {
                         throw new ArgumentNullException("dataSource");
                     }
-                    throw new ArgumentException(SR.GetString(SR.ListManagerSetDataSource, tempList.GetType().FullName), "dataSource");
+                    throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), "dataSource");
                 }
 
             }
@@ -279,13 +279,13 @@ namespace System.Windows.Forms {
         internal Object this[int index] {
             get {
                 if (index < 0 || index >= list.Count) {
-                    throw new IndexOutOfRangeException(SR.GetString(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
+                    throw new IndexOutOfRangeException(string.Format(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
                 }
                 return list[index];
             }
             set {
                 if (index < 0 || index >= list.Count) {
-                    throw new IndexOutOfRangeException(SR.GetString(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
+                    throw new IndexOutOfRangeException(string.Format(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
                 }
                 list[index] = value;
             }

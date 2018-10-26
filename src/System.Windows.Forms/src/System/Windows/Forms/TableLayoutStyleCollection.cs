@@ -120,7 +120,7 @@ namespace System.Windows.Forms {
 
         private void EnsureNotOwned(TableLayoutStyle style) {
             if(style.Owner != null) {
-                throw new ArgumentException(SR.GetString(SR.OnlyOneControl, style.GetType().Name), "style");
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, style.GetType().Name), "style");
             }
         }
         internal void EnsureOwnership(IArrangedElement owner) {

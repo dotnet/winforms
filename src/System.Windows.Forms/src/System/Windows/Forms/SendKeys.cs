@@ -396,7 +396,7 @@ namespace System.Windows.Forms {
                         // context, so return an error.  KeyStart processes
                         // ochKeys up to the appropriate KeyEnd.
                         //
-                        throw new ArgumentException(SR.GetString(SR.InvalidSendKeysString, keys));
+                        throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
 
                     case '{':
                         int j = i + 1;
@@ -489,7 +489,7 @@ namespace System.Windows.Forms {
                             fStartNewChar = AddSimpleKey(keyName[0], repeat, hwnd, haveKeys, fStartNewChar, cGrp);
                         }
                         else {
-                            throw new ArgumentException(SR.GetString(SR.InvalidSendKeysKeyword, keys.Substring(i + 1, j - (i + 1))));
+                            throw new ArgumentException(string.Format(SR.InvalidSendKeysKeyword, keys.Substring(i + 1, j - (i + 1))));
                         }
 
                         // don't forget to position ourselves at the end of the {...} group
@@ -497,7 +497,7 @@ namespace System.Windows.Forms {
                         break;
 
                     case '+':
-                        if (haveKeys[HAVESHIFT] != 0) throw new ArgumentException(SR.GetString(SR.InvalidSendKeysString, keys));
+                        if (haveKeys[HAVESHIFT] != 0) throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
 
                         AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.ShiftKey, fStartNewChar, hwnd));
                         fStartNewChar = false;
@@ -505,7 +505,7 @@ namespace System.Windows.Forms {
                         break;
 
                     case '^':
-                        if (haveKeys[HAVECTRL]!= 0) throw new ArgumentException(SR.GetString(SR.InvalidSendKeysString, keys));
+                        if (haveKeys[HAVECTRL]!= 0) throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
 
                         AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.ControlKey, fStartNewChar, hwnd));
                         fStartNewChar = false;
@@ -513,7 +513,7 @@ namespace System.Windows.Forms {
                         break;
 
                     case '%':
-                        if (haveKeys[HAVEALT] != 0) throw new ArgumentException(SR.GetString(SR.InvalidSendKeysString, keys));
+                        if (haveKeys[HAVEALT] != 0) throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
 
                         AddEvent(new SKEvent((haveKeys[HAVECTRL] != 0) ? NativeMethods.WM_KEYDOWN : NativeMethods.WM_SYSKEYDOWN,
                                              (int)Keys.Menu, fStartNewChar, hwnd));
@@ -535,7 +535,7 @@ namespace System.Windows.Forms {
                         break;
 
                     case ')':
-                        if (cGrp < 1) throw new ArgumentException(SR.GetString(SR.InvalidSendKeysString, keys));
+                        if (cGrp < 1) throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
                         CancelMods(haveKeys, cGrp, hwnd);
                         cGrp--;
                         if (cGrp == 0) fStartNewChar = true;

@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
             set {
                 if (!backBrush.Color.Equals(value)) {
                     if (value.IsEmpty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "Caption BackColor"));
+                        throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Caption BackColor"));
                     backBrush = new SolidBrush(value);
                     Invalidate();
                 }
@@ -243,7 +243,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value.IsEmpty)
-                    throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "Caption ForeColor"));
+                    throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Caption ForeColor"));
                 foreBrush = new SolidBrush(value);
                 colorMap[0].NewColor = this.ForeColor;
                 Invalidate();

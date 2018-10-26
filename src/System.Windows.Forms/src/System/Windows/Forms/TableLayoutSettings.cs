@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             set { 
                 //valid values are 0x0 to 0x6
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelCellBorderStyle.None, (int)TableLayoutPanelCellBorderStyle.OutsetPartial)){
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument, "CellBorderStyle", value.ToString()));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, "CellBorderStyle", value.ToString()));
                 }
                 _borderStyle = value;   
                 //set the CellBorderWidth according to the current CellBorderStyle.
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
             }
             set { 
                 if (value < 0) {                    
-                     throw new ArgumentOutOfRangeException("ColumnCount", value, SR.GetString (SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                     throw new ArgumentOutOfRangeException("ColumnCount", value, string.Format (SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);         
                 containerInfo.MaxColumns = value;
@@ -135,7 +135,7 @@ namespace System.Windows.Forms {
             }
             set { 
                 if (value < 0) {                    
-                     throw new ArgumentOutOfRangeException("RowCount", value, SR.GetString (SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                     throw new ArgumentOutOfRangeException("RowCount", value, string.Format (SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 containerInfo.MaxRows = value;
@@ -194,7 +194,7 @@ namespace System.Windows.Forms {
             set { 
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelGrowStyle.FixedSize, (int)TableLayoutPanelGrowStyle.AddColumns)){
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument, "GrowStyle", value.ToString()));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, "GrowStyle", value.ToString()));
                 }            
                
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
@@ -244,7 +244,7 @@ namespace System.Windows.Forms {
 
         public void SetColumnSpan(object control, int value) {
             if(value < 1) {
-                throw new ArgumentOutOfRangeException("ColumnSpan", SR.GetString(SR.InvalidArgument, "ColumnSpan", (value).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("ColumnSpan", string.Format(SR.InvalidArgument, "ColumnSpan", (value).ToString(CultureInfo.CurrentCulture)));
             }
             if (IsStub) {
                 _stub.SetColumnSpan(control, value);
@@ -274,7 +274,7 @@ namespace System.Windows.Forms {
         
         public void SetRowSpan(object control, int value) {
             if(value < 1) {
-                throw new ArgumentOutOfRangeException("RowSpan", SR.GetString(SR.InvalidArgument, "RowSpan", (value).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("RowSpan", string.Format(SR.InvalidArgument, "RowSpan", (value).ToString(CultureInfo.CurrentCulture)));
             }
             if (control == null) {
                 throw new ArgumentNullException("control");
@@ -323,7 +323,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("control");
             }
             if (row < -1) {
-                throw new ArgumentOutOfRangeException("Row", SR.GetString(SR.InvalidArgument, "Row", (row).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("Row", string.Format(SR.InvalidArgument, "Row", (row).ToString(CultureInfo.CurrentCulture)));
             }   
             SetCellPosition(control, row, -1,  /*rowSpecified=*/true, /*colSpecified=*/false);
         
@@ -375,7 +375,7 @@ namespace System.Windows.Forms {
         //absolutely positioned to non-absolutely positioned
         public void SetColumn(object control, int column) {
             if (column < -1) {
-                throw new ArgumentException(SR.GetString(SR.InvalidArgument, "Column", (column).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, "Column", (column).ToString(CultureInfo.CurrentCulture)));
             }
             if (IsStub) {
                 _stub.SetColumn(control, column);

@@ -108,11 +108,11 @@ namespace System.Windows.Forms
                 // VSWhidbey 515823
                 //if (this.DataGridView != null && this.RowIndex == -1)
                 //{
-                //    throw new InvalidOperationException(SR.GetString(SR.DataGridView_InvalidOperationOnSharedCell));
+                //    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
                 //}
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("MaxInputLength", SR.GetString(SR.InvalidLowBoundArgumentEx, "MaxInputLength", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("MaxInputLength", string.Format(SR.InvalidLowBoundArgumentEx, "MaxInputLength", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 this.Properties.SetInteger(PropTextBoxCellMaxInputLength, value);
                 if (OwnsEditingTextBox(this.RowIndex))

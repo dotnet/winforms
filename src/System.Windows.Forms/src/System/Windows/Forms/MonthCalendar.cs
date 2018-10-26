@@ -580,7 +580,7 @@ namespace System.Windows.Forms {
             set {
                 if (value != maxDate) {
                     if (value < DateTimePicker.EffectiveMinDate(minDate)) {
-                        throw new ArgumentOutOfRangeException("MaxDate", SR.GetString(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException("MaxDate", string.Format(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDate(value), "MinDate"));
                     }
                     maxDate = value;
                     SetRange();
@@ -605,13 +605,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException("MaxSelectionCount", SR.GetString(SR.InvalidLowBoundArgumentEx, "MaxSelectionCount", (value).ToString("D", CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("MaxSelectionCount", string.Format(SR.InvalidLowBoundArgumentEx, "MaxSelectionCount", (value).ToString("D", CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (value != maxSelectionCount) {
                     if (IsHandleCreated) {
                         if (unchecked( (int) (long)SendMessage(NativeMethods.MCM_SETMAXSELCOUNT, value, 0)) == 0)
-                            throw new ArgumentException(SR.GetString(SR.MonthCalendarMaxSelCount, (value).ToString("D", CultureInfo.CurrentCulture)), "MaxSelectionCount");
+                            throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, (value).ToString("D", CultureInfo.CurrentCulture)), "MaxSelectionCount");
                     }
                     maxSelectionCount = value;
                 }
@@ -635,13 +635,13 @@ namespace System.Windows.Forms {
             set {
                 if (value != minDate) {
                     if (value > DateTimePicker.EffectiveMaxDate(maxDate)) {
-                        throw new ArgumentOutOfRangeException("MinDate", SR.GetString(SR.InvalidHighBoundArgument, "MinDate", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException("MinDate", string.Format(SR.InvalidHighBoundArgument, "MinDate", FormatDate(value), "MaxDate"));
                     }
 
                     // If trying to set the minimum less than DateTimePicker.MinimumDateTime, throw
                     // an exception.
                     if (value < DateTimePicker.MinimumDateTime) {
-                        throw new ArgumentOutOfRangeException("MinDate", SR.GetString(SR.InvalidLowBoundArgumentEx, "MinDate", FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
+                        throw new ArgumentOutOfRangeException("MinDate", string.Format(SR.InvalidLowBoundArgumentEx, "MinDate", FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
                     }
 
                     minDate = value;
@@ -776,10 +776,10 @@ namespace System.Windows.Forms {
                 if (scrollChange != value) {
 
                     if (value < 0) {
-                        throw new ArgumentOutOfRangeException("ScrollChange", SR.GetString(SR.InvalidLowBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("ScrollChange", string.Format(SR.InvalidLowBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value > MaxScrollChange) {
-                        throw new ArgumentOutOfRangeException("ScrollChange", SR.GetString(SR.InvalidHighBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (MaxScrollChange).ToString("D", CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("ScrollChange", string.Format(SR.InvalidHighBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (MaxScrollChange).ToString("D", CultureInfo.CurrentCulture)));
                     }
 
                     if (IsHandleCreated) {
@@ -810,10 +810,10 @@ namespace System.Windows.Forms {
 
                     // Keep SelectionEnd within min and max
                     if (value < MinDate) {
-                        throw new ArgumentOutOfRangeException("SelectionEnd", SR.GetString(SR.InvalidLowBoundArgumentEx, "SelectionEnd", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException("SelectionEnd", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionEnd", FormatDate(value), "MinDate"));
                     }
                     if (value > MaxDate) {
-                        throw new ArgumentOutOfRangeException("SelectionEnd", SR.GetString(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException("SelectionEnd", string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(value), "MaxDate"));
                     }
 
                     // If we've moved SelectionEnd before SelectionStart, move SelectionStart back
@@ -854,10 +854,10 @@ namespace System.Windows.Forms {
                     // Keep SelectionStart within min and max
                     //
                     if (value < minDate) {
-                        throw new ArgumentOutOfRangeException("SelectionStart", SR.GetString(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException("SelectionStart", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(value), "MinDate"));
                     }
                     if (value > maxDate) {
-                        throw new ArgumentOutOfRangeException("SelectionStart", SR.GetString(SR.InvalidHighBoundArgumentEx, "SelectionStart", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException("SelectionStart", string.Format(SR.InvalidHighBoundArgumentEx, "SelectionStart", FormatDate(value), "MaxDate"));
                     }
 
                     // If we've moved SelectionStart beyond SelectionEnd, move SelectionEnd forward
@@ -1065,12 +1065,12 @@ namespace System.Windows.Forms {
 
                     // throw if trying to set the TodayDate to a value greater than MaxDate
                     if (DateTime.Compare(value, maxDate) > 0) {
-                        throw new ArgumentOutOfRangeException("TodayDate", SR.GetString(SR.InvalidHighBoundArgumentEx, "TodayDate", FormatDate(value), FormatDate(maxDate)));
+                        throw new ArgumentOutOfRangeException("TodayDate", string.Format(SR.InvalidHighBoundArgumentEx, "TodayDate", FormatDate(value), FormatDate(maxDate)));
                     }
 
                     // throw if trying to set the TodayDate to a value less than MinDate
                     if (DateTime.Compare(value, minDate) < 0) {
-                        throw new ArgumentOutOfRangeException("TodayDate", SR.GetString(SR.InvalidLowBoundArgument, "TodayDate", FormatDate(value), FormatDate(minDate)));
+                        throw new ArgumentOutOfRangeException("TodayDate", string.Format(SR.InvalidLowBoundArgument, "TodayDate", FormatDate(value), FormatDate(minDate)));
                     }
 
                     todayDate = value.Date;
@@ -1114,7 +1114,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidNullArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
                 titleBackColor = value;
@@ -1137,7 +1137,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidNullArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
                 titleForeColor = value;
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(SR.GetString(SR.InvalidNullArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
                 trailingForeColor = value;
@@ -2023,7 +2023,7 @@ namespace System.Windows.Forms {
                 sa.wDay2 = sys.wDay;
 
                 if ((int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_SETRANGE, flag, sa) == 0)
-                    throw new InvalidOperationException(SR.GetString(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
+                    throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
             }
         }
 
@@ -2033,10 +2033,10 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void SetCalendarDimensions(int x, int y) {
             if (x < 1) {
-                throw new ArgumentOutOfRangeException("x", SR.GetString(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("x", string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
             }
             if (y < 1) {
-                throw new ArgumentOutOfRangeException("y", SR.GetString(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("y", string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
             }
 
             // MonthCalendar limits the dimensions to x * y <= 12
@@ -2068,10 +2068,10 @@ namespace System.Windows.Forms {
         public void SetDate(DateTime date) {
 
             if (date.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date", SR.GetString(SR.InvalidLowBoundArgumentEx, "date", FormatDate(date), "MinDate"));
+                throw new ArgumentOutOfRangeException("date", string.Format(SR.InvalidLowBoundArgumentEx, "date", FormatDate(date), "MinDate"));
             }
             if (date.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date", SR.GetString(SR.InvalidHighBoundArgumentEx, "date", FormatDate(date), "MaxDate"));
+                throw new ArgumentOutOfRangeException("date", string.Format(SR.InvalidHighBoundArgumentEx, "date", FormatDate(date), "MaxDate"));
             }
 
             SetSelectionRange(date, date);
@@ -2087,16 +2087,16 @@ namespace System.Windows.Forms {
 
             // Keep the dates within the min and max dates
             if (date1.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date1", SR.GetString(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date1), "MinDate"));
+                throw new ArgumentOutOfRangeException("date1", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date1), "MinDate"));
             }
             if (date1.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date1", SR.GetString(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date1), "MaxDate"));
+                throw new ArgumentOutOfRangeException("date1", string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date1), "MaxDate"));
             }
             if (date2.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date2", SR.GetString(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date2), "MinDate"));
+                throw new ArgumentOutOfRangeException("date2", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date2), "MinDate"));
             }
             if (date2.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date2", SR.GetString(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date2), "MaxDate"));
+                throw new ArgumentOutOfRangeException("date2", string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date2), "MaxDate"));
             }
 
             // If date1 > date2, we just select date2 (compat)
@@ -2687,30 +2687,30 @@ namespace System.Windows.Forms {
 
                         if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_MONTH) {
                             if (System.DateTime.Equals(calendar.SelectionStart.Date, calendar.SelectionEnd.Date)) {
-                                name = SR.GetString(SR.MonthCalendarSingleDateSelected, calendar.SelectionStart.ToLongDateString());
+                                name = string.Format(SR.MonthCalendarSingleDateSelected, calendar.SelectionStart.ToLongDateString());
                             }
                             else {
-                                name = SR.GetString(SR.MonthCalendarRangeSelected, calendar.SelectionStart.ToLongDateString(), calendar.SelectionEnd.ToLongDateString());
+                                name = string.Format(SR.MonthCalendarRangeSelected, calendar.SelectionStart.ToLongDateString(), calendar.SelectionEnd.ToLongDateString());
                             }
                         }
                         else if (this.calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_YEAR) {
                             if (System.DateTime.Equals(this.calendar.SelectionStart.Month, this.calendar.SelectionEnd.Month)) {
-                                name = SR.GetString(SR.MonthCalendarSingleDateSelected, calendar.SelectionStart.ToString("y"));
+                                name = string.Format(SR.MonthCalendarSingleDateSelected, calendar.SelectionStart.ToString("y"));
                             }
                             else {
-                                name = SR.GetString(SR.MonthCalendarRangeSelected, calendar.SelectionStart.ToString("y"), calendar.SelectionEnd.ToString("y"));
+                                name = string.Format(SR.MonthCalendarRangeSelected, calendar.SelectionStart.ToString("y"), calendar.SelectionEnd.ToString("y"));
                             }
                         }
                         else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_DECADE) {
                             if (System.DateTime.Equals(calendar.SelectionStart.Year, calendar.SelectionEnd.Year)) {
-                                name = SR.GetString(SR.MonthCalendarSingleYearSelected, calendar.SelectionStart.ToString("yyyy"));
+                                name = string.Format(SR.MonthCalendarSingleYearSelected, calendar.SelectionStart.ToString("yyyy"));
                             }
                             else {
-                                name = SR.GetString(SR.MonthCalendarYearRangeSelected, calendar.SelectionStart.ToString("yyyy"), calendar.SelectionEnd.ToString("yyyy"));
+                                name = string.Format(SR.MonthCalendarYearRangeSelected, calendar.SelectionStart.ToString("yyyy"), calendar.SelectionEnd.ToString("yyyy"));
                             }
                         }
                         else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_CENTURY) {
-                            name = SR.GetString(SR.MonthCalendarSingleDecadeSelected, calendar.SelectionStart.ToString("yyyy"));
+                            name = string.Format(SR.MonthCalendarSingleDecadeSelected, calendar.SelectionStart.ToString("yyyy"));
                         }
                     }
                     return name;

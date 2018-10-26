@@ -519,7 +519,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             switch (type) {
                 case NOTIFY_RESET:
                     
-                    SetPropertyValue(obj, null, true, SR.GetString(SR.PropertyGridResetValue, this.PropertyName));
+                    SetPropertyValue(obj, null, true, string.Format(SR.PropertyGridResetValue, this.PropertyName));
                     if (pvUIItems != null) {
                         for (int i = 0; i < pvUIItems.Length; i++) {
                             pvUIItems[i].Reset();
@@ -645,7 +645,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                 if (host != null)
                 {
-                    string text = (undoText == null ? SR.GetString(SR.PropertyGridSetValue, propertyInfo.Name) : undoText);
+                    string text = (undoText == null ? string.Format(SR.PropertyGridSetValue, propertyInfo.Name) : undoText);
                     trans = host.CreateTransaction(text);
                 }
 
@@ -923,7 +923,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 
                 if (host != null) {
                     string compName = component.Site != null ? component.Site.Name : component.GetType().Name;
-                    trans = DesignerHost.CreateTransaction(SR.GetString(SR.WindowsFormsSetEvent, compName + "." + this.PropertyName));
+                    trans = DesignerHost.CreateTransaction(string.Format(SR.WindowsFormsSetEvent, compName + "." + this.PropertyName));
                 }
              
                 if (eventBindings == null) {

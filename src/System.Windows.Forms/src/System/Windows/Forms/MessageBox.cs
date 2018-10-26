@@ -467,7 +467,7 @@ namespace System.Windows.Forms {
                 if (UnsafeNativeMethods.GetModuleHandle(ExternDll.Shell32) == IntPtr.Zero) {
                     if (UnsafeNativeMethods.LoadLibraryFromSystemPathIfAvailable(ExternDll.Shell32) == IntPtr.Zero) {
                         int lastWin32Error = Marshal.GetLastWin32Error();
-                        throw new Win32Exception(lastWin32Error, SR.GetString(SR.LoadDLLError, ExternDll.Shell32));
+                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, ExternDll.Shell32));
                     }
                 }
 

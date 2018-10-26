@@ -70,7 +70,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
                 catch (Exception e) {
                     if (string.IsNullOrEmpty(e.Message)) {
-                        throw new TargetInvocationException(SR.GetString(SR.ExceptionCreatingObject,
+                        throw new TargetInvocationException(string.Format(SR.ExceptionCreatingObject,
                                                             InstanceParentGridEntry.PropertyType.FullName,
                                                             e.ToString()), e);
                     }

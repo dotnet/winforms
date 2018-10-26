@@ -399,12 +399,12 @@ namespace System.Windows.Forms {
                 if (AllowSomePages) {
                     if (PrinterSettings.FromPage < PrinterSettings.MinimumPage
                         || PrinterSettings.FromPage > PrinterSettings.MaximumPage)
-                        throw new ArgumentException(SR.GetString(SR.PDpageOutOfRange, "FromPage"));
+                        throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
                     if (PrinterSettings.ToPage < PrinterSettings.MinimumPage
                         || PrinterSettings.ToPage > PrinterSettings.MaximumPage)
-                        throw new ArgumentException(SR.GetString(SR.PDpageOutOfRange, "ToPage"));
+                        throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "ToPage"));
                     if (PrinterSettings.ToPage < PrinterSettings.FromPage)
-                        throw new ArgumentException(SR.GetString(SR.PDpageOutOfRange, "FromPage"));
+                        throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
 
                     data.nFromPage = (short) PrinterSettings.FromPage;
                     data.nToPage = (short) PrinterSettings.ToPage;
@@ -480,12 +480,12 @@ namespace System.Windows.Forms {
                 if (AllowSomePages) {
                     if (PrinterSettings.FromPage < PrinterSettings.MinimumPage
                         || PrinterSettings.FromPage > PrinterSettings.MaximumPage)
-                        throw new ArgumentException(SR.GetString(SR.PDpageOutOfRange, "FromPage"));
+                        throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
                     if (PrinterSettings.ToPage < PrinterSettings.MinimumPage
                         || PrinterSettings.ToPage > PrinterSettings.MaximumPage)
-                        throw new ArgumentException(SR.GetString(SR.PDpageOutOfRange, "ToPage"));
+                        throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "ToPage"));
                     if (PrinterSettings.ToPage < PrinterSettings.FromPage)
-                        throw new ArgumentException(SR.GetString(SR.PDpageOutOfRange, "FromPage"));
+                        throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
 
                     unsafe {
                         int* pageRangeField = (int*)data.pageRanges;

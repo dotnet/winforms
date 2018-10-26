@@ -395,7 +395,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value.Width < 0 || value.Height < 0)
-                    throw new ArgumentOutOfRangeException("ButtonSize", SR.GetString(SR.InvalidArgument, "ButtonSize", value.ToString()));
+                    throw new ArgumentOutOfRangeException("ButtonSize", string.Format(SR.InvalidArgument, "ButtonSize", value.ToString()));
 
                 if (buttonSize != value) {
                     buttonSize = value;
@@ -1187,7 +1187,7 @@ namespace System.Windows.Forms {
             if (value == null)
                 throw new ArgumentNullException("value");
             if (index < 0 || ((buttons != null) && (index > buttonCount)))
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
             // insert the button into our local array, and then into the
             // real windows ToolBar control
@@ -1800,7 +1800,7 @@ namespace System.Windows.Forms {
             public virtual ToolBarButton this[int index] {
                 get {
                     if (index < 0 || ((owner.buttons != null) && (index >= owner.buttonCount)))
-                         throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                         throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                    return owner.buttons[index];
                 }
                 set {
@@ -1808,7 +1808,7 @@ namespace System.Windows.Forms {
                     // Sanity check parameters
                     //
                     if (index < 0 || ((owner.buttons != null) && index >= owner.buttonCount)) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value == null) {
                         throw new ArgumentNullException("value");
@@ -2111,7 +2111,7 @@ namespace System.Windows.Forms {
                 int count = (owner.buttons == null) ? 0 : owner.buttonCount;
 
                 if (index < 0 || index >= count)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                 if (owner.IsHandleCreated) {
                     owner.SendMessage(NativeMethods.TB_DELETEBUTTON, index, 0);

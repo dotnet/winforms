@@ -18,10 +18,10 @@ namespace System.Windows.Forms {
         
         public TableLayoutPanelCellPosition(int column, int row) {
             if (row < -1) {
-                throw new ArgumentOutOfRangeException("row", SR.GetString(SR.InvalidArgument, "row", (row).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("row", string.Format(SR.InvalidArgument, "row", (row).ToString(CultureInfo.CurrentCulture)));
             } 
             if (column < -1) {
-                throw new ArgumentOutOfRangeException("column", SR.GetString(SR.InvalidArgument, "column", (column).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("column", string.Format(SR.InvalidArgument, "column", (column).ToString(CultureInfo.CurrentCulture)));
             }
             this.row = row;
             this.column = column;
@@ -118,7 +118,7 @@ namespace System.Windows.Forms {
                         return new TableLayoutPanelCellPosition(values[0], values[1]);
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.TextParseFailedFormat,
+                        throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
                                                                   text,
                                                                   "column, row"));
                     }

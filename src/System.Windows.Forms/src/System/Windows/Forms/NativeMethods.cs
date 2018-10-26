@@ -4372,7 +4372,7 @@ namespace System.Windows.Forms {
                         v.data1 = Marshal.GetIUnknownForObject(var);
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.ConnPointUnhandledType, t.Name));
+                        throw new ArgumentException(string.Format(SR.ConnPointUnhandledType, t.Name));
                     }
                 }
                 return v;
@@ -4524,7 +4524,7 @@ namespace System.Windows.Forms {
                     return new DateTime(longVal);
 
                 case (int)tagVT.VT_USERDEFINED:
-                    throw new ArgumentException(SR.GetString(SR.COM2UnhandledVT, "VT_USERDEFINED"));
+                    throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));
 
                 case (int)tagVT.VT_ARRAY:
                     //gSAFEARRAY sa = (tagSAFEARRAY)Marshal.PtrToStructure(val), typeof(tagSAFEARRAY));
@@ -4549,7 +4549,7 @@ namespace System.Windows.Forms {
                     //case (int)tagVT.VT_RESERVED:
                 default:
                     int iVt = this.vt;
-                    throw new ArgumentException(SR.GetString(SR.COM2UnhandledVT, iVt.ToString(CultureInfo.InvariantCulture)));
+                    throw new ArgumentException(string.Format(SR.COM2UnhandledVT, iVt.ToString(CultureInfo.InvariantCulture)));
                 }
             }
 

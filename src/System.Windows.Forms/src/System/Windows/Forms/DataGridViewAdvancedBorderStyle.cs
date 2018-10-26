@@ -69,7 +69,7 @@ namespace System.Windows.Forms
                     value == this.banned2 ||
                     value == this.banned3)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_AdvancedCellBorderStyleInvalid, "All"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "All"));
                 }
                 if (!this.all || this.top != value)
                 {
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Bottom"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Bottom"));
                 }
                 this.BottomInternal = value;
             }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
                 }
                 this.LeftInternal = value;
             }
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
                     if ((this.owner != null && this.owner.RightToLeftInternal) &&
                         (value == DataGridViewAdvancedCellBorderStyle.InsetDouble || value == DataGridViewAdvancedCellBorderStyle.OutsetDouble))
                     {
-                        throw new ArgumentException(SR.GetString(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
+                        throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
                     }
                     if (this.all)
                     {
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
                 }
                 this.RightInternal = value;
             }
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
                     if ((this.owner != null && !this.owner.RightToLeftInternal) &&
                         (value == DataGridViewAdvancedCellBorderStyle.InsetDouble || value == DataGridViewAdvancedCellBorderStyle.OutsetDouble))
                     {
-                        throw new ArgumentException(SR.GetString(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
+                        throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
                     }
                     if (this.all)
                     {
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
-                    throw new ArgumentException(SR.GetString(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Top"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Top"));
                 }
                 this.TopInternal = value;
             }

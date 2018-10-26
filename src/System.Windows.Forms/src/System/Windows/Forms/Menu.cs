@@ -697,7 +697,7 @@ namespace System.Windows.Forms {
             public virtual MenuItem this[int index] {
                 get {
                     if (index < 0 || index >= owner.ItemCount)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     return owner.items[index];
                 }
                 // set not supported
@@ -842,7 +842,7 @@ namespace System.Windows.Forms {
                         MenuItem parent = (MenuItem)owner;
                         while (parent != null) {
                             if (parent.Equals(item)) {
-                                throw new ArgumentException(SR.GetString(SR.MenuItemAlreadyExists, item.Text), "item");
+                                throw new ArgumentException(string.Format(SR.MenuItemAlreadyExists, item.Text), "item");
                             }
                             if (parent.Parent is MenuItem)
                                 parent = (MenuItem)parent.Parent;
@@ -863,7 +863,7 @@ namespace System.Windows.Forms {
 
                 // Validate our index
                 if (index < 0 || index > owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
                 }
                                 
                 if (owner.items == null || owner.items.Length == owner.ItemCount) {
@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 MenuItem item = owner.items[index];

@@ -40,7 +40,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.AutoComplete;
             }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                 DataGridViewComboBoxCell dataGridViewComboBoxCell = value as DataGridViewComboBoxCell;
                 if (value != null && dataGridViewComboBoxCell == null)
                 {
-                    throw new InvalidCastException(SR.GetString(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewComboBoxCell"));
+                    throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewComboBoxCell"));
                 }
                 base.CellTemplate = value;
                 if (value != null)
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.DataSource;
             }
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 this.ComboBoxCellTemplate.DataSource = value;
                 if (this.DataGridView != null)
@@ -158,7 +158,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.DisplayMember;
             }
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 this.ComboBoxCellTemplate.DisplayMember = value;
                 if (this.DataGridView != null)
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.DisplayStyle;
             }
@@ -207,7 +207,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 this.ComboBoxCellTemplate.DisplayStyle = value;
                 if (this.DataGridView != null)
@@ -241,7 +241,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.DisplayStyleForCurrentCellOnly;
             }
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 this.ComboBoxCellTemplate.DisplayStyleForCurrentCellOnly = value;
                 if (this.DataGridView != null)
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.DropDownWidth;
             }
@@ -322,7 +322,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewComboBoxCell) this.CellTemplate).FlatStyle;
             }
@@ -363,7 +363,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.GetItems(this.DataGridView);
             }
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.ValueMember;
             }
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 this.ComboBoxCellTemplate.ValueMember = value;
                 if (this.DataGridView != null)
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.MaxDropDownItems;
             }
@@ -463,7 +463,7 @@ namespace System.Windows.Forms
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return this.ComboBoxCellTemplate.Sorted;
             }

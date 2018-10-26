@@ -934,7 +934,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         private void PromptFileNotFound(string fileName) {
-            MessageBoxWithFocusRestore(SR.GetString(SR.FileDialogFileNotFound, fileName), DialogCaption,
+            MessageBoxWithFocusRestore(string.Format(SR.FileDialogFileNotFound, fileName), DialogCaption,
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
@@ -978,7 +978,7 @@ namespace System.Windows.Forms {
         protected override bool RunDialog(IntPtr hWndOwner) {
             // See VSWhidbey 
             if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                throw new System.Threading.ThreadStateException(SR.GetString(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+                throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
             }
             EnsureFileDialogPermission();
             if (this.UseVistaDialogInternal)

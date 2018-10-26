@@ -47,7 +47,7 @@ namespace System.Windows.Forms
             {
                 if (value != null && !(value is System.Windows.Forms.DataGridViewButtonCell))
                 {
-                    throw new InvalidCastException(SR.GetString(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewButtonCell"));
+                    throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewButtonCell"));
                 }
                 base.CellTemplate = value;
             }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewButtonCell) this.CellTemplate).FlatStyle;
             }
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
             {
                 if (this.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
                 return ((DataGridViewButtonCell)this.CellTemplate).UseColumnTextForButtonValue;
             }

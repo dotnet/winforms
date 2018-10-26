@@ -556,7 +556,7 @@ namespace System.Windows.Forms {
                     throw new NotSupportedException(SR.ReadonlyControlsCollection);
                 }
                 if (!typeOfControl.IsAssignableFrom(value.GetType())) {
-                    throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, SR.GetString(SR.TypedControlCollectionShouldBeOfType, typeOfControl.Name)), value.GetType().Name);
+                    throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeOfControl.Name)), value.GetType().Name);
                 }
                 base.Add(value);
             }

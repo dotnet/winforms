@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
             get { return columns;}
             set {
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException("Columns", SR.GetString(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("Columns", string.Format(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 columns = value;
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
             set {
                 
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException("Rows", SR.GetString(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("Rows", string.Format(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 rows = value;
@@ -290,7 +290,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0 ) {
-                    throw new ArgumentOutOfRangeException("StartPage", SR.GetString(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("StartPage", string.Format(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 int oldValue = StartPage;
                 startPage = value;
@@ -456,7 +456,7 @@ namespace System.Windows.Forms {
                 PreviewPrintController previewController = new PreviewPrintController();
                 previewController.UseAntiAlias = UseAntiAlias;
                 document.PrintController = new PrintControllerWithStatusDialog(previewController, 
-                                                                               SR.GetString(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
+                                                                               string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
 
                 // Want to make sure we've reverted any security asserts before we call Print -- that calls into user code
                 document.Print();

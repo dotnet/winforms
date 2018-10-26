@@ -242,7 +242,7 @@ namespace System.Windows.Forms {
 
                 fieldInfo = owner.BindingManagerBase.GetItemProperties().Find(dataField, true);
                 if (owner.BindingManagerBase.DataSource != null && fieldInfo == null && dataField.Length > 0) {
-                    throw new ArgumentException(SR.GetString(SR.ListBindingBindField, dataField), "dataMember");
+                    throw new ArgumentException(string.Format(SR.ListBindingBindField, dataField), "dataMember");
                 }
 
                 // Do not add propertyChange notification if

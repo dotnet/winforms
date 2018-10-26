@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
                     return new SelectionRange(start, end);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.TextParseFailedFormat,
+                    throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
                                                               text,
                                                               "Start" + separator + " End"));
                 }

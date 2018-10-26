@@ -1237,7 +1237,7 @@ namespace System.Windows.Forms {
                     int length = owner.panels.Count;
 
                     if (index < 0|| index >= length)
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                     StatusBarPanel oldPanel = (StatusBarPanel) owner.panels[index];
                     oldPanel.ParentInternal = null;
@@ -1495,7 +1495,7 @@ namespace System.Windows.Forms {
                 int length = owner.panels.Count;
 
                 if (index < 0 || index > length)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                 value.ParentInternal = owner;
 
                 switch (value.AutoSize) {
@@ -1582,7 +1582,7 @@ namespace System.Windows.Forms {
             public virtual void RemoveAt(int index) {
                 int length = Count;
                 if (index < 0 || index >= length)
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                 // clear any tooltip
                 //

@@ -195,7 +195,7 @@ namespace System.Windows.Forms {
             set {
                 if (ImageIndexer.Index != value) {
                     if (value < -1)
-                        throw new ArgumentOutOfRangeException("ImageIndex", SR.GetString(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), -1));
+                        throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), -1));
 
                     ImageIndexer.Index = value;
                     UpdateButton(false);

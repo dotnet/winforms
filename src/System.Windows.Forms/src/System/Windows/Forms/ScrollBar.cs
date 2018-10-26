@@ -322,7 +322,7 @@ namespace System.Windows.Forms {
                 if (largeChange != value) {
                 
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("LargeChange", SR.GetString(SR.InvalidLowBoundArgumentEx, "LargeChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("LargeChange", string.Format(SR.InvalidLowBoundArgumentEx, "LargeChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                 
                     largeChange = value;
@@ -415,7 +415,7 @@ namespace System.Windows.Forms {
                 if (smallChange != value) {
                 
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("SmallChange", SR.GetString(SR.InvalidLowBoundArgumentEx, "SmallChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("SmallChange", string.Format(SR.InvalidLowBoundArgumentEx, "SmallChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                 
                     smallChange = value;
@@ -490,7 +490,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if (value < minimum || value > maximum) {
-                        throw new ArgumentOutOfRangeException("Value", SR.GetString(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
+                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
                     }
                     this.value = value;
                     UpdateScrollInfo();

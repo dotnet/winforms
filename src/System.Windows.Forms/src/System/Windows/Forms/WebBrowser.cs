@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms {
             {
                 if (!url.IsAbsoluteUri)
                 {
-                    throw new ArgumentException(SR.GetString(SR.WebBrowserNavigateAbsoluteUri, "uri"));
+                    throw new ArgumentException(string.Format(SR.WebBrowserNavigateAbsoluteUri, "uri"));
                 }
 
                 // Characters outside of US-ASCII may appear in Windows file paths and accordingly they’re allowed in file URIs.

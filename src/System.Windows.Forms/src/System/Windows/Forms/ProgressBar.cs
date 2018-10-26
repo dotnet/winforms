@@ -390,7 +390,7 @@ namespace System.Windows.Forms {
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("Maximum", SR.GetString(SR.InvalidLowBoundArgumentEx, "Maximum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("Maximum", string.Format(SR.InvalidLowBoundArgumentEx, "Maximum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
 
                     if (minimum > value) minimum = value;
 
@@ -428,7 +428,7 @@ namespace System.Windows.Forms {
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("Minimum", SR.GetString(SR.InvalidLowBoundArgumentEx, "Minimum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("Minimum", string.Format(SR.InvalidLowBoundArgumentEx, "Minimum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     if (maximum < value) maximum = value;
 
                     minimum = value;
@@ -623,7 +623,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if ((value < minimum) || (value > maximum))
-                        throw new ArgumentOutOfRangeException("Value", SR.GetString(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
+                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
                     this.value = value;
                     UpdatePos() ;
                 }

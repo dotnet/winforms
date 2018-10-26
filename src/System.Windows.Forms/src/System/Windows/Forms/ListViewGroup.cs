@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Creates a ListViewGroup.
         /// </devdoc>
-        public ListViewGroup() : this(SR.GetString(SR.ListViewGroupDefaultHeader, nextHeader++))
+        public ListViewGroup() : this(string.Format(SR.ListViewGroupDefaultHeader, nextHeader++))
         {
         }
 
@@ -509,7 +509,7 @@ namespace System.Windows.Forms {
             for (int i = 0; i < group.Items.Count; i ++) {
                 ListViewItem item = group.Items[i];
                 if (item.ListView != null && item.ListView != this.listView) {
-                    throw new ArgumentException(SR.GetString(SR.OnlyOneControl, item.Text));
+                    throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text));
                 }
             }
         }

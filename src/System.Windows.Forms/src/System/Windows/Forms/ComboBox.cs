@@ -519,7 +519,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException("DropDownWidth", SR.GetString(SR.InvalidArgument, "DropDownWidth", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("DropDownWidth", string.Format(SR.InvalidArgument, "DropDownWidth", (value).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (Properties.GetInteger(PropDropDownWidth) != value) {
                     Properties.SetInteger(PropDropDownWidth, value);
@@ -554,7 +554,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException("DropDownHeight", SR.GetString(SR.InvalidArgument, "DropDownHeight", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("DropDownHeight", string.Format(SR.InvalidArgument, "DropDownHeight", (value).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (Properties.GetInteger(PropDropDownHeight) != value) {
                     Properties.SetInteger(PropDropDownHeight, value);
@@ -723,7 +723,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException("ItemHeight", SR.GetString(SR.InvalidArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("ItemHeight", string.Format(SR.InvalidArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 ResetHeightCache();
@@ -789,7 +789,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1 || value > 100) {
-                    throw new ArgumentOutOfRangeException("MaxDropDownItems", SR.GetString(SR.InvalidBoundArgument, "MaxDropDownItems", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), (100).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("MaxDropDownItems", string.Format(SR.InvalidBoundArgument, "MaxDropDownItems", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), (100).ToString(CultureInfo.CurrentCulture)));
                 }
                 maxDropDownItems = (short)value;
             }
@@ -1026,7 +1026,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (value < -1 || value >= itemCount) {
-                        throw new ArgumentOutOfRangeException("SelectedIndex", SR.GetString(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("SelectedIndex", string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     if (IsHandleCreated) {
@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("SelectionStart", SR.GetString(SR.InvalidArgument, "SelectionStart", value.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("SelectionStart", string.Format(SR.InvalidArgument, "SelectionStart", value.ToString(CultureInfo.CurrentCulture)));
                 }
                 Select(value, SelectionLength);
             }
@@ -2135,7 +2135,7 @@ namespace System.Windows.Forms {
             }
 
             if (index < 0 || itemsCollection == null || index >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
 
             if (IsHandleCreated) {
@@ -3116,14 +3116,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Select(int start, int length) {
             if (start < 0) {
-                throw new ArgumentOutOfRangeException("start", SR.GetString(SR.InvalidArgument, "start", start.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("start", string.Format(SR.InvalidArgument, "start", start.ToString(CultureInfo.CurrentCulture)));
             }
             // the Length can be negative to support Selecting in the "reverse" direction..
             int end = start + length;
 
             // but end cannot be negative... this means Length is far negative...
             if (end < 0) {
-                throw new ArgumentOutOfRangeException("length", SR.GetString(SR.InvalidArgument, "length", length.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException("length", string.Format(SR.InvalidArgument, "length", length.ToString(CultureInfo.CurrentCulture)));
             }
 
             SendMessage(NativeMethods.CB_SETEDITSEL, 0, NativeMethods.Util.MAKELPARAM(start, end));
@@ -4038,7 +4038,7 @@ namespace System.Windows.Forms {
             public virtual object this[int index] {
                 get {
                     if (index < 0 || index >= InnerList.Count) {
-                        throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     return InnerList[index];
@@ -4132,7 +4132,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index > InnerList.Count) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 // If the combo box is sorted, then nust treat this like an add
@@ -4174,7 +4174,7 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerList.Count) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (owner.IsHandleCreated) {
@@ -4211,7 +4211,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index >= InnerList.Count) {
-                    throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 InnerList[index] = value;
