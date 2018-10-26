@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>System.Windows.Forms</AssemblyName>
+    <RootNamespace>System.Windows.Forms</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;SIGNED</DefineConstants>
+    <NoWarn>;NU5105;1701;1702;1705;1591;0169;0649</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;DEBUGRESOURCES;SIGNED</DefineConstants>
+    <NoWarn>;NU5105;1701;1702;1705;1591;0169;0649</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Accessibility" Version="4.6.0-alpha-27024-2" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.6.0-preview1-27018-01" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0-preview1-27018-01" />
+    <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview1-27018-01" />
+  </ItemGroup>
+
+</Project>
