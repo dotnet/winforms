@@ -2,6 +2,7 @@
 <Project>
   <PropertyGroup>
     <ImportNetSdkFromRepoToolset>false</ImportNetSdkFromRepoToolset>
+    <!--<DotNetUseShippingVersions>true</DotNetUseShippingVersions>-->
   </PropertyGroup>
 
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
