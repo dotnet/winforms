@@ -239,10 +239,10 @@ namespace System.Windows.Forms {
 
                 if (!value.IsEmpty) {
                     if (value.Start < 0) {
-                        throw new ArgumentOutOfRangeException("LinkArea", value, SR.GetString(SR.LinkLabelAreaStart));
+                        throw new ArgumentOutOfRangeException("LinkArea", value, SR.LinkLabelAreaStart);
                     }
                     if (value.Length < -1) {
-                        throw new ArgumentOutOfRangeException("LinkArea", value, SR.GetString(SR.LinkLabelAreaLength));
+                        throw new ArgumentOutOfRangeException("LinkArea", value, SR.LinkLabelAreaLength);
                     }
 
                     if (value.Start != 0 || value.Length != 0) {
@@ -1835,7 +1835,7 @@ namespace System.Windows.Forms {
 
                 Link left = (Link)links[x];
                 if (left.Length < 0) {
-                    throw new InvalidOperationException(SR.GetString(SR.LinkLabelOverlap));
+                    throw new InvalidOperationException(SR.LinkLabelOverlap);
                 }
 
                 for (int y=x; y<links.Count; y++) {
@@ -1844,7 +1844,7 @@ namespace System.Windows.Forms {
                         int maxStart = Math.Max(left.Start, right.Start);
                         int minEnd = Math.Min(left.Start + left.Length, right.Start + right.Length);
                         if (maxStart < minEnd) {
-                            throw new InvalidOperationException(SR.GetString(SR.LinkLabelOverlap));
+                            throw new InvalidOperationException(SR.LinkLabelOverlap);
                         }
                     }
                 }
@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms {
                         this[index] = (Link)value;
                     }
                     else {  
-                        throw new ArgumentException(SR.GetString(SR.LinkLabelBadLink),"value");
+                        throw new ArgumentException(SR.LinkLabelBadLink,"value");
                     }
                 }
             }
@@ -2180,7 +2180,7 @@ namespace System.Windows.Forms {
                     return Add((Link)value);
                 }
                 else {  
-                    throw new ArgumentException(SR.GetString(SR.LinkLabelBadLink),"value");
+                    throw new ArgumentException(SR.LinkLabelBadLink,"value");
                 }
             }
             
@@ -2191,7 +2191,7 @@ namespace System.Windows.Forms {
                     Add((Link)value);
                 }
                 else {  
-                    throw new ArgumentException(SR.GetString(SR.LinkLabelBadLink), "value");
+                    throw new ArgumentException(SR.LinkLabelBadLink, "value");
                 }
             }
     
@@ -2747,7 +2747,7 @@ namespace System.Windows.Forms {
 
             public override string DefaultAction {
                 get {
-                    return SR.GetString(SR.AccessibleActionClick);
+                    return SR.AccessibleActionClick;
                 }
             }
 

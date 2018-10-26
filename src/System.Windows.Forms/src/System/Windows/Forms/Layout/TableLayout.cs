@@ -336,11 +336,11 @@ namespace System.Windows.Forms.Layout {
             if (growStyle == TableLayoutPanelGrowStyle.FixedSize) {
                 //if we're a fixed size - check to see if we have enough room 
                 if (containerInfo.MinRowsAndColumns > numCols * numRows) {
-                    throw new ArgumentException(SR.GetString(SR.TableLayoutPanelFullDesc));
+                    throw new ArgumentException(SR.TableLayoutPanelFullDesc);
                 }    
 
                 if ((minColumn > numCols) || (minRow > numRows)) {
-                    throw new ArgumentException(SR.GetString(SR.TableLayoutPanelSpanDesc));
+                    throw new ArgumentException(SR.TableLayoutPanelSpanDesc);
                 }
                 
                 numRows = Math.Max(1, numRows);

@@ -59,7 +59,7 @@ namespace System.Windows.Forms {
 
         private static readonly object EVENT_FORMATCHANGED = new object();
 
-        private static readonly string DateTimePickerLocalizedControlTypeString = SR.GetString(SR.DateTimePickerLocalizedControlType);
+        private static readonly string DateTimePickerLocalizedControlTypeString = SR.DateTimePickerLocalizedControlType;
 
         private const int TIMEFORMAT_NOUPDOWN = NativeMethods.DTS_TIMEFORMAT & (~NativeMethods.DTS_UPDOWN);
         private EventHandler                    onCloseUp;

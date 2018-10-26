@@ -6692,7 +6692,7 @@ namespace System.Windows.Forms {
         }
         
         protected static void NotImplemented() {
-            ExternalException e = new ExternalException(SR.GetString(SR.UnsafeNativeMethodsNotImplemented), NativeMethods.E_NOTIMPL);
+            ExternalException e = new ExternalException(SR.UnsafeNativeMethodsNotImplemented, NativeMethods.E_NOTIMPL);
             throw e;
         }
 

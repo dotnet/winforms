@@ -191,7 +191,7 @@ namespace System.Windows.Forms {
                 return base.Height;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.SplitContainerPanelHeight)); 
+                throw new NotSupportedException(SR.SplitContainerPanelHeight); 
             }
         }
 
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
                 return base.Width;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.SplitContainerPanelWidth));
+                throw new NotSupportedException(SR.SplitContainerPanelWidth);
             }
         }
 

@@ -712,7 +712,7 @@ namespace System.Windows.Forms {
                 return new FormatEnumerator(this);
             }
             else {
-                throw new ExternalException(SR.GetString(SR.ExternalException), NativeMethods.E_NOTIMPL);
+                throw new ExternalException(SR.ExternalException, NativeMethods.E_NOTIMPL);
             }
         }
 
@@ -1228,7 +1228,7 @@ namespace System.Windows.Forms {
                     DataObject dataObject = parent as DataObject;
                     if (dataObject != null && dataObject.RestrictedFormats) {
                         if (!Clipboard.IsFormatValid(formats)) {
-                            throw new SecurityException(SR.GetString(SR.ClipboardSecurityException));
+                            throw new SecurityException(SR.ClipboardSecurityException);
                         }
                     }
 
@@ -1264,7 +1264,7 @@ namespace System.Windows.Forms {
                     DataObject dataObject = parent as DataObject;
                     if (dataObject != null && dataObject.RestrictedFormats) {
                         if (!Clipboard.IsFormatValid(formats)) {
-                            throw new SecurityException(SR.GetString(SR.ClipboardSecurityException));
+                            throw new SecurityException(SR.ClipboardSecurityException);
                         }
                     }
 
@@ -1659,7 +1659,7 @@ namespace System.Windows.Forms {
             private Stream ReadByteStreamFromHandle(IntPtr handle, out bool isSerializedObject) {
                 IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, handle));
                 if (ptr == IntPtr.Zero){
-                    throw new ExternalException(SR.GetString(SR.ExternalException), NativeMethods.E_OUTOFMEMORY);
+                    throw new ExternalException(SR.ExternalException, NativeMethods.E_OUTOFMEMORY);
                 }
                 try {
                     int size = UnsafeNativeMethods.GlobalSize(new HandleRef(null, handle));
@@ -2069,7 +2069,7 @@ namespace System.Windows.Forms {
                         format = DataFormats.Bitmap;
                     }
                     else {
-                        throw new NotSupportedException(SR.GetString(SR.DataObjectDibNotSupported));
+                        throw new NotSupportedException(SR.DataObjectDibNotSupported);
                     }
                 }
 

@@ -48,7 +48,7 @@ namespace System.Windows.Forms{
         private string       mappingName       = "";
         private string       headerName       = "";
         private bool         invalid              = false;
-        private string       nullText            = SR.GetString(SR.DataGridNullText);
+        private string       nullText            = SR.DataGridNullText;
         private bool         readOnly             = false;
         private bool         updating             = false;
         //private bool        visible              = true;
@@ -852,12 +852,12 @@ namespace System.Windows.Forms{
         }
 
 	private void ResetNullText() {
-		NullText = SR.GetString(SR.DataGridNullText);
+		NullText = SR.DataGridNullText;
 	}
 		
 
         private bool ShouldSerializeNullText() {
-            return (!SR.GetString(SR.DataGridNullText).Equals(nullText));
+            return (!SR.DataGridNullText.Equals(nullText));
         }
 
         /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.GetPreferredSize"]/*' />
@@ -890,7 +890,7 @@ namespace System.Windows.Forms{
         protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum) {
             CheckValidDataSource(source);
             if (PropertyDescriptor == null) {
-                throw new InvalidOperationException(SR.GetString(SR.DataGridColumnNoPropertyDescriptor));
+                throw new InvalidOperationException(SR.DataGridColumnNoPropertyDescriptor);
             }
             object value = PropertyDescriptor.GetValue(source[rowNum]);
             return value;
@@ -1138,7 +1138,7 @@ namespace System.Windows.Forms{
             CheckValidDataSource(source);
 
             if (source.Position != rowNum)
-                throw new ArgumentException(SR.GetString(SR.DataGridColumnListManagerPosition), "rowNum");
+                throw new ArgumentException(SR.DataGridColumnListManagerPosition, "rowNum");
             if (source[rowNum] is IEditableObject)
                 ((IEditableObject)source[rowNum]).BeginEdit();
             this.PropertyDescriptor.SetValue(source[rowNum], value);

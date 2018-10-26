@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
             ]
             set {
                 if (value.Width < 0 || value.Height < 0) {
-                    throw new ArgumentOutOfRangeException(SR.GetString(SR.ContainerControlInvalidAutoScaleDimensions), "value");
+                    throw new ArgumentOutOfRangeException(SR.ContainerControlInvalidAutoScaleDimensions, "value");
                 }
                 autoScaleDimensions = value;
                 if (!autoScaleDimensions.IsEmpty) {
@@ -1381,7 +1381,7 @@ namespace System.Windows.Forms {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::SetActiveControlInternal(" + (value == null ? "null" : value.Name) + ") - " + this.Name);
             if (activeControl != value || (value != null && !value.Focused)) {
                 if (value != null && !Contains(value)) {
-                    throw new ArgumentException(SR.GetString(SR.CannotActivateControl));
+                    throw new ArgumentException(SR.CannotActivateControl);
                 }
 
                 bool ret;

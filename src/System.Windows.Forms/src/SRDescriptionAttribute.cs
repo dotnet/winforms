@@ -19,7 +19,7 @@ namespace System.Windows.Forms
                 if (!this.replaced)
                 {
                     this.replaced = true;
-                    base.DescriptionValue = SR.GetString(base.Description);
+                    base.DescriptionValue = base.Description;
                 }
                 return base.Description;
             }

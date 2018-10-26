@@ -238,7 +238,7 @@ namespace System.Windows.Forms {
                                                  new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(null)),
                                                  0);
                 if (hhook == IntPtr.Zero)
-                    throw new SecurityException(SR.GetString(SR.SendKeysHookFailed));
+                    throw new SecurityException(SR.SendKeysHookFailed);
             }
         }
 
@@ -427,7 +427,7 @@ namespace System.Windows.Forms {
                         }
                         
                         if (j >= keysLen) {
-                            throw new ArgumentException(SR.GetString(SR.SendKeysKeywordDelimError));
+                            throw new ArgumentException(SR.SendKeysKeywordDelimError);
                         }
                         
                         // okay, have our KEYWORD.  verify it's one we know about
@@ -443,7 +443,7 @@ namespace System.Windows.Forms {
                             }
                             
                             if (j >= keysLen) {
-                                throw new ArgumentException(SR.GetString(SR.SendKeysKeywordDelimError));                            
+                                throw new ArgumentException(SR.SendKeysKeywordDelimError);                            
                             }
                             
                             if (Char.IsDigit(keys[j])) {
@@ -456,10 +456,10 @@ namespace System.Windows.Forms {
                         }
                         
                         if (j >= keysLen) {
-                            throw new ArgumentException(SR.GetString(SR.SendKeysKeywordDelimError));                            
+                            throw new ArgumentException(SR.SendKeysKeywordDelimError);                            
                         }
                         if (keys[j] != '}') {
-                            throw new ArgumentException(SR.GetString(SR.InvalidSendKeysRepeat));
+                            throw new ArgumentException(SR.InvalidSendKeysRepeat);
                         }
 
                         vk = MatchKeyword(keyName);
@@ -527,7 +527,7 @@ namespace System.Windows.Forms {
                         // Nests three deep.
                         //
                         cGrp++;
-                        if (cGrp > 3) throw new ArgumentException(SR.GetString(SR.SendKeysNestingError));
+                        if (cGrp > 3) throw new ArgumentException(SR.SendKeysNestingError);
 
                         if (haveKeys[HAVESHIFT] == UNKNOWN_GROUPING) haveKeys[HAVESHIFT] = cGrp;
                         if (haveKeys[HAVECTRL] == UNKNOWN_GROUPING) haveKeys[HAVECTRL] = cGrp;
@@ -558,7 +558,7 @@ namespace System.Windows.Forms {
             }
 
             if (cGrp != 0)
-                throw new ArgumentException(SR.GetString(SR.SendKeysGroupDelimError));
+                throw new ArgumentException(SR.SendKeysGroupDelimError);
 
             CancelMods(haveKeys, UNKNOWN_GROUPING, hwnd);
         }
@@ -874,7 +874,7 @@ namespace System.Windows.Forms {
             // If we're not going to wait, make sure there is a pump.
             //
             if (!wait && !Application.MessageLoop) {
-                throw new InvalidOperationException(SR.GetString(SR.SendKeysNoMessageLoop));
+                throw new InvalidOperationException(SR.SendKeysNoMessageLoop);
             }
 
             // For SendInput only, see AddCancelModifiersForPreviousEvents for details

@@ -4479,14 +4479,14 @@ namespace System.Windows.Forms {
                 case (int)tagVT.VT_R8:
 
                     // can I use unsafe here?
-                    throw new FormatException(SR.GetString(SR.CannotConvertIntToFloat));
+                    throw new FormatException(SR.CannotConvertIntToFloat);
 
                 case (int)tagVT.VT_CY:
                     // internally currency is 8-byte int scaled by 10,000
                     longVal = ((uint)data1 & 0xffffffff) | ((uint)data2 << 32);
                     return new Decimal(longVal);
                 case (int)tagVT.VT_DATE:
-                    throw new FormatException(SR.GetString(SR.CannotConvertDoubleToDate));
+                    throw new FormatException(SR.CannotConvertDoubleToDate);
 
                 case (int)tagVT.VT_BSTR:
                 case (int)tagVT.VT_LPWSTR:

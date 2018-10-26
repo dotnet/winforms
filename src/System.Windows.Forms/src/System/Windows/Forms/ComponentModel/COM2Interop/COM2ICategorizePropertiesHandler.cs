@@ -37,25 +37,25 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             case NativeMethods.ActiveX.PROPCAT_Nil:
                                 return "";
                             case NativeMethods.ActiveX.PROPCAT_Misc:
-                                return SR.GetString(SR.PropertyCategoryMisc);
+                                return SR.PropertyCategoryMisc;
                             case NativeMethods.ActiveX.PROPCAT_Font:
-                                return SR.GetString(SR.PropertyCategoryFont);
+                                return SR.PropertyCategoryFont;
                             case NativeMethods.ActiveX.PROPCAT_Position:
-                                return SR.GetString(SR.PropertyCategoryPosition);
+                                return SR.PropertyCategoryPosition;
                             case NativeMethods.ActiveX.PROPCAT_Appearance:
-                                return SR.GetString(SR.PropertyCategoryAppearance);
+                                return SR.PropertyCategoryAppearance;
                             case NativeMethods.ActiveX.PROPCAT_Behavior:
-                                return SR.GetString(SR.PropertyCategoryBehavior);
+                                return SR.PropertyCategoryBehavior;
                             case NativeMethods.ActiveX.PROPCAT_Data:
-                                return SR.GetString(SR.PropertyCategoryData);
+                                return SR.PropertyCategoryData;
                             case NativeMethods.ActiveX.PROPCAT_List:
-                                return SR.GetString(SR.PropertyCategoryList);
+                                return SR.PropertyCategoryList;
                             case NativeMethods.ActiveX.PROPCAT_Text:
-                                return SR.GetString(SR.PropertyCategoryText);
+                                return SR.PropertyCategoryText;
                             case NativeMethods.ActiveX.PROPCAT_Scale:
-                                return SR.GetString(SR.PropertyCategoryScale);
+                                return SR.PropertyCategoryScale;
                             case NativeMethods.ActiveX.PROPCAT_DDE:
-                                return SR.GetString(SR.PropertyCategoryDDE);
+                                return SR.PropertyCategoryDDE;
                         }
                         
                         if (NativeMethods.S_OK == catObj.GetCategoryName(categoryID, CultureInfo.CurrentCulture.LCID, out categoryName)) {

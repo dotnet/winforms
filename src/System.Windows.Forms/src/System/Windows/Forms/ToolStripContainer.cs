@@ -455,7 +455,7 @@ namespace System.Windows.Forms {
                     throw new ArgumentNullException("value");
                 }
                 if (IsReadOnly) {
-                    throw new NotSupportedException(SR.GetString(SR.ToolStripContainerUseContentPanel));
+                    throw new NotSupportedException(SR.ToolStripContainerUseContentPanel);
                 }
 
                 Type controlType = value.GetType();
@@ -467,7 +467,7 @@ namespace System.Windows.Forms {
             public override void Remove(Control value) {
                 if (value is ToolStripPanel || value is ToolStripContentPanel) {
                     if (!owner.DesignMode) {
-                        if (IsReadOnly) throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                        if (IsReadOnly) throw new NotSupportedException(SR.ReadonlyControlsCollection);
                     }
                 }
                 base.Remove(value);
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
                 if (child is ToolStripPanel || child is ToolStripContentPanel) {
                     if (!owner.DesignMode) {
                         if (IsReadOnly) {
-                            throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
                         }
                     }
                     else {

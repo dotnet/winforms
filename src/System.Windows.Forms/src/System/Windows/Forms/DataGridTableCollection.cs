@@ -176,7 +176,7 @@ namespace System.Windows.Forms {
                 return;
             for (int i = 0; i < items.Count; i++)
                 if ( ((DataGridTableStyle)items[i]).MappingName.Equals(table.MappingName) && table != items[i])
-                    throw new ArgumentException(SR.GetString(SR.DataGridTableStyleDuplicateMappingName), "table");
+                    throw new ArgumentException(SR.DataGridTableStyleDuplicateMappingName, "table");
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.Add"]/*' />
@@ -190,7 +190,7 @@ namespace System.Windows.Forms {
                 table.RowHeaderWidth = this.owner.MinimumRowHeaderWidth();
 
             if (table.DataGrid != owner && table.DataGrid != null)
-                throw new ArgumentException(SR.GetString(SR.DataGridTableStyleCollectionAddedParentedTableStyle), "table");
+                throw new ArgumentException(SR.DataGridTableStyleCollectionAddedParentedTableStyle, "table");
             table.DataGrid = owner;
             CheckForMappingNameDuplicates(table);
             table.MappingNameChanged += new EventHandler(TableStyleMappingNameChanged);
@@ -281,7 +281,7 @@ namespace System.Windows.Forms {
             if (!allowRemove)
                 return GetEnumerator();
             else
-                throw new NotSupportedException(SR.GetString(SR.DataGridTableCollectionGetEnumerator));
+                throw new NotSupportedException(SR.DataGridTableCollectionGetEnumerator);
         }
         */
 
@@ -323,7 +323,7 @@ namespace System.Windows.Forms {
                     break;
                 }
             if (tableIndex == -1)
-                throw new ArgumentException(SR.GetString(SR.DataGridTableCollectionMissingTable), "table");
+                throw new ArgumentException(SR.DataGridTableCollectionMissingTable, "table");
             else
                 RemoveAt(tableIndex);
         }

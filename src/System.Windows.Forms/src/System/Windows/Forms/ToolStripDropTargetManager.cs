@@ -248,7 +248,7 @@ namespace System.Windows.Forms {
                  {
                      if (Application.OleRequired() != System.Threading.ApartmentState.STA)
                      {
-                         throw new ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                         throw new ThreadStateException(SR.ThreadMustBeSTA);
                      }
                      if (accept)
                      {
@@ -285,7 +285,7 @@ namespace System.Windows.Forms {
                  }
                  catch (Exception e)
                  {
-                     throw new InvalidOperationException(SR.GetString(SR.DragDropRegFailed), e);
+                     throw new InvalidOperationException(SR.DragDropRegFailed, e);
                  }
             }
         }

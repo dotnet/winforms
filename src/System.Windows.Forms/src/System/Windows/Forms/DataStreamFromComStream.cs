@@ -61,7 +61,7 @@ namespace System.Windows.Forms {
 
         /*
         private void _NotImpl(string message) {
-            NotSupportedException ex = new NotSupportedException(message, new ExternalException(SR.GetString(SR.ExternalException), NativeMethods.E_NOTIMPL));
+            NotSupportedException ex = new NotSupportedException(message, new ExternalException(SR.ExternalException, NativeMethods.E_NOTIMPL));
             throw ex;
         }
         */
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
                 }
             }
             if (bytesWritten < count) {
-                throw new IOException(SR.GetString(SR.DataStreamWrite));
+                throw new IOException(SR.DataStreamWrite);
             }
         }
 

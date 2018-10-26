@@ -688,7 +688,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (this.DropDown == this.ParentInternal) {
-                    throw new InvalidOperationException(SR.GetString(SR.ToolStripShowDropDownInvalidOperation));
+                    throw new InvalidOperationException(SR.ToolStripShowDropDownInvalidOperation);
                 }
 
                 this.dropDown.OwnerItem = this;

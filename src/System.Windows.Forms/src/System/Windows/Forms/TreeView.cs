@@ -606,7 +606,7 @@ namespace System.Windows.Forms {
             set {
                 if (ImageIndexer.Key != value) {
                     ImageIndexer.Key = value;
-                    if (String.IsNullOrEmpty(value) || value.Equals(SR.GetString(SR.toStringNone))) {
+                    if (String.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
                         ImageIndex = (ImageList != null) ? 0:-1;
                     }
                     if (IsHandleCreated) {
@@ -1095,7 +1095,7 @@ namespace System.Windows.Forms {
                 if (SelectedImageIndexer.Key != value) {
                     SelectedImageIndexer.Key = value;
 
-                    if (String.IsNullOrEmpty(value) || value.Equals(SR.GetString(SR.toStringNone))) {
+                    if (String.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
                         SelectedImageIndex = (ImageList != null) ? 0 : -1;
                     }
                     if (IsHandleCreated) {

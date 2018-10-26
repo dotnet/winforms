@@ -186,10 +186,10 @@ namespace System.Windows.Forms {
                 if (this.DropDownStyle == ComboBoxStyle.DropDownList &&
                     this.AutoCompleteSource != AutoCompleteSource.ListItems &&
                     value != AutoCompleteMode.None) {
-                    throw new NotSupportedException(SR.GetString(SR.ComboBoxAutoCompleteModeOnlyNoneAllowed));
+                    throw new NotSupportedException(SR.ComboBoxAutoCompleteModeOnlyNoneAllowed);
                 }
                 if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                    throw new ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                    throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
                 bool resetAutoComplete = false;
                 if (autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None) {
@@ -234,10 +234,10 @@ namespace System.Windows.Forms {
                 if (this.DropDownStyle == ComboBoxStyle.DropDownList &&
                     this.AutoCompleteMode != AutoCompleteMode.None &&
                     value != AutoCompleteSource.ListItems) {
-                    throw new NotSupportedException(SR.GetString(SR.ComboBoxAutoCompleteSourceOnlyListItemsAllowed));
+                    throw new NotSupportedException(SR.ComboBoxAutoCompleteSourceOnlyListItemsAllowed);
                 }
                 if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                    throw new ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                    throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
 
                 // VSWhidbey 466300
@@ -1175,7 +1175,7 @@ namespace System.Windows.Forms {
             set {
                 if (sorted != value) {
                     if (this.DataSource != null && value) {
-                        throw new ArgumentException(SR.GetString(SR.ComboBoxSortWithDataSource));
+                        throw new ArgumentException(SR.ComboBoxSortWithDataSource);
                     }
 
                     sorted = value;
@@ -1546,7 +1546,7 @@ namespace System.Windows.Forms {
 
         private void CheckNoDataSource() {
             if (DataSource != null) {
-                throw new ArgumentException(SR.GetString(SR.DataSourceLocksItems));
+                throw new ArgumentException(SR.DataSourceLocksItems);
             }
         }
 
@@ -2283,7 +2283,7 @@ namespace System.Windows.Forms {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
             int insertIndex = unchecked( (int) (long)SendMessage(NativeMethods.CB_ADDSTRING, 0, GetItemText(item)));
             if (insertIndex < 0) {
-                throw new OutOfMemoryException(SR.GetString(SR.ComboBoxItemOverflow));
+                throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
             }
             return insertIndex;
         }
@@ -2321,7 +2321,7 @@ namespace System.Windows.Forms {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
             int insertIndex = unchecked( (int) (long)SendMessage(NativeMethods.CB_INSERTSTRING, index, GetItemText(item)));
             if (insertIndex < 0) {
-                throw new OutOfMemoryException(SR.GetString(SR.ComboBoxItemOverflow));
+                throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
             }
             Debug.Assert(insertIndex == index, "NativeComboBox inserted at " + insertIndex + " not the requested index of " + index);
             return insertIndex;
@@ -2837,7 +2837,7 @@ namespace System.Windows.Forms {
                     // we will only throw the exception when the control is already on the form.
                     Debug.Assert(DisplayMember.Equals(String.Empty), "if this list is sorted it means that dataSource was null when Sorted first became true. at that point DisplayMember had to be String.Empty");
                     DataSource = null;
-                    throw new InvalidOperationException(SR.GetString(SR.ComboBoxDataSourceWithSort));
+                    throw new InvalidOperationException(SR.ComboBoxDataSourceWithSort);
                 }
             }
             if (DataSource == null) {
@@ -3039,7 +3039,7 @@ namespace System.Windows.Forms {
                             {
                                 stringSource = new StringSource(GetStringsForAutoComplete(AutoCompleteCustomSource));
                                 if (!stringSource.Bind(new HandleRef(this, childEdit.Handle), (int)AutoCompleteMode)) {
-                                    throw new ArgumentException(SR.GetString(SR.AutoCompleteFailure));
+                                    throw new ArgumentException(SR.AutoCompleteFailure);
                                 }
                             }
                             else
@@ -3063,7 +3063,7 @@ namespace System.Windows.Forms {
                                 {
                                     stringSource = new StringSource(GetStringsForAutoComplete(Items));
                                     if (!stringSource.Bind(new HandleRef(this, childEdit.Handle), (int)AutoCompleteMode)) {
-                                        throw new ArgumentException(SR.GetString(SR.AutoCompleteFailureListItems));
+                                        throw new ArgumentException(SR.AutoCompleteFailureListItems);
                                     }
                                 }
                                 else
@@ -3804,7 +3804,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     catch (Exception e) {
-                        throw new InvalidOperationException(SR.GetString(SR.RichControlLresult), e);
+                        throw new InvalidOperationException(SR.RichControlLresult, e);
                     }
                 }
                 else {  // m.lparam != OBJID_CLIENT, so do default message processing

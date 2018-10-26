@@ -32,7 +32,7 @@ namespace System.Windows.Forms
             Browsable(true),
             DefaultValue(true),
             SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(SR.DataGridView_ComboBoxColumnAutoCompleteDescr)
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnAutoCompleteDescr))
         ]
         public bool AutoComplete
         {
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatData)),
-            SRDescription(SR.DataGridView_ComboBoxColumnDataSourceDescr),
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnDataSourceDescr)),
             RefreshProperties(RefreshProperties.Repaint),
             AttributeProvider(typeof(IListSource)),
         ]
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(""),
             SRCategory(nameof(SR.CatData)),
-            SRDescription(SR.DataGridView_ComboBoxColumnDisplayMemberDescr),
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayMemberDescr)),
             TypeConverterAttribute("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
             Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
         ]
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(DataGridViewComboBoxDisplayStyle.DropDownButton),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_ComboBoxColumnDisplayStyleDescr)
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayStyleDescr))
         ]
         public DataGridViewComboBoxDisplayStyle DisplayStyle
         {
@@ -233,7 +233,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_ComboBoxColumnDisplayStyleForCurrentCellOnlyDescr)
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayStyleForCurrentCellOnlyDescr))
         ]
         public bool DisplayStyleForCurrentCellOnly
         {
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(1),
             SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(SR.DataGridView_ComboBoxColumnDropDownWidthDescr),
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnDropDownWidthDescr))
         ]
         public int DropDownWidth
         {
@@ -314,7 +314,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(FlatStyle.Standard),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_ComboBoxColumnFlatStyleDescr),
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnFlatStyleDescr)),
         ]
         public FlatStyle FlatStyle
         {
@@ -355,7 +355,7 @@ namespace System.Windows.Forms
             Editor("System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
             SRCategory(nameof(SR.CatData)),
-            SRDescription(SR.DataGridView_ComboBoxColumnItemsDescr)
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnItemsDescr))
         ]
         public DataGridViewComboBoxCell.ObjectCollection Items
         {
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(""),
             SRCategory(nameof(SR.CatData)),
-            SRDescription(SR.DataGridView_ComboBoxColumnValueMemberDescr),
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnValueMemberDescr)),
             TypeConverterAttribute("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
             Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
         ]
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(DataGridViewComboBoxCell.DATAGRIDVIEWCOMBOBOXCELL_defaultMaxDropDownItems),
             SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(SR.DataGridView_ComboBoxColumnMaxDropDownItemsDescr)
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnMaxDropDownItemsDescr))
         ]
         public int MaxDropDownItems
         {
@@ -455,7 +455,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(SR.DataGridView_ComboBoxColumnSortedDescr)
+            SRDescription(nameof(SR.DataGridView_ComboBoxColumnSortedDescr))
         ]
         public bool Sorted
         {

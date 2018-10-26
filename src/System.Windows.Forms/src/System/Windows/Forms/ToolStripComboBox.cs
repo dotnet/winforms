@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.ToolStripComboBox1"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public ToolStripComboBox(Control c) : base(c) {
-            throw new NotSupportedException(SR.GetString(SR.ToolStripMustSupplyItsOwnComboBox));
+            throw new NotSupportedException(SR.ToolStripMustSupplyItsOwnComboBox);
         }
 
         private static Control CreateControlInstance() {

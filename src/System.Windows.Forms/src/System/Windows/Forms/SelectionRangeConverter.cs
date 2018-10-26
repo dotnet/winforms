@@ -148,11 +148,11 @@ namespace System.Windows.Forms {
             }
             catch (InvalidCastException invalidCast)
             {
-                throw new ArgumentException(SR.GetString(SR.PropertyValueInvalidEntry), invalidCast);
+                throw new ArgumentException(SR.PropertyValueInvalidEntry, invalidCast);
             }
             catch (NullReferenceException nullRef)
             {
-                throw new ArgumentException(SR.GetString(SR.PropertyValueInvalidEntry), nullRef);
+                throw new ArgumentException(SR.PropertyValueInvalidEntry, nullRef);
             }
         }
 

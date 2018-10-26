@@ -758,7 +758,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Increment(int value) {
             if (this.Style == ProgressBarStyle.Marquee) {
-                throw new InvalidOperationException(SR.GetString(SR.ProgressBarIncrementMarqueeException));
+                throw new InvalidOperationException(SR.ProgressBarIncrementMarqueeException);
             }
             this.value += value;
 
@@ -831,7 +831,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void PerformStep() {
             if (this.Style == ProgressBarStyle.Marquee) {
-                throw new InvalidOperationException(SR.GetString(SR.ProgressBarPerformStepMarqueeException));
+                throw new InvalidOperationException(SR.ProgressBarPerformStepMarqueeException);
             }
             Increment(step);
         }

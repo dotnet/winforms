@@ -572,7 +572,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return;
                 }
                 
-                throw new ArgumentException(SR.GetString(SR.PropertyGridInvalidGridEntry));
+                throw new ArgumentException(SR.PropertyGridInvalidGridEntry);
             }
         }
 
@@ -4858,8 +4858,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             IUIService uiSvc = (IUIService)GetService(typeof(IUIService));
 
-            ErrorDialog.Message = SR.GetString(SR.PBRSFormatExceptionMessage);
-            ErrorDialog.Text = SR.GetString(SR.PBRSErrorTitle);
+            ErrorDialog.Message = SR.PBRSFormatExceptionMessage;
+            ErrorDialog.Text = SR.PBRSErrorTitle;
             ErrorDialog.Details = exMessage;
 
 
@@ -4938,8 +4938,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             
             IUIService uiSvc = (IUIService)GetService(typeof(IUIService));
 
-            ErrorDialog.Message = SR.GetString(SR.PBRSErrorInvalidPropertyValue);
-            ErrorDialog.Text = SR.GetString(SR.PBRSErrorTitle);
+            ErrorDialog.Message = SR.PBRSErrorInvalidPropertyValue;
+            ErrorDialog.Text = SR.PBRSErrorTitle;
             ErrorDialog.Details = exMessage;
             
 
@@ -6697,7 +6697,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         return name;
                     }
                     else {
-                        return SR.GetString(SR.PropertyGridDefaultAccessibleName);
+                        return SR.PropertyGridDefaultAccessibleName;
                     }
                 }
             }

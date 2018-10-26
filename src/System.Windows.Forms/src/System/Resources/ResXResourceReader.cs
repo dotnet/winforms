@@ -165,7 +165,7 @@ namespace System.Resources {
             }
             set {
                 if(isReaderDirty) {
-                    throw new InvalidOperationException(SR.GetString(SR.InvalidResXBasePathOperation));
+                    throw new InvalidOperationException(SR.InvalidResXBasePathOperation);
                 }
                 basePath = value;
             }
@@ -205,7 +205,7 @@ namespace System.Resources {
             }
             set {
                 if(isReaderDirty) {
-                    throw new InvalidOperationException(SR.GetString(SR.InvalidResXBasePathOperation));
+                    throw new InvalidOperationException(SR.InvalidResXBasePathOperation);
                 }
                 this.useResXDataNodes = value;
             }
@@ -469,7 +469,7 @@ namespace System.Resources {
             if (!validFile) {
                 resData = null;
                 resMetadata = null;
-                throw new ArgumentException(SR.GetString(SR.InvalidResXFileReaderWriterTypes));
+                throw new ArgumentException(SR.InvalidResXFileReaderWriterTypes);
             }
         }
 

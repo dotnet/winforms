@@ -2271,7 +2271,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index >= array.Length || InnerList.Count > array.Length - index) {
-                    throw new ArgumentException(SR.GetString(SR.ToolStripPanelRowControlCollectionIncorrectIndexLength));
+                    throw new ArgumentException(SR.ToolStripPanelRowControlCollectionIncorrectIndexLength);
                 }
 
                 for (int i = 0; i < InnerList.Count; i++) {

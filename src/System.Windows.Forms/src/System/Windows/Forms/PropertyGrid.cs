@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
                 toolStrip = new ToolStrip();
                 toolStrip.SuspendLayout();
                 toolStrip.ShowItemToolTips = true;
-                toolStrip.AccessibleName = SR.GetString(SR.PropertyGridToolbarAccessibleName);
+                toolStrip.AccessibleName = SR.PropertyGridToolbarAccessibleName;
                 toolStrip.AccessibleRole = AccessibleRole.ToolBar;
                 toolStrip.TabStop = true;
                 toolStrip.AllowMerge = false;
@@ -1911,7 +1911,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal void ClearTabs(PropertyTabScope tabScope) {
             if (tabScope < PropertyTabScope.Document) {
-                throw new ArgumentException(SR.GetString(SR.PropertyGridTabScope));
+                throw new ArgumentException(SR.PropertyGridTabScope);
             }
             RemoveTabs(tabScope, true);
         }
@@ -3495,14 +3495,14 @@ namespace System.Windows.Forms {
                 }
                 catch (Exception ex)
                 {
-                    String errString = SR.GetString(SR.ErrorPropertyPageFailed);
+                    String errString = SR.ErrorPropertyPageFailed;
                     if (uiSvc != null)
                     {
                         uiSvc.ShowError(ex, errString);
                     }
                     else
                     {
-                        RTLAwareMessageBox.Show(null, errString, SR.GetString(SR.PropertyGridTitle), MessageBoxButtons.OK, MessageBoxIcon.Error,
+                        RTLAwareMessageBox.Show(null, errString, SR.PropertyGridTitle, MessageBoxButtons.OK, MessageBoxIcon.Error,
                                 MessageBoxDefaultButton.Button1, 0);
                     }
                 }
@@ -3821,7 +3821,7 @@ namespace System.Windows.Forms {
         public void RefreshTabs(PropertyTabScope tabScope) {
             
             if (tabScope < PropertyTabScope.Document) {
-                throw new ArgumentException(SR.GetString(SR.PropertyGridTabScope));
+                throw new ArgumentException(SR.PropertyGridTabScope);
             }
 
             RemoveTabs(tabScope, false);
@@ -3920,7 +3920,7 @@ namespace System.Windows.Forms {
         // for example, removing PropertyTabScope.Document will remove PropertyTabScope.Document and PropertyTabScope.Component tabs
         internal void RemoveTabs(PropertyTabScope classification, bool setupToolbar) {
             if (classification == PropertyTabScope.Static) {
-                throw new ArgumentException(SR.GetString(SR.PropertyGridRemoveStaticTabs));
+                throw new ArgumentException(SR.PropertyGridRemoveStaticTabs);
             }
             
             // in case we've been disposed
@@ -3974,11 +3974,11 @@ namespace System.Windows.Forms {
             Debug.Assert(viewTabs != null, "Tab array destroyed!");
 
             if (tabIndex >= viewTabs.Length || tabIndex < 0) {
-                throw new ArgumentOutOfRangeException("tabIndex", SR.GetString(SR.PropertyGridBadTabIndex));
+                throw new ArgumentOutOfRangeException("tabIndex", SR.PropertyGridBadTabIndex);
             }
 
             if (viewTabScopes[tabIndex] == PropertyTabScope.Static) {
-                throw new ArgumentException(SR.GetString(SR.PropertyGridRemoveStaticTabs));
+                throw new ArgumentException(SR.PropertyGridRemoveStaticTabs);
             }
 
 
@@ -4315,8 +4315,8 @@ namespace System.Windows.Forms {
                        Debug.Fail("Failed to load category bitmap", e.ToString());
                    }
    
-                   viewSortButtons[ALPHA] = CreatePushButton(SR.GetString(SR.PBRSToolTipAlphabetic), alphaIndex, ehViewType, true);
-                   viewSortButtons[CATEGORIES] = CreatePushButton(SR.GetString(SR.PBRSToolTipCategorized), categoryIndex, ehViewType, true);
+                   viewSortButtons[ALPHA] = CreatePushButton(SR.PBRSToolTipAlphabetic, alphaIndex, ehViewType, true);
+                   viewSortButtons[CATEGORIES] = CreatePushButton(SR.PBRSToolTipCategorized, categoryIndex, ehViewType, true);
                    
                    // we create a dummy hidden button for view sort
                    viewSortButtons[NO_SORT] = CreatePushButton("", 0, ehViewType, true);
@@ -4384,7 +4384,7 @@ namespace System.Windows.Forms {
    
                // we recreate this every time to ensure it's at the end
                //
-               btnViewPropertyPages = CreatePushButton(SR.GetString(SR.PBRSToolTipPropertyPages), designpg, ehPP, false);
+               btnViewPropertyPages = CreatePushButton(SR.PBRSToolTipPropertyPages, designpg, ehPP, false);
                btnViewPropertyPages.Enabled = false;
                buttonList.Add(btnViewPropertyPages);
    
@@ -5006,7 +5006,7 @@ namespace System.Windows.Forms {
             public PropertyTab this[int index] {
                 get {
                     if (owner == null) {
-                        throw new InvalidOperationException(SR.GetString(SR.PropertyGridPropertyTabCollectionReadOnly));
+                        throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                     }
                     return owner.viewTabs[index];
                 }
@@ -5018,7 +5018,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void AddTabType(Type propertyTabType) {
                 if (owner == null) {
-                    throw new InvalidOperationException(SR.GetString(SR.PropertyGridPropertyTabCollectionReadOnly));
+                    throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
                 owner.AddTab(propertyTabType, PropertyTabScope.Global);
             }
@@ -5029,7 +5029,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void AddTabType(Type propertyTabType, PropertyTabScope tabScope) {
                 if (owner == null) {
-                    throw new InvalidOperationException(SR.GetString(SR.PropertyGridPropertyTabCollectionReadOnly));
+                    throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
                 owner.AddTab(propertyTabType, tabScope);
             }
@@ -5041,7 +5041,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void Clear(PropertyTabScope tabScope) {
                 if (owner == null) {
-                    throw new InvalidOperationException(SR.GetString(SR.PropertyGridPropertyTabCollectionReadOnly));
+                    throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
                 owner.ClearTabs(tabScope);
             }
@@ -5075,7 +5075,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void RemoveTabType(Type propertyTabType) {
                 if (owner == null) {
-                    throw new InvalidOperationException(SR.GetString(SR.PropertyGridPropertyTabCollectionReadOnly));
+                    throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
                 owner.RemoveTab(propertyTabType);
             }

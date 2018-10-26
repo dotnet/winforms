@@ -4030,7 +4030,7 @@ namespace System.Windows.Forms {
                         return defaultAction;
                     }
                     else {
-                        return SR.GetString(SR.AccessibleActionPress);
+                        return SR.AccessibleActionPress;
                     }
                 }
             }

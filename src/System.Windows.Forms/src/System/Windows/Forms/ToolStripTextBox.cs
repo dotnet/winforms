@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ToolStripTextBox1"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public ToolStripTextBox(Control c): base(c) {
-            throw new NotSupportedException(SR.GetString(SR.ToolStripMustSupplyItsOwnTextBox));
+            throw new NotSupportedException(SR.ToolStripMustSupplyItsOwnTextBox);
         }
 
         [

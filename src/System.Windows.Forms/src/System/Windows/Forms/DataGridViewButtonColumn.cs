@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_ColumnDefaultCellStyleDescr)
+            SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(FlatStyle.Standard),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_ButtonColumnFlatStyleDescr)
+            SRDescription(nameof(SR.DataGridView_ButtonColumnFlatStyleDescr))
         ]
         public FlatStyle FlatStyle
         {
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_ButtonColumnTextDescr)
+            SRDescription(nameof(SR.DataGridView_ButtonColumnTextDescr))
         ]
         public string Text
         {
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_ButtonColumnUseColumnTextForButtonValueDescr)
+            SRDescription(nameof(SR.DataGridView_ButtonColumnUseColumnTextForButtonValueDescr))
         ]
         public bool UseColumnTextForButtonValue
         {

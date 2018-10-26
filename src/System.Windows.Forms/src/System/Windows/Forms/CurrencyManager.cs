@@ -302,7 +302,7 @@ namespace System.Windows.Forms {
             }
             else {
                 // If the list is not IBindingList, then throw an exception:
-                throw new NotSupportedException(SR.GetString(SR.CurrencyManagerCantAddNew));
+                throw new NotSupportedException(SR.CurrencyManagerCantAddNew);
             }
 
             ChangeRecordState(list.Count - 1, (Position != list.Count - 1), (Position != list.Count - 1), true, true);  // true for firingPositionChangeNotification
@@ -346,7 +346,7 @@ namespace System.Windows.Forms {
             }
             
             if ((newPosition < 0 || newPosition >= Count) && this.IsBinding) {
-                throw new IndexOutOfRangeException(SR.GetString(SR.ListManagerBadPosition));
+                throw new IndexOutOfRangeException(SR.ListManagerBadPosition);
             }
 
             // if PushData fails in the OnCurrentChanged and there was a lastGoodKnownRow
@@ -390,7 +390,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected void CheckEmpty() {
             if (dataSource == null || list == null || list.Count == 0) {
-                throw new InvalidOperationException(SR.GetString(SR.ListManagerEmptyList));
+                throw new InvalidOperationException(SR.ListManagerEmptyList);
             }
         }
 
@@ -491,7 +491,7 @@ namespace System.Windows.Forms {
             // if we got here, the list did not contain any rows suitable for the bindings
             // suspend binding and throw an exception
             SuspendBinding();
-            throw new InvalidOperationException(SR.GetString(SR.DataBindingPushDataException));
+            throw new InvalidOperationException(SR.DataBindingPushDataException);
         }
 
         /// <devdoc>

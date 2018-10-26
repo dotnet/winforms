@@ -302,7 +302,7 @@ namespace System.Windows.Forms {
                 }
                 if (value != SelectionMode.One
                     && value != SelectionMode.None) {
-                    throw new ArgumentException(SR.GetString(SR.CheckedListBoxInvalidSelectionMode));
+                    throw new ArgumentException(SR.CheckedListBoxInvalidSelectionMode);
                 }
 
                 if (value != SelectionMode) {
@@ -1235,38 +1235,38 @@ namespace System.Windows.Forms {
                     return this[index];
                 }
                 set {
-                    throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly));
+                    throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
                 }
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object value) {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Clear"]/*' />
             /// <internalonly/>
             void IList.Clear() {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Insert"]/*' />
             /// <internalonly/>
             void IList.Insert(int index, object value) {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Remove"]/*' />
             /// <internalonly/>
             void IList.Remove(object value) {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.RemoveAt"]/*' />
             /// <internalonly/>
             void IList.RemoveAt(int index) {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.Contains"]/*' />
@@ -1390,7 +1390,7 @@ namespace System.Windows.Forms {
                     return InnerArray.GetItem(index, AnyMask);
                 }
                 set {
-                    throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedItemCollectionIsReadOnly));
+                    throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
                 }
             }
 
@@ -1451,31 +1451,31 @@ namespace System.Windows.Forms {
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object value) {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedItemCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Clear"]/*' />
             /// <internalonly/>
             void IList.Clear() {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedItemCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Insert"]/*' />
             /// <internalonly/>
             void IList.Insert(int index, object value) {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedItemCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Remove"]/*' />
             /// <internalonly/>
             void IList.Remove(object value) {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedItemCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.RemoveAt"]/*' />
             /// <internalonly/>
             void IList.RemoveAt(int index) {
-                throw new NotSupportedException(SR.GetString(SR.CheckedListBoxCheckedItemCollectionIsReadOnly));
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.CopyTo"]/*' />
@@ -1676,10 +1676,10 @@ namespace System.Windows.Forms {
             public override string DefaultAction {
                 get {
                     if (ParentCheckedListBox.GetItemChecked(index)) {
-                        return SR.GetString(SR.AccessibleActionUncheck);
+                        return SR.AccessibleActionUncheck;
                     }
                     else {
-                        return SR.GetString(SR.AccessibleActionCheck);
+                        return SR.AccessibleActionCheck;
                     }
                 }
             }

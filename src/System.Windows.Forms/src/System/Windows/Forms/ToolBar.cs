@@ -1531,7 +1531,7 @@ namespace System.Windows.Forms {
 
             ToolBarButton tbb = (ToolBarButton)buttons[nmTB.iItem];
             if (tbb == null)
-                throw new InvalidOperationException(SR.GetString(SR.ToolBarButtonNotFound));
+                throw new InvalidOperationException(SR.ToolBarButtonNotFound);
 
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
@@ -1829,7 +1829,7 @@ namespace System.Windows.Forms {
                         this[index] = (ToolBarButton)value;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.ToolBarBadToolBarButton),"value");
+                        throw new ArgumentException(SR.ToolBarBadToolBarButton,"value");
                     }
                 }
             }
@@ -1932,7 +1932,7 @@ namespace System.Windows.Forms {
                     return Add((ToolBarButton)button);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ToolBarBadToolBarButton),"button");
+                    throw new ArgumentException(SR.ToolBarBadToolBarButton,"button");
                 }
             }
 
@@ -2089,7 +2089,7 @@ namespace System.Windows.Forms {
                     Insert(index, (ToolBarButton)button);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ToolBarBadToolBarButton),"button");
+                    throw new ArgumentException(SR.ToolBarBadToolBarButton,"button");
                 }
             }
 

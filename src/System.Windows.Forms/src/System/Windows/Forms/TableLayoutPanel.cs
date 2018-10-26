@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
                     }
                 }
                 else {
-                    throw new NotSupportedException(SR.GetString(SR.TableLayoutSettingSettingsIsNotSupported));
+                    throw new NotSupportedException(SR.TableLayoutSettingSettingsIsNotSupported);
                 }
                 
             }

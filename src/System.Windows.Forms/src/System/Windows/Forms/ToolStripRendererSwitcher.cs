@@ -94,7 +94,7 @@ namespace System.Windows.Forms {
                     throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripRenderMode));
                 }
                 if (value == ToolStripRenderMode.Custom) {
-                    throw new NotSupportedException(SR.GetString(SR.ToolStripRenderModeUseRendererPropertyInstead));
+                    throw new NotSupportedException(SR.ToolStripRenderModeUseRendererPropertyInstead);
                 }
 
                 if (value == ToolStripRenderMode.ManagerRenderMode) {

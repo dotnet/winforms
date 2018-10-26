@@ -548,7 +548,7 @@ namespace System.Windows.Forms {
             }
             else {
                 Debug.Fail("Why are we trying to serialize an empty cursor?");
-                throw new SerializationException(SR.GetString(SR.CursorNonSerializableHandle));
+                throw new SerializationException(SR.CursorNonSerializableHandle);
             }
         }
 
@@ -655,7 +655,7 @@ namespace System.Windows.Forms {
             }
             catch (COMException e) {
                 Debug.Fail(e.ToString());
-                throw new ArgumentException(SR.GetString(SR.InvalidPictureFormat), "stream", e);
+                throw new ArgumentException(SR.InvalidPictureFormat, "stream", e);
             }
         }
 
@@ -667,7 +667,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("stream");
             }
             if(this.resourceId != 0) {
-                throw new FormatException(SR.GetString(SR.CursorCannotCovertToBytes));
+                throw new FormatException(SR.CursorCannotCovertToBytes);
             }
             try {
                 stream.Write(cursorData, 0, cursorData.Length);
@@ -678,7 +678,7 @@ namespace System.Windows.Forms {
             }
             catch (Exception e) {
                 Debug.Fail(e.ToString());
-                throw new InvalidOperationException(SR.GetString(SR.InvalidPictureFormat));
+                throw new InvalidOperationException(SR.InvalidPictureFormat);
             }
         }
 

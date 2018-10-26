@@ -128,7 +128,7 @@ namespace System.Windows.Forms
                 catch (ArgumentException)
                 {
                     // Give a better message describing the error
-                    throw new ArgumentException(SR.GetString(SR.HtmlDocumentInvalidDomain));
+                    throw new ArgumentException(SR.HtmlDocumentInvalidDomain);
                 }
             }
         }

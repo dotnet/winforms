@@ -460,9 +460,9 @@ namespace System.Windows.Forms {
             if ((original.options & OriginalOptions.ImageStrip) != 0) {
                 // strip width must be a positive multiple of image list width
                 if (size.Width == 0 || (size.Width % imageSize.Width) != 0)
-                    throw new ArgumentException(SR.GetString(SR.ImageListStripBadWidth), "original");
+                    throw new ArgumentException(SR.ImageListStripBadWidth, "original");
                 if (size.Height != imageSize.Height)
-                    throw new ArgumentException(SR.GetString(SR.ImageListImageTooShort), "original");
+                    throw new ArgumentException(SR.ImageListImageTooShort, "original");
             }
             else if (!size.Equals(ImageSize)) {
                 Bitmap source = bitmap;
@@ -479,7 +479,7 @@ namespace System.Windows.Forms {
             try {
                 Debug.Assert(HandleCreated, "Calling AddIconToHandle when there is no handle");
                 int index = SafeNativeMethods.ImageList_ReplaceIcon(new HandleRef(this, Handle), -1, new HandleRef(icon, icon.Handle));
-                if (index == -1) throw new InvalidOperationException(SR.GetString(SR.ImageListAddFailed));
+                if (index == -1) throw new InvalidOperationException(SR.ImageListAddFailed);
                 return index;
             } finally {
                 if((original.options & OriginalOptions.OwnsImage) != 0) { /// this is to handle the case were we clone the icon (see WHY WHY WHY below)
@@ -498,7 +498,7 @@ namespace System.Windows.Forms {
             SafeNativeMethods.DeleteObject(new HandleRef(null, hBitmap));
             SafeNativeMethods.DeleteObject(new HandleRef(null, hMask));
 
-            if (index == -1) throw new InvalidOperationException(SR.GetString(SR.ImageListAddFailed));
+            if (index == -1) throw new InvalidOperationException(SR.ImageListAddFailed);
             return index;
         }
 
@@ -545,7 +545,7 @@ namespace System.Windows.Forms {
                 UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
             }
 
-            if (Handle == IntPtr.Zero) throw new InvalidOperationException(SR.GetString(SR.ImageListCreateFailed));
+            if (Handle == IntPtr.Zero) throw new InvalidOperationException(SR.ImageListCreateFailed);
             SafeNativeMethods.ImageList_SetBkColor(new HandleRef(this, Handle), NativeMethods.CLR_NONE);
 
             Debug.Assert(originals != null, "Handle not yet created, yet original images are gone");
@@ -973,7 +973,7 @@ namespace System.Windows.Forms {
             internal Original(object image, OriginalOptions options, Color customTransparentColor) {
                 Debug.Assert(image != null, "image is null");
                 if (!(image is Icon) && !(image is Image)) {
-                    throw new InvalidOperationException(SR.GetString(SR.ImageListEntryType));
+                    throw new InvalidOperationException(SR.ImageListEntryType);
                 }
                 this.image = image;
                 this.options = options;
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms {
                     }
 
                    if (!(value is Bitmap))
-                        throw new ArgumentException(SR.GetString(SR.ImageListBitmap));
+                        throw new ArgumentException(SR.ImageListBitmap);
 
                     AssertInvariant();
                     Bitmap bitmap = (Bitmap)value;
@@ -1169,7 +1169,7 @@ namespace System.Windows.Forms {
                         SafeNativeMethods.DeleteObject(new HandleRef(null, hMask));
 
                         if (!ok)
-                            throw new InvalidOperationException(SR.GetString(SR.ImageListReplaceFailed));
+                            throw new InvalidOperationException(SR.ImageListReplaceFailed);
                         
                     } finally {
                         if(ownsImage) {
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms {
                         this[index] = (Image)value;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.ImageListBadImage), "value");
+                        throw new ArgumentException(SR.ImageListBadImage, "value");
                     }
                 }
             }
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
                     return Count - 1;
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ImageListBadImage), "value");
+                    throw new ArgumentException(SR.ImageListBadImage, "value");
                 }
             }
 
@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms {
                     }
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ImageListBitmap));
+                    throw new ArgumentException(SR.ImageListBitmap);
                 }
 
                 // update the imageInfoCollection
@@ -1394,9 +1394,9 @@ namespace System.Windows.Forms {
                 // strip width must be a positive multiple of image list width
                 //
                 if (value.Width == 0 || (value.Width % owner.ImageSize.Width) != 0)
-                    throw new ArgumentException(SR.GetString(SR.ImageListStripBadWidth), "value");
+                    throw new ArgumentException(SR.ImageListStripBadWidth, "value");
                 if (value.Height != owner.ImageSize.Height)
-                    throw new ArgumentException(SR.GetString(SR.ImageListImageTooShort), "value");
+                    throw new ArgumentException(SR.ImageListImageTooShort, "value");
 
                 int nImages = value.Width / owner.ImageSize.Width;
 
@@ -1575,7 +1575,7 @@ namespace System.Windows.Forms {
                 AssertInvariant();
                 bool ok = SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), index);
                 if (!ok) {
-                    throw new InvalidOperationException(SR.GetString(SR.ImageListRemoveFailed));
+                    throw new InvalidOperationException(SR.ImageListRemoveFailed);
                 } else {
                     if ((imageInfoCollection != null) && (index >= 0  && index < imageInfoCollection.Count)) {
                          imageInfoCollection.RemoveAt(index);

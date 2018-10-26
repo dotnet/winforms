@@ -560,7 +560,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("BlinkRate", value, SR.GetString(SR.BlinkRateMustBeZeroOrMore));
+                    throw new ArgumentOutOfRangeException("BlinkRate", value, SR.BlinkRateMustBeZeroOrMore);
                 }
                 blinkRate = value;
                 // If we set the blinkRate = 0 then set BlinkStyle = NeverBlink

@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
         internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints) {
             // undone be more clever here - perhaps figure out the biggest element and return that.
             if (!(container is ToolStrip)) {
-                throw new NotSupportedException(SR.GetString(SR.ToolStripSplitStackLayoutContainerMustBeAToolStrip));
+                throw new NotSupportedException(SR.ToolStripSplitStackLayoutContainerMustBeAToolStrip);
             }
 
             if (toolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow) {
@@ -218,7 +218,7 @@ namespace System.Windows.Forms {
         // this is part of the LayoutEngine - called when we need to do a layout.
         internal override bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs) {
             if (!(container is ToolStrip)) {
-                throw new NotSupportedException(SR.GetString(SR.ToolStripSplitStackLayoutContainerMustBeAToolStrip));
+                throw new NotSupportedException(SR.ToolStripSplitStackLayoutContainerMustBeAToolStrip);
             }
 
             InvalidateLayout();

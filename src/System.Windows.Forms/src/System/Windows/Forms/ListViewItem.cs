@@ -611,7 +611,7 @@ namespace System.Windows.Forms {
                 if (value == indentCount)
                     return;
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("IndentCount", SR.GetString(SR.ListViewIndentCountCantBeNegative));
+                    throw new ArgumentOutOfRangeException("IndentCount", SR.ListViewIndentCountCantBeNegative);
                 }
                 indentCount = value;
                 if (listView != null && listView.IsHandleCreated) {
@@ -954,7 +954,7 @@ namespace System.Windows.Forms {
             if (Index >= 0) {
                 ListView lv = ListView;
                 if (lv.LabelEdit == false)
-                    throw new InvalidOperationException(SR.GetString(SR.ListViewBeginEditFailed));
+                    throw new InvalidOperationException(SR.ListViewBeginEditFailed);
                 if (!lv.Focused)
                     lv.FocusInternal();
                 UnsafeNativeMethods.SendMessage(new HandleRef(lv, lv.Handle), NativeMethods.LVM_EDITLABEL, Index, 0);
@@ -1796,7 +1796,7 @@ namespace System.Windows.Forms {
                         this[index] = (ListViewSubItem)value;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.ListViewBadListViewSubItem),"value");
+                        throw new ArgumentException(SR.ListViewBadListViewSubItem,"value");
                     }
                 }
             }
@@ -1904,7 +1904,7 @@ namespace System.Windows.Forms {
                     return IndexOf(Add((ListViewSubItem)item));
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ListViewSubItemCollectionInvalidArgument));
+                    throw new ArgumentException(SR.ListViewSubItemCollectionInvalidArgument);
                 }
             }
             
@@ -1960,7 +1960,7 @@ namespace System.Windows.Forms {
             
                 // Range check subItems.
                 if (owner.SubItemCount == ListViewItem.MAX_SUBITEMS) {
-                    throw new InvalidOperationException(SR.GetString(SR.ErrorCollectionFull));
+                    throw new InvalidOperationException(SR.ErrorCollectionFull);
                 }
                 
                 if (owner.SubItemCount + size > owner.subItems.Length) {
@@ -2096,7 +2096,7 @@ namespace System.Windows.Forms {
                     Insert(index, (ListViewSubItem)item);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ListViewBadListViewSubItem),"item");
+                    throw new ArgumentException(SR.ListViewBadListViewSubItem,"item");
                 }
             }
             

@@ -808,7 +808,7 @@ namespace System.Windows.Forms {
                                 value = this.Width - Panel2MinSize - SplitterWidthInternal;
                             }
                             if (value < 0 ) {
-                                throw new InvalidOperationException(SR.GetString(SR.SplitterDistanceNotAllowed));
+                                throw new InvalidOperationException(SR.SplitterDistanceNotAllowed);
                             }
                             splitDistance = value;
                             splitterDistance = value;
@@ -827,7 +827,7 @@ namespace System.Windows.Forms {
                                 value = this.Height - Panel2MinSize - SplitterWidthInternal;
                             }
                             if (value < 0 ) {
-                                throw new InvalidOperationException(SR.GetString(SR.SplitterDistanceNotAllowed));
+                                throw new InvalidOperationException(SR.SplitterDistanceNotAllowed);
                             }
                             splitDistance = value;
                             splitterDistance = value;
@@ -2575,7 +2575,7 @@ namespace System.Windows.Forms {
             public override void Remove(Control value) {
                 if (value is SplitterPanel) {
                     if (!owner.DesignMode) {
-                        if (IsReadOnly) throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                        if (IsReadOnly) throw new NotSupportedException(SR.ReadonlyControlsCollection);
                     }
                 }
                 base.Remove(value);
@@ -2586,7 +2586,7 @@ namespace System.Windows.Forms {
                if (child is SplitterPanel) {
                    if (!owner.DesignMode) {
                        if (IsReadOnly) {
-                           throw new NotSupportedException(SR.GetString(SR.ReadonlyControlsCollection));
+                           throw new NotSupportedException(SR.ReadonlyControlsCollection);
                        }
                    }
                    else {

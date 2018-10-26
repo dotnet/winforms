@@ -981,7 +981,7 @@ namespace System.Windows.Forms {
                     }
                 }
                 if (ret == 0) {
-                    throw new InvalidOperationException(SR.GetString(SR.ToolTipAddFailed));
+                    throw new InvalidOperationException(SR.ToolTipAddFailed);
                 }
             } finally {
                 if(allocatedString && IntPtr.Zero != tool.lpszText) {

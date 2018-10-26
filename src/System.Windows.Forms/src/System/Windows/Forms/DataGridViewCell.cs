@@ -4779,12 +4779,12 @@ namespace System.Windows.Forms
                                 dataGridViewCell.OwningColumn == dataGridView.SortedColumn)
                             {
                                 name += ", " + (dataGridView.SortOrder == SortOrder.Ascending
-                                    ? SR.GetString(SR.SortedAscendingAccessibleStatus)
-                                    : SR.GetString(SR.SortedDescendingAccessibleStatus));
+                                    ? SR.SortedAscendingAccessibleStatus
+                                    : SR.SortedDescendingAccessibleStatus);
                             }
                             else
                             {
-                                name += ", " + SR.GetString(SR.NotSortedAccessibleStatus);
+                                name += ", " + SR.NotSortedAccessibleStatus;
                             }
                         }
 

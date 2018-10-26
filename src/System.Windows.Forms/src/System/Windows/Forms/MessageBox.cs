@@ -430,13 +430,13 @@ namespace System.Windows.Forms {
             // options intentionally not verified because we don't expose all the options Win32 supports.
 
             if (!SystemInformation.UserInteractive && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0) {
-                throw new InvalidOperationException(SR.GetString(SR.CantShowModalOnNonInteractive));
+                throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
             if (owner != null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0) {
-                throw new ArgumentException(SR.GetString(SR.CantShowMBServiceWithOwner), "options");
+                throw new ArgumentException(SR.CantShowMBServiceWithOwner, "options");
             }
             if (showHelp && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0) {
-                throw new ArgumentException(SR.GetString(SR.CantShowMBServiceWithHelp), "options");
+                throw new ArgumentException(SR.CantShowMBServiceWithHelp, "options");
             }
 
             // demand if not safe known options.

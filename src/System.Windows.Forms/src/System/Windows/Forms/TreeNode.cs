@@ -495,7 +495,7 @@ namespace System.Windows.Forms {
                     return path.ToString();
                 }
                 else 
-                    throw new InvalidOperationException(SR.GetString(SR.TreeNodeNoParent));
+                    throw new InvalidOperationException(SR.TreeNodeNoParent);
             }
         }
 
@@ -1200,7 +1200,7 @@ namespace System.Windows.Forms {
             if (handle != IntPtr.Zero) {
                 TreeView tv = TreeView;
                 if (tv.LabelEdit == false)
-                    throw new InvalidOperationException(SR.GetString(SR.TreeNodeBeginEditFailed));
+                    throw new InvalidOperationException(SR.TreeNodeBeginEditFailed);
                 if (!tv.Focused)
                     tv.FocusInternal();
                 UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EDITLABEL, 0, handle);
@@ -1659,7 +1659,7 @@ namespace System.Windows.Forms {
             if (parent != null) { // Never realize the virtual root
 
                 if (tv.InvokeRequired) {
-                    throw new InvalidOperationException(SR.GetString(SR.InvalidCrossThreadControlCall));
+                    throw new InvalidOperationException(SR.InvalidCrossThreadControlCall);
                 }
 
                 NativeMethods.TV_INSERTSTRUCT tvis = new NativeMethods.TV_INSERTSTRUCT();

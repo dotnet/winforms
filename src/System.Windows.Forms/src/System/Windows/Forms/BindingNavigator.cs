@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
         private ToolStripItem positionItem;
         private ToolStripItem countItem;
 
-        private String countItemFormat = SR.GetString(SR.BindingNavigatorCountItemFormat);
+        private String countItemFormat = SR.BindingNavigatorCountItemFormat;
 
         private EventHandler onRefreshItems = null;
 
@@ -170,19 +170,19 @@ namespace System.Windows.Forms {
             separator2.Name       = ch + "indingNavigatorSeparator";
             separator3.Name       = ch + "indingNavigatorSeparator";
 
-            MoveFirstItem.Text    = SR.GetString(SR.BindingNavigatorMoveFirstItemText);
-            MovePreviousItem.Text = SR.GetString(SR.BindingNavigatorMovePreviousItemText);
-            MoveNextItem.Text     = SR.GetString(SR.BindingNavigatorMoveNextItemText);
-            MoveLastItem.Text     = SR.GetString(SR.BindingNavigatorMoveLastItemText);
-            AddNewItem.Text       = SR.GetString(SR.BindingNavigatorAddNewItemText);
-            DeleteItem.Text       = SR.GetString(SR.BindingNavigatorDeleteItemText);
+            MoveFirstItem.Text    = SR.BindingNavigatorMoveFirstItemText;
+            MovePreviousItem.Text = SR.BindingNavigatorMovePreviousItemText;
+            MoveNextItem.Text     = SR.BindingNavigatorMoveNextItemText;
+            MoveLastItem.Text     = SR.BindingNavigatorMoveLastItemText;
+            AddNewItem.Text       = SR.BindingNavigatorAddNewItemText;
+            DeleteItem.Text       = SR.BindingNavigatorDeleteItemText;
 
-            CountItem.ToolTipText    = SR.GetString(SR.BindingNavigatorCountItemTip);
-            PositionItem.ToolTipText = SR.GetString(SR.BindingNavigatorPositionItemTip);
+            CountItem.ToolTipText    = SR.BindingNavigatorCountItemTip;
+            PositionItem.ToolTipText = SR.BindingNavigatorPositionItemTip;
             CountItem.AutoToolTip    = false;
             PositionItem.AutoToolTip = false;
 
-            PositionItem.AccessibleName = SR.GetString(SR.BindingNavigatorPositionAccessibleName);
+            PositionItem.AccessibleName = SR.BindingNavigatorPositionAccessibleName;
             //
             // Set up images
             //
@@ -743,11 +743,11 @@ namespace System.Windows.Forms {
         }
 
         private void ResetCountItemFormat() {
-            countItemFormat = SR.GetString(SR.BindingNavigatorCountItemFormat);
+            countItemFormat = SR.BindingNavigatorCountItemFormat;
         }
 
         private bool ShouldSerializeCountItemFormat() {
-            return countItemFormat != SR.GetString(SR.BindingNavigatorCountItemFormat);
+            return countItemFormat != SR.BindingNavigatorCountItemFormat;
         }
 
         private void OnAddNewItemEnabledChanged(object sender, EventArgs e) {

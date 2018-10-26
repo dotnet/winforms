@@ -352,7 +352,7 @@ namespace System.Windows.Forms {
 
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
             if (pageSettings == null)
-                throw new ArgumentException(SR.GetString(SR.PSDcantShowWithoutPage));
+                throw new ArgumentException(SR.PSDcantShowWithoutPage);
 
             NativeMethods.PAGESETUPDLG data = new NativeMethods.PAGESETUPDLG();
             data.lStructSize = Marshal.SizeOf(data);

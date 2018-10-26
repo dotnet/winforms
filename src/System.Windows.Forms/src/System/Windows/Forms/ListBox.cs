@@ -439,7 +439,7 @@ namespace System.Windows.Forms {
                 }
                 if (drawMode != value) {
                     if (MultiColumn && value == DrawMode.OwnerDrawVariable) {
-                        throw new ArgumentException(SR.GetString(SR.ListBoxVarHeightMultiCol), "value");
+                        throw new ArgumentException(SR.ListBoxVarHeightMultiCol, "value");
                     }
                     drawMode = value;
                     RecreateHandle();
@@ -713,7 +713,7 @@ namespace System.Windows.Forms {
             set {
                 if (multiColumn != value) {
                     if (value && drawMode == DrawMode.OwnerDrawVariable) {
-                        throw new ArgumentException(SR.GetString(SR.ListBoxVarHeightMultiCol), "value");
+                        throw new ArgumentException(SR.ListBoxVarHeightMultiCol, "value");
                     }
                     multiColumn = value;
                     RecreateHandle();
@@ -888,7 +888,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (selectionMode == SelectionMode.None) {
-                    throw new ArgumentException(SR.GetString(SR.ListBoxInvalidSelectionMode), "SelectedIndex");
+                    throw new ArgumentException(SR.ListBoxInvalidSelectionMode, "SelectedIndex");
                 }
 
                 if (selectionMode == SelectionMode.One && value != -1) {
@@ -1338,7 +1338,7 @@ namespace System.Windows.Forms {
 
         private void CheckNoDataSource() {
             if (DataSource != null)
-                throw new ArgumentException(SR.GetString(SR.DataSourceLocksItems));
+                throw new ArgumentException(SR.DataSourceLocksItems);
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.CreateItemCollection"]/*' />
@@ -1593,7 +1593,7 @@ namespace System.Windows.Forms {
                 // so we'll have to assume that LB_ERR corresponds to item
                 // overflow.
                 //
-                throw new OutOfMemoryException(SR.GetString(SR.ListBoxItemOverflow));
+                throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 
             return insertIndex;
@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms {
                 // so we'll have to assume that LB_ERR corresponds to item
                 // overflow.
                 //
-                throw new OutOfMemoryException(SR.GetString(SR.ListBoxItemOverflow));
+                throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 
             Debug.Assert(insertIndex == index, "NativeListBox inserted at " + insertIndex + " not the requested index of " + index);
@@ -2131,7 +2131,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentOutOfRangeException("index", SR.GetString(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
             if (selectionMode == SelectionMode.None)
-                throw new InvalidOperationException(SR.GetString(SR.ListBoxInvalidSelectionMode));
+                throw new InvalidOperationException(SR.ListBoxInvalidSelectionMode);
 
             SelectedItems.SetSelected(index, value);
             if (IsHandleCreated) {
@@ -2871,7 +2871,7 @@ namespace System.Windows.Forms {
                 ///     Moves to the next element, or returns false if at the end.
                 /// </devdoc>
                 bool IEnumerator.MoveNext() {
-                    if(version != items.version) throw new InvalidOperationException(SR.GetString(SR.ListEnumVersionMismatch));
+                    if(version != items.version) throw new InvalidOperationException(SR.ListEnumVersionMismatch);
 
                     while(true) {
                         if (current < items.count - 1) {
@@ -2898,7 +2898,7 @@ namespace System.Windows.Forms {
                 ///     Resets the enumeration back to the beginning.
                 /// </devdoc>
                 void IEnumerator.Reset() {
-                    if(version != items.version) throw new InvalidOperationException(SR.GetString(SR.ListEnumVersionMismatch));
+                    if(version != items.version) throw new InvalidOperationException(SR.ListEnumVersionMismatch);
                     current = -1;
                 }
 
@@ -2908,7 +2908,7 @@ namespace System.Windows.Forms {
                 object IEnumerator.Current {
                     get {
                         if (current == -1 || current == items.count) {
-                            throw new InvalidOperationException(SR.GetString(SR.ListEnumCurrentOutOfRange));
+                            throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                         }
 
                         return items.entries[current].item;
@@ -3628,7 +3628,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Insert"]/*' />
             /// <internalonly/>
             void IList.Insert(int index, object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxCantInsertIntoIntegerCollection));
+                throw new NotSupportedException(SR.ListBoxCantInsertIntoIntegerCollection);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Remove"]/*' />
@@ -3795,7 +3795,7 @@ namespace System.Windows.Forms {
                 object IEnumerator.Current {
                     get {
                         if (current == -1 || current == items.Count) {
-                            throw new InvalidOperationException(SR.GetString(SR.ListEnumCurrentOutOfRange));
+                            throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                         }
 
                         return items[current];
@@ -3921,31 +3921,31 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Clear"]/*' />
             /// <internalonly/>
             void IList.Clear() {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Insert"]/*' />
             /// <internalonly/>
             void IList.Insert(int index, object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Remove"]/*' />
             /// <internalonly/>
             void IList.Remove(object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.RemoveAt"]/*' />
             /// <internalonly/>
             void IList.RemoveAt(int index) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.this"]/*' />
@@ -3966,7 +3966,7 @@ namespace System.Windows.Forms {
                     return this[index];
                 }
                 set {
-                    throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedIndexCollectionIsReadOnly));
+                    throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
                 }
             }
 
@@ -4084,7 +4084,7 @@ namespace System.Windows.Forms {
                 object IEnumerator.Current {
                     get {
                         if (current == -1 || current == items.Count) {
-                            throw new InvalidOperationException(SR.GetString(SR.ListEnumCurrentOutOfRange));
+                            throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                         }
 
                         return items[current];
@@ -4245,31 +4245,31 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Clear"]/*' />
             /// <internalonly/>
             void IList.Clear() {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Insert"]/*' />
             /// <internalonly/>
             void IList.Insert(int index, object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Remove"]/*' />
             /// <internalonly/>
             void IList.Remove(object value) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.RemoveAt"]/*' />
             /// <internalonly/>
             void IList.RemoveAt(int index) {
-                throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             // A new internal method used in SelectedIndex getter...
@@ -4294,7 +4294,7 @@ namespace System.Windows.Forms {
                     return InnerArray.GetItem(index, SelectedObjectMask);
                 }
                 set {
-                    throw new NotSupportedException(SR.GetString(SR.ListBoxSelectedObjectCollectionIsReadOnly));
+                    throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
                 }
             }
 

@@ -130,7 +130,7 @@ namespace System {
 #if DEPLOYMENT_NAMESPACE
                 throw new NotSupportedException(System.Deployment.Application.Resources.GetString("CombinationOfAccessibilitySwitchesNotSupported"));
 #else
-                throw new NotSupportedException(SR.GetString(SR.CombinationOfAccessibilitySwitchesNotSupported));
+                throw new NotSupportedException(SR.CombinationOfAccessibilitySwitchesNotSupported);
 #endif
             }
 
@@ -142,7 +142,7 @@ namespace System {
 #if DEPLOYMENT_NAMESPACE
                 throw new NotSupportedException(System.Deployment.Application.Resources.GetString("KeyboardToolTipDisplayBehaviorRequiresAccessibilityImprovementsLevel3"));
 #else
-                throw new NotSupportedException(SR.GetString(SR.KeyboardToolTipDisplayBehaviorRequiresAccessibilityImprovementsLevel3));
+                throw new NotSupportedException(SR.KeyboardToolTipDisplayBehaviorRequiresAccessibilityImprovementsLevel3);
 #endif
             }
 

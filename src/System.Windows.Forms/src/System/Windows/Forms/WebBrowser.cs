@@ -508,7 +508,7 @@ namespace System.Windows.Forms {
 #if Marshal_IsTypeVisibleFromCom
                     if (!Marshal.IsTypeVisibleFromCom(t))
                     {
-                        throw new ArgumentException(SR.GetString(SR.WebBrowserObjectForScriptingComVisibleOnly));
+                        throw new ArgumentException(SR.WebBrowserObjectForScriptingComVisibleOnly);
                     }
 #endif
                 }
@@ -1514,7 +1514,7 @@ namespace System.Windows.Forms {
                 }
                 else {
                     this.Dispose();
-                    throw new NotSupportedException(SR.GetString(SR.WebBrowserInIENotSupported));
+                    throw new NotSupportedException(SR.WebBrowserInIENotSupported);
                 }
             }
         }
@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms {
                 }
                 // We still don't have this.axIWebBrowser2. Throw an exception.
                 if (this.axIWebBrowser2 == null) {
-                    throw new InvalidOperationException(SR.GetString(SR.WebBrowserNoCastToIWebBrowser2)); 
+                    throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2); 
                 }
                 return this.axIWebBrowser2;
             }

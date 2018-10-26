@@ -220,7 +220,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("control");
 
             if (!control.IsHandleCreated || !control.Visible)
-                throw new ArgumentException(SR.GetString(SR.ContextMenuInvalidParent), "control");
+                throw new ArgumentException(SR.ContextMenuInvalidParent, "control");
 
             sourceControl = control;
 

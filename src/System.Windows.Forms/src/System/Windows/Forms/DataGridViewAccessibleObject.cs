@@ -311,7 +311,7 @@ namespace System.Windows.Forms
                                 switch (owner.SortOrder)
                                 {
                                     case SortOrder.None:
-                                        return SR.GetString(SR.NotSortedAccessibleStatus);
+                                        return SR.NotSortedAccessibleStatus;
                                     case SortOrder.Ascending:
                                         return SR.GetString(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                                     case SortOrder.Descending:
@@ -580,7 +580,7 @@ namespace System.Windows.Forms
                     case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
                         return true;
                     case NativeMethods.UIA_ProviderDescriptionPropertyId:
-                        return SR.GetString(SR.DataGridViewEditingPanelUiaProviderDescription);
+                        return SR.DataGridViewEditingPanelUiaProviderDescription;
                 }
 
                 return base.GetPropertyValue(propertyId);

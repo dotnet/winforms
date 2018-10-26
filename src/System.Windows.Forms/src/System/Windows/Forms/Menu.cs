@@ -506,7 +506,7 @@ namespace System.Windows.Forms {
             MenuItem itemDst;
 
             if (menuSrc == this)
-                throw new ArgumentException(SR.GetString(SR.MenuMergeWithSelf), "menuSrc");
+                throw new ArgumentException(SR.MenuMergeWithSelf, "menuSrc");
 
             if (menuSrc.items != null && items == null) {
                 MenuItems.Clear();                
@@ -903,7 +903,7 @@ namespace System.Windows.Forms {
                     return Add((MenuItem)value);
                 }
                 else {  
-                    throw new ArgumentException(SR.GetString(SR.MenuBadMenuItem), "value");
+                    throw new ArgumentException(SR.MenuBadMenuItem, "value");
                 }
             }
            
@@ -943,7 +943,7 @@ namespace System.Windows.Forms {
             public MenuItem [] Find(string key, bool searchAllChildren) {
 
                 if ((key == null) || (key.Length == 0)) {
-                    throw new System.ArgumentNullException("key", SR.GetString(SR.FindKeyMayNotBeEmptyOrNull));
+                    throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
                 
@@ -1059,7 +1059,7 @@ namespace System.Windows.Forms {
                     Add(index, (MenuItem)value);                    
                 }
                 else {  
-                    throw new ArgumentException(SR.GetString(SR.MenuBadMenuItem),"value");
+                    throw new ArgumentException(SR.MenuBadMenuItem,"value");
                 }
             }
             

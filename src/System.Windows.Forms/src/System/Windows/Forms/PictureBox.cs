@@ -567,7 +567,7 @@ namespace System.Windows.Forms {
             if (imageLocation == null || imageLocation.Length == 0)
             {
                 throw new
-                    InvalidOperationException(SR.GetString(SR.PictureBoxNoImageLocation));
+                    InvalidOperationException(SR.PictureBoxNoImageLocation);
             }
 
             // If the load and install fails, pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation] will be
@@ -634,7 +634,7 @@ namespace System.Windows.Forms {
             if (imageLocation == null || imageLocation.Length == 0)
             {
                 throw new
-                    InvalidOperationException(SR.GetString(SR.PictureBoxNoImageLocation));
+                    InvalidOperationException(SR.PictureBoxNoImageLocation);
             }
 
             if (pictureBoxState[PICTUREBOXSTATE_asyncOperationInProgress])

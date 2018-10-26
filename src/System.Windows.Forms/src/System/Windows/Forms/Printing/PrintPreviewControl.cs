@@ -350,7 +350,7 @@ namespace System.Windows.Forms {
             get { return zoom;}
             set {
                 if (value <= 0)
-                    throw new ArgumentException(SR.GetString(SR.PrintPreviewControlZoomNegative));
+                    throw new ArgumentException(SR.PrintPreviewControlZoomNegative);
                 autoZoom = false;
                 zoom = value;
                 InvalidateLayout();
@@ -550,10 +550,10 @@ namespace System.Windows.Forms {
                         SolidBrush brush = new SolidBrush(ForeColor);
                         try {
                             if (exceptionPrinting) {
-                                pevent.Graphics.DrawString(SR.GetString(SR.PrintPreviewExceptionPrinting), Font, brush, ClientRectangle, format);
+                                pevent.Graphics.DrawString(SR.PrintPreviewExceptionPrinting, Font, brush, ClientRectangle, format);
                             }
                             else {
-                                pevent.Graphics.DrawString(SR.GetString(SR.PrintPreviewNoPages), Font, brush, ClientRectangle, format);
+                                pevent.Graphics.DrawString(SR.PrintPreviewNoPages, Font, brush, ClientRectangle, format);
                             }
                         }
                         finally {

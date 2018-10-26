@@ -657,7 +657,7 @@ namespace System.Windows.Forms {
                         return defaultAction;
                     }
 
-                    return SR.GetString(SR.AccessibleActionCheck);
+                    return SR.AccessibleActionCheck;
                 }
             }
 

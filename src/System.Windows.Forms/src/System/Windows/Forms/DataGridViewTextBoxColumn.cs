@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength),
             SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(SR.DataGridView_TextBoxColumnMaxInputLengthDescr)
+            SRDescription(nameof(SR.DataGridView_TextBoxColumnMaxInputLengthDescr))
         ]
         public int MaxInputLength
         {

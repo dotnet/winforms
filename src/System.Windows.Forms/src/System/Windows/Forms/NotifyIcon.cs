@@ -672,7 +672,7 @@ namespace System.Windows.Forms {
 
             if (string.IsNullOrEmpty(tipText))
             {
-                throw new ArgumentException(SR.GetString(SR.NotifyIconEmptyOrNullTipText));
+                throw new ArgumentException(SR.NotifyIconEmptyOrNullTipText);
             }
 
             //valid values are 0x0 to 0x3

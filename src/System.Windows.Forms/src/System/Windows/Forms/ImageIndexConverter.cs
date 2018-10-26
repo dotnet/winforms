@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
             String stringValue = value as String;
-            if (stringValue != null && String.Compare(stringValue, SR.GetString(SR.toStringNone), true, culture) == 0) {
+            if (stringValue != null && String.Compare(stringValue, SR.toStringNone, true, culture) == 0) {
                 return -1;
             }
 
@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
             }
 
             if (destinationType == typeof(string) && value is int && ((int)value) == -1) {
-                return SR.GetString(SR.toStringNone);
+                return SR.toStringNone;
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

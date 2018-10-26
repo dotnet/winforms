@@ -89,10 +89,10 @@ namespace System.Windows.Forms {
             internal const int IgnoreThreadModel     = 0x10000000;
         }
 
-        private static COMException E_NOTIMPL = new COMException(SR.GetString(SR.AXNotImplemented), unchecked((int)0x80000001));
-        private static COMException E_INVALIDARG = new COMException(SR.GetString(SR.AXInvalidArgument), unchecked((int)0x80070057));
-        private static COMException E_FAIL   = new COMException(SR.GetString(SR.AXUnknownError), unchecked((int)0x80004005));
-        private static COMException E_NOINTERFACE = new COMException(SR.GetString(SR.AxInterfaceNotSupported), unchecked((int)0x80004002));
+        private static COMException E_NOTIMPL = new COMException(SR.AXNotImplemented, unchecked((int)0x80000001));
+        private static COMException E_INVALIDARG = new COMException(SR.AXInvalidArgument, unchecked((int)0x80070057));
+        private static COMException E_FAIL   = new COMException(SR.AXUnknownError, unchecked((int)0x80004005));
+        private static COMException E_NOINTERFACE = new COMException(SR.AxInterfaceNotSupported, unchecked((int)0x80004002));
 
         private const int INPROC_SERVER = 1;
         private const int OC_PASSIVE = 0;
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms {
 
                 if (storageType != STG_UNKNOWN && storageType != value.type) {
                     Debug.Fail("Trying to reload with a OcxState that is of a different type.");
-                    throw new InvalidOperationException(SR.GetString(SR.AXOcxStateLoaded));
+                    throw new InvalidOperationException(SR.AXOcxStateLoaded);
                 }
                 
                 if (this.ocxState == value)
@@ -2593,7 +2593,7 @@ namespace System.Windows.Forms {
             }
             catch (ExternalException e) {
                 if (e.ErrorCode == unchecked((int)0x80040112)) { // CLASS_E_NOTLICENSED
-                    throw new LicenseException(GetType(), this, SR.GetString(SR.AXNoLicenseToUse));
+                    throw new LicenseException(GetType(), this, SR.AXNoLicenseToUse);
                 }
                 throw;
             }
@@ -3044,7 +3044,7 @@ namespace System.Windows.Forms {
                 }
                 catch (Exception t) {
                     Debug.Fail(t.ToString());
-                    throw new InvalidOperationException(SR.GetString(SR.AXNoThreadInfo));
+                    throw new InvalidOperationException(SR.AXNoThreadInfo);
                 }
             }
             finally {
@@ -3052,7 +3052,7 @@ namespace System.Windows.Forms {
             }
 
             if (singleThreaded) {
-                throw new InvalidOperationException(SR.GetString(SR.AXSingleThreaded));
+                throw new InvalidOperationException(SR.AXSingleThreaded);
             }
         }
 #endif
@@ -3145,7 +3145,7 @@ namespace System.Windows.Forms {
                 }
                 
                 Debug.Fail("no implemented persitance interfaces on object");
-                throw new InvalidOperationException(SR.GetString(SR.UnableToInitComponent));
+                throw new InvalidOperationException(SR.UnableToInitComponent);
             }
             
             // Otherwise, we have state to deperist from:
@@ -3187,7 +3187,7 @@ namespace System.Windows.Forms {
                     break;
                 default:
                     Debug.Fail("unknown storage type.");
-                    throw new InvalidOperationException(SR.GetString(SR.UnableToInitComponent));
+                    throw new InvalidOperationException(SR.UnableToInitComponent);
             }
         
             if (ocxState.GetPropBag() != null) {
@@ -3371,7 +3371,7 @@ namespace System.Windows.Forms {
                 DesignerTransaction trans = null;
                 try {
                     if (host != null)
-                        trans = host.CreateTransaction(SR.GetString(SR.AXEditProperties));
+                        trans = host.CreateTransaction(SR.AXEditProperties);
 
                     string name = null;
                     object o = GetOcx();
@@ -3637,7 +3637,7 @@ namespace System.Windows.Forms {
             // that is not good enough for DragDrop.
             //
             if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                throw new ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                throw new ThreadStateException(SR.ThreadMustBeSTA);
             }
 
             SetAcceptDrops(AllowDrop);
@@ -3743,7 +3743,7 @@ namespace System.Windows.Forms {
                 }
                 else {
                     if (throwException) {
-                        throw new InvalidCastException(SR.GetString(SR.AXNoConnectionPointContainer));
+                        throw new InvalidCastException(SR.AXNoConnectionPointContainer);
                     }
                 }
 
@@ -4197,7 +4197,7 @@ namespace System.Windows.Forms {
                 }
                 else if (host.GetInPlaceObject() is UnsafeNativeMethods.IOleInPlaceObjectWindowless) {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Windowless control.");
-                    throw new InvalidOperationException(SR.GetString(SR.AXWindowlessControl));
+                    throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
 
                 return NativeMethods.S_OK;
@@ -4751,7 +4751,7 @@ namespace System.Windows.Forms {
             {
                 return new NativeMethods.PICTDESCemf(mf);
             }
-            throw new ArgumentException(SR.GetString(SR.AXUnknownImage), "image");
+            throw new ArgumentException(SR.AXUnknownImage, "image");
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIPictureFromPicture"]/*' />
@@ -4859,7 +4859,7 @@ namespace System.Windows.Forms {
                     return null;
                 default:
                     Debug.Fail("Invalid image type "+ type.ToString(CultureInfo.InvariantCulture));
-                    throw new ArgumentException(SR.GetString(SR.AXUnknownImage), "type");
+                    throw new ArgumentException(SR.AXUnknownImage, "type");
             }
         }
 
@@ -4920,7 +4920,7 @@ namespace System.Windows.Forms {
             if (font == null) return null;
 
             if (font.Unit != GraphicsUnit.Point)
-                throw new ArgumentException(SR.GetString(SR.AXFontUnitNotPoint), "font");
+                throw new ArgumentException(SR.AXFontUnitNotPoint, "font");
 
             try {
                 return (UnsafeNativeMethods.IFont)UnsafeNativeMethods.OleCreateIFontIndirect(GetFONTDESCFromFont(font), ref ifont_Guid);
@@ -4965,7 +4965,7 @@ namespace System.Windows.Forms {
             if (font == null) return null;
             
             if (font.Unit != GraphicsUnit.Point)
-                throw new ArgumentException(SR.GetString(SR.AXFontUnitNotPoint), "font");
+                throw new ArgumentException(SR.AXFontUnitNotPoint, "font");
 
             SafeNativeMethods.IFontDisp rval = SafeNativeMethods.OleCreateIFontDispIndirect(GetFONTDESCFromFont(font), ref ifontDisp_Guid);
             return rval;
@@ -7330,7 +7330,7 @@ namespace System.Windows.Forms {
                     if (provider != null) {
                           IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
                           if (uiSvc != null){
-                            uiSvc.ShowError(ex1, SR.GetString(SR.ErrorTypeConverterFailed));
+                            uiSvc.ShowError(ex1, SR.ErrorTypeConverterFailed);
                           }
                     }
                 }

@@ -33,9 +33,9 @@ namespace System.Windows.Forms {
             if (dataBinding == null)
                 throw new ArgumentNullException("dataBinding");
             if (dataBinding.BindingManagerBase == bindingManagerBase)
-                throw new ArgumentException(SR.GetString(SR.BindingsCollectionAdd1), "dataBinding");
+                throw new ArgumentException(SR.BindingsCollectionAdd1, "dataBinding");
             if (dataBinding.BindingManagerBase != null)
-                throw new ArgumentException(SR.GetString(SR.BindingsCollectionAdd2), "dataBinding");
+                throw new ArgumentException(SR.BindingsCollectionAdd2, "dataBinding");
 
             // important to set prop first for error checking.
             dataBinding.SetListManager(bindingManagerBase);
@@ -54,7 +54,7 @@ namespace System.Windows.Forms {
 
         protected override void RemoveCore(Binding dataBinding) {
             if (dataBinding.BindingManagerBase != bindingManagerBase)
-                throw new ArgumentException(SR.GetString(SR.BindingsCollectionForeign));
+                throw new ArgumentException(SR.BindingsCollectionForeign);
             dataBinding.SetListManager(null);
             base.RemoveCore(dataBinding);
         }

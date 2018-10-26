@@ -935,7 +935,7 @@ namespace System.Windows.Forms
                 if( !MaskedTextProvider.IsValidPasswordChar(value) ) // null character accepted (resets value)
                 {
                     // Same message as in SR.MaskedTextProviderInvalidCharError.
-                    throw new ArgumentException(SR.GetString(SR.MaskedTextBoxInvalidCharError) );
+                    throw new ArgumentException(SR.MaskedTextBoxInvalidCharError );
                 }
 
                 if( this.passwordChar != value )
@@ -943,7 +943,7 @@ namespace System.Windows.Forms
                     if( value == this.maskedTextProvider.PromptChar )
                     {
                         // Prompt and password chars must be different.
-                        throw new InvalidOperationException( SR.GetString(SR.MaskedTextBoxPasswordAndPromptCharError) );
+                        throw new InvalidOperationException( SR.MaskedTextBoxPasswordAndPromptCharError );
                     }
 
                     this.passwordChar = value;
@@ -1004,7 +1004,7 @@ namespace System.Windows.Forms
                 if( !MaskedTextProvider.IsValidInputChar(value) )
                 {
                     // This message is the same as the one in SR.MaskedTextProviderInvalidCharError.
-                    throw new ArgumentException(SR.GetString(SR.MaskedTextBoxInvalidCharError) );
+                    throw new ArgumentException(SR.MaskedTextBoxInvalidCharError );
                 }
 
                 if( this.maskedTextProvider.PromptChar != value )
@@ -1013,7 +1013,7 @@ namespace System.Windows.Forms
                     if( value == this.passwordChar || value == this.maskedTextProvider.PasswordChar )
                     {
                         // Prompt and password chars must be different.
-                        throw new InvalidOperationException( SR.GetString(SR.MaskedTextBoxPasswordAndPromptCharError) );
+                        throw new InvalidOperationException( SR.MaskedTextBoxPasswordAndPromptCharError );
                     }
                 
                     // Recreate masked text provider to be consistent with AllowPromptAsInput - current text may have chars with same value as new prompt.
@@ -1590,7 +1590,7 @@ namespace System.Windows.Forms
                         if( this.SystemPasswordChar == this.PromptChar )
                         {
                             // Prompt and password chars must be different. 
-                            throw new InvalidOperationException( SR.GetString(SR.MaskedTextBoxPasswordAndPromptCharError) );
+                            throw new InvalidOperationException( SR.MaskedTextBoxPasswordAndPromptCharError );
                         }
 
                         this.maskedTextProvider.PasswordChar = this.SystemPasswordChar;
@@ -2542,7 +2542,7 @@ namespace System.Windows.Forms
                 
                 if (!this.flagState[IS_NULL_MASK]&& this.maskedTextProvider.MaskCompleted == false)
                 {
-                    message = SR.GetString(SR.MaskedTextBoxIncompleteMsg);
+                    message = SR.MaskedTextBoxIncompleteMsg;
                 }
                 else
                 {
@@ -2589,7 +2589,7 @@ namespace System.Windows.Forms
                 if (message == null)
                 {
                     isValidInput = true;
-                    message = SR.GetString(SR.MaskedTextBoxTypeValidationSucceeded);
+                    message = SR.MaskedTextBoxTypeValidationSucceeded;
                 }
                 
                 TypeValidationEventArgs tve = new TypeValidationEventArgs(this.validatingType, isValidInput, parseRetVal, message);

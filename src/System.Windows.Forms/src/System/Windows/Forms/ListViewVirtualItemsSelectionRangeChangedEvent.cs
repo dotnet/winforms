@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         {
             if (startIndex > endIndex)
             {
-                throw new ArgumentException(SR.GetString(SR.ListViewStartIndexCannotBeLargerThanEndIndex));
+                throw new ArgumentException(SR.ListViewStartIndexCannotBeLargerThanEndIndex);
             }
             this.startIndex = startIndex;
             this.endIndex = endIndex;

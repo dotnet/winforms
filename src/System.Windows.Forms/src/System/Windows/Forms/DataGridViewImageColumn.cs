@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_ColumnDefaultCellStyleDescr)
+            SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
             Browsable(true),
             DefaultValue(""),
             SRCategory(nameof(SR.CatAppearance)), 
-            SRDescription(SR.DataGridViewImageColumn_DescriptionDescr)
+            SRDescription(nameof(SR.DataGridViewImageColumn_DescriptionDescr))
         ]
         public string Description
         {
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridViewImageColumn_ImageDescr)
+            SRDescription(nameof(SR.DataGridViewImageColumn_ImageDescr))
         ]
         public Image Image
         {
@@ -181,7 +181,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(DataGridViewImageCellLayout.Normal),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridViewImageColumn_ImageLayoutDescr)
+            SRDescription(nameof(SR.DataGridViewImageColumn_ImageLayoutDescr))
         ]
         public DataGridViewImageCellLayout ImageLayout
         {

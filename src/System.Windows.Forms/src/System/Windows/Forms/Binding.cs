@@ -823,7 +823,7 @@ namespace System.Windows.Forms {
                 }
 
                 // time to fail:
-                throw new FormatException(SR.GetString(SR.ListBindingFormatFailed));
+                throw new FormatException(SR.ListBindingFormatFailed);
             }
         }
 

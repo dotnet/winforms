@@ -206,10 +206,10 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.GetString(SR.FileDialogInvalidFileName, FileName));
 
                     case NativeMethods.FNERR_SUBCLASSFAILURE:
-                        throw new InvalidOperationException(SR.GetString(SR.FileDialogSubLassFailure));
+                        throw new InvalidOperationException(SR.FileDialogSubLassFailure);
 
                     case NativeMethods.FNERR_BUFFERTOOSMALL:
-                        throw new InvalidOperationException(SR.GetString(SR.FileDialogBufferTooSmall));
+                        throw new InvalidOperationException(SR.FileDialogBufferTooSmall);
                 }
             }
             return result;

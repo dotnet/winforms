@@ -620,7 +620,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public override GridItemCollection GridItems {
             get {
                 if (Disposed) {
-                    throw new ObjectDisposedException(SR.GetString(SR.GridItemDisposed));
+                    throw new ObjectDisposedException(SR.GridItemDisposed);
                 }
                 
                 if (IsExpandable && childCollection != null && childCollection.Count == 0) {
@@ -860,7 +860,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public override GridItem Parent {
             get {
                 if (Disposed) {
-                    throw new ObjectDisposedException(SR.GetString(SR.GridItemDisposed));
+                    throw new ObjectDisposedException(SR.GridItemDisposed);
                 }
                 
                 GridItem parent = this.ParentGridEntry;
@@ -1330,7 +1330,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                     else
                     {
-                        RTLAwareMessageBox.Show(GridEntryHost, e.Message, SR.GetString(SR.PBRSErrorTitle), MessageBoxButtons.OK,
+                        RTLAwareMessageBox.Show(GridEntryHost, e.Message, SR.PBRSErrorTitle, MessageBoxButtons.OK,
                                 MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                     }
                 }
@@ -2741,10 +2741,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         return base.DefaultAction;
                     }
                     else if (owner.Expanded) {
-                        return SR.GetString(SR.AccessibleActionCollapse);
+                        return SR.AccessibleActionCollapse;
                     }
                     else {
-                        return SR.GetString(SR.AccessibleActionExpand);
+                        return SR.AccessibleActionExpand;
                     }
                 }
             }

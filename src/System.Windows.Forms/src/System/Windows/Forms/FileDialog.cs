@@ -339,7 +339,7 @@ namespace System.Windows.Forms {
                     if (value != null && value.Length > 0) {
                         string[] formats = value.Split('|');
                         if (formats == null || formats.Length % 2 != 0) {
-                            throw new ArgumentException(SR.GetString(SR.FileDialogInvalidFilter));
+                            throw new ArgumentException(SR.FileDialogInvalidFilter);
                         }
                     }
                     else {
@@ -370,7 +370,7 @@ namespace System.Windows.Forms {
                     string[] tokens = filter.Split('|');
                     
                     if ((filterIndex * 2) - 1 >= tokens.Length) {
-                        throw new InvalidOperationException(SR.GetString(SR.FileDialogInvalidFilterIndex));
+                        throw new InvalidOperationException(SR.FileDialogInvalidFilterIndex);
                     }
                     
                     if (filterIndex > 0) {
@@ -978,7 +978,7 @@ namespace System.Windows.Forms {
         protected override bool RunDialog(IntPtr hWndOwner) {
             // See VSWhidbey 
             if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                throw new System.Threading.ThreadStateException(SR.GetString(SR.DebuggingExceptionOnly, SR.GetString(SR.ThreadMustBeSTA)));
+                throw new System.Threading.ThreadStateException(SR.GetString(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
             }
             EnsureFileDialogPermission();
             if (this.UseVistaDialogInternal)

@@ -668,7 +668,7 @@ namespace System.Windows.Forms {
 
             while (bindingSource != null) {
                 if (bindingSource == this) {
-                    throw new InvalidOperationException(SR.GetString(SR.BindingSourceRecursionDetected));
+                    throw new InvalidOperationException(SR.BindingSourceRecursionDetected);
                 }
                 bindingSource = bindingSource.DataSource as BindingSource;
             }
@@ -708,7 +708,7 @@ namespace System.Windows.Forms {
             }
 
             if (instanceException != null) {
-                throw new NotSupportedException(SR.GetString(SR.BindingSourceInstanceError), instanceException);
+                throw new NotSupportedException(SR.BindingSourceInstanceError, instanceException);
             }
 
             return instancedObject;
@@ -1141,14 +1141,14 @@ namespace System.Windows.Forms {
                         current = current.Substring(1, current.Length - 2);
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.BindingSourceBadSortString));
+                        throw new ArgumentException(SR.BindingSourceBadSortString);
                     }
                 }
 
                 // Find the property
                 PropertyDescriptor prop = props.Find(current, true);
                 if (prop == null) {
-                    throw new ArgumentException(SR.GetString(SR.BindingSourceSortStringPropertyNotInIBindingList));
+                    throw new ArgumentException(SR.BindingSourceSortStringPropertyNotInIBindingList);
                 }
 
                 // Add the sort description
@@ -1163,11 +1163,11 @@ namespace System.Windows.Forms {
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.RemoveCurrent"]/*' />
         public void RemoveCurrent() {
             if (!(this as IBindingList).AllowRemove) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceRemoveCurrentNotAllowed));
+                throw new InvalidOperationException(SR.BindingSourceRemoveCurrentNotAllowed);
             }
 
             if (Position < 0 || Position >= Count) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceRemoveCurrentNoCurrentItem));
+                throw new InvalidOperationException(SR.BindingSourceRemoveCurrentNoCurrentItem);
             }
 
             RemoveAt(Position);
@@ -1595,7 +1595,7 @@ namespace System.Windows.Forms {
                     }
                     if (recursionDetectionFlag) 
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.BindingSourceRecursionDetected));
+                        throw new InvalidOperationException(SR.BindingSourceRecursionDetected);
                     }
                     recursionDetectionFlag = true;
 
@@ -1645,11 +1645,11 @@ namespace System.Windows.Forms {
 
             // Throw if user tries to add items to list that don't match the current item type
             if (value != null && !itemType.IsAssignableFrom(value.GetType())) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceItemTypeMismatchOnAdd));
+                throw new InvalidOperationException(SR.BindingSourceItemTypeMismatchOnAdd);
             }
 
             if (value == null && itemType.IsValueType) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceItemTypeIsValueType));
+                throw new InvalidOperationException(SR.BindingSourceItemTypeIsValueType);
             }
 
             ret = List.Add(value);
@@ -1763,7 +1763,7 @@ namespace System.Windows.Forms {
         public virtual object AddNew() {
             // Throw if adding new items has been disabled
             if (!AllowNewInternal(false)) {
-                throw new InvalidOperationException(SR.GetString(SR.BindingSourceBindingListWrapperAddToReadOnlyList));
+                throw new InvalidOperationException(SR.BindingSourceBindingListWrapperAddToReadOnlyList);
             }
 
             if (!AllowNewInternal(true)) {
@@ -1862,7 +1862,7 @@ namespace System.Windows.Forms {
                 // do NOT check for a default constructor because someone will set AllowNew=True
                 // when they have overridden OnAddingNew (which we cannot detect).
                 if (value == true && !isBindingList && !IsListWriteable(false)) {
-                    throw new InvalidOperationException(SR.GetString(SR.NoAllowNewOnReadOnlyList));
+                    throw new InvalidOperationException(SR.NoAllowNewOnReadOnlyList);
                 }
 
                 // Record new value, which will now override inner list's value
@@ -1958,7 +1958,7 @@ namespace System.Windows.Forms {
                 ((IBindingList) List).AddIndex(property);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingList));
+                throw new NotSupportedException(SR.OperationRequiresIBindingList);
             }
         }
 
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms {
                 ((IBindingList) List).ApplySort(property, sort);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingList));
+                throw new NotSupportedException(SR.OperationRequiresIBindingList);
             }
         }
 
@@ -1977,7 +1977,7 @@ namespace System.Windows.Forms {
                 return ((IBindingList) List).Find(prop, key);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingList));
+                throw new NotSupportedException(SR.OperationRequiresIBindingList);
             }
         }
 
@@ -1986,7 +1986,7 @@ namespace System.Windows.Forms {
                 ((IBindingList) List).RemoveIndex(prop);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingList));
+                throw new NotSupportedException(SR.OperationRequiresIBindingList);
             }
         }
 
@@ -2013,7 +2013,7 @@ namespace System.Windows.Forms {
                 iblw.ApplySort(sorts);
             }
             else {
-                throw new NotSupportedException(SR.GetString(SR.OperationRequiresIBindingListView));
+                throw new NotSupportedException(SR.OperationRequiresIBindingListView);
             }
         }
 

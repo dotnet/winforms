@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Design {
         /// </devdoc>
         public override string TabName {
             get {
-                return SR.GetString(SR.PBRSToolTipEvents);
+                return SR.PBRSToolTipEvents;
             }
         }
 

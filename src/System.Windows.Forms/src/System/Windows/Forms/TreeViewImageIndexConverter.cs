@@ -39,10 +39,10 @@ namespace System.Windows.Forms {
             string strValue = value as string;
             if (strValue != null) {
                
-               if (String.Compare(strValue, SR.GetString(SR.toStringDefault), true, culture) == 0) {
+               if (String.Compare(strValue, SR.toStringDefault, true, culture) == 0) {
                    return -1;
                } 
-               else if (String.Compare(strValue, SR.GetString(SR.toStringNone), true, culture) == 0) {
+               else if (String.Compare(strValue, SR.toStringNone, true, culture) == 0) {
                    return -2;
                }
             }
@@ -67,10 +67,10 @@ namespace System.Windows.Forms {
             if (destinationType == typeof(string) && value is int) {
                 int intValue = (int)value;
                 if (intValue == -1) {
-                    return SR.GetString(SR.toStringDefault);
+                    return SR.toStringDefault;
                 }
                 else if (intValue == -2) {
-                    return SR.GetString(SR.toStringNone);
+                    return SR.toStringNone;
                 }
             }
 

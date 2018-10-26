@@ -190,7 +190,7 @@ namespace System.Windows.Forms {
                     throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoCompleteSource));
                 }
                 if (value == AutoCompleteSource.ListItems) {
-                    throw new NotSupportedException(SR.GetString(SR.TextBoxAutoCompleteSourceNoItems));
+                    throw new NotSupportedException(SR.TextBoxAutoCompleteSourceNoItems);
                 }
 
                 // VSWhidbey 466300
@@ -783,7 +783,7 @@ namespace System.Windows.Forms {
                                 stringSource = new StringSource(GetStringsForAutoComplete());
                                 if (!stringSource.Bind(new HandleRef(this, Handle), (int)AutoCompleteMode))
                                 {
-                                   throw new ArgumentException(SR.GetString(SR.AutoCompleteFailure));
+                                   throw new ArgumentException(SR.AutoCompleteFailure);
                                 }
                             }
                             else

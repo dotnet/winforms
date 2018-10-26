@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
             set {
                 //if trying to set checked=true - if we're a top-level item (from a mainmenu) or have children, don't do this...
                 if (value == true && (ItemCount != 0 || (Parent != null && (Parent is MainMenu)))) {
-                    throw new ArgumentException(SR.GetString(SR.MenuItemInvalidCheckProperty));
+                    throw new ArgumentException(SR.MenuItemInvalidCheckProperty);
                 }
 
                 data.SetState(STATE_CHECKED, value);
@@ -1203,7 +1203,7 @@ namespace System.Windows.Forms {
 
                         MenuItem moreWindows = (MenuItem)Activator.CreateInstance(this.GetType());
                         moreWindows.data.UserData = new MdiListMoreWindowsData(this);
-                        moreWindows.Text = SR.GetString(SR.MDIMenuMoreWindows);
+                        moreWindows.Text = SR.MDIMenuMoreWindows;
                         senderMenu.MenuItems.Add(moreWindows);
                     }
                 }

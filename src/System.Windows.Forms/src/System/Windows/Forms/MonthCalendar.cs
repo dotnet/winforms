@@ -984,7 +984,7 @@ namespace System.Windows.Forms {
                 if (IsHandleCreated) {
 
                     if (unchecked( (int) (long)SendMessage(NativeMethods.MCM_GETMINREQRECT, 0, ref rect)) == 0)
-                        throw new InvalidOperationException(SR.GetString(SR.InvalidSingleMonthSize));
+                        throw new InvalidOperationException(SR.InvalidSingleMonthSize);
 
                     return new Size(rect.right, rect.bottom);
                 }

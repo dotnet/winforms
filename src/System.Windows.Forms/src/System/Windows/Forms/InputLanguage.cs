@@ -74,7 +74,7 @@ namespace System.Windows.Forms {
                 }
                 IntPtr handleOld = SafeNativeMethods.ActivateKeyboardLayout(new HandleRef(value, value.handle), 0);
                 if (handleOld == IntPtr.Zero) {
-                    throw new ArgumentException(SR.GetString(SR.ErrorBadInputLanguage), "value");
+                    throw new ArgumentException(SR.ErrorBadInputLanguage, "value");
                 }
             }
         }
@@ -294,7 +294,7 @@ namespace System.Windows.Forms {
                 }
     
                 if (layoutName == null) {
-                    layoutName = SR.GetString(SR.UnknownInputLanguageLayout);
+                    layoutName = SR.UnknownInputLanguageLayout;
                 }
                 return layoutName;
             }

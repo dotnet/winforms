@@ -1357,7 +1357,7 @@ namespace System.Windows.Forms {
             // that is not good enough for DragDrop.
             //
             if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                throw new ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                throw new ThreadStateException(SR.ThreadMustBeSTA);
             }
 
             base.OnHandleCreated(e);
@@ -1441,7 +1441,7 @@ namespace System.Windows.Forms {
                 return base.AllowDrop;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.WebBrowserAllowDropNotSupported));
+                throw new NotSupportedException(SR.WebBrowserAllowDropNotSupported);
             }
         }
 
@@ -1453,7 +1453,7 @@ namespace System.Windows.Forms {
                 return base.BackgroundImage;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.WebBrowserBackgroundImageNotSupported));
+                throw new NotSupportedException(SR.WebBrowserBackgroundImageNotSupported);
             }
         }
 
@@ -1465,7 +1465,7 @@ namespace System.Windows.Forms {
                 return base.BackgroundImageLayout;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.WebBrowserBackgroundImageLayoutNotSupported));
+                throw new NotSupportedException(SR.WebBrowserBackgroundImageLayoutNotSupported);
             }
         }
 
@@ -1477,7 +1477,7 @@ namespace System.Windows.Forms {
                 return base.Cursor;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.WebBrowserCursorNotSupported));
+                throw new NotSupportedException(SR.WebBrowserCursorNotSupported);
             }
         }
 
@@ -1492,7 +1492,7 @@ namespace System.Windows.Forms {
             }
             set
             {
-                throw new NotSupportedException(SR.GetString(SR.WebBrowserEnabledNotSupported));
+                throw new NotSupportedException(SR.WebBrowserEnabledNotSupported);
             }
         }
 
@@ -1506,7 +1506,7 @@ namespace System.Windows.Forms {
             }
             set
             {
-                throw new NotSupportedException(SR.GetString(SR.WebBrowserRightToLeftNotSupported));
+                throw new NotSupportedException(SR.WebBrowserRightToLeftNotSupported);
             }
         }
 
@@ -1523,7 +1523,7 @@ namespace System.Windows.Forms {
                 return "";
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.WebBrowserTextNotSupported));
+                throw new NotSupportedException(SR.WebBrowserTextNotSupported);
             }
         }
 
@@ -1535,7 +1535,7 @@ namespace System.Windows.Forms {
                 return base.UseWaitCursor;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.WebBrowserUseWaitCursorNotSupported));
+                throw new NotSupportedException(SR.WebBrowserUseWaitCursorNotSupported);
             }
         }
 

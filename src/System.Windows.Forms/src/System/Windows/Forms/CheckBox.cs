@@ -727,10 +727,10 @@ namespace System.Windows.Forms {
                     }
 
                     if (((CheckBox)Owner).Checked) {
-                        return SR.GetString(SR.AccessibleActionUncheck);
+                        return SR.AccessibleActionUncheck;
                     }
                     else {
-                        return SR.GetString(SR.AccessibleActionCheck);
+                        return SR.AccessibleActionCheck;
                     }
                 }
             }

@@ -835,7 +835,7 @@ example usage
                     // as activeX controls.
                     //
                     if (GetState(STATE_TOPLEVEL)) {
-                        throw new NotSupportedException(SR.GetString(SR.AXTopLevelSource));
+                        throw new NotSupportedException(SR.AXTopLevelSource);
                     }
 
                     activeXImpl = new ActiveXImpl(this);
@@ -1112,7 +1112,7 @@ example usage
 
             set {
                 if (!value.Equals(Color.Empty) && !GetStyle(ControlStyles.SupportsTransparentBackColor) && value.A < 255)
-                    throw new ArgumentException(SR.GetString(SR.TransparentBackColorNotAllowed));
+                    throw new ArgumentException(SR.TransparentBackColorNotAllowed);
 
                 Color c = BackColor;
                 if (!value.IsEmpty || Properties.ContainsObject(PropBackColor)) {
@@ -1638,7 +1638,7 @@ example usage
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        DescriptionAttribute(SR.ControlCompanyNameDescr)
+        DescriptionAttribute(nameof(SR.ControlCompanyNameDescr))
         ]
         public string CompanyName {
             [ResourceExposure(ResourceScope.Machine)]
@@ -4412,7 +4412,7 @@ example usage
                     if (waitHandle.WaitOne(1, false)) {
                         break;
                     }
-                    throw new InvalidAsynchronousStateException(SR.GetString(SR.ThreadNoLongerValid));
+                    throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
                 }
 
                 if (IsDisposed && threadCallbackList != null && threadCallbackList.Count > 0) {
@@ -5651,7 +5651,7 @@ example usage
             for (Control ctl = bottom; ctl != null; ctl = ctl.ParentInternal) {
                 lastParent = ctl;
                 if (ctl == toFind) {
-                    throw new ArgumentException(SR.GetString(SR.CircularOwner));
+                    throw new ArgumentException(SR.CircularOwner);
                 }
             }
 
@@ -5661,7 +5661,7 @@ example usage
                     for (Form form = f; form != null; form = form.OwnerInternal) {
                         lastOwner = form;
                         if (form == toFind) {
-                            throw new ArgumentException(SR.GetString(SR.CircularOwner));
+                            throw new ArgumentException(SR.CircularOwner);
                         }
                     }
                 }
@@ -6190,7 +6190,7 @@ example usage
 
                 ThreadMethodEntry entry = asyncResult as ThreadMethodEntry;
                 if (entry == null) {
-                    throw new ArgumentException(SR.GetString(SR.ControlBadAsyncResult),"asyncResult");
+                    throw new ArgumentException(SR.ControlBadAsyncResult,"asyncResult");
                 }
                 Debug.Assert(this == entry.caller, "Called BeginInvoke on one control, and the corresponding EndInvoke on a different control");
 
@@ -7575,7 +7575,7 @@ example usage
 
             // else - it's an un-lockable key.
             // Actually get the exception string from the system resource.
-            throw new NotSupportedException(SR.GetString(SR.ControlIsKeyLockedNumCapsScrollLockKeysSupportedOnly));
+            throw new NotSupportedException(SR.ControlIsKeyLockedNumCapsScrollLockKeysSupportedOnly);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsInputChar"]/*' />
@@ -7768,7 +7768,7 @@ example usage
             //
 
             if (!IsHandleCreated) {
-                throw new InvalidOperationException(SR.GetString(SR.ErrorNoMarshalingThread));
+                throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
             }
 
             // We have to demand unmanaged code permission here for the control hosted in
@@ -11199,7 +11199,7 @@ example usage
             if (accept != GetState(STATE_DROPTARGET) && IsHandleCreated) {
                 try {
                     if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
-                        throw new ThreadStateException(SR.GetString(SR.ThreadMustBeSTA));
+                        throw new ThreadStateException(SR.ThreadMustBeSTA);
                     }
                     if (accept) {
                         IntSecurity.ClipboardRead.Demand();
@@ -11224,7 +11224,7 @@ example usage
                     SetState(STATE_DROPTARGET, accept);
                 }
                 catch (Exception e) {
-                    throw new InvalidOperationException(SR.GetString(SR.DragDropRegFailed), e);
+                    throw new InvalidOperationException(SR.DragDropRegFailed, e);
                 }
             }
         }
@@ -12026,7 +12026,7 @@ example usage
         /// </devdoc>
         protected void SetTopLevel(bool value) {
             if (value && IsActiveX) {
-                throw new InvalidOperationException(SR.GetString(SR.TopLevelNotAllowedIfActiveX));
+                throw new InvalidOperationException(SR.TopLevelNotAllowedIfActiveX);
             }
             else {
                 if (value) {
@@ -12049,7 +12049,7 @@ example usage
 
             if (GetTopLevel() != value) {
                 if (parent != null) {
-                    throw new ArgumentException(SR.GetString(SR.TopLevelParentedControl), "value");
+                    throw new ArgumentException(SR.TopLevelParentedControl, "value");
                 }
                 SetState(STATE_TOPLEVEL, value);
                 // make sure the handle is created before hooking, otherwise a toplevel control that never
@@ -13043,7 +13043,7 @@ example usage
                     object tempObject = intAccessibleObject;
                     IAccessible iAccCheck = tempObject as IAccessible;
                     if (iAccCheck != null) {
-                        throw new InvalidOperationException(SR.GetString(SR.ControlAccessibileObjectInvalid));
+                        throw new InvalidOperationException(SR.ControlAccessibileObjectInvalid);
                     }
 
                     // Check that we have an IAccessibleInternal implementation and return this
@@ -13077,7 +13077,7 @@ example usage
                     }
                 }
                 catch (Exception e) {
-                    throw new InvalidOperationException(SR.GetString(SR.RichControlLresult), e);
+                    throw new InvalidOperationException(SR.RichControlLresult, e);
                 }
             }
             else {  // some accessible object requested that we don't care about, so do default message processing
@@ -14691,14 +14691,14 @@ example usage
                 if (value == null)
                     return;
                 if (value.GetTopLevel()) {
-                    throw new ArgumentException(SR.GetString(SR.TopLevelControlAdd));
+                    throw new ArgumentException(SR.TopLevelControlAdd);
                 }
 
                 // Verify that the control being added is on the same thread as
                 // us...or our parent chain.
                 //
                 if (owner.CreateThreadId != value.CreateThreadId) {
-                    throw new ArgumentException(SR.GetString(SR.AddDifferentThreads));
+                    throw new ArgumentException(SR.AddDifferentThreads);
                 }
 
                 CheckParentingCycle(owner, value);
@@ -14783,7 +14783,7 @@ example usage
                     return IndexOf((Control)control);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.ControlBadControl), "control");
+                    throw new ArgumentException(SR.ControlBadControl, "control");
                 }
             }
 
@@ -14844,7 +14844,7 @@ example usage
             /// </devdoc>
             public Control[] Find(string key, bool searchAllChildren) {
                 if (String.IsNullOrEmpty(key)) {
-                   throw new System.ArgumentNullException("key", SR.GetString(SR.FindKeyMayNotBeEmptyOrNull));
+                   throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
                 ArrayList foundControls =  FindInternal(key, searchAllChildren, this, new ArrayList());
@@ -15114,7 +15114,7 @@ example usage
             public virtual int GetChildIndex(Control child, bool throwException) {
                 int index = IndexOf(child);
                 if (index == -1 && throwException) {
-                    throw new ArgumentException(SR.GetString(SR.ControlNotChild));
+                    throw new ArgumentException(SR.ControlNotChild);
                 }
                 return index;
             }
@@ -16692,7 +16692,7 @@ example usage
                     verbHide.lVerb = NativeMethods.OLEIVERB_HIDE;
                     verbPrimary.lVerb = NativeMethods.OLEIVERB_PRIMARY;
                     verbProperties.lVerb = NativeMethods.OLEIVERB_PROPERTIES;
-                    verbProperties.lpszVerbName = SR.GetString(SR.AXProperties);
+                    verbProperties.lpszVerbName = SR.AXProperties;
                     verbProperties.grfAttribs = NativeMethods.ActiveX.OLEVERBATTRIB_ONCONTAINERMENU;
 
                     axVerbs = new NativeMethods.tagOLEVERB[] {
@@ -17775,7 +17775,7 @@ example usage
                         IntPtr ppv;
                         int hresult = Marshal.QueryInterface(pUnk, ref iid, out ppv);
                         if (hresult != 0 || ppv == IntPtr.Zero) {
-                            throw new InvalidCastException(SR.GetString(SR.AxInterfaceNotSupported));
+                            throw new InvalidCastException(SR.AxInterfaceNotSupported);
                         }
                         return ppv;
                     }
@@ -18423,7 +18423,7 @@ example usage
             ///      Throws the given hresult.  This is used by ActiveX sourcing.
             /// </devdoc>
             internal static void ThrowHr(int hr) {
-                ExternalException e = new ExternalException(SR.GetString(SR.ExternalException), hr);
+                ExternalException e = new ExternalException(SR.ExternalException, hr);
                 throw e;
             }
 
@@ -19050,7 +19050,7 @@ example usage
                     form = new Form();
                     grid = new PropertyGrid();
 
-                    form.Text = SR.GetString(SR.AXProperties);
+                    form.Text = SR.AXProperties;
                     form.StartPosition = FormStartPosition.CenterParent;
                     form.Size = new Size(300, 350);
                     form.FormBorderStyle = FormBorderStyle.Sizable;
@@ -19186,7 +19186,7 @@ example usage
 
                 // Security fix: make sure the size has non-negative width and height.
                 if (size.Width < 0 || size.Height < 0) {
-                    throw new ArgumentException("size", SR.GetString(SR.ControlMetaFileDCWrapperSizeInvalid));
+                    throw new ArgumentException("size", SR.ControlMetaFileDCWrapperSizeInvalid);
                 }
 
                 hMetafileDC = hOriginalDC;
@@ -19856,7 +19856,7 @@ example usage
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged() {
                 if (!(this.Owner is IAutomationLiveRegion)) {
-                    throw new InvalidOperationException(SR.GetString(SR.OwnerControlIsNotALiveRegion));
+                    throw new InvalidOperationException(SR.OwnerControlIsNotALiveRegion);
                 }
 
                 return RaiseAutomationEvent(NativeMethods.UIA_LiveRegionChangedEventId);

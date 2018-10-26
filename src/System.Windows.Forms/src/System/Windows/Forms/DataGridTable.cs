@@ -165,7 +165,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
-                    throw new ArgumentException(SR.GetString(SR.DataGridTableStyleTransparentAlternatingBackColorNotAllowed));
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentAlternatingBackColorNotAllowed);
                 if (value.IsEmpty) {
                     throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor,
                                                               "AlternatingBackColor"));
@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
-                    throw new ArgumentException(SR.GetString(SR.DataGridTableStyleTransparentBackColorNotAllowed));
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentBackColorNotAllowed);
                 if (value.IsEmpty) {
                     throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor,
                                                               "BackColor"));
@@ -583,7 +583,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
-                    throw new ArgumentException(SR.GetString(SR.DataGridTableStyleTransparentHeaderBackColorNotAllowed));
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentHeaderBackColorNotAllowed);
                 if (value.IsEmpty)
                     throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "HeaderBackColor"));
                 if (!value.Equals(headerBackBrush.Color)) {
@@ -973,7 +973,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value < 0)
-                    throw new ArgumentException(SR.GetString(SR.DataGridColumnWidth), "PreferredColumnWidth");
+                    throw new ArgumentException(SR.DataGridColumnWidth, "PreferredColumnWidth");
                 if (preferredColumnWidth != value) {
                     preferredColumnWidth = value;
 
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value < 0)
-                    throw new ArgumentException(SR.GetString(SR.DataGridRowRowHeight));
+                    throw new ArgumentException(SR.DataGridRowRowHeight);
                 prefferedRowHeight = value;
 
                 /*
@@ -1217,7 +1217,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (System.Windows.Forms.DataGrid.IsTransparentColor(value))
-                    throw new ArgumentException(SR.GetString(SR.DataGridTableStyleTransparentSelectionBackColorNotAllowed));
+                    throw new ArgumentException(SR.DataGridTableStyleTransparentSelectionBackColorNotAllowed);
                 if (value.IsEmpty)
                     throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "SelectionBackColor"));
                 if (!value.Equals(selectionBackBrush.Color)) {

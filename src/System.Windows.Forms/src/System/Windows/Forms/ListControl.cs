@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value != null && !(value is IList || value is IListSource))
-                    throw new ArgumentException(SR.GetString(SR.BadDataSourceForComplexBinding));
+                    throw new ArgumentException(SR.BadDataSourceForComplexBinding);
                 if (dataSource == value)
                     return;
                 // When we change the dataSource to null, we should reset
@@ -348,7 +348,7 @@ namespace System.Windows.Forms {
                     // the properties in the dataManager
                     if (this.dataManager != null && value != null && value.Length != 0)
                         if (!BindingMemberInfoInDataManager(newValueMember)) {
-                            throw new ArgumentException(SR.GetString(SR.ListControlWrongValueMember), "value");
+                            throw new ArgumentException(SR.ListControlWrongValueMember, "value");
                         }
 
                     valueMember = newValueMember;
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
                     // we can't set the SelectedValue property when the listManager does not
                     // have a ValueMember set.
                     if (string.IsNullOrEmpty(propertyName))
-                        throw new InvalidOperationException(SR.GetString(SR.ListControlEmptyValueMemberInSettingSelectedValue));
+                        throw new InvalidOperationException(SR.ListControlEmptyValueMemberInSettingSelectedValue);
                     PropertyDescriptorCollection props = dataManager.GetItemProperties();
                     PropertyDescriptor property = props.Find(propertyName, true);
                     int index = dataManager.Find(property, value, true);
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
                         if (dataManager != null && (displayMemberChanged || dataSourceChanged) && displayMember.BindingMember != null && displayMember.BindingMember.Length != 0) {
 
                             if (!BindingMemberInfoInDataManager(displayMember))
-                                throw new ArgumentException(SR.GetString(SR.ListControlWrongDisplayMember), "newDisplayMember");
+                                throw new ArgumentException(SR.ListControlWrongDisplayMember, "newDisplayMember");
                         }
 
                         if (dataManager != null && (dataSourceChanged || displayMemberChanged || force)) {

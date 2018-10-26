@@ -1450,7 +1450,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             object IList.this[int index] {
                 get { return InnerList[index]; }
-                set { throw new NotSupportedException(SR.GetString(SR.ToolStripCollectionMustInsertAndRemove)); /* InnerList[index] = value; */ }
+                set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
             }
 
 

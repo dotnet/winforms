@@ -79,7 +79,7 @@ namespace System.Windows.Forms {
                             if (null == cmds[icmd] || null == cmds[icmd].Target)
                                 goto FindSlotComplete;
                         }
-                        throw new ArgumentException(SR.GetString(SR.CommandIdNotAllocated));
+                        throw new ArgumentException(SR.CommandIdNotAllocated);
                     }
                     else {
                         Command[] newCmds = new Command[icmdLim];

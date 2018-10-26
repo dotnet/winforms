@@ -491,7 +491,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!initializing && value < this.minWidth)
-                    throw new ArgumentOutOfRangeException("Width", SR.GetString(SR.WidthGreaterThanMinWidth));
+                    throw new ArgumentOutOfRangeException("Width", SR.WidthGreaterThanMinWidth);
 
                 this.width = value;
                 UpdateSize();
@@ -641,7 +641,7 @@ namespace System.Windows.Forms {
                 int result = (int) UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_SETTEXT, (IntPtr)wparam, sendText);
 
                 if (result == 0)
-                    throw new InvalidOperationException(SR.GetString(SR.UnableToSetPanelText));
+                    throw new InvalidOperationException(SR.UnableToSetPanelText);
 
                 if (this.icon != null && style != StatusBarPanelStyle.OwnerDraw) {
                     this.parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), this.icon.Handle);

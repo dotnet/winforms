@@ -117,7 +117,7 @@ namespace System.Windows.Forms {
                 // this exception to indicate to itself that this object should
                 // be serialized through ISeriazable instead of a string.
                 //
-                throw new FormatException(SR.GetString(SR.CursorCannotCovertToString));
+                throw new FormatException(SR.CursorCannotCovertToString);
             }
 
             if (destinationType == typeof(InstanceDescriptor) && value is Cursor) {

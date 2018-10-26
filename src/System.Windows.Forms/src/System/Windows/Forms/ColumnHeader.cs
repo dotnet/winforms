@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
                 }
 
 	        if (value < 0 || value> (this.listview.Columns.Count - 1)) {
-                    throw new ArgumentOutOfRangeException("DisplayIndex", SR.GetString(SR.ColumnHeaderBadDisplayIndex));
+                    throw new ArgumentOutOfRangeException("DisplayIndex", SR.ColumnHeaderBadDisplayIndex);
 	        }
 
                 int lowDI = Math.Min(this.DisplayIndexInternal, value);

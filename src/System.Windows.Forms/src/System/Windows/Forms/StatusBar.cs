@@ -1231,7 +1231,7 @@ namespace System.Windows.Forms {
                     owner.layoutDirty = true;
 
                     if (value.Parent != null) {
-                        throw new ArgumentException(SR.GetString(SR.ObjectHasParent), "value");
+                        throw new ArgumentException(SR.ObjectHasParent, "value");
                     }
 
                     int length = owner.panels.Count;
@@ -1266,7 +1266,7 @@ namespace System.Windows.Forms {
                         this[index] = (StatusBarPanel)value;
                     }
                     else {
-                        throw new ArgumentException(SR.GetString(SR.StatusBarBadStatusBarPanel), "value");
+                        throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
                     }
                 }
             }
@@ -1373,7 +1373,7 @@ namespace System.Windows.Forms {
                     return Add((StatusBarPanel)value);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.StatusBarBadStatusBarPanel), "value");
+                    throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
                 }
             }
 
@@ -1490,7 +1490,7 @@ namespace System.Windows.Forms {
 
                 owner.layoutDirty = true;
                 if (value.Parent != owner && value.Parent != null)
-                    throw new ArgumentException(SR.GetString(SR.ObjectHasParent), "value");
+                    throw new ArgumentException(SR.ObjectHasParent, "value");
 
                 int length = owner.panels.Count;
 
@@ -1520,7 +1520,7 @@ namespace System.Windows.Forms {
                     Insert(index, (StatusBarPanel)value);
                 }
                 else {
-                    throw new ArgumentException(SR.GetString(SR.StatusBarBadStatusBarPanel), "value");
+                    throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
                 }
             }
 
@@ -1784,7 +1784,7 @@ namespace System.Windows.Forms {
                         ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(tool));
                     }
                     if (ret == 0) {
-                        throw new InvalidOperationException(SR.GetString(SR.StatusBarAddFailed));
+                        throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
                 }
             }

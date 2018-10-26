@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                 // Same check as for ListControl's DataSource
                 if (value != null && !(value is IList || value is IListSource))
                 {
-                    throw new ArgumentException(SR.GetString(SR.BadDataSourceForComplexBinding));
+                    throw new ArgumentException(SR.BadDataSourceForComplexBinding);
                 }
                 if (this.DataSource != value)
                 {
@@ -614,7 +614,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            throw new ArgumentException(SR.GetString(SR.ComboBoxSortWithDataSource));
+                            throw new ArgumentException(SR.ComboBoxSortWithDataSource);
                         }
                         this.flags |= (byte)DATAGRIDVIEWCOMBOBOXCELL_sorted;
                     }
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
         {
             if (this.DataSource != null)
             {
-                throw new ArgumentException(SR.GetString(SR.DataSourceLocksItems));
+                throw new ArgumentException(SR.DataSourceLocksItems);
             }
         }
 
@@ -2928,7 +2928,7 @@ namespace System.Windows.Forms
                 {
                     if (item == null)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.InvalidNullItemInCollection));
+                        throw new InvalidOperationException(SR.InvalidNullItemInCollection);
                     }
                 }
 

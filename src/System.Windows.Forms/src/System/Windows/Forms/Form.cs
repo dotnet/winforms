@@ -1895,7 +1895,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value != null && this.CreateThreadId != value.CreateThreadId) {
-                    throw new ArgumentException(SR.GetString(SR.AddDifferentThreads), "value");
+                    throw new ArgumentException(SR.AddDifferentThreads, "value");
                 }
 
                 bool oldVisibleBit = GetState(STATE_VISIBLE);
@@ -1910,10 +1910,10 @@ namespace System.Windows.Forms {
                     }
                     else {
                         if (IsMdiContainer) {
-                            throw new ArgumentException(SR.GetString(SR.FormMDIParentAndChild), "value");
+                            throw new ArgumentException(SR.FormMDIParentAndChild, "value");
                         }
                         if (!value.IsMdiContainer) {
-                            throw new ArgumentException(SR.GetString(SR.MDIParentNotContainer), "value");
+                            throw new ArgumentException(SR.MDIParentNotContainer, "value");
                         }
 
                         // Setting TopLevel forces a handle recreate before Parent is set,
@@ -2158,7 +2158,7 @@ namespace System.Windows.Forms {
                     return;
 
                 if (value != null && !TopLevel) {
-                    throw new ArgumentException(SR.GetString(SR.NonTopLevelCantHaveOwner), "value");
+                    throw new ArgumentException(SR.NonTopLevelCantHaveOwner, "value");
                 }
 
                 CheckParentingCycle(this, value);
@@ -2540,7 +2540,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!value && ((Form)this).IsMdiContainer && !DesignMode) {
-                    throw new ArgumentException(SR.GetString(SR.MDIContainerMustBeTopLevel), "value");
+                    throw new ArgumentException(SR.MDIContainerMustBeTopLevel, "value");
                 }
                 SetTopLevel(value);
             }
@@ -4182,8 +4182,8 @@ namespace System.Windows.Forms {
             //Start by defaulting to 'unknown zone' and 'unknown site' strings.  We will return this
             //information if anything goes wrong while trying to resolve this information.
             //
-            securityZone = SR.GetString(SR.SecurityRestrictedWindowTextUnknownZone);
-            securitySite = SR.GetString(SR.SecurityRestrictedWindowTextUnknownSite);
+            securityZone = SR.SecurityRestrictedWindowTextUnknownZone;
+            securitySite = SR.SecurityRestrictedWindowTextUnknownSite;
 
             try
             {
@@ -4243,7 +4243,7 @@ namespace System.Windows.Forms {
                 {
                     //here, we found multiple zones
                     //
-                    securityZone = SR.GetString(SR.SecurityRestrictedWindowTextMixedZone);
+                    securityZone = SR.SecurityRestrictedWindowTextMixedZone;
                 }
 
                 //generate a list of loaded assemblies that came from the gac, this
@@ -4324,7 +4324,7 @@ namespace System.Windows.Forms {
                 {
                     //multiple sites, we'll have to return 'mixed sites'
                     //
-                    securitySite = SR.GetString(SR.SecurityRestrictedWindowTextMultipleSites);
+                    securitySite = SR.SecurityRestrictedWindowTextMultipleSites;
                 }
             }
             catch
@@ -5713,7 +5713,7 @@ namespace System.Windows.Forms {
         private void ResumeUpdateMenuHandles() {
             int suspendCount = formStateEx[FormStateExUpdateMenuHandlesSuspendCount];
             if (suspendCount <= 0) {
-                throw new InvalidOperationException(SR.GetString(SR.TooManyResumeUpdateMenuHandles));
+                throw new InvalidOperationException(SR.TooManyResumeUpdateMenuHandles);
             }
 
             formStateEx[FormStateExUpdateMenuHandlesSuspendCount] = --suspendCount;
@@ -6071,7 +6071,7 @@ namespace System.Windows.Forms {
                                                   "Show"));
             }
             else if (!SystemInformation.UserInteractive) {
-                throw new InvalidOperationException(SR.GetString(SR.CantShowModalOnNonInteractive));
+                throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
             else if ( (owner != null) && ((int)UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), NativeMethods.GWL_EXSTYLE)
                      & NativeMethods.WS_EX_TOPMOST) == 0 ) {   // It's not the top-most window
@@ -6136,7 +6136,7 @@ namespace System.Windows.Forms {
                                                   "showDialog"));
             }
             else if (!SystemInformation.UserInteractive) {
-                throw new InvalidOperationException(SR.GetString(SR.CantShowModalOnNonInteractive));
+                throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
             else if ( (owner != null) && ((int)UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), NativeMethods.GWL_EXSTYLE)
                      & NativeMethods.WS_EX_TOPMOST) == 0 ) {   // It's not the top-most window
@@ -7675,11 +7675,11 @@ namespace System.Windows.Forms {
             public override void Add(Control value) {
                 if (value is MdiClient && owner.ctlClient == null) {
                     if (!owner.TopLevel && !owner.DesignMode) {
-                        throw new ArgumentException(SR.GetString(SR.MDIContainerMustBeTopLevel), "value");
+                        throw new ArgumentException(SR.MDIContainerMustBeTopLevel, "value");
                     }
                     owner.AutoScroll = false;
                     if (owner.IsMdiChild) {
-                        throw new ArgumentException(SR.GetString(SR.FormMDIParentAndChild), "value");
+                        throw new ArgumentException(SR.FormMDIParentAndChild, "value");
                     }
                     owner.ctlClient = (MdiClient)value;
                 }
@@ -7687,7 +7687,7 @@ namespace System.Windows.Forms {
                 // make sure we don't add a form that has a valid mdi parent
                 //
                 if (value is Form && ((Form)value).MdiParentInternal != null) {
-                    throw new ArgumentException(SR.GetString(SR.FormMDIParentCannotAdd), "value");
+                    throw new ArgumentException(SR.FormMDIParentCannotAdd, "value");
                 }
 
                 base.Add(value);
@@ -7841,7 +7841,7 @@ namespace System.Windows.Forms {
 
             private void SetupText() {
                 owner.EnsureSecurityInformation();
-                string mainText = SR.GetString(SR.SecurityToolTipMainText);
+                string mainText = SR.SecurityToolTipMainText;
                 string sourceInfo = SR.GetString(SR.SecurityToolTipSourceInformation, owner.securitySite);
                 this.toolTipText =  SR.GetString(SR.SecurityToolTipTextFormat, mainText, sourceInfo);
             }
@@ -7856,7 +7856,7 @@ namespace System.Windows.Forms {
 
                 UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, owner.Width);
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_SETTITLE, NativeMethods.TTI_WARNING, SR.GetString(SR.SecurityToolTipCaption));
+                UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_SETTITLE, NativeMethods.TTI_WARNING, SR.SecurityToolTipCaption);
 
                 if (0 == (int)UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO())) {
                     Debug.Fail("TTM_ADDTOOL failed for security tip");

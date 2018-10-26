@@ -108,7 +108,7 @@ namespace System.Windows.Forms
                 return false;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.GridItemNotExpandable));
+                throw new NotSupportedException(SR.GridItemNotExpandable);
             }
         }
         

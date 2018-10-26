@@ -729,7 +729,7 @@ namespace System.Windows.Forms {
         internal string GetAccessibleName(string baseName) {
             if (baseName == null) {
                 if (AccessibilityImprovements.Level3) {
-                    return SR.GetString(SR.SpinnerAccessibleName);
+                    return SR.SpinnerAccessibleName;
                 }
                 else if (AccessibilityImprovements.Level1) {
                     return this.GetType().Name;
@@ -1823,7 +1823,7 @@ namespace System.Windows.Forms {
                                 // For AI.Level3 spinner is already announced so use type name.
                                 return Owner.ParentInternal.GetType().Name;
                             }
-                            return SR.GetString(SR.SpinnerAccessibleName);
+                            return SR.SpinnerAccessibleName;
                         }
                         return baseName;
                     }
@@ -1921,9 +1921,9 @@ namespace System.Windows.Forms {
                     public override string Name {
                         get {
                             if (up) {
-                                return SR.GetString(SR.UpDownBaseUpButtonAccName);
+                                return SR.UpDownBaseUpButtonAccName;
                             }
-                            return SR.GetString(SR.UpDownBaseDownButtonAccName);
+                            return SR.UpDownBaseDownButtonAccName;
                         }
                         set {
                         }

@@ -218,7 +218,7 @@ namespace System.Windows.Forms {
                 //
                 int formatId = SafeNativeMethods.RegisterClipboardFormat(format);
                 if (0 == formatId) {
-                    throw new Win32Exception(Marshal.GetLastWin32Error(), SR.GetString(SR.RegisterCFFailed));
+                    throw new Win32Exception(Marshal.GetLastWin32Error(), SR.RegisterCFFailed);
                 }
         
 

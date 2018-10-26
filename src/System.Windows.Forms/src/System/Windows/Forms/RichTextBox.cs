@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
                     }
                     catch (Exception e)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DragDropRegFailed), e);
+                        throw new InvalidOperationException(SR.DragDropRegFailed, e);
                     }
                 }
                 richTextBoxFlags[allowOleDropSection] = value ? 1 : 0;
@@ -488,7 +488,7 @@ namespace System.Windows.Forms {
                     }
                     catch (Exception e)
                     {
-                        throw new InvalidOperationException(SR.GetString(SR.DragDropRegFailed), e);
+                        throw new InvalidOperationException(SR.DragDropRegFailed, e);
                     }
                 }
                 richTextBoxFlags[enableAutoDragDropSection] = value ? 1 : 0;
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms {
             set {
                 // Verify the argument, and throw an error if is bad
                 if (value != null && value.Length > RichTextBoxConstants.MAX_TAB_STOPS)
-                    throw new ArgumentOutOfRangeException("SelectionTabs", SR.GetString(SR.SelTabCountRange));
+                    throw new ArgumentOutOfRangeException("SelectionTabs", SR.SelTabCountRange);
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
@@ -2445,7 +2445,7 @@ namespace System.Windows.Forms {
                     flags = RichTextBoxConstants.SF_UNICODE | RichTextBoxConstants.SF_TEXT;
                     break;
                 default:
-                    throw new ArgumentException(SR.GetString(SR.InvalidFileType));
+                    throw new ArgumentException(SR.InvalidFileType);
             }
 
             StreamIn(data, flags);
@@ -2864,7 +2864,7 @@ namespace System.Windows.Forms {
                         cf.dwEffects = 0;
                         break;
                     default:
-                        throw new ArgumentException(SR.GetString(SR.UnknownAttr));
+                        throw new ArgumentException(SR.UnknownAttr);
                 }
 
                 // set the format information
@@ -3028,7 +3028,7 @@ namespace System.Windows.Forms {
                     editStream.Read(bytes, (int)streamStart, SZ_RTF_TAG.Length);
                     string str = Encoding.Default.GetString(bytes);
                     if (!SZ_RTF_TAG.Equals(str))
-                        throw new ArgumentException(SR.GetString(SR.InvalidFileFormat));
+                        throw new ArgumentException(SR.InvalidFileFormat);
 
                     // put us back at the start of the file
                     editStream.Position = streamStart;
@@ -3081,7 +3081,7 @@ namespace System.Windows.Forms {
                     return;
 
                 if (es.dwError != 0)
-                    throw new InvalidOperationException(SR.GetString(SR.LoadTextError));
+                    throw new InvalidOperationException(SR.LoadTextError);
 
                 // set the modify tag on the control
                 SendMessage(NativeMethods.EM_SETMODIFY, -1, 0);
@@ -3171,7 +3171,7 @@ namespace System.Windows.Forms {
 
                 // check to make sure things went well
                 if (es.dwError != 0)
-                    throw new InvalidOperationException(SR.GetString(SR.SaveTextError));
+                    throw new InvalidOperationException(SR.SaveTextError);
             }
             finally {
                 // release any storage space held.
@@ -3375,7 +3375,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.CharBuffer charBuffer = UnsafeNativeMethods.CharBuffer.CreateBuffer(characters);
             IntPtr unmanagedBuffer = charBuffer.AllocCoTaskMem();
             if (unmanagedBuffer == IntPtr.Zero)
-                throw new OutOfMemoryException(SR.GetString(SR.OutOfMemory));
+                throw new OutOfMemoryException(SR.OutOfMemory);
 
             txrg.lpstrText = unmanagedBuffer;
             int len = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETTEXTRANGE, 0, txrg);

@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
             if (dataGrid == null || dgTable.DataGrid == null)
                 throw new ArgumentNullException("dataGrid");
             if (rowNumber < 0)
-                throw new ArgumentException(SR.GetString(SR.DataGridRowRowNumber), "rowNumber");
+                throw new ArgumentException(SR.DataGridRowRowNumber, "rowNumber");
             // this.dataGrid = dataGrid;
             this.number = rowNumber;
 
@@ -761,7 +761,7 @@ namespace System.Windows.Forms {
             public override string Name {
                 get {
                     if (owner is DataGridAddNewRow) {
-                        return SR.GetString(SR.AccDGNewRow);
+                        return SR.AccDGNewRow;
                     }
                     else {
                         return DataGridRowAccessibleObject.CellToDisplayString(DataGrid, owner.RowNumber, 0);
@@ -939,7 +939,7 @@ namespace System.Windows.Forms {
 
             public override string DefaultAction {
                 get {
-                    return SR.GetString(SR.AccDGEdit);
+                    return SR.AccDGEdit;
                 }
             }
 

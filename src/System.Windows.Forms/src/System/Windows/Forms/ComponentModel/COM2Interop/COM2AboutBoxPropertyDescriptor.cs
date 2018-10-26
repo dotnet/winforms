@@ -20,7 +20,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     
         public Com2AboutBoxPropertyDescriptor() : base(NativeMethods.ActiveX.DISPID_ABOUTBOX, "About", new Attribute[]{new DispIdAttribute(NativeMethods.ActiveX.DISPID_ABOUTBOX), 
                                                                                       DesignerSerializationVisibilityAttribute.Hidden, 
-                                                                                      new DescriptionAttribute(SR.GetString(SR.AboutBoxDesc)), 
+                                                                                      new DescriptionAttribute(SR.AboutBoxDesc), 
                                                                                       new ParenthesizePropertyNameAttribute(true)}, true, typeof(string), null, false) {
         }
     

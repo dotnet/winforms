@@ -419,7 +419,7 @@ namespace System.Windows.Forms {
                                                                   "AlternatingBackColor"));
                     }
                     if (IsTransparentColor(value))
-                        throw new ArgumentException(SR.GetString(SR.DataGridTransparentAlternatingBackColorNotAllowed));
+                        throw new ArgumentException(SR.DataGridTransparentAlternatingBackColorNotAllowed);
                     if (!alternatingBackBrush.Color.Equals(value)) {
                         alternatingBackBrush = new SolidBrush(value);
                         InvalidateInside();
@@ -471,7 +471,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (IsTransparentColor(value))
-                        throw new ArgumentException(SR.GetString(SR.DataGridTransparentBackColorNotAllowed));
+                        throw new ArgumentException(SR.DataGridTransparentBackColorNotAllowed);
                     base.BackColor = value;
                 }
             }
@@ -722,7 +722,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (IsTransparentColor(value))
-                        throw new ArgumentException(SR.GetString(SR.DataGridTransparentCaptionBackColorNotAllowed));
+                        throw new ArgumentException(SR.DataGridTransparentCaptionBackColorNotAllowed);
                     Caption.BackColor = value;
                 }
             }
@@ -899,7 +899,7 @@ namespace System.Windows.Forms {
                     // if the OnLayout event was not set in the grid, then we can't
                     // reliably set the currentCell on the grid.
                     if (layout.dirty)
-                        throw new ArgumentException(SR.GetString(SR.DataGridSettingCurrentCellNotGood));
+                        throw new ArgumentException(SR.DataGridSettingCurrentCellNotGood);
                     if (value.RowNumber == currentRow && value.ColumnNumber == currentCol)
                         return;
     
@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms {
                     if (errorMessage != null) {
                         DialogResult result = RTLAwareMessageBox.Show(null,
                             SR.GetString(SR.DataGridPushedIncorrectValueIntoColumn, errorMessage),
-                            SR.GetString(SR.DataGridErrorMessageBoxCaption), MessageBoxButtons.YesNo,
+                            SR.DataGridErrorMessageBoxCaption, MessageBoxButtons.YesNo,
                             MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                         
                         if (result == DialogResult.Yes) {
@@ -1190,7 +1190,7 @@ namespace System.Windows.Forms {
                     if (value.IsEmpty)
                         throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "SelectionBackColor"));
                     if (IsTransparentColor(value))
-                        throw new ArgumentException(SR.GetString(SR.DataGridTransparentSelectionBackColorNotAllowed));
+                        throw new ArgumentException(SR.DataGridTransparentSelectionBackColorNotAllowed);
                     if (!value.Equals(selectionBackBrush.Color)) {
                         selectionBackBrush = new SolidBrush(value);
     
@@ -1331,8 +1331,8 @@ namespace System.Windows.Forms {
                     backButton.X = MirrorRectangle(backButton, layout.Inside, isRightToLeft());
                     detailsButton.X = MirrorRectangle(detailsButton, layout.Inside, isRightToLeft());
     
-                    ToolTipProvider.AddToolTip(SR.GetString(SR.DataGridCaptionBackButtonToolTip), new IntPtr(0), backButton);
-                    ToolTipProvider.AddToolTip(SR.GetString(SR.DataGridCaptionDetailsButtonToolTip), new IntPtr(1), detailsButton);
+                    ToolTipProvider.AddToolTip(SR.DataGridCaptionBackButtonToolTip, new IntPtr(0), backButton);
+                    ToolTipProvider.AddToolTip(SR.DataGridCaptionDetailsButtonToolTip, new IntPtr(1), detailsButton);
                     ToolTipId = 2;
                 } else {
                     ToolTipId = 0;
@@ -1441,7 +1441,7 @@ namespace System.Windows.Forms {
     
                 set {
                     if (value != null && !(value is IList || value is IListSource))
-                        throw new ArgumentException(SR.GetString(SR.BadDataSourceForComplexBinding));
+                        throw new ArgumentException(SR.BadDataSourceForComplexBinding);
                     if (dataSource != null && dataSource.Equals(value))
                     {
                         return;
@@ -1541,7 +1541,7 @@ namespace System.Windows.Forms {
                         return listManager;
                 }
                 set {
-                    throw new NotSupportedException(SR.GetString(SR.DataGridSetListManager));
+                    throw new NotSupportedException(SR.DataGridSetListManager);
                 }
             }
     
@@ -1731,7 +1731,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (this.listManager == null)
-                        throw new InvalidOperationException(SR.GetString(SR.DataGridSetSelectIndex));
+                        throw new InvalidOperationException(SR.DataGridSetSelectIndex);
     
                     if (originalState == null) {
                         this.listManager.Position = value;
@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms {
                     if (value.IsEmpty)
                         throw new ArgumentException(SR.GetString(SR.DataGridEmptyColor, "HeaderBackColor"));
                     if (IsTransparentColor(value))
-                        throw new ArgumentException(SR.GetString(SR.DataGridTransparentHeaderBackColorNotAllowed));
+                        throw new ArgumentException(SR.DataGridTransparentHeaderBackColorNotAllowed);
                     if (!value.Equals(headerBackBrush.Color)) {
                         headerBackBrush = new SolidBrush(value);
     
@@ -2595,7 +2595,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (IsTransparentColor(value))
-                        throw new ArgumentException(SR.GetString(SR.DataGridTransparentParentRowsBackColorNotAllowed));
+                        throw new ArgumentException(SR.DataGridTransparentParentRowsBackColorNotAllowed);
                     this.parentRows.BackColor = value;
                 }
             }
@@ -2686,7 +2686,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value < 0)
-                        throw new ArgumentException(SR.GetString(SR.DataGridColumnWidth), "PreferredColumnWidth");
+                        throw new ArgumentException(SR.DataGridColumnWidth, "PreferredColumnWidth");
                     if (preferredColumnWidth != value) {
                         preferredColumnWidth = value;
                     }
@@ -2709,7 +2709,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value < 0)
-                        throw new ArgumentException(SR.GetString(SR.DataGridRowRowHeight));
+                        throw new ArgumentException(SR.DataGridRowRowHeight);
                     prefferedRowHeight = value;
                 }
             }
@@ -3678,7 +3678,7 @@ namespace System.Windows.Forms {
 
                 if (errorMessage != null) {
                     DialogResult result = RTLAwareMessageBox.Show(null, SR.GetString(SR.DataGridPushedIncorrectValueIntoColumn,
-                            errorMessage), SR.GetString(SR.DataGridErrorMessageBoxCaption), MessageBoxButtons.YesNo,
+                            errorMessage), SR.DataGridErrorMessageBoxCaption, MessageBoxButtons.YesNo,
                             MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                     
                     if (result == DialogResult.Yes) {
@@ -3744,7 +3744,7 @@ namespace System.Windows.Forms {
                         if (this.Site == null || !this.Site.DesignMode)
                             throw;
     
-                        RTLAwareMessageBox.Show(null, SR.GetString(SR.DataGridExceptionInPaint), null,
+                        RTLAwareMessageBox.Show(null, SR.DataGridExceptionInPaint, null,
                             MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                         
                         if (this.Visible) BeginUpdateInternal();
@@ -4438,7 +4438,7 @@ namespace System.Windows.Forms {
                         throw;
                     gridState[GRIDSTATE_exceptionInPaint] = true;
                     try {
-                        RTLAwareMessageBox.Show(null, SR.GetString(SR.DataGridExceptionInPaint), null, MessageBoxButtons.OK,
+                        RTLAwareMessageBox.Show(null, SR.DataGridExceptionInPaint, null, MessageBoxButtons.OK,
                             MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                         
                         if (this.Visible) BeginUpdateInternal();
@@ -4691,7 +4691,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void BeginInit() {
                 if (inInit)
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridBeginInit));
+                    throw new InvalidOperationException(SR.DataGridBeginInit);
                 inInit = true;
             }
     
@@ -6363,7 +6363,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private void EnsureBound() {
                 if (!Bound) {
-                    throw new InvalidOperationException(SR.GetString(SR.DataGridUnbound));
+                    throw new InvalidOperationException(SR.DataGridUnbound);
                 }
             }
     

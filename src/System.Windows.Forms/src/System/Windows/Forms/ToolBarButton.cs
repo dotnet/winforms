@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
                 //The dropdownmenu must be of type ContextMenu, Main & Items are invalid.
                 //
                 if (value != null && !(value is ContextMenu)) {
-                    throw new ArgumentException(SR.GetString(SR.ToolBarButtonInvalidDropDownMenuType));
+                    throw new ArgumentException(SR.ToolBarButtonInvalidDropDownMenuType);
                 }
                 dropDownMenu = value;
             }

@@ -307,7 +307,7 @@ namespace System.Windows.Forms {
             set {
             
                 if (!(value == DockStyle.Top || value == DockStyle.Bottom || value == DockStyle.Left || value == DockStyle.Right)) {
-                    throw new ArgumentException(SR.GetString(SR.SplitterInvalidDockEnum));
+                    throw new ArgumentException(SR.SplitterInvalidDockEnum);
                 }
                 
                 int requestedSize = splitterThickness;

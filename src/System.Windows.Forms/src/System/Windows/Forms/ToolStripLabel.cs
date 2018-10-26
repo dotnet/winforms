@@ -365,7 +365,7 @@ namespace System.Windows.Forms {
             public override string DefaultAction {
                 get {
                     if (ownerItem.IsLink) {
-                        return SR.GetString(SR.AccessibleActionClick);
+                        return SR.AccessibleActionClick;
                     }
                     else {
                         return string.Empty;

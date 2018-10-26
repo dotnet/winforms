@@ -1069,13 +1069,13 @@ namespace System.Windows.Forms {
 
             public override string DefaultAction {
                 get {
-                    return SR.GetString(SR.AccDGNavigateBack);
+                    return SR.AccDGNavigateBack;
                 }
             }
 
             public override string Name {
                 get {
-                    return SR.GetString(SR.AccDGParentRows);
+                    return SR.AccDGParentRows;
                 }
             }
 

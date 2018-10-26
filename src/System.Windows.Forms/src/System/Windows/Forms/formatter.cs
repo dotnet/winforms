@@ -383,7 +383,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         private static string GetCantConvertMessage(object value, Type targetType) {
             string stringResId = (value == null) ? SR.Formatter_CantConvertNull : SR.Formatter_CantConvert;
-            return String.Format(CultureInfo.CurrentCulture, SR.GetString(stringResId), value, targetType.Name);
+            return String.Format(CultureInfo.CurrentCulture, stringResId, value, targetType.Name);
         }
 
         /// <devdoc>

@@ -1104,7 +1104,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         string message = except.Message;
                         if (message == null || message.Length == 0) message = except.ToString();
                         
-                        RTLAwareMessageBox.Show(null, message, SR.GetString(SR.PropertyGridExceptionInfo),
+                        RTLAwareMessageBox.Show(null, message, SR.PropertyGridExceptionInfo,
                             MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                     }
                 }

@@ -613,7 +613,7 @@ namespace System.Windows.Forms {
         public static string SafeTopLevelCaptionFormat {
             get {
                 if (safeTopLevelCaptionSuffix == null) {
-                    safeTopLevelCaptionSuffix = SR.GetString(SR.SafeTopLevelCaptionFormat); // 0 - original, 1 - zone, 2 - site
+                    safeTopLevelCaptionSuffix = SR.SafeTopLevelCaptionFormat; // 0 - original, 1 - zone, 2 - site
                 }
                 return safeTopLevelCaptionSuffix;
             }
@@ -1399,7 +1399,7 @@ namespace System.Windows.Forms {
         {
             if (Assembly.GetEntryAssembly() == null)
             {
-                throw new NotSupportedException(SR.GetString(SR.RestartNotSupported));
+                throw new NotSupportedException(SR.RestartNotSupported);
             }
 
             bool hrefExeCase = false;
@@ -1530,7 +1530,7 @@ namespace System.Windows.Forms {
         {
             if (NativeWindow.AnyHandleCreated)
             {
-                throw new InvalidOperationException(SR.GetString(SR.Win32WindowAlreadyCreated));
+                throw new InvalidOperationException(SR.Win32WindowAlreadyCreated);
             }
             Control.UseCompatibleTextRenderingDefault = defaultValue;
         }
@@ -3353,7 +3353,7 @@ namespace System.Windows.Forms {
                 Debug.Indent();
 
                 if (reason == NativeMethods.MSOCM.msoloopModalForm && !SystemInformation.UserInteractive) {
-                    throw new InvalidOperationException(SR.GetString(SR.CantShowModalOnNonInteractive));
+                    throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
                 }
 
                 // if we've entered because of a Main message loop being pushed
@@ -3374,7 +3374,7 @@ namespace System.Windows.Forms {
                     // If someone has tried to push another main message loop on this thread, ignore
                     // it.
                     if (messageLoopCount != 1) {
-                        throw new InvalidOperationException(SR.GetString(SR.CantNestMessageLoops));
+                        throw new InvalidOperationException(SR.CantNestMessageLoops);
                     }
 
                     applicationContext = context;

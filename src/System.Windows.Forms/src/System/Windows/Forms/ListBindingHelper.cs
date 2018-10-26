@@ -280,7 +280,7 @@ namespace System.Windows.Forms {
             }
 
             if (instanceException != null) {
-                throw new NotSupportedException(SR.GetString(SR.BindingSourceInstanceError), instanceException);
+                throw new NotSupportedException(SR.BindingSourceInstanceError, instanceException);
             }
 
             return instancedObject;

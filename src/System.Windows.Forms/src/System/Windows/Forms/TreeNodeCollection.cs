@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
                     this[index] = (TreeNode)value;
                 }
                 else { 
-                    throw new ArgumentException(SR.GetString(SR.TreeNodeCollectionBadTreeNode), "value");
+                    throw new ArgumentException(SR.TreeNodeCollectionBadTreeNode, "value");
                 }
             }
         }
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
                 Insert(index, (TreeNode)node);
             }
             else {  
-                throw new ArgumentException(SR.GetString(SR.TreeNodeCollectionBadTreeNode), "node");
+                throw new ArgumentException(SR.TreeNodeCollectionBadTreeNode, "node");
             }
         }
 

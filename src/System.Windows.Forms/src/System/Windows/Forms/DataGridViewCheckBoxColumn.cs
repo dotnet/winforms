@@ -74,7 +74,7 @@ namespace System.Windows.Forms
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_ColumnDefaultCellStyleDescr)
+            SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatData)),
-            SRDescription(SR.DataGridView_CheckBoxColumnFalseValueDescr),
+            SRDescription(nameof(SR.DataGridView_CheckBoxColumnFalseValueDescr)),
             TypeConverter(typeof(StringConverter))
         ]
         public object FalseValue 
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(FlatStyle.Standard),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_CheckBoxColumnFlatStyleDescr)
+            SRDescription(nameof(SR.DataGridView_CheckBoxColumnFlatStyleDescr))
         ]
         public FlatStyle FlatStyle 
         {
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatData)),
-            SRDescription(SR.DataGridView_CheckBoxColumnIndeterminateValueDescr),
+            SRDescription(nameof(SR.DataGridView_CheckBoxColumnIndeterminateValueDescr)),
             TypeConverter(typeof(StringConverter))
         ]
         public object IndeterminateValue 
@@ -214,7 +214,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(SR.DataGridView_CheckBoxColumnThreeStateDescr)
+            SRDescription(nameof(SR.DataGridView_CheckBoxColumnThreeStateDescr))
         ]
         public bool ThreeState
         {
@@ -270,7 +270,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatData)),
-            SRDescription(SR.DataGridView_CheckBoxColumnTrueValueDescr),
+            SRDescription(nameof(SR.DataGridView_CheckBoxColumnTrueValueDescr)),
             TypeConverter(typeof(StringConverter))
         ]
         public object TrueValue

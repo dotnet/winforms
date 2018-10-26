@@ -227,7 +227,7 @@ namespace System.Windows.Forms {
             internal class SystemMenuItem : ToolStripMenuItem {
                    public SystemMenuItem(){
                        if (AccessibilityImprovements.Level1) {
-                           AccessibleName = SR.GetString(SR.MDIChildSystemMenuItemAccessibleName);
+                           AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
                        }
                    }
                    protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {

@@ -292,7 +292,7 @@ namespace System.Windows.Forms {
                 return base.AutoScroll;
             }
             set {
-                throw new NotSupportedException(SR.GetString(SR.ToolStripDoesntSupportAutoScroll));
+                throw new NotSupportedException(SR.ToolStripDoesntSupportAutoScroll);
             }
         }
 
@@ -348,7 +348,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value && AllowItemReorder) {
-                    throw new ArgumentException(SR.GetString(SR.ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue));
+                    throw new ArgumentException(SR.ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue);
                 }
 
                 base.AllowDrop = value;
@@ -379,7 +379,7 @@ namespace System.Windows.Forms {
             set {
                 if (GetToolStripState(STATE_ALLOWITEMREORDER) != value) {
                     if (AllowDrop && value) {
-                        throw new ArgumentException(SR.GetString(SR.ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue));
+                        throw new ArgumentException(SR.ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue);
                     }
                     SetToolStripState(STATE_ALLOWITEMREORDER, value);
 
@@ -1725,7 +1725,7 @@ namespace System.Windows.Forms {
                      throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripRenderMode));
                  }
                  if (value == ToolStripRenderMode.Custom) {
-                     throw new NotSupportedException(SR.GetString(SR.ToolStripRenderModeUseRendererPropertyInstead));
+                     throw new NotSupportedException(SR.ToolStripRenderModeUseRendererPropertyInstead);
                  }
 
                  if (value == ToolStripRenderMode.ManagerRenderMode) {
@@ -4081,7 +4081,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("item");
             }
             if (item.Owner != this) {
-                throw new NotSupportedException(SR.GetString(SR.ToolStripCanOnlyPositionItsOwnItems));
+                throw new NotSupportedException(SR.ToolStripCanOnlyPositionItsOwnItems);
             }
 
             item.SetBounds(new Rectangle(location, item.Size));

@@ -265,7 +265,7 @@ namespace System.Windows.Forms {
             IntSecurity.SafeSubWindows.Demand();
 
             if (!SystemInformation.UserInteractive) {
-                throw new InvalidOperationException(SR.GetString(SR.CantShowModalOnNonInteractive));
+                throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
             NativeWindow native = null;//This will be used if there is no owner or active window (declared here so it can be kept alive)

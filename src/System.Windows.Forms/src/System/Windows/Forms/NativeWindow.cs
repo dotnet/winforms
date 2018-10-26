@@ -681,7 +681,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private void CheckReleased() {
             if (handle != IntPtr.Zero) {
-                throw new InvalidOperationException(SR.GetString(SR.HandleAlreadyExists));
+                throw new InvalidOperationException(SR.HandleAlreadyExists);
             }
         }
 
@@ -755,7 +755,7 @@ namespace System.Windows.Forms {
                             lastWin32Error = Marshal.GetLastWin32Error();
                         }
                         catch (NullReferenceException e) {
-                            throw new OutOfMemoryException(SR.GetString(SR.ErrorCreatingHandle), e);
+                            throw new OutOfMemoryException(SR.ErrorCreatingHandle, e);
                         }
                     }
                     windowClass.targetWindow = null;
@@ -763,7 +763,7 @@ namespace System.Windows.Forms {
                     Debug.WriteLineIf(CoreSwitches.PerfTrack.Enabled, "Handle created of type '" + cp.ClassName + "' with caption '" + cp.Caption + "' from NativeWindow of type '" + GetType().FullName + "'");
 
                     if (createResult == IntPtr.Zero) {
-                        throw new Win32Exception(lastWin32Error, SR.GetString(SR.ErrorCreatingHandle));
+                        throw new Win32Exception(lastWin32Error, SR.ErrorCreatingHandle);
                     }
                     ownHandle = true;
                     System.Internal.HandleCollector.Add(createResult, NativeMethods.CommonHandles.Window);
@@ -1298,10 +1298,10 @@ namespace System.Windows.Forms {
         internal static void SetUnhandledExceptionModeInternal(UnhandledExceptionMode mode, bool threadScope) {
 
             if (!threadScope && anyHandleCreatedInApp) {
-                throw new InvalidOperationException(SR.GetString(SR.ApplicationCannotChangeApplicationExceptionMode));
+                throw new InvalidOperationException(SR.ApplicationCannotChangeApplicationExceptionMode);
             }
             if (threadScope && anyHandleCreated) {
-                throw new InvalidOperationException(SR.GetString(SR.ApplicationCannotChangeThreadExceptionMode));
+                throw new InvalidOperationException(SR.ApplicationCannotChangeThreadExceptionMode);
             }
 
             switch (mode) {
@@ -1586,7 +1586,7 @@ namespace System.Windows.Forms {
                     bool ok = UnsafeNativeMethods.GetClassInfo(NativeMethods.NullHandleRef, className, wcls);
                     int error = Marshal.GetLastWin32Error();
                     if (!ok) {
-                        throw new Win32Exception(error, SR.GetString(SR.InvalidWndClsName));
+                        throw new Win32Exception(error, SR.InvalidWndClsName);
                     }
                     wndclass.style = wcls.style;
                     wndclass.cbClsExtra = wcls.cbClsExtra;

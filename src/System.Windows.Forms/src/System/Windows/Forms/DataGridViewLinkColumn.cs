@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.ActiveLinkColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_LinkColumnActiveLinkColorDescr)
+            SRDescription(nameof(SR.DataGridView_LinkColumnActiveLinkColorDescr))
         ]
         public Color ActiveLinkColor
         {
@@ -98,7 +98,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(LinkBehavior.SystemDefault),
             SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(SR.DataGridView_LinkColumnLinkBehaviorDescr)
+            SRDescription(nameof(SR.DataGridView_LinkColumnLinkBehaviorDescr))
         ]
         public LinkBehavior LinkBehavior
         {
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.LinkColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_LinkColumnLinkColorDescr)
+            SRDescription(nameof(SR.DataGridView_LinkColumnLinkColorDescr))
         ]
         public Color LinkColor
         {
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_LinkColumnTextDescr)
+            SRDescription(nameof(SR.DataGridView_LinkColumnTextDescr))
         ]
         public string Text
         {
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(SR.DataGridView_LinkColumnTrackVisitedStateDescr)
+            SRDescription(nameof(SR.DataGridView_LinkColumnTrackVisitedStateDescr))
         ]
         public bool TrackVisitedState
         {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_LinkColumnUseColumnTextForLinkValueDescr)
+            SRDescription(nameof(SR.DataGridView_LinkColumnUseColumnTextForLinkValueDescr))
         ]
         public bool UseColumnTextForLinkValue
         {
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.VisitedLinkColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(SR.DataGridView_LinkColumnVisitedLinkColorDescr)
+            SRDescription(nameof(SR.DataGridView_LinkColumnVisitedLinkColorDescr))
         ]
         public Color VisitedLinkColor
         {

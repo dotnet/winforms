@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
         Localizable (true),
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue (-1),
-        SRDescription (SR.TabItemImageIndexDescr)
+        SRDescription (nameof(SR.TabItemImageIndexDescr))
         ]
         public int ImageIndex {
             get {
@@ -309,7 +309,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue (false),
         SRCategory(nameof(SR.CatAppearance)),
-        SRDescription (SR.TabItemUseVisualStyleBackColorDescr)
+        SRDescription(nameof(SR.TabItemUseVisualStyleBackColorDescr))
         ]
         public bool UseVisualStyleBackColor {
             get {
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue (""),
         Localizable (true),
-        SRDescription (SR.TabItemToolTipTextDescr)
+        SRDescription (nameof(SR.TabItemToolTipTextDescr))
         ]
         public string ToolTipText {
             get {

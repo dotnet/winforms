@@ -34,18 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\SR.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SR.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SR.Designer.cs</LastGenOutput>
+      <GenerateSource>true</GenerateSource>
+      <Namespace>System</Namespace>
     </EmbeddedResource>
   </ItemGroup>
-
+  
 </Project>
