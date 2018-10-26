@@ -72,6 +72,7 @@ phases:
       overWrite: true
 
 - phase: Helix publish
+  steps:
   # send the unit tests to helix
   - template: /eng/common/templates/steps/helix-publish.yml
     parameters:
