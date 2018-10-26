@@ -52,22 +52,23 @@ phases:
             _SignType: test # set to real once our build definition has signing approval
             _DotNetPublishToBlobFeed : true
 
+steps:
 # prepare the helix package
-- task: CopyFiles@2
-  displayName: Copy test binaries to helix package dir
-  inputs:
-    sourceFolder: $(Build.SourcesDirectory)/artifacts/bin/System.Windows.Forms.Tests/$(_BuildConfig)/netcoreapp2.0
-    contents: '**'
-    targetFolder: $(Build.StagingDirectory)/helixPackage
-    overWrite: true
+  - task: CopyFiles@2
+    displayName: Copy test binaries to helix package dir
+    inputs:
+      sourceFolder: $(Build.SourcesDirectory)/artifacts/bin/System.Windows.Forms.Tests/$(_BuildConfig)/netcoreapp2.0
+      contents: '**'
+      targetFolder: $(Build.StagingDirectory)/helixPackage
+      overWrite: true
 
-- task: CopyFiles@2
-  displayName: Copy xunit.runner.console to helix package dir
-  inputs:
-    sourceFolder: $(NuGetPackageRoot)/xunit.runner.console/2.4.1-pre.build.4059/tools/netcoreapp2.0
-    contents: '**'
-    targetFolder: $(Build.StagingDirectory)/helixPackage
-    overWrite: true
+  - task: CopyFiles@2
+    displayName: Copy xunit.runner.console to helix package dir
+    inputs:
+      sourceFolder: $(NuGetPackageRoot)/xunit.runner.console/2.4.1-pre.build.4059/tools/netcoreapp2.0
+      contents: '**'
+      targetFolder: $(Build.StagingDirectory)/helixPackage
+      overWrite: true
 
 # send the unit tests to helix
 - template: /eng/common/templates/steps/helix-publish.yml
