@@ -114,9 +114,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(defaultAllowSorting),
-        SRDescription(SR.DataGridAllowSortingDescr)
+        SRDescription(nameof(SR.DataGridAllowSortingDescr))
         ]
         public bool AllowSorting {
             get {
@@ -152,8 +152,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridAlternatingBackColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridAlternatingBackColorDescr))
         ]
         public Color AlternatingBackColor {
             get {
@@ -243,8 +243,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.ControlBackColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public Color BackColor {
             get {
@@ -396,8 +396,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.ControlForeColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.ControlForeColorDescr))
         ]
         public Color ForeColor {
             get {
@@ -454,8 +454,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridGridLineColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridGridLineColorDescr))
         ]
         public Color GridLineColor {
             get {
@@ -527,9 +527,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatAppearance),
+         SRCategory(nameof(SR.CatAppearance)),
          DefaultValue(defaultGridLineStyle),
-         SRDescription(SR.DataGridGridLineStyleDescr)
+         SRDescription(nameof(SR.DataGridGridLineStyleDescr))
         ]
         public DataGridLineStyle GridLineStyle {
             get {
@@ -570,8 +570,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridHeaderBackColorDescr)         
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridHeaderBackColorDescr))         
         ]
         public Color HeaderBackColor {
             get {
@@ -644,10 +644,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatAppearance),
+         SRCategory(nameof(SR.CatAppearance)),
          Localizable(true),
          AmbientValue(null),
-         SRDescription(SR.DataGridHeaderFontDescr)
+         SRDescription(nameof(SR.DataGridHeaderFontDescr))
         ]
         public Font HeaderFont {
             get {
@@ -712,8 +712,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridHeaderForeColorDescr)         
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridHeaderForeColorDescr))         
         ]
         public Color HeaderForeColor {
             get {
@@ -788,8 +788,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridLinkColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridLinkColorDescr))
         ]
         public Color LinkColor {
             get {
@@ -853,8 +853,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRDescription(SR.DataGridLinkHoverColorDescr),
-         SRCategory(SR.CatColors),
+         SRDescription(nameof(SR.DataGridLinkHoverColorDescr)),
+         SRCategory(nameof(SR.CatColors)),
          Browsable(false),
          EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -958,9 +958,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
          DefaultValue(defaultPreferredColumnWidth),
-         SRCategory(SR.CatLayout),
+         SRCategory(nameof(SR.CatLayout)),
          Localizable(true),
-         SRDescription(SR.DataGridPreferredColumnWidthDescr),
+         SRDescription(nameof(SR.DataGridPreferredColumnWidthDescr)),
          TypeConverter(typeof(DataGridPreferredColumnWidthTypeConverter))
         ]
         public int PreferredColumnWidth {
@@ -1009,9 +1009,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatLayout),
+         SRCategory(nameof(SR.CatLayout)),
          Localizable(true),
-         SRDescription(SR.DataGridPreferredRowHeightDescr)
+         SRDescription(nameof(SR.DataGridPreferredRowHeightDescr))
         ]
         public int PreferredRowHeight {
             get {
@@ -1083,9 +1083,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatDisplay),
+         SRCategory(nameof(SR.CatDisplay)),
          DefaultValue(true),
-         SRDescription(SR.DataGridColumnHeadersVisibleDescr)
+         SRDescription(nameof(SR.DataGridColumnHeadersVisibleDescr))
         ]
         public bool ColumnHeadersVisible {
             get {
@@ -1121,9 +1121,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatDisplay),
+         SRCategory(nameof(SR.CatDisplay)),
          DefaultValue(true),
-         SRDescription(SR.DataGridRowHeadersVisibleDescr)
+         SRDescription(nameof(SR.DataGridRowHeadersVisibleDescr))
         ]
         public bool RowHeadersVisible {
             get {
@@ -1159,10 +1159,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatLayout),
+         SRCategory(nameof(SR.CatLayout)),
          DefaultValue(defaultRowHeaderWidth),
          Localizable(true),
-         SRDescription(SR.DataGridRowHeaderWidthDescr)
+         SRDescription(nameof(SR.DataGridRowHeaderWidthDescr))
         ]
         public int RowHeaderWidth {
             get {
@@ -1204,8 +1204,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridSelectionBackColorDescr)
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridSelectionBackColorDescr))
         ]
         public Color SelectionBackColor {
             get {
@@ -1279,8 +1279,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
          Description("The foreground color for the current data grid row"),
-         SRCategory(SR.CatColors),
-         SRDescription(SR.DataGridSelectionForeColorDescr)        
+         SRCategory(nameof(SR.CatColors)),
+         SRDescription(nameof(SR.DataGridSelectionForeColorDescr))        
         ]
         public Color SelectionForeColor {
             get {

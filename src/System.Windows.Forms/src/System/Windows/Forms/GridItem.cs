@@ -22,10 +22,10 @@ namespace System.Windows.Forms
 
         /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]

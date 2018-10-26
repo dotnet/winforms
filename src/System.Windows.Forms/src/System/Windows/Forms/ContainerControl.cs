@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Localizable(true)]
         [Browsable(false)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SizeF AutoScaleDimensions {
@@ -131,8 +131,8 @@ namespace System.Windows.Forms {
         ///     independent of font.  for example, a control displaying a chart or other graphic
         ///     may want to use DPI scaling to increase in size to account for higher DPI monitors.
         /// </devdoc>
-        [SRCategory(SR.CatLayout)]
-        [SRDescription(SR.ContainerControlAutoScaleModeDescr)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ContainerControlAutoScaleModeDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -179,8 +179,8 @@ namespace System.Windows.Forms {
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
         AmbientValue(AutoValidate.Inherit),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ContainerControlAutoValidate),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ContainerControlAutoValidate)),
         ]
         public virtual AutoValidate AutoValidate {
             get {
@@ -217,8 +217,8 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
-        SRCategory(SR.CatPropertyChanged),
-        SRDescription(SR.ContainerControlOnAutoValidateChangedDescr),
+        SRCategory(nameof(SR.CatPropertyChanged)),
+        SRDescription(nameof(SR.ContainerControlOnAutoValidateChangedDescr)),
         ]
         public event EventHandler AutoValidateChanged {
             add {
@@ -238,7 +238,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Browsable(false),
-        SRDescription(SR.ContainerControlBindingContextDescr)
+        SRDescription(nameof(SR.ContainerControlBindingContextDescr))
         ]
         public override BindingContext BindingContext {
             get {
@@ -274,10 +274,10 @@ namespace System.Windows.Forms {
         ///    <para>Indicates the current active control on the container control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ContainerControlActiveControlDescr)
+        SRDescription(nameof(SR.ContainerControlActiveControlDescr))
         ]
         public Control ActiveControl {
             get {
@@ -306,7 +306,7 @@ namespace System.Windows.Forms {
         ///     the CurrentAutoScaleDimensions is equal to the ActualScaleDimensions
         /// </devdoc>
         [Browsable(false)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public SizeF CurrentAutoScaleDimensions {
             get {
@@ -342,10 +342,10 @@ namespace System.Windows.Forms {
         ///    <para>Indicates the form that the scrollable control is assigned to. This property is read-only.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ContainerControlParentFormDescr)
+        SRDescription(nameof(SR.ContainerControlParentFormDescr))
         ]
         public Form ParentForm {
             get {

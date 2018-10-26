@@ -54,10 +54,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
         ///       dialog box.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.CommonDialogHelpRequested)]
+        [SRDescription(nameof(SR.CommonDialogHelpRequested))]
         public event EventHandler HelpRequest {
             add {
                 Events.AddHandler(EventHelpRequest, value);

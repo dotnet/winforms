@@ -61,7 +61,7 @@ namespace System.Windows.Forms {
         ///       current item has been
         ///       altered.</para>
         /// </devdoc>
-        [SRCategory(SR.CatData)]
+        [SRCategory(nameof(SR.CatData))]
         public event ItemChangedEventHandler ItemChanged {
             add {
                 onItemChanged += value;
@@ -767,7 +767,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.MetaDataChanged"]/*' />
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Exists in Everett
-        [SRCategory(SR.CatData)]
+        [SRCategory(nameof(SR.CatData))]
         public event EventHandler MetaDataChanged {
             add {
                 onMetaDataChangedHandler += value;

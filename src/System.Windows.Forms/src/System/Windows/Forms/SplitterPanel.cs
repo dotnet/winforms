@@ -178,10 +178,10 @@ namespace System.Windows.Forms {
         ///     The height of this SplitterPanel
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlHeightDescr)
+        SRDescription(nameof(SR.ControlHeightDescr))
         ]
         public new int Height {
             get {
@@ -400,10 +400,10 @@ namespace System.Windows.Forms {
         ///     The width of this control.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlWidthDescr)
+        SRDescription(nameof(SR.ControlWidthDescr))
         ]
         public new int Width {
             get {

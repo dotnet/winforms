@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRDescription(SR.MainMenuCollapseDescr)]
+        [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse {
             add {
                 onCollapse += value;
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         AmbientValue(RightToLeft.Inherit),
-        SRDescription(SR.MenuRightToLeftDescr)
+        SRDescription(nameof(SR.MenuRightToLeftDescr))
         ]
         public virtual RightToLeft RightToLeft {
             get {

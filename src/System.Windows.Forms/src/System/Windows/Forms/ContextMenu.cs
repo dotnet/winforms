@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ContextMenuSourceControlDescr)
+        SRDescription(nameof(SR.ContextMenuSourceControlDescr))
         ]
         public Control SourceControl {
             [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
@@ -69,7 +69,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRDescription(SR.MenuItemOnInitDescr)]
+        [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup {
             add {
                 onPopup += value;
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Fires when the context menu collapses.
         /// </devdoc>
-        [SRDescription(SR.ContextMenuCollapseDescr)]
+        [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse {
             add {
                 onCollapse += value;
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DefaultValue(RightToLeft.No),
-        SRDescription(SR.MenuRightToLeftDescr)
+        SRDescription(nameof(SR.MenuRightToLeftDescr))
         ]
         public virtual RightToLeft RightToLeft {
             get {

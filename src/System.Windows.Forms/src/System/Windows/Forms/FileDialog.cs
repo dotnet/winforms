@@ -89,9 +89,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.FDaddExtensionDescr)
+        SRDescription(nameof(SR.FDaddExtensionDescr))
         ]
         public bool AddExtension {
             get {
@@ -111,9 +111,9 @@ namespace System.Windows.Forms {
         ///       the dialog box displays a warning if the user specifies a file name that does not exist.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FDcheckFileExistsDescr)
+        SRDescription(nameof(SR.FDcheckFileExistsDescr))
         ]
         public virtual bool CheckFileExists {
             get {
@@ -135,9 +135,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.FDcheckPathExistsDescr)
+        SRDescription(nameof(SR.FDcheckPathExistsDescr))
         ]
         public bool CheckPathExists {
             get {
@@ -159,9 +159,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(""),
-        SRDescription(SR.FDdefaultExtDescr)
+        SRDescription(nameof(SR.FDdefaultExtDescr))
         ]
         public string DefaultExt {
             get {
@@ -188,9 +188,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.FDdereferenceLinksDescr)
+        SRDescription(nameof(SR.FDdereferenceLinksDescr))
         ]
         public bool DereferenceLinks {
             get { 
@@ -221,9 +221,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
+        SRCategory(nameof(SR.CatData)), 
         DefaultValue(""),
-        SRDescription(SR.FDfileNameDescr)
+        SRDescription(nameof(SR.FDfileNameDescr))
         ]
         public string FileName {
             get {
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FDFileNamesDescr)
+        SRDescription(nameof(SR.FDFileNamesDescr))
         ]
         public string[] FileNames {
             get{
@@ -324,10 +324,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(""),
         Localizable(true),
-        SRDescription(SR.FDfilterDescr)
+        SRDescription(nameof(SR.FDfilterDescr))
         ]
         public string Filter {
             get {
@@ -396,9 +396,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(1),
-        SRDescription(SR.FDfilterIndexDescr)
+        SRDescription(nameof(SR.FDfilterIndexDescr))
         ]
         public int FilterIndex {
             get {
@@ -418,9 +418,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
+        SRCategory(nameof(SR.CatData)), 
         DefaultValue(""),
-        SRDescription(SR.FDinitialDirDescr)
+        SRDescription(nameof(SR.FDinitialDirDescr))
         ]
         public string InitialDirectory {
             get {
@@ -476,9 +476,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FDrestoreDirectoryDescr)
+        SRDescription(nameof(SR.FDrestoreDirectoryDescr))
         ]
         public bool RestoreDirectory {
             get {
@@ -502,9 +502,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FDshowHelpDescr)
+        SRDescription(nameof(SR.FDshowHelpDescr))
         ]
         public bool ShowHelp {
             get {
@@ -522,9 +522,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FDsupportMultiDottedExtensionsDescr)
+        SRDescription(nameof(SR.FDsupportMultiDottedExtensionsDescr))
         ]
         public bool SupportMultiDottedExtensions
         {
@@ -545,10 +545,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance), 
+        SRCategory(nameof(SR.CatAppearance)), 
         DefaultValue(""),
         Localizable(true),
-        SRDescription(SR.FDtitleDescr)
+        SRDescription(nameof(SR.FDtitleDescr))
         ]
         public string Title {
             get {
@@ -570,9 +570,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.FDvalidateNamesDescr)
+        SRDescription(nameof(SR.FDvalidateNamesDescr))
         ]
         public bool ValidateNames {
             get {
@@ -598,7 +598,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </remarks>
         /// </devdoc>
-        [SRDescription(SR.FDfileOkDescr)]
+        [SRDescription(nameof(SR.FDfileOkDescr))]
         public event CancelEventHandler FileOk {
             add {
                 Events.AddHandler(EventFileOk, value);

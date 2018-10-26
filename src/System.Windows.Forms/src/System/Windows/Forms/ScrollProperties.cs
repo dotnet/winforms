@@ -65,9 +65,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ScrollBarEnableDescr)
+        SRDescription(nameof(SR.ScrollBarEnableDescr))
         ]
         public bool Enabled {
             get {
@@ -93,9 +93,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(10),
-        SRDescription(SR.ScrollBarLargeChangeDescr),
+        SRDescription(nameof(SR.ScrollBarLargeChangeDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int LargeChange {
@@ -126,9 +126,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(100),
-        SRDescription(SR.ScrollBarMaximumDescr),
+        SRDescription(nameof(SR.ScrollBarMaximumDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int Maximum {
@@ -159,9 +159,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
-        SRDescription(SR.ScrollBarMinimumDescr),
+        SRDescription(nameof(SR.ScrollBarMinimumDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int Minimum {
@@ -215,9 +215,9 @@ namespace System.Windows.Forms {
         /// </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(1),
-        SRDescription(SR.ScrollBarSmallChangeDescr)
+        SRDescription(nameof(SR.ScrollBarSmallChangeDescr))
         ]
         public int SmallChange {
             get {
@@ -251,10 +251,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Bindable(true),
-        SRDescription(SR.ScrollBarValueDescr)
+        SRDescription(nameof(SR.ScrollBarValueDescr))
         ]
         public int Value {
             get {
@@ -280,9 +280,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ScrollBarVisibleDescr)
+        SRDescription(nameof(SR.ScrollBarVisibleDescr))
         ]
         public bool Visible {
             get {

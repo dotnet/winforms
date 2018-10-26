@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
     DefaultBindingProperty("Text"),
     Designer("System.Windows.Forms.Design.LabelDesigner, " + AssemblyRef.SystemDesign),
     ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionLabel)
+    SRDescription(nameof(SR.DescriptionLabel))
     ]
     // If not for FormatControl, we could inherit from ButtonBase and get foreground images for free.
     public class Label : Control, IAutomationLiveRegion {
@@ -124,11 +124,11 @@ namespace System.Windows.Forms {
         ///       to fit its contents. </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         DefaultValue(false),
         RefreshProperties(RefreshProperties.All),
         Localizable(true),
-        SRDescription(SR.LabelAutoSizeDescr),
+        SRDescription(nameof(SR.LabelAutoSizeDescr)),
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
@@ -166,11 +166,11 @@ namespace System.Windows.Forms {
         ///    extends beyond the width of the label. </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
-        SRDescription(SR.LabelAutoEllipsisDescr)
+        SRDescription(nameof(SR.LabelAutoEllipsisDescr))
         ]
         public bool AutoEllipsis {
             get {
@@ -207,10 +207,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.LabelBackgroundImageDescr)
+        SRDescription(nameof(SR.LabelBackgroundImageDescr))
         ]
         public override Image BackgroundImage {
             get {
@@ -271,10 +271,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.None),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.LabelBorderDescr)
+        SRDescription(nameof(SR.LabelBorderDescr))
         ]
         public virtual BorderStyle BorderStyle {
             get {
@@ -400,9 +400,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.FlatStyle"]/*' />
         [
-            SRCategory(SR.CatAppearance),
+            SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(FlatStyle.Standard),
-            SRDescription(SR.ButtonFlatStyleDescr)
+            SRDescription(nameof(SR.ButtonFlatStyleDescr))
         ]
         public FlatStyle FlatStyle {
             get {
@@ -447,8 +447,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRDescription(SR.ButtonImageDescr),
-        SRCategory(SR.CatAppearance)
+        SRDescription(nameof(SR.ButtonImageDescr)),
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public Image Image {
             [ResourceExposure(ResourceScope.Machine)]
@@ -494,8 +494,8 @@ namespace System.Windows.Forms {
         DefaultValue(-1),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ButtonImageIndexDescr),
-        SRCategory(SR.CatAppearance)
+        SRDescription(nameof(SR.ButtonImageIndexDescr)),
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public int ImageIndex {
             get {
@@ -541,8 +541,8 @@ namespace System.Windows.Forms {
         DefaultValue(""),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ButtonImageIndexDescr),
-        SRCategory(SR.CatAppearance)
+        SRDescription(nameof(SR.ButtonImageIndexDescr)),
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public string ImageKey {
             get {
@@ -591,9 +591,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(null),
-        SRDescription(SR.ButtonImageListDescr),
+        SRDescription(nameof(SR.ButtonImageListDescr)),
         RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public ImageList ImageList {
             get {
@@ -642,8 +642,8 @@ namespace System.Windows.Forms {
         [
         DefaultValue(ContentAlignment.MiddleCenter),
         Localizable(true),
-        SRDescription(SR.ButtonImageAlignDescr),
-        SRCategory(SR.CatAppearance)
+        SRDescription(nameof(SR.ButtonImageAlignDescr)),
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public ContentAlignment ImageAlign {
             get {
@@ -679,9 +679,9 @@ namespace System.Windows.Forms {
         /// to notify the user of changes to the live region.
         /// </summary>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         DefaultValue(AutomationLiveSetting.Off),
-        SRDescription(SR.LiveRegionAutomationLiveSettingDescr),
+        SRDescription(nameof(SR.LiveRegionAutomationLiveSettingDescr)),
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always)
         ]
@@ -779,10 +779,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.LabelPreferredHeightDescr)
+        SRDescription(nameof(SR.LabelPreferredHeightDescr))
         ]
         public virtual int PreferredHeight {
             get { return PreferredSize.Height; }
@@ -796,10 +796,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.LabelPreferredWidthDescr)
+        SRDescription(nameof(SR.LabelPreferredWidthDescr))
         ]
         public virtual int PreferredWidth {
             get { return PreferredSize.Width; }
@@ -864,10 +864,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRDescription(SR.LabelTextAlignDescr),
+        SRDescription(nameof(SR.LabelTextAlignDescr)),
         Localizable(true),
         DefaultValue(ContentAlignment.TopLeft),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public virtual ContentAlignment TextAlign {
             get {
@@ -923,7 +923,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.LabelOnTextAlignChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
             add {
                 Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
@@ -939,8 +939,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.UseCompatibleTextRenderingDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public bool UseCompatibleTextRendering {
             get{
@@ -976,9 +976,9 @@ namespace System.Windows.Forms {
         ///       the control.</para>
         /// </devdoc>
         [
-        SRDescription(SR.LabelUseMnemonicDescr),
+        SRDescription(nameof(SR.LabelUseMnemonicDescr)),
         DefaultValue(true),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public bool UseMnemonic {
             get {

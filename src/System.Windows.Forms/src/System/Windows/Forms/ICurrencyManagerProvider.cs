@@ -9,7 +9,7 @@ namespace System.Windows.Forms {
     /// <include file='doc\ICurrencyManagerProvider.uex' path='docs/doc[@for="ICurrencyManagerProvider"]/*' />
     /// <devdoc>
     /// </devdoc>
-    [SRDescription(SR.ICurrencyManagerProviderDescr)]
+    [SRDescription(nameof(SR.ICurrencyManagerProviderDescr))]
     public interface ICurrencyManagerProvider {
 
         /// <include file='doc\ICurrencyManagerProvider.uex' path='docs/doc[@for="ICurrencyManagerProvider.CurrencyManager"]/*' />

@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
     DefaultEvent("ValueChanged"),
     DefaultBindingProperty("Value"),
     Designer("System.Windows.Forms.Design.DateTimePickerDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionDateTimePicker)
+    SRDescription(nameof(SR.DescriptionDateTimePicker))
     ]
     public class DateTimePicker : Control {
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultTitleBackColor"]/*' />
@@ -236,8 +236,8 @@ namespace System.Windows.Forms {
         ///     The current value of the CalendarForeColor property.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.DateTimePickerCalendarForeColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.DateTimePickerCalendarForeColorDescr))
         ]
         public Color CalendarForeColor {
             get {
@@ -261,10 +261,10 @@ namespace System.Windows.Forms {
         ///     The current value of the CalendarFont property.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         AmbientValue(null),
-        SRDescription(SR.DateTimePickerCalendarFontDescr)
+        SRDescription(nameof(SR.DateTimePickerCalendarFontDescr))
         ]
         public Font CalendarFont {
             get {
@@ -303,8 +303,8 @@ namespace System.Windows.Forms {
         ///     The current value of the CalendarTitleBackColor property.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.DateTimePickerCalendarTitleBackColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.DateTimePickerCalendarTitleBackColorDescr))
         ]
         public Color CalendarTitleBackColor {
             get {
@@ -328,8 +328,8 @@ namespace System.Windows.Forms {
         ///     The current value of the CalendarTitleForeColor property.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.DateTimePickerCalendarTitleForeColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.DateTimePickerCalendarTitleForeColorDescr))
         ]
         public Color CalendarTitleForeColor {
             get {
@@ -353,8 +353,8 @@ namespace System.Windows.Forms {
         ///     The current value of the CalendarTrailingForeColor property.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.DateTimePickerCalendarTrailingForeColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.DateTimePickerCalendarTrailingForeColorDescr))
         ]
         public Color CalendarTrailingForeColor {
             get {
@@ -378,8 +378,8 @@ namespace System.Windows.Forms {
         ///     The current value of the CalendarMonthBackground property.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.DateTimePickerCalendarMonthBackgroundDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.DateTimePickerCalendarMonthBackgroundDescr))
         ]
         public Color CalendarMonthBackground {
             get {
@@ -403,10 +403,10 @@ namespace System.Windows.Forms {
         /// <para>Indicates whether the <see cref='System.Windows.Forms.DateTimePicker.Value'/> property has been set.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Bindable(true),
-        SRDescription(SR.DateTimePickerCheckedDescr)
+        SRDescription(nameof(SR.DateTimePickerCheckedDescr))
         ]
         public bool Checked {
             get {
@@ -497,8 +497,8 @@ namespace System.Windows.Forms {
         DefaultValue(null),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.DateTimePickerCustomFormatDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.DateTimePickerCustomFormatDescr))
         ]
         public string CustomFormat {
             get {
@@ -561,9 +561,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(LeftRightAlignment.Left),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
-        SRDescription(SR.DateTimePickerDropDownAlignDescr)
+        SRDescription(nameof(SR.DateTimePickerDropDownAlignDescr))
         ]
         public LeftRightAlignment DropDownAlign {
             get {
@@ -619,9 +619,9 @@ namespace System.Windows.Forms {
         ///     style of format the date is displayed in.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.DateTimePickerFormatDescr)
+        SRDescription(nameof(SR.DateTimePickerFormatDescr))
         ]
         public DateTimePickerFormat Format {
             get {
@@ -649,7 +649,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DateTimePickerOnFormatChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
         public event EventHandler FormatChanged {
             add {
                 Events.AddHandler(EVENT_FORMATCHANGED, value);
@@ -710,8 +710,8 @@ namespace System.Windows.Forms {
         ///       selectable in the control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.DateTimePickerMaxDateDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.DateTimePickerMaxDateDescr))
         ]
         public DateTime MaxDate {
             get {
@@ -762,8 +762,8 @@ namespace System.Windows.Forms {
         ///       selectable in the control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.DateTimePickerMinDateDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.DateTimePickerMinDateDescr))
         ]
         public DateTime MinDate {
             get {
@@ -891,10 +891,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -922,8 +922,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.DateTimePickerShowNoneDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.DateTimePickerShowNoneDescr))
         ]
         public bool ShowCheckBox {
             get {
@@ -941,8 +941,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.DateTimePickerShowUpDownDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.DateTimePickerShowUpDownDescr))
         ]
         public bool ShowUpDown {
             get {
@@ -995,10 +995,10 @@ namespace System.Windows.Forms {
         ///    <para>Indicates the DateTime value assigned to the control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Bindable(true),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.DateTimePickerValueDescr)
+        SRDescription(nameof(SR.DateTimePickerValueDescr))
         ]
         public DateTime Value {
             get {
@@ -1049,7 +1049,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs when the dropdown calendar is dismissed and disappears.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.DateTimePickerOnCloseUpDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
         public event EventHandler CloseUp {
             add {
                 onCloseUp += value;
@@ -1064,7 +1064,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 onRightToLeftLayoutChanged += value;
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs when the value for the control changes.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.valueChangedEventDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
             add {
                 onValueChanged += value;
@@ -1093,7 +1093,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs when the drop down calendar is shown.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.DateTimePickerOnDropDownDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
         public event EventHandler DropDown {
             add {
                 onDropDown += value;

@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
     DefaultProperty("TabPages"),
     DefaultEvent("SelectedIndexChanged"),
     Designer("System.Windows.Forms.Design.TabControlDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionTabControl)
+    SRDescription(nameof(SR.DescriptionTabControl))
     ]
     public class TabControl : Control {
 
@@ -129,11 +129,11 @@ namespace System.Windows.Forms {
         ///     to TabAppearance.Buttons.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(TabAlignment.Top),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.TabBaseAlignmentDescr)
+        SRDescription(nameof(SR.TabBaseAlignmentDescr))
         ]
         public TabAlignment Alignment {
             get {
@@ -163,10 +163,10 @@ namespace System.Windows.Forms {
         ///     to TabAppearance.Buttons.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(TabAppearance.Normal),
-        SRDescription(SR.TabBaseAppearanceDescr)
+        SRDescription(nameof(SR.TabBaseAppearanceDescr))
         ]
         public TabAppearance Appearance {
             get {
@@ -449,9 +449,9 @@ namespace System.Windows.Forms {
         ///     The drawing mode of the tabs in the tab strip.  This will indicate
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TabDrawMode.Normal),
-        SRDescription(SR.TabBaseDrawModeDescr)
+        SRDescription(nameof(SR.TabBaseDrawModeDescr))
         ]
         public TabDrawMode DrawMode {
             get {
@@ -476,9 +476,9 @@ namespace System.Windows.Forms {
         ///     Indicates whether the tabs visually change when the mouse passes over them.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TabBaseHotTrackDescr)
+        SRDescription(nameof(SR.TabBaseHotTrackDescr))
         ]
         public bool HotTrack {
             get {
@@ -501,10 +501,10 @@ namespace System.Windows.Forms {
         ///     set will get there images from.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(null),
-        SRDescription(SR.TabBaseImageListDescr)
+        SRDescription(nameof(SR.TabBaseImageListDescr))
         ]
         public ImageList ImageList {
             get {
@@ -545,9 +545,9 @@ namespace System.Windows.Forms {
         ///     However, the tab size can be explicity set by setting this property.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        SRDescription(SR.TabBaseItemSizeDescr)
+        SRDescription(nameof(SR.TabBaseItemSizeDescr))
         ]
         public Size ItemSize {
             get {
@@ -604,9 +604,9 @@ namespace System.Windows.Forms {
         ///     Windows spills extra tabs over on to second rows.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TabBaseMultilineDescr)
+        SRDescription(nameof(SR.TabBaseMultilineDescr))
         ]
         public bool Multiline {
             get {
@@ -628,9 +628,9 @@ namespace System.Windows.Forms {
         ///     You can specify both horizontal and vertical padding.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        SRDescription(SR.TabBasePaddingDescr)
+        SRDescription(nameof(SR.TabBasePaddingDescr))
         ]
         public new Point Padding {
             get {
@@ -659,10 +659,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -690,10 +690,10 @@ namespace System.Windows.Forms {
         ///     taking up.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TabBaseRowCountDescr)
+        SRDescription(nameof(SR.TabBaseRowCountDescr))
         ]
         public int RowCount {
             get {
@@ -712,9 +712,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Browsable(false),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(-1),
-        SRDescription(SR.selectedIndexDescr)
+        SRDescription(nameof(SR.selectedIndexDescr))
         ]
         public int SelectedIndex {
             get {
@@ -780,10 +780,10 @@ namespace System.Windows.Forms {
         ///      or -1 if no tab was selected.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TabControlSelectedTabDescr)
+        SRDescription(nameof(SR.TabControlSelectedTabDescr))
         ]
         public TabPage SelectedTab {
             get {
@@ -820,9 +820,9 @@ namespace System.Windows.Forms {
         ///     the same width.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TabSizeMode.Normal),
-        SRDescription(SR.TabBaseSizeModeDescr),
+        SRDescription(nameof(SR.TabBaseSizeModeDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public TabSizeMode SizeMode {
@@ -848,10 +848,10 @@ namespace System.Windows.Forms {
         ///     them.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Localizable(true),
-        SRDescription(SR.TabBaseShowToolTipsDescr)
+        SRDescription(nameof(SR.TabBaseShowToolTipsDescr))
         ]
         public bool ShowToolTips {
             get {
@@ -870,10 +870,10 @@ namespace System.Windows.Forms {
         ///     Returns the number of tabs in the strip
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TabBaseTabCountDescr)
+        SRDescription(nameof(SR.TabBaseTabCountDescr))
         ]
         public int TabCount {
             get { return tabPageCount;}
@@ -884,8 +884,8 @@ namespace System.Windows.Forms {
         ///     Returns the Collection of TabPages.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TabControlTabsDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TabControlTabsDescr)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Editor("System.Windows.Forms.Design.TabPageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         MergableProperty(false)
@@ -925,7 +925,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.drawItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
             add {
                 onDrawItem += value;
@@ -939,7 +939,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
@@ -954,7 +954,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.selectedIndexChangedEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
                 onSelectedIndexChanged += value;
@@ -970,7 +970,7 @@ namespace System.Windows.Forms {
         ///       Occurs before a tabpage is selected as the top tabPage.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.TabControlSelectingEventDescr)
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlSelectingEventDescr))
         ]
         public event TabControlCancelEventHandler Selecting {
             add {
@@ -987,7 +987,7 @@ namespace System.Windows.Forms {
         ///       Occurs after a tabpage is selected as the top tabPage.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.TabControlSelectedEventDescr)
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlSelectedEventDescr))
         ]
         public event TabControlEventHandler Selected {
             add {
@@ -1004,7 +1004,7 @@ namespace System.Windows.Forms {
         ///       Occurs before the visible property of the top tabpage is set to false.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.TabControlDeselectingEventDescr)
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlDeselectingEventDescr))
         ]
         public event TabControlCancelEventHandler Deselecting {
             add {
@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms {
         ///       Occurs after the visible property of the top tabpage is set to false.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.TabControlDeselectedEventDescr)
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlDeselectedEventDescr))
         ]
         public event TabControlEventHandler Deselected {
             add {

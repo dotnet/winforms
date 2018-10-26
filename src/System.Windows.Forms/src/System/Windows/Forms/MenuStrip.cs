@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip"]/*' />
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
-     SRDescription(SR.DescriptionMenuStrip)
+     SRDescription(nameof(SR.DescriptionMenuStrip))
     ]
     public class MenuStrip : ToolStrip {
 
@@ -53,8 +53,8 @@ namespace System.Windows.Forms {
 
         [
         DefaultValue(false),
-        SRDescription(SR.ToolStripCanOverflowDescr),
-        SRCategory(SR.CatLayout),
+        SRDescription(nameof(SR.ToolStripCanOverflowDescr)),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false)
         ]
         public new bool CanOverflow {
@@ -106,7 +106,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SRCategory(SR.CatBehavior), SRDescription(SR.MenuStripMenuActivateDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuActivateDescr))]
         public event EventHandler MenuActivate {
             add {
                 Events.AddHandler(EventMenuActivate, value);
@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SRCategory(SR.CatBehavior), SRDescription(SR.MenuStripMenuDeactivateDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuDeactivateDescr))]
         public event EventHandler MenuDeactivate {
             add {
                 Events.AddHandler(EventMenuDeactivate, value);
@@ -127,8 +127,8 @@ namespace System.Windows.Forms {
         }
 
         [DefaultValue(false)]
-        [SRDescription(SR.ToolStripShowItemToolTipsDescr)]
-        [SRCategory(SR.CatBehavior)]
+        [SRDescription(nameof(SR.ToolStripShowItemToolTipsDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         public new bool ShowItemToolTips {
             get {
                 return base.ShowItemToolTips;
@@ -139,8 +139,8 @@ namespace System.Windows.Forms {
         }
 
         [DefaultValue(true)]
-        [SRCategory(SR.CatLayout)]
-        [SRDescription(SR.ToolStripStretchDescr)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ToolStripStretchDescr))]
         public new bool Stretch {
             get {
                 return base.Stretch;
@@ -152,8 +152,8 @@ namespace System.Windows.Forms {
 
         [DefaultValue(null)]
         [MergableProperty(false)]
-        [SRDescription(SR.MenuStripMdiWindowListItem)]
-        [SRCategory(SR.CatBehavior)]
+        [SRDescription(nameof(SR.MenuStripMdiWindowListItem))]
+        [SRCategory(nameof(SR.CatBehavior))]
         [TypeConverterAttribute(typeof(MdiWindowListItemConverter))]
         public ToolStripMenuItem MdiWindowListItem {
             get {

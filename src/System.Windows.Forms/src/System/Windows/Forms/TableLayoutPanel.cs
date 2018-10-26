@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
     [Designer("System.Windows.Forms.Design.TableLayoutPanelDesigner, " + AssemblyRef.SystemDesign)]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-    [SRDescription(SR.DescriptionTableLayoutPanel)]
+    [SRDescription(nameof(SR.DescriptionTableLayoutPanel))]
     public class TableLayoutPanel : Panel, IExtenderProvider {
         private TableLayoutSettings _tableLayoutSettings;
         private static readonly object EventCellPaint = new object();
@@ -88,8 +88,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.CellBorderStyle"]/*' />
         [
         DefaultValue(TableLayoutPanelCellBorderStyle.None), 
-        SRCategory(SR.CatAppearance), 
-        SRDescription(SR.TableLayoutPanelCellBorderStyleDescr),
+        SRCategory(nameof(SR.CatAppearance)), 
+        SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr)),
         Localizable(true)
         ]
         public TableLayoutPanelCellBorderStyle CellBorderStyle {
@@ -113,7 +113,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.Controls"]/*' />
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [SRDescription(SR.ControlControlsDescr)]
+        [SRDescription(nameof(SR.ControlControlsDescr))]
         public new TableLayoutControlCollection Controls {
             get { return (TableLayoutControlCollection)base.Controls; }
         }
@@ -124,8 +124,8 @@ namespace System.Windows.Forms {
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
         /// causing out of memory exception
         /// </devdoc>
-        [SRDescription(SR.GridPanelColumnsDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.GridPanelColumnsDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
         [Localizable(true)]
         public int ColumnCount {
@@ -142,8 +142,8 @@ namespace System.Windows.Forms {
         ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
         ///       when the TableLayoutPanel is over-filled.
         /// </devdoc>
-        [SRDescription(SR.TableLayoutPanelGrowStyleDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
         public TableLayoutPanelGrowStyle GrowStyle {
             get {
@@ -160,8 +160,8 @@ namespace System.Windows.Forms {
         /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
         /// causing out of memory exception
         /// </devdoc>
-        [SRDescription(SR.GridPanelRowsDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.GridPanelRowsDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
         [Localizable(true)]
         public int RowCount {
@@ -170,9 +170,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.RowStyles"]/*' />
-        [SRDescription(SR.GridPanelRowStylesDescr)]
+        [SRDescription(nameof(SR.GridPanelRowStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [DisplayName("Rows")]
         [MergableProperty(false)]
         [Browsable(false)]
@@ -181,9 +181,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.ColumnStyles"]/*' />
-        [SRDescription(SR.GridPanelColumnStylesDescr)]
+        [SRDescription(nameof(SR.GridPanelColumnStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [DisplayName("Columns")]
         [Browsable(false)]
         [MergableProperty(false)]        
@@ -214,9 +214,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.GetColumnSpan"]/*' />
-        [SRDescription(SR.GridPanelGetColumnSpanDescr)]
+        [SRDescription(nameof(SR.GridPanelGetColumnSpanDescr))]
         [DefaultValue(1)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [DisplayName("ColumnSpan")]
         public int GetColumnSpan(Control control) {
             return _tableLayoutSettings.GetColumnSpan(control);
@@ -230,9 +230,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.GetRowSpan"]/*' />
-        [SRDescription(SR.GridPanelGetRowSpanDescr)]
+        [SRDescription(nameof(SR.GridPanelGetRowSpanDescr))]
         [DefaultValue(1)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [DisplayName("RowSpan")]
         public int GetRowSpan(Control control) {
             return _tableLayoutSettings.GetRowSpan(control);
@@ -248,8 +248,8 @@ namespace System.Windows.Forms {
         //get the row position of the control
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.GetRow"]/*' />
         [DefaultValue(-1)]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
-        [SRDescription(SR.GridPanelRowDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.GridPanelRowDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [DisplayName("Row")]
         public int GetRow(Control control) {
@@ -266,8 +266,8 @@ namespace System.Windows.Forms {
         //get the row and column position of the control
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.GetRow"]/*' />
         [DefaultValue(typeof(TableLayoutPanelCellPosition), "-1,-1")]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
-        [SRDescription(SR.GridPanelCellPositionDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.GridPanelCellPositionDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [DisplayName("Cell")]
         public TableLayoutPanelCellPosition GetCellPosition(Control control) {
@@ -285,8 +285,8 @@ namespace System.Windows.Forms {
         //get the column position of the control
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.GetColumn"]/*' />
         [DefaultValue(-1)]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
-        [SRDescription(SR.GridPanelColumnDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.GridPanelColumnDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [DisplayName("Column")]
         public int GetColumn(Control control) {
@@ -355,7 +355,7 @@ namespace System.Windows.Forms {
         #region PaintCode
 
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.CellPaint"]/*' />
-        [SRCategory(SR.CatAppearance), SRDescription(SR.TableLayoutPanelOnPaintCellDescr)]
+        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelOnPaintCellDescr))]
         public event TableLayoutCellPaintEventHandler CellPaint {
             add {
                 Events.AddHandler(EventCellPaint, value);

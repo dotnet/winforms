@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
     DefaultBindingProperty("Checked"),
     ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
     Designer("System.Windows.Forms.Design.RadioButtonDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionRadioButton)
+    SRDescription(nameof(SR.DescriptionRadioButton))
     ]
     public class RadioButton : ButtonBase {
 
@@ -88,8 +88,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.RadioButtonAutoCheckDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.RadioButtonAutoCheckDescr))
         ]
         public bool AutoCheck {
             get {
@@ -114,9 +114,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(Appearance.Normal),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
-        SRDescription(SR.RadioButtonAppearanceDescr)
+        SRDescription(nameof(SR.RadioButtonAppearanceDescr))
         ]
         public Appearance Appearance {
             get {
@@ -151,7 +151,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.RadioButtonOnAppearanceChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnAppearanceChangedDescr))]
         public event EventHandler AppearanceChanged {
             add {
                 Events.AddHandler(EVENT_APPEARANCECHANGED, value);
@@ -173,9 +173,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ContentAlignment.MiddleLeft),
-        SRDescription(SR.RadioButtonCheckAlignDescr)
+        SRDescription(nameof(SR.RadioButtonCheckAlignDescr))
         ]
         public ContentAlignment CheckAlign {
             get {
@@ -208,8 +208,8 @@ namespace System.Windows.Forms {
         Bindable(true),
         SettingsBindable(true),
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.RadioButtonCheckedDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.RadioButtonCheckedDescr))
         ]
         public bool Checked {
             get {
@@ -393,7 +393,7 @@ namespace System.Windows.Forms {
         ///       property changes.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.RadioButtonOnCheckedChangedDescr)]
+        [SRDescription(nameof(SR.RadioButtonOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
             add {
                 Events.AddHandler(EVENT_CHECKEDCHANGED, value);

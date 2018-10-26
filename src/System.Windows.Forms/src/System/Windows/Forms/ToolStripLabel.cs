@@ -62,8 +62,8 @@ namespace System.Windows.Forms {
 
         [
         DefaultValue(false),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ToolStripLabelIsLinkDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ToolStripLabelIsLinkDescr))
         ]
         public bool IsLink {
           get {
@@ -78,8 +78,8 @@ namespace System.Windows.Forms {
         }
         
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripLabelActiveLinkColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripLabelActiveLinkColorDescr))
         ]
         public Color ActiveLinkColor {
             get {
@@ -116,8 +116,8 @@ namespace System.Windows.Forms {
 
         [
         DefaultValue(LinkBehavior.SystemDefault),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ToolStripLabelLinkBehaviorDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ToolStripLabelLinkBehaviorDescr))
         ]
         public LinkBehavior LinkBehavior {
             get {
@@ -138,8 +138,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripLabelLinkColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripLabelLinkColorDescr))
         ]
         public Color LinkColor {
             get {
@@ -160,8 +160,8 @@ namespace System.Windows.Forms {
 
         [
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripLabelLinkVisitedDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripLabelLinkVisitedDescr))
         ]
         public bool LinkVisited {
             get {
@@ -176,8 +176,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripLabelVisitedLinkColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripLabelVisitedLinkColorDescr))
         ]
         public Color VisitedLinkColor {
             get {

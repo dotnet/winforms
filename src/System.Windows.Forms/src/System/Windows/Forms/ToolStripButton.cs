@@ -71,8 +71,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CheckOnClick"]/*' />
         [
         DefaultValue(false),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ToolStripButtonCheckOnClickDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ToolStripButtonCheckOnClickDescr))
         ]
         public bool CheckOnClick {
             get {
@@ -91,8 +91,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripButtonCheckedDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripButtonCheckedDescr))
         ]
         public bool Checked {
             get {
@@ -114,9 +114,9 @@ namespace System.Windows.Forms {
         /// or sets a value indicating whether the check box is checked.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(CheckState.Unchecked),
-        SRDescription(SR.CheckBoxCheckStateDescr)
+        SRDescription(nameof(SR.CheckBoxCheckStateDescr))
         ]
         public CheckState CheckState {
             get {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms {
         /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
         /// property changes.</para>
         /// </devdoc>
-        [SRDescription(SR.CheckBoxOnCheckedChangedDescr)]
+        [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
             add {
                 Events.AddHandler(EventCheckedChanged, value);
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
         /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         /// property changes.</para>
         /// </devdoc>
-        [SRDescription(SR.CheckBoxOnCheckStateChangedDescr)]
+        [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
             add {
                 Events.AddHandler(EventCheckStateChanged, value);

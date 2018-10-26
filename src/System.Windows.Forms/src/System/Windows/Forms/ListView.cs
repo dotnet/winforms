@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.ListViewDesigner, " + AssemblyRef.SystemDesign),
     DefaultProperty("Items"),
     DefaultEvent("SelectedIndexChanged"),
-    SRDescription(SR.DescriptionListView)
+    SRDescription(nameof(SR.DescriptionListView))
     ]
     public class ListView : Control {
 
@@ -257,9 +257,9 @@ namespace System.Windows.Forms {
         ///     activate an item.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(ItemActivation.Standard),
-        SRDescription(SR.ListViewActivationDescr)
+        SRDescription(nameof(SR.ListViewActivationDescr))
         ]
         public ItemActivation Activation {
             get {
@@ -289,10 +289,10 @@ namespace System.Windows.Forms {
         ///     to by default
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(ListViewAlignment.Top),
         Localizable(true),
-        SRDescription(SR.ListViewAlignmentDescr)
+        SRDescription(nameof(SR.ListViewAlignmentDescr))
         ]
         public ListViewAlignment Alignment {
             get {
@@ -324,9 +324,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Details view.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewAllowColumnReorderDescr)
+        SRDescription(nameof(SR.ListViewAllowColumnReorderDescr))
         ]
         public bool AllowColumnReorder {
             get {
@@ -348,9 +348,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Large Icon or Small Icon views.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewAutoArrangeDescr)
+        SRDescription(nameof(SR.ListViewAutoArrangeDescr))
         ]
         public bool AutoArrange {
             get {
@@ -414,9 +414,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.BackgroundImageTiled"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.ListViewBackgroundImageTiledDescr)
+        SRDescription(nameof(SR.ListViewBackgroundImageTiledDescr))
         ]
         public bool BackgroundImageTiled {
             get {
@@ -452,10 +452,10 @@ namespace System.Windows.Forms {
         ///     Describes the border style of the window.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.borderStyleDescr)
+        SRDescription(nameof(SR.borderStyleDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -482,9 +482,9 @@ namespace System.Windows.Forms {
         ///     to it.  The user can change the state of the item by clicking the checkbox.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.ListViewCheckBoxesDescr)
+        SRDescription(nameof(SR.ListViewCheckBoxesDescr))
         ]
         public bool CheckBoxes {
             get {
@@ -640,10 +640,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Editor("System.Windows.Forms.Design.ColumnHeaderCollectionEditor, " + AssemblyRef.SystemDesign,typeof(UITypeEditor)),
-        SRDescription(SR.ListViewColumnsDescr),
+        SRDescription(nameof(SR.ListViewColumnsDescr)),
         Localizable(true),
         MergableProperty(false)
         ]
@@ -812,10 +812,10 @@ namespace System.Windows.Forms {
         ///     Returns null if no item is currently focused.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewFocusedItemDescr)
+        SRDescription(nameof(SR.ListViewFocusedItemDescr))
         ]
         public ListViewItem FocusedItem {
             get {
@@ -879,9 +879,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Details view
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.ListViewFullRowSelectDescr)
+        SRDescription(nameof(SR.ListViewFullRowSelectDescr))
         ]
         public bool FullRowSelect {
             get {
@@ -901,9 +901,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Details view
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.ListViewGridLinesDescr)
+        SRDescription(nameof(SR.ListViewGridLinesDescr))
         ]
         public bool GridLines {
             get {
@@ -923,11 +923,11 @@ namespace System.Windows.Forms {
         ///     The collection of groups belonging to this ListView
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
         Editor("System.Windows.Forms.Design.ListViewGroupCollectionEditor, " + AssemblyRef.SystemDesign,typeof(UITypeEditor)),
-        SRDescription(SR.ListViewGroupsDescr),
+        SRDescription(nameof(SR.ListViewGroupsDescr)),
         MergableProperty(false)
         ]
         public ListViewGroupCollection Groups {
@@ -955,9 +955,9 @@ namespace System.Windows.Forms {
         ///     This property is only meaningful in Details view
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(ColumnHeaderStyle.Clickable),
-        SRDescription(SR.ListViewHeaderStyleDescr)
+        SRDescription(nameof(SR.ListViewHeaderStyleDescr))
         ]
         public ColumnHeaderStyle HeaderStyle {
             get { return headerStyle;}
@@ -990,9 +990,9 @@ namespace System.Windows.Forms {
         ///     different color) when focus is moved away from the ListView.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewHideSelectionDescr)
+        SRDescription(nameof(SR.ListViewHideSelectionDescr))
         ]
         public bool HideSelection {
             get {
@@ -1011,9 +1011,9 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewHotTrackingDescr)
+        SRDescription(nameof(SR.ListViewHotTrackingDescr))
         ]
         public bool HotTracking {
             get {
@@ -1037,9 +1037,9 @@ namespace System.Windows.Forms {
         ///     Determines whether items can be selected by hovering over them with the mouse.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewHoverSelectDescr)
+        SRDescription(nameof(SR.ListViewHoverSelectDescr))
         ]
         public bool HoverSelection {
             get {
@@ -1073,7 +1073,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewInsertionMarkDescr)
+        SRDescription(nameof(SR.ListViewInsertionMarkDescr))
         ]
         public ListViewInsertionMark InsertionMark {
             get
@@ -1099,11 +1099,11 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
         Editor("System.Windows.Forms.Design.ListViewItemCollectionEditor, " + AssemblyRef.SystemDesign,typeof(UITypeEditor)),
-        SRDescription(SR.ListViewItemsDescr),
+        SRDescription(nameof(SR.ListViewItemsDescr)),
         MergableProperty(false)
         ]
         public ListViewItemCollection Items {
@@ -1117,9 +1117,9 @@ namespace System.Windows.Forms {
         ///     Tells whether the EditLabels style is currently set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewLabelEditDescr)
+        SRDescription(nameof(SR.ListViewLabelEditDescr))
         ]
         public bool LabelEdit {
             get {
@@ -1138,10 +1138,10 @@ namespace System.Windows.Forms {
         ///     Tells whether the LabelWrap style is currently set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.ListViewLabelWrapDescr)
+        SRDescription(nameof(SR.ListViewLabelWrapDescr))
         ]
         public bool LabelWrap {
             get {
@@ -1160,9 +1160,9 @@ namespace System.Windows.Forms {
         ///     The Currently set ImageList for Large Icon mode.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ListViewLargeImageListDescr)
+        SRDescription(nameof(SR.ListViewLargeImageListDescr))
         ]
         public ImageList LargeImageList {
             get {
@@ -1217,10 +1217,10 @@ namespace System.Windows.Forms {
         ///     The sorting comparer for this ListView.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewItemSorterDescr)
+        SRDescription(nameof(SR.ListViewItemSorterDescr))
         ]
         public IComparer ListViewItemSorter {
             get {
@@ -1242,9 +1242,9 @@ namespace System.Windows.Forms {
         ///     Tells whether the MultiSelect style is currently set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewMultiSelectDescr)
+        SRDescription(nameof(SR.ListViewMultiSelectDescr))
         ]
         public bool MultiSelect {
             get {
@@ -1264,9 +1264,9 @@ namespace System.Windows.Forms {
         ///     drawn by the system or the user. This includes the column header when item index = -1.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewOwnerDrawDescr)
+        SRDescription(nameof(SR.ListViewOwnerDrawDescr))
         ]
         public bool OwnerDraw {
             get {
@@ -1290,10 +1290,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -1315,7 +1315,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
@@ -1331,9 +1331,9 @@ namespace System.Windows.Forms {
         ///     Tells whether the ScrollBars are visible or not.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewScrollableDescr)
+        SRDescription(nameof(SR.ListViewScrollableDescr))
         ]
         public bool Scrollable {
             get {
@@ -1369,10 +1369,10 @@ namespace System.Windows.Forms {
         ///     The currently selected list items.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewSelectedItemsDescr)
+        SRDescription(nameof(SR.ListViewSelectedItemsDescr))
         ]
         public SelectedListViewItemCollection SelectedItems {
             get {
@@ -1385,9 +1385,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ShowGroups"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListViewShowGroupsDescr)
+        SRDescription(nameof(SR.ListViewShowGroupsDescr))
         ]
         public bool ShowGroups {
             get {
@@ -1408,9 +1408,9 @@ namespace System.Windows.Forms {
         ///     The currently set SmallIcon image list.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ListViewSmallImageListDescr)
+        SRDescription(nameof(SR.ListViewSmallImageListDescr))
         ]
         public ImageList SmallImageList {
             get {
@@ -1456,9 +1456,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListViewShowItemToolTipsDescr)
+        SRDescription(nameof(SR.ListViewShowItemToolTipsDescr))
         ]
         public bool ShowItemToolTips {
             get {
@@ -1477,9 +1477,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(SortOrder.None),
-        SRDescription(SR.ListViewSortingDescr)
+        SRDescription(nameof(SR.ListViewSortingDescr))
         ]
         public SortOrder Sorting {
             get {
@@ -1520,9 +1520,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ListViewStateImageListDescr)
+        SRDescription(nameof(SR.ListViewStateImageListDescr))
         ]
         public ImageList StateImageList {
             get {
@@ -1625,9 +1625,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-            SRCategory(SR.CatAppearance),
+            SRCategory(nameof(SR.CatAppearance)),
             Browsable(true),
-            SRDescription(SR.ListViewTileSizeDescr),
+            SRDescription(nameof(SR.ListViewTileSizeDescr)),
         ]
         public Size TileSize {
             get {
@@ -1677,10 +1677,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListViewTopItemDescr)
+        SRDescription(nameof(SR.ListViewTopItemDescr))
         ]
         public ListViewItem TopItem {
             get {
@@ -1759,9 +1759,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(View.LargeIcon),
-        SRDescription(SR.ListViewViewDescr)
+        SRDescription(nameof(SR.ListViewViewDescr))
         ]
         public View View {
             get {
@@ -1809,10 +1809,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ListViewVirtualListSizeDescr)
+        SRDescription(nameof(SR.ListViewVirtualListSizeDescr))
         ]
         public int VirtualListSize {
             get {
@@ -1851,10 +1851,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ListViewVirtualModeDescr)
+        SRDescription(nameof(SR.ListViewVirtualModeDescr))
         ]
         public bool VirtualMode {
             get {
@@ -1891,7 +1891,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewAfterLabelEditDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewAfterLabelEditDescr))]
         public event LabelEditEventHandler AfterLabelEdit {
             add {
                 onAfterLabelEdit += value;
@@ -1905,7 +1905,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewBeforeLabelEditDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewBeforeLabelEditDescr))]
         public event LabelEditEventHandler BeforeLabelEdit {
             add {
                 onBeforeLabelEdit += value;
@@ -1919,7 +1919,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewCacheVirtualItemsEventDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewCacheVirtualItemsEventDescr))]
         public event CacheVirtualItemsEventHandler CacheVirtualItems {
             add {
                 Events.AddHandler(EVENT_CACHEVIRTUALITEMS, value);
@@ -1933,7 +1933,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewColumnClickDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewColumnClickDescr))]
         public event ColumnClickEventHandler ColumnClick {
             add {
                 onColumnClick += value;
@@ -1947,7 +1947,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Tell the user that the column headers are being rearranged
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListViewColumnReorderedDscr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnReorderedDscr))]
         public event ColumnReorderedEventHandler ColumnReordered {
             add {
                 Events.AddHandler(EVENT_COLUMNREORDERED, value);
@@ -1961,7 +1961,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Tell the user that the column width changed
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListViewColumnWidthChangedDscr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnWidthChangedDscr))]
         public event ColumnWidthChangedEventHandler ColumnWidthChanged {
             add {
                 Events.AddHandler(EVENT_COLUMNWIDTHCHANGED, value);
@@ -1975,7 +1975,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Tell the user that the column width is being changed
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ListViewColumnWidthChangingDscr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnWidthChangingDscr))]
         public event ColumnWidthChangingEventHandler ColumnWidthChanging {
             add {
                 Events.AddHandler(EVENT_COLUMNWIDTHCHANGING, value);
@@ -1989,7 +1989,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Fires in owner draw + Details mode when a column header needs to be drawn.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewDrawColumnHeaderEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawColumnHeaderEventDescr))]
         public event DrawListViewColumnHeaderEventHandler DrawColumnHeader {
             add {
                 Events.AddHandler(EVENT_DRAWCOLUMNHEADER, value);
@@ -2003,7 +2003,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Fires in owner draw mode when a ListView item needs to be drawn.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewDrawItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawItemEventDescr))]
         public event DrawListViewItemEventHandler DrawItem {
             add {
                 Events.AddHandler(EVENT_DRAWITEM, value);
@@ -2017,7 +2017,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///      <para>Fires in owner draw mode and Details view when a ListView sub-item needs to be drawn.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewDrawSubItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawSubItemEventDescr))]
         public event DrawListViewSubItemEventHandler DrawSubItem {
             add {
                 Events.AddHandler(EVENT_DRAWSUBITEM, value);
@@ -2031,7 +2031,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewItemClickDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemClickDescr))]
         public event EventHandler ItemActivate {
             add {
                 onItemActivate += value;
@@ -2045,7 +2045,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.CheckedListBoxItemCheckDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
             add {
                 onItemCheck += value;
@@ -2059,7 +2059,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewItemCheckedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewItemCheckedDescr))]
         public event ItemCheckedEventHandler ItemChecked {
             add {
                 onItemChecked += value;
@@ -2073,7 +2073,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewItemDragDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemDragDescr))]
         public event ItemDragEventHandler ItemDrag {
             add {
                 onItemDrag += value;
@@ -2087,7 +2087,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewItemMouseHoverDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemMouseHoverDescr))]
         public event ListViewItemMouseHoverEventHandler ItemMouseHover {
             add {
                 onItemMouseHover += value;
@@ -2098,7 +2098,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexChanged"]/*' />
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewItemSelectionChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewItemSelectionChangedDescr))]
         public event ListViewItemSelectionChangedEventHandler ItemSelectionChanged {
             add {
                 Events.AddHandler(EVENT_ITEMSELECTIONCHANGED, value);
@@ -2151,7 +2151,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewRetrieveVirtualItemEventDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewRetrieveVirtualItemEventDescr))]
         public event RetrieveVirtualItemEventHandler RetrieveVirtualItem {
             add {
                 Events.AddHandler(EVENT_RETRIEVEVIRTUALITEM, value);
@@ -2164,7 +2164,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SearchForVirtualItem"]/*' />
         /// <devdoc>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewSearchForVirtualItemDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewSearchForVirtualItemDescr))]
         public event SearchForVirtualItemEventHandler SearchForVirtualItem {
             add {
                 Events.AddHandler(EVENT_SEARCHFORVIRTUALITEM, value);
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewSelectedIndexChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewSelectedIndexChangedDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
                 Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
@@ -2189,7 +2189,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.VirtualItemsSelectionRangeChanged"]/*' />
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ListViewVirtualItemsSelectionRangeChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewVirtualItemsSelectionRangeChangedDescr))]
         public event ListViewVirtualItemsSelectionRangeChangedEventHandler VirtualItemsSelectionRangeChanged {
             add {
                 Events.AddHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);

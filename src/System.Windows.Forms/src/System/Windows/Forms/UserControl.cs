@@ -84,8 +84,8 @@ namespace System.Windows.Forms {
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
-        SRDescription(SR.ControlAutoSizeModeDescr),
-        SRCategory(SR.CatLayout),
+        SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(true),
         DefaultValue(AutoSizeMode.GrowOnly),
         Localizable(true)
@@ -158,9 +158,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.None),
-        SRDescription(SR.UserControlBorderStyleDescr),
+        SRDescription(nameof(SR.UserControlBorderStyleDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public BorderStyle BorderStyle {
@@ -226,7 +226,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs before the control becomes visible.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.UserControlOnLoadDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.UserControlOnLoadDescr))]
         public event EventHandler Load {
             add {
                 Events.AddHandler(EVENT_LOAD, value);

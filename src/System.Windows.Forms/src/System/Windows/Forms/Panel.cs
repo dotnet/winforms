@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
     DefaultEvent("Paint"),
     Docking(DockingBehavior.Ask),
     Designer("System.Windows.Forms.Design.PanelDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionPanel)
+    SRDescription(nameof(SR.DescriptionPanel))
     ]
     public class Panel : ScrollableControl {
 
@@ -69,7 +69,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
@@ -87,8 +87,8 @@ namespace System.Windows.Forms {
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
-        SRDescription(SR.ControlAutoSizeModeDescr),
-        SRCategory(SR.CatLayout),        
+        SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
+        SRCategory(nameof(SR.CatLayout)),        
         Browsable(true),
         DefaultValue(AutoSizeMode.GrowOnly),
         Localizable(true)
@@ -122,10 +122,10 @@ namespace System.Windows.Forms {
         ///       border style for the control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.None),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.PanelBorderStyleDescr)
+        SRDescription(nameof(SR.PanelBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
             get {

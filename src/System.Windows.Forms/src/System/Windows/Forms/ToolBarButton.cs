@@ -131,7 +131,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(null),
         TypeConverterAttribute(typeof(ReferenceConverter)),
-        SRDescription(SR.ToolBarButtonMenuDescr)
+        SRDescription(nameof(SR.ToolBarButtonMenuDescr))
         ]
         public Menu DropDownMenu {
             get {
@@ -155,7 +155,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.ToolBarButtonEnabledDescr)
+        SRDescription(nameof(SR.ToolBarButtonEnabledDescr))
         ]
         public bool Enabled {
             get {
@@ -186,7 +186,7 @@ namespace System.Windows.Forms {
         DefaultValue(-1),
         RefreshProperties(RefreshProperties.Repaint),        
         Localizable(true),
-        SRDescription(SR.ToolBarButtonImageIndexDescr)
+        SRDescription(nameof(SR.ToolBarButtonImageIndexDescr))
         ]
         public int ImageIndex {
             get {
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
         DefaultValue(""),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.ToolBarButtonImageIndexDescr)
+        SRDescription(nameof(SR.ToolBarButtonImageIndexDescr))
         ]
         public string ImageKey {
             get {
@@ -274,7 +274,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.ToolBarButtonPartialPushDescr)
+        SRDescription(nameof(SR.ToolBarButtonPartialPushDescr))
         ]
         public bool PartialPush {
             get {
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.ToolBarButtonPushedDescr)
+        SRDescription(nameof(SR.ToolBarButtonPushedDescr))
         ]
         public bool Pushed {
             get {
@@ -344,7 +344,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(ToolBarButtonStyle.PushButton),
-        SRDescription(SR.ToolBarButtonStyleDescr),
+        SRDescription(nameof(SR.ToolBarButtonStyleDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public ToolBarButtonStyle Style {
@@ -364,10 +364,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -387,7 +387,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DefaultValue(""),
-        SRDescription(SR.ToolBarButtonTextDescr)
+        SRDescription(nameof(SR.ToolBarButtonTextDescr))
         ]
         public string Text {
             get {
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DefaultValue(""),
-        SRDescription(SR.ToolBarButtonToolTipTextDescr)
+        SRDescription(nameof(SR.ToolBarButtonToolTipTextDescr))
         ]
         public string ToolTipText {
             get {
@@ -438,7 +438,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.ToolBarButtonVisibleDescr)
+        SRDescription(nameof(SR.ToolBarButtonVisibleDescr))
         ]
         public bool Visible {
             get {

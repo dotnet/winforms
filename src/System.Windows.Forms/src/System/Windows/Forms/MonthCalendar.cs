@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
     DefaultEvent("DateChanged"),
     DefaultBindingProperty("SelectionRange"),
     Designer("System.Windows.Forms.Design.MonthCalendarDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionMonthCalendar)
+    SRDescription(nameof(SR.DescriptionMonthCalendar))
     ]
     public class MonthCalendar : Control {
         const long DAYS_TO_1601 = 548229;
@@ -261,7 +261,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRDescription(SR.MonthCalendarAnnuallyBoldedDatesDescr)
+        SRDescription(nameof(SR.MonthCalendarAnnuallyBoldedDatesDescr))
         ]
         public DateTime[] AnnuallyBoldedDates {
             get {
@@ -301,7 +301,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRDescription(SR.MonthCalendarMonthBackColorDescr)]
+        [SRDescription(nameof(SR.MonthCalendarMonthBackColorDescr))]
         public override Color BackColor {
             get {
                 if (ShouldSerializeBackColor()) {
@@ -410,9 +410,9 @@ namespace System.Windows.Forms {
         ///     in the MonthCalendar control.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
-        SRDescription(SR.MonthCalendarDimensionsDescr)
+        SRDescription(nameof(SR.MonthCalendarDimensionsDescr))
         ]
         public Size CalendarDimensions {
             get {
@@ -491,10 +491,10 @@ namespace System.Windows.Forms {
         ///     The first day of the week for the month calendar control.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(DEFAULT_FIRST_DAY_OF_WEEK),
-        SRDescription(SR.MonthCalendarFirstDayOfWeekDescr)
+        SRDescription(nameof(SR.MonthCalendarFirstDayOfWeekDescr))
         ]
         public Day FirstDayOfWeek {
             get {
@@ -525,7 +525,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRDescription(SR.MonthCalendarForeColorDescr)]
+        [SRDescription(nameof(SR.MonthCalendarForeColorDescr))]
         public override Color ForeColor {
             get {
                 if (ShouldSerializeForeColor()) {
@@ -570,8 +570,8 @@ namespace System.Windows.Forms {
         ///     current minimum date.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.MonthCalendarMaxDateDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.MonthCalendarMaxDateDescr))
         ]
         public DateTime MaxDate {
             get {
@@ -595,9 +595,9 @@ namespace System.Windows.Forms {
         ///     selection range.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DEFAULT_MAX_SELECTION_COUNT),
-        SRDescription(SR.MonthCalendarMaxSelectionCountDescr)
+        SRDescription(nameof(SR.MonthCalendarMaxSelectionCountDescr))
         ]
         public int MaxSelectionCount {
             get {
@@ -625,8 +625,8 @@ namespace System.Windows.Forms {
         ///     current maximum date.  MonthCalendar does not support dates prior to 1753.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.MonthCalendarMinDateDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.MonthCalendarMinDateDescr))
         ]
         public DateTime MinDate {
             get {
@@ -656,7 +656,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRDescription(SR.MonthCalendarMonthlyBoldedDatesDescr)
+        SRDescription(nameof(SR.MonthCalendarMonthlyBoldedDatesDescr))
         ]
         public DateTime[] MonthlyBoldedDates {
             get {
@@ -734,10 +734,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -764,9 +764,9 @@ namespace System.Windows.Forms {
         ///     months displayed in the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DEFAULT_SCROLL_CHANGE),
-        SRDescription(SR.MonthCalendarScrollChangeDescr)
+        SRDescription(nameof(SR.MonthCalendarScrollChangeDescr))
         ]
         public int ScrollChange {
             get {
@@ -796,10 +796,10 @@ namespace System.Windows.Forms {
         ///    <para>Indicates the end date of the selected range of dates.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.MonthCalendarSelectionEndDescr)
+        SRDescription(nameof(SR.MonthCalendarSelectionEndDescr))
         ]
         public DateTime SelectionEnd {
             get {
@@ -839,10 +839,10 @@ namespace System.Windows.Forms {
         ///       the start date of the selected range of dates.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.MonthCalendarSelectionStartDescr)
+        SRDescription(nameof(SR.MonthCalendarSelectionStartDescr))
         ]
         public DateTime SelectionStart {
             get {
@@ -881,8 +881,8 @@ namespace System.Windows.Forms {
         ///     Retrieves the selection range for a month calendar control.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.MonthCalendarSelectionRangeDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.MonthCalendarSelectionRangeDescr)),
         Bindable(true)
         ]
         public SelectionRange SelectionRange {
@@ -900,9 +900,9 @@ namespace System.Windows.Forms {
         ///     the "today" date at the bottom of the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.MonthCalendarShowTodayDescr)
+        SRDescription(nameof(SR.MonthCalendarShowTodayDescr))
         ]
         public bool ShowToday {
             get {
@@ -923,9 +923,9 @@ namespace System.Windows.Forms {
         ///     the "today" date.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.MonthCalendarShowTodayCircleDescr)
+        SRDescription(nameof(SR.MonthCalendarShowTodayCircleDescr))
         ]
         public bool ShowTodayCircle {
             get {
@@ -945,10 +945,10 @@ namespace System.Windows.Forms {
         ///     week numbers (1-52) to the left of each row of days.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.MonthCalendarShowWeekNumbersDescr)
+        SRDescription(nameof(SR.MonthCalendarShowWeekNumbersDescr))
         ]
         public bool ShowWeekNumbers {
             get {
@@ -972,10 +972,10 @@ namespace System.Windows.Forms {
         ///     control depends on the currently selected font.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.MonthCalendarSingleMonthSizeDescr)
+        SRDescription(nameof(SR.MonthCalendarSingleMonthSizeDescr))
         ]
         public Size SingleMonthSize {
             get {
@@ -1046,8 +1046,8 @@ namespace System.Windows.Forms {
         ///     the MonthCalendar control is created.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.MonthCalendarTodayDateDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.MonthCalendarTodayDateDescr))
         ]
         public DateTime TodayDate {
             get {
@@ -1088,10 +1088,10 @@ namespace System.Windows.Forms {
         ///     wall-clock time; ie. TodayDate will always equal the current system date.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.MonthCalendarTodayDateSetDescr)
+        SRDescription(nameof(SR.MonthCalendarTodayDateSetDescr))
         ]
         public bool TodayDateSet {
             get {
@@ -1105,8 +1105,8 @@ namespace System.Windows.Forms {
         ///     title.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.MonthCalendarTitleBackColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.MonthCalendarTitleBackColorDescr))
         ]
         public Color TitleBackColor {
             get {
@@ -1128,8 +1128,8 @@ namespace System.Windows.Forms {
         ///     calendar's title.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.MonthCalendarTitleForeColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.MonthCalendarTitleForeColorDescr))
         ]
         public Color TitleForeColor {
             get {
@@ -1151,8 +1151,8 @@ namespace System.Windows.Forms {
         ///     appear on the current month calendar.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.MonthCalendarTrailingForeColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.MonthCalendarTrailingForeColorDescr))
         ]
         public Color TrailingForeColor {
             get {
@@ -1216,7 +1216,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.MonthCalendarOnDateChangedDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateChangedDescr))]
         public event DateRangeEventHandler DateChanged {
             add {
                 onDateChanged += value;
@@ -1231,7 +1231,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.MonthCalendarOnDateSelectedDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateSelectedDescr))]
         public event DateRangeEventHandler DateSelected {
             add {
                 onDateSelected += value;
@@ -1296,7 +1296,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 onRightToLeftLayoutChanged += value;

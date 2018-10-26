@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
     PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust"),
     DefaultProperty("Url"), DefaultEvent("DocumentCompleted"),
     Docking(DockingBehavior.AutoDock),
-    SRDescription(SR.DescriptionWebBrowser),
+    SRDescription(nameof(SR.DescriptionWebBrowser)),
     Designer("System.Windows.Forms.Design.WebBrowserDesigner, " + AssemblyRef.SystemDesign)]
     public class WebBrowser : WebBrowserBase {
         private static bool createdInIE;
@@ -93,8 +93,8 @@ namespace System.Windows.Forms {
         /// "Loaded" here means setting Url, DocumentText, or DocumentStream.
         ///     </para>
         /// </devdoc>
-        [SRDescription(SR.WebBrowserAllowNavigationDescr),
-        SRCategory(SR.CatBehavior), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserAllowNavigationDescr)),
+        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool AllowNavigation
         {
             get
@@ -121,8 +121,8 @@ namespace System.Windows.Forms {
         /// control whether you can drag new documents into the browser control.
         ///     </para>
         /// </devdoc>
-        [SRDescription(SR.WebBrowserAllowWebBrowserDropDescr),
-        SRCategory(SR.CatBehavior), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserAllowWebBrowserDropDescr)),
+        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool AllowWebBrowserDrop {
             get {
                 return this.AxIWebBrowser2.RegisterAsDropTarget;
@@ -144,8 +144,8 @@ namespace System.Windows.Forms {
         /// Maps to IWebBrowser2:Silent.
         ///     </para>
         /// </devdoc>
-        [SRDescription(SR.WebBrowserScriptErrorsSuppressedDescr),
-        SRCategory(SR.CatBehavior), DefaultValue(false)]
+        [SRDescription(nameof(SR.WebBrowserScriptErrorsSuppressedDescr)),
+        SRCategory(nameof(SR.CatBehavior)), DefaultValue(false)]
         public bool ScriptErrorsSuppressed {
             get {
                 return this.AxIWebBrowser2.Silent;
@@ -164,8 +164,8 @@ namespace System.Windows.Forms {
         /// Maps to IDocHostUIHandler:TranslateAccelerator event.
         ///     </para>
         /// </devdoc>
-        [SRDescription(SR.WebBrowserWebBrowserShortcutsEnabledDescr),
-        SRCategory(SR.CatBehavior), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserWebBrowserShortcutsEnabledDescr)),
+        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool WebBrowserShortcutsEnabled {
             get {
                 return webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled];
@@ -456,7 +456,7 @@ namespace System.Windows.Forms {
         /// Gets the offline state of the browser control. Maps to IWebBrowser2:Offline.
         ///     </para>
         /// </devdoc>
-        [SRDescription(SR.WebBrowserIsOfflineDescr), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.WebBrowserIsOfflineDescr)), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsOffline {
             get {
                 return this.AxIWebBrowser2.Offline;
@@ -473,8 +473,8 @@ namespace System.Windows.Forms {
         /// IDocHostUIHandler:ShowContextMenu 
         ///     </para>
         /// </devdoc>
-        [SRDescription(SR.WebBrowserIsWebBrowserContextMenuEnabledDescr),
-        SRCategory(SR.CatBehavior), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserIsWebBrowserContextMenuEnabledDescr)),
+        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool IsWebBrowserContextMenuEnabled {
             get {
                 return webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled];
@@ -540,7 +540,7 @@ namespace System.Windows.Forms {
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatLayout), SRDescription(SR.ControlOnPaddingChangedDescr)
+        SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))
         ]
         public new event EventHandler PaddingChanged
         {
@@ -606,9 +606,9 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         [
-            SRDescription(SR.WebBrowserUrlDescr),
+            SRDescription(nameof(SR.WebBrowserUrlDescr)),
             Bindable(true),
-            SRCategory(SR.CatBehavior),
+            SRCategory(nameof(SR.CatBehavior)),
             TypeConverter(typeof(System.Windows.Forms.WebBrowserUriTypeConverter)),
             DefaultValue(null)
         ]
@@ -933,8 +933,8 @@ namespace System.Windows.Forms {
         /// Enables/disables the webbrowser's scrollbars.
         ///     </para>
         /// </devdoc>
-        [SRDescription(SR.WebBrowserScrollBarsEnabledDescr),
-        SRCategory(SR.CatBehavior), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserScrollBarsEnabledDescr)),
+        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool ScrollBarsEnabled {
             get {
                 return webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled];
@@ -1080,7 +1080,7 @@ namespace System.Windows.Forms {
         /// Maps to DWebBrowserEvents2:CommandStateChange w/ CSC_NAVIGATEBACK.
         ///     </para>
         /// </devdoc>
-        [Browsable(false), SRCategory(SR.CatPropertyChanged), SRDescription(SR.WebBrowserCanGoBackChangedDescr)]
+        [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserCanGoBackChangedDescr))]
         public event EventHandler CanGoBackChanged;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.CanGoForwardChanged"]/*' />
         /// <devdoc>
@@ -1089,7 +1089,7 @@ namespace System.Windows.Forms {
         /// Maps to DWebBrowserEvents2:CommandStateChange w/ CSC_NAVIGATEFORWARD.
         ///     </para>
         /// </devdoc>
-        [Browsable(false), SRCategory(SR.CatPropertyChanged), SRDescription(SR.WebBrowserCanGoForwardChangedDescr)]
+        [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserCanGoForwardChangedDescr))]
         public event EventHandler CanGoForwardChanged;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DocumentCompleted"]/*' />
         /// <devdoc>
@@ -1100,7 +1100,7 @@ namespace System.Windows.Forms {
         /// property of the webbrowser control. Maps to DWebBrowserEvents2:DocumentComplete.
         ///     </para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.WebBrowserDocumentCompletedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.WebBrowserDocumentCompletedDescr))]
         public event WebBrowserDocumentCompletedEventHandler DocumentCompleted;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DocumentTitleChanged"]/*' />
         /// <devdoc>
@@ -1111,7 +1111,7 @@ namespace System.Windows.Forms {
         /// Maps to DWebBrowserEvents2:TitleChange.
         ///     </para>
         /// </devdoc>
-        [Browsable(false), SRCategory(SR.CatPropertyChanged), SRDescription(SR.WebBrowserDocumentTitleChangedDescr)]
+        [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserDocumentTitleChangedDescr))]
         public event EventHandler DocumentTitleChanged;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.EncryptionLevelChanged"]/*' />
         /// <devdoc>
@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms {
         /// you go to an https site. Maps to DWebBrowserEvents2:SetSecureLockIcon.
         ///     </para>
         /// </devdoc>
-        [Browsable(false), SRCategory(SR.CatPropertyChanged), SRDescription(SR.WebBrowserEncryptionLevelChangedDescr)]
+        [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserEncryptionLevelChangedDescr))]
         public event EventHandler EncryptionLevelChanged;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.FileDownload"]/*' />
         /// <devdoc>
@@ -1130,7 +1130,7 @@ namespace System.Windows.Forms {
         /// Can be used to cancel file downloads. Maps to DWebBrowserEvents2:FileDownload.
         ///     </para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.WebBrowserFileDownloadDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.WebBrowserFileDownloadDescr))]
         public event EventHandler FileDownload;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigated"]/*' />
         /// <devdoc>
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms {
         /// Fires after browser navigation is complete. Maps to DWebBrowserEvents2:NavigateComplete.
         ///     </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.WebBrowserNavigatedDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.WebBrowserNavigatedDescr))]
         public event WebBrowserNavigatedEventHandler Navigated;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigating"]/*' />
         /// <devdoc>
@@ -1149,7 +1149,7 @@ namespace System.Windows.Forms {
         /// NavigatingEventArgs.Cancel is set to false. Maps to DWebBrowserEvents2:BeforeNavigate2.
         ///     </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.WebBrowserNavigatingDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.WebBrowserNavigatingDescr))]
         public event WebBrowserNavigatingEventHandler Navigating;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.NewWindow"]/*' />
         /// <devdoc>
@@ -1158,7 +1158,7 @@ namespace System.Windows.Forms {
         /// Can be used to cancel the creation of the new browser window. Maps to DWebBrowserEvents2:NewWindow2.
         ///     </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.WebBrowserNewWindowDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.WebBrowserNewWindowDescr))]
         public event CancelEventHandler NewWindow;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ProgressChanged"]/*' />
         /// <devdoc>
@@ -1169,7 +1169,7 @@ namespace System.Windows.Forms {
         /// Maps to DWebBrowserEvents2:ProgressChange.
         ///     </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.WebBrowserProgressChangedDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.WebBrowserProgressChangedDescr))]
         public event WebBrowserProgressChangedEventHandler ProgressChanged;
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.StatusTextChanged"]/*' />
         /// <devdoc>
@@ -1179,7 +1179,7 @@ namespace System.Windows.Forms {
         /// Maps to DWebBrowserEvents2:StatusTextChange.
         ///     </para>
         /// </devdoc>
-        [Browsable(false), SRCategory(SR.CatPropertyChanged), SRDescription(SR.WebBrowserStatusTextChangedDescr)]
+        [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserStatusTextChangedDescr))]
         public event EventHandler StatusTextChanged;
 
 

@@ -218,7 +218,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ToolStripItemAccessibilityObjectDescr)
+        SRDescription(nameof(SR.ToolStripItemAccessibilityObjectDescr))
         ]
         public AccessibleObject AccessibilityObject {
             get {
@@ -238,10 +238,10 @@ namespace System.Windows.Forms {
         /// The default action description of the control
         /// </devdoc>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ToolStripItemAccessibleDefaultActionDescr)
+        SRDescription(nameof(SR.ToolStripItemAccessibleDefaultActionDescr))
         ]
         public string AccessibleDefaultActionDescription {
             get {
@@ -257,10 +257,10 @@ namespace System.Windows.Forms {
         /// The accessible description of the control
         /// </devdoc>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         DefaultValue(null),
         Localizable(true),
-        SRDescription(SR.ToolStripItemAccessibleDescriptionDescr)
+        SRDescription(nameof(SR.ToolStripItemAccessibleDescriptionDescr))
         ]
         public string AccessibleDescription {
             get {
@@ -277,10 +277,10 @@ namespace System.Windows.Forms {
         /// The accessible name of the control
         /// </devdoc>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         DefaultValue(null),
         Localizable(true),
-        SRDescription(SR.ToolStripItemAccessibleNameDescr)
+        SRDescription(nameof(SR.ToolStripItemAccessibleNameDescr))
         ]
         public string AccessibleName {
             get {
@@ -298,9 +298,9 @@ namespace System.Windows.Forms {
         /// The accessible role of the control
         /// </devdoc>
         [
-        SRCategory(SR.CatAccessibility),
+        SRCategory(nameof(SR.CatAccessibility)),
         DefaultValue(AccessibleRole.Default),
-        SRDescription(SR.ToolStripItemAccessibleRoleDescr)
+        SRDescription(nameof(SR.ToolStripItemAccessibleRoleDescr))
         ]
         public AccessibleRole AccessibleRole {
 
@@ -334,8 +334,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(ToolStripItemAlignment.Left),
-        SRCategory(SR.CatLayout),
-        SRDescription(SR.ToolStripItemAlignmentDescr)
+        SRCategory(nameof(SR.CatLayout)),
+        SRDescription(nameof(SR.ToolStripItemAlignmentDescr))
         ]
         public ToolStripItemAlignment Alignment {
             get {
@@ -367,9 +367,9 @@ namespace System.Windows.Forms {
         /// methods.
         /// </devdoc>
         [
-        SRCategory(SR.CatDragDrop),
+        SRCategory(nameof(SR.CatDragDrop)),
         DefaultValue(false),
-        SRDescription(SR.ToolStripItemAllowDropDescr),
+        SRDescription(nameof(SR.ToolStripItemAllowDropDescr)),
         EditorBrowsable(EditorBrowsableState.Advanced),
         Browsable(false)
         ]
@@ -390,10 +390,10 @@ namespace System.Windows.Forms {
         /// Determines whether we set the ToolStripItem to its preferred size
         /// </devdoc>
         [DefaultValue(true)]
-        [SRCategory(SR.CatBehavior)]
+        [SRCategory(nameof(SR.CatBehavior))]
         [RefreshProperties(RefreshProperties.All)]
         [Localizable(true)]
-        [SRDescription(SR.ToolStripItemAutoSizeDescr)]
+        [SRDescription(nameof(SR.ToolStripItemAutoSizeDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool AutoSize {
             get {       
@@ -414,8 +414,8 @@ namespace System.Windows.Forms {
         ///   if AutoToolTip is set to true we use the Text, if false, we use ToolTipText.
         ///</devdoc>
         [DefaultValue(false)]
-        [SRDescription(SR.ToolStripItemAutoToolTipDescr)]
-        [SRCategory(SR.CatBehavior)]
+        [SRDescription(nameof(SR.ToolStripItemAutoToolTipDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         public bool AutoToolTip {
            get { 
                 return state[stateAutoToolTip];
@@ -431,7 +431,7 @@ namespace System.Windows.Forms {
         ///</devdoc>
         [
         Browsable(false),
-        SRDescription(SR.ToolStripItemAvailableDescr),
+        SRDescription(nameof(SR.ToolStripItemAvailableDescr)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public bool Available{
@@ -450,8 +450,8 @@ namespace System.Windows.Forms {
 
         [
         Browsable(false),
-        SRCategory(SR.CatPropertyChanged), 
-        SRDescription(SR.ToolStripItemOnAvailableChangedDescr)
+        SRCategory(nameof(SR.CatPropertyChanged)), 
+        SRDescription(nameof(SR.ToolStripItemOnAvailableChangedDescr))
         ]
         public event EventHandler AvailableChanged {
             add {
@@ -470,8 +470,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripItemImageDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripItemImageDescr)),
         DefaultValue(null)
         ]
         public virtual Image BackgroundImage {
@@ -489,10 +489,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackgroundImageLayout"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ImageLayout.Tile),
         Localizable(true),
-        SRDescription(SR.ControlBackgroundImageLayoutDescr)
+        SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))
         ]
         public virtual ImageLayout BackgroundImageLayout {
           get {
@@ -522,8 +522,8 @@ namespace System.Windows.Forms {
         /// The BackColor of the item
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripItemBackColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripItemBackColorDescr))
         ]
         public virtual Color BackColor {
             get {
@@ -553,7 +553,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ToolStripItemOnBackColorChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
             add {
                 Events.AddHandler(EventBackColorChanged, value);
@@ -616,8 +616,8 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the control is clicked.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAction), 
-        SRDescription(SR.ToolStripItemOnClickDescr)
+        SRCategory(nameof(SR.CatAction)), 
+        SRDescription(nameof(SR.ToolStripItemOnClickDescr))
         ]
         public event EventHandler Click {
             add { 
@@ -742,8 +742,8 @@ namespace System.Windows.Forms {
         /// item class because different derived things will have different enumeration needs.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripItemDisplayStyleDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripItemDisplayStyleDescr))
         ]
         public virtual ToolStripItemDisplayStyle DisplayStyle {
             get { 
@@ -791,7 +791,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>Occurs when the control is double clicked.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ControlOnDoubleClickDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick {
             add {
                 Events.AddHandler(EventDoubleClick, value);
@@ -803,8 +803,8 @@ namespace System.Windows.Forms {
 
         [
         DefaultValue(false), 
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.ToolStripItemDoubleClickedEnabledDescr)
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.ToolStripItemDoubleClickedEnabledDescr))
         ]
         public bool DoubleClickEnabled {
             get {
@@ -819,8 +819,8 @@ namespace System.Windows.Forms {
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatDragDrop), 
-        SRDescription(SR.ToolStripItemOnDragDropDescr),
+        SRCategory(nameof(SR.CatDragDrop)), 
+        SRDescription(nameof(SR.ToolStripItemOnDragDropDescr)),
         EditorBrowsable(EditorBrowsableState.Advanced),
         Browsable(false)
         ]
@@ -838,8 +838,8 @@ namespace System.Windows.Forms {
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatDragDrop), 
-        SRDescription(SR.ToolStripItemOnDragEnterDescr),
+        SRCategory(nameof(SR.CatDragDrop)), 
+        SRDescription(nameof(SR.ToolStripItemOnDragEnterDescr)),
         EditorBrowsable(EditorBrowsableState.Advanced),
         Browsable(false)
         ]
@@ -857,8 +857,8 @@ namespace System.Windows.Forms {
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatDragDrop), 
-        SRDescription(SR.ToolStripItemOnDragOverDescr),
+        SRCategory(nameof(SR.CatDragDrop)), 
+        SRDescription(nameof(SR.ToolStripItemOnDragOverDescr)),
         EditorBrowsable(EditorBrowsableState.Advanced),
         Browsable(false)
         ]
@@ -876,8 +876,8 @@ namespace System.Windows.Forms {
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatDragDrop), 
-        SRDescription(SR.ToolStripItemOnDragLeaveDescr),
+        SRCategory(nameof(SR.CatDragDrop)), 
+        SRDescription(nameof(SR.ToolStripItemOnDragLeaveDescr)),
         EditorBrowsable(EditorBrowsableState.Advanced),
         Browsable(false)
         ]
@@ -914,9 +914,9 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the control is clicked.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        SRDescription(SR.ToolStripItemEnabledDescr),
+        SRDescription(nameof(SR.ToolStripItemEnabledDescr)),
         DefaultValue(true)
         ]
         public virtual bool Enabled {
@@ -958,7 +958,7 @@ namespace System.Windows.Forms {
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         [ 
-        SRDescription(SR.ToolStripItemEnabledChangedDescr)
+        SRDescription(nameof(SR.ToolStripItemEnabledChangedDescr))
         ]
         public event EventHandler EnabledChanged {
             add {
@@ -991,8 +991,8 @@ namespace System.Windows.Forms {
         /// by default for painting and text in the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripItemForeColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripItemForeColorDescr))
         ]
         public virtual Color ForeColor {
             get {
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ToolStripItemOnForeColorChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
             add {
                 Events.AddHandler(EventForeColorChanged, value);
@@ -1039,9 +1039,9 @@ namespace System.Windows.Forms {
         /// by default for painting and text in the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
-        SRDescription(SR.ToolStripItemFontDescr)
+        SRDescription(nameof(SR.ToolStripItemFontDescr))
         ]
         public virtual Font Font {
             get {
@@ -1071,8 +1071,8 @@ namespace System.Windows.Forms {
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatDragDrop), 
-        SRDescription(SR.ToolStripItemOnGiveFeedbackDescr),
+        SRCategory(nameof(SR.CatDragDrop)), 
+        SRDescription(nameof(SR.ToolStripItemOnGiveFeedbackDescr)),
         EditorBrowsable(EditorBrowsableState.Advanced),
         Browsable(false)
         ]
@@ -1090,7 +1090,7 @@ namespace System.Windows.Forms {
         /// The height of this control
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -1180,8 +1180,8 @@ namespace System.Windows.Forms {
         [
         DefaultValue(ContentAlignment.MiddleCenter),
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripItemImageAlignDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripItemImageAlignDescr))
         ]
         public ContentAlignment ImageAlign {
             get {
@@ -1207,8 +1207,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripItemImageDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripItemImageDescr))
         ]
         public virtual Image Image {
             [ResourceExposure(ResourceScope.Machine)]
@@ -1255,8 +1255,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\WinBarItem.uex' path='docs/doc[@for="ToolStripItem.ImageTransparentColor"]/*' />
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripItemImageTransparentColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripItemImageTransparentColorDescr))
         ] 
         public Color ImageTransparentColor {
             get {
@@ -1283,9 +1283,9 @@ namespace System.Windows.Forms {
         /// Here for compat only - this is NOT to be visible at DT.
         /// </devdoc>
         [
-        SRDescription(SR.ToolStripItemImageIndexDescr),
+        SRDescription(nameof(SR.ToolStripItemImageIndexDescr)),
         Localizable(true),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         RefreshProperties(RefreshProperties.Repaint),        
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ToolStripImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -1330,8 +1330,8 @@ namespace System.Windows.Forms {
         /// Here for compat only - this is NOT to be visible at DT.
         /// </devdoc>
         [
-        SRDescription(SR.ToolStripItemImageKeyDescr),
-        SRCategory(SR.CatBehavior),
+        SRDescription(nameof(SR.ToolStripItemImageKeyDescr)),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         TypeConverterAttribute(typeof(ImageKeyConverter)),
         RefreshProperties(RefreshProperties.Repaint),
@@ -1355,10 +1355,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ImageScaling"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ToolStripItemImageScaling.SizeToFit),
         Localizable(true),
-        SRDescription(SR.ToolStripItemImageScalingDescr)
+        SRDescription(nameof(SR.ToolStripItemImageScalingDescr))
         ]
         public ToolStripItemImageScaling ImageScaling {
             get {
@@ -1471,7 +1471,7 @@ namespace System.Windows.Forms {
         /// Occurs when the location of the ToolStripItem has been updated -- usually by layout by its
         /// owner of ToolStrips
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.ToolStripItemOnLocationChangedDescr)]
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ToolStripItemOnLocationChangedDescr))]
         public event EventHandler LocationChanged {
             add {
                 Events.AddHandler(EventLocationChanged, value);
@@ -1486,8 +1486,8 @@ namespace System.Windows.Forms {
         /// Specifies the external spacing between this item and any other item or the ToolStrip.
         /// </devdoc>
         [
-        SRDescription(SR.ToolStripItemMarginDescr),
-        SRCategory(SR.CatLayout)
+        SRDescription(nameof(SR.ToolStripItemMarginDescr)),
+        SRCategory(nameof(SR.CatLayout))
         ]
         public Padding Margin {
             get { return CommonProperties.GetMargin(this); }
@@ -1505,9 +1505,9 @@ namespace System.Windows.Forms {
         /// Specifies the merge action when merging two ToolStrip.
         /// </devdoc>
         [
-        SRDescription(SR.ToolStripMergeActionDescr),
+        SRDescription(nameof(SR.ToolStripMergeActionDescr)),
         DefaultValue(MergeAction.Append),
-        SRCategory(SR.CatLayout)
+        SRCategory(nameof(SR.CatLayout))
         ]
         public MergeAction MergeAction {
             get {
@@ -1537,9 +1537,9 @@ namespace System.Windows.Forms {
         /// Specifies the merge action when merging two ToolStrip.
         /// </devdoc>
         [
-        SRDescription(SR.ToolStripMergeIndexDescr),
+        SRDescription(nameof(SR.ToolStripMergeIndexDescr)),
         DefaultValue(-1),
-        SRCategory(SR.CatLayout)
+        SRCategory(nameof(SR.CatLayout))
         ]
         public int MergeIndex {
             get {
@@ -1571,8 +1571,8 @@ namespace System.Windows.Forms {
         /// pressed.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatMouse), 
-        SRDescription(SR.ToolStripItemOnMouseDownDescr)
+        SRCategory(nameof(SR.CatMouse)), 
+        SRDescription(nameof(SR.ToolStripItemOnMouseDownDescr))
         ]
         public event MouseEventHandler MouseDown {
             add {
@@ -1589,8 +1589,8 @@ namespace System.Windows.Forms {
         /// <para> Occurs when the mouse pointer enters the control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatMouse), 
-        SRDescription(SR.ToolStripItemOnMouseEnterDescr)
+        SRCategory(nameof(SR.CatMouse)), 
+        SRDescription(nameof(SR.ToolStripItemOnMouseEnterDescr))
         ]
         public event EventHandler MouseEnter {
             add {
@@ -1606,8 +1606,8 @@ namespace System.Windows.Forms {
         /// <para> Occurs when the mouse pointer leaves the control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatMouse), 
-        SRDescription(SR.ToolStripItemOnMouseLeaveDescr)
+        SRCategory(nameof(SR.CatMouse)), 
+        SRDescription(nameof(SR.ToolStripItemOnMouseLeaveDescr))
         ]
         public event EventHandler MouseLeave {
             add {
@@ -1624,8 +1624,8 @@ namespace System.Windows.Forms {
         /// <para> Occurs when the mouse pointer hovers over the contro.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatMouse), 
-        SRDescription(SR.ToolStripItemOnMouseHoverDescr)
+        SRCategory(nameof(SR.CatMouse)), 
+        SRDescription(nameof(SR.ToolStripItemOnMouseHoverDescr))
         ]
         public event EventHandler MouseHover {
             add {
@@ -1641,8 +1641,8 @@ namespace System.Windows.Forms {
         /// <para> Occurs when the mouse pointer is moved over the control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatMouse), 
-        SRDescription(SR.ToolStripItemOnMouseMoveDescr)
+        SRCategory(nameof(SR.CatMouse)), 
+        SRDescription(nameof(SR.ToolStripItemOnMouseMoveDescr))
         ]
         public event MouseEventHandler MouseMove {
             add {
@@ -1658,8 +1658,8 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the mouse pointer is over the control and a mouse button is released.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatMouse), 
-        SRDescription(SR.ToolStripItemOnMouseUpDescr)
+        SRCategory(nameof(SR.CatMouse)), 
+        SRDescription(nameof(SR.ToolStripItemOnMouseUpDescr))
         ]
         public event MouseEventHandler MouseUp {
             add {
@@ -1750,8 +1750,8 @@ namespace System.Windows.Forms {
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.ToolStripItemOwnerChangedDescr)
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.ToolStripItemOwnerChangedDescr))
         ]
         public event EventHandler OwnerChanged {
             add {
@@ -1767,8 +1767,8 @@ namespace System.Windows.Forms {
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance), 
-        SRDescription(SR.ToolStripItemOnPaintDescr)
+        SRCategory(nameof(SR.CatAppearance)), 
+        SRDescription(nameof(SR.ToolStripItemOnPaintDescr))
         ]
         public event PaintEventHandler Paint {
             add {
@@ -1810,8 +1810,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(ToolStripItemOverflow.AsNeeded),
-        SRDescription(SR.ToolStripItemOverflowDescr),
-        SRCategory(SR.CatLayout)
+        SRDescription(nameof(SR.ToolStripItemOverflowDescr)),
+        SRCategory(nameof(SR.CatLayout))
         ]
         public ToolStripItemOverflow Overflow {
             get { 
@@ -1837,8 +1837,8 @@ namespace System.Windows.Forms {
         /// Specifies the internal spacing between the contents and the edges of the item
         /// </devdoc>
         [
-        SRDescription(SR.ToolStripItemPaddingDescr),
-        SRCategory(SR.CatLayout)
+        SRDescription(nameof(SR.ToolStripItemPaddingDescr)),
+        SRCategory(nameof(SR.CatLayout))
         ]
         public virtual Padding Padding {
             get { return CommonProperties.GetPadding(this, DefaultPadding); }
@@ -1940,8 +1940,8 @@ namespace System.Windows.Forms {
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatDragDrop), 
-        SRDescription(SR.ToolStripItemOnQueryContinueDragDescr),
+        SRCategory(nameof(SR.CatDragDrop)), 
+        SRDescription(nameof(SR.ToolStripItemOnQueryContinueDragDescr)),
         EditorBrowsable(EditorBrowsableState.Advanced),
         Browsable(false)
         ]
@@ -1958,7 +1958,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ToolStripItemOnQueryAccessibilityHelpDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripItemOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
             add {
                 Events.AddHandler(EventQueryAccessibilityHelp, value);
@@ -1993,9 +1993,9 @@ namespace System.Windows.Forms {
         /// control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
-        SRDescription(SR.ToolStripItemRightToLeftDescr)
+        SRDescription(nameof(SR.ToolStripItemRightToLeftDescr))
         ]
         public virtual RightToLeft RightToLeft {
             get {
@@ -2048,9 +2048,9 @@ namespace System.Windows.Forms {
         ///</devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
-        SRDescription(SR.ToolStripItemRightToLeftAutoMirrorImageDescr)
+        SRDescription(nameof(SR.ToolStripItemRightToLeftAutoMirrorImageDescr))
         ]
         public bool RightToLeftAutoMirrorImage {
             get {
@@ -2089,7 +2089,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ToolStripItemOnRightToLeftChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
             add {
                 Events.AddHandler(EventRightToLeft, value);
@@ -2152,9 +2152,9 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Size"]/*' />
         /// <devdoc>The size of the item</devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
-        SRDescription(SR.ToolStripItemSizeDescr)
+        SRDescription(nameof(SR.ToolStripItemSizeDescr))
         ]
         public virtual Size Size {
             get {
@@ -2207,10 +2207,10 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Tag"]/*' />
         /// <devdoc>Summary for Tag</devdoc>
         [DefaultValue(null),
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ToolStripItemTagDescr),
+        SRDescription(nameof(SR.ToolStripItemTagDescr)),
         TypeConverter(typeof(StringConverter))
         ]
         public object Tag {
@@ -2230,9 +2230,9 @@ namespace System.Windows.Forms {
         /// <devdoc>The text of the item</devdoc>
         [
         DefaultValue(""),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
-        SRDescription(SR.ToolStripItemTextDescr)
+        SRDescription(nameof(SR.ToolStripItemTextDescr))
         ]
         public virtual string Text {
             get {
@@ -2261,8 +2261,8 @@ namespace System.Windows.Forms {
         [
         DefaultValue(ContentAlignment.MiddleCenter),
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripItemTextAlignDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripItemTextAlignDescr))
         ]
         public virtual ContentAlignment TextAlign {
             get {
@@ -2283,7 +2283,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ToolStripItemOnTextChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnTextChangedDescr))]
         public event EventHandler TextChanged {
             add {
                 Events.AddHandler(EventText, value);
@@ -2294,8 +2294,8 @@ namespace System.Windows.Forms {
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextDirection"]/*' />
         [
-        SRDescription(SR.ToolStripTextDirectionDescr),
-        SRCategory(SR.CatAppearance)
+        SRDescription(nameof(SR.ToolStripTextDirectionDescr)),
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public virtual ToolStripTextDirection TextDirection {
              get {
@@ -2330,8 +2330,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextImageRelation"]/*' />
         [DefaultValue(TextImageRelation.ImageBeforeText),
         Localizable(true),
-        SRDescription(SR.ToolStripItemTextImageRelationDescr),
-        SRCategory(SR.CatAppearance)]
+        SRDescription(nameof(SR.ToolStripItemTextImageRelationDescr)),
+        SRCategory(nameof(SR.CatAppearance))]
         public TextImageRelation TextImageRelation {
             get {
                 return textImageRelation;
@@ -2353,8 +2353,8 @@ namespace System.Windows.Forms {
         ///   !!!!This property ONLY works when toolStrip.ShowItemToolTips = true!!!!
         ///   if AutoToolTip is set to true we return the Text as the ToolTipText.
         /// </devdoc>
-        [SRDescription(SR.ToolStripItemToolTipTextDescr)]
-        [SRCategory(SR.CatBehavior)]
+        [SRDescription(nameof(SR.ToolStripItemToolTipTextDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))]
         [Localizable(true)]
         public string ToolTipText {
@@ -2377,9 +2377,9 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Visible"]/*' />
         /// <devdoc>Whether or not the item is visible</devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        SRDescription(SR.ToolStripItemVisibleDescr)
+        SRDescription(nameof(SR.ToolStripItemVisibleDescr))
         ]
         public bool Visible {
             get { 
@@ -2396,7 +2396,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ToolStripItemOnVisibleChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged {
             add {
                 Events.AddHandler(EventVisibleChanged, value);
@@ -2411,7 +2411,7 @@ namespace System.Windows.Forms {
         /// The width of this ToolStripItem.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]

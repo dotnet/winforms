@@ -145,7 +145,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlAllowTransparencyDescr)
+        SRDescription(nameof(SR.ControlAllowTransparencyDescr))
         ]
         public bool AllowTransparency {
             get {
@@ -203,8 +203,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ToolStripDropDownAutoCloseDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ToolStripDropDownAutoCloseDescr))
         ]
         public bool AutoClose {
             get {
@@ -450,7 +450,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SRCategory(SR.CatAction), SRDescription(SR.ToolStripDropDownClosedDecr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripDropDownClosedDecr))]
         public event ToolStripDropDownClosedEventHandler Closed {
             add { 
                 Events.AddHandler(EventClosed, value); 
@@ -460,7 +460,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SRCategory(SR.CatAction), SRDescription(SR.ToolStripDropDownClosingDecr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripDropDownClosingDecr))]
         public event ToolStripDropDownClosingEventHandler Closing {
             add { 
                 Events.AddHandler(EventClosing, value); 
@@ -693,7 +693,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SRCategory(SR.CatAction), SRDescription(SR.ToolStripDropDownOpeningDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))]
         public event CancelEventHandler Opening {
             add {
                 Events.AddHandler(EventOpening, value);
@@ -708,7 +708,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>Occurs when the control is clicked.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ToolStripDropDownOpenedDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))]
         public event EventHandler Opened {
             add { 
                 Events.AddHandler(EventOpened, value); 
@@ -732,9 +732,9 @@ namespace System.Windows.Forms {
         ///     operating systems.
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         TypeConverterAttribute(typeof(OpacityConverter)),
-        SRDescription(SR.FormOpacityDescr),
+        SRDescription(nameof(SR.FormOpacityDescr)),
         DefaultValue(1.0),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -877,10 +877,10 @@ namespace System.Windows.Forms {
 
 
        [
-       SRCategory(SR.CatAppearance),
+       SRCategory(nameof(SR.CatAppearance)),
        Localizable(true),
        AmbientValue(RightToLeft.Inherit),
-       SRDescription(SR.ControlRightToLeftDescr)
+       SRDescription(nameof(SR.ControlRightToLeftDescr))
        ]
        public override RightToLeft RightToLeft {
            get {
@@ -960,8 +960,8 @@ namespace System.Windows.Forms {
        [
        Browsable(false),
        DefaultValue(ToolStripTextDirection.Horizontal),
-       SRDescription(SR.ToolStripTextDirectionDescr),
-       SRCategory(SR.CatAppearance)
+       SRDescription(nameof(SR.ToolStripTextDirectionDescr)),
+       SRCategory(nameof(SR.CatAppearance))
        ]
        public override ToolStripTextDirection TextDirection {
            get {
@@ -1025,8 +1025,8 @@ namespace System.Windows.Forms {
           [
           Browsable(false), 
           EditorBrowsable(EditorBrowsableState.Never), 
-          SRCategory(SR.CatPropertyChanged), 
-          SRDescription(SR.ControlOnTabIndexChangedDescr)
+          SRCategory(nameof(SR.CatPropertyChanged)), 
+          SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))
           ]
           public new event EventHandler TabIndexChanged {
               add {
@@ -1052,9 +1052,9 @@ namespace System.Windows.Forms {
         /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.Visible"]/*' />
         /// VSWhidbey 233498: override base Visible property in order to control serialization by setting default value
         [
-                SRCategory(SR.CatBehavior),
+                SRCategory(nameof(SR.CatBehavior)),
                 Localizable(true),
-                SRDescription(SR.ControlVisibleDescr),
+                SRDescription(nameof(SR.ControlVisibleDescr)),
                 DefaultValue(false),
                 Browsable(false),
                 DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)

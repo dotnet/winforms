@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the collection has changed.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.collectionChangedEventDescr), EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+        [SRDescription(nameof(SR.collectionChangedEventDescr)), EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
         public event CollectionChangeEventHandler CollectionChanged {
             /* !!THIS EVENT IS OBSOLETE AND UNUSED!! */
             [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]

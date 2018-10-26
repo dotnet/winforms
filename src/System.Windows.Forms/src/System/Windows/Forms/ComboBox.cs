@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
     DefaultProperty("Items"),
     DefaultBindingProperty("Text"),
     Designer("System.Windows.Forms.Design.ComboBoxDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionComboBox)
+    SRDescription(nameof(SR.DescriptionComboBox))
     ]
     public class ComboBox : ListControl {
 
@@ -171,7 +171,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(AutoCompleteMode.None),
-        SRDescription(SR.ComboBoxAutoCompleteModeDescr),
+        SRDescription(nameof(SR.ComboBoxAutoCompleteModeDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteMode AutoCompleteMode {
@@ -208,7 +208,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(AutoCompleteSource.None),
-        SRDescription(SR.ComboBoxAutoCompleteSourceDescr),
+        SRDescription(nameof(SR.ComboBoxAutoCompleteSourceDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteSource AutoCompleteSource {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms {
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
-        SRDescription(SR.ComboBoxAutoCompleteCustomSourceDescr),
+        SRDescription(nameof(SR.ComboBoxAutoCompleteCustomSourceDescr)),
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
@@ -446,11 +446,11 @@ namespace System.Windows.Forms {
         ///     When set, a user can not modify the Items collection.
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         RefreshProperties(RefreshProperties.Repaint),
         AttributeProvider(typeof(IListSource)),
-        SRDescription(SR.ListControlDataSourceDescr)
+        SRDescription(nameof(SR.ListControlDataSourceDescr))
         ]
         public new object DataSource {
             get {
@@ -468,9 +468,9 @@ namespace System.Windows.Forms {
         ///     controls whether the control is drawn by Windows or by the user.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DrawMode.Normal),
-        SRDescription(SR.ComboBoxDrawModeDescr),
+        SRDescription(nameof(SR.ComboBoxDrawModeDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public DrawMode DrawMode {
@@ -501,8 +501,8 @@ namespace System.Windows.Forms {
         ///     Returns the width of the drop down box in a combo box.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ComboBoxDropDownWidthDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))
         ]
         public int DropDownWidth {
             get {
@@ -536,8 +536,8 @@ namespace System.Windows.Forms {
         ///     Sets the Height of the drop down box in a combo box.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ComboBoxDropDownHeightDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ComboBoxDropDownHeightDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(106)
         ]
@@ -573,7 +573,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ComboBoxDroppedDownDescr)
+        SRDescription(nameof(SR.ComboBoxDroppedDownDescr))
         ]
         public bool DroppedDown {
             get {
@@ -603,10 +603,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(FlatStyle.Standard),
         Localizable(true),
-        SRDescription(SR.ComboBoxFlatStyleDescr)
+        SRDescription(nameof(SR.ComboBoxFlatStyleDescr))
         ]
         public FlatStyle FlatStyle {
             get {
@@ -662,10 +662,10 @@ namespace System.Windows.Forms {
         ///     shown
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.ComboBoxIntegralHeightDescr)
+        SRDescription(nameof(SR.ComboBoxIntegralHeightDescr))
         ]
         public bool IntegralHeight {
             get {
@@ -689,9 +689,9 @@ namespace System.Windows.Forms {
         ///     an item, use the GetItemHeight() method with an integer parameter.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        SRDescription(SR.ComboBoxItemHeightDescr)
+        SRDescription(nameof(SR.ComboBoxItemHeightDescr))
         ]
         public int ItemHeight {
             get {
@@ -742,10 +742,10 @@ namespace System.Windows.Forms {
         ///     Collection of the items contained in this ComboBox.
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
-        SRDescription(SR.ComboBoxItemsDescr),
+        SRDescription(nameof(SR.ComboBoxItemsDescr)),
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         MergableProperty(false)
         ]
@@ -778,10 +778,10 @@ namespace System.Windows.Forms {
         ///     of the ComboBox.  This number can be between 1 and 100.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(8),
         Localizable(true),
-        SRDescription(SR.ComboBoxMaxDropDownItemsDescr)
+        SRDescription(nameof(SR.ComboBoxMaxDropDownItemsDescr))
         ]
         public int MaxDropDownItems {
             get {
@@ -815,10 +815,10 @@ namespace System.Windows.Forms {
         ///     of a combo box.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Localizable(true),
-        SRDescription(SR.ComboBoxMaxLengthDescr)
+        SRDescription(nameof(SR.ComboBoxMaxLengthDescr))
         ]
         public int MaxLength {
             get {
@@ -887,7 +887,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ComboBoxPreferredHeightDescr)
+        SRDescription(nameof(SR.ComboBoxPreferredHeightDescr))
         ]
         public int PreferredHeight {
             get {
@@ -1006,7 +1006,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ComboBoxSelectedIndexDescr)
+        SRDescription(nameof(SR.ComboBoxSelectedIndexDescr))
         ]
         public override int SelectedIndex {
             get {
@@ -1058,7 +1058,7 @@ namespace System.Windows.Forms {
         Browsable(false),
         Bindable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ComboBoxSelectedItemDescr)
+        SRDescription(nameof(SR.ComboBoxSelectedItemDescr))
         ]
         public object SelectedItem {
             get {
@@ -1091,7 +1091,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ComboBoxSelectedTextDescr)
+        SRDescription(nameof(SR.ComboBoxSelectedTextDescr))
         ]
         public string SelectedText {
             get {
@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ComboBoxSelectionLengthDescr)
+        SRDescription(nameof(SR.ComboBoxSelectionLengthDescr))
         ]
         public int SelectionLength {
             get {
@@ -1143,7 +1143,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ComboBoxSelectionStartDescr)
+        SRDescription(nameof(SR.ComboBoxSelectionStartDescr))
         ]
         public int SelectionStart {
             get {
@@ -1164,9 +1164,9 @@ namespace System.Windows.Forms {
         ///     Indicates if the Combos list is sorted or not.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ComboBoxSortedDescr)
+        SRDescription(nameof(SR.ComboBoxSortedDescr))
         ]
         public bool Sorted {
             get {
@@ -1191,9 +1191,9 @@ namespace System.Windows.Forms {
         ///     from the System.Windows.Forms.ComboBoxStyle enumeration.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ComboBoxStyle.DropDown),
-        SRDescription(SR.ComboBoxStyleDescr),
+        SRDescription(nameof(SR.ComboBoxStyleDescr)),
         RefreshPropertiesAttribute(RefreshProperties.Repaint)
         ]
         public ComboBoxStyle DropDownStyle {
@@ -1378,7 +1378,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.drawItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
             add {
                 Events.AddHandler(EVENT_DRAWITEM, value);
@@ -1392,7 +1392,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ComboBoxOnDropDownDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
         public event EventHandler DropDown {
             add {
                 Events.AddHandler(EVENT_DROPDOWN, value);
@@ -1407,7 +1407,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.measureItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
             add {
                 Events.AddHandler(EVENT_MEASUREITEM, value);
@@ -1424,7 +1424,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.selectedIndexChangedEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
                 Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
@@ -1438,7 +1438,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.selectionChangeCommittedEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectionChangeCommittedEventDescr))]
         public event EventHandler SelectionChangeCommitted {
             add {
                 Events.AddHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
@@ -1452,7 +1452,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ComboBoxDropDownStyleChangedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
         public event EventHandler DropDownStyleChanged {
             add {
                 Events.AddHandler(EVENT_DROPDOWNSTYLE, value);
@@ -1484,7 +1484,7 @@ namespace System.Windows.Forms {
         //     </para>
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.TextUpdate"]/*' />
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ComboBoxOnTextUpdateDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
         public event EventHandler TextUpdate {
             add {
                 Events.AddHandler(EVENT_TEXTUPDATE, value);
@@ -1502,7 +1502,7 @@ namespace System.Windows.Forms {
         //      </para>
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownClosed"]/*' />
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ComboBoxOnDropDownClosedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
         public event EventHandler DropDownClosed {
             add {
                 Events.AddHandler(EVENT_DROPDOWNCLOSED, value);

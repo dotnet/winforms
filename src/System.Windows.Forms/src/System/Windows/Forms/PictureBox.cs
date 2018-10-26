@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
     DefaultBindingProperty("Image"),
     Docking(DockingBehavior.Ask),
     Designer("System.Windows.Forms.Design.PictureBoxDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionPictureBox)
+    SRDescription(nameof(SR.DescriptionPictureBox))
     ]
     public class PictureBox : Control, ISupportInitialize {
 
@@ -151,9 +151,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(BorderStyle.None),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.PictureBoxBorderStyleDescr)
+        SRDescription(nameof(SR.PictureBoxBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -195,8 +195,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.CancelAsync"]/*' />
         [
-        SRCategory(SR.CatAsynchronous),
-        SRDescription(SR.PictureBoxCancelAsyncDescr)
+        SRCategory(nameof(SR.CatAsynchronous)),
+        SRDescription(nameof(SR.PictureBoxCancelAsyncDescr))
         ]
         public void CancelAsync()
         {
@@ -274,10 +274,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ErrorImage"]/*' />
         [
-        SRCategory(SR.CatAsynchronous),
+        SRCategory(nameof(SR.CatAsynchronous)),
         Localizable(true),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.PictureBoxErrorImageDescr)
+        SRDescription(nameof(SR.PictureBoxErrorImageDescr))
         ]
         public Image ErrorImage {
             [ResourceExposure(ResourceScope.Machine)]
@@ -371,10 +371,10 @@ namespace System.Windows.Forms {
         /// <para>Retrieves the Image that the <see cref='System.Windows.Forms.PictureBox'/> is currently displaying.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         Bindable(true),
-        SRDescription(SR.PictureBoxImageDescr)
+        SRDescription(nameof(SR.PictureBoxImageDescr))
         ]
         public Image Image {
             [ResourceExposure(ResourceScope.Machine)]
@@ -389,11 +389,11 @@ namespace System.Windows.Forms {
         // The area occupied by the image
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ImageLocation"]/*' />
         [
-         SRCategory(SR.CatAsynchronous),
+         SRCategory(nameof(SR.CatAsynchronous)),
          Localizable(true),
          DefaultValue(null),
          RefreshProperties(RefreshProperties.All),
-         SRDescription(SR.PictureBoxImageLocationDescr)
+         SRDescription(nameof(SR.PictureBoxImageLocationDescr))
         ]
         public string ImageLocation 
         {
@@ -475,10 +475,10 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.InitialImage"]/*' />
         [
-        SRCategory(SR.CatAsynchronous),
+        SRCategory(nameof(SR.CatAsynchronous)),
         Localizable(true),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.PictureBoxInitialImageDescr)
+        SRDescription(nameof(SR.PictureBoxInitialImageDescr))
         ]
         public Image InitialImage {
             [ResourceExposure(ResourceScope.Machine)]
@@ -559,8 +559,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Load"]/*' />
         // Synchronous load
         [
-        SRCategory(SR.CatAsynchronous),
-        SRDescription(SR.PictureBoxLoad0Descr)
+        SRCategory(nameof(SR.CatAsynchronous)),
+        SRDescription(nameof(SR.PictureBoxLoad0Descr))
         ]
         public void Load()
         {
@@ -614,8 +614,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Load2"]/*' />
         [
-        SRCategory(SR.CatAsynchronous),
-        SRDescription(SR.PictureBoxLoad1Descr),
+        SRCategory(nameof(SR.CatAsynchronous)),
+        SRDescription(nameof(SR.PictureBoxLoad1Descr)),
         SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings") // PM review done
         ]
         public void Load(String url)
@@ -626,8 +626,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.LoadAsync"]/*' />
         [
-        SRCategory(SR.CatAsynchronous),
-        SRDescription(SR.PictureBoxLoadAsync0Descr)
+        SRCategory(nameof(SR.CatAsynchronous)),
+        SRDescription(nameof(SR.PictureBoxLoadAsync0Descr))
         ]
         public void LoadAsync()
         {
@@ -837,8 +837,8 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.LoadAsync2"]/*' />
         [
-        SRCategory(SR.CatAsynchronous),
-        SRDescription(SR.PictureBoxLoadAsync1Descr),
+        SRCategory(nameof(SR.CatAsynchronous)),
+        SRDescription(nameof(SR.PictureBoxLoadAsync1Descr)),
         SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings") // PM review done
         ]
         public void LoadAsync(String url)
@@ -849,8 +849,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.LoadCompleted"]/*' />
         [
-        SRCategory(SR.CatAsynchronous),
-        SRDescription(SR.PictureBoxLoadCompletedDescr)
+        SRCategory(nameof(SR.CatAsynchronous)),
+        SRDescription(nameof(SR.PictureBoxLoadCompletedDescr))
         ]
         public event AsyncCompletedEventHandler LoadCompleted
         {
@@ -866,8 +866,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.LoadProgressChanged"]/*' />
         [
-        SRCategory(SR.CatAsynchronous),
-        SRDescription(SR.PictureBoxLoadProgressChangedDescr)
+        SRCategory(nameof(SR.CatAsynchronous)),
+        SRDescription(nameof(SR.PictureBoxLoadProgressChangedDescr))
         ]
         public event ProgressChangedEventHandler LoadProgressChanged
         {
@@ -951,9 +951,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(PictureBoxSizeMode.Normal),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        SRDescription(SR.PictureBoxSizeModeDescr),
+        SRDescription(nameof(SR.PictureBoxSizeModeDescr)),
         RefreshProperties(RefreshProperties.Repaint)        
         ]
         public PictureBoxSizeMode SizeMode {
@@ -990,7 +990,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.PictureBoxOnSizeModeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
         public event EventHandler SizeModeChanged {
             add {
                 Events.AddHandler(EVENT_SIZEMODECHANGED, value);
@@ -1387,10 +1387,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.WaitOnLoad"]/*' />
         [
-        SRCategory(SR.CatAsynchronous),
+        SRCategory(nameof(SR.CatAsynchronous)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.PictureBoxWaitOnLoadDescr)
+        SRDescription(nameof(SR.PictureBoxWaitOnLoadDescr))
         ]
         public bool WaitOnLoad {
             get {

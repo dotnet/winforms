@@ -282,8 +282,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DrawMode"]/*' />
         [
-        SRDescription(SR.ToolStripRenderModeDescr),
-        SRCategory(SR.CatAppearance),
+        SRDescription(nameof(SR.ToolStripRenderModeDescr)),
+        SRCategory(nameof(SR.CatAppearance)),
         ]
         public ToolStripRenderMode RenderMode {
             get {
@@ -294,7 +294,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SRCategory(SR.CatAppearance), SRDescription(SR.ToolStripRendererChanged)]
+        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripRendererChanged))]
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public event EventHandler RendererChanged {
@@ -313,7 +313,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(SR.ToolStripPanelRowsDescr)
+        SRDescription(nameof(SR.ToolStripPanelRowsDescr))
         ]
         internal ToolStripPanelRowCollection RowsInternal {
             get {
@@ -330,7 +330,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ToolStripPanelRowsDescr),        
+        SRDescription(nameof(SR.ToolStripPanelRowsDescr)),        
         SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")
         ]
         

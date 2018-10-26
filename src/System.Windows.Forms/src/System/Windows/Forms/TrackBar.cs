@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
     DefaultEvent("Scroll"),
     DefaultBindingProperty("Value"),
     Designer("System.Windows.Forms.Design.TrackBarDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionTrackBar)
+    SRDescription(nameof(SR.DescriptionTrackBar))
     ]
     public class TrackBar : Control, ISupportInitialize {
 
@@ -84,9 +84,9 @@ namespace System.Windows.Forms {
         ///     space is used.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.TrackBarAutoSizeDescr),
+        SRDescription(nameof(SR.TrackBarAutoSizeDescr)),
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
@@ -118,7 +118,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
@@ -346,9 +346,9 @@ namespace System.Windows.Forms {
         ///     keyboard.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(5),
-        SRDescription(SR.TrackBarLargeChangeDescr)
+        SRDescription(nameof(SR.TrackBarLargeChangeDescr))
         ]
         public int LargeChange {
             get {
@@ -374,10 +374,10 @@ namespace System.Windows.Forms {
         ///     The upper limit of the range this TrackBar is working with.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(10),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.TrackBarMaximumDescr)
+        SRDescription(nameof(SR.TrackBarMaximumDescr))
         ]
         public int Maximum {
             get {
@@ -398,10 +398,10 @@ namespace System.Windows.Forms {
         ///     The lower limit of the range this TrackBar is working with.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.TrackBarMinimumDescr)
+        SRDescription(nameof(SR.TrackBarMinimumDescr))
         ]
         public int Minimum {
             get {
@@ -424,10 +424,10 @@ namespace System.Windows.Forms {
         ///       oriented horizontally and vertically.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(Orientation.Horizontal),
         Localizable(true),
-        SRDescription(SR.TrackBarOrientationDescr)
+        SRDescription(nameof(SR.TrackBarOrientationDescr))
         ]
         public Orientation Orientation {
             get {
@@ -527,10 +527,10 @@ namespace System.Windows.Forms {
         //      and the RightToLeft property is true, mirroring will be turned on on the trackbar.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -555,9 +555,9 @@ namespace System.Windows.Forms {
         ///     seen by using the arrow keys to move the TrackBar thumb around.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(1),
-        SRDescription(SR.TrackBarSmallChangeDescr)
+        SRDescription(nameof(SR.TrackBarSmallChangeDescr))
         ]
         public int SmallChange {
             get {
@@ -611,9 +611,9 @@ namespace System.Windows.Forms {
         ///     TickStyle enumeration.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(TickStyle.BottomRight),
-        SRDescription(SR.TrackBarTickStyleDescr)
+        SRDescription(nameof(SR.TrackBarTickStyleDescr))
         ]
         public TickStyle TickStyle {
             get {
@@ -643,9 +643,9 @@ namespace System.Windows.Forms {
         ///     range of values.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(1),
-        SRDescription(SR.TrackBarTickFrequencyDescr)
+        SRDescription(nameof(SR.TrackBarTickFrequencyDescr))
         ]
         public int TickFrequency {
             get {
@@ -668,10 +668,10 @@ namespace System.Windows.Forms {
         ///     be between the lower and upper limits of the TrackBar range, of course.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Bindable(true),
-        SRDescription(SR.TrackBarValueDescr)
+        SRDescription(nameof(SR.TrackBarValueDescr))
         ]
         public int Value {
             get {
@@ -741,7 +741,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
@@ -755,7 +755,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TrackBarOnScrollDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TrackBarOnScrollDescr))]
         public event EventHandler Scroll {
             add {
                 Events.AddHandler(EVENT_SCROLL, value);
@@ -784,7 +784,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.valueChangedEventDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
             add {
                 Events.AddHandler(EVENT_VALUECHANGED, value);

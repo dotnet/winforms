@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
     ClassInterface(ClassInterfaceType.AutoDispatch),
     DefaultEvent("SplitterMoved"),
     DefaultProperty("Dock"),
-    SRDescription(SR.DescriptionSplitter),
+    SRDescription(nameof(SR.DescriptionSplitter)),
     Designer("System.Windows.Forms.Design.SplitterDesigner, " + AssemblyRef.SystemDesign)
     ]
     public class Splitter : Control  {
@@ -238,9 +238,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(BorderStyle.None),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         System.Runtime.InteropServices.DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.SplitterBorderStyleDescr)
+        SRDescription(nameof(SR.SplitterBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -373,10 +373,10 @@ namespace System.Windows.Forms {
         ///     would be used for any fill docked control.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(25),
-        SRDescription(SR.SplitterMinExtraDescr)
+        SRDescription(nameof(SR.SplitterMinExtraDescr))
         ]
         public int MinExtra {
             get {
@@ -395,10 +395,10 @@ namespace System.Windows.Forms {
         ///     to the splitter, just prior in the dock order.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(25),
-        SRDescription(SR.SplitterMinSizeDescr)
+        SRDescription(nameof(SR.SplitterMinSizeDescr))
         ]
         public int MinSize {
             get {
@@ -416,10 +416,10 @@ namespace System.Windows.Forms {
         ///     to a control, SplitPosition will be -1.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.SplitterSplitPositionDescr)
+        SRDescription(nameof(SR.SplitterSplitPositionDescr))
         ]
         public int SplitPosition {
             get {
@@ -599,7 +599,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.SplitterSplitterMovingDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterEventHandler SplitterMoving {
             add {
                 Events.AddHandler(EVENT_MOVING, value);
@@ -614,7 +614,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.SplitterSplitterMovedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved {
             add {
                 Events.AddHandler(EVENT_MOVED, value);

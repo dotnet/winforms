@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
     DefaultEvent("SplitterMoved"),
     Docking(DockingBehavior.AutoDock),
     Designer("System.Windows.Forms.Design.SplitContainerDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionSplitContainer)
+    SRDescription(nameof(SR.DescriptionSplitContainer))
     ]
     public class SplitContainer : ContainerControl, ISupportInitialize
     {
@@ -177,10 +177,10 @@ namespace System.Windows.Forms {
         ///     Here we dont set the base value ... but set autoscroll for panels.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.FormAutoScrollDescr),
+        SRDescription(nameof(SR.FormAutoScrollDescr)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
         ]
         public override bool AutoScroll {
@@ -247,10 +247,10 @@ namespace System.Windows.Forms {
 
 
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormAutoScrollPositionDescr)        
+        SRDescription(nameof(SR.FormAutoScrollPositionDescr))        
         ]
         public new Point AutoScrollPosition {
             get {
@@ -329,7 +329,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Browsable(false),
-        SRDescription(SR.ContainerControlBindingContextDescr),
+        SRDescription(nameof(SR.ContainerControlBindingContextDescr)),
         SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")
         ]
         public override BindingContext BindingContext {
@@ -348,9 +348,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(BorderStyle.None),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         System.Runtime.InteropServices.DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.SplitterBorderStyleDescr)
+        SRDescription(nameof(SR.SplitterBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -464,8 +464,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(FixedPanel.None),
-        SRCategory(SR.CatLayout),
-        SRDescription(SR.SplitContainerFixedPanelDescr)
+        SRCategory(nameof(SR.CatLayout)),
+        SRDescription(nameof(SR.SplitContainerFixedPanelDescr))
         ]
         public FixedPanel FixedPanel {
             get {
@@ -503,10 +503,10 @@ namespace System.Windows.Forms {
         /// This property determines whether the the splitter can move.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         DefaultValue(false),
         Localizable(true),
-        SRDescription(SR.SplitContainerIsSplitterFixedDescr)
+        SRDescription(nameof(SR.SplitContainerIsSplitterFixedDescr))
         ]
 
         public bool IsSplitterFixed {
@@ -545,10 +545,10 @@ namespace System.Windows.Forms {
         /// This Property sets or gets if the splitter is vertical or horizontal.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(Orientation.Vertical),
         Localizable(true),
-        SRDescription(SR.SplitContainerOrientationDescr)
+        SRDescription(nameof(SR.SplitContainerOrientationDescr))
         ]
         public Orientation Orientation {
             get { return  orientation; }
@@ -606,8 +606,8 @@ namespace System.Windows.Forms {
         /// The Left or Top panel in the SplitContainer.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.SplitContainerPanel1Descr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.SplitContainerPanel1Descr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -663,9 +663,9 @@ namespace System.Windows.Forms {
         /// Collapses or restores panel1
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         DefaultValue(false),
-        SRDescription(SR.SplitContainerPanel1CollapsedDescr)
+        SRDescription(nameof(SR.SplitContainerPanel1CollapsedDescr))
         ]
         public bool Panel1Collapsed {
             get {
@@ -687,9 +687,9 @@ namespace System.Windows.Forms {
         /// Collapses or restores panel2
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         DefaultValue(false),
-        SRDescription(SR.SplitContainerPanel2CollapsedDescr)
+        SRDescription(nameof(SR.SplitContainerPanel2CollapsedDescr))
         ]
         public bool Panel2Collapsed {
             get {
@@ -710,10 +710,10 @@ namespace System.Windows.Forms {
         /// This property determines the minimum distance of pixels of the splitter from the left or the top edge of Panel1.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         DefaultValue(25),
         Localizable(true),
-        SRDescription(SR.SplitContainerPanel1MinSizeDescr),
+        SRDescription(nameof(SR.SplitContainerPanel1MinSizeDescr)),
         RefreshProperties(RefreshProperties.All)       
         ]
         public int Panel1MinSize {
@@ -733,8 +733,8 @@ namespace System.Windows.Forms {
         /// This is the Right or Bottom panel in the SplitContainer.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.SplitContainerPanel2Descr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.SplitContainerPanel2Descr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -749,10 +749,10 @@ namespace System.Windows.Forms {
         /// This property determines the minimum distance of pixels of the splitter from the right or the bottom edge of Panel2
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         DefaultValue(25),
         Localizable(true),
-        SRDescription(SR.SplitContainerPanel2MinSizeDescr),
+        SRDescription(nameof(SR.SplitContainerPanel2MinSizeDescr)),
         RefreshProperties(RefreshProperties.All)
         ]
         public int Panel2MinSize {
@@ -772,10 +772,10 @@ namespace System.Windows.Forms {
         /// This property determines pixel distance of the splitter from the left or top edge.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
         SettingsBindable(true),
-        SRDescription(SR.SplitContainerSplitterDistanceDescr),
+        SRDescription(nameof(SR.SplitContainerSplitterDistanceDescr)),
         DefaultValue(50)
         ]
         public int SplitterDistance 
@@ -873,10 +873,10 @@ namespace System.Windows.Forms {
         /// This determines the number of pixels the splitter moves in increments.This is defaulted to 1.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         DefaultValue(1),
         Localizable(true),
-        SRDescription(SR.SplitContainerSplitterIncrementDescr)
+        SRDescription(nameof(SR.SplitContainerSplitterIncrementDescr))
         ]
         public int SplitterIncrement {
             get {
@@ -898,8 +898,8 @@ namespace System.Windows.Forms {
         /// This property determines the rectangle bounds of the splitter.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
-        SRDescription(SR.SplitContainerSplitterRectangleDescr),
+        SRCategory(nameof(SR.CatLayout)),
+        SRDescription(nameof(SR.SplitContainerSplitterRectangleDescr)),
         Browsable(false)
         ]
         public Rectangle SplitterRectangle {
@@ -916,8 +916,8 @@ namespace System.Windows.Forms {
         /// This property determines the thickness of the splitter.
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
-        SRDescription(SR.SplitContainerSplitterWidthDescr),
+        SRCategory(nameof(SR.CatLayout)),
+        SRDescription(nameof(SR.SplitContainerSplitterWidthDescr)),
         Localizable(true),
         DefaultValue(4)
         ]
@@ -950,10 +950,10 @@ namespace System.Windows.Forms {
         ///       key. This property is read-only.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         DispId(NativeMethods.ActiveX.DISPID_TABSTOP),
-        SRDescription(SR.ControlTabStopDescr)
+        SRDescription(nameof(SR.ControlTabStopDescr))
         ]
         public new bool TabStop {
             get {
@@ -1063,7 +1063,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.SplitterSplitterMovingDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterCancelEventHandler SplitterMoving {
             add {
                 Events.AddHandler(EVENT_MOVING, value);
@@ -1077,7 +1077,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.SplitterSplitterMovedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved {
             add {
                 Events.AddHandler(EVENT_MOVED, value);

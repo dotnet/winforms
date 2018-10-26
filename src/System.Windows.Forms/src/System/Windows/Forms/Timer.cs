@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
     DefaultProperty("Interval"),
     DefaultEvent("Tick"),
     ToolboxItemFilter("System.Windows.Forms"),
-    SRDescription(SR.DescriptionTimer)
+    SRDescription(nameof(SR.DescriptionTimer))
     ]
     public class Timer : Component {
 
@@ -84,10 +84,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
         ///    <para>Occurs when the specified timer
         ///       interval has elapsed and the timer is enabled.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TimerTimerDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TimerTimerDescr))]
         public event EventHandler Tick {
             add {
                 onTimer += value;
@@ -139,9 +139,9 @@ namespace System.Windows.Forms {
         ///       running.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TimerEnabledDescr)
+        SRDescription(nameof(SR.TimerEnabledDescr))
         ]
         public virtual bool Enabled {
             get {             
@@ -199,9 +199,9 @@ namespace System.Windows.Forms {
         ///       Indicates the time, in milliseconds, between timer ticks.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(100),
-        SRDescription(SR.TimerIntervalDescr)
+        SRDescription(nameof(SR.TimerIntervalDescr))
         ]
         public int Interval {
             get {

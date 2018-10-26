@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
     DefaultEvent("AfterSelect"),
     Docking(DockingBehavior.Ask),
     Designer("System.Windows.Forms.Design.TreeViewDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionTreeView)
+    SRDescription(nameof(SR.DescriptionTreeView))
     ]
     public class TreeView : Control {
 
@@ -277,10 +277,10 @@ namespace System.Windows.Forms {
         ///     The border style of the window.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.borderStyleDescr)
+        SRDescription(nameof(SR.borderStyleDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -310,9 +310,9 @@ namespace System.Windows.Forms {
         ///     tree view.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.TreeViewCheckBoxesDescr)
+        SRDescription(nameof(SR.TreeViewCheckBoxesDescr))
         ]
         public bool CheckBoxes {
             get {
@@ -470,9 +470,9 @@ namespace System.Windows.Forms {
         ///     This property will have no effect if ShowLines is true.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TreeViewFullRowSelectDescr)
+        SRDescription(nameof(SR.TreeViewFullRowSelectDescr))
         ]
         public bool FullRowSelect {
             get { return treeViewState[TREEVIEWSTATE_fullRowSelect];}
@@ -492,9 +492,9 @@ namespace System.Windows.Forms {
         ///     be highlighted even when the TreeView loses focus.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.TreeViewHideSelectionDescr)
+        SRDescription(nameof(SR.TreeViewHideSelectionDescr))
         ]
         public bool HideSelection {
             get {
@@ -518,9 +518,9 @@ namespace System.Windows.Forms {
         ///     passes over them.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TreeViewHotTrackingDescr)
+        SRDescription(nameof(SR.TreeViewHotTrackingDescr))
         ]
         public bool HotTracking {
             get {
@@ -543,12 +543,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(-1),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        SRDescription(SR.TreeViewImageIndexDescr),
+        SRDescription(nameof(SR.TreeViewImageIndexDescr)),
         RelatedImageList("ImageList")
         ]
         public int ImageIndex {
@@ -589,13 +589,13 @@ namespace System.Windows.Forms {
         ///     The default image index for nodes in the tree view.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         TypeConverterAttribute(typeof(ImageKeyConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         DefaultValue(""),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.TreeViewImageKeyDescr),
+        SRDescription(nameof(SR.TreeViewImageKeyDescr)),
         RelatedImageList("ImageList")
         ]
         public string ImageKey {
@@ -621,9 +621,9 @@ namespace System.Windows.Forms {
         ///     Returns the image list control that is bound to the tree view.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.TreeViewImageListDescr),
+        SRDescription(nameof(SR.TreeViewImageListDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public ImageList ImageList {
@@ -693,9 +693,9 @@ namespace System.Windows.Forms {
         ///     Returns the state image list control that is bound to the tree view.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.TreeViewStateImageListDescr)
+        SRDescription(nameof(SR.TreeViewStateImageListDescr))
         ]
         public ImageList StateImageList {
             get {
@@ -742,8 +742,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeViewIndentDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeViewIndentDescr))
         ]
         public int Indent {
             get {
@@ -778,8 +778,8 @@ namespace System.Windows.Forms {
         ///     The height of every item in the tree view, in pixels.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.TreeViewItemHeightDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.TreeViewItemHeightDescr))
         ]
         public int ItemHeight {
             get {
@@ -831,9 +831,9 @@ namespace System.Windows.Forms {
         ///     of nodes in the tree view is editable.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TreeViewLabelEditDescr)
+        SRDescription(nameof(SR.TreeViewLabelEditDescr))
         ]
         public bool LabelEdit {
             get {
@@ -855,8 +855,8 @@ namespace System.Windows.Forms {
         ///     This is the color of the lines that connect the nodes of the Treeview.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeViewLineColorDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeViewLineColorDescr)),
         DefaultValue(typeof(Color), "Black")
         ]
         public Color LineColor {
@@ -883,10 +883,10 @@ namespace System.Windows.Forms {
         ///     The collection of nodes associated with this TreeView control
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
-        SRDescription(SR.TreeViewNodesDescr),
+        SRDescription(nameof(SR.TreeViewNodesDescr)),
         MergableProperty(false)
         ]
         public TreeNodeCollection Nodes {
@@ -905,9 +905,9 @@ namespace System.Windows.Forms {
         /// </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TreeViewDrawMode.Normal),
-        SRDescription(SR.TreeViewDrawModeDescr)
+        SRDescription(nameof(SR.TreeViewDrawModeDescr))
         ]
         public TreeViewDrawMode DrawMode {
             get {
@@ -938,9 +938,9 @@ namespace System.Windows.Forms {
         ///     The delimeter string used by TreeNode.getFullPath().
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue("\\"),
-        SRDescription(SR.TreeViewPathSeparatorDescr)
+        SRDescription(nameof(SR.TreeViewPathSeparatorDescr))
         ]
         public string PathSeparator {
             get {
@@ -984,10 +984,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -1011,9 +1011,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.TreeViewScrollableDescr)
+        SRDescription(nameof(SR.TreeViewScrollableDescr))
         ]
         public bool Scrollable {
             get {
@@ -1034,11 +1034,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(-1),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
         Localizable(true),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        SRDescription(SR.TreeViewSelectedImageIndexDescr),
+        SRDescription(nameof(SR.TreeViewSelectedImageIndexDescr)),
         RelatedImageList("ImageList")
         ]
         public int SelectedImageIndex {
@@ -1077,13 +1077,13 @@ namespace System.Windows.Forms {
         ///     The default image index for nodes in the tree view.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         TypeConverterAttribute(typeof(ImageKeyConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         DefaultValue(""),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.TreeViewSelectedImageKeyDescr),
+        SRDescription(nameof(SR.TreeViewSelectedImageKeyDescr)),
         RelatedImageList("ImageList")
         ]
         public string SelectedImageKey {
@@ -1110,10 +1110,10 @@ namespace System.Windows.Forms {
         ///     The currently selected tree node, or null if nothing is selected.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TreeViewSelectedNodeDescr)
+        SRDescription(nameof(SR.TreeViewSelectedNodeDescr))
         ]
         public TreeNode SelectedNode {
             get {
@@ -1154,9 +1154,9 @@ namespace System.Windows.Forms {
         ///     nodes in the tree view.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.TreeViewShowLinesDescr)
+        SRDescription(nameof(SR.TreeViewShowLinesDescr))
         ]
         public bool ShowLines {
             get {
@@ -1177,9 +1177,9 @@ namespace System.Windows.Forms {
         ///     The ShowLines property determines whether or not the tooltips willbe displayed on the nodes
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TreeViewShowShowNodeToolTipsDescr)
+        SRDescription(nameof(SR.TreeViewShowShowNodeToolTipsDescr))
         ]
         public bool ShowNodeToolTips {
             get {
@@ -1200,9 +1200,9 @@ namespace System.Windows.Forms {
         ///     expand button is shown next to tree nodes that have children.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.TreeViewShowPlusMinusDescr)
+        SRDescription(nameof(SR.TreeViewShowPlusMinusDescr))
         ]
         public bool ShowPlusMinus {
             get {
@@ -1224,9 +1224,9 @@ namespace System.Windows.Forms {
         ///     the tree view.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.TreeViewShowRootLinesDescr)
+        SRDescription(nameof(SR.TreeViewShowRootLinesDescr))
         ]
         public bool ShowRootLines {
             get { return treeViewState[TREEVIEWSTATE_showRootLines];}
@@ -1245,9 +1245,9 @@ namespace System.Windows.Forms {
         ///     The Sorted property determines if nodes in the tree view are sorted.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TreeViewSortedDescr),
+        SRDescription(nameof(SR.TreeViewSortedDescr)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
         ]
         public bool Sorted {
@@ -1270,10 +1270,10 @@ namespace System.Windows.Forms {
         ///     The sorting comparer for this TreeView.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TreeViewNodeSorterDescr)
+        SRDescription(nameof(SR.TreeViewNodeSorterDescr))
         ]
         public IComparer TreeViewNodeSorter {
             get {
@@ -1322,10 +1322,10 @@ namespace System.Windows.Forms {
         ///     contents have been scrolled another node may be at the top.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TreeViewTopNodeDescr)
+        SRDescription(nameof(SR.TreeViewTopNodeDescr))
         ]
         public TreeNode TopNode {
             get {
@@ -1361,10 +1361,10 @@ namespace System.Windows.Forms {
         ///     client window by the height of an item
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TreeViewVisibleCountDescr)
+        SRDescription(nameof(SR.TreeViewVisibleCountDescr))
         ]
         public int VisibleCount {
             get {
@@ -1380,7 +1380,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewBeforeEditDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeEditDescr))]
         public event NodeLabelEditEventHandler BeforeLabelEdit {
             add {
                 onBeforeLabelEdit += value;
@@ -1395,7 +1395,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewAfterEditDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterEditDescr))]
         public event NodeLabelEditEventHandler AfterLabelEdit {
             add {
                 onAfterLabelEdit += value;
@@ -1410,7 +1410,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewBeforeCheckDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCheckDescr))]
         public event TreeViewCancelEventHandler BeforeCheck {
             add {
                 onBeforeCheck += value;
@@ -1425,7 +1425,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewAfterCheckDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCheckDescr))]
         public event TreeViewEventHandler AfterCheck {
             add {
                 onAfterCheck += value;
@@ -1440,7 +1440,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewBeforeCollapseDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCollapseDescr))]
         public event TreeViewCancelEventHandler BeforeCollapse {
             add {
                 onBeforeCollapse += value;
@@ -1455,7 +1455,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewAfterCollapseDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCollapseDescr))]
         public event TreeViewEventHandler AfterCollapse {
             add {
                 onAfterCollapse += value;
@@ -1470,7 +1470,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewBeforeExpandDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeExpandDescr))]
         public event TreeViewCancelEventHandler BeforeExpand {
             add {
                 onBeforeExpand += value;
@@ -1485,7 +1485,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewAfterExpandDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterExpandDescr))]
         public event TreeViewEventHandler AfterExpand {
             add {
                 onAfterExpand += value;
@@ -1499,7 +1499,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Fires when a TreeView node needs to be drawn.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewDrawNodeEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewDrawNodeEventDescr))]
         public event DrawTreeNodeEventHandler DrawNode {
             add {
                 onDrawNode += value;
@@ -1513,7 +1513,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ListViewItemDragDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemDragDescr))]
         public event ItemDragEventHandler ItemDrag {
             add {
                 onItemDrag += value;
@@ -1527,7 +1527,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.TreeViewNodeMouseHoverDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TreeViewNodeMouseHoverDescr))]
         public event TreeNodeMouseHoverEventHandler NodeMouseHover  {
             add {
                 onNodeMouseHover += value;
@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewBeforeSelectDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeSelectDescr))]
         public event TreeViewCancelEventHandler BeforeSelect {
             add {
                 onBeforeSelect += value;
@@ -1558,7 +1558,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewAfterSelectDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterSelectDescr))]
         public event TreeViewEventHandler AfterSelect {
             add {
                 onAfterSelect += value;
@@ -1587,7 +1587,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewNodeMouseClickDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewNodeMouseClickDescr))]
         public event TreeNodeMouseClickEventHandler NodeMouseClick {
             add {
                 onNodeMouseClick += value;
@@ -1601,7 +1601,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.TreeViewNodeMouseDoubleClickDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewNodeMouseDoubleClickDescr))]
         public event TreeNodeMouseClickEventHandler NodeMouseDoubleClick {
             add {
                 onNodeMouseDoubleClick += value;
@@ -1615,7 +1615,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 onRightToLeftLayoutChanged += value;

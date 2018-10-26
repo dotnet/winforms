@@ -335,7 +335,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(null),
-        SRDescription(SR.FormAcceptButtonDescr)
+        SRDescription(nameof(SR.FormAcceptButtonDescr))
         ]
         public IButtonControl AcceptButton {
             get {
@@ -445,7 +445,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormActiveMDIChildDescr)
+        SRDescription(nameof(SR.FormActiveMDIChildDescr))
         ]
         public Form ActiveMdiChild {
             get {
@@ -511,7 +511,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlAllowTransparencyDescr)
+        SRDescription(nameof(SR.ControlAllowTransparencyDescr))
         ]
         public bool AllowTransparency {
             get {
@@ -548,8 +548,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
-        SRDescription(SR.FormAutoScaleDescr),
+        SRCategory(nameof(SR.CatLayout)),
+        SRDescription(nameof(SR.FormAutoScaleDescr)),
         Obsolete("This property has been deprecated. Use the AutoScaleMode property instead.  http://go.microsoft.com/fwlink/?linkid=14202"),
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -666,7 +666,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
@@ -686,8 +686,8 @@ namespace System.Windows.Forms {
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
-        SRDescription(SR.ControlAutoSizeModeDescr),
-        SRCategory(SR.CatLayout),
+        SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(true),
         DefaultValue(AutoSizeMode.GrowOnly),
         Localizable(true)
@@ -818,10 +818,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(FormBorderStyle.Sizable),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.FormBorderStyleDescr)
+        SRDescription(nameof(SR.FormBorderStyleDescr))
         ]
         public FormBorderStyle FormBorderStyle {
             get {
@@ -911,7 +911,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(null),
-        SRDescription(SR.FormCancelButtonDescr)
+        SRDescription(nameof(SR.FormCancelButtonDescr))
         ]
         public IButtonControl CancelButton {
             get {
@@ -951,9 +951,9 @@ namespace System.Windows.Forms {
         ///       caption bar of the form.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         DefaultValue(true),
-        SRDescription(SR.FormControlBoxDescr)
+        SRDescription(nameof(SR.FormControlBoxDescr))
         ]
         public bool ControlBox {
             get {
@@ -1150,10 +1150,10 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the size and location of the form on the Windows desktop.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormDesktopBoundsDescr)
+        SRDescription(nameof(SR.FormDesktopBoundsDescr))
         ]
         public Rectangle DesktopBounds {
             get {
@@ -1174,10 +1174,10 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the location of the form on the Windows desktop.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormDesktopLocationDescr)
+        SRDescription(nameof(SR.FormDesktopLocationDescr))
         ]
         public Point DesktopLocation {
             get {
@@ -1198,10 +1198,10 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the dialog result for the form.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormDialogResultDescr)
+        SRDescription(nameof(SR.FormDialogResultDescr))
         ]
         public DialogResult DialogResult {
             get {
@@ -1243,9 +1243,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         DefaultValue(false),
-        SRDescription(SR.FormHelpButtonDescr)
+        SRDescription(nameof(SR.FormHelpButtonDescr))
         ]
         public bool HelpButton {
             get {
@@ -1269,8 +1269,8 @@ namespace System.Windows.Forms {
         [
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.FormHelpButtonClickedDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.FormHelpButtonClickedDescr))
         ]
         public event CancelEventHandler HelpButtonClicked {
             add {
@@ -1290,8 +1290,8 @@ namespace System.Windows.Forms {
         [
         AmbientValue(null),
         Localizable(true),
-        SRCategory(SR.CatWindowStyle),
-        SRDescription(SR.FormIconDescr)
+        SRCategory(nameof(SR.CatWindowStyle)),
+        SRDescription(nameof(SR.FormIconDescr))
         ]
         public Icon Icon {
             get {
@@ -1361,10 +1361,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormIsMDIChildDescr)
+        SRDescription(nameof(SR.FormIsMDIChildDescr))
         ]
         public bool IsMdiChild {
             get {
@@ -1397,9 +1397,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         DefaultValue(false),
-        SRDescription(SR.FormIsMDIContainerDescr)
+        SRDescription(nameof(SR.FormIsMDIContainerDescr))
         ]
         public bool IsMdiContainer {
             get {
@@ -1484,7 +1484,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.FormKeyPreviewDescr)
+        SRDescription(nameof(SR.FormKeyPreviewDescr))
         ]
         public bool KeyPreview {
             get {
@@ -1541,7 +1541,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.FormOnMaximizedBoundsChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMaximizedBoundsChangedDescr))]
         public event EventHandler MaximizedBoundsChanged {
             add {
                 Events.AddHandler(EVENT_MAXIMIZEDBOUNDSCHANGED, value);
@@ -1559,9 +1559,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
-        SRDescription(SR.FormMaximumSizeDescr),
+        SRDescription(nameof(SR.FormMaximumSizeDescr)),
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(typeof(Size), "0, 0")
         ]
@@ -1611,7 +1611,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.FormOnMaximumSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMaximumSizeChangedDescr))]
         public event EventHandler MaximumSizeChanged {
             add {
                 Events.AddHandler(EVENT_MAXIMUMSIZECHANGED, value);
@@ -1622,9 +1622,9 @@ namespace System.Windows.Forms {
             }
         }
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         DefaultValue(null),
-        SRDescription(SR.FormMenuStripDescr),
+        SRDescription(nameof(SR.FormMenuStripDescr)),
         TypeConverter(typeof(ReferenceConverter))
         ]
         public MenuStrip MainMenuStrip {
@@ -1674,9 +1674,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         DefaultValue(null),
-        SRDescription(SR.FormMenuDescr),
+        SRDescription(nameof(SR.FormMenuDescr)),
         TypeConverter(typeof(ReferenceConverter)),
         Browsable(false),
         ]
@@ -1718,9 +1718,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
-        SRDescription(SR.FormMinimumSizeDescr),
+        SRDescription(nameof(SR.FormMinimumSizeDescr)),
         RefreshProperties(RefreshProperties.Repaint),
         ]
         public override Size MinimumSize {
@@ -1786,7 +1786,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.FormOnMinimumSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMinimumSizeChangedDescr))]
         public event EventHandler MinimumSizeChanged {
             add {
                 Events.AddHandler(EVENT_MINIMUMSIZECHANGED, value);
@@ -1803,9 +1803,9 @@ namespace System.Windows.Forms {
         ///       displayed in the caption bar of the form.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         DefaultValue(true),
-        SRDescription(SR.FormMaximizeBoxDescr)
+        SRDescription(nameof(SR.FormMaximizeBoxDescr))
         ]
         public bool MaximizeBox {
             get {
@@ -1831,10 +1831,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormMDIChildrenDescr)
+        SRDescription(nameof(SR.FormMDIChildrenDescr))
         ]
         public Form[] MdiChildren {
             get {
@@ -1866,10 +1866,10 @@ namespace System.Windows.Forms {
         ///       interface (MDI) parent form of this form.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormMDIParentDescr)
+        SRDescription(nameof(SR.FormMDIParentDescr))
         ]
         public Form MdiParent {
             get {
@@ -1964,10 +1964,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormMergedMenuDescr),
+        SRDescription(nameof(SR.FormMergedMenuDescr)),
         ]
         public MainMenu MergedMenu {
             [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
@@ -2005,9 +2005,9 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets a value indicating whether the minimize button is displayed in the caption bar of the form.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         DefaultValue(true),
-        SRDescription(SR.FormMinimizeBoxDescr)
+        SRDescription(nameof(SR.FormMinimizeBoxDescr))
         ]
         public bool MinimizeBox {
             get {
@@ -2032,10 +2032,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormModalDescr)
+        SRDescription(nameof(SR.FormModalDescr))
         ]
         public bool Modal {
             get {
@@ -2050,9 +2050,9 @@ namespace System.Windows.Forms {
         ///     operating systems.
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         TypeConverterAttribute(typeof(OpacityConverter)),
-        SRDescription(SR.FormOpacityDescr),
+        SRDescription(nameof(SR.FormOpacityDescr)),
         DefaultValue(1.0)
         ]
         public double Opacity {
@@ -2118,10 +2118,10 @@ namespace System.Windows.Forms {
         /// <para>Gets an array of <see cref='System.Windows.Forms.Form'/> objects that represent all forms that are owned by this form.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormOwnedFormsDescr)
+        SRDescription(nameof(SR.FormOwnedFormsDescr))
         ]
         public Form[] OwnedForms {
             get {
@@ -2142,10 +2142,10 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the form that owns this form.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormOwnerDescr)
+        SRDescription(nameof(SR.FormOwnerDescr))
         ]
         public Form Owner {
             get {
@@ -2218,10 +2218,10 @@ namespace System.Windows.Forms {
         ///     control placement and text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftLayoutDescr)
+        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
             get {
@@ -2259,8 +2259,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(true),
-        SRCategory(SR.CatWindowStyle),
-        SRDescription(SR.FormShowInTaskbarDescr)
+        SRCategory(nameof(SR.CatWindowStyle)),
+        SRDescription(nameof(SR.FormShowInTaskbarDescr))
         ]
         public bool ShowInTaskbar {
             get {
@@ -2294,8 +2294,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(true),
-        SRCategory(SR.CatWindowStyle),
-        SRDescription(SR.FormShowIconDescr)
+        SRCategory(nameof(SR.CatWindowStyle)),
+        SRDescription(nameof(SR.FormShowIconDescr))
         ]
         public bool ShowIcon {
             get {
@@ -2383,9 +2383,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
+        SRCategory(nameof(SR.CatWindowStyle)),
         DefaultValue(SizeGripStyle.Auto),
-        SRDescription(SR.FormSizeGripStyleDescr)
+        SRDescription(nameof(SR.FormSizeGripStyleDescr))
         ]
         public SizeGripStyle SizeGripStyle {
             get {
@@ -2416,9 +2416,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         DefaultValue(FormStartPosition.WindowsDefaultLocation),
-        SRDescription(SR.FormStartPositionDescr)
+        SRDescription(nameof(SR.FormStartPositionDescr))
         ]
         public FormStartPosition StartPosition {
             get {
@@ -2469,12 +2469,12 @@ namespace System.Windows.Forms {
         ///     This property has no effect on Form, we need to hide it from browsers.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
         DispId(NativeMethods.ActiveX.DISPID_TABSTOP),
-        SRDescription(SR.ControlTabStopDescr)
+        SRDescription(nameof(SR.ControlTabStopDescr))
         ]
         public new bool TabStop {
             get {
@@ -2553,8 +2553,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatWindowStyle),
-        SRDescription(SR.FormTopMostDescr)
+        SRCategory(nameof(SR.CatWindowStyle)),
+        SRDescription(nameof(SR.FormTopMostDescr))
         ]
         public bool TopMost {
             get {
@@ -2586,8 +2586,8 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the color that will represent transparent areas of the form.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatWindowStyle),
-        SRDescription(SR.FormTransparencyKeyDescr)
+        SRCategory(nameof(SR.CatWindowStyle)),
+        SRDescription(nameof(SR.FormTransparencyKeyDescr))
         ]
         public Color TransparencyKey {
             get {
@@ -2739,9 +2739,9 @@ namespace System.Windows.Forms {
         ///       </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         DefaultValue(FormWindowState.Normal),
-        SRDescription(SR.FormWindowStateDescr)
+        SRDescription(nameof(SR.FormWindowStateDescr))
         ]
         public FormWindowState WindowState {
             get {
@@ -2849,7 +2849,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs when the form is activated in code or by the user.</para>
         /// </devdoc>
-        [SRCategory(SR.CatFocus), SRDescription(SR.FormOnActivateDescr)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.FormOnActivateDescr))]
         public event EventHandler Activated {
             add {
                 Events.AddHandler(EVENT_ACTIVATED, value);
@@ -2865,8 +2865,8 @@ namespace System.Windows.Forms {
         ///    <para>Occurs when the form is closing.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.FormOnClosingDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.FormOnClosingDescr)),
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -2885,8 +2885,8 @@ namespace System.Windows.Forms {
         ///    <para>Occurs when the form is closed.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.FormOnClosedDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.FormOnClosedDescr)),
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -2904,7 +2904,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs when the form loses focus and is not the active form.</para>
         /// </devdoc>
-        [SRCategory(SR.CatFocus), SRDescription(SR.FormOnDeactivateDescr)]
+        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.FormOnDeactivateDescr))]
         public event EventHandler Deactivate {
             add {
                 Events.AddHandler(EVENT_DEACTIVATE, value);
@@ -2919,7 +2919,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs when the form is closing.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.FormOnFormClosingDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnFormClosingDescr))]
         public event FormClosingEventHandler FormClosing {
             add {
                 Events.AddHandler(EVENT_FORMCLOSING, value);
@@ -2934,7 +2934,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs when the form is closed.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.FormOnFormClosedDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnFormClosedDescr))]
         public event FormClosedEventHandler FormClosed {
             add {
                 Events.AddHandler(EVENT_FORMCLOSED, value);
@@ -2949,7 +2949,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs before the form becomes visible.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.FormOnLoadDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnLoadDescr))]
         public event EventHandler Load {
             add {
                 Events.AddHandler(EVENT_LOAD, value);
@@ -2964,7 +2964,7 @@ namespace System.Windows.Forms {
         ///    <para>Occurs when a Multiple Document Interface (MDI) child form is activated or closed
         ///       within an MDI application.</para>
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.FormOnMDIChildActivateDescr)]
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.FormOnMDIChildActivateDescr))]
         public event EventHandler MdiChildActivate {
             add {
                 Events.AddHandler(EVENT_MDI_CHILD_ACTIVATE, value);
@@ -2979,8 +2979,8 @@ namespace System.Windows.Forms {
         ///    <para> Occurs when the menu of a form loses focus.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.FormOnMenuCompleteDescr),
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.FormOnMenuCompleteDescr)),
         Browsable(false)
         ]
         public event EventHandler MenuComplete {
@@ -2997,8 +2997,8 @@ namespace System.Windows.Forms {
         ///    <para> Occurs when the menu of a form receives focus.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.FormOnMenuStartDescr),
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.FormOnMenuStartDescr)),
         Browsable(false)
         ]
         public event EventHandler MenuStart {
@@ -3015,7 +3015,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs after the input language of the form has changed.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.FormOnInputLangChangeDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnInputLangChangeDescr))]
         public event InputLanguageChangedEventHandler InputLanguageChanged {
             add {
                 Events.AddHandler(EVENT_INPUTLANGCHANGE, value);
@@ -3031,7 +3031,7 @@ namespace System.Windows.Forms {
         ///    <para>Occurs when the the user attempts to change the input language for the
         ///       form.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.FormOnInputLangChangeRequestDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnInputLangChangeRequestDescr))]
         public event InputLanguageChangingEventHandler InputLanguageChanging {
             add {
                 Events.AddHandler(EVENT_INPUTLANGCHANGEREQUEST, value);
@@ -3045,7 +3045,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftLayoutChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
                 Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
@@ -3059,7 +3059,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs whenever the form is first shown.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.FormOnShownDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnShownDescr))]
         public event EventHandler Shown {
             add {
                 Events.AddHandler(EVENT_SHOWN, value);
@@ -5125,7 +5125,7 @@ namespace System.Windows.Forms {
         ///    either when the top level window is moved between monitors or when the OS settings are changed.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatLayout), SRDescription(SR.FormOnDpiChangedDescr)]
+        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.FormOnDpiChangedDescr))]
         public event DpiChangedEventHandler DpiChanged {
             add {
                 Events.AddHandler(EVENT_DPI_CHANGED, value);
@@ -5618,7 +5618,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs when the form enters the sizing modal loop</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.FormOnResizeBeginDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.FormOnResizeBeginDescr))]
         public event EventHandler ResizeBegin {
             add {
                 Events.AddHandler(EVENT_RESIZEBEGIN, value);
@@ -5632,7 +5632,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Occurs when the control exits the sizing modal loop.</para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.FormOnResizeEndDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.FormOnResizeEndDescr))]
         public event EventHandler ResizeEnd {
             add {
                 Events.AddHandler(EVENT_RESIZEEND, value);

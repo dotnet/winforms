@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
       ClassInterface(ClassInterfaceType.AutoDispatch),
       ComVisible(true),
       Designer("System.Windows.Forms.Design.TextBoxDesigner, " + AssemblyRef.SystemDesign),
-      SRDescription(SR.DescriptionTextBox)
+      SRDescription(nameof(SR.DescriptionTextBox))
     ]
     public class TextBox : TextBoxBase {
     
@@ -115,9 +115,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TextBoxAcceptsReturnDescr)
+        SRDescription(nameof(SR.TextBoxAcceptsReturnDescr))
         ]
         public bool AcceptsReturn {
             get {
@@ -138,7 +138,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(AutoCompleteMode.None),
-        SRDescription(SR.TextBoxAutoCompleteModeDescr),
+        SRDescription(nameof(SR.TextBoxAutoCompleteModeDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteMode AutoCompleteMode {
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(AutoCompleteSource.None),
-        SRDescription(SR.TextBoxAutoCompleteSourceDescr),
+        SRDescription(nameof(SR.TextBoxAutoCompleteSourceDescr)),
         TypeConverterAttribute(typeof(TextBoxAutoCompleteSourceConverter)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
-        SRDescription(SR.TextBoxAutoCompleteCustomSourceDescr),
+        SRDescription(nameof(SR.TextBoxAutoCompleteCustomSourceDescr)),
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
@@ -251,9 +251,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(CharacterCasing.Normal),
-        SRDescription(SR.TextBoxCharacterCasingDescr)
+        SRDescription(nameof(SR.TextBoxCharacterCasingDescr))
         ]
         public CharacterCasing CharacterCasing {
             get {
@@ -371,10 +371,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue((char)0),
         Localizable(true),
-        SRDescription(SR.TextBoxPasswordCharDescr),
+        SRDescription(nameof(SR.TextBoxPasswordCharDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public char PasswordChar {
@@ -412,10 +412,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(ScrollBars.None),
-        SRDescription(SR.TextBoxScrollBarsDescr)
+        SRDescription(nameof(SR.TextBoxScrollBarsDescr))
         ]
         public ScrollBars ScrollBars {
             get {
@@ -480,9 +480,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(HorizontalAlignment.Left),
-        SRDescription(SR.TextBoxTextAlignDescr)
+        SRDescription(nameof(SR.TextBoxTextAlignDescr))
         ]
         public HorizontalAlignment TextAlign {
             get {
@@ -515,9 +515,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TextBoxUseSystemPasswordCharDescr),
+        SRDescription(nameof(SR.TextBoxUseSystemPasswordCharDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public bool UseSystemPasswordChar {
@@ -542,7 +542,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.RadioButtonOnTextAlignChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
             add {
                 Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);

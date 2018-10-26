@@ -169,7 +169,7 @@ namespace System.Windows.Forms {
         /// .</para>
         /// </devdoc>
         [
-        SRDescription(SR.FormatControlFormatDescr),
+        SRDescription(nameof(SR.FormatControlFormatDescr)),
         DefaultValue(null)
         ]
         public override PropertyDescriptor PropertyDescriptor {

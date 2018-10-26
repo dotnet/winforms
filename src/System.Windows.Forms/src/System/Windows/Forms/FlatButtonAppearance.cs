@@ -35,8 +35,8 @@ namespace System.Windows.Forms {
         Browsable(true),
         ApplicableToButton(),
         NotifyParentProperty(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ButtonBorderSizeDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ButtonBorderSizeDescr)),
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(1),
         ]
@@ -66,8 +66,8 @@ namespace System.Windows.Forms {
         Browsable(true),
         ApplicableToButton(),
         NotifyParentProperty(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ButtonBorderColorDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ButtonBorderColorDescr)),
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(typeof(Color), ""),
         ]
@@ -95,8 +95,8 @@ namespace System.Windows.Forms {
         [
         Browsable(true),
         NotifyParentProperty(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ButtonCheckedBackColorDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ButtonCheckedBackColorDescr)),
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(typeof(Color), ""),
         ]
@@ -121,8 +121,8 @@ namespace System.Windows.Forms {
         Browsable(true),
         ApplicableToButton(),
         NotifyParentProperty(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ButtonMouseDownBackColorDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ButtonMouseDownBackColorDescr)),
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(typeof(Color), ""),
         ]
@@ -147,8 +147,8 @@ namespace System.Windows.Forms {
         Browsable(true),
         ApplicableToButton(),
         NotifyParentProperty(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ButtonMouseOverBackColorDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ButtonMouseOverBackColorDescr)),
         EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(typeof(Color), ""),
         ]

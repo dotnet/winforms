@@ -234,8 +234,8 @@ namespace System.Windows.Forms {
         ///     node is attached to
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.TreeNodeBackColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.TreeNodeBackColorDescr))
         ]
         public Color BackColor {
             get {
@@ -351,8 +351,8 @@ namespace System.Windows.Forms {
         ///     Indicates whether the node's checkbox is checked.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeNodeCheckedDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeNodeCheckedDescr)),
         DefaultValue(false)
         ]
         public bool Checked {
@@ -391,9 +391,9 @@ namespace System.Windows.Forms {
         ///     will be shown when the user right clicks the mouse on the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ControlContextMenuDescr)
+        SRDescription(nameof(SR.ControlContextMenuDescr))
         ]
         public virtual ContextMenu ContextMenu {
             get {
@@ -408,9 +408,9 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.ControlContextMenuDescr)
+        SRDescription(nameof(SR.ControlContextMenuDescr))
         ]
         public virtual ContextMenuStrip ContextMenuStrip {
             get {
@@ -450,8 +450,8 @@ namespace System.Windows.Forms {
         ///     node is attached to
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.TreeNodeForeColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.TreeNodeForeColorDescr))
         ]
         public Color ForeColor {
             get {
@@ -521,8 +521,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeNodeImageIndexDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeNodeImageIndexDescr)),
         TypeConverterAttribute(typeof(TreeViewImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
@@ -545,8 +545,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeNodeImageKeyDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeNodeImageKeyDescr)),
         TypeConverterAttribute(typeof(TreeViewImageKeyConverter)),
         DefaultValue(""),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -567,8 +567,8 @@ namespace System.Windows.Forms {
         ///     Returns the position of this node in relation to its siblings
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeNodeIndexDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeNodeIndexDescr)),
         ]
         public int Index {
             get { return index;}
@@ -728,8 +728,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.TreeNodeNodeFontDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.TreeNodeNodeFontDescr)),
         DefaultValue(null)
         ]
         public Font NodeFont {
@@ -854,8 +854,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeNodeSelectedImageIndexDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeNodeSelectedImageIndexDescr)),
         TypeConverterAttribute(typeof(TreeViewImageIndexConverter)),
         DefaultValue(-1),
         RefreshProperties(RefreshProperties.Repaint),
@@ -879,8 +879,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeNodeSelectedImageKeyDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeNodeSelectedImageKeyDescr)),
         TypeConverterAttribute(typeof(TreeViewImageKeyConverter)),
         DefaultValue(""),
         RefreshProperties(RefreshProperties.Repaint),
@@ -928,8 +928,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeNodeStateImageKeyDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeNodeStateImageKeyDescr)),
         TypeConverterAttribute(typeof(ImageKeyConverter)),
         DefaultValue(""),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -958,8 +958,8 @@ namespace System.Windows.Forms {
         Localizable(true),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
         DefaultValue(-1),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.TreeNodeStateImageIndexDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.TreeNodeStateImageIndexDescr)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
         RelatedImageList("TreeView.StateImageList")
@@ -983,10 +983,10 @@ namespace System.Windows.Forms {
         // <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Tag"]/*' />
         /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -1005,8 +1005,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.TreeNodeTextDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.TreeNodeTextDescr))
         ]
         public string Text {
             get {
@@ -1025,8 +1025,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(false),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.TreeNodeToolTipTextDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.TreeNodeToolTipTextDescr)),
         DefaultValue("")
         ]
         public string ToolTipText {
@@ -1043,8 +1043,8 @@ namespace System.Windows.Forms {
         ///     The name for the tree node - useful for indexing.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.TreeNodeNodeNameDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.TreeNodeNodeNameDescr))
         ]
         public string Name {
             get {

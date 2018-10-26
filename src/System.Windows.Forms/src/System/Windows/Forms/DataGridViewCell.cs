@@ -833,10 +833,10 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCell.Tag"]/*' />
         [
-            SRCategory(SR.CatData),
+            SRCategory(nameof(SR.CatData)),
             Localizable(false), 
             Bindable(true), 
-            SRDescription(SR.ControlTagDescr), 
+            SRDescription(nameof(SR.ControlTagDescr)), 
             DefaultValue(null), 
             TypeConverter(typeof(StringConverter))
         ]

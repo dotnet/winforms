@@ -87,7 +87,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
@@ -108,8 +108,8 @@ namespace System.Windows.Forms {
         ///     will always return a non-null value.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ControlBackColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public override Color BackColor {
             get {
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
         Localizable (true),
         DefaultValue (""),
         RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(SR.TabItemImageIndexDescr)
+        SRDescription(nameof(SR.TabItemImageIndexDescr))
         ]
         public string ImageKey {
             get {
@@ -308,7 +308,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [
         DefaultValue (false),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         SRDescription (SR.TabItemUseVisualStyleBackColorDescr)
         ]
         public bool UseVisualStyleBackColor {

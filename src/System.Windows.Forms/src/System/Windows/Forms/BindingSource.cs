@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
     DefaultEvent("CurrentChanged"),
     ComplexBindingProperties("DataSource", "DataMember"),
     Designer("System.Windows.Forms.Design.BindingSourceDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionBindingSource),
+    SRDescription(nameof(SR.DescriptionBindingSource)),
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1035:ICollectionImplementationsHaveStronglyTypedMembers"), // ICollection.CopyTo: Its just a wrapper class, it doesn't have a specific member type
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), // ICollection: We don't want class name to have to end in 'Collection'
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1039:ListsAreStronglyTyped"), // IList.Add: Its just a wrapper class, it doesn't have a specific member type
@@ -229,11 +229,11 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(""),
         RefreshProperties(RefreshProperties.Repaint),
         Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
-        SRDescription(SR.BindingSourceDataMemberDescr)
+        SRDescription(nameof(SR.BindingSourceDataMemberDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataMember"]/* />
         public string DataMember {
@@ -255,11 +255,11 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         RefreshProperties(RefreshProperties.Repaint),
         AttributeProvider(typeof(IListSource)),
-        SRDescription(SR.BindingSourceDataSourceDescr)
+        SRDescription(nameof(SR.BindingSourceDataSourceDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataSource"]/* />
         public object DataSource {
@@ -442,9 +442,9 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
-        SRDescription(SR.BindingSourceSortDescr)
+        SRDescription(nameof(SR.BindingSourceSortDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Sort"]/*' />
         public string Sort {
@@ -465,8 +465,8 @@ namespace System.Windows.Forms {
         ///////////////////////////////////////////////////////////////////////////////
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceAddingNewEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceAddingNewEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.AddingNew"]/*' />
         public event AddingNewEventHandler AddingNew {
@@ -480,8 +480,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.BindingComplete"]/*' />
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceBindingCompleteEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceBindingCompleteEventHandlerDescr))
         ]
         public event BindingCompleteEventHandler BindingComplete {
             add {
@@ -493,8 +493,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceDataErrorEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceDataErrorEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataError"]/*' />
         public event BindingManagerDataErrorEventHandler DataError {
@@ -507,8 +507,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceDataSourceChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceDataSourceChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataSourceChanged"]/*' />
         public event EventHandler DataSourceChanged {
@@ -521,8 +521,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceDataMemberChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceDataMemberChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataMemberChanged"]/*' />
         public event EventHandler DataMemberChanged {
@@ -535,8 +535,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceCurrentChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceCurrentChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.CurrentChanged"]/*' />
         public event EventHandler CurrentChanged {
@@ -549,8 +549,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceCurrentItemChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceCurrentItemChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.CurrentItemChanged"]/*' />
         public event EventHandler CurrentItemChanged {
@@ -563,8 +563,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourceListChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourceListChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.ListChanged"]/*' />
         public event ListChangedEventHandler ListChanged {
@@ -577,8 +577,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingSourcePositionChangedEventHandlerDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingSourcePositionChangedEventHandlerDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.PositionChanged"]/*' />
         public event EventHandler PositionChanged {
@@ -1842,8 +1842,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.BindingSourceAllowNewDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.BindingSourceAllowNewDescr)),
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.AllowNew"]/*' />
         public virtual bool AllowNew {
@@ -2031,9 +2031,9 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
-        SRDescription(SR.BindingSourceFilterDescr)
+        SRDescription(nameof(SR.BindingSourceFilterDescr))
         ]
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Filter"]/* />
         public virtual string Filter

@@ -68,10 +68,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]

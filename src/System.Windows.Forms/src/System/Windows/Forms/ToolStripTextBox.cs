@@ -220,9 +220,9 @@ namespace System.Windows.Forms {
 #region WrappedProperties   
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AcceptsTab"]/*' />
         [
-         SRCategory(SR.CatBehavior),
+         SRCategory(nameof(SR.CatBehavior)),
          DefaultValue(false),
-         SRDescription(SR.TextBoxAcceptsTabDescr)
+         SRDescription(nameof(SR.TextBoxAcceptsTabDescr))
          ]
         public bool AcceptsTab { 
             get { return TextBox.AcceptsTab; } 
@@ -231,9 +231,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AcceptsReturn"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TextBoxAcceptsReturnDescr)
+        SRDescription(nameof(SR.TextBoxAcceptsReturnDescr))
         ]
         public bool AcceptsReturn { 
             get { return TextBox.AcceptsReturn; } 
@@ -244,7 +244,7 @@ namespace System.Windows.Forms {
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
-        SRDescription(SR.TextBoxAutoCompleteCustomSourceDescr),
+        SRDescription(nameof(SR.TextBoxAutoCompleteCustomSourceDescr)),
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AutoCompleteMode"]/*' />
         [
         DefaultValue(AutoCompleteMode.None),
-        SRDescription(SR.TextBoxAutoCompleteModeDescr),
+        SRDescription(nameof(SR.TextBoxAutoCompleteModeDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteMode AutoCompleteMode {
@@ -267,7 +267,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AutoCompleteSource"]/*' />
         [
         DefaultValue(AutoCompleteSource.None),
-        SRDescription(SR.TextBoxAutoCompleteSourceDescr),
+        SRDescription(nameof(SR.TextBoxAutoCompleteSourceDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteSource AutoCompleteSource { 
@@ -277,10 +277,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.BorderStyle"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.TextBoxBorderDescr)
+        SRDescription(nameof(SR.TextBoxBorderDescr))
         ]
         public BorderStyle BorderStyle { 
             get { return TextBox.BorderStyle; } 
@@ -289,10 +289,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.CanUndo"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TextBoxCanUndoDescr)
+        SRDescription(nameof(SR.TextBoxCanUndoDescr))
         ]
         public bool CanUndo { 
             get { return TextBox.CanUndo; } 
@@ -300,9 +300,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.CharacterCasing"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(CharacterCasing.Normal),
-        SRDescription(SR.TextBoxCharacterCasingDescr)
+        SRDescription(nameof(SR.TextBoxCharacterCasingDescr))
         ]
         public CharacterCasing CharacterCasing { 
             get { return TextBox.CharacterCasing; } 
@@ -311,9 +311,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.HideSelection"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.TextBoxHideSelectionDescr)
+        SRDescription(nameof(SR.TextBoxHideSelectionDescr))
         ]
         public bool HideSelection {
             get { return TextBox.HideSelection; } 
@@ -322,10 +322,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Lines"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Localizable(true),
-        SRDescription(SR.TextBoxLinesDescr),
+        SRDescription(nameof(SR.TextBoxLinesDescr)),
         Editor("System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
         public string[] Lines { 
@@ -335,10 +335,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.MaxLength"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(32767),
         Localizable(true),
-        SRDescription(SR.TextBoxMaxLengthDescr)
+        SRDescription(nameof(SR.TextBoxMaxLengthDescr))
         ]
         public int MaxLength {
             get { return TextBox.MaxLength; }
@@ -347,10 +347,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Modified"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TextBoxModifiedDescr)
+        SRDescription(nameof(SR.TextBoxModifiedDescr))
         ]
         public bool Modified { 
             get { return TextBox.Modified; }
@@ -359,10 +359,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Multiline"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Localizable(true),
-        SRDescription(SR.TextBoxMultilineDescr),
+        SRDescription(nameof(SR.TextBoxMultilineDescr)),
         RefreshProperties(RefreshProperties.All),
         Browsable(false),EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -373,9 +373,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ReadOnly"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.TextBoxReadOnlyDescr)
+        SRDescription(nameof(SR.TextBoxReadOnlyDescr))
         ]
         public bool ReadOnly {
             get { return TextBox.ReadOnly; }
@@ -383,10 +383,10 @@ namespace System.Windows.Forms {
         }
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.SelectedText"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TextBoxSelectedTextDescr)
+        SRDescription(nameof(SR.TextBoxSelectedTextDescr))
         ]
         public string SelectedText { 
             get { return TextBox.SelectedText; }
@@ -395,10 +395,10 @@ namespace System.Windows.Forms {
        
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.SelectionLength"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TextBoxSelectionLengthDescr)
+        SRDescription(nameof(SR.TextBoxSelectionLengthDescr))
         ]
         public int SelectionLength {
             get { return TextBox.SelectionLength; }
@@ -406,10 +406,10 @@ namespace System.Windows.Forms {
         }
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.SelectionStart"]/*' />
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TextBoxSelectionStartDescr)
+        SRDescription(nameof(SR.TextBoxSelectionStartDescr))
         ]
         public int SelectionStart {
             get { return TextBox.SelectionStart; }
@@ -417,9 +417,9 @@ namespace System.Windows.Forms {
         }
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ShortcutsEnabled"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.TextBoxShortcutsEnabledDescr)
+        SRDescription(nameof(SR.TextBoxShortcutsEnabledDescr))
         ]
         public bool ShortcutsEnabled { 
             get { return TextBox.ShortcutsEnabled; }
@@ -433,9 +433,9 @@ namespace System.Windows.Forms {
         
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(HorizontalAlignment.Left),
-        SRDescription(SR.TextBoxTextAlignDescr)
+        SRDescription(nameof(SR.TextBoxTextAlignDescr))
         ]
         public HorizontalAlignment TextBoxTextAlign { 
             get { return TextBox.TextAlign; } 
@@ -444,10 +444,10 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.WordWrap"]/*' />
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(true),
-        SRDescription(SR.TextBoxWordWrapDescr),
+        SRDescription(nameof(SR.TextBoxWordWrapDescr)),
         Browsable(false),EditorBrowsable(EditorBrowsableState.Never)
         ]
         public bool WordWrap { 
@@ -462,7 +462,7 @@ namespace System.Windows.Forms {
 
 #region WrappedEvents
        /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AcceptsTabChanged"]/*' />
-       [SRCategory(SR.CatPropertyChanged), SRDescription(SR.TextBoxBaseOnAcceptsTabChangedDescr)]
+       [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
        public event EventHandler AcceptsTabChanged {
             add {
                 Events.AddHandler(EventAcceptsTabChanged, value);
@@ -474,7 +474,7 @@ namespace System.Windows.Forms {
 
        
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.BorderStyleChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.TextBoxBaseOnBorderStyleChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
         public event EventHandler BorderStyleChanged {
             add {
                 Events.AddHandler(EventBorderStyleChanged, value);
@@ -485,7 +485,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.HideSelectionChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.TextBoxBaseOnHideSelectionChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
         public event EventHandler HideSelectionChanged {
             add {
                 Events.AddHandler(EventHideSelectionChanged, value);
@@ -496,7 +496,7 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ModifiedChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.TextBoxBaseOnModifiedChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
         public event EventHandler ModifiedChanged {
             add {
                 Events.AddHandler(EventModifiedChanged, value);
@@ -507,7 +507,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.MultilineChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.TextBoxBaseOnMultilineChangedDescr),Browsable(false),EditorBrowsable(EditorBrowsableState.Never)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr)),Browsable(false),EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler MultilineChanged {
            add {
                Events.AddHandler(EventMultilineChanged, value);
@@ -518,7 +518,7 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ReadOnlyChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.TextBoxBaseOnReadOnlyChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
         public event EventHandler ReadOnlyChanged {
            add {
                Events.AddHandler(EventReadOnlyChanged, value);
@@ -530,7 +530,7 @@ namespace System.Windows.Forms {
 
         
         /// <include file='doc\WinBarTextBox.uex' path='docs/doc[@for="ToolStripTextBox.TextAlignChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ToolStripTextBoxTextBoxTextAlignChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripTextBoxTextBoxTextAlignChangedDescr))]
         public event EventHandler TextBoxTextAlignChanged {
             add {
                 Events.AddHandler(EventTextBoxTextAlignChanged, value);

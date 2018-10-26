@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.DefaultCellStyle"]/*' />
         [
             Browsable(true),
-            SRCategory(SR.CatAppearance),
+            SRCategory(nameof(SR.CatAppearance)),
             SRDescription(SR.DataGridView_ColumnDefaultCellStyleDescr)
         ]
         public override DataGridViewCellStyle DefaultCellStyle
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.FalseValue"]/*' />
         [
             DefaultValue(null),
-            SRCategory(SR.CatData),
+            SRCategory(nameof(SR.CatData)),
             SRDescription(SR.DataGridView_CheckBoxColumnFalseValueDescr),
             TypeConverter(typeof(StringConverter))
         ]
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.FlatStyle"]/*' />
         [
             DefaultValue(FlatStyle.Standard),
-            SRCategory(SR.CatAppearance),
+            SRCategory(nameof(SR.CatAppearance)),
             SRDescription(SR.DataGridView_CheckBoxColumnFlatStyleDescr)
         ]
         public FlatStyle FlatStyle 
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.IndeterminateValue"]/*' />
         [
             DefaultValue(null),
-            SRCategory(SR.CatData),
+            SRCategory(nameof(SR.CatData)),
             SRDescription(SR.DataGridView_CheckBoxColumnIndeterminateValueDescr),
             TypeConverter(typeof(StringConverter))
         ]
@@ -213,7 +213,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.ThreeState"]/*' />
         [
             DefaultValue(false),
-            SRCategory(SR.CatBehavior),
+            SRCategory(nameof(SR.CatBehavior)),
             SRDescription(SR.DataGridView_CheckBoxColumnThreeStateDescr)
         ]
         public bool ThreeState
@@ -269,7 +269,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.TrueValue"]/*' />
         [
             DefaultValue(null),
-            SRCategory(SR.CatData),
+            SRCategory(nameof(SR.CatData)),
             SRDescription(SR.DataGridView_CheckBoxColumnTrueValueDescr),
             TypeConverter(typeof(StringConverter))
         ]

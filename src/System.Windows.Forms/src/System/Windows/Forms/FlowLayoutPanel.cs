@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     [DefaultProperty("FlowDirection")]
     [Designer("System.Windows.Forms.Design.FlowLayoutPanelDesigner, " + AssemblyRef.SystemDesign)]
     [Docking(DockingBehavior.Ask)]
-    [SRDescription(SR.DescriptionFlowLayoutPanel)]
+    [SRDescription(nameof(SR.DescriptionFlowLayoutPanel))]
     public class FlowLayoutPanel : Panel, IExtenderProvider {
         private FlowLayoutSettings _flowLayoutSettings;
 
@@ -32,9 +32,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\FlowPanel.uex' path='docs/doc[@for="FlowPanel.FlowDirection"]/*' />
-        [SRDescription(SR.FlowPanelFlowDirectionDescr)]
+        [SRDescription(nameof(SR.FlowPanelFlowDirectionDescr))]
         [DefaultValue(FlowDirection.LeftToRight)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
         public FlowDirection FlowDirection {
             get { return _flowLayoutSettings.FlowDirection; }
@@ -45,9 +45,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\FlowPanel.uex' path='docs/doc[@for="FlowPanel.WrapContents"]/*' />
-        [SRDescription(SR.FlowPanelWrapContentsDescr)]
+        [SRDescription(nameof(SR.FlowPanelWrapContentsDescr))]
         [DefaultValue(true)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
         public bool WrapContents {
             get { return _flowLayoutSettings.WrapContents; }

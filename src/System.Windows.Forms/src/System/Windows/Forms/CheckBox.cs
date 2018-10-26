@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
     DefaultEvent("CheckedChanged"),
     DefaultBindingProperty("CheckState"),
     ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionCheckBox)
+    SRDescription(nameof(SR.DescriptionCheckBox))
     ]
     public class CheckBox : ButtonBase {
         private static readonly object EVENT_CHECKEDCHANGED = new object();
@@ -102,8 +102,8 @@ namespace System.Windows.Forms {
         [
         DefaultValue(Appearance.Normal),
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.CheckBoxAppearanceDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.CheckBoxAppearanceDescr))
         ]
         public Appearance Appearance {
             get {
@@ -135,7 +135,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.CheckBoxOnAppearanceChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
         public event EventHandler AppearanceChanged {
             add {
                 Events.AddHandler(EVENT_APPEARANCECHANGED, value);
@@ -153,8 +153,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.CheckBoxAutoCheckDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.CheckBoxAutoCheckDescr))
         ]
         public bool AutoCheck {
             get {
@@ -178,9 +178,9 @@ namespace System.Windows.Forms {
         [
         Bindable(true),
         Localizable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ContentAlignment.MiddleLeft),
-        SRDescription(SR.CheckBoxCheckAlignDescr)
+        SRDescription(nameof(SR.CheckBoxCheckAlignDescr))
         ]
         public ContentAlignment CheckAlign {
             get {
@@ -217,9 +217,9 @@ namespace System.Windows.Forms {
         Bindable(true),
         SettingsBindable(true),
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.CheckBoxCheckedDescr)
+        SRDescription(nameof(SR.CheckBoxCheckedDescr))
         ]
         public bool Checked {
             get {
@@ -240,10 +240,10 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Bindable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(CheckState.Unchecked),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.CheckBoxCheckStateDescr)
+        SRDescription(nameof(SR.CheckBoxCheckStateDescr))
         ]
         public CheckState CheckState {
             get {
@@ -446,8 +446,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.CheckBoxThreeStateDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.CheckBoxThreeStateDescr))
         ]
         public bool ThreeState {
             get {
@@ -464,7 +464,7 @@ namespace System.Windows.Forms {
         ///       value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
         ///       property changes.</para>
         /// </devdoc>
-        [SRDescription(SR.CheckBoxOnCheckedChangedDescr)]
+        [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
             add {
                 Events.AddHandler(EVENT_CHECKEDCHANGED, value);
@@ -480,7 +480,7 @@ namespace System.Windows.Forms {
         ///       value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         ///       property changes.</para>
         /// </devdoc>
-        [SRDescription(SR.CheckBoxOnCheckStateChangedDescr)]
+        [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
             add {
                 Events.AddHandler(EVENT_CHECKSTATECHANGED, value);

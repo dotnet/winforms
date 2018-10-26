@@ -77,10 +77,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(HorizontalAlignment.Left),
         Localizable(true),
-        SRDescription(SR.StatusBarPanelAlignmentDescr)
+        SRDescription(nameof(SR.StatusBarPanelAlignmentDescr))
         ]
         public HorizontalAlignment Alignment {
             get {
@@ -108,10 +108,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(StatusBarPanelAutoSize.None),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.StatusBarPanelAutoSizeDescr)
+        SRDescription(nameof(SR.StatusBarPanelAutoSizeDescr))
         ]
         public StatusBarPanelAutoSize AutoSize {
             get {
@@ -141,10 +141,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(System.Windows.Forms.StatusBarPanelBorderStyle.Sunken),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.StatusBarPanelBorderStyleDescr)
+        SRDescription(nameof(SR.StatusBarPanelBorderStyleDescr))
         ]
         public StatusBarPanelBorderStyle BorderStyle {
             get {
@@ -184,10 +184,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(null),
         Localizable(true),
-        SRDescription(SR.StatusBarPanelIconDescr)
+        SRDescription(nameof(SR.StatusBarPanelIconDescr))
         ]
         public Icon Icon {
             [ResourceExposure(ResourceScope.Machine)]
@@ -244,11 +244,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DEFAULTMINWIDTH),
         Localizable(true),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.StatusBarPanelMinWidthDescr)
+        SRDescription(nameof(SR.StatusBarPanelMinWidthDescr))
         ]
         public int MinWidth {
             get {
@@ -277,9 +277,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
 	[
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
-        SRDescription(SR.StatusBarPanelNameDescr)
+        SRDescription(nameof(SR.StatusBarPanelNameDescr))
         ]
         public string Name {
             get {
@@ -349,9 +349,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(StatusBarPanelStyle.Text),
-        SRDescription(SR.StatusBarPanelStyleDescr)
+        SRDescription(nameof(SR.StatusBarPanelStyleDescr))
         ]
         public StatusBarPanelStyle Style {
             get { return style;}
@@ -372,10 +372,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -395,10 +395,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(""),
-        SRDescription(SR.StatusBarPanelTextDescr)
+        SRDescription(nameof(SR.StatusBarPanelTextDescr))
         ]
         public string Text {
             get {
@@ -436,10 +436,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(""),
-        SRDescription(SR.StatusBarPanelToolTipTextDescr)
+        SRDescription(nameof(SR.StatusBarPanelToolTipTextDescr))
         ]
         public string ToolTipText {
             get {
@@ -481,9 +481,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(DEFAULTWIDTH),
-        SRDescription(SR.StatusBarPanelWidthDescr)
+        SRDescription(nameof(SR.StatusBarPanelWidthDescr))
         ]
         public int Width {
             get {

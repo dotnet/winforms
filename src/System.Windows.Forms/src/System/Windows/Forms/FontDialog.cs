@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
     [
     DefaultEvent("Apply"),
     DefaultProperty("Font"),
-    SRDescription(SR.DescriptionFontDialog)
+    SRDescription(nameof(SR.DescriptionFontDialog))
     ]
     public class FontDialog : CommonDialog {
         /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.EventApply"]/*' />
@@ -72,9 +72,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.FnDallowSimulationsDescr)
+        SRDescription(nameof(SR.FnDallowSimulationsDescr))
         ]
         public bool AllowSimulations {
             get {
@@ -93,9 +93,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.FnDallowVectorFontsDescr)
+        SRDescription(nameof(SR.FnDallowVectorFontsDescr))
         ]
         public bool AllowVectorFonts {
             get {
@@ -116,9 +116,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.FnDallowVerticalFontsDescr)
+        SRDescription(nameof(SR.FnDallowVerticalFontsDescr))
         ]
         public bool AllowVerticalFonts {
             get {
@@ -140,9 +140,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.FnDallowScriptChangeDescr)
+        SRDescription(nameof(SR.FnDallowScriptChangeDescr))
         ]
         public bool AllowScriptChange {
             get {
@@ -161,8 +161,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
-        SRDescription(SR.FnDcolorDescr),
+        SRCategory(nameof(SR.CatData)), 
+        SRDescription(nameof(SR.FnDcolorDescr)),
         DefaultValue(typeof(Color), "Black")
         ]
         public Color Color {
@@ -194,9 +194,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FnDfixedPitchOnlyDescr)
+        SRDescription(nameof(SR.FnDfixedPitchOnlyDescr))
         ]
         public bool FixedPitchOnly {
             get {
@@ -215,8 +215,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
-        SRDescription(SR.FnDfontDescr)
+        SRCategory(nameof(SR.CatData)), 
+        SRDescription(nameof(SR.FnDfontDescr))
         ]
         public Font Font {
             [ResourceExposure(ResourceScope.Process)]
@@ -247,9 +247,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FnDfontMustExistDescr)
+        SRDescription(nameof(SR.FnDfontMustExistDescr))
         ]
         public bool FontMustExist {
             get {
@@ -269,9 +269,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
+        SRCategory(nameof(SR.CatData)), 
         DefaultValue(defaultMaxSize),
-        SRDescription(SR.FnDmaxSizeDescr)
+        SRDescription(nameof(SR.FnDmaxSizeDescr))
         ]
         public int MaxSize {
             get {
@@ -296,9 +296,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
+        SRCategory(nameof(SR.CatData)), 
         DefaultValue(defaultMinSize),
-        SRDescription(SR.FnDminSizeDescr)
+        SRDescription(nameof(SR.FnDminSizeDescr))
         ]
         public int MinSize {
             get {
@@ -338,9 +338,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FnDscriptsOnlyDescr)
+        SRDescription(nameof(SR.FnDscriptsOnlyDescr))
         ]
         public bool ScriptsOnly {
             get {
@@ -358,9 +358,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FnDshowApplyDescr)
+        SRDescription(nameof(SR.FnDshowApplyDescr))
         ]
         public bool ShowApply {
             get {
@@ -378,9 +378,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FnDshowColorDescr)
+        SRDescription(nameof(SR.FnDshowColorDescr))
         ]
         public bool ShowColor {
             get {
@@ -399,9 +399,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.FnDshowEffectsDescr)
+        SRDescription(nameof(SR.FnDshowEffectsDescr))
         ]
         public bool ShowEffects {
             get {
@@ -419,9 +419,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.FnDshowHelpDescr)
+        SRDescription(nameof(SR.FnDshowHelpDescr))
         ]
         public bool ShowHelp {
             get {
@@ -439,7 +439,7 @@ namespace System.Windows.Forms {
         ///       dialog box.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.FnDapplyDescr)]
+        [SRDescription(nameof(SR.FnDapplyDescr))]
         public event EventHandler Apply {
             add {
                 Events.AddHandler(EventApply, value);

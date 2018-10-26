@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlHandleDescr)
+        SRDescription(nameof(SR.ControlHandleDescr))
         ]
         public IntPtr Handle {
             get {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.MenuIsParentDescr)
+        SRDescription(nameof(SR.MenuIsParentDescr))
         ]
         public virtual bool IsParent {
             [System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)]
@@ -114,7 +114,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.MenuMDIListItemDescr)
+        SRDescription(nameof(SR.MenuMDIListItemDescr))
         ]
         public MenuItem MdiListItem {
             get {
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(SR.MenuMenuItemsDescr),
+        SRDescription(nameof(SR.MenuMenuItemsDescr)),
         MergableProperty(false)
         ]
         public MenuItemCollection MenuItems {
@@ -189,10 +189,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]

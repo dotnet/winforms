@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     LookupBindingProperties(), // ...overrides equivalent attribute in ListControl
-    SRDescription(SR.DescriptionCheckedListBox)
+    SRDescription(nameof(SR.DescriptionCheckedListBox))
     ]
     public class CheckedListBox : ListBox {
 
@@ -130,9 +130,9 @@ namespace System.Windows.Forms {
         ///     some may prefer checking the item as soon as it is clicked.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.CheckedListBoxCheckOnClickDescr)
+        SRDescription(nameof(SR.CheckedListBoxCheckOnClickDescr))
         ]
         public bool CheckOnClick {
             get {
@@ -263,10 +263,10 @@ namespace System.Windows.Forms {
         ///     Collection of items in this listbox.
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
-        SRDescription(SR.ListBoxItemsDescr),
+        SRDescription(nameof(SR.ListBoxItemsDescr)),
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
         new public CheckedListBox.ObjectCollection Items {
@@ -317,9 +317,9 @@ namespace System.Windows.Forms {
         ///     Indicates if the CheckBoxes should show up as flat or 3D in appearance.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
-        SRDescription(SR.CheckedListBoxThreeDCheckBoxesDescr)
+        SRDescription(nameof(SR.CheckedListBoxThreeDCheckBoxesDescr))
         ]
         public bool ThreeDCheckBoxes {
             get {
@@ -345,8 +345,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.UseCompatibleTextRenderingDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public bool UseCompatibleTextRendering {
             get{
@@ -412,7 +412,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.CheckedListBoxItemCheckDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
             add {
                 onItemCheck += value;

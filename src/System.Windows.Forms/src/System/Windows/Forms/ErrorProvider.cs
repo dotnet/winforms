@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
     ProvideProperty("Error", typeof(Control)),
     ToolboxItemFilter("System.Windows.Forms"),
     ComplexBindingProperties("DataSource", "DataMember"),
-    SRDescription(SR.DescriptionErrorProvider)
+    SRDescription(nameof(SR.DescriptionErrorProvider))
     ]
     public class ErrorProvider : Component, IExtenderProvider, ISupportInitialize {
 
@@ -137,9 +137,9 @@ namespace System.Windows.Forms {
         ///     Returns or sets when the error icon flashes.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(defaultBlinkStyle),
-        SRDescription(SR.ErrorProviderBlinkStyleDescr)
+        SRDescription(nameof(SR.ErrorProviderBlinkStyleDescr))
         ]
         public ErrorBlinkStyle BlinkStyle {
             get {
@@ -195,8 +195,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(null),
-        SRCategory(SR.CatData),
-        SRDescription(SR.ErrorProviderContainerControlDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.ErrorProviderContainerControlDescr))
         ]
         public ContainerControl ContainerControl {
             [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
@@ -226,10 +226,10 @@ namespace System.Windows.Forms {
         //      text will be from right to left.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.ControlRightToLeftDescr)
+        SRDescription(nameof(SR.ControlRightToLeftDescr))
         ]
         public virtual bool RightToLeft {
             get {
@@ -249,7 +249,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnRightToLeftChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
             add {
                 onRightToLeftChanged += value;
@@ -264,10 +264,10 @@ namespace System.Windows.Forms {
         ///    User defined data associated with the control.
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -338,9 +338,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(null),
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         AttributeProvider(typeof(IListSource)),
-        SRDescription(SR.ErrorProviderDataSourceDescr)
+        SRDescription(nameof(SR.ErrorProviderDataSourceDescr))
         ]
         public object DataSource {
             get {
@@ -376,9 +376,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(null),
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
-        SRDescription(SR.ErrorProviderDataMemberDescr)
+        SRDescription(nameof(SR.ErrorProviderDataMemberDescr))
         ]
         public string DataMember {
             get {
@@ -549,9 +549,9 @@ namespace System.Windows.Forms {
         ///     Returns or set the rate in milliseconds at which the error icon flashes.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(defaultBlinkRate),
-        SRDescription(SR.ErrorProviderBlinkRateDescr),
+        SRDescription(nameof(SR.ErrorProviderBlinkRateDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int BlinkRate {
@@ -595,8 +595,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ErrorProviderIconDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ErrorProviderIconDescr))
         ]
         public Icon Icon {
             get {
@@ -770,8 +770,8 @@ namespace System.Windows.Forms {
         [
         DefaultValue(""),
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ErrorProviderErrorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ErrorProviderErrorDescr))
         ]
         public string GetError(Control control) {
             return EnsureControlItem(control).Error;
@@ -784,8 +784,8 @@ namespace System.Windows.Forms {
         [
         DefaultValue(defaultIconAlignment),
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ErrorProviderIconAlignmentDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ErrorProviderIconAlignmentDescr))
         ]
         public ErrorIconAlignment GetIconAlignment(Control control) {
             return EnsureControlItem(control).IconAlignment;
@@ -798,8 +798,8 @@ namespace System.Windows.Forms {
         [
         DefaultValue(0),
         Localizable(true),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ErrorProviderIconPaddingDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ErrorProviderIconPaddingDescr))
         ]
         public int GetIconPadding(Control control) {
             return EnsureControlItem(control).IconPadding;

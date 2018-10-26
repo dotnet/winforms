@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewTextBoxColumn.uex' path='docs/doc[@for="DataGridViewTextBoxColumn.MaxInputLength"]/*' />
         [
             DefaultValue(DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength),
-            SRCategory(SR.CatBehavior),
+            SRCategory(nameof(SR.CatBehavior)),
             SRDescription(SR.DataGridView_TextBoxColumnMaxInputLengthDescr)
         ]
         public int MaxInputLength

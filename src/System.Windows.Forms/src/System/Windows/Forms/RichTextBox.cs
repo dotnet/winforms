@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
      ComVisible(true),
      Docking(DockingBehavior.Ask),
      Designer("System.Windows.Forms.Design.RichTextBoxDesigner, " + AssemblyRef.SystemDesign),
-     SRDescription(SR.DescriptionRichTextBox)
+     SRDescription(nameof(SR.DescriptionRichTextBox))
    ]
     public class RichTextBox : TextBoxBase {
         static TraceSwitch richTextDbg;
@@ -218,9 +218,9 @@ namespace System.Windows.Forms {
         ///     Controls whether whether mouse selection snaps to whole words.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.RichTextBoxAutoWordSelection)
+        SRDescription(nameof(SR.RichTextBoxAutoWordSelection))
         ]
         public bool AutoWordSelection {
             get { return richTextBoxFlags[autoWordSelectionSection] != 0; }
@@ -292,10 +292,10 @@ namespace System.Windows.Forms {
         ///     SelectionBullet is set to true.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Localizable(true),
-        SRDescription(SR.RichTextBoxBulletIndent)
+        SRDescription(nameof(SR.RichTextBoxBulletIndent))
         ]
         public int BulletIndent {
             get {
@@ -334,7 +334,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxCanRedoDescr)
+        SRDescription(nameof(SR.RichTextBoxCanRedoDescr))
         ]
         public bool CanRedo {
             get {
@@ -436,9 +436,9 @@ namespace System.Windows.Forms {
         ///     property is changed.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.RichTextBoxDetectURLs)
+        SRDescription(nameof(SR.RichTextBoxDetectURLs))
         ]
         public bool DetectUrls {
             get {
@@ -468,9 +468,9 @@ namespace System.Windows.Forms {
         ///     375177).  Should be false by default.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.RichTextBoxEnableAutoDragDrop)
+        SRDescription(nameof(SR.RichTextBoxEnableAutoDragDrop))
         ]
         public bool EnableAutoDragDrop
         {
@@ -656,10 +656,10 @@ namespace System.Windows.Forms {
         //NOTE: This is overridable, because we want people to be able to
         //      mess with the names if necessary...?
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxRedoActionNameDescr)
+        SRDescription(nameof(SR.RichTextBoxRedoActionNameDescr))
         ]
         public string RedoActionName {
             get {
@@ -692,10 +692,10 @@ namespace System.Windows.Forms {
         ///     The right margin of a RichTextBox control.  A nonzero margin implies WordWrap.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Localizable(true),
-        SRDescription(SR.RichTextBoxRightMargin)
+        SRDescription(nameof(SR.RichTextBoxRightMargin))
         ]
         public int RightMargin {
             get {
@@ -734,7 +734,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxRTF),
+        SRDescription(nameof(SR.RichTextBoxRTF)),
         RefreshProperties(RefreshProperties.All)
         ]
         public string Rtf {
@@ -774,10 +774,10 @@ namespace System.Windows.Forms {
         ///     Possible return values are given by the RichTextBoxScrollBars enumeration.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(RichTextBoxScrollBars.Both),
         Localizable(true),
-        SRDescription(SR.RichTextBoxScrollBars)
+        SRDescription(nameof(SR.RichTextBoxScrollBars))
         ]
         public RichTextBoxScrollBars ScrollBars {
             get {
@@ -816,7 +816,7 @@ namespace System.Windows.Forms {
         DefaultValue(HorizontalAlignment.Left),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelAlignment)
+        SRDescription(nameof(SR.RichTextBoxSelAlignment))
         ]
         public HorizontalAlignment SelectionAlignment {
             get {
@@ -887,7 +887,7 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelBullet)
+        SRDescription(nameof(SR.RichTextBoxSelBullet))
         ]
         public bool SelectionBullet {
             get {
@@ -942,7 +942,7 @@ namespace System.Windows.Forms {
         DefaultValue(0),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelCharOffset)
+        SRDescription(nameof(SR.RichTextBoxSelCharOffset))
         ]
         public int SelectionCharOffset {
             get {
@@ -989,7 +989,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelColor)
+        SRDescription(nameof(SR.RichTextBoxSelColor))
         ]
         public Color SelectionColor {
             get {
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelBackColor)
+        SRDescription(nameof(SR.RichTextBoxSelBackColor))
         ]
         public Color SelectionBackColor {
             get {
@@ -1076,7 +1076,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelFont)
+        SRDescription(nameof(SR.RichTextBoxSelFont))
         ]
         public Font SelectionFont {
             get {
@@ -1098,7 +1098,7 @@ namespace System.Windows.Forms {
         DefaultValue(0),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelHangingIndent)
+        SRDescription(nameof(SR.RichTextBoxSelHangingIndent))
         ]
         public int SelectionHangingIndent {
             get {
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms {
         DefaultValue(0),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelIndent)
+        SRDescription(nameof(SR.RichTextBoxSelIndent))
         ]
         public int SelectionIndent {
             get {
@@ -1178,10 +1178,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.TextBoxSelectionLengthDescr)
+        SRDescription(nameof(SR.TextBoxSelectionLengthDescr))
         ]
         public override int SelectionLength {
             get {
@@ -1209,7 +1209,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.RichTextBoxSelProtected),
+        SRDescription(nameof(SR.RichTextBoxSelProtected)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -1243,7 +1243,7 @@ namespace System.Windows.Forms {
         DefaultValue(""),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelRTF)
+        SRDescription(nameof(SR.RichTextBoxSelRTF))
         ]
         public string SelectedRtf {
             get {
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
         DefaultValue(0),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelRightIndent)
+        SRDescription(nameof(SR.RichTextBoxSelRightIndent))
         ]
         public int SelectionRightIndent {
             get {
@@ -1308,7 +1308,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelTabs)
+        SRDescription(nameof(SR.RichTextBoxSelTabs))
         ]
         public int[] SelectionTabs {
             get {
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms {
         DefaultValue(""),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelText)
+        SRDescription(nameof(SR.RichTextBoxSelText))
         ]
         public override string SelectedText {
             get {
@@ -1383,10 +1383,10 @@ namespace System.Windows.Forms {
         ///     of the values enumerated in RichTextBoxSelectionType.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxSelTypeDescr)
+        SRDescription(nameof(SR.RichTextBoxSelTypeDescr))
         ]
         public RichTextBoxSelectionTypes SelectionType {
             get {
@@ -1408,9 +1408,9 @@ namespace System.Windows.Forms {
         ///     can be used to select entire lines
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.RichTextBoxSelMargin)
+        SRDescription(nameof(SR.RichTextBoxSelMargin))
         ]
         public bool ShowSelectionMargin {
             get { return richTextBoxFlags[showSelBarSection] != 0; }
@@ -1526,10 +1526,10 @@ namespace System.Windows.Forms {
         //NOTE: This is overridable, because we want people to be able to
         //      mess with the names if necessary...?
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.RichTextBoxUndoActionNameDescr)
+        SRDescription(nameof(SR.RichTextBoxUndoActionNameDescr))
         ]
         public string UndoActionName {
             get {
@@ -1567,10 +1567,10 @@ namespace System.Windows.Forms {
         ///     for non-TrueType fonts, ZoomFactor will be treated as the nearest whole number.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(1.0f),
         Localizable(true),
-        SRDescription(SR.RichTextBoxZoomFactor)
+        SRDescription(nameof(SR.RichTextBoxZoomFactor))
         ]
         public float ZoomFactor {
             get {
@@ -1603,7 +1603,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxContentsResized)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxContentsResized))]
         public event ContentsResizedEventHandler ContentsResized {
             add {
                 Events.AddHandler(EVENT_REQUESTRESIZE, value);
@@ -1704,7 +1704,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxHScroll)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxHScroll))]
         public event EventHandler HScroll {
             add {
                 Events.AddHandler(EVENT_HSCROLL, value);
@@ -1718,7 +1718,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxLinkClick)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxLinkClick))]
         public event LinkClickedEventHandler LinkClicked {
             add {
                 Events.AddHandler(EVENT_LINKACTIVATE, value);
@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxIMEChange)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxIMEChange))]
         public event EventHandler ImeChange {
             add {
                 Events.AddHandler(EVENT_IMECHANGE, value);
@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxProtected)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxProtected))]
         public event EventHandler Protected {
             add {
                 Events.AddHandler(EVENT_PROTECTED, value);
@@ -1763,7 +1763,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxSelChange)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxSelChange))]
         public event EventHandler SelectionChanged {
             add {
                 Events.AddHandler(EVENT_SELCHANGE, value);
@@ -1778,7 +1778,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.RichTextBoxVScroll)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxVScroll))]
         public event EventHandler VScroll {
             add {
                 Events.AddHandler(EVENT_VSCROLL, value);

@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.CellBorderStyle"]/*' />
         /// <devdoc> internal as this is a TableLayoutPanel feature only </devdoc>
-        [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(SR.CatAppearance), SRDescription(SR.TableLayoutPanelCellBorderStyleDescr)]
+        [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
         internal TableLayoutPanelCellBorderStyle CellBorderStyle {
             get { return _borderStyle; }
             set { 
@@ -99,8 +99,8 @@ namespace System.Windows.Forms {
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
         /// causing out of memory exception
         /// </devdoc>
-        [SRDescription(SR.GridPanelColumnsDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.GridPanelColumnsDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
         public int ColumnCount {
             get { 
@@ -125,8 +125,8 @@ namespace System.Windows.Forms {
         /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
         /// causing out of memory exception
         /// </devdoc>
-        [SRDescription(SR.GridPanelRowsDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.GridPanelRowsDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
         public int RowCount {
             get { 
@@ -146,9 +146,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.RowStyles"]/*' />
-        [SRDescription(SR.GridPanelRowStylesDescr)]
+        [SRDescription(nameof(SR.GridPanelRowStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         public TableLayoutRowStyleCollection RowStyles {
             get { 
                 if (IsStub) {
@@ -162,9 +162,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.ColumnStyles"]/*' />
-        [SRDescription(SR.GridPanelColumnStylesDescr)]
+        [SRDescription(nameof(SR.GridPanelColumnStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [SRCategory(SR.CatLayout)]
+        [SRCategory(nameof(SR.CatLayout))]
         public TableLayoutColumnStyleCollection ColumnStyles {
             get { 
                 if (IsStub) {
@@ -183,8 +183,8 @@ namespace System.Windows.Forms {
         ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
         ///       when the TableLayoutPanel is over-filled.
         /// </devdoc>
-        [SRDescription(SR.TableLayoutPanelGrowStyleDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
         public TableLayoutPanelGrowStyle GrowStyle {
             get {
@@ -298,8 +298,8 @@ namespace System.Windows.Forms {
         }
 
         //get the row position of the element
-        [SRDescription(SR.GridPanelRowDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.GridPanelRowDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
         public int GetRow(object control) {
             if (control == null) {
@@ -330,8 +330,8 @@ namespace System.Windows.Forms {
         }
 
         //get the column position of the element
-        [SRDescription(SR.TableLayoutSettingsGetCellPositionDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.TableLayoutSettingsGetCellPositionDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
         public TableLayoutPanelCellPosition GetCellPosition(object control) {
             if (control == null) {
@@ -341,8 +341,8 @@ namespace System.Windows.Forms {
         }
 
         //get the column position of the element
-        [SRDescription(SR.TableLayoutSettingsSetCellPositionDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.TableLayoutSettingsSetCellPositionDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
         public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition) {
            if (control == null) {
@@ -353,8 +353,8 @@ namespace System.Windows.Forms {
         }
 
         //get the column position of the element
-        [SRDescription(SR.GridPanelColumnDescr)]
-        [SRCategory(SR.CatLayout)]
+        [SRDescription(nameof(SR.GridPanelColumnDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
         public int GetColumn(object control) {
            if (control == null) {

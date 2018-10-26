@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
     DefaultEvent("SelectedIndexChanged"),
     DefaultProperty("Items"),
     DefaultBindingProperty("SelectedValue"),
-    SRDescription(SR.DescriptionListBox)
+    SRDescription(nameof(SR.DescriptionListBox))
     ]
     public class ListBox : ListControl {
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.NoMatches"]/*' />
@@ -255,10 +255,10 @@ namespace System.Windows.Forms {
         ///     The System.Windows.Forms.BorderStyle enumeration.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.ListBoxBorderDescr)
+        SRDescription(nameof(SR.ListBoxBorderDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -291,10 +291,10 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         DefaultValue(0),
-        SRDescription(SR.ListBoxColumnWidthDescr)
+        SRDescription(nameof(SR.ListBoxColumnWidthDescr))
         ]
         public int ColumnWidth {
             get {
@@ -391,7 +391,7 @@ namespace System.Windows.Forms {
         ///     its strings using the CustomTabOffsets integer array.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Browsable(false)
         ]
@@ -421,9 +421,9 @@ namespace System.Windows.Forms {
         ///     whether or not items have to be of the same height.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DrawMode.Normal),
-        SRDescription(SR.ListBoxDrawModeDescr),
+        SRDescription(nameof(SR.ListBoxDrawModeDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public virtual DrawMode DrawMode {
@@ -506,10 +506,10 @@ namespace System.Windows.Forms {
         ///     This property will only have an effect if HorizontalScrollbars is true.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Localizable(true),
-        SRDescription(SR.ListBoxHorizontalExtentDescr)
+        SRDescription(nameof(SR.ListBoxHorizontalExtentDescr))
         ]
         public int HorizontalExtent {
             get {
@@ -533,10 +533,10 @@ namespace System.Windows.Forms {
         ///     which case HorizontalExtent will need to be explicitly set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Localizable(true),
-        SRDescription(SR.ListBoxHorizontalScrollbarDescr)
+        SRDescription(nameof(SR.ListBoxHorizontalScrollbarDescr))
         ]
         public bool HorizontalScrollbar {
             get {
@@ -571,10 +571,10 @@ namespace System.Windows.Forms {
         ///     shown
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.ListBoxIntegralHeightDescr),
+        SRDescription(nameof(SR.ListBoxIntegralHeightDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public bool IntegralHeight {
@@ -607,10 +607,10 @@ namespace System.Windows.Forms {
         ///       the height of an item in an owner-draw list box.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DefaultItemHeight),
         Localizable(true),
-        SRDescription(SR.ListBoxItemHeightDescr),
+        SRDescription(nameof(SR.ListBoxItemHeightDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public virtual int ItemHeight {
@@ -652,10 +652,10 @@ namespace System.Windows.Forms {
         ///     Collection of items in this listbox.
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
-        SRDescription(SR.ListBoxItemsDescr),
+        SRDescription(nameof(SR.ListBoxItemsDescr)),
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         MergableProperty(false)
         ]
@@ -702,9 +702,9 @@ namespace System.Windows.Forms {
         ///       or not.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListBoxMultiColumnDescr)
+        SRDescription(nameof(SR.ListBoxMultiColumnDescr))
         ]
         public bool MultiColumn {
             get {
@@ -728,7 +728,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxPreferredHeightDescr)
+        SRDescription(nameof(SR.ListBoxPreferredHeightDescr))
         ]
         public int PreferredHeight {
             get {
@@ -817,10 +817,10 @@ namespace System.Windows.Forms {
         ///       Gets or sets whether the scrollbar is shown at all times.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         Localizable(true),
-        SRDescription(SR.ListBoxScrollIsVisibleDescr)
+        SRDescription(nameof(SR.ListBoxScrollIsVisibleDescr))
         ]
         public bool ScrollAlwaysVisible {
             get {
@@ -858,7 +858,7 @@ namespace System.Windows.Forms {
         Browsable(false),
         Bindable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxSelectedIndexDescr)
+        SRDescription(nameof(SR.ListBoxSelectedIndexDescr))
         ]
         public override int SelectedIndex {
             get {
@@ -939,7 +939,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxSelectedIndicesDescr)
+        SRDescription(nameof(SR.ListBoxSelectedIndicesDescr))
         ]
         public SelectedIndexCollection SelectedIndices {
             get {
@@ -963,7 +963,7 @@ namespace System.Windows.Forms {
         Browsable(false),
         Bindable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxSelectedItemDescr)
+        SRDescription(nameof(SR.ListBoxSelectedItemDescr))
         ]
         public object SelectedItem {
             get {
@@ -995,7 +995,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxSelectedItemsDescr)
+        SRDescription(nameof(SR.ListBoxSelectedItemsDescr))
         ]
         public SelectedObjectCollection SelectedItems {
             get {
@@ -1012,9 +1012,9 @@ namespace System.Windows.Forms {
         ///     values are from the System.Windows.Forms.SelectionMode enumeration.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(SelectionMode.One),
-        SRDescription(SR.ListBoxSelectionModeDescr)
+        SRDescription(nameof(SR.ListBoxSelectionModeDescr))
         ]
         public virtual SelectionMode SelectionMode {
             get {
@@ -1054,9 +1054,9 @@ namespace System.Windows.Forms {
         ///     the list will be sorted alphabetically
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ListBoxSortedDescr)
+        SRDescription(nameof(SR.ListBoxSortedDescr))
         ]
         public bool Sorted {
             get {
@@ -1135,7 +1135,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ListBoxTopIndexDescr)
+        SRDescription(nameof(SR.ListBoxTopIndexDescr))
         ]
         public int TopIndex {
             get {
@@ -1162,9 +1162,9 @@ namespace System.Windows.Forms {
         ///     its strings.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.ListBoxUseTabStopsDescr)
+        SRDescription(nameof(SR.ListBoxUseTabStopsDescr))
         ]
         public bool UseTabStops {
             get {
@@ -1183,8 +1183,8 @@ namespace System.Windows.Forms {
         ///     The integer array should have the tab spaces in the ascending order.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ListBoxCustomTabOffsetsDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ListBoxCustomTabOffsetsDescr)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Browsable(false)
         ]
@@ -1276,7 +1276,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.drawItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
             add {
                 Events.AddHandler(EVENT_DRAWITEM, value);
@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.measureItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
             add {
                 Events.AddHandler(EVENT_MEASUREITEM, value);
@@ -1306,7 +1306,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.selectedIndexChangedEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
                 Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);

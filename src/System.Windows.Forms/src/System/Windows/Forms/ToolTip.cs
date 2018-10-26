@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
     ProvideProperty("ToolTip", typeof(Control)),
     DefaultEvent("Popup"),
     ToolboxItemFilter("System.Windows.Forms"),
-    SRDescription(SR.DescriptionToolTip)
+    SRDescription(nameof(SR.DescriptionToolTip))
     ]
     public class ToolTip : Component, IExtenderProvider {
 
@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRDescription(SR.ToolTipActiveDescr),
+        SRDescription(nameof(SR.ToolTipActiveDescr)),
         DefaultValue(true)
         ]
         public bool Active {
@@ -158,7 +158,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.ToolTipAutomaticDelayDescr),
+        SRDescription(nameof(SR.ToolTipAutomaticDelayDescr)),
         DefaultValue(DEFAULT_DELAY)
         ]
         public int AutomaticDelay {
@@ -188,7 +188,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.ToolTipAutoPopDelayDescr)
+        SRDescription(nameof(SR.ToolTipAutoPopDelayDescr))
         ]
         public int AutoPopDelay {
             get {
@@ -210,7 +210,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRDescription(SR.ToolTipBackColorDescr),
+        SRDescription(nameof(SR.ToolTipBackColorDescr)),
         DefaultValue(typeof(Color),"Info")
         ]
         public Color BackColor {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRDescription(SR.ToolTipForeColorDescr),
+        SRDescription(nameof(SR.ToolTipForeColorDescr)),
         DefaultValue(typeof(Color),"InfoText")
         ]
         public Color ForeColor {
@@ -324,7 +324,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRDescription(SR.ToolTipIsBalloonDescr),
+        SRDescription(nameof(SR.ToolTipIsBalloonDescr)),
         DefaultValue(false)
         ]
         public bool IsBalloon {
@@ -378,7 +378,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.ToolTipInitialDelayDescr)
+        SRDescription(nameof(SR.ToolTipInitialDelayDescr))
         ]
         public int InitialDelay {
             get {
@@ -398,9 +398,9 @@ namespace System.Windows.Forms {
         /// Indicates whether the ToolTip will be drawn by the system or the user.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.ToolTipOwnerDrawDescr) 
+        SRDescription(nameof(SR.ToolTipOwnerDrawDescr)) 
         ]
         public bool OwnerDraw 
         {
@@ -426,7 +426,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.ToolTipReshowDelayDescr)
+        SRDescription(nameof(SR.ToolTipReshowDelayDescr))
         ]
         public int ReshowDelay {
             get {
@@ -449,7 +449,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.ToolTipShowAlwaysDescr)
+        SRDescription(nameof(SR.ToolTipShowAlwaysDescr))
         ]
         public bool ShowAlways {
             get {
@@ -473,7 +473,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRDescription(SR.ToolTipStripAmpersandsDescr),
+        SRDescription(nameof(SR.ToolTipStripAmpersandsDescr)),
         Browsable(true),
         DefaultValue(false)
         ]
@@ -493,10 +493,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(ToolTipIcon.None),
-        SRDescription(SR.ToolTipToolTipIconDescr)
+        SRDescription(nameof(SR.ToolTipToolTipIconDescr))
         ]
         public ToolTipIcon ToolTipIcon {
             get {
@@ -553,7 +553,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(""), 
-        SRDescription(SR.ToolTipTitleDescr)
+        SRDescription(nameof(SR.ToolTipTitleDescr))
         ]
         public string ToolTipTitle
         {
@@ -641,7 +641,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRDescription(SR.ToolTipUseAnimationDescr),
+        SRDescription(nameof(SR.ToolTipUseAnimationDescr)),
         Browsable(true),
         DefaultValue(true)
         ]
@@ -667,7 +667,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRDescription(SR.ToolTipUseFadingDescr),
+        SRDescription(nameof(SR.ToolTipUseFadingDescr)),
         Browsable(true),
         DefaultValue(true)
         ]
@@ -689,7 +689,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Fires in OwnerDraw mode when the tooltip needs to be drawn.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior),SRDescription(SR.ToolTipDrawEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipDrawEventDescr))]
         public event DrawToolTipEventHandler Draw 
         {
             add 
@@ -706,7 +706,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Fires when the tooltip is just about to be shown.</para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior),SRDescription(SR.ToolTipPopupEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipPopupEventDescr))]
         public event PopupEventHandler Popup 
         {
             add 
@@ -1227,7 +1227,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(""),
         Localizable(true),
-        SRDescription(SR.ToolTipToolTipDescr),
+        SRDescription(nameof(SR.ToolTipToolTipDescr)),
         Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
         ]
         public string GetToolTip(Control control) {

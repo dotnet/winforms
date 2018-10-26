@@ -384,9 +384,9 @@ namespace System.Windows.Forms {
             ///       a column header.</para>
             /// </devdoc>
             [
-            SRCategory(SR.CatBehavior),
+            SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(true),
-            SRDescription(SR.DataGridAllowSortingDescr)
+            SRDescription(nameof(SR.DataGridAllowSortingDescr))
             ]
             public bool AllowSorting {
                 get {
@@ -406,8 +406,8 @@ namespace System.Windows.Forms {
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.AlternatingBackColor"]/*' />
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridAlternatingBackColorDescr)
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridAlternatingBackColorDescr))
             ]
             public Color AlternatingBackColor {
                 get {
@@ -460,8 +460,8 @@ namespace System.Windows.Forms {
             ///    <para>Gets or sets the background color of the grid.</para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.ControlBackColorDescr)
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.ControlBackColorDescr))
             ]
             public override Color BackColor {
                 // overrode those properties just to move the BackColor and the ForeColor 
@@ -491,8 +491,8 @@ namespace System.Windows.Forms {
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.ControlForeColorDescr)
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.ControlForeColorDescr))
             ]
             public override Color ForeColor {
                 get {
@@ -539,10 +539,10 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-            SRCategory(SR.CatAppearance),
+            SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(defaultBorderStyle),
             DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-            SRDescription(SR.DataGridBorderStyleDescr)
+            SRDescription(nameof(SR.DataGridBorderStyleDescr))
             ]
             public BorderStyle BorderStyle {
                 get {
@@ -568,7 +568,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnBorderStyleChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnBorderStyleChangedDescr))]
             public event EventHandler BorderStyleChanged {
                 add {
                     Events.AddHandler(EVENT_BORDERSTYLECHANGED, value);
@@ -713,8 +713,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridCaptionBackColorDescr)
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridCaptionBackColorDescr))
             ]
             public Color CaptionBackColor {
                 get {
@@ -753,8 +753,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridCaptionForeColorDescr)
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridCaptionForeColorDescr))
             ]
             public Color CaptionForeColor {
                 get {
@@ -789,10 +789,10 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatAppearance),
+             SRCategory(nameof(SR.CatAppearance)),
              Localizable(true),
              AmbientValue(null),
-             SRDescription(SR.DataGridCaptionFontDescr)
+             SRDescription(nameof(SR.DataGridCaptionFontDescr))
             ]
             public Font CaptionFont {
                 get {
@@ -824,10 +824,10 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatAppearance),
+             SRCategory(nameof(SR.CatAppearance)),
              DefaultValue(""),
              Localizable(true),
-             SRDescription(SR.DataGridCaptionTextDescr)
+             SRDescription(nameof(SR.DataGridCaptionTextDescr))
             ]
             public string CaptionText {
                 get {
@@ -847,8 +847,8 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              DefaultValue(true),
-             SRCategory(SR.CatDisplay),
-             SRDescription(SR.DataGridCaptionVisibleDescr)        
+             SRCategory(nameof(SR.CatDisplay)),
+             SRDescription(nameof(SR.DataGridCaptionVisibleDescr))        
             ]
             public bool CaptionVisible {
                 get {
@@ -870,7 +870,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnCaptionVisibleChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnCaptionVisibleChangedDescr))]
             public event EventHandler CaptionVisibleChanged {
                 add {
                     Events.AddHandler(EVENT_CAPTIONVISIBLECHANGED, value);
@@ -889,7 +889,7 @@ namespace System.Windows.Forms {
             [
              Browsable(false),
              DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-             SRDescription(SR.DataGridCurrentCellDescr)
+             SRDescription(nameof(SR.DataGridCurrentCellDescr))
             ]
             public DataGridCell CurrentCell {
                 get {
@@ -1149,7 +1149,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnCurrentCellChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnCurrentCellChangedDescr))]
             public event EventHandler CurrentCellChanged {
                 add {
                     Events.AddHandler(EVENT_CURRENTCELLCHANGED, value);
@@ -1179,8 +1179,8 @@ namespace System.Windows.Forms {
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.SelectionBackColor"]/*' />
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridSelectionBackColorDescr)
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridSelectionBackColorDescr))
             ]
             public Color SelectionBackColor {
                 get {
@@ -1234,8 +1234,8 @@ namespace System.Windows.Forms {
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridSelectionForeColorDescr)        
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridSelectionForeColorDescr))        
             ]
             public Color SelectionForeColor {
                 get {
@@ -1429,10 +1429,10 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              DefaultValue(null),
-             SRCategory(SR.CatData),
+             SRCategory(nameof(SR.CatData)),
              RefreshProperties(RefreshProperties.Repaint),
              AttributeProvider(typeof(IListSource)),
-             SRDescription(SR.DataGridDataSourceDescr)
+             SRDescription(nameof(SR.DataGridDataSourceDescr))
             ]
             public object DataSource {
                 get {
@@ -1476,7 +1476,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnDataSourceChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnDataSourceChangedDescr))]
             public event EventHandler DataSourceChanged {
                 add {
                     Events.AddHandler(EVENT_DATASOURCECHANGED, value);
@@ -1494,9 +1494,9 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              DefaultValue(null),
-             SRCategory(SR.CatData),
+             SRCategory(nameof(SR.CatData)),
              Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
-             SRDescription(SR.DataGridDataMemberDescr)
+             SRDescription(nameof(SR.DataGridDataMemberDescr))
             ]
             public string DataMember {
                 get {
@@ -1530,7 +1530,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ListManager"]/*' />
             [
              Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-             SRDescription(SR.DataGridListManagerDescr)
+             SRDescription(nameof(SR.DataGridListManagerDescr))
             ]
             internal protected CurrencyManager ListManager {
                 get {
@@ -1716,7 +1716,7 @@ namespace System.Windows.Forms {
             [
              DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
              Browsable(false),
-             SRDescription(SR.DataGridSelectedIndexDescr)         
+             SRDescription(nameof(SR.DataGridSelectedIndexDescr))         
             ]
             public int CurrentRowIndex {
                 get {
@@ -1758,10 +1758,10 @@ namespace System.Windows.Forms {
             ///    <para>Gets the collection of tables for the grid.</para>
             /// </devdoc>
             [
-             SRCategory(SR.CatData),
+             SRCategory(nameof(SR.CatData)),
              DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
              Localizable(true),
-             SRDescription(SR.DataGridGridTablesDescr)
+             SRDescription(nameof(SR.DataGridGridTablesDescr))
             ]
             public GridTableStylesCollection TableStyles {
                 get {
@@ -1792,8 +1792,8 @@ namespace System.Windows.Forms {
              ///    <para>Gets or sets the color of the grid lines.</para>
              /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridGridLineColorDescr)
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridGridLineColorDescr))
             ]
             public Color GridLineColor {
                 get {
@@ -1842,9 +1842,9 @@ namespace System.Windows.Forms {
              ///    </para>
              /// </devdoc>
             [
-             SRCategory(SR.CatAppearance),
+             SRCategory(nameof(SR.CatAppearance)),
              DefaultValue(defaultGridLineStyle),
-             SRDescription(SR.DataGridGridLineStyleDescr)
+             SRDescription(nameof(SR.DataGridGridLineStyleDescr))
             ]
             public DataGridLineStyle GridLineStyle {
                 get {
@@ -1881,8 +1881,8 @@ namespace System.Windows.Forms {
              /// </devdoc>
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
              DefaultValue(defaultParentRowsLabelStyle),
-             SRCategory(SR.CatDisplay),
-             SRDescription(SR.DataGridParentRowsLabelStyleDescr)
+             SRCategory(nameof(SR.CatDisplay)),
+             SRDescription(nameof(SR.DataGridParentRowsLabelStyleDescr))
             ]
             public DataGridParentRowsLabelStyle ParentRowsLabelStyle {
                 get {
@@ -1911,7 +1911,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnParentRowsLabelStyleChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnParentRowsLabelStyleChangedDescr))]
             public event EventHandler ParentRowsLabelStyleChanged {
                 add {
                     Events.AddHandler(EVENT_PARENTROWSLABELSTYLECHANGED, value);
@@ -1935,7 +1935,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              Browsable(false),
-             SRDescription(SR.DataGridFirstVisibleColumnDescr)
+             SRDescription(nameof(SR.DataGridFirstVisibleColumnDescr))
             ]
             public int FirstVisibleColumn {
                 get {
@@ -1951,8 +1951,8 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              DefaultValue(false),
-             SRCategory(SR.CatAppearance),
-             SRDescription(SR.DataGridFlatModeDescr)
+             SRCategory(nameof(SR.CatAppearance)),
+             SRDescription(nameof(SR.DataGridFlatModeDescr))
             ]
             public bool FlatMode {
                 get {
@@ -1973,7 +1973,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnFlatModeChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnFlatModeChangedDescr))]
             public event EventHandler FlatModeChanged {
                 add {
                     Events.AddHandler(EVENT_FLATMODECHANGED, value);
@@ -1991,8 +1991,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridHeaderBackColorDescr)         
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridHeaderBackColorDescr))         
             ]
             public Color HeaderBackColor {
                 get {
@@ -2069,8 +2069,8 @@ namespace System.Windows.Forms {
             ///    <para>Gets or sets the background color of the grid.</para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridBackgroundColorDescr)         
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridBackgroundColorDescr))         
             ]
             public Color BackgroundColor {
                 get {
@@ -2099,7 +2099,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnBackgroundColorChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnBackgroundColorChangedDescr))]
             public event EventHandler BackgroundColorChanged {
                 add {
                     Events.AddHandler(EVENT_BACKGROUNDCOLORCHANGED, value);
@@ -2116,8 +2116,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatAppearance),
-             SRDescription(SR.DataGridHeaderFontDescr)
+             SRCategory(nameof(SR.CatAppearance)),
+             SRDescription(nameof(SR.DataGridHeaderFontDescr))
             ]
             public Font HeaderFont {
                 get {
@@ -2168,8 +2168,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridHeaderForeColorDescr)         
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridHeaderForeColorDescr))         
             ]
             public Color HeaderForeColor {
                 get {
@@ -2306,7 +2306,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             /// </devdoc>
             [
-             SRDescription(SR.DataGridHorizScrollBarDescr)        
+             SRDescription(nameof(SR.DataGridHorizScrollBarDescr))        
             ]
             protected ScrollBar HorizScrollBar {
                 get {
@@ -2342,8 +2342,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridLinkColorDescr)
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridLinkColorDescr))
             ]
             public Color LinkColor {
                 get {
@@ -2391,8 +2391,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRDescription(SR.DataGridLinkHoverColorDescr),
-             SRCategory(SR.CatColors),
+             SRDescription(nameof(SR.DataGridLinkHoverColorDescr)),
+             SRCategory(nameof(SR.CatColors)),
              Browsable(false),
              EditorBrowsable(EditorBrowsableState.Never)
  
@@ -2451,8 +2451,8 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              DefaultValue(true),
-             SRDescription(SR.DataGridNavigationModeDescr),
-             SRCategory(SR.CatBehavior)
+             SRDescription(nameof(SR.DataGridNavigationModeDescr)),
+             SRCategory(nameof(SR.CatBehavior))
             ]
             public bool AllowNavigation {
                 get {
@@ -2477,7 +2477,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnNavigationModeChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnNavigationModeChangedDescr))]
             public event EventHandler AllowNavigationChanged {
                 add {
                     Events.AddHandler(EVENT_ALLOWNAVIGATIONCHANGED, value);
@@ -2586,8 +2586,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridParentRowsBackColorDescr)
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridParentRowsBackColorDescr))
             ]
             public Color ParentRowsBackColor {
                 get {
@@ -2630,8 +2630,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatColors),
-             SRDescription(SR.DataGridParentRowsForeColorDescr)         
+             SRCategory(nameof(SR.CatColors)),
+             SRDescription(nameof(SR.DataGridParentRowsForeColorDescr))         
             ]
             public Color ParentRowsForeColor {
                 get {
@@ -2676,8 +2676,8 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              DefaultValue(defaultPreferredColumnWidth),
-             SRCategory(SR.CatLayout),
-             SRDescription(SR.DataGridPreferredColumnWidthDescr),
+             SRCategory(nameof(SR.CatLayout)),
+             SRDescription(nameof(SR.DataGridPreferredColumnWidthDescr)),
              TypeConverter(typeof(DataGridPreferredColumnWidthTypeConverter))
             ]
             public int PreferredColumnWidth {
@@ -2700,8 +2700,8 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatLayout),
-             SRDescription(SR.DataGridPreferredRowHeightDescr)
+             SRCategory(nameof(SR.CatLayout)),
+             SRDescription(nameof(SR.DataGridPreferredRowHeightDescr))
             ]
             public int PreferredRowHeight {
                 get {
@@ -2734,8 +2734,8 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              DefaultValue(false),
-             SRCategory(SR.CatBehavior),
-             SRDescription(SR.DataGridReadOnlyDescr)
+             SRCategory(nameof(SR.CatBehavior)),
+             SRDescription(nameof(SR.DataGridReadOnlyDescr))
             ]
             public bool ReadOnly {
                 get {
@@ -2783,7 +2783,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnReadOnlyChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnReadOnlyChangedDescr))]
             public event EventHandler ReadOnlyChanged {
                 add {
                     Events.AddHandler(EVENT_READONLYCHANGED, value);
@@ -2801,9 +2801,9 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatDisplay),
+             SRCategory(nameof(SR.CatDisplay)),
              DefaultValue(true),
-             SRDescription(SR.DataGridColumnHeadersVisibleDescr)
+             SRDescription(nameof(SR.DataGridColumnHeadersVisibleDescr))
             ]
             public bool ColumnHeadersVisible {
                 get {
@@ -2827,9 +2827,9 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatDisplay),
+             SRCategory(nameof(SR.CatDisplay)),
              DefaultValue(true),
-             SRDescription(SR.DataGridParentRowsVisibleDescr)        
+             SRDescription(nameof(SR.DataGridParentRowsVisibleDescr))        
             ]
             public bool ParentRowsVisible {
                 get {
@@ -2854,7 +2854,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
-            [SRCategory(SR.CatPropertyChanged), SRDescription(SR.DataGridOnParentRowsVisibleChangedDescr)]
+            [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnParentRowsVisibleChangedDescr))]
             public event EventHandler ParentRowsVisibleChanged {
                 add {
                     Events.AddHandler(EVENT_PARENTROWSVISIBLECHANGED, value);
@@ -2876,9 +2876,9 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </devdoc>
             [
-             SRCategory(SR.CatDisplay),
+             SRCategory(nameof(SR.CatDisplay)),
              DefaultValue(true),
-             SRDescription(SR.DataGridRowHeadersVisibleDescr)
+             SRDescription(nameof(SR.DataGridRowHeadersVisibleDescr))
             ]
             public bool RowHeadersVisible {
                 get {
@@ -2898,9 +2898,9 @@ namespace System.Windows.Forms {
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
             [
-             SRCategory(SR.CatLayout),
+             SRCategory(nameof(SR.CatLayout)),
              DefaultValue(defaultRowHeaderWidth),
-             SRDescription(SR.DataGridRowHeaderWidthDescr)
+             SRDescription(nameof(SR.DataGridRowHeaderWidthDescr))
             ]
             public int RowHeaderWidth {
                 get {
@@ -2961,7 +2961,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-             SRDescription(SR.DataGridVertScrollBarDescr)
+             SRDescription(nameof(SR.DataGridVertScrollBarDescr))
             ]
             protected ScrollBar VertScrollBar {
                 get {
@@ -2977,7 +2977,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              Browsable(false),
-             SRDescription(SR.DataGridVisibleColumnCountDescr)
+             SRDescription(nameof(SR.DataGridVisibleColumnCountDescr))
             ]
             public int VisibleColumnCount {
                 get {
@@ -2993,7 +2993,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
              Browsable(false),
-             SRDescription(SR.DataGridVisibleRowCountDescr)
+             SRDescription(nameof(SR.DataGridVisibleRowCountDescr))
             ]
             public int VisibleRowCount {
                 get {
@@ -4570,7 +4570,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>Occurs when the user navigates to a new table.</para>
             /// </devdoc>
-            [SRCategory(SR.CatAction), SRDescription(SR.DataGridNavigateEventDescr)]
+            [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DataGridNavigateEventDescr))]
             public event NavigateEventHandler Navigate {
                 add {
                     onNavigate += value;
@@ -4599,7 +4599,7 @@ namespace System.Windows.Forms {
             ///       event.
             ///    </para>
             /// </devdoc>
-            [SRCategory(SR.CatAction), SRDescription(SR.DataGridNodeClickEventDescr)]
+            [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DataGridNodeClickEventDescr))]
             internal event EventHandler NodeClick {
                 add {
                     Events.AddHandler(EVENT_NODECLICKED, value);
@@ -4615,7 +4615,7 @@ namespace System.Windows.Forms {
             ///       Occurs when the user scrolls the <see cref='System.Windows.Forms.DataGrid'/> control.
             ///    </para>
             /// </devdoc>
-            [SRCategory(SR.CatAction), SRDescription(SR.DataGridScrollEventDescr)]
+            [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DataGridScrollEventDescr))]
             public event EventHandler Scroll {
                 add {
                     Events.AddHandler(EVENT_SCROLL, value);
@@ -8516,8 +8516,8 @@ namespace System.Windows.Forms {
             ///    <para>Occurs when the BackButton is clicked.</para>
             /// </devdoc>
             [
-             SRCategory(SR.CatAction),
-             SRDescription(SR.DataGridBackButtonClickDescr)
+             SRCategory(nameof(SR.CatAction)),
+             SRDescription(nameof(SR.DataGridBackButtonClickDescr))
             ]
             public event EventHandler BackButtonClick {
                 add {
@@ -8535,8 +8535,8 @@ namespace System.Windows.Forms {
             ///    Occurs when the Down button is clicked.
             /// </devdoc>
             [
-             SRCategory(SR.CatAction),
-             SRDescription(SR.DataGridDownButtonClickDescr)
+             SRCategory(nameof(SR.CatAction)),
+             SRDescription(nameof(SR.DataGridDownButtonClickDescr))
             ]
             public event EventHandler ShowParentDetailsButtonClick {
                 add {

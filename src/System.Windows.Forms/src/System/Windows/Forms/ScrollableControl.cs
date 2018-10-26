@@ -122,10 +122,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
         DefaultValue(false),
-        SRDescription(SR.FormAutoScrollDescr)
+        SRDescription(nameof(SR.FormAutoScrollDescr))
         ]
         public virtual bool AutoScroll {
             get {
@@ -151,9 +151,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
-        SRDescription(SR.FormAutoScrollMarginDescr)
+        SRDescription(nameof(SR.FormAutoScrollMarginDescr))
         ]
         public Size AutoScrollMargin {
             get {
@@ -173,10 +173,10 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the location of the auto-scroll position.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.FormAutoScrollPositionDescr)        
+        SRDescription(nameof(SR.FormAutoScrollPositionDescr))        
         ]
         public Point AutoScrollPosition {
             get {
@@ -199,9 +199,9 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the mimimum size of the auto-scroll.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
-        SRDescription(SR.FormAutoScrollMinSizeDescr)
+        SRDescription(nameof(SR.FormAutoScrollMinSizeDescr))
         ]
         public Size AutoScrollMinSize {
             get {
@@ -311,8 +311,8 @@ namespace System.Windows.Forms {
         ///    <para>Gets the Horizontal Scroll bar for this ScrollableControl.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
-        SRDescription(SR.ScrollableControlHorizontalScrollDescr),
+        SRCategory(nameof(SR.CatLayout)),
+        SRDescription(nameof(SR.ScrollableControlHorizontalScrollDescr)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public HScrollProperties HorizontalScroll {
@@ -350,8 +350,8 @@ namespace System.Windows.Forms {
         ///    <para>Gets the Veritcal Scroll bar for this ScrollableControl.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
-        SRDescription(SR.ScrollableControlVerticalScrollDescr),
+        SRCategory(nameof(SR.CatLayout)),
+        SRDescription(nameof(SR.ScrollableControlVerticalScrollDescr)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public VScrollProperties VerticalScroll {
@@ -997,7 +997,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the scroll box has been moved by either a mouse or keyboard action.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ScrollBarOnScrollDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
         public event ScrollEventHandler Scroll {
             add {
                 Events.AddHandler(EVENT_SCROLL, value);
@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
             RefreshProperties(RefreshProperties.All),
-            SRDescription(SR.PaddingAllDescr)
+            SRDescription(nameof(SR.PaddingAllDescr))
             ]
             public int All {
                 get { 
@@ -1574,7 +1574,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
             RefreshProperties(RefreshProperties.All),
-            SRDescription(SR.PaddingBottomDescr)
+            SRDescription(nameof(SR.PaddingBottomDescr))
             ]
             public int Bottom {
                 get { 
@@ -1604,7 +1604,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
             RefreshProperties(RefreshProperties.All),
-            SRDescription(SR.PaddingLeftDescr)
+            SRDescription(nameof(SR.PaddingLeftDescr))
             ]
             public int Left {
                  get { 
@@ -1634,7 +1634,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
             RefreshProperties(RefreshProperties.All),
-            SRDescription(SR.PaddingRightDescr)
+            SRDescription(nameof(SR.PaddingRightDescr))
             ]
             public int Right {
                  get { 
@@ -1664,7 +1664,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
             RefreshProperties(RefreshProperties.All),
-            SRDescription(SR.PaddingTopDescr)
+            SRDescription(nameof(SR.PaddingTopDescr))
             ]
             public int Top {
                  get { 

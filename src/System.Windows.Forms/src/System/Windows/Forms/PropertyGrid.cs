@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
-    [SRDescription(SR.DescriptionPropertyGrid)]
+    [SRDescription(nameof(SR.DescriptionPropertyGrid))]
     public class PropertyGrid : ContainerControl, IComPropertyBrowser, UnsafeNativeMethods.IPropertyNotifySink {
 
         private DocComment                          doccomment;
@@ -492,7 +492,7 @@ namespace System.Windows.Forms {
         /// expose verbs can show commands.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        SRDescription(SR.PropertyGridCanShowCommandsDesc)]
+        SRDescription(nameof(SR.PropertyGridCanShowCommandsDesc))]
         public virtual bool CanShowCommands {
             get {
                 return hotcommands.WouldBeVisible;
@@ -504,8 +504,8 @@ namespace System.Windows.Forms {
         /// The text used color for category headings. The background color is determined by the LineColor property.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridCategoryForeColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridCategoryForeColorDesc)),
         DefaultValue(typeof(Color), "ControlText")
         ]
         public Color CategoryForeColor {
@@ -525,8 +525,8 @@ namespace System.Windows.Forms {
         /// The background color for the hot commands region.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridCommandsBackColorDesc)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridCommandsBackColorDesc))
         ]
         public Color CommandsBackColor {
             get {
@@ -543,8 +543,8 @@ namespace System.Windows.Forms {
         /// The forground color for the hot commands region.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridCommandsForeColorDesc)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridCommandsForeColorDesc))
         ]
         public Color CommandsForeColor {
             get {
@@ -561,8 +561,8 @@ namespace System.Windows.Forms {
         /// The link color for the hot commands region.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridCommandsLinkColorDesc)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridCommandsLinkColorDesc))
         ]
         public Color CommandsLinkColor {
             get {
@@ -578,8 +578,8 @@ namespace System.Windows.Forms {
         /// The active link color for the hot commands region.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridCommandsActiveLinkColorDesc)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridCommandsActiveLinkColorDesc))
         ]
         public Color CommandsActiveLinkColor {
             get {
@@ -595,8 +595,8 @@ namespace System.Windows.Forms {
         /// The color for the hot commands region when the link is disabled.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridCommandsDisabledLinkColorDesc)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridCommandsDisabledLinkColorDesc))
         ]
         public Color CommandsDisabledLinkColor {
             get {
@@ -612,8 +612,8 @@ namespace System.Windows.Forms {
         ///    <para>The border color for the hot commands region</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridCommandsBorderColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridCommandsBorderColorDesc)),
         DefaultValue(typeof(Color), "ControlDark")
         ]
         public Color CommandsBorderColor {
@@ -642,9 +642,9 @@ namespace System.Windows.Forms {
         /// that expose verbs.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
-        SRDescription(SR.PropertyGridCommandsVisibleIfAvailable)
+        SRDescription(nameof(SR.PropertyGridCommandsVisibleIfAvailable))
         ]
         public virtual bool CommandsVisibleIfAvailable {
             get {
@@ -783,8 +783,8 @@ namespace System.Windows.Forms {
         /// The background color for the help region.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridHelpBackColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridHelpBackColorDesc)),
         DefaultValue(typeof(Color), "Control")
         ]
         public Color HelpBackColor {
@@ -801,8 +801,8 @@ namespace System.Windows.Forms {
         /// The forground color for the help region.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridHelpForeColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridHelpForeColorDesc)),
         DefaultValue(typeof(Color), "ControlText")
         ]
         public Color HelpForeColor {
@@ -819,8 +819,8 @@ namespace System.Windows.Forms {
         ///    <para>The border color for the help region</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridHelpBorderColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridHelpBorderColorDesc)),
         DefaultValue(typeof(Color), "ControlDark")
         ]
         public Color HelpBorderColor {
@@ -837,10 +837,10 @@ namespace System.Windows.Forms {
         /// Sets or gets the visiblity state of the help pane.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.PropertyGridHelpVisibleDesc)
+        SRDescription(nameof(SR.PropertyGridHelpVisibleDesc))
         ]
         public virtual bool HelpVisible {
             get {
@@ -861,8 +861,8 @@ namespace System.Windows.Forms {
         ///    <para>Background color for Highlighted text.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridSelectedItemWithFocusBackColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusBackColorDesc)),
         DefaultValue(typeof(Color), "Highlight")
         ]
         public Color SelectedItemWithFocusBackColor {
@@ -883,8 +883,8 @@ namespace System.Windows.Forms {
         ///    <para>Foreground color for Highlighted (selected) text.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridSelectedItemWithFocusForeColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusForeColorDesc)),
         DefaultValue(typeof(Color), "HighlightText")
         ]
         public Color SelectedItemWithFocusForeColor {
@@ -905,8 +905,8 @@ namespace System.Windows.Forms {
         ///    <para>Foreground color for disabled text in the Grid View</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridDisabledItemForeColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridDisabledItemForeColorDesc)),
         DefaultValue(typeof(Color), "GrayText")
         ]
         public Color DisabledItemForeColor {
@@ -924,8 +924,8 @@ namespace System.Windows.Forms {
         ///    <para>Color for the horizontal splitter line separating property categories.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridCategorySplitterColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridCategorySplitterColorDesc)),
         DefaultValue(typeof(Color), "Control")
         ]
         public Color CategorySplitterColor {
@@ -945,8 +945,8 @@ namespace System.Windows.Forms {
         ///    <para>Enable/Disable use of VisualStyle glyph for PropertyGrid node expansion.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridCanShowVisualStyleGlyphsDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridCanShowVisualStyleGlyphsDesc)),
         DefaultValue(true)
         ]
         public bool CanShowVisualStyleGlyphs {
@@ -974,8 +974,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridLineColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridLineColorDesc)),
         DefaultValue(typeof(Color), "InactiveBorder")
         ]
         public Color LineColor {
@@ -1026,9 +1026,9 @@ namespace System.Windows.Forms {
         /// PropertySort.Categorized or PropertySort.Alphabetical.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(PropertySort.CategorizedAlphabetical),
-        SRDescription(SR.PropertyGridPropertySortDesc)
+        SRDescription(nameof(SR.PropertyGridPropertySortDesc))
         ]
         public PropertySort PropertySort {
             get {
@@ -1095,8 +1095,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(null),
-        SRDescription(SR.PropertyGridSelectedObjectDesc),
-        SRCategory(SR.CatBehavior),
+        SRDescription(nameof(SR.PropertyGridSelectedObjectDesc)),
+        SRCategory(nameof(SR.CatBehavior)),
         TypeConverter(typeof(SelectedObjectConverter))
         ]
         public Object SelectedObject {
@@ -1455,8 +1455,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridLargeButtonsDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridLargeButtonsDesc)),
         DefaultValue(false)
         ]
         public bool LargeButtons {
@@ -1493,9 +1493,9 @@ namespace System.Windows.Forms {
         /// Sets or gets the visiblity state of the toolStrip.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
-        SRDescription(SR.PropertyGridToolbarVisibleDesc)
+        SRDescription(nameof(SR.PropertyGridToolbarVisibleDesc))
         ]
         public virtual bool ToolbarVisible {
             get {
@@ -1535,8 +1535,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridViewBackColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridViewBackColorDesc)),
         DefaultValue(typeof(Color), "Window")
         ]
         public Color ViewBackColor {
@@ -1554,8 +1554,8 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridViewForeColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridViewForeColorDesc)),
         DefaultValue(typeof(Color), "WindowText")
         ]
         public Color ViewForeColor {
@@ -1574,8 +1574,8 @@ namespace System.Windows.Forms {
         ///    <para>Border color for the property grid view.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.PropertyGridViewBorderColorDesc),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.PropertyGridViewBorderColorDesc)),
         DefaultValue(typeof(Color), "ControlDark")
         ]
         public Color ViewBorderColor {
@@ -1702,7 +1702,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyValueChanged"]/*' />
         /// <devdoc> Event that is fired when a property value is modified.</devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.PropertyGridPropertyValueChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
         public event PropertyValueChangedEventHandler PropertyValueChanged {
             add {
                 Events.AddHandler(EventPropertyValueChanged, value);
@@ -1725,7 +1725,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabChanged"]/*' />
         /// <devdoc> Event that is fired when the current view tab is changed, such as changing from Properties to Events</devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.PropertyGridPropertyTabchangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged {
             add {
                 Events.AddHandler(EventPropertyTabChanged, value);
@@ -1737,7 +1737,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertySortChanged"]/*' />
         /// <devdoc> Event that is fired when the sort mode is changed.</devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.PropertyGridPropertySortChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged {
             add {
                 Events.AddHandler(EventPropertySortChanged, value);
@@ -1749,7 +1749,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedGridItemChanged"]/*' />
         /// <devdoc> Event that is fired when the selected GridItem is changed</devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.PropertyGridSelectedGridItemChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged {
             add {
                 Events.AddHandler(EventSelectedGridItemChanged, value);
@@ -1763,7 +1763,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.PropertyGridSelectedObjectsChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
         public event EventHandler SelectedObjectsChanged {
             add {
                 Events.AddHandler(EventSelectedObjectsChanged, value);
@@ -4638,8 +4638,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.UseCompatibleTextRenderingDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public bool UseCompatibleTextRendering {
             get{

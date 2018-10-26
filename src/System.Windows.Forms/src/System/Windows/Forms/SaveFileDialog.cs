@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [
     Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionSaveFileDialog)
+    SRDescription(nameof(SR.DescriptionSaveFileDialog))
     ]
     public sealed class SaveFileDialog : FileDialog {
 
@@ -39,9 +39,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.SaveFileDialogCreatePrompt)
+        SRDescription(nameof(SR.SaveFileDialogCreatePrompt))
         ]
         public bool CreatePrompt {
             get {
@@ -62,9 +62,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.SaveFileDialogOverWritePrompt)
+        SRDescription(nameof(SR.SaveFileDialogOverWritePrompt))
         ]
         public bool OverwritePrompt {
             get {

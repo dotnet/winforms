@@ -93,7 +93,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     The text displayed in the group header.
         /// </devdoc>
-        [SRCategory(SR.CatAppearance)]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string Header {
             get
             {
@@ -117,7 +117,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
             DefaultValue(HorizontalAlignment.Left),
-            SRCategory(SR.CatAppearance)
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public HorizontalAlignment HeaderAlignment {
             get
@@ -189,8 +189,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Name"]/*' />
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ListViewGroupNameDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ListViewGroupNameDescr)),
         Browsable(true),
         DefaultValue("")
         ]
@@ -209,10 +209,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]

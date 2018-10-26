@@ -54,8 +54,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(SR.CatData),
-        SRDescription(SR.ToolStripDropDownDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.ToolStripDropDownDescr))
         ]
         public ToolStripDropDown DropDown {
             get {               
@@ -102,8 +102,8 @@ namespace System.Windows.Forms {
         }
 
         [Browsable(false)]
-        [SRDescription(SR.ToolStripDropDownItemDropDownDirectionDescr)]
-        [SRCategory(SR.CatBehavior)]
+        [SRDescription(nameof(SR.ToolStripDropDownItemDropDownDirectionDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         public ToolStripDropDownDirection DropDownDirection {
             get { 
                 if (toolStripDropDownDirection == ToolStripDropDownDirection.Default) {
@@ -172,8 +172,8 @@ namespace System.Windows.Forms {
         /// Occurs when the dropdown is closed
         /// </devdoc>
         [
-        SRCategory(SR.CatAction),
-        SRDescription(SR.ToolStripDropDownClosedDecr)
+        SRCategory(nameof(SR.CatAction)),
+        SRDescription(nameof(SR.ToolStripDropDownClosedDecr))
         ]
         public event EventHandler DropDownClosed {
             add {
@@ -199,8 +199,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WinBarPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpening"]/*' />
         [
-        SRCategory(SR.CatAction),
-        SRDescription(SR.ToolStripDropDownOpeningDescr)
+        SRCategory(nameof(SR.CatAction)),
+        SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))
         ]
         public event EventHandler DropDownOpening {
             add {
@@ -215,8 +215,8 @@ namespace System.Windows.Forms {
         /// Occurs when the dropdown is opened
         /// </devdoc>
         [
-        SRCategory(SR.CatAction),
-        SRDescription(SR.ToolStripDropDownOpenedDescr)
+        SRCategory(nameof(SR.CatAction)),
+        SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))
         ]
         public event EventHandler DropDownOpened {
             add {
@@ -233,8 +233,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRCategory(SR.CatData),
-        SRDescription(SR.ToolStripDropDownItemsDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.ToolStripDropDownItemsDescr))
         ]
         public ToolStripItemCollection DropDownItems {
             get {
@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Occurs when the dropdown is opened
         /// </devdoc>
-        [SRCategory(SR.CatAction)]
+        [SRCategory(nameof(SR.CatAction))]
         public event ToolStripItemClickedEventHandler DropDownItemClicked {
             add {
                 Events.AddHandler(EventDropDownItemClicked, value);

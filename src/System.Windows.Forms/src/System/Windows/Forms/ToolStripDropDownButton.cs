@@ -81,8 +81,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton.ShowDropDownArrow"]/*' />
         [
         DefaultValue(true),
-        SRDescription(SR.ToolStripDropDownButtonShowDropDownArrowDescr),
-        SRCategory(SR.CatAppearance)
+        SRDescription(nameof(SR.ToolStripDropDownButtonShowDropDownArrowDescr)),
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public bool ShowDropDownArrow {
             get {

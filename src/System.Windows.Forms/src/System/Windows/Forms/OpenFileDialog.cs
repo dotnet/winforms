@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     ///       cannot be inherited.
     ///    </para>
     /// </devdoc>
-    [SRDescription(SR.DescriptionOpenFileDialog)]
+    [SRDescription(nameof(SR.DescriptionOpenFileDialog))]
     public sealed class OpenFileDialog : FileDialog
     {
 
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         [
         DefaultValue(true),
-        SRDescription(SR.OFDcheckFileExistsDescr)
+        SRDescription(nameof(SR.OFDcheckFileExistsDescr))
         ]
         public override bool CheckFileExists
         {
@@ -60,9 +60,9 @@ namespace System.Windows.Forms
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.OFDmultiSelectDescr)
+        SRDescription(nameof(SR.OFDmultiSelectDescr))
         ]
         public bool Multiselect
         {
@@ -84,9 +84,9 @@ namespace System.Windows.Forms
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.OFDreadOnlyCheckedDescr)
+        SRDescription(nameof(SR.OFDreadOnlyCheckedDescr))
         ]
         public bool ReadOnlyChecked
         {
@@ -107,9 +107,9 @@ namespace System.Windows.Forms
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.OFDshowReadOnlyDescr)
+        SRDescription(nameof(SR.OFDshowReadOnlyDescr))
         ]
         public bool ShowReadOnly
         {

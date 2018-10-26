@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     DefaultEvent("Opening"),
-    SRDescription(SR.DescriptionContextMenuStrip)
+    SRDescription(nameof(SR.DescriptionContextMenuStrip))
     ]
     public class ContextMenuStrip : ToolStripDropDownMenu {
 
@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ContextMenuStripSourceControlDescr)
+        SRDescription(nameof(SR.ContextMenuStripSourceControlDescr))
         ]
         public Control SourceControl {
             [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]

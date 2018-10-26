@@ -304,9 +304,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(10),
-        SRDescription(SR.ScrollBarLargeChangeDescr),
+        SRDescription(nameof(SR.ScrollBarLargeChangeDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int LargeChange {
@@ -338,9 +338,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(100),
-        SRDescription(SR.ScrollBarMaximumDescr),
+        SRDescription(nameof(SR.ScrollBarMaximumDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int Maximum {
@@ -367,9 +367,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
-        SRDescription(SR.ScrollBarMinimumDescr),
+        SRDescription(nameof(SR.ScrollBarMinimumDescr)),
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int Minimum {
@@ -399,9 +399,9 @@ namespace System.Windows.Forms {
         /// </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(1),
-        SRDescription(SR.ScrollBarSmallChangeDescr)
+        SRDescription(nameof(SR.ScrollBarSmallChangeDescr))
         ]
         public int SmallChange {
             get {
@@ -478,10 +478,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
         Bindable(true),
-        SRDescription(SR.ScrollBarValueDescr)
+        SRDescription(nameof(SR.ScrollBarValueDescr))
         ]
         public int Value {
             get {
@@ -502,11 +502,11 @@ namespace System.Windows.Forms {
         /// <summary>
         /// Get/Set flag to let scrollbar scale according to the DPI of the window.
         /// </summary>
-        [SRCategory(SR.CatBehavior),
+        [SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         Browsable(true), 
         EditorBrowsable(EditorBrowsableState.Always),
-        SRDescription(SR.ControlDpiChangeScale)]
+        SRDescription(nameof(SR.ControlDpiChangeScale))]
         public bool ScaleScrollBarForDpiChange {
             get {
                 return scaleScrollBarForDpiChange;
@@ -624,7 +624,7 @@ namespace System.Windows.Forms {
         ///       moved by either a mouse or keyboard action.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.ScrollBarOnScrollDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
         public event ScrollEventHandler Scroll {
             add {
                 Events.AddHandler(EVENT_SCROLL, value);
@@ -641,7 +641,7 @@ namespace System.Windows.Forms {
         ///    <see cref='System.Windows.Forms.ScrollBar.OnScroll'/> event or programatically.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.valueChangedEventDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
             add {
                 Events.AddHandler(EVENT_VALUECHANGED, value);

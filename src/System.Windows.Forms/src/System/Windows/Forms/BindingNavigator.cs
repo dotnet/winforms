@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     DefaultProperty("BindingSource"),
     DefaultEvent("RefreshItems"),
     Designer("System.Windows.Forms.Design.BindingNavigatorDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionBindingNavigator)
+    SRDescription(nameof(SR.DescriptionBindingNavigator))
     ]
     /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator"]/* />
     public class BindingNavigator : ToolStrip, ISupportInitialize {
@@ -253,8 +253,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(null),
-        SRCategory(SR.CatData),
-        SRDescription(SR.BindingNavigatorBindingSourcePropDescr),
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.BindingNavigatorBindingSourcePropDescr)),
         TypeConverter(typeof(ReferenceConverter)),
         SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")
         ]
@@ -274,8 +274,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(SR.CatItems),
-        SRDescription(SR.BindingNavigatorMoveFirstItemPropDescr)
+        SRCategory(nameof(SR.CatItems)),
+        SRDescription(nameof(SR.BindingNavigatorMoveFirstItemPropDescr))
         ]
         public ToolStripItem MoveFirstItem {
             get {
@@ -296,8 +296,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(SR.CatItems),
-        SRDescription(SR.BindingNavigatorMovePreviousItemPropDescr)
+        SRCategory(nameof(SR.CatItems)),
+        SRDescription(nameof(SR.BindingNavigatorMovePreviousItemPropDescr))
         ]
         public ToolStripItem MovePreviousItem {
             get {
@@ -320,8 +320,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(SR.CatItems),
-        SRDescription(SR.BindingNavigatorMoveNextItemPropDescr)
+        SRCategory(nameof(SR.CatItems)),
+        SRDescription(nameof(SR.BindingNavigatorMoveNextItemPropDescr))
         ]
         public ToolStripItem MoveNextItem {
             get {
@@ -342,8 +342,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(SR.CatItems),
-        SRDescription(SR.BindingNavigatorMoveLastItemPropDescr)
+        SRCategory(nameof(SR.CatItems)),
+        SRDescription(nameof(SR.BindingNavigatorMoveLastItemPropDescr))
         ]
         public ToolStripItem MoveLastItem {
             get {
@@ -364,8 +364,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(SR.CatItems),
-        SRDescription(SR.BindingNavigatorAddNewItemPropDescr)
+        SRCategory(nameof(SR.CatItems)),
+        SRDescription(nameof(SR.BindingNavigatorAddNewItemPropDescr))
         ]
         public ToolStripItem AddNewItem {
             get {
@@ -390,8 +390,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(SR.CatItems),
-        SRDescription(SR.BindingNavigatorDeleteItemPropDescr)
+        SRCategory(nameof(SR.CatItems)),
+        SRDescription(nameof(SR.BindingNavigatorDeleteItemPropDescr))
         ]
         public ToolStripItem DeleteItem {
             get {
@@ -417,8 +417,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(SR.CatItems),
-        SRDescription(SR.BindingNavigatorPositionItemPropDescr)
+        SRCategory(nameof(SR.CatItems)),
+        SRDescription(nameof(SR.BindingNavigatorPositionItemPropDescr))
         ]
         public ToolStripItem PositionItem {
             get {
@@ -439,8 +439,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(SR.CatItems),
-        SRDescription(SR.BindingNavigatorCountItemPropDescr)
+        SRCategory(nameof(SR.CatItems)),
+        SRDescription(nameof(SR.BindingNavigatorCountItemPropDescr))
         ]
         public ToolStripItem CountItem {
             get {
@@ -460,8 +460,8 @@ namespace System.Windows.Forms {
         ///     Formatting to apply to count displayed in the CountItem tool strip item.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.BindingNavigatorCountItemFormatPropDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.BindingNavigatorCountItemFormatPropDescr))
         ]
         public String CountItemFormat {
             get {
@@ -482,8 +482,8 @@ namespace System.Windows.Forms {
         ///     refreshed to reflect the current state of the data.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.BindingNavigatorRefreshItemsEventDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.BindingNavigatorRefreshItemsEventDescr))
         ]
         public event EventHandler RefreshItems {
             add {

@@ -26,7 +26,7 @@ namespace System.Windows.Forms
     DefaultEvent("HelpRequest"),
     DefaultProperty("SelectedPath"),
     Designer("System.Windows.Forms.Design.FolderBrowserDialogDesigner, " + AssemblyRef.SystemDesign),    
-    SRDescription(SR.DescriptionFolderBrowserDialog)
+    SRDescription(nameof(SR.DescriptionFolderBrowserDialog))
     ]
     public sealed class FolderBrowserDialog : CommonDialog
     {
@@ -86,8 +86,8 @@ namespace System.Windows.Forms
         Browsable(true),
         DefaultValue(true),
         Localizable(false),
-        SRCategory(SR.CatFolderBrowsing),
-        SRDescription(SR.FolderBrowserDialogShowNewFolderButton)
+        SRCategory(nameof(SR.CatFolderBrowsing)),
+        SRDescription(nameof(SR.FolderBrowserDialogShowNewFolderButton))
         ]
         public bool ShowNewFolderButton
         {
@@ -111,8 +111,8 @@ namespace System.Windows.Forms
         DefaultValue(""),
         Editor("System.Windows.Forms.Design.SelectedPathEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Localizable(true),
-        SRCategory(SR.CatFolderBrowsing),
-        SRDescription(SR.FolderBrowserDialogSelectedPath)
+        SRCategory(nameof(SR.CatFolderBrowsing)),
+        SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))
         ]
         /// 
 
@@ -149,8 +149,8 @@ namespace System.Windows.Forms
         Browsable(true),
         DefaultValue(System.Environment.SpecialFolder.Desktop),
         Localizable(false),
-        SRCategory(SR.CatFolderBrowsing),
-        SRDescription(SR.FolderBrowserDialogRootFolder),
+        SRCategory(nameof(SR.CatFolderBrowsing)),
+        SRDescription(nameof(SR.FolderBrowserDialogRootFolder)),
         TypeConverter(typeof(SpecialFolderEnumConverter))
         ]
         public System.Environment.SpecialFolder RootFolder
@@ -183,8 +183,8 @@ namespace System.Windows.Forms
         Browsable(true),
         DefaultValue(""),
         Localizable(true),
-        SRCategory(SR.CatFolderBrowsing),
-        SRDescription(SR.FolderBrowserDialogDescription)
+        SRCategory(nameof(SR.CatFolderBrowsing)),
+        SRDescription(nameof(SR.FolderBrowserDialogDescription))
         ]
         public string Description
         {

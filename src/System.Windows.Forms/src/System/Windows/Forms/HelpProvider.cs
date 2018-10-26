@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
     ProvideProperty("HelpNavigator", typeof(Control)),
     ProvideProperty("ShowHelp", typeof(Control)),
     ToolboxItemFilter("System.Windows.Forms"),
-    SRDescription(SR.DescriptionHelpProvider)
+    SRDescription(nameof(SR.DescriptionHelpProvider))
     ]
     public class HelpProvider : Component, IExtenderProvider {
 
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
         Localizable(true),
         DefaultValue(null),
         Editor("System.Windows.Forms.Design.HelpNamespaceEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        SRDescription(SR.HelpProviderHelpNamespaceDescr)
+        SRDescription(nameof(SR.HelpProviderHelpNamespaceDescr))
         ]
         public virtual string HelpNamespace {
             get {
@@ -76,10 +76,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -113,7 +113,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(null),
         Localizable(true),
-        SRDescription(SR.HelpProviderHelpKeywordDescr)
+        SRDescription(nameof(SR.HelpProviderHelpKeywordDescr))
         ]
         public virtual string GetHelpKeyword(Control ctl) {
             return(string)keywords[ctl];
@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(HelpNavigator.AssociateIndex),
         Localizable(true),
-        SRDescription(SR.HelpProviderNavigatorDescr)
+        SRDescription(nameof(SR.HelpProviderNavigatorDescr))
         ]
         public virtual HelpNavigator GetHelpNavigator(Control ctl) {
             object nav = navigators[ctl];
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(null),
         Localizable(true),
-        SRDescription(SR.HelpProviderHelpStringDescr)
+        SRDescription(nameof(SR.HelpProviderHelpStringDescr))
         ]
         public virtual string GetHelpString(Control ctl) {
             return(string)helpStrings[ctl];
@@ -161,7 +161,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRDescription(SR.HelpProviderShowHelpDescr)
+        SRDescription(nameof(SR.HelpProviderShowHelpDescr))
         ]
         public virtual bool GetShowHelp(Control ctl) {
             object b = showHelp[ctl];

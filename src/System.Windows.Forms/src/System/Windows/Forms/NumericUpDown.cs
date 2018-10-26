@@ -26,7 +26,7 @@ namespace System.Windows.Forms {
     DefaultProperty("Value"),
     DefaultEvent("ValueChanged"),
     DefaultBindingProperty("Value"),
-    SRDescription(SR.DescriptionNumericUpDown)
+    SRDescription(nameof(SR.DescriptionNumericUpDown))
     ]
     public class NumericUpDown : UpDownBase, ISupportInitialize {
 
@@ -126,9 +126,9 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the number of decimal places to display in the up-down control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(NumericUpDown.DefaultDecimalPlaces),
-        SRDescription(SR.NumericUpDownDecimalPlacesDescr)
+        SRDescription(nameof(SR.NumericUpDownDecimalPlacesDescr))
         ]
         public int DecimalPlaces {
 
@@ -152,9 +152,9 @@ namespace System.Windows.Forms {
         ///       display the value it contains in hexadecimal format.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(NumericUpDown.DefaultHexadecimal),
-        SRDescription(SR.NumericUpDownHexadecimalDescr)
+        SRDescription(nameof(SR.NumericUpDownHexadecimalDescr))
         ]
         public bool Hexadecimal {
 
@@ -175,8 +175,8 @@ namespace System.Windows.Forms {
         ///       decrement the up-down control when the up or down buttons are clicked.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
-        SRDescription(SR.NumericUpDownIncrementDescr)
+        SRCategory(nameof(SR.CatData)),
+        SRDescription(nameof(SR.NumericUpDownIncrementDescr))
         ]
         public Decimal Increment {
 
@@ -204,9 +204,9 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the maximum value for the up-down control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.NumericUpDownMaximumDescr)
+        SRDescription(nameof(SR.NumericUpDownMaximumDescr))
         ]
         public Decimal Maximum {
 
@@ -231,9 +231,9 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the minimum allowed value for the up-down control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         RefreshProperties(RefreshProperties.All),
-        SRDescription(SR.NumericUpDownMinimumDescr)
+        SRDescription(nameof(SR.NumericUpDownMinimumDescr))
         ]
         public Decimal Minimum {
 
@@ -327,10 +327,10 @@ namespace System.Windows.Forms {
         ///       separator is displayed in the up-down control when appropriate.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(NumericUpDown.DefaultThousandsSeparator),
         Localizable(true),
-        SRDescription(SR.NumericUpDownThousandsSeparatorDescr)
+        SRDescription(nameof(SR.NumericUpDownThousandsSeparatorDescr))
         ]
         public bool ThousandsSeparator {
 
@@ -353,9 +353,9 @@ namespace System.Windows.Forms {
         ///       assigned to the up-down control.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         Bindable(true),
-        SRDescription(SR.NumericUpDownValueDescr)
+        SRDescription(nameof(SR.NumericUpDownValueDescr))
         ]
         public Decimal Value {
 
@@ -395,7 +395,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the <see cref='System.Windows.Forms.NumericUpDown.Value'/> property has been changed in some way.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatAction), SRDescription(SR.NumericUpDownOnValueChangedDescr)]
+        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NumericUpDownOnValueChangedDescr))]
         public event EventHandler ValueChanged {
             add {
                 onValueChanged += value;

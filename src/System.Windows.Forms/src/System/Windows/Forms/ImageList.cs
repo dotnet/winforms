@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
     DefaultProperty("Images"),
     TypeConverter(typeof(ImageListConverter)),
     DesignerSerializer("System.Windows.Forms.Design.ImageListCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionImageList)
+    SRDescription(nameof(SR.DescriptionImageList))
     ]
     public sealed class ImageList : Component {
 
@@ -156,8 +156,8 @@ namespace System.Windows.Forms {
         ///     Retrieves the color depth of the imagelist.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ImageListColorDepthDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ImageListColorDepthDescr))
         ]
         public ColorDepth ColorDepth {
             get {
@@ -197,7 +197,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ImageListHandleDescr)
+        SRDescription(nameof(SR.ImageListHandleDescr))
         ]
         public IntPtr Handle {
             get {
@@ -215,7 +215,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ImageListHandleCreatedDescr)
+        SRDescription(nameof(SR.ImageListHandleCreatedDescr))
         ]
         public bool HandleCreated {
             get { return nativeImageList != null; }
@@ -226,10 +226,10 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(null),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ImageListImagesDescr),
+        SRDescription(nameof(SR.ImageListImagesDescr)),
         MergableProperty(false)
         ]
         public ImageCollection Images {
@@ -245,9 +245,9 @@ namespace System.Windows.Forms {
         ///     Returns the size of the images in the ImageList
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        SRDescription(SR.ImageListSizeDescr)
+        SRDescription(nameof(SR.ImageListSizeDescr))
         ]
         public Size ImageSize {
             get {
@@ -288,7 +288,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DefaultValue(null),
-        SRDescription(SR.ImageListImageStreamDescr)
+        SRDescription(nameof(SR.ImageListImageStreamDescr))
         ]
         public ImageListStreamer ImageStream {
             get {
@@ -356,10 +356,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -377,8 +377,8 @@ namespace System.Windows.Forms {
         ///     The color to treat as transparent.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ImageListTransparentColorDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ImageListTransparentColorDescr))
         ]
         public Color TransparentColor {
             get {
@@ -401,7 +401,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        SRDescription(SR.ImageListOnRecreateHandleDescr)
+        SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))
         ]
         public event EventHandler RecreateHandle {
             add {

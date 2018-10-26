@@ -18,12 +18,7 @@ namespace System
     internal partial class SR
 #endif
     {
-        private static ResourceManager s_resourceManager;
-
-        private static ResourceManager ResourceManager
-            => s_resourceManager ?? (s_resourceManager = new ResourceManager(ResourceType));
-
-        // This method is used to decide if we need to append the exception message parameters to the message when calling SR.Format.
+        // This method is used to decide if we need to append the exception message parameters to the message when calling nameof(SR.Format).
         // by default it returns false.
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static bool UsingResourceKeys()

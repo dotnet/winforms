@@ -177,7 +177,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SRCategory(SR.CatBehavior), SRDescription(SR.ToolStripContentPanelOnLoadDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripContentPanelOnLoadDescr))]
         public event EventHandler Load {
             add {
                 Events.AddHandler(EventLoad, value);
@@ -318,8 +318,8 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DrawMode"]/*' />
         [
-        SRDescription(SR.ToolStripRenderModeDescr),
-        SRCategory(SR.CatAppearance),
+        SRDescription(nameof(SR.ToolStripRenderModeDescr)),
+        SRCategory(nameof(SR.CatAppearance)),
         ]
         public ToolStripRenderMode RenderMode {
             get {
@@ -330,7 +330,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SRCategory(SR.CatAppearance), SRDescription(SR.ToolStripRendererChanged)]
+        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripRendererChanged))]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public event EventHandler RendererChanged {
             add {

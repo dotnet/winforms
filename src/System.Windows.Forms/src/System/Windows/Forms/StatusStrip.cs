@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     /// <include file='doc\StatusStrip.uex' path='docs/doc[@for="StatusStrip"]/*' />
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
-     SRDescription(SR.DescriptionStatusStrip)
+     SRDescription(nameof(SR.DescriptionStatusStrip))
     ]
     public class StatusStrip : ToolStrip  {
 
@@ -53,8 +53,8 @@ namespace System.Windows.Forms {
 
         [
         DefaultValue(false),
-        SRDescription(SR.ToolStripCanOverflowDescr),
-        SRCategory(SR.CatLayout),
+        SRDescription(nameof(SR.ToolStripCanOverflowDescr)),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false)
         ]
         public new bool CanOverflow { 
@@ -168,8 +168,8 @@ namespace System.Windows.Forms {
 
     
        [DefaultValue(false)]
-       [SRDescription(SR.ToolStripShowItemToolTipsDescr)]
-       [SRCategory(SR.CatBehavior)]
+       [SRDescription(nameof(SR.ToolStripShowItemToolTipsDescr))]
+       [SRCategory(nameof(SR.CatBehavior))]
        public new bool ShowItemToolTips { 
            get {
                 return base.ShowItemToolTips;
@@ -198,9 +198,9 @@ namespace System.Windows.Forms {
             }
        }
        [
-       SRCategory(SR.CatAppearance),
+       SRCategory(nameof(SR.CatAppearance)),
        DefaultValue(true),
-       SRDescription(SR.StatusStripSizingGripDescr)
+       SRDescription(nameof(SR.StatusStripSizingGripDescr))
        ]
        public bool SizingGrip {
           get {
@@ -237,8 +237,8 @@ namespace System.Windows.Forms {
 
        
        [DefaultValue(true)]
-       [SRCategory(SR.CatLayout)]
-       [SRDescription(SR.ToolStripStretchDescr)]
+       [SRCategory(nameof(SR.CatLayout))]
+       [SRDescription(nameof(SR.ToolStripStretchDescr))]
        public new bool Stretch {
            get {
               return base.Stretch;

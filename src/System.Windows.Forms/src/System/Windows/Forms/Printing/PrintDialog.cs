@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     ///       portions of the document to print.</para>
     /// </devdoc>
     [DefaultProperty("Document")]
-    [SRDescription(SR.DescriptionPrintDialog)]
+    [SRDescription(nameof(SR.DescriptionPrintDialog))]
     [Designer("System.Windows.Forms.Design.PrintDialogDesigner, " + AssemblyRef.SystemDesign)]
     // The only event this dialog has is HelpRequested, which isn't very useful
     public sealed class PrintDialog : CommonDialog {
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
         /// </summary>
         [
         DefaultValue(false),
-        SRDescription(SR.PDallowCurrentPageDescr)
+        SRDescription(nameof(SR.PDallowCurrentPageDescr))
         ]
         public bool AllowCurrentPage {
             get { return allowCurrentPage;}
@@ -73,9 +73,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.PDallowPagesDescr)
+        SRDescription(nameof(SR.PDallowPagesDescr))
         ]
         public bool AllowSomePages {
             get { return allowPages;}
@@ -87,9 +87,9 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets a value indicating whether the Print to file check box is enabled.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.PDallowPrintToFileDescr)
+        SRDescription(nameof(SR.PDallowPrintToFileDescr))
         ]
         public bool AllowPrintToFile {
             get { return allowPrintToFile;}
@@ -103,9 +103,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.PDallowSelectionDescr)
+        SRDescription(nameof(SR.PDallowSelectionDescr))
         ]
         public bool AllowSelection {
             get { return allowSelection;}
@@ -119,9 +119,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
+        SRCategory(nameof(SR.CatData)), 
         DefaultValue(null),
-        SRDescription(SR.PDdocumentDescr)
+        SRDescription(nameof(SR.PDdocumentDescr))
         ]
         public PrintDocument Document {
             get { return printDocument;}
@@ -151,11 +151,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
+        SRCategory(nameof(SR.CatData)), 
         DefaultValue(null),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.PDprinterSettingsDescr)
+        SRDescription(nameof(SR.PDprinterSettingsDescr))
         ]
         public PrinterSettings PrinterSettings {
             get {
@@ -180,9 +180,9 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets a value indicating whether the Print to file check box is checked.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.PDprintToFileDescr)
+        SRDescription(nameof(SR.PDprintToFileDescr))
         ]
         public bool PrintToFile {
             get { return printToFile;}
@@ -196,9 +196,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.PDshowHelpDescr)
+        SRDescription(nameof(SR.PDshowHelpDescr))
         ]
         public bool ShowHelp {
             get { return showHelp;}
@@ -212,9 +212,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.PDshowNetworkDescr)
+        SRDescription(nameof(SR.PDshowNetworkDescr))
         ]
         public bool ShowNetwork {
             get { return showNetwork;}
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
         /// </summary>
         [
         DefaultValue(false),
-        SRDescription(SR.PDuseEXDialog)
+        SRDescription(nameof(SR.PDuseEXDialog))
         ]
         public bool UseEXDialog {
             get { return useEXDialog;}

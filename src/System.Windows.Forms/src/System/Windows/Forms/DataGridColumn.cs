@@ -107,7 +107,7 @@ namespace System.Windows.Forms{
         /// <devdoc>
         ///       Gets or sets the alignment of text in a column.
         /// </devdoc>
-        [SRCategory(SR.CatDisplay),
+        [SRCategory(nameof(SR.CatDisplay)),
         Localizable(true),
         DefaultValue(HorizontalAlignment.Left)]
         public virtual HorizontalAlignment Alignment {        
@@ -168,7 +168,7 @@ namespace System.Windows.Forms{
         /// </example>
         /// <seealso cref='System.Windows.Forms.DataGrid.AlternatingBackColor'/>
         /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/>
-        [SRCategory(SR.CatColors)]
+        [SRCategory(nameof(SR.CatColors))]
         public virtual Color AlternatingBackColor {
             get {
                 if (alternatingBackBrush != null) {
@@ -593,7 +593,7 @@ namespace System.Windows.Forms{
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatDisplay)
+        SRCategory(nameof(SR.CatDisplay))
         ]
         public virtual string HeaderText {
             get {
@@ -694,7 +694,7 @@ namespace System.Windows.Forms{
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatDisplay)
+        SRCategory(nameof(SR.CatDisplay))
         ]
         public virtual string NullText {
             get {
@@ -775,7 +775,7 @@ namespace System.Windows.Forms{
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
         DefaultValue(100)
         ]

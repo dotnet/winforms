@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
     DefaultProperty("Document"),
     ToolboxItemFilter("System.Windows.Forms.Control.TopLevel"),
     ToolboxItem(true),
-    SRDescription(SR.DescriptionPrintPreviewDialog)
+    SRDescription(nameof(SR.DescriptionPrintPreviewDialog))
     ]
     public class PrintPreviewDialog : Form {
         PrintPreviewControl previewControl;
@@ -1154,9 +1154,9 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.UseAntiAlias"]/*' />
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.PrintPreviewAntiAliasDescr)
+        SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))
         ]
         public bool UseAntiAlias {
             get {
@@ -1198,9 +1198,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
-        SRDescription(SR.PrintPreviewDocumentDescr)
+        SRDescription(nameof(SR.PrintPreviewDocumentDescr))
         ]
         public PrintDocument Document {
             get { 
@@ -1228,8 +1228,8 @@ namespace System.Windows.Forms {
         /// contained in this form.</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.PrintPreviewPrintPreviewControlDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.PrintPreviewPrintPreviewControlDescr)),
         Browsable(false)
         ]
         public PrintPreviewControl PrintPreviewControl {

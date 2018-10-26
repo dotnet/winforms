@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
     DefaultEvent("Enter"),
     DefaultProperty("Text"),
     Designer("System.Windows.Forms.Design.GroupBoxDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionGroupBox)
+    SRDescription(nameof(SR.DescriptionGroupBox))
     ]
     public class GroupBox : Control {
         int fontHeight = -1;
@@ -97,7 +97,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
@@ -115,8 +115,8 @@ namespace System.Windows.Forms {
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
-        SRDescription(SR.ControlAutoSizeModeDescr),
-        SRCategory(SR.CatLayout),        
+        SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
+        SRCategory(nameof(SR.CatLayout)),        
         Browsable(true),
         DefaultValue(AutoSizeMode.GrowOnly),
         Localizable(true)
@@ -221,9 +221,9 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.FlatStyle"]/*' />
         [
-            SRCategory(SR.CatAppearance),
+            SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(FlatStyle.Standard),
-            SRDescription(SR.ButtonFlatStyleDescr)
+            SRDescription(nameof(SR.ButtonFlatStyleDescr))
         ]
         public FlatStyle FlatStyle {
             get {
@@ -338,8 +338,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.UseCompatibleTextRenderingDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public bool UseCompatibleTextRendering {
             get{

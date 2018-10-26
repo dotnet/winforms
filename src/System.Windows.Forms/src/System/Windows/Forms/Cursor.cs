@@ -338,10 +338,10 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\CurSor.uex' path='docs/doc[@for="CurSor.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]

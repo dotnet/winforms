@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripContainerDesigner, " + AssemblyRef.SystemDesign)]
-    [SRDescription(SR.ToolStripContainerDesc)]
+    [SRDescription(nameof(SR.ToolStripContainerDesc))]
     public class ToolStripContainer : ContainerControl {
 
         private ToolStripPanel topPanel;
@@ -167,8 +167,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerBottomToolStripPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerBottomToolStripPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -179,8 +179,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerBottomToolStripPanelVisibleDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerBottomToolStripPanelVisibleDescr)),
         DefaultValue(true)
         ]
         public bool BottomToolStripPanelVisible {
@@ -193,8 +193,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerContentPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerContentPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -300,8 +300,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerLeftToolStripPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerLeftToolStripPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -313,8 +313,8 @@ namespace System.Windows.Forms {
 
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerLeftToolStripPanelVisibleDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerLeftToolStripPanelVisibleDescr)),
         DefaultValue(true)
         ]
         public bool LeftToolStripPanelVisible {
@@ -328,8 +328,8 @@ namespace System.Windows.Forms {
 
        
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerRightToolStripPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerRightToolStripPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -340,8 +340,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerRightToolStripPanelVisibleDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerRightToolStripPanelVisibleDescr)),
         DefaultValue(true)
         ]
         public bool RightToolStripPanelVisible {
@@ -354,8 +354,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerTopToolStripPanelDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerTopToolStripPanelDescr)),
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
@@ -366,8 +366,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.ToolStripContainerTopToolStripPanelVisibleDescr),
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.ToolStripContainerTopToolStripPanelVisibleDescr)),
         DefaultValue(true)
         ]
         public bool TopToolStripPanelVisible {

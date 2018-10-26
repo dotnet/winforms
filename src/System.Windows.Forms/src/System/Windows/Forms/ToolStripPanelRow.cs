@@ -89,7 +89,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(SR.ControlControlsDescr), SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(nameof(SR.ControlControlsDescr)), SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public Control[] Controls {
             get {
                 Control[] controls = new Control[ControlsInternal.Count];
@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Collection of child controls.
         /// </devdoc>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(SR.ControlControlsDescr)]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(nameof(SR.ControlControlsDescr))]
         internal ToolStripPanelRowControlCollection ControlsInternal {
             get {
                 ToolStripPanelRowControlCollection controlsCollection = (ToolStripPanelRowControlCollection)Properties.GetObject(PropControlsCollection);

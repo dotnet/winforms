@@ -31,7 +31,7 @@ namespace System.Windows.Forms
     DefaultBindingProperty("Text"),
     DefaultProperty("Mask"),
     Designer("System.Windows.Forms.Design.MaskedTextBoxDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionMaskedTextBox)
+    SRDescription(nameof(SR.DescriptionMaskedTextBox))
     ]
     public class MaskedTextBox : TextBoxBase
     {
@@ -215,8 +215,8 @@ namespace System.Windows.Forms
         ///     This property has no particular effect if no mask has been set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxAllowPromptAsInputDescr), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxAllowPromptAsInputDescr)), 
         DefaultValue(true)
         ]
         public bool AllowPromptAsInput
@@ -262,8 +262,8 @@ namespace System.Windows.Forms
         ///     This property has no particular effect if no mask has been set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxAsciiOnlyDescr), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxAsciiOnlyDescr)), 
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(false)
         ]
@@ -296,8 +296,8 @@ namespace System.Windows.Forms
         ///     Specifies whether to play a beep when the input is not valid according to the mask.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxBeepOnErrorDescr), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxBeepOnErrorDescr)), 
         DefaultValue(false)
         ]
         public bool BeepOnError
@@ -368,8 +368,8 @@ namespace System.Windows.Forms
         ///     The culture that determines the value of the localizable mask language separators and placeholders.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.MaskedTextBoxCultureDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.MaskedTextBoxCultureDescr)),
         RefreshProperties(RefreshProperties.Repaint),
         ]
         public CultureInfo Culture
@@ -408,8 +408,8 @@ namespace System.Windows.Forms
         ///    When prompt characters are excluded, theyare returned as spaces in the string returned.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxCutCopyMaskFormat), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxCutCopyMaskFormat)), 
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(MaskFormat.IncludeLiterals)
         ]
@@ -486,8 +486,8 @@ namespace System.Windows.Forms
         ///     Specifies whether the PromptCharacter is displayed when the control loses focus.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxHidePromptOnLeaveDescr),
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxHidePromptOnLeaveDescr)),
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(false)
         ]
@@ -550,8 +550,8 @@ namespace System.Windows.Forms
         ///     This property has no particular effect if no mask has been set.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxInsertKeyModeDescr), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxInsertKeyModeDescr)), 
         DefaultValue(InsertKeyMode.Default)
         ]
         public InsertKeyMode InsertKeyMode
@@ -636,8 +636,8 @@ namespace System.Windows.Forms
         ///   Event to notify when the insert mode has changed.  This is required for data binding. 
         /// </devdoc>
         [
-        SRCategory(SR.CatPropertyChanged),
-        SRDescription(SR.MaskedTextBoxIsOverwriteModeChangedDescr)
+        SRCategory(nameof(SR.CatPropertyChanged)),
+        SRDescription(nameof(SR.MaskedTextBoxIsOverwriteModeChangedDescr))
         ]
         public event EventHandler IsOverwriteModeChanged
         {
@@ -686,8 +686,8 @@ namespace System.Windows.Forms
         ///     to add the existing input text (if any) using the new mask, failure is ignored.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxMaskDescr), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxMaskDescr)), 
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(""),
         MergableProperty(false),
@@ -787,8 +787,8 @@ namespace System.Windows.Forms
         ///   Event to notify when the mask has changed.
         /// </devdoc>
         [
-        SRCategory(SR.CatPropertyChanged),
-        SRDescription(SR.MaskedTextBoxMaskChangedDescr)
+        SRCategory(nameof(SR.CatPropertyChanged)),
+        SRDescription(nameof(SR.MaskedTextBoxMaskChangedDescr))
         ]
         public event EventHandler MaskChanged
         {
@@ -852,8 +852,8 @@ namespace System.Windows.Forms
         ///     Event to notify when an input has been rejected according to the mask.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxMaskInputRejectedDescr)
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxMaskInputRejectedDescr))
         ]
         public event MaskInputRejectedEventHandler MaskInputRejected
         {
@@ -917,8 +917,8 @@ namespace System.Windows.Forms
         ///     character.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxPasswordCharDescr), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxPasswordCharDescr)), 
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue('\0') // This property is shadowed by MaskedTextBoxDesigner.
         ]
@@ -987,8 +987,8 @@ namespace System.Windows.Forms
         ///     Specifies the prompt character to be used in the formatted string for unsupplied characters.
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance), 
-        SRDescription(SR.MaskedTextBoxPromptCharDescr), 
+        SRCategory(nameof(SR.CatAppearance)), 
+        SRDescription(nameof(SR.MaskedTextBoxPromptCharDescr)), 
         RefreshProperties(RefreshProperties.Repaint),
         Localizable(true),
         DefaultValue('_')
@@ -1061,8 +1061,8 @@ namespace System.Windows.Forms
         ///     where an edit char has not being assigned.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxRejectInputOnFirstFailureDescr), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxRejectInputOnFirstFailureDescr)), 
         DefaultValue(false)
         ]
         public bool RejectInputOnFirstFailure
@@ -1093,8 +1093,8 @@ namespace System.Windows.Forms
         ///     has the same value as the prompt.  This property takes precedence over AllowPromptAsInput.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxResetOnPrompt), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxResetOnPrompt)), 
         DefaultValue(true)
         ]
         public bool ResetOnPrompt
@@ -1114,8 +1114,8 @@ namespace System.Windows.Forms
         ///     is the space character.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxResetOnSpace), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxResetOnSpace)), 
         DefaultValue(true)
         ]
         public bool ResetOnSpace
@@ -1135,8 +1135,8 @@ namespace System.Windows.Forms
         ///     the same value as the literal at that position.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxSkipLiterals), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxSkipLiterals)), 
         DefaultValue(true)
         ]
         public bool SkipLiterals
@@ -1297,7 +1297,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         [
         Editor("System.Windows.Forms.Design.MaskedTextBoxTextEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        SRCategory(SR.CatAppearance), 
+        SRCategory(nameof(SR.CatAppearance)), 
         RefreshProperties(RefreshProperties.Repaint),
         Bindable(true),
         DefaultValue(""), // This property is shadowed by MaskedTextBoxDesigner.
@@ -1395,9 +1395,9 @@ namespace System.Windows.Forms
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(HorizontalAlignment.Left),
-        SRDescription(SR.TextBoxTextAlignDescr)
+        SRDescription(nameof(SR.TextBoxTextAlignDescr))
         ]
         public HorizontalAlignment TextAlign 
         {
@@ -1427,8 +1427,8 @@ namespace System.Windows.Forms
         ///     Event to notify the text alignment has changed.
         /// </devdoc>
         [
-        SRCategory(SR.CatPropertyChanged), 
-        SRDescription(SR.RadioButtonOnTextAlignChangedDescr)
+        SRCategory(nameof(SR.CatPropertyChanged)), 
+        SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))
         ]
         public event EventHandler TextAlignChanged 
         {
@@ -1449,8 +1449,8 @@ namespace System.Windows.Forms
         ///    When prompt characters are excluded, theyare returned as spaces in the string returned.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxTextMaskFormat), 
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxTextMaskFormat)), 
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(MaskFormat.IncludeLiterals)
         ]
@@ -1550,8 +1550,8 @@ namespace System.Windows.Forms
         ///     Event to notify when the validating object completes parsing the formatted text.
         /// </devdoc>
         [
-        SRCategory(SR.CatFocus), 
-        SRDescription(SR.MaskedTextBoxTypeValidationCompletedDescr)
+        SRCategory(nameof(SR.CatFocus)), 
+        SRDescription(nameof(SR.MaskedTextBoxTypeValidationCompletedDescr))
         ]
         public event TypeValidationEventHandler TypeValidationCompleted
         {
@@ -1570,8 +1570,8 @@ namespace System.Windows.Forms
         ///    This property has precedence over the PasswordChar property.
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
-        SRDescription(SR.MaskedTextBoxUseSystemPasswordCharDescr),
+        SRCategory(nameof(SR.CatBehavior)), 
+        SRDescription(nameof(SR.MaskedTextBoxUseSystemPasswordCharDescr)),
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(false)
         ]

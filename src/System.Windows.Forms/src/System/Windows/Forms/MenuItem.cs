@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.MenuItemCheckedDescr)
+        SRDescription(nameof(SR.MenuItemCheckedDescr))
         ]
         public bool Checked {
             get {
@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.MenuItemDefaultDescr)
+        SRDescription(nameof(SR.MenuItemDefaultDescr))
         ]        
         public bool DefaultItem {
             get { return(data.State & STATE_DEFAULT) != 0;}
@@ -281,9 +281,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.MenuItemOwnerDrawDescr)
+        SRDescription(nameof(SR.MenuItemOwnerDrawDescr))
         ]
         public bool OwnerDraw {
             get {
@@ -305,7 +305,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DefaultValue(true),
-        SRDescription(SR.MenuItemEnabledDescr)
+        SRDescription(nameof(SR.MenuItemEnabledDescr))
         ]
         public bool Enabled {
             get {
@@ -402,7 +402,7 @@ namespace System.Windows.Forms {
         /// </devdoc> 
         [
         DefaultValue(false),
-        SRDescription(SR.MenuItemMDIListDescr)
+        SRDescription(nameof(SR.MenuItemMDIListDescr))
         ]
         public bool MdiList {
             get {
@@ -498,7 +498,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(MenuMerge.Add),
-        SRDescription(SR.MenuItemMergeTypeDescr)
+        SRDescription(nameof(SR.MenuItemMergeTypeDescr))
         ]
         public MenuMerge MergeType {
             get {
@@ -525,7 +525,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(0),
-        SRDescription(SR.MenuItemMergeOrderDescr)
+        SRDescription(nameof(SR.MenuItemMergeOrderDescr))
         ]
         public int MergeOrder {
             get {
@@ -573,7 +573,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.MenuItemRadioCheckDescr)
+        SRDescription(nameof(SR.MenuItemRadioCheckDescr))
         ]
         public bool RadioCheck {
             get {
@@ -601,7 +601,7 @@ namespace System.Windows.Forms {
         /// </devdoc> 
         [
         Localizable(true),
-        SRDescription(SR.MenuItemTextDescr)
+        SRDescription(nameof(SR.MenuItemTextDescr))
         ]
         public string Text {
             get {
@@ -622,7 +622,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DefaultValue(Shortcut.None),
-        SRDescription(SR.MenuItemShortCutDescr)
+        SRDescription(nameof(SR.MenuItemShortCutDescr))
         ]
         public Shortcut Shortcut {
             get {
@@ -651,7 +651,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(true),
         Localizable(true),
-        SRDescription(SR.MenuItemShowShortCutDescr)
+        SRDescription(nameof(SR.MenuItemShowShortCutDescr))
         ]
         public bool ShowShortcut {
             get {
@@ -676,7 +676,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DefaultValue(true),
-        SRDescription(SR.MenuItemVisibleDescr)
+        SRDescription(nameof(SR.MenuItemVisibleDescr))
         ]
         public bool Visible {
             get {
@@ -694,7 +694,7 @@ namespace System.Windows.Forms {
         ///       shortcut key defined for the menu item.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.MenuItemOnClickDescr)]
+        [SRDescription(nameof(SR.MenuItemOnClickDescr))]
         public event EventHandler Click {
             add {
                 data.onClick += value;
@@ -713,7 +713,7 @@ namespace System.Windows.Forms {
         ///    and a request is made to draw the menu item.
         /// </para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.drawItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
             add {
                 data.onDrawItem += value;
@@ -730,7 +730,7 @@ namespace System.Windows.Forms {
         ///       menu item before drawing it.
         ///    </para>
         /// </devdoc>
-        [SRCategory(SR.CatBehavior), SRDescription(SR.measureItemEventDescr)]
+        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
             add {
                 data.onMeasureItem += value;
@@ -776,7 +776,7 @@ namespace System.Windows.Forms {
         ///       displayed.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.MenuItemOnInitDescr)]
+        [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup {
             add {
                 data.onPopup += value;
@@ -794,7 +794,7 @@ namespace System.Windows.Forms {
         ///       or selects it with the keyboard but has not activated it.
         ///    </para>
         /// </devdoc>
-        [SRDescription(SR.MenuItemOnSelectDescr)]
+        [SRDescription(nameof(SR.MenuItemOnSelectDescr))]
         public event EventHandler Select {
             add {
                 data.onSelect += value;

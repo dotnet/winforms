@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.AutoSizeChanged"]/*' />
-        [SRCategory(SR.CatPropertyChanged), SRDescription(SR.ControlOnAutoSizeChangedDescr)]
+        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
@@ -272,10 +272,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(SR.UpDownBaseBorderStyleDescr)
+        SRDescription(nameof(SR.UpDownBaseBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
             get {
@@ -398,7 +398,7 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.ControlFocusedDescr)
+        SRDescription(nameof(SR.ControlFocusedDescr))
         ]
         public override bool Focused {
             get {
@@ -432,9 +432,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
-        SRDescription(SR.UpDownBaseInterceptArrowKeysDescr)
+        SRDescription(nameof(SR.UpDownBaseInterceptArrowKeysDescr))
         ]
         public bool InterceptArrowKeys {
 
@@ -519,10 +519,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatLayout),
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.UpDownBasePreferredHeightDescr)
+        SRDescription(nameof(SR.UpDownBasePreferredHeightDescr))
         ]
         public int PreferredHeight {
             get {
@@ -553,9 +553,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(SR.UpDownBaseReadOnlyDescr)
+        SRDescription(nameof(SR.UpDownBaseReadOnlyDescr))
         ]
         public bool ReadOnly {
 
@@ -614,9 +614,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(HorizontalAlignment.Left),
-        SRDescription(SR.UpDownBaseTextAlignDescr)
+        SRDescription(nameof(SR.UpDownBaseTextAlignDescr))
         ]
         public HorizontalAlignment TextAlign {
             get {
@@ -649,9 +649,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Localizable(true),
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(LeftRightAlignment.Right),
-        SRDescription(SR.UpDownBaseAlignmentDescr)
+        SRDescription(nameof(SR.UpDownBaseAlignmentDescr))
         ]
         public LeftRightAlignment UpDownAlign {
 

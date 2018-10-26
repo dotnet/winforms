@@ -334,7 +334,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public Color BackColor {
             get {
@@ -376,7 +376,7 @@ namespace System.Windows.Forms {
         [
         DefaultValue(false),
         RefreshPropertiesAttribute(RefreshProperties.Repaint),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public bool Checked {
             get {
@@ -434,7 +434,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public Font Font {
             get {
@@ -459,7 +459,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public Color ForeColor {
             get {
@@ -485,7 +485,7 @@ namespace System.Windows.Forms {
         [
             DefaultValue(null),
             Localizable(true),
-            SRCategory(SR.CatBehavior)
+            SRCategory(nameof(SR.CatBehavior))
         ]
         public ListViewGroup Group {
             get
@@ -519,8 +519,8 @@ namespace System.Windows.Forms {
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.ListViewItemImageIndexDescr),
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.ListViewItemImageIndexDescr)),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter))
         ]        
         public int ImageIndex {
@@ -562,7 +562,7 @@ namespace System.Windows.Forms {
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(SR.CatBehavior),
+        SRCategory(nameof(SR.CatBehavior)),
         Localizable(true)
         ]        
         public string ImageKey {
@@ -600,8 +600,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.IndentCount"]/*' />
         [
         DefaultValue(0),
-        SRDescription(SR.ListViewItemIndentCountDescr),
-        SRCategory(SR.CatDisplay)
+        SRDescription(nameof(SR.ListViewItemIndentCountDescr)),
+        SRCategory(nameof(SR.CatDisplay))
         ]
         public int IndentCount {
             get {
@@ -680,7 +680,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Position"]/*' />
         [
-        SRCategory(SR.CatDisplay),
+        SRCategory(nameof(SR.CatDisplay)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false)
         ]
@@ -772,8 +772,8 @@ namespace System.Windows.Forms {
         Localizable(true),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
         DefaultValue(-1),
-        SRDescription(SR.ListViewItemStateImageIndexDescr),
-        SRCategory(SR.CatBehavior),
+        SRDescription(nameof(SR.ListViewItemStateImageIndexDescr)),
+        SRCategory(nameof(SR.CatBehavior)),
         RefreshProperties(RefreshProperties.Repaint),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RelatedImageList("ListView.StateImageList")
@@ -836,9 +836,9 @@ namespace System.Windows.Forms {
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),        
-        SRDescription(SR.ListViewItemSubItemsDescr),
+        SRDescription(nameof(SR.ListViewItemSubItemsDescr)),
         Editor("System.Windows.Forms.Design.ListViewSubItemCollectionEditor, " + AssemblyRef.SystemDesign,typeof(UITypeEditor)),
         ]
         public ListViewSubItemCollection SubItems {
@@ -858,10 +858,10 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Tag"]/*' />
         [
-        SRCategory(SR.CatData),
+        SRCategory(nameof(SR.CatData)),
         Localizable(false),
         Bindable(true),
-        SRDescription(SR.ControlTagDescr),
+        SRDescription(nameof(SR.ControlTagDescr)),
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
@@ -881,7 +881,7 @@ namespace System.Windows.Forms {
         [
         Localizable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public string Text {
             get {
@@ -902,7 +902,7 @@ namespace System.Windows.Forms {
         ///     Tool tip text associated with this ListViewItem
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
+        SRCategory(nameof(SR.CatAppearance)),
         DefaultValue("")
         ]
         public string ToolTipText {
@@ -934,7 +934,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(true),
-        SRCategory(SR.CatAppearance)
+        SRCategory(nameof(SR.CatAppearance))
         ]
         public bool UseItemStyleForSubItems {
             get {
@@ -1587,10 +1587,10 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ListViewSubItem.uex' path='docs/doc[@for="ListViewSubItem.Tag"]/*' />
             [
-            SRCategory(SR.CatData),
+            SRCategory(nameof(SR.CatData)),
             Localizable(false),
             Bindable(true),
-            SRDescription(SR.ControlTagDescr),
+            SRDescription(nameof(SR.ControlTagDescr)),
             DefaultValue(null),
             TypeConverter(typeof(StringConverter)),
             ]

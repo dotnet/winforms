@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     ///       a dialog box that allows users to manipulate page settings, including margins and paper orientation.</para>
     /// </devdoc>
     [DefaultProperty("Document")]
-    [SRDescription(SR.DescriptionPageSetupDialog)]
+    [SRDescription(nameof(SR.DescriptionPageSetupDialog))]
     // The only event this dialog has is HelpRequested, which isn't very useful
     public sealed class PageSetupDialog : CommonDialog {
         // If PrintDocument != null, pageSettings == printDocument.PageSettings
@@ -54,9 +54,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.PSDallowMarginsDescr)
+        SRDescription(nameof(SR.PSDallowMarginsDescr))
         ]
         public bool AllowMargins {
             get { 
@@ -74,9 +74,9 @@ namespace System.Windows.Forms {
         ///       </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.PSDallowOrientationDescr)
+        SRDescription(nameof(SR.PSDallowOrientationDescr))
         ]
         public bool AllowOrientation {
             get { return allowOrientation;}
@@ -92,9 +92,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.PSDallowPaperDescr)
+        SRDescription(nameof(SR.PSDallowPaperDescr))
         ]
         public bool AllowPaper {
             get { return allowPaper;}
@@ -109,9 +109,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.PSDallowPrinterDescr)
+        SRDescription(nameof(SR.PSDallowPrinterDescr))
         ]
         public bool AllowPrinter {
             get { return allowPrinter;}
@@ -125,9 +125,9 @@ namespace System.Windows.Forms {
         /// </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
+        SRCategory(nameof(SR.CatData)), 
         DefaultValue(null),
-        SRDescription(SR.PDdocumentDescr)
+        SRDescription(nameof(SR.PDdocumentDescr))
         ]
         public PrintDocument Document {
             get { return printDocument;}
@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRDescription(SR.PSDenableMetricDescr),
+        SRDescription(nameof(SR.PSDenableMetricDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public bool EnableMetric {
@@ -164,8 +164,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
-        SRDescription(SR.PSDminMarginsDescr)
+        SRCategory(nameof(SR.CatData)), 
+        SRDescription(nameof(SR.PSDminMarginsDescr))
         ]
         public Margins MinMargins {
             get { return minMargins;}
@@ -187,11 +187,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
+        SRCategory(nameof(SR.CatData)), 
         DefaultValue(null),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.PSDpageSettingsDescr)
+        SRDescription(nameof(SR.PSDpageSettingsDescr))
         ]
         public PageSettings PageSettings {
             get { return pageSettings;}
@@ -210,11 +210,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatData), 
+        SRCategory(nameof(SR.CatData)), 
         DefaultValue(null),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(SR.PSDprinterSettingsDescr)
+        SRDescription(nameof(SR.PSDprinterSettingsDescr))
         ]
         public PrinterSettings PrinterSettings {
             get { return printerSettings;}
@@ -231,9 +231,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
-        SRDescription(SR.PSDshowHelpDescr)
+        SRDescription(nameof(SR.PSDshowHelpDescr))
         ]
         public bool ShowHelp {
             get { return showHelp;}
@@ -247,9 +247,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatBehavior), 
+        SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
-        SRDescription(SR.PSDshowNetworkDescr)
+        SRDescription(nameof(SR.PSDshowNetworkDescr))
         ]
         public bool ShowNetwork {
             get { return showNetwork;}

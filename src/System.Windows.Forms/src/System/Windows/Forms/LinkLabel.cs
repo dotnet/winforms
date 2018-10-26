@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
     ClassInterface(ClassInterfaceType.AutoDispatch),
     DefaultEvent("LinkClicked"),
     ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
-    SRDescription(SR.DescriptionLinkLabel)
+    SRDescription(nameof(SR.DescriptionLinkLabel))
     ]
     public class LinkLabel : Label, IButtonControl {
 
@@ -97,8 +97,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.LinkLabelActiveLinkColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))
         ]
         public Color ActiveLinkColor {
             get {
@@ -124,8 +124,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.LinkLabelDisabledLinkColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.LinkLabelDisabledLinkColorDescr))
         ]
         public Color DisabledLinkColor {
             get {
@@ -222,8 +222,8 @@ namespace System.Windows.Forms {
         Editor("System.Windows.Forms.Design.LinkAreaEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
         Localizable(true),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.LinkLabelLinkAreaDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.LinkLabelLinkAreaDescr))
         ]
         public LinkArea LinkArea {
             get {
@@ -274,8 +274,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(LinkBehavior.SystemDefault),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.LinkLabelLinkBehaviorDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.LinkLabelLinkBehaviorDescr))
         ]
         public LinkBehavior LinkBehavior {
             get {
@@ -301,8 +301,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.LinkLabelLinkColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.LinkLabelLinkColorDescr))
         ]
         public Color LinkColor {
             get {
@@ -351,8 +351,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         DefaultValue(false),
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.LinkLabelLinkVisitedDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.LinkLabelLinkVisitedDescr))
         ]
         public bool LinkVisited {
             get {
@@ -460,8 +460,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(SR.CatAppearance),
-        SRDescription(SR.LinkLabelVisitedLinkColorDescr)
+        SRCategory(nameof(SR.CatAppearance)),
+        SRDescription(nameof(SR.LinkLabelVisitedLinkColorDescr))
         ]
         public Color VisitedLinkColor {
             get {
@@ -489,7 +489,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the link is clicked.
         ///    </para>
         /// </devdoc>
-        [WinCategory("Action"), SRDescription(SR.LinkLabelLinkClickedDescr)]
+        [WinCategory("Action"), SRDescription(nameof(SR.LinkLabelLinkClickedDescr))]
         public event LinkLabelLinkClickedEventHandler LinkClicked {
             add {
                 Events.AddHandler(EventLinkClicked, value);
@@ -1886,8 +1886,8 @@ namespace System.Windows.Forms {
         [
         // DefaultValue(false), - // See ShouldSerailizeUseCompatibleTextRendering method.
         RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(SR.CatBehavior),
-        SRDescription(SR.UseCompatibleTextRenderingDescr)
+        SRCategory(nameof(SR.CatBehavior)),
+        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public new bool UseCompatibleTextRendering {
             get {
@@ -2527,8 +2527,8 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [
             DefaultValue(""),
-            SRCategory(SR.CatAppearance),
-            SRDescription(SR.TreeNodeNodeNameDescr)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.TreeNodeNodeNameDescr))
             ]
             public string Name {
                 get {
@@ -2562,10 +2562,10 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Tag"]/*' />
             [
-            SRCategory(SR.CatData),
+            SRCategory(nameof(SR.CatData)),
             Localizable(false),
             Bindable(true),
-            SRDescription(SR.ControlTagDescr),
+            SRDescription(nameof(SR.ControlTagDescr)),
             DefaultValue(null),
             TypeConverter(typeof(StringConverter)),
             ]
