@@ -80,7 +80,7 @@ phases:
     - task: CopyFiles@2
       displayName: Copy xunit.runner.console to helix payload dir
       inputs:
-        sourceFolder: $(UserProfile)/.nuget/packages/xunit.runner.console/2.4.1-pre.build.4059/tools/netcoreapp2.0
+        sourceFolder: $(Build.SourcesDirectory)/.packages/xunit.runner.console/2.4.1-pre.build.4059/tools/netcoreapp2.0
         contents: '**'
         targetFolder: $(Build.StagingDirectory)/helixPayload
         overWrite: true
