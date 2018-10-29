@@ -100,7 +100,7 @@ phases:
         EnableXUnitReporter: true # required for reporting out xUnit test results to Mission Control
         IncludeDotNetCli: true # install the dot net cli
         DotNetCliPackageType: sdk
-        DotNetCliVersion: 2.1.300
+        DotNetCliVersion: 2.1.403
 
     - task: PublishBuildArtifacts@1
       displayName: Publish Logs to VSTS
