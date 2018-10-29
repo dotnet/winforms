@@ -67,14 +67,38 @@ phases:
       displayName: Windows Build / Publish
       condition: and(succeeded(), eq(variables['Agent.Os'], 'Windows_NT'))
 
-    - script: eng/common/cibuild.sh
-        --configuration $(_BuildConfig)
-        --prepareMachine
-        $(_PublishArgs)
-        $(_SignArgs)
-        $(_OfficialBuildIdArgs)
-      displayName: Unix Build / Publish
-      condition: and(succeeded(), ne(variables['Agent.Os'], 'Windows_NT'))
+    # prepare the helix package
+    - task: CopyFiles@2
+      displayName: Copy test binaries to helix payload dir
+      inputs:
+        sourceFolder: $(Build.SourcesDirectory)/artifacts/bin/System.Windows.Forms.Tests/$(_BuildConfig)/netcoreapp2.0
+        contents: '**'
+        targetFolder: $(Build.StagingDirectory)/helixPayload
+        overWrite: true
+
+    - task: CopyFiles@2
+      displayName: Copy xunit.runner.console to helix payload dir
+      inputs:
+        sourceFolder: $(NuGetPackageRoot)/xunit.runner.console/2.4.1-pre.build.4059/tools/netcoreapp2.0
+        contents: '**'
+        targetFolder: $(Build.StagingDirectory)/helixPayload
+        overWrite: true
+
+    # send the unit tests to helix
+    - template: /eng/common/templates/steps/helix-publish.yml
+      parameters:
+        HelixSource: $(_HelixSource)
+        HelixType: type/tests
+        HelixTargetQueues: Windows.10.Amd64.Open
+        HelixAccessToken: $(helix-token)
+        # HelixPreCommands: '' -- any commands that you would like to run prior to running your job
+        # HelixPostCommands: '' -- any commands that you would like to run after running your job
+        WorkItemDirectory: $(Build.StagingDirectory)/helixPackage
+        WorkItemCommand: 'dotnet exec --depsfile System.Windows.Forms.Tests.deps.json --runtimeconfig System.Windows.Forms.Tests.runtimeconfig.json xunit.console.dll System.Windows.Forms.Tests.dll -noautoreporters -xml testResults.xml'
+        EnableXUnitReporter: true # required for reporting out xUnit test results to Mission Control
+        IncludeDotNetCli: true # install the dot net cli
+        DotNetCliPackageType: sdk
+        DotNetCliVersion: 2.1.300
 
     - task: PublishBuildArtifacts@1
       displayName: Publish Logs to VSTS
