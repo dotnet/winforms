@@ -47,7 +47,7 @@ phases:
             _DotNetPublishToBlobFeed : false
           ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.Repository.Provider'], 'GitHub')) }}:
             _PublishType: blob
-            _SignType: test # set to real once our build definition has signing approval
+            _SignType: real
             _DotNetPublishToBlobFeed : true
 
 # If the project is NOT public AND the build is NOT for a PR, publish build assets
