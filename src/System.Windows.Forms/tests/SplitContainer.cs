@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(sc, sc.Panel1.Owner);
             Assert.NotNull(sc.Panel2);
             Assert.Equal(sc, sc.Panel2.Owner);
-            Assert.NotNull(sc.SplitterRectangle);
+            Assert.False(sc.SplitterRectangle.IsEmpty);
         }
     }
 }

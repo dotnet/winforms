@@ -1,7 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <StrongNameKeyId>ECMA</StrongNameKeyId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.10.0" />
+    <PackageReference Include="Xunit.StaFact" Version="0.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>    
+    <ProjectReference Include="..\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
 
 </Project>

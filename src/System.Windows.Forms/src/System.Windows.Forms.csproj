@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <StrongNameKeyId>ECMA</StrongNameKeyId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

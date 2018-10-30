@@ -16,15 +16,14 @@ namespace System.Windows.Forms.Tests
 
             // assert
             Assert.NotNull(ts);
-            Assert.NotNull(ts.ImageScalingSize);
+            Assert.False(ts.ImageScalingSize.IsEmpty);
             Assert.Equal(16, ts.ImageScalingSize.Width);
             Assert.Equal(16, ts.ImageScalingSize.Height);
             Assert.True(ts.CanOverflow);
             Assert.False(ts.TabStop);
             Assert.False(ts.MenuAutoExpand);
             Assert.NotNull(ToolStripManager.ToolStrips);
-            Assert.True(ToolStripManager.ToolStrips.Contains(ts));
-            Assert.NotNull(ts.Dock);
+            Assert.True(ToolStripManager.ToolStrips.Contains(ts));            
             Assert.True(ts.AutoSize);
             Assert.False(ts.CausesValidation);
             Assert.Equal(100, ts.Size.Width);
@@ -45,7 +44,7 @@ namespace System.Windows.Forms.Tests
             // assert
             Assert.NotNull(ts);
             Assert.NotNull(ts.Items);
-            Assert.Equal(1, ts.Items.Count);
+            Assert.Single(ts.Items);
             Assert.Equal(button, ts.Items[0]);
         }
     }

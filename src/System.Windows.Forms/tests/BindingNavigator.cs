@@ -70,11 +70,11 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(bn.CountItem);
             Assert.Equal("bindingNavigatorPositionItem", bn.PositionItem.Name);
             Assert.Equal("bindingNavigatorCountItem", bn.CountItem.Name);
-            Assert.Equal(SR.GetString(SR.BindingNavigatorCountItemTip), bn.CountItem.ToolTipText);
-            Assert.Equal(SR.GetString(SR.BindingNavigatorPositionItemTip), bn.PositionItem.ToolTipText);
+            Assert.Equal(SR.BindingNavigatorCountItemTip, bn.CountItem.ToolTipText);
+            Assert.Equal(SR.BindingNavigatorPositionItemTip, bn.PositionItem.ToolTipText);
             Assert.False(bn.CountItem.AutoToolTip);
             Assert.False(bn.PositionItem.AutoToolTip);
-            Assert.Equal(SR.GetString(SR.BindingNavigatorPositionAccessibleName), bn.PositionItem.AccessibleName);
+            Assert.Equal(SR.BindingNavigatorPositionAccessibleName, bn.PositionItem.AccessibleName);
 
             var items = new List<ToolStripItem>()
             {
@@ -98,12 +98,12 @@ namespace System.Windows.Forms.Tests
 
             var itemTexts = new List<string>()
             {
-                SR.GetString(SR.BindingNavigatorMoveFirstItemText),
-                SR.GetString(SR.BindingNavigatorMovePreviousItemText),
-                SR.GetString(SR.BindingNavigatorMoveNextItemText),
-                SR.GetString(SR.BindingNavigatorMoveLastItemText),
-                SR.GetString(SR.BindingNavigatorAddNewItemText),
-                SR.GetString(SR.BindingNavigatorDeleteItemText)
+                SR.BindingNavigatorMoveFirstItemText,
+                SR.BindingNavigatorMovePreviousItemText,
+                SR.BindingNavigatorMoveNextItemText,
+                SR.BindingNavigatorMoveLastItemText,
+                SR.BindingNavigatorAddNewItemText,
+                SR.BindingNavigatorDeleteItemText
             };
 
             for (var i=0; i<items.Count; i++)

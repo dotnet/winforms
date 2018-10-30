@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Tests
 
             // assert
             Assert.NotNull(label);
-            Assert.NotNull(label.LinkArea);
+            Assert.False(label.LinkArea.IsEmpty);            
             Assert.Equal(0, label.LinkArea.Start);
             Assert.Equal(0, label.LinkArea.Length);
         }
