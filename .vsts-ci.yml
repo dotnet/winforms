@@ -3,9 +3,9 @@ variables:
   _HelixType: build/product
   
   # Change helix sources based on build project/reason
-  ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.Repository.Provider'], 'GitHub')) }}:
+  ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
     _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
-  ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.Repository.Provider'], 'GitHub')) }}:
+  ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
     _TeamName: DotNetCore
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
 
@@ -41,17 +41,17 @@ phases:
           _BuildConfig: netcoreapp-Windows_NT-Release
           # If the project is public or the build is for a PR, test sign and don't publish package updates to dotnet feed.
           # If the project is not public AND the build is NOT for a PR, real sign and publish.
-          ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.Repository.Provider'], 'GitHub')) }}:
+          ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
             _PublishType: none
             _SignType: test
             _DotNetPublishToBlobFeed : false
-          ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.Repository.Provider'], 'GitHub')) }}:
+          ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
             _PublishType: blob
             _SignType: real
             _DotNetPublishToBlobFeed : true
 
 # If the project is NOT public AND the build is NOT for a PR, publish build assets
-- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.Repository.Provider'], 'GitHub')) }}:
+- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
   - template: /eng/common/templates/phases/publish-build-assets.yml
     parameters:
       dependsOn:
