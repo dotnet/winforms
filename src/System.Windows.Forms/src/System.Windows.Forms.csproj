@@ -1,9 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
     <Configurations>netcoreapp-Windows_NT-Debug;netcoreapp-Windows_NT-Release</Configurations>
+
+    <!-- Needed for xUnit.stafact to work properly, since stafact was built against winforms -->
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <StrongNameKeyId>ECMA</StrongNameKeyId>
   </PropertyGroup>
 
 </Project>

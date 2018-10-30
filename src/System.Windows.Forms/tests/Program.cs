@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace System.Windows.Forms.Tests
+namespace HelloWorld.Tests
 {
     public class ProgramTests
     {
