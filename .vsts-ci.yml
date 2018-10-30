@@ -51,7 +51,7 @@ phases:
             _DotNetPublishToBlobFeed : true
 
 # If the project is NOT public AND the build is NOT for a PR, publish build assets
-- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.Repository.Provider'], 'GitHub')) }}:
+- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Repository.Provider'], 'GitHub')) }}:
   - template: /eng/common/templates/phases/publish-build-assets.yml
     parameters:
       dependsOn:
