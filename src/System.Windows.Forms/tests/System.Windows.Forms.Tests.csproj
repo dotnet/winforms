@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Moq" Version="4.10.0" />
+    <PackageReference Include="Microsoft.DesktopUI.App" Version="3.0.0-alpha-27006-1" ExcludeAssets="All" />
     <PackageReference Include="Xunit.StaFact" Version="0.3.2" />
   </ItemGroup>
 
