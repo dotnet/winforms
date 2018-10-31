@@ -9,6 +9,9 @@
   <!-- Package references -->
   <ItemGroup>
     <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />
+
+    <!-- Hack needed because xUnit.stafact references this package and this messes us up -->
+    <PackageReference Include="Microsoft.DesktopUI.App" Version="3.0.0-alpha-27006-1" ExcludeAssets="All" />
   </ItemGroup>
 
   <!-- Project references -->
