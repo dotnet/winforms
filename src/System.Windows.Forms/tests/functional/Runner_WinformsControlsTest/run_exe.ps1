@@ -1,19 +1,19 @@
 Add-Type -AssemblyName System.Windows.Forms
-Add-Type @" 
+<#Add-Type @" 
   using System; 
   using System.Runtime.InteropServices; 
   public class UserWindows { 
     [DllImport("user32.dll")] 
     public static extern IntPtr GetForegroundWindow(); 
 } 
-"@
+"@#>
 
 # changeable parameters
 $testInner = $true
 $waitTime = 200
 # end of changable parameters
 
-function SeeActiveWindow()
+<#function SeeActiveWindow()
 {
     try 
     { 
@@ -25,7 +25,7 @@ function SeeActiveWindow()
     { 
         Write-Error "Failed to get active Window details. More Info: $_" 
     } 
-}
+}#>
 
 function TabOpenClose 
 {
@@ -33,7 +33,7 @@ function TabOpenClose
         [parameter(Mandatory=$true)] [System.Diagnostics.Process] $p
     )
 
-    if($p.HasExited -ne $true -and (SeeActiveWindow -eq $p.ProcessName))
+    if($p.HasExited -ne $true )#-and (SeeActiveWindow -eq $p.ProcessName))
     {
         [System.Windows.Forms.SendKeys]::SendWait('{TAB}') #DateTimePickerButton
     } 
@@ -47,12 +47,12 @@ function OpenClose
         [parameter(Mandatory=$true)] [System.Diagnostics.Process] $p
     )
 
-    if($p.HasExited -ne $true -and (SeeActiveWindow -eq $p.ProcessName))
+    if($p.HasExited -ne $true )#-and (SeeActiveWindow -eq $p.ProcessName))
     {
         [System.Windows.Forms.SendKeys]::SendWait('~')
     }
     Start-Sleep -m $waitTime
-    if($p.HasExited -ne $true -and (SeeActiveWindow -eq $p.ProcessName))
+    if($p.HasExited -ne $true )#-and (SeeActiveWindow -eq $p.ProcessName))
     {
         [System.Windows.Forms.SendKeys]::SendWait('%{F4}')
     } 
