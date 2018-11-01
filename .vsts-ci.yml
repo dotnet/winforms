@@ -52,7 +52,7 @@ phases:
 
 # If the project is NOT public AND the build is NOT for a PR, publish build assets
 - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
-  - template: /eng/common/templates/phases/publish-build-assets.yml
+  - template: /eng/common-local/templates/phases/publish-build-assets.yml
     parameters:
       dependsOn:
         - Windows_NT
