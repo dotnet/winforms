@@ -59,7 +59,7 @@ function OpenClose
 }
 
 $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-$pinfo.FileName = '..\WinformsControlsTest\bin\Debug\netcoreapp3.0\WinformsControlsTest.exe' # path to exe
+$pinfo.FileName = 'WinformsControlsTest.exe' # path to exe in adjacent folder ..\WinformsControlsTest\bin\Debug\netcoreapp3.0\WinformsControlsTest.exe
 $pinfo.RedirectStandardError = $true
 $pinfo.RedirectStandardOutput = $true
 $pinfo.UseShellExecute = $false
