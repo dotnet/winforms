@@ -1,0 +1,146 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System">
+      <HintPath>System</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>System.Data</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <HintPath>System.Drawing</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>System.Windows.Forms</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>System.Xml</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Buttons.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Buttons.Designer.cs">
+      <DependentUpon>Buttons.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Calendar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Calendar.Designer.cs">
+      <DependentUpon>Calendar.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ComboBoxes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ComboBoxes.Designer.cs">
+      <DependentUpon>ComboBoxes.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DataGridViewHeaders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="DataGridViewHeaders.Designer.cs">
+      <DependentUpon>DataGridViewHeaders.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DateTimePicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="DateTimePicker.Designer.cs">
+      <DependentUpon>DateTimePicker.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DesignTimeAligned.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="DesignTimeAligned.Designer.cs">
+      <DependentUpon>DesignTimeAligned.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ListViewTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ListViewTest.Designer.cs">
+      <DependentUpon>ListViewTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="MdiChild.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MdiChild.Designer.cs">
+      <DependentUpon>MdiChild.cs</DependentUpon>
+    </Compile>
+    <Compile Update="MDIParent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MDIParent.Designer.cs">
+      <DependentUpon>MDIParent.cs</DependentUpon>
+    </Compile>
+    <Compile Update="MenuStripAndCheckedListBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MenuStripAndCheckedListBox.Designer.cs">
+      <DependentUpon>MenuStripAndCheckedListBox.cs</DependentUpon>
+    </Compile>
+    <Compile Update="MultipleControls.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MultipleControls.Designer.cs">
+      <DependentUpon>MultipleControls.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Panels.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Panels.Designer.cs">
+      <DependentUpon>Panels.cs</DependentUpon>
+    </Compile>
+    <Compile Update="PropertyGrid.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PropertyGrid.Designer.cs">
+      <DependentUpon>PropertyGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ScalingBeforeChanges.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ScalingBeforeChanges.Designer.cs">
+      <DependentUpon>ScalingBeforeChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Splitter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Splitter.Designer.cs">
+      <DependentUpon>Splitter.cs</DependentUpon>
+    </Compile>
+    <Compile Update="TreeViewTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="TreeViewTest.Designer.cs">
+      <DependentUpon>TreeViewTest.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="MainForm.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="LargeA.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="LargeABlue.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SmallA.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SmallABlue.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
