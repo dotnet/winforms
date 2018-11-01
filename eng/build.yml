@@ -16,7 +16,7 @@ parameters:
 #   - contains(variables['Build.DefinitionName'], 'github') - Build definition contains 'github' (since Build.Repository.Provider doesn't seem to work)
 
 phases:
-- template: /eng/common/templates/phases/base.yml
+- template: /eng/common-local/templates/phases/base.yml
   parameters:
     enableTelemetry: ${{ parameters.enableTelemetry }}
 
@@ -65,7 +65,7 @@ phases:
       displayName: Windows Build / Publish
       condition: and(succeeded(), eq(variables['Agent.Os'], 'Windows_NT'))
 
-    - script: eng/common/cibuild.sh
+    - script: eng/common-local/cibuild.sh
         --configuration $(_BuildConfig)
         --prepareMachine
         $(_PublishArgs)
