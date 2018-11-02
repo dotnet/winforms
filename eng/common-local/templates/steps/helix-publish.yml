@@ -21,7 +21,7 @@ steps:
   - task: DotNetCoreCLI@2
     inputs:
       command: custom
-      projects: eng/common/helixpublish.proj
+      projects: eng/common-local/helixpublish.proj
       custom: msbuild
       arguments: '/t:test /p:Language=msbuild'
     displayName: Send job to Helix
