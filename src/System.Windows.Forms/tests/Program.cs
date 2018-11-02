@@ -1,8 +1,10 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using HelloWorld;
 
-namespace System.Windows.Forms.Tests
+namespace HelloWorld.Tests
 {
     public class ProgramTests
     {
@@ -16,13 +18,13 @@ namespace System.Windows.Forms.Tests
             Assert.True(result);
         }
 
-        // test copied from https://github.com/AArnott/Xunit.StaFact
-        [StaFact]
-        public async Task WpfFact_OnSTAThread()
+        // test copied from https://github.com/AArnott/Xunit.StaFact/blob/2e33ac2b88603852a2d72f81be4ff1c188f8ea55/src/Xunit.StaFact.Tests/Samples.cs
+        [UIFact]
+        public async Task UIFact_OnSTAThread()
         {
-            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+            int initialThread = Environment.CurrentManagedThreadId;
             await Task.Yield();
-            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
+            Assert.Equal(initialThread, Environment.CurrentManagedThreadId);
         }
     }
 }
