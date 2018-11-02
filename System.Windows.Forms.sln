@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Ref", "src\System.Windows.Forms\ref\System.Windows.Forms.Ref.csproj", "{334C343B-9D39-498E-89D8-B6526028FD5C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Tests", "src\System.Windows.Forms\tests\System.Windows.Forms.Tests.csproj", "{47B0F92F-683B-4711-B23A-8965743F2792}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{334C343B-9D39-498E-89D8-B6526028FD5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{334C343B-9D39-498E-89D8-B6526028FD5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{334C343B-9D39-498E-89D8-B6526028FD5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47B0F92F-683B-4711-B23A-8965743F2792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47B0F92F-683B-4711-B23A-8965743F2792}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47B0F92F-683B-4711-B23A-8965743F2792}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47B0F92F-683B-4711-B23A-8965743F2792}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

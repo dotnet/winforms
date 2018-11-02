@@ -34,12 +34,12 @@ phases:
       parallel: 99
       matrix:
         Build_Debug:
-          _BuildConfig: netcoreapp-Windows_NT-Debug
+          _BuildConfig: Debug
           _PublishType: none
           _SignType: test
           _DotNetPublishToBlobFeed : false
         Build_Release:
-          _BuildConfig: netcoreapp-Windows_NT-Release
+          _BuildConfig: Release
           # If the project is public or the build is for a PR, test sign and don't publish package updates to dotnet feed.
           # If the project is not public AND the build is NOT for a PR, real sign and publish.
           # TODO: Once we go public, remove the build definition name check
@@ -61,4 +61,4 @@ phases:
         - Windows_NT
       queue:
         name: Hosted VS2017
-      configuration: netcoreapp-Windows_NT-Debug
+      configuration: Debug
