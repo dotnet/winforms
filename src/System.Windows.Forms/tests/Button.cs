@@ -186,7 +186,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public new void ToString()
+        public void ToStringTest()
         {
             // arrange
             var button = new Button();
