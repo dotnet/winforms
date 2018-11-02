@@ -5,7 +5,7 @@
     <IsPackable>true</IsPackable>
     <Configurations>netcoreapp-Windows_NT-Debug;netcoreapp-Windows_NT-Release</Configurations>
 
-    <!-- Needed for xUnit.stafact to work properly, since stafact was built against winforms -->
+    <!-- Identity needs to match what was in desktop so we remain compatible with desktop assemblies built against winforms -->
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <StrongNameKeyId>ECMA</StrongNameKeyId>
   </PropertyGroup>
