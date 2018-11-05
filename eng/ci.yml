@@ -8,7 +8,7 @@ phases:
 - template: /eng/build.yml
   parameters:
     name: Windows_NT
-    runAsPublic: ${{ parameters.runAsPublic }}
+    runAsPublic: $(_RunAsPublic)
     queue:
       name: ${{ parameters.agentPool }}
       parallel: 99
