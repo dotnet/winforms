@@ -31,7 +31,7 @@ trigger:
 # call the ci.yml template, which does the real work
 phases:
 - template: /eng/ci.yml
-  paramters:
+  parameters:
     # agent pool is a special case, needs to be constant when it's used
     ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
       agentPool: dotnet-internal-temp # todo: once github repo goes public, change this to dotnet-external-temp
