@@ -1,7 +1,7 @@
 # All variables in this yml are defined in ../.vsts-ci.yml.
 # The only ones passed in are the ones that can't be read as globals, due to yaml limitations
 parameters:
-  #runAsPublic: false
+  runAsPublic: false
   #agentPool: ''
   variables: {}
 
@@ -9,9 +9,9 @@ phases:
 - template: /eng/build.yml
   parameters:
     variables: 
-      ${{ insert }}: ${{ parameters.variables }}  
+      ${{ insert }}: ${{ parameters.variables }}
     name: Windows_NT
-    runAsPublic: $(_RunAsPublic)
+    runAsPublic: ${{ parameters.runAsPublic }}
     queue:
       name: $(_AgentPool)
       parallel: 99

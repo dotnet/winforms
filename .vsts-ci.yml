@@ -33,7 +33,7 @@ trigger:
 # call the ci.yml template, which does the real work
 phases:
 - template: /eng/ci.yml
-  #parameters:
-  #  runAsPublic: $(_RunAsPublic)
+  parameters:
+    runAsPublic: 'true'
     #agentPool: variables['_AgentPool']
     #agentPool: $(_AgentPool)
