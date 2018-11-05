@@ -3,13 +3,13 @@
 parameters:
   runAsPublic: false
   #agentPool: ''
-  variables: {}
+  #variables: {}
 
 phases:
 - template: /eng/build.yml
   parameters:
-    variables: 
-      ${{ insert }}: ${{ parameters.variables }}
+    #variables: 
+    #  ${{ insert }}: ${{ parameters.variables }}
     name: Windows_NT
     runAsPublic: ${{ parameters.runAsPublic }}
     queue:
