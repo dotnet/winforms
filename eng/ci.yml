@@ -25,7 +25,7 @@ phases:
           runAsPublic: $(_RunAsPublic)
 
 - ${{ if ne(parameters.runAsPublic, 'true') }}:
-  - template: /eng/common-local/templates/phases/publish-build-assets.yml
+  - template: /eng/common/templates/phases/publish-build-assets.yml
     parameters:
       dependsOn: Windows_NT
       queue:
