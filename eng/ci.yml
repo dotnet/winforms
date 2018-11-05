@@ -1,4 +1,6 @@
 # All variables in this yml are defined in ../.vsts-ci.yml.
+# The only parameter is agent pool because this can't be read from a variable yet
+# according to the Azure DevOps team.
 parameters:
   agentPool: ''
 
