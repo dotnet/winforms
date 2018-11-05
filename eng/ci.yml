@@ -16,7 +16,7 @@ phases:
       ${{ insert }}: ${{ parameters.variables }}
 
     name: Windows_NT
-    runAsPublic: $(_RunAsPublic)
+    runAsPublic: ${{ variables['_RunAsPublic'] }}
     queue:
       name: ${{ parameters.agentPool }}
       parallel: 99
