@@ -54,14 +54,6 @@ phases:
     ${{ if ne(parameters.fetchDepth, '') }}:
       fetchDepth: ${{ parameters.fetchDepth }}
 
-  # todo: remove this
-  - script: |
-      echo HelixType - $(_HelixType)
-      echo HelixSource - $(_HelixSource)
-      echo PublishType - $(_PublishType)
-      echo Signtype - $(_SignType)
-    displayName: 'Debugging'
-
   - ${{ if eq(parameters.enableTelemetry, 'true') }}:
     - template: /eng/common/templates/steps/telemetry-start.yml
       parameters:
