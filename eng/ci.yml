@@ -1,7 +1,7 @@
 # All variables in this yml are defined in ../.vsts-ci.yml.
 # The only ones passed in are the ones that can't be read as globals, due to yaml limitations
-parameters:
-  runAsPublic: false
+#parameters:
+  #runAsPublic: false
   #agentPool: ''
   #variables: {}
 
