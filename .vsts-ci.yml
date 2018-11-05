@@ -9,18 +9,18 @@ variables:
     _RunAsPublic: true
     _AgentPool: dotnet-internal-temp # todo: once github repo goes public, change this to dotnet-external-temp
     _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
-    _publishType: none
-    _signType: test
-    _dotNetPublishToBlobFeed : false
+    _publishType2: none
+    _signType2: test
+    _dotNetPublishToBlobFeed2 : false
   # else
   ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
     _RunAsPublic: false
     _AgentPool: dotnet-internal-temp
     _TeamName: DotNetCore
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
-    _publishType: blob
-    _signType: real
-    _dotNetPublishToBlobFeed : true
+    _publishType2: blob
+    _signType2: real
+    _dotNetPublishToBlobFeed2 : true
 
 # only trigger builds for the master branch
 trigger:
