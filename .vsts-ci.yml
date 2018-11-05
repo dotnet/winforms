@@ -34,4 +34,9 @@ trigger:
 phases:
 - template: /eng/ci.yml
   parameters:
-    agentPool: ${{ variables['_AgentPool'] }}
+    # Agent pool must be constant when it's referenced, according to the Azure DevOps team,
+    # so this is a hack needed until they fix this
+    ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
+      agentPool: dotnet-internal-temp # todo: once github repo goes public, change this to dotnet-external-temp
+    ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+      agentPool: dotnet-internal-temp
