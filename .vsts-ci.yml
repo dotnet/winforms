@@ -6,6 +6,7 @@ variables:
   
   # Change some variables based on build conditions
   ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
+    _AgentPool : dotnet-internal-temp # todo: once github repo goes public, change this to dotnet-external-temp
     _RunAsPublic: true
     _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
     _PublishType: none
@@ -13,6 +14,7 @@ variables:
     _DotNetPublishToBlobFeed : false
   # else
   ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+    _AgentPool : dotnet-internal-temp
     _RunAsPublic: false
     _TeamName: DotNetCore
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
@@ -32,8 +34,10 @@ trigger:
 phases:
 - template: /eng/ci.yml
   parameters:
-    # agent pool is a special case, needs to be constant when it's used
-    ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
-      agentPool: dotnet-internal-temp # todo: once github repo goes public, change this to dotnet-external-temp
-    ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
-      agentPool: dotnet-internal-temp
+    # agent pool is a special case, it needs to be constant when it's referenced (it can be a parameter)
+    # The Azure DevOps team said this will be fixed in a future release
+    #${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
+      # todo: once github repo goes public, change this to dotnet-external-temp
+    agentPool: ${{ variables['_AgentPool'] }}
+    #${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+    #  agentPool: dotnet-internal-temp
