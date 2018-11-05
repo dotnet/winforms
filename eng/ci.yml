@@ -24,10 +24,10 @@ phases:
           _DotNetPublishToBlobFeed : $(_DotNetPublishToBlobFeed)
           runAsPublic: $(_RunAsPublic)
 
-- template: /eng/common-local/templates/phases/publish-build-assets.yml
-  parameters:
-    dependsOn: Windows_NT
-    queue:
-      name: Hosted VS2017
-    configuration: netcoreapp-Windows_NT-Debug
-    condition: not(parameters.runAsPublic) #todo: change this to $(_RunAsPublic) to see if it works?
+- ${{ if ne(parameters.runAsPublic, 'true') }}
+  - template: /eng/common-local/templates/phases/publish-build-assets.yml
+    parameters:
+      dependsOn: Windows_NT
+      queue:
+        name: Hosted VS2017
+      configuration: netcoreapp-Windows_NT-Debug
