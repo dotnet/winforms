@@ -13,7 +13,7 @@ phases:
     name: Windows_NT
     runAsPublic: ${{ parameters.runAsPublic }}
     queue:
-      name: $(_AgentPool)
+      name: dotnet-internal-temp # todo: remove this hardcoded value
       parallel: 99
       matrix:
         Build_Debug:
