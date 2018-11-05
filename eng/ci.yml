@@ -11,10 +11,9 @@ phases:
     variables: 
       ${{ insert }}: ${{ parameters.variables }}  
     name: Windows_NT
-    agentPool: $(_AgentPool)
     runAsPublic: $(_RunAsPublic)
     queue:
-      name: parameters.agentPool
+      name: $(_AgentPool)
       parallel: 99
       matrix:
         Build_Debug:
