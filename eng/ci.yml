@@ -8,6 +8,8 @@ phases:
 - template: /eng/build.yml
   parameters:
     name: Windows_NT
+    agentPool: ${{ parameters.agentPool }}
+    runAsPublic: ${{ parameters.runAsPublic }}
     queue:
       name: parameters.agentPool
       parallel: 99
@@ -17,13 +19,11 @@ phases:
           _PublishType: none
           _SignType: test
           _DotNetPublishToBlobFeed : false
-          runAsPublic: $(_RunAsPublic)
         Build_Release:
           _BuildConfig: netcoreapp-Windows_NT-Release
           _PublishType: $(_PublishType)
           _SignType: $(_SignType)
           _DotNetPublishToBlobFeed : $(_DotNetPublishToBlobFeed)
-          runAsPublic: $(_RunAsPublic)
 
 - ${{ if ne(parameters.runAsPublic, 'true') }}:
   - template: /eng/common/templates/phases/publish-build-assets.yml
