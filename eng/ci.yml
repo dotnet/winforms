@@ -23,9 +23,9 @@ phases:
           _DotNetPublishToBlobFeed : false
         Build_Release:
           _BuildConfig: netcoreapp-Windows_NT-Release
-          _PublishType: $(_PublishType)
-          _SignType: $(_SignType)
-          _DotNetPublishToBlobFeed : $(_DotNetPublishToBlobFeed)
+          _PublishType: $(_publishType)
+          _SignType: $(_signType)
+          _DotNetPublishToBlobFeed : $(_dotNetPublishToBlobFeed)
 
 - ${{ if eq(parameters.runAsPublic, 'false') }}:
   - template: /eng/common/templates/phases/publish-build-assets.yml
