@@ -1,7 +1,7 @@
 # All variables in this yml are defined in ../.vsts-ci.yml
 # RunAsPublic is the only one passed in, because conditional steps can't seem to read global variables
-variables:
-  runAsPublic: $(_RunAsPublic)
+parameters:
+  runAsPublic: false
 
 phases:
 - template: /eng/build.yml
@@ -30,4 +30,4 @@ phases:
     queue:
       name: Hosted VS2017
     configuration: netcoreapp-Windows_NT-Debug
-    condition: not(variables['runAsPublic'])
+    condition: not(parameters.runAsPublic) #todo: change this to $(_RunAsPublic) to see if it works?
