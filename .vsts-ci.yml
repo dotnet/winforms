@@ -12,7 +12,7 @@ variables:
     _PublishType: none
     _SignType: test
     _DotNetPublishToBlobFeed : false
-  
+  # else
   ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
     _RunAsPublic: false
     _AgentPool: dotnet-internal-temp
@@ -33,6 +33,7 @@ trigger:
 # call the ci.yml template, which does the real work
 phases:
 - template: /eng/ci.yml
-  parameters:
-    runAsPublic: $(_RunAsPublic)
-    agentPool: variables['_AgentPool']
+  #parameters:
+  #  runAsPublic: $(_RunAsPublic)
+    #agentPool: variables['_AgentPool']
+    #agentPool: $(_AgentPool)
