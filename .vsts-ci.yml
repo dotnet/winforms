@@ -35,4 +35,4 @@ phases:
 - template: /eng/ci.yml
   parameters:
     runAsPublic: $(_RunAsPublic)
-    agentPool: $(_AgentPool)
+    agentPool: variables['_AgentPool']
