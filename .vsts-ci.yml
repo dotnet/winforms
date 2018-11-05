@@ -7,7 +7,6 @@ variables:
   # Change some variables based on build conditions
   ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
     _RunAsPublic: true
-    _AgentPool: dotnet-internal-temp # todo: once github repo goes public, change this to dotnet-external-temp
     _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
     _PublishType: none
     _SignType: test
@@ -15,7 +14,6 @@ variables:
   # else
   ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
     _RunAsPublic: false
-    _AgentPool: dotnet-internal-temp
     _TeamName: DotNetCore
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
     _PublishType: blob
@@ -33,7 +31,9 @@ trigger:
 # call the ci.yml template, which does the real work
 phases:
 - template: /eng/ci.yml
-# parameters:
-    #runAsPublic: 'true'
-    #agentPool: variables['_AgentPool']
-    #agentPool: $(_AgentPool)
+  paramters:
+    # agent pool is a special case, needs to be constant when it's used
+    ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
+      agentPool: dotnet-internal-temp # todo: once github repo goes public, change this to dotnet-external-temp
+    ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+      agentPool: dotnet-internal-temp
