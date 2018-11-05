@@ -1,12 +1,20 @@
 # All variables in this yml are defined in ../.vsts-ci.yml.
-# The only parameter is agent pool because this can't be read from a variable yet
-# according to the Azure DevOps team.
 parameters:
+
+  # Needed because agent pool can't be read from agent-scoped variables
   agentPool: ''
+
+  # needed to reference variables defined in the caller
+  variables: {}
 
 phases:
 - template: /eng/build.yml
   parameters:
+  
+    # insert the variables from the caller as local variables
+    variables:
+      ${{ insert }}: ${{ parameters.variables }}
+
     name: Windows_NT
     runAsPublic: $(_RunAsPublic)
     queue:
