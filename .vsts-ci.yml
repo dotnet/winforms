@@ -1,21 +1,14 @@
-# This is a simple wrapper for eng/ci.yml so we have a place to define variables,
-# since yaml doesn't have good support for delayed variable expansion
+# This is a simple wrapper for eng/ci.yml to get around the limitation of
+# user-defined variables not being available in yaml expressions.
+
+# Template parameters ARE available in yaml expressions, and parameters can have default values,
+# so they can be used to control yaml flow.
+
 variables:
+
+  # clean the local repo on the build agents
   Build.Repository.Clean: true
-  _HelixType: build/product
-  _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
-  _PublishType: none
-  _SignType: test
-  _DotNetPublishToBlobFeed: false
-
-  # Change some values for internal builds
-  ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
-    _TeamName: DotNetCore
-    _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
-    _PublishType: blob
-    _SignType: real
-    _DotNetPublishToBlobFeed: true
-
+  
 # only trigger ci builds for the master branch
 trigger:
 - master
@@ -29,9 +22,9 @@ trigger:
 phases:
 - template: /eng/ci.yml
   parameters:
-    # Workaround for agent pool not able to be read from a runtime variable (move this up to user defined variables once the AzDO team fixes this)
-    # runAsPublic is used in template expansion, so it can't be in a user defined variable
     # TODO: REMOVE THE BUILD.DEFINITIONNAME CHECK ONCE THE GITHUB REPO GOES PUBLIC
     ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+      # agent pool can't be read from a user-defined variable (Azure DevOps limitation)
       agentPool: dotnet-internal-temp
+      # runAsPublic is used in expressions, which can't read from user-defined variables
       runAsPublic: false
