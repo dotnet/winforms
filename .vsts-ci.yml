@@ -3,14 +3,12 @@
 variables:
   Build.Repository.Clean: true
   _HelixType: build/product
-  
-  # Change some variables based on build conditions
-  ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
-    _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
-    _PublishType: none
-    _SignType: test
-    _DotNetPublishToBlobFeed : false
-  # else
+  _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
+  _PublishType: none
+  _SignType: test
+  _DotNetPublishToBlobFeed : false
+
+  # Change some values for internal builds
   ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
     _TeamName: DotNetCore
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
@@ -18,11 +16,12 @@ variables:
     _SignType: real
     _DotNetPublishToBlobFeed : true
 
-# only trigger builds for the master branch
+# only trigger ci builds for the master branch
 trigger:
 - master
 
 # To be added in the future when VSTS supports this feature
+# only trigger pull request builds for the master branch
 # pr:
 # - master
 
