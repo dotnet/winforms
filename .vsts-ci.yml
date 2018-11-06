@@ -11,7 +11,7 @@ variables:
   
   # Set some variables based on build conditions
   # TODO: Remove the Build.DefinitionName check once the github repo goes public
-  ${{ if or(eq(variables.System.TeamProject, 'public'), in(variables.Build.Reason, 'PullRequest'), contains(variables.Build.DefinitionName, 'github')) }}:
+  ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
     _HelixType: build/product
     _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
     _PublishType: none
@@ -19,7 +19,7 @@ variables:
     _DotNetPublishToBlobFeed: false
   # else
   # TODO: Remove the Build.DefinitionName check once the github repo goes public
-  ${{ if and(ne(variables.System.TeamProject, 'public'), notin(variables.Build.Reason, 'PullRequest'), not(contains(variables.Build.DefinitionName, 'github'))) }}:
+  ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
     _TeamName: DotNetCore
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
     _PublishType: blob
@@ -40,7 +40,7 @@ phases:
 - template: /eng/ci.yml
   parameters:
     # TODO: Remove the Build.DefinitionName check once the github repo goes public
-    ${{ if and(ne(variables.System.TeamProject, 'public'), notin(variables.Build.Reason, 'PullRequest'), not(contains(variables.Build.DefinitionName, 'github'))) }}:
+    ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
       # agent pool can't be read from a user-defined variable (Azure DevOps limitation)
       agentPool: dotnet-internal-temp
       # runAsPublic is used in expressions, which can't read from user-defined variables
