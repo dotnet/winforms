@@ -1,0 +1,36 @@
+# All variables in this yml are defined in ../.vsts-ci.yml.
+parameters:
+
+  # Needed because agent pool can't be read from runtime variables
+  agentPool: ''
+
+  # Needed because runAsPublic is in template conditionals, which can't read from runtime variables
+  runAsPublic: ''
+
+# Call build.yml, which runs common build tasks
+phases:
+- template: /eng/build.yml
+  parameters:
+    name: Windows_NT
+    runAsPublic: ${{ parameters.runAsPublic }}
+    queue:
+      name: ${{ parameters.agentPool }}
+      parallel: 99
+      matrix:
+        Build_Debug:
+          _BuildConfig: netcoreapp-Windows_NT-Debug
+          # hardcode some values when building debug
+          _PublishType: none
+          _SignType: test
+          _DotNetPublishToBlobFeed : false
+        Build_Release:
+          _BuildConfig: netcoreapp-Windows_NT-Release
+
+# only publish build assets if we're running internally
+- ${{ if eq(parameters.runAsPublic, 'false') }}:
+  - template: /eng/common/templates/phases/publish-build-assets.yml
+    parameters:
+      dependsOn: Windows_NT
+      queue:
+        name: Hosted VS2017
+      configuration: netcoreapp-Windows_NT-Debug
