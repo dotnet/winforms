@@ -6,7 +6,7 @@ variables:
   _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
   _PublishType: none
   _SignType: test
-  _DotNetPublishToBlobFeed : false
+  _DotNetPublishToBlobFeed: false
 
   # Change some values for internal builds
   ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
@@ -14,7 +14,7 @@ variables:
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
     _PublishType: blob
     _SignType: real
-    _DotNetPublishToBlobFeed : true
+    _DotNetPublishToBlobFeed: true
 
 # only trigger ci builds for the master branch
 trigger:
