@@ -22,7 +22,7 @@ phases:
       matrix:
         Build_Debug:
           _BuildConfig: netcoreapp-Windows_NT-Debug
-          # hardcode some values when building debug
+          # overwrite some values when building debug
           _PublishType: none
           _SignType: test
           _DotNetPublishToBlobFeed : false
