@@ -1,7 +1,7 @@
 # This is a simple wrapper for eng/ci.yml to get around the limitation of
-# user-defined variables not being available in yaml expressions.
+# user-defined variables not being available in yaml template expressions.
 
-# Template parameters ARE available in yaml expressions, and parameters can have default values,
+# Parameters ARE available in template expressions, and parameters can have default values,
 # so they can be used to control yaml flow.
 
 variables:
@@ -9,6 +9,23 @@ variables:
   # clean the local repo on the build agents
   Build.Repository.Clean: true
   
+  # Set some variables based on build conditions
+  # TODO: Remove the Build.DefinitionName check once the github repo goes public
+  ${{ if or(eq(variables.System.TeamProject, 'public'), in(variables.Build.Reason, 'PullRequest'), contains(variables.Build.DefinitionName, 'github')) }}:
+    _HelixType: build/product
+    _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
+    _PublishType: none
+    _SignType: test
+    _DotNetPublishToBlobFeed: false
+  # else
+  # TODO: Remove the Build.DefinitionName check once the github repo goes public
+  ${{ if and(ne(variables.System.TeamProject, 'public'), notin(variables.Build.Reason, 'PullRequest'), not(contains(variables.Build.DefinitionName, 'github'))) }}:
+    _TeamName: DotNetCore
+    _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
+    _PublishType: blob
+    _SignType: real
+    _DotNetPublishToBlobFeed: true
+
 # only trigger ci builds for the master branch
 trigger:
 - master
@@ -22,8 +39,8 @@ trigger:
 phases:
 - template: /eng/ci.yml
   parameters:
-    # TODO: REMOVE THE BUILD.DEFINITIONNAME CHECK ONCE THE GITHUB REPO GOES PUBLIC
-    ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+    # TODO: Remove the Build.DefinitionName check once the github repo goes public
+    ${{ if and(ne(variables.System.TeamProject, 'public'), notin(variables.Build.Reason, 'PullRequest'), not(contains(variables.Build.DefinitionName, 'github'))) }}:
       # agent pool can't be read from a user-defined variable (Azure DevOps limitation)
       agentPool: dotnet-internal-temp
       # runAsPublic is used in expressions, which can't read from user-defined variables
