@@ -1,22 +1,17 @@
 # All variables in this yml are defined in ../.vsts-ci.yml.
 parameters:
 
-  # Needed because agent pool can't be read from agent-scoped variables
+  # Needed because agent pool can't be read from runtime variables
   agentPool: ''
 
-  # needed to reference variables defined in the caller
-  variables: {}
+  # Needed because runAsPublic is in template conditionals, which can't read from runtime variables
+  runAsPublic: ''
 
 phases:
 - template: /eng/build.yml
   parameters:
-  
-    # insert the variables from the caller as local variables
-    variables:
-      ${{ insert }}: ${{ parameters.variables }}
-
     name: Windows_NT
-    runAsPublic: ${{ variables['_RunAsPublic'] }}
+    runAsPublic: ${{ parameters.runAsPublic }}
     queue:
       name: ${{ parameters.agentPool }}
       parallel: 99
