@@ -47,6 +47,7 @@ namespace System.Windows.Forms
             internal const string IFileOpenDialog = "d57c7288-d4ad-4768-be02-9d969532d960";
             internal const string IFileSaveDialog = "84bccd23-5fde-4cdb-aea4-af64b83d78ab";
             internal const string IFileDialogEvents = "973510DB-7D7F-452B-8975-74A85828D354";
+            internal const string IFileDialogCustomize = "e6fdd21a-163f-4975-9c8c-a69f1ba37034";
             internal const string IShellItem = "43826D1E-E718-42EE-BC55-A1E261C37BFE";
             internal const string IShellItemArray = "B63EA76D-1F85-456F-A19C-48159EFA858B";
         }
@@ -310,6 +311,40 @@ namespace System.Windows.Forms
         }
 
         [ComImport,
+        Guid(IIDGuid.IFileDialogCustomize),
+        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        internal interface IFileDialogCustomize
+        {
+            void EnableOpenDropDown([In] int dwIDCtl);
+
+            void AddMenu([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
+            void AddPushButton([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
+            void AddComboBox([In] int dwIDCtl);
+            void AddRadioButtonList([In] int dwIDCtl);
+            void AddCheckButton([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszLabel, [In] bool bChecked);
+            void AddEditBox([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszText);
+            void AddSeparator([In] int dwIDCtl);
+            void AddText([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszText);
+            void SetControlLabel([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
+            void GetControlState([In] int dwIDCtl, [Out] out CDCONTROLSTATE pdwState);
+            void SetControlState([In] int dwIDCtl, [In] CDCONTROLSTATE dwState);
+            void GetEditBoxText([In] int dwIDCtl, [Out] IntPtr ppszText);
+            void SetEditBoxText([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszText);
+            void GetCheckButtonState([In] int dwIDCtl, [Out] out bool pbChecked);
+            void SetCheckButtonState([In] int dwIDCtl, [In] bool bChecked);
+            void AddControlItem([In] int dwIDCtl, [In] int dwIDItem, [In, MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
+            void RemoveControlItem([In] int dwIDCtl, [In] int dwIDItem);
+            void RemoveAllControlItems([In] int dwIDCtl);
+            void GetControlItemState([In] int dwIDCtl, [In] int dwIDItem, [Out] out CDCONTROLSTATE pdwState);
+            void SetControlItemState([In] int dwIDCtl, [In] int dwIDItem, [In] CDCONTROLSTATE dwState);
+            void GetSelectedControlItem([In] int dwIDCtl, [Out] out int pdwIDItem);
+            void SetSelectedControlItem([In] int dwIDCtl, [In] int dwIDItem); // Not valid for OpenDropDown
+            void StartVisualGroup([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
+            void EndVisualGroup();
+            void MakeProminent([In] int dwIDCtl);
+        }
+
+        [ComImport,
         Guid(IIDGuid.IShellItem),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         internal interface IShellItem
@@ -372,6 +407,13 @@ namespace System.Windows.Forms
             FOS_DEFAULTNOMINIMODE = 0x20000000
         }
 
+        internal enum CDCONTROLSTATE
+        {
+            CDCS_INACTIVE = 0x00000000,
+            CDCS_ENABLED = 0x00000001,
+            CDCS_VISIBLE = 0x00000002
+        }
+
         internal enum FDE_SHAREVIOLATION_RESPONSE
         {
             FDESVR_DEFAULT = 0x00000000,
@@ -384,6 +426,18 @@ namespace System.Windows.Forms
             FDEOR_DEFAULT = 0x00000000,
             FDEOR_ACCEPT = 0x00000001,
             FDEOR_REFUSE = 0x00000002
+        }
+
+        [DllImport(ExternDll.Shell32, CharSet = CharSet.Unicode)]
+        private static extern int SHCreateItemFromParsingName([MarshalAs(UnmanagedType.LPWStr)] string pszPath, IntPtr pbc, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out object ppv);
+
+        public static IShellItem CreateItemFromParsingName(string path)
+        {
+            Guid guid = new Guid(IIDGuid.IShellItem);
+            int hr = SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out object item);
+            if (hr != 0)
+                throw new System.ComponentModel.Win32Exception(hr);
+            return (IShellItem)item;
         }
     }
 }

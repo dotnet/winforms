@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Security;
+
 namespace System.Windows.Forms 
 {
     using System;
@@ -39,6 +41,8 @@ namespace System.Windows.Forms
         // Folder picked by the user.
         private string selectedPath;
 
+        private bool autoUpgradeEnabled = true;
+
         // Show the 'New Folder' button?
         private bool showNewFolderButton;
 
@@ -63,6 +67,24 @@ namespace System.Windows.Forms
             Reset();
         }
 
+
+        /// <summary>
+        /// Gets or Sets whether the dialog will be automatically upgraded to enable new features.
+        /// </summary>
+        [
+            DefaultValue(true)
+        ]
+        public bool AutoUpgradeEnabled
+        {
+            get
+            {
+                return autoUpgradeEnabled;
+            }
+            set
+            {
+                autoUpgradeEnabled = value;
+            }
+        }
         /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.HelpRequest"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -81,6 +103,7 @@ namespace System.Windows.Forms
         /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.ShowNewFolderButton"]/*' />
         /// <devdoc>
         ///     Determines if the 'New Folder' button should be exposed.
+        ///     This property has no effect if the Vista style dialog is used; in that case, the New Folder button is always shown.
         /// </devdoc>
         [
         Browsable(true),
@@ -105,6 +128,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Gets the directory path of the folder the user picked.
         ///     Sets the directory path of the initial folder shown in the dialog box.
+        ///     This property has no effect if the Vista style is used.
         /// </devdoc>
         [
         Browsable(true),
@@ -197,7 +221,40 @@ namespace System.Windows.Forms
                 descriptionText = (value == null) ? String.Empty : value;
             }
         }
-    
+
+        /// <summary>
+        /// Gets or sets a value that indicates whether to use the value of the <see cref="Description" /> property
+        /// as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.
+        /// </summary>
+        /// <value><see langword="true" /> to indicate that the value of the <see cref="Description" /> property is used as dialog title; <see langword="false" />
+        /// to indicate the value is added as additional text to the dialog. The default is <see langword="false" />.</value>
+        [Category("Folder Browsing"), DefaultValue(false), Description("A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.")]
+        public bool UseDescriptionForTitle { get; set; }
+
+        [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
+        internal bool UseVistaDialogInternal
+        {
+            get
+            {
+                if (UnsafeNativeMethods.IsVista && autoUpgradeEnabled)
+                {
+                    // 
+
+                    new EnvironmentPermission(PermissionState.Unrestricted).Assert();
+                    try
+                    {
+                        return SystemInformation.BootMode == BootMode.Normal; // see DDB#169589
+                    }
+                    finally
+                    {
+                        CodeAccessPermission.RevertAssert();
+                    }
+                }
+
+                return false;
+            }
+        }
+
         /// <devdoc>
         ///     Helper function that returns the IMalloc interface used by the shell.
         /// </devdoc>
@@ -229,10 +286,80 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected override bool RunDialog(IntPtr hWndOwner) 
         {
+            return UseVistaDialogInternal ? RunDialogVista(hWndOwner) : RunDialogOld(hWndOwner);
+        }
+
+        private bool RunDialogVista(IntPtr owner)
+        {
+            FileDialogNative.IFileDialog dialog = null;
+            try
+            {
+                dialog = new FileDialogNative.NativeFileOpenDialog();
+                SetDialogProperties(dialog);
+                int result = dialog.Show(owner);
+                if (result < 0)
+                {
+                    if ((uint)result == (uint)NativeMethods.HRESULT.ERROR_CANCELLED)
+                        return false;
+                    else
+                        throw Marshal.GetExceptionForHR(result);
+                }
+                GetResult(dialog);
+                return true;
+            }
+            finally
+            {
+                if (dialog != null)
+                    Marshal.FinalReleaseComObject(dialog);
+            }
+        }
+
+        private void SetDialogProperties(FileDialogNative.IFileDialog dialog)
+        {
+            // Description
+            if (!string.IsNullOrEmpty(descriptionText))
+            {
+                if (UseDescriptionForTitle)
+                {
+                    dialog.SetTitle(descriptionText);
+                }
+                else
+                {
+                    FileDialogNative.IFileDialogCustomize customize = (FileDialogNative.IFileDialogCustomize)dialog;
+                    customize.AddText(0, descriptionText);
+                }
+            }
+
+            dialog.SetOptions(FileDialogNative.FOS.FOS_PICKFOLDERS | FileDialogNative.FOS.FOS_FORCEFILESYSTEM | FileDialogNative.FOS.FOS_FILEMUSTEXIST);
+
+            if (!string.IsNullOrEmpty(selectedPath))
+            {
+                string parent = Path.GetDirectoryName(selectedPath);
+                if (parent == null || !Directory.Exists(parent))
+                {
+                    dialog.SetFileName(selectedPath);
+                }
+                else
+                {
+                    string folder = Path.GetFileName(selectedPath);
+                    dialog.SetFolder(FileDialogNative.CreateItemFromParsingName(parent));
+                    dialog.SetFileName(folder);
+                }
+            }
+        }
+
+        private void GetResult(FileDialogNative.IFileDialog dialog)
+        {
+            dialog.GetResult(out FileDialogNative.IShellItem item);
+            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_FILESYSPATH, out selectedPath);
+        }
+
+        private bool RunDialogOld(IntPtr hWndOwner)
+        {
             IntPtr pidlRoot = IntPtr.Zero;
             bool returnValue = false;
-    
-            UnsafeNativeMethods.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int) rootFolder, ref pidlRoot);
+
+            UnsafeNativeMethods.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)rootFolder, ref pidlRoot);
             if (pidlRoot == IntPtr.Zero)
             {
                 UnsafeNativeMethods.Shell32.SHGetSpecialFolderLocation(hWndOwner, NativeMethods.CSIDL_DESKTOP, ref pidlRoot);
@@ -242,10 +369,10 @@ namespace System.Windows.Forms
                 }
             }
 
-            int mergedOptions = unchecked( (int) (long)UnsafeNativeMethods.BrowseInfos.NewDialogStyle);
+            int mergedOptions = unchecked((int)(long)UnsafeNativeMethods.BrowseInfos.NewDialogStyle);
             if (!showNewFolderButton)
             {
-                mergedOptions += unchecked( (int) (long)UnsafeNativeMethods.BrowseInfos.HideNewFolderButton);
+                mergedOptions += unchecked((int)(long)UnsafeNativeMethods.BrowseInfos.HideNewFolderButton);
             }
 
             // The SHBrowserForFolder dialog is OLE/COM based, and documented as only being safe to use under the STA
@@ -256,7 +383,7 @@ namespace System.Windows.Forms
             {
                 throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
             }
-    
+
             IntPtr pidlRet = IntPtr.Zero;
             IntPtr pszDisplayName = IntPtr.Zero;
             IntPtr pszSelectedPath = IntPtr.Zero;
@@ -265,7 +392,7 @@ namespace System.Windows.Forms
             {
                 // Construct a BROWSEINFO
                 UnsafeNativeMethods.BROWSEINFO bi = new UnsafeNativeMethods.BROWSEINFO();
-    
+
                 pszDisplayName = Marshal.AllocHGlobal(NativeMethods.MAX_PATH * Marshal.SystemDefaultCharSize);
                 pszSelectedPath = Marshal.AllocHGlobal((NativeMethods.MAX_PATH + 1) * Marshal.SystemDefaultCharSize);
                 this.callback = new UnsafeNativeMethods.BrowseCallbackProc(this.FolderBrowserDialog_BrowseCallbackProc);
@@ -278,15 +405,15 @@ namespace System.Windows.Forms
                 bi.lpfn = callback;
                 bi.lParam = IntPtr.Zero;
                 bi.iImage = 0;
-    
+
                 // And show the dialog
                 pidlRet = UnsafeNativeMethods.Shell32.SHBrowseForFolder(bi);
-    
+
                 if (pidlRet != IntPtr.Zero)
                 {
                     // Then retrieve the path from the IDList
                     UnsafeNativeMethods.Shell32.SHGetPathFromIDListLongPath(pidlRet, ref pszSelectedPath);
-    
+
                     // set the flag to True before selectedPath is set to
                     // assure security check and avoid bogus race condition
                     selectedPathNeedsCheck = true;
@@ -297,7 +424,7 @@ namespace System.Windows.Forms
                     returnValue = true;
                 }
             }
-            finally 
+            finally
             {
                 UnsafeNativeMethods.CoTaskMemFree(pidlRoot);
                 if (pidlRet != IntPtr.Zero)
