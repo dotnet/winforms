@@ -15,8 +15,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("BindingSource"),
-    DefaultEvent("RefreshItems"),
+    DefaultProperty(nameof(BindingSource)),
+    DefaultEvent(nameof(RefreshItems)),
     Designer("System.Windows.Forms.Design.BindingNavigatorDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionBindingNavigator))
     ]

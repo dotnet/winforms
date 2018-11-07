@@ -32,7 +32,7 @@ namespace System.Windows.Forms{
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
-    DefaultProperty("Header"),
+    DefaultProperty(nameof(Header)),
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors") // Shipped in Everett
     ]
     public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService {

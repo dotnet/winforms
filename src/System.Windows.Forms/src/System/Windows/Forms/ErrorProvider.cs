@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
     ProvideProperty("IconAlignment", typeof(Control)),
     ProvideProperty("Error", typeof(Control)),
     ToolboxItemFilter("System.Windows.Forms"),
-    ComplexBindingProperties("DataSource", "DataMember"),
+    ComplexBindingProperties(nameof(DataSource), nameof(DataMember)),
     SRDescription(nameof(SR.DescriptionErrorProvider))
     ]
     public class ErrorProvider : Component, IExtenderProvider, ISupportInitialize {

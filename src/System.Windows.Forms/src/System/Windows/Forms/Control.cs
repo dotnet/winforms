@@ -58,8 +58,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Text"),
-    DefaultEvent("Click"),
+    DefaultProperty(nameof(Text)),
+    DefaultEvent(nameof(Click)),
     Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign),
     DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
     ToolboxItemFilter("System.Windows.Forms")

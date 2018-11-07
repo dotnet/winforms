@@ -32,9 +32,9 @@ namespace System.Windows.Forms {
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch),
         Designer("System.Windows.Forms.Design.DataGridDesigner, " + AssemblyRef.SystemDesign),
-        DefaultProperty("DataSource"),
-        DefaultEvent("Navigate"),
-        ComplexBindingProperties("DataSource", "DataMember"),
+        DefaultProperty(nameof(DataSource)),
+        DefaultEvent(nameof(Navigate)),
+        ComplexBindingProperties(nameof(DataSource), nameof(DataMember)),
         ]
         public class DataGrid : Control, ISupportInitialize, IDataGridEditingService {
     #if DEBUG

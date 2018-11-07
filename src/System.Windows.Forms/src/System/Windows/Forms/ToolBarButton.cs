@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [
     Designer("System.Windows.Forms.Design.ToolBarButtonDesigner, " + AssemblyRef.SystemDesign),
-    DefaultProperty("Text"),
+    DefaultProperty(nameof(Text)),
     ToolboxItem(false),
     DesignTimeVisible(false),
     ]

@@ -34,8 +34,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Text"),
-    DefaultBindingProperty("Text"),
+    DefaultProperty(nameof(Text)),
+    DefaultBindingProperty(nameof(Text)),
     Designer("System.Windows.Forms.Design.LabelDesigner, " + AssemblyRef.SystemDesign),
     ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionLabel))

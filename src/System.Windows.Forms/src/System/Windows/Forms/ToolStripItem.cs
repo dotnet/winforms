@@ -30,9 +30,9 @@ namespace System.Windows.Forms {
     /// <devdoc/>
     [System.ComponentModel.DesignTimeVisible(false)]
     [Designer("System.Windows.Forms.Design.ToolStripItemDesigner, " + AssemblyRef.SystemDesign)]
-    [DefaultEvent("Click")]
+    [DefaultEvent(nameof(Click))]
     [ToolboxItem(false)]
-    [DefaultProperty("Text")]
+    [DefaultProperty(nameof(Text))]
     public abstract class ToolStripItem : Component, 
                               IDropTarget, 
                               ISupportOleDropSource,

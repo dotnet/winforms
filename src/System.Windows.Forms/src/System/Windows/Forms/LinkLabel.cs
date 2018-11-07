@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("LinkClicked"),
+    DefaultEvent(nameof(LinkClicked)),
     ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionLinkLabel))
     ]

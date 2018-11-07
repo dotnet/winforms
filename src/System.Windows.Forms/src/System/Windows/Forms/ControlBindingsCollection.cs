@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     ///    <para> 
     ///       Represents the collection of data bindings for a control.</para>
     /// </devdoc>
-    [DefaultEvent("CollectionChanged"),
+    [DefaultEvent(nameof(CollectionChanged)),
      Editor("System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing, typeof(System.Drawing.Design.UITypeEditor)),
      TypeConverterAttribute("System.Windows.Forms.Design.ControlBindingsConverter, " + AssemblyRef.SystemDesign),
      ]

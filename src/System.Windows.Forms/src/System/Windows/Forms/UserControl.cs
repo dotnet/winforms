@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.UserControlDocumentDesigner, " + AssemblyRef.SystemDesign, typeof(IRootDesigner)),
     Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign),
     DesignerCategory("UserControl"),
-    DefaultEvent("Load")
+    DefaultEvent(nameof(Load))
     ]
     public class UserControl : ContainerControl {
         private static readonly object EVENT_LOAD = new object();

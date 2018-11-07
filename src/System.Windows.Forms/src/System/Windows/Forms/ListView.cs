@@ -37,8 +37,8 @@ namespace System.Windows.Forms {
     ClassInterface(ClassInterfaceType.AutoDispatch),
     Docking(DockingBehavior.Ask),
     Designer("System.Windows.Forms.Design.ListViewDesigner, " + AssemblyRef.SystemDesign),
-    DefaultProperty("Items"),
-    DefaultEvent("SelectedIndexChanged"),
+    DefaultProperty(nameof(Items)),
+    DefaultEvent(nameof(SelectedIndexChanged)),
     SRDescription(nameof(SR.DescriptionListView))
     ]
     public class ListView : Control {

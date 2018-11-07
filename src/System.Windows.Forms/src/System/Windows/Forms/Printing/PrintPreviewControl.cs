@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-    [DefaultProperty("Document")]
+    [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
     public class PrintPreviewControl : Control {
         Size virtualSize = new Size(1,1);

@@ -24,9 +24,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("ButtonClick"),
+    DefaultEvent(nameof(ButtonClick)),
     Designer("System.Windows.Forms.Design.ToolBarDesigner, " + AssemblyRef.SystemDesign),
-    DefaultProperty("Buttons")
+    DefaultProperty(nameof(Buttons))
     ]
     public class ToolBar : Control {
 

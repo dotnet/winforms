@@ -38,8 +38,8 @@ namespace System.Windows.Forms {
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
-    DefaultEvent("Click"),
-    DefaultProperty("Text")
+    DefaultEvent(nameof(Click)),
+    DefaultProperty(nameof(Text))
     ]
     public class MenuItem : Menu {
         internal const int STATE_BARBREAK   = 0x00000020;

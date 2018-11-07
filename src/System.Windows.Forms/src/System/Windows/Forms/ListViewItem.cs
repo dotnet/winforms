@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
     TypeConverterAttribute(typeof(ListViewItemConverter)),
     ToolboxItem(false),
     DesignTimeVisible(false),
-    DefaultProperty("Text"),
+    DefaultProperty(nameof(Text)),
     Serializable,    
     SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")
     ]
@@ -1407,7 +1407,7 @@ namespace System.Windows.Forms {
             TypeConverterAttribute(typeof(ListViewSubItemConverter)),
             ToolboxItem(false),
             DesignTimeVisible(false),
-            DefaultProperty("Text"),
+            DefaultProperty(nameof(Text)),
             Serializable
         ]
         public class ListViewSubItem {

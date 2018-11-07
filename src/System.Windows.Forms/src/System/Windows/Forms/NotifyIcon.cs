@@ -23,8 +23,8 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     [
-    DefaultProperty("Text"),
-    DefaultEvent("MouseDoubleClick"),
+    DefaultProperty(nameof(Text)),
+    DefaultEvent(nameof(MouseDoubleClick)),
     Designer("System.Windows.Forms.Design.NotifyIconDesigner, " + AssemblyRef.SystemDesign),
     ToolboxItemFilter("System.Windows.Forms"),
     SRDescription(nameof(SR.DescriptionNotifyIcon))

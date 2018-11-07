@@ -34,8 +34,8 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     [
-    ProvideProperty("ToolTip", typeof(Control)),
-    DefaultEvent("Popup"),
+    ProvideProperty(nameof(ToolTip), typeof(Control)),
+    DefaultEvent(nameof(Popup)),
     ToolboxItemFilter("System.Windows.Forms"),
     SRDescription(nameof(SR.DescriptionToolTip))
     ]

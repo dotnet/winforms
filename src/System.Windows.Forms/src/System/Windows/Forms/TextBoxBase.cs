@@ -35,8 +35,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("TextChanged"),
-    DefaultBindingProperty("Text"),
+    DefaultEvent(nameof(TextChanged)),
+    DefaultBindingProperty(nameof(Text)),
     Designer("System.Windows.Forms.Design.TextBoxBaseDesigner, " + AssemblyRef.SystemDesign)
     ]
     public abstract class TextBoxBase : Control {

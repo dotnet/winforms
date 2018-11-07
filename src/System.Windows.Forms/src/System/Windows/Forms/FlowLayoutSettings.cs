@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
 
     /// <include file='doc\FlowLayoutSettings.uex' path='docs/doc[@for="FlowLayoutSettings"]/*' />
-    [DefaultProperty("FlowDirection")]
+    [DefaultProperty(nameof(FlowDirection))]
     public class FlowLayoutSettings : LayoutSettings {
 
         internal FlowLayoutSettings(IArrangedElement owner) : base(owner) {}

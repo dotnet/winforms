@@ -27,8 +27,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("SplitterMoved"),
-    DefaultProperty("Dock"),
+    DefaultEvent(nameof(SplitterMoved)),
+    DefaultProperty(nameof(Dock)),
     SRDescription(nameof(SR.DescriptionSplitter)),
     Designer("System.Windows.Forms.Design.SplitterDesigner, " + AssemblyRef.SystemDesign)
     ]

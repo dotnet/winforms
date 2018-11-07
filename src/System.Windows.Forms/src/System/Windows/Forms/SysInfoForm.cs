@@ -532,7 +532,7 @@ namespace System.Windows.Forms {
             tabControl1.Controls.Add(bugReportInfo);
         }
 
-        [DefaultProperty("CompanyName")]
+        [DefaultProperty(nameof(CompanyName))]
         public class AppInfo {
             AssemblyName assemblyName;
 

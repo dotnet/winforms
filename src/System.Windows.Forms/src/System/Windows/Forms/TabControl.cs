@@ -33,8 +33,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("TabPages"),
-    DefaultEvent("SelectedIndexChanged"),
+    DefaultProperty(nameof(TabPages)),
+    DefaultEvent(nameof(SelectedIndexChanged)),
     Designer("System.Windows.Forms.Design.TabControlDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionTabControl))
     ]

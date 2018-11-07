@@ -26,9 +26,9 @@ namespace System.Windows.Forms {
     using System.Text;
 
     [
-    DefaultProperty("DataSource"),
-    DefaultEvent("CurrentChanged"),
-    ComplexBindingProperties("DataSource", "DataMember"),
+    DefaultProperty(nameof(DataSource)),
+    DefaultEvent(DefaultEvent(nameof(CurrentChanged)),
+    ComplexBindingProperties(nameof(DataSource), nameof(DataMember)),
     Designer("System.Windows.Forms.Design.BindingSourceDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionBindingSource)),
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1035:ICollectionImplementationsHaveStronglyTypedMembers"), // ICollection.CopyTo: Its just a wrapper class, it doesn't have a specific member type

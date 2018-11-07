@@ -41,8 +41,8 @@ namespace System.Windows.Forms {
     DesignTimeVisible(false),
     Designer("System.Windows.Forms.Design.FormDocumentDesigner, " + AssemblyRef.SystemDesign, typeof(IRootDesigner)),
     DesignerCategory("Form"),
-    DefaultEvent("Load"),
-    InitializationEvent("Load"),
+    DefaultEvent(nameof(Load)),
+    InitializationEvent(nameof(Load)),
     ]
     public class Form : ContainerControl {
 #if DEBUG
