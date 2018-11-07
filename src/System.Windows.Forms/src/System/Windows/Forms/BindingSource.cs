@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
 
     [
     DefaultProperty(nameof(DataSource)),
-    DefaultEvent(DefaultEvent(nameof(CurrentChanged)),
+    DefaultEvent(nameof(CurrentChanged)),
     ComplexBindingProperties(nameof(DataSource), nameof(DataMember)),
     Designer("System.Windows.Forms.Design.BindingSourceDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionBindingSource)),

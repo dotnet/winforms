@@ -22,7 +22,7 @@ namespace System.Windows.Forms{
     ClassInterface(ClassInterfaceType.AutoDispatch),
     ToolboxItem(false),
     DesignTimeVisible(false),
-    DefaultProperty(nameof(GridEditName))
+    DefaultProperty("GridEditName")
     ]
     public class DataGridTextBox : TextBox {
 
