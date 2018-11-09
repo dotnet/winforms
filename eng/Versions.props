@@ -11,7 +11,13 @@
     <AccessibilityPackage>Accessibility</AccessibilityPackage>
     <MicrosoftWin32RegistryPackage>Microsoft.Win32.Registry</MicrosoftWin32RegistryPackage>
     <SystemConfigurationConfigurationManagerPackage>System.Configuration.ConfigurationManager</SystemConfigurationConfigurationManagerPackage>
-    <SystemDrawingCommonPackage>System.Drawing.Common</SystemDrawingCommonPackage>    
+    <SystemDrawingCommonPackage>System.Drawing.Common</SystemDrawingCommonPackage>
+    <MicrosoftWin32SystemEventsPackage>Microsoft.Win32.SystemEvents</MicrosoftWin32SystemEventsPackage>
+    <SystemDrawingDesignPrimitivesPackage>System.Drawing.Design.Primitives</SystemDrawingDesignPrimitivesPackage>
+    <SystemDrawingPrimitivesPackage>System.Drawing.Primitives</SystemDrawingPrimitivesPackage>
+    <SystemMediaSoundPlayerPackage>System.Media.SoundPlayer</SystemMediaSoundPlayerPackage>
+    <SystemSecurityCryptographyCngPackage>System.Security.Cryptography.Cng</SystemSecurityCryptographyCngPackage>
+    <SystemSecurityPermissionsPackage>System.Security.Permissions</SystemSecurityPermissionsPackage>
     <XUnitStaFactPackage>xunit.stafact</XUnitStaFactPackage>
     <MoqPackage>Moq</MoqPackage>
   </PropertyGroup>
@@ -21,6 +27,12 @@
     <MicrosoftWin32RegistryPackageVersion>4.6.0-preview1-27018-01</MicrosoftWin32RegistryPackageVersion>
     <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview1-27018-01</SystemConfigurationConfigurationManagerPackageVersion>
     <SystemDrawingCommonPackageVersion>4.6.0-preview1-27018-01</SystemDrawingCommonPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview1-27018-01</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemDrawingDesignPrimitivesPackageVersion>4.6.0-preview1-27018-01</SystemDrawingDesignPrimitivesPackageVersion>
+    <SystemDrawingPrimitivesPackageVersion>4.3.0</SystemDrawingPrimitivesPackageVersion>
+    <SystemMediaSoundPlayerPackageVersion>4.6.0-alpha-27024-2</SystemMediaSoundPlayerPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview1-27018-01</SystemSecurityCryptographyCngPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>4.6.0-preview1-27018-01</SystemSecurityPermissionsPackageVersion>    
     <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
   </PropertyGroup>

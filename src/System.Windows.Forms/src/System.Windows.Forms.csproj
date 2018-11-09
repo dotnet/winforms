@@ -24,16 +24,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Accessibility" Version="4.6.0-alpha-27024-2" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.6.0-preview1-27018-01" />
-    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="4.6.0-preview1-27018-01" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
-    <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview1-27018-01" />
-    <PackageReference Include="System.Drawing.Design.Primitives" Version="4.6.0-preview1-27018-01" />
-    <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Media.SoundPlayer" Version="4.6.0-alpha-27024-2" />
-    <PackageReference Include="System.Security.Cryptography.Cng" Version="4.6.0-preview1-27018-01" />
-    <PackageReference Include="System.Security.Permissions" Version="4.5.0" />
+    <PackageReference Include="$(AccessibilityPackage)" Version="$(AccessibilityPackageVersion)" />
+    <PackageReference Include="$(MicrosoftWin32RegistryPackage)" Version="$(MicrosoftWin32RegistryPackageVersion)" />
+    <PackageReference Include="$(MicrosoftWin32SystemEventsPackage)" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
+    <PackageReference Include="$(SystemConfigurationConfigurationManagerPackage)" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
+    <PackageReference Include="$(SystemDrawingCommonPackage)" Version="$(SystemDrawingCommonPackageVersion)" />
+    <PackageReference Include="$(SystemDrawingDesignPrimitivesPackage)" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
+    <PackageReference Include="$(SystemDrawingPrimitivesPackage)" Version="$(SystemDrawingPrimitivesPackageVersion)" />
+    <PackageReference Include="$(SystemMediaSoundPlayerPackage)" Version="$(SystemMediaSoundPlayerPackageVersion)" />
+    <PackageReference Include="$(SystemSecurityCryptographyCngPackage)" Version="$(SystemSecurityCryptographyCngPackageVersion)" />
+    <PackageReference Include="$(SystemSecurityPermissionsPackage)" Version="$(SystemSecurityPermissionsPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
