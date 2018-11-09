@@ -8,10 +8,20 @@
   </PropertyGroup>
   <!-- Package names -->
   <PropertyGroup>
+    <AccessibilityPackage>Accessibility</AccessibilityPackage>
+    <MicrosoftWin32RegistryPackage>Microsoft.Win32.Registry</MicrosoftWin32RegistryPackage>
+    <SystemConfigurationConfigurationManagerPackage>System.Configuration.ConfigurationManager</SystemConfigurationConfigurationManagerPackage>
+    <SystemDrawingCommonPackage>System.Drawing.Common</SystemDrawingCommonPackage>    
     <XUnitStaFactPackage>xunit.stafact</XUnitStaFactPackage>
+    <MoqPackage>Moq</MoqPackage>
   </PropertyGroup>
   <!-- Package versions -->
   <PropertyGroup>
+    <AccessibilityPackageVersion>4.6.0-alpha-27024-2</AccessibilityPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview1-27018-01</MicrosoftWin32RegistryPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview1-27018-01</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>4.6.0-preview1-27018-01</SystemDrawingCommonPackageVersion>
     <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
+    <MoqPackageVersion>4.10.0</MoqPackageVersion>
   </PropertyGroup>
 </Project>
