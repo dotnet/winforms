@@ -121,7 +121,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //CheckNoSharedCell(); VSWhidbey 515823
+                //CheckNoSharedCell();
                 if (value != this.AutoComplete)
                 {
                     if (value)
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //CheckNoSharedCell(); VSWhidbey 515823
+                //CheckNoSharedCell();
                 // Same check as for ListControl's DataSource
                 if (value != null && !(value is IList || value is IListSource))
                 {
@@ -259,7 +259,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //CheckNoSharedCell(); VSWhidbey 515823
+                //CheckNoSharedCell();
                 this.DisplayMemberInternal = value;
                 if (OwnsEditingComboBox(this.RowIndex))
                 {
@@ -442,7 +442,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //CheckNoSharedCell(); VSWhidbey 515823
+                //CheckNoSharedCell();
                 if (value < 1)
                 {
                     throw new ArgumentOutOfRangeException("DropDownWidth", value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, (1).ToString(CultureInfo.CurrentCulture)));
@@ -563,7 +563,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //CheckNoSharedCell(); VSWhidbey 515823
+                //CheckNoSharedCell();
                 if (value < 1 || value > 100)
                 {
                     throw new ArgumentOutOfRangeException("MaxDropDownItems", value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, (1).ToString(CultureInfo.CurrentCulture), (100).ToString(CultureInfo.CurrentCulture)));
@@ -603,7 +603,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //CheckNoSharedCell(); VSWhidbey 515823
+                //CheckNoSharedCell();
                 if (value != this.Sorted)
                 {
                     if (value)
@@ -660,7 +660,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //CheckNoSharedCell(); VSWhidbey 515823
+                //CheckNoSharedCell();
                 this.ValueMemberInternal = value;
                 if (OwnsEditingComboBox(this.RowIndex))
                 {
@@ -1515,8 +1515,7 @@ namespace System.Windows.Forms
                 }
 
                 // We need the comboBox to be parented by a control which has a handle or else the native ComboBox ends up
-                // w/ its parentHwnd pointing to the WinFormsParkingWindow.
-                // See vsWhidbey 385025.
+                // w/ its parentHwnd pointing to the WinFormsParkingWindow.                
                 IntPtr h;
                 if (comboBox.ParentInternal != null)
                 {
@@ -1528,13 +1527,13 @@ namespace System.Windows.Forms
                 comboBox.MaxDropDownItems = this.MaxDropDownItems;
                 comboBox.DropDownWidth = this.DropDownWidth;
                 comboBox.DataSource = null;
-                comboBox.ValueMember = null; // VSWhidbey 424061
+                comboBox.ValueMember = null;
                 comboBox.Items.Clear();
 
                 /* Don't set the position inside the currency manager blindly to 0 because it may be the case that 
                    the DataGridView and the DataGridViewComboBoxCell share the same DataManager.
                    Then setting the position on the DataManager will also set the position on the DataGridView.
-                   And this causes problems when changing position inside the DataGridView. See vsWhidbey 397071.
+                   And this causes problems when changing position inside the DataGridView.
                 if (this.DataManager != null && this.DataManager.Count > 0)
                 {
                     this.DataManager.Position = 0;
@@ -2851,7 +2850,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             public int Add(object item) 
             {
-                //this.owner.CheckNoSharedCell(); //VSWhidbey 515823
+                //this.owner.CheckNoSharedCell();
                 this.owner.CheckNoDataSource();
 
                 if (item == null) 
@@ -2896,7 +2895,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             public void AddRange(params object[] items)
             {
-                //this.owner.CheckNoSharedCell(); //VSWhidbey 515823
+                //this.owner.CheckNoSharedCell();
                 this.owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)items);
                 this.owner.OnItemsCollectionChanged();
@@ -2908,7 +2907,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             public void AddRange(ObjectCollection value) 
             {
-                //this.owner.CheckNoSharedCell(); //VSWhidbey 515823
+                //this.owner.CheckNoSharedCell();
                 this.owner.CheckNoDataSource();
                 AddRangeInternal((ICollection) value);
                 this.owner.OnItemsCollectionChanged();
@@ -2961,7 +2960,7 @@ namespace System.Windows.Forms
                 }
                 set 
                 {
-                    //this.owner.CheckNoSharedCell(); //VSWhidbey 515823
+                    //this.owner.CheckNoSharedCell();
                     this.owner.CheckNoDataSource();
 
                     if (value == null)
@@ -2987,7 +2986,7 @@ namespace System.Windows.Forms
             {
                 if (this.InnerArray.Count > 0)
                 {
-                    //this.owner.CheckNoSharedCell(); //VSWhidbey 515823
+                    //this.owner.CheckNoSharedCell();
                     this.owner.CheckNoDataSource();
                     this.InnerArray.Clear();
                     this.owner.OnItemsCollectionChanged();
@@ -3064,7 +3063,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             public void Insert(int index, object item) 
             {
-                //this.owner.CheckNoSharedCell(); VSWhidbey 515823
+                //this.owner.CheckNoSharedCell();
                 this.owner.CheckNoDataSource();
                 
                 if (item == null) 
@@ -3111,7 +3110,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             public void RemoveAt(int index) 
             {
-                //this.owner.CheckNoSharedCell(); VSWhidbey 515823
+                //this.owner.CheckNoSharedCell();
                 this.owner.CheckNoDataSource();
                 
                 if (index < 0 || index >= this.InnerArray.Count) 

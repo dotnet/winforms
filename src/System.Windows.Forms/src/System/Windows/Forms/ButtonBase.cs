@@ -330,7 +330,7 @@ namespace System.Windows.Forms {
 
                     // Pre-whidbey we used to use ImageIndex rather than ImageIndexer.ActualIndex.
                     // ImageIndex clamps to the length of the image list.  We need to replicate
-                    // this logic here for backwards compatibility.  (VSWhidbey #95780)
+                    // this logic here for backwards compatibility.
                     // We do not bake this into ImageIndexer because different controls
                     // treat this scenario differently.
                     if(actualIndex >= imageList.Images.Count) {
@@ -1105,7 +1105,7 @@ namespace System.Windows.Forms {
                     SetFlag(FlagMouseDown, false);
                     SendMessage(NativeMethods.BM_SETSTATE, 0, 0);
                 }
-                // VSWhidbey 498398: Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
+                // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
                 // two keystrokes to execute OnClick.  
                 if (kevent.KeyCode == Keys.Enter || kevent.KeyCode == Keys.Space) {
                     OnClick(EventArgs.Empty);

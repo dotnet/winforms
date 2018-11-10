@@ -1467,8 +1467,7 @@ example usage
                 CaptureInternal = value;
             }
         }
-
-        // SECURITY WARNING: This property bypasses a security demand. Use with caution!
+                
         internal bool CaptureInternal {
             get {
                 return IsHandleCreated && UnsafeNativeMethods.GetCapture() == Handle;
@@ -3437,7 +3436,6 @@ example usage
             }
         }
 
-        // SECURITY WARNING: This property bypasses a security demand. Use with caution!
         internal virtual Control ParentInternal {
             get {
                 return parent;
@@ -4124,7 +4122,6 @@ example usage
             }
         }
 
-        // SECURITY WARNING: This property bypasses a security demand. Use with caution!
         internal Control TopLevelControlInternal {
             get {
                 Control control = this;
@@ -4135,7 +4132,6 @@ example usage
             }
         }
 
-        // SECURITY WARNING: This property bypasses a security demand. Use with caution!
         internal Control TopMostParent {
             get {
                 Control control = this;
@@ -5740,9 +5736,8 @@ example usage
                 return CreateGraphicsInternal();
             }
         }
+       
 
-        
-        // SECURITY WARNING: This property bypasses a security demand. Use with caution!
         [ResourceExposure(ResourceScope.Process)]
         [ResourceConsumption(ResourceScope.Process)]
         internal System.Drawing.Graphics CreateGraphicsInternal() {
@@ -9866,8 +9861,6 @@ example usage
         /// <devdoc>
         ///     Find ContainerControl that is the container of this control.
         /// </devdoc>
-        /// <internalonly/>
-        // SECURITY WARNING: This property bypasses a security demand. Use with caution!
         internal ContainerControl ParentContainerControl {
             get {
                 for (Control c = this.ParentInternal; c != null; c = c.ParentInternal) {

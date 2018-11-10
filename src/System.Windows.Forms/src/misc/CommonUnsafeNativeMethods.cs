@@ -63,8 +63,6 @@ namespace System.Windows.Forms
                 {
                     // LOAD_LIBRARY_SEARCH_SYSTEM32 is not supported on this OS. 
                     // Fall back to using plain ol' LoadLibrary
-                    // There is risk that this call might fail, or that it might be
-                    // susceptible to DLL hijacking. 
                     module = LoadLibrary(libraryName);
                 }
             }

@@ -1615,7 +1615,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
          public void Show(string text, IWin32Window window) {
-            //SecReview: We should not allow Semi-trust apps to call Show on a tooltip. Refer VsWhidbey : 439847
             // Check if the foreground window is the TopLevelWindow
             if (HasAllWindowsPermission && IsWindowActive(window)) {
                 ShowTooltip(text, window, 0);
@@ -1634,8 +1633,7 @@ namespace System.Windows.Forms {
             if (duration < 0) {
                 throw new ArgumentOutOfRangeException("duration", string.Format(SR.InvalidLowBoundArgumentEx, "duration", (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
-            
-            //SecReview: We should not allow Semi-trust apps to call Show on a tooltip. Refer VsWhidbey : 439847
+
             if (HasAllWindowsPermission && IsWindowActive(window)) {
                 ShowTooltip(text, window, duration);
             }
@@ -1651,8 +1649,7 @@ namespace System.Windows.Forms {
             if (window == null) {
                 throw new ArgumentNullException("window");
             }
-            
-            //SecReview: We should not allow Semi-trust apps to call Show on a tooltip. Refer VsWhidbey : 439847
+
             if (HasAllWindowsPermission && IsWindowActive(window)) {
                 //Set The ToolTips...
                 NativeMethods.RECT r = new NativeMethods.RECT();
@@ -1678,8 +1675,7 @@ namespace System.Windows.Forms {
             if (duration < 0) {
                 throw new ArgumentOutOfRangeException("duration", string.Format(SR.InvalidLowBoundArgumentEx, "duration", (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
-            
-            //SecReview: We should not allow Semi-trust apps to call Show on a tooltip. Refer VsWhidbey : 439847
+
             if (HasAllWindowsPermission && IsWindowActive(window)) {
                 //Set The ToolTips...
                 NativeMethods.RECT r = new NativeMethods.RECT();
@@ -1704,8 +1700,7 @@ namespace System.Windows.Forms {
             if (window == null) {
                 throw new ArgumentNullException("window");
             }
-            
-            //SecReview: We should not allow Semi-trust apps to call Show on a tooltip. Refer VsWhidbey : 439847
+
             if (HasAllWindowsPermission && IsWindowActive(window)) {
                 NativeMethods.RECT r = new NativeMethods.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
@@ -1729,8 +1724,7 @@ namespace System.Windows.Forms {
             if (duration < 0) {
                 throw new ArgumentOutOfRangeException("duration", string.Format(SR.InvalidLowBoundArgumentEx, "duration", (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
-            
-            //SecReview: We should not allow Semi-trust apps to call Show on a tooltip. Refer VsWhidbey : 439847
+
             if (HasAllWindowsPermission && IsWindowActive(window)) {
                 NativeMethods.RECT r = new NativeMethods.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
@@ -1945,15 +1939,13 @@ namespace System.Windows.Forms {
             if (win == null) {
                 throw new ArgumentNullException("win");
             }
-            
-            //SecReview: We should not allow Semi-trust apps to call Show on a tooltip. Refer VsWhidbey : 439847
+
             if (HasAllWindowsPermission) {
                 if (window == null)
                 {
                     return;
                 }
-
-                // VSWhidbey 562045: Only send message if we actually have a ToolTip at this point.
+                
                 if (GetHandleCreated())  {                    
                     IntPtr hWnd = Control.GetSafeHandle(win);
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_TRACKACTIVATE, 0, GetWinTOOLINFO(hWnd));

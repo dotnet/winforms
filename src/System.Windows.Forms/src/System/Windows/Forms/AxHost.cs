@@ -1554,7 +1554,6 @@ namespace System.Windows.Forms {
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             // We have already been in this Code so please avoid re-entering this CODE PATH or else the 
             // IOleObject will "give a Catastrophic error" in SetObjectRects( ).
-            // Please refer : VsWhidbey 341212.
             
             if (GetAxState(AxHost.handlePosRectChanged))
                 return;

@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
         ///         use OptimizedDoubleBuffer instead.
         ///    </para>
         /// </devdoc>
-        [EditorBrowsable(EditorBrowsableState.Never)] // It is recommended that you use the DoubleBuffer property instead.  See VSWhidbey 502873
+        [EditorBrowsable(EditorBrowsableState.Never)] // It is recommended that you use the DoubleBuffer property instead.
         DoubleBuffer                        = 0x00010000, 
         /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.OptimizedDoubleBuffer"]/*' />
         /// <devdoc>

@@ -1106,7 +1106,7 @@ namespace System.Windows.Forms
                                 DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
                                 dataGridViewColumn.DesiredFillWidth = dataGridViewColumn.Width;
                             }
-                            // the width loss is accounted for in steps of 10% (see VSWhidbey 568343)
+                            // the width loss is accounted for in steps of 10%
                             do
                             {
                                 int stepDownAvailableWidthForFillColumns = this.availableWidthForFillColumns - cumulatedWidthLoss;
@@ -2642,7 +2642,7 @@ namespace System.Windows.Forms
                     dataGridViewCell = this.CurrentCellInternal;
                     if (previousCurrentCell != dataGridViewCell)
                     {
-                        // VSWhidbey 555494. The new current cell can be a whole different cell. 
+                        // The new current cell can be a whole different cell. 
                         // In that case, all tests previously done are no longer valid.
                         if (IsSharedCellReadOnly(dataGridViewCell, this.ptCurrentCell.Y) ||
                             !ColumnEditable(this.ptCurrentCell.X))
@@ -8636,7 +8636,7 @@ namespace System.Windows.Forms
             Debug.Assert(!this.vertScrollBar.Enabled ||
                          !this.vertScrollBar.Visible ||
                          this.vertScrollBar.Maximum == visibleRowsHeight - frozenVisibleRowsHeight);
-            //VSWhidbey 525671
+
             //Debug.Assert(!this.vertScrollBar.Enabled ||
             //             !this.vertScrollBar.Visible ||
             //             this.vertScrollBar.Value >= this.verticalOffset);
@@ -12436,7 +12436,7 @@ namespace System.Windows.Forms
                 }
                 if (this.ptCurrentCell != ptOriginalCurrentCell)
                 {
-                    // VSWhidbey 492203. Somehow the fact that the current cell was committed altered the current cell value.
+                    // Somehow the fact that the current cell was committed altered the current cell value.
                     // To avoid unintentional multi-selections, we act as if Shift and Control keys were up.
                     isShiftDown = isControlDown = false;
                 }
@@ -12887,7 +12887,6 @@ namespace System.Windows.Forms
 
                         // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
                         // DataGridView changes.
-                        // See vsWhidbey: 325296.
                         // Debug.Assert(success);
                         break;
                     }
@@ -17272,7 +17271,6 @@ namespace System.Windows.Forms
             this.Invalidate(edge);
         }
 
-        // See VSWhidbey 527459 & 526373.
         internal override void OnParentBecameInvisible()
         {
             base.OnParentBecameInvisible();
@@ -18127,7 +18125,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        // vsWhidbey 329429: AllowUserToAddRowsInternal can become FALSE while adding a row.
+                        // AllowUserToAddRowsInternal can become FALSE while adding a row.
                         // NOTE: we don't need to invalidate if AllowUserToAddRowsInternal changed to FALSE.
                         //
                         if (this.AllowUserToAddRowsInternal)
@@ -19590,7 +19588,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnValidating"]/*' />
         protected override void OnValidating(CancelEventArgs e) 
         {
-            // VSWhidbey 481170. Avoid Cell/Row Validation events when the grid or its editing control gets the focus
+            // Avoid Cell/Row Validation events when the grid or its editing control gets the focus
             if (!this.BecomingActiveControl && (this.editingControl == null || !this.editingControl.BecomingActiveControl))
             {
                 if (!this.dataGridViewState1[DATAGRIDVIEWSTATE1_leavingWithTabKey])
@@ -20736,7 +20734,6 @@ namespace System.Windows.Forms
                                         // the list under the DataGridView changes.
                                         // In this case set moved to false so the users that call ProcessDownKey
                                         // will commit the data.
-                                        // See vsWhidbey: 325296.
                                         moved = false;
                                     }
                                 }
@@ -21589,7 +21586,6 @@ namespace System.Windows.Forms
                             }
                             // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
                             // DataGridView changes.
-                            // See vsWhidbey: 325296.
                             // Debug.Assert(success);
                         }
                         return true;
@@ -22043,7 +22039,6 @@ namespace System.Windows.Forms
                             }
                             // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
                             // DataGridView changes.
-                            // See vsWhidbey: 325296.
                             // Debug.Assert(success);
                         }
                         return true;
@@ -23316,7 +23311,6 @@ namespace System.Windows.Forms
                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, nextScreenVisibleRowIndex, true, false, false);
                     // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
                     // DataGridView changes.
-                    // See vsWhidbey: 325296.
                     // Debug.Assert(success);
                     return true;
                 }
@@ -23692,7 +23686,6 @@ namespace System.Windows.Forms
                         success = SetCurrentCellAddressCore(this.ptCurrentCell.X, previousScreenVisibleRowIndex, true, false, false);
                         // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
                         // DataGridView changes.
-                        // See vsWhidbey: 325296.
                         // Debug.Assert(success);
                         return true;
                 }
@@ -24764,7 +24757,6 @@ namespace System.Windows.Forms
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
                                     // DataGridView changes.
-                                    // See vsWhidbey: 325296.
                                     // Debug.Assert(success);
                                 }
                                 else
@@ -26556,7 +26548,7 @@ namespace System.Windows.Forms
                     newFirstVisibleScrollingRow = this.Rows.GetNextRow(newFirstVisibleScrollingRow, DataGridViewElementStates.Visible);
                     if (newFirstVisibleScrollingRow == -1)
                     {
-                        throw new InvalidOperationException(); // Occurs in case of VSWhidbey 533407
+                        throw new InvalidOperationException();
                     }
                     else
                     {

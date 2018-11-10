@@ -2857,7 +2857,6 @@ namespace System.Windows.Forms {
 
     /// <Summary>
     ///    Internal object passed out to OLEACC clients via WM_GETOBJECT.
-    ///    NOTE: THIS CLASS IS INTERNAL FOR SECURITY REASONS AND SHOULD REMAIN SO!
     /// </Summary>
     internal sealed class InternalAccessibleObject : StandardOleMarshalObject, 
                                     UnsafeNativeMethods.IAccessibleInternal,

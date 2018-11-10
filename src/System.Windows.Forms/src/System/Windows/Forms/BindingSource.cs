@@ -878,7 +878,7 @@ namespace System.Windows.Forms {
         }
 
         private void InnerList_ListChanged(object sender, ListChangedEventArgs e) {
-            // Set recursive flag - see VSWhidbey 455276
+            // Set recursive flag
             // Basically, we can have computed columns that cause our parent
             // to change when our list changes.  This can cause recursion because we update
             // when our parent updates which then causes our parent to update which
@@ -1026,7 +1026,7 @@ namespace System.Windows.Forms {
             if (this.initializing)
                 return;
 
-            // Commit pending changes in prior list (VSWhidbey #418447)
+            // Commit pending changes in prior list
             if (parentsCurrentItemChanging) {
                 return;
             }

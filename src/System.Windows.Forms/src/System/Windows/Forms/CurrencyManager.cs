@@ -371,7 +371,7 @@ namespace System.Windows.Forms {
                 CurrencyManager_PullData();
             }
 
-            // vsWhidbey 425961: EndCurrentEdit or PullData can cause the list managed by the CurrencyManager to shrink.
+            // EndCurrentEdit or PullData can cause the list managed by the CurrencyManager to shrink.
             this.listposition = Math.Min(newPosition, Count - 1);
 
             if (validating) {

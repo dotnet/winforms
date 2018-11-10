@@ -656,7 +656,7 @@ namespace System.Windows.Forms {
                         throw;
                     }
 
-                    // Fix for VSWhidbey#303304. BindingComplete event is intended primarily as an "FYI" event with support for cancellation.
+                    // BindingComplete event is intended primarily as an "FYI" event with support for cancellation.
                     // User code should not be throwing exceptions from this event as a way to signal new error conditions (they should use
                     // things like the Format or Parse events for that). Exceptions thrown here can mess up currency manager behavior big time.
                     // For now, eat any non-critical exceptions and instead just cancel the current push/pull operation.

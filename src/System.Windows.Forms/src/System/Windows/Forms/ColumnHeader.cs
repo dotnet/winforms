@@ -322,7 +322,7 @@ namespace System.Windows.Forms {
                 {
                         textAlignInitialized = true;
                         // See below for an explanation of (Index != 0)
-                        //Added !IsMirrored for VSWhidbey # 365437
+                        //Added !IsMirrored
                         if ((Index != 0) && (listview.RightToLeft == RightToLeft.Yes) && !listview.IsMirrored)
                         {
                                 this.textAlign = HorizontalAlignment.Right;

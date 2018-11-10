@@ -37,7 +37,6 @@ namespace System.Experimental.Gdi
     ///     The underlying hdc is always saved and restored on dispose so external HDCs won't
     ///     be modified by WindowsGraphics.  So we don't need to restore previous objects into 
     ///     the dc in method calls.
-    ///     See VSWhidbey 300692 & 445469 for some background.
     ///</devdoc>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
@@ -192,8 +191,7 @@ namespace System.Experimental.Gdi
                     {
                         // We have to create the WindowsRegion and dipose the Region object before locking the Graphics object,
                         // in case of an unlikely exception before releasing the WindowsRegion, the finalizer will do it for us.
-                        // (no try-finally block since this method is used frequently - perf).
-                        // See VSWhidbey#383762
+                        // (no try-finally block since this method is used frequently - perf).                        
                         // If the Graphics.Clip has not been set (Region.IsInfinite) we don't need to apply it to the DC.
                         if (!clipRgn.IsInfinite(g)) 
                         {

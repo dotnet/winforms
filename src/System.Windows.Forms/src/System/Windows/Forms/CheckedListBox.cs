@@ -803,7 +803,7 @@ namespace System.Windows.Forms {
                         //
                         format.FormatFlags |= StringFormatFlags.NoWrap;
 
-                        // VSWhidbey 95774: Set Trimming to None to prevent DrawString() from whacking the entire
+                        // Set Trimming to None to prevent DrawString() from whacking the entire
                         // string when there is only one character per tab included in the string.
                         format.Trimming = StringTrimming.None;
 

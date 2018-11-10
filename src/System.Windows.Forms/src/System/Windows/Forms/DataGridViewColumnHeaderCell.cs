@@ -821,7 +821,6 @@ namespace System.Windows.Forms
                     int state = (int) HeaderItemState.Normal;
 
                     // Set the state to Pressed/Hot only if the column can be sorted or selected
-                    // VSWhidbey 174824.
                     if (this.OwningColumn != null && this.OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable ||
                         this.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                         this.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)

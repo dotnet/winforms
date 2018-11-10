@@ -2379,8 +2379,6 @@ namespace System.Windows.Forms {
 #if DEBUG
             private int debugModalCounter;
 #endif
-            // Refer VSWhidbey 258748
-            // Refer VS Whidbey 337882
             // We need to set this flag if we have started the ModalMessageLoop so that we dont create the ThreadWindows
             // when the ComponentManager calls on us (as IMSOComponent) during the OnEnterState.
             private bool ourModalLoop;
@@ -2996,7 +2994,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             ~ThreadContext() {
 
-                // VSWhidbey 169487 We used to call OleUninitialize() here if we were
+                // We used to call OleUninitialize() here if we were
                 // still STATE_OLEINITIALIZED, but that's never the correct thing to do.
                 // At this point we're on the wrong thread and we should never have been
                 // called here in the first place.
@@ -3023,7 +3021,7 @@ namespace System.Windows.Forms {
             // Sets this component as the tracking component - trumping any active component 
             // for message filtering.
             internal void TrackInput(bool track) {
-                // VSWhidbey 409264
+
                 // protect against double setting, as this causes asserts in the VS component manager.
                 if (track != GetState(STATE_TRACKINGCOMPONENT)) {
                     UnsafeNativeMethods.IMsoComponentManager cm = ComponentManager;
@@ -4291,14 +4289,14 @@ namespace System.Windows.Forms {
                     if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd))) SafeNativeMethods.EnableWindow(new HandleRef(null, hWnd), state);
                 }
 
-                // VSWhidbey 258748 :OpenFileDialog is not returning the focus the way other dialogs do.
-                //               Important that we re-activate the old window when we are closing
-                //               our modal dialog.
+                // OpenFileDialog is not returning the focus the way other dialogs do.
+                // Important that we re-activate the old window when we are closing
+                // our modal dialog.
                 //
-                // VS Whidbey 337882: edit mode forever with Excel application
-                //               But, DON'T change other people's state when we're simply
-                //               responding to external MSOCM events about modality.  When we are,
-                //               we are created with a TRUE for onlyWinForms.
+                // edit mode forever with Excel application
+                // But, DON'T change other people's state when we're simply
+                // responding to external MSOCM events about modality.  When we are,
+                // we are created with a TRUE for onlyWinForms.
                 if (!onlyWinForms && state) {
                     if (activeHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, activeHwnd))) {
                         UnsafeNativeMethods.SetActiveWindow(new HandleRef(null, activeHwnd));
@@ -4324,7 +4322,7 @@ namespace System.Windows.Forms {
 
                 Control parentControl = null;
                 
-                // VSWhidbey 400973 get ahold of the parent HWND -- if it's a different thread we need to do 
+                // Get ahold of the parent HWND -- if it's a different thread we need to do 
                 // do the disable over there too.  Note we only do this if we're parented by a Windows Forms
                 // parent.
                 //

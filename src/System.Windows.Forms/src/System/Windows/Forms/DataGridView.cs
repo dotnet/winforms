@@ -6944,7 +6944,7 @@ namespace System.Windows.Forms
         //                    //
         ////////////////////////
         [
-            SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes") // VSWhidbey 405004
+            SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")
         ]
         void ISupportInitialize.BeginInit()
         {
@@ -6957,7 +6957,7 @@ namespace System.Windows.Forms
         }
 
         [
-            SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes") // VSWhidbey 405004
+            SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")
         ]
         void ISupportInitialize.EndInit()
         {

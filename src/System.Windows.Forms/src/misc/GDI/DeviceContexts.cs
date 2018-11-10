@@ -26,7 +26,7 @@ namespace System.Experimental.Gdi
     /// <devdoc>
     ///     Keeps a cache of some graphics primitives.
     ///     Created to improve performance of TextRenderer.MeasureText methods that don't receive a WindowsGraphics.
-    ///     This class mantains a cache of MRU WindowsFont objects in the process. (See VSWhidbey#301492).
+    ///     This class mantains a cache of MRU WindowsFont objects in the process.
     /// </devdoc>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public

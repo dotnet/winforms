@@ -516,8 +516,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            // VSWhidbey#262686: Two controls in UserControls that don't take focus via UI can have bad behavior if ...
-            // VSWhidbey#537131: 
+            // Two controls in UserControls that don't take focus via UI can have bad behavior if ...
             // When a control is removed from a container, not only do we need to clear the unvalidatedControl of that 
             // container potentially, but the unvalidatedControl of all its container parents, up the chain, needs to
             // now point to the old parent of the disappearing control.
@@ -812,8 +811,7 @@ namespace System.Windows.Forms {
                 autoValidateChanged(this, e);
             }
         }
-
-        // Refer VsWhidbey : 515910 & 269769
+        
         internal override void OnFrameWindowActivate(bool fActivate) {
           if (fActivate) {
               IntSecurity.ModifyFocus.Assert();
@@ -1267,7 +1265,7 @@ namespace System.Windows.Forms {
                     // Loop through the controls starting at the control next to the current Active control in the Tab order
                     // till we find someone willing to process this mnemonic.
                     // We don't start the search on the Active control to allow controls in the same container with the same 
-                    // mnemonic (bad UI design but supported) to be processed sequentially (see VSWhidbey#428029).
+                    // mnemonic (bad UI design but supported) to be processed sequentially
 #if DEBUG
                 count++;
                 if (count > 9999) {
