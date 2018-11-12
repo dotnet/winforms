@@ -1236,7 +1236,7 @@ namespace System.Windows.Forms {
         private Size GetBordersAndPadding() {
            Size bordersAndPadding = Padding.Size;
            
-           // COMPAT VSW 248415: Everett added random numbers to the height of the label               
+           // COMPAT: Everett added random numbers to the height of the label               
            if (UseCompatibleTextRendering) {               
               //Always return the Fontheight + some buffer else the Text gets clipped for Autosize = true..
               //(
