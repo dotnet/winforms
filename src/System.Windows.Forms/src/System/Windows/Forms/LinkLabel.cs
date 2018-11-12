@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.TabStopChanged"]/*' />
         /// <internalonly/>
-        // VSWhidbey 106827: Make this event visible through the property browser.
+        // Make this event visible through the property browser.
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler TabStopChanged {
             add {
@@ -599,7 +599,7 @@ namespace System.Windows.Forms {
                 return index;
             }
 
-            //VSWhidbey 217272: Dealing with surrogate characters
+            //Dealing with surrogate characters
             //in some languages, characters can expand over multiple
             //chars, using StringInfo lets us properly deal with it.
             StringInfo stringInfo = new StringInfo(text);

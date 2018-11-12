@@ -1362,11 +1362,11 @@ namespace System.Windows.Forms.ButtonInternal {
                 //Don't call "layout.imageBounds = Rectangle.Intersect(layout.imageBounds, maxBounds);"
                 // because that is a breaking change that causes images to be scaled to the dimensions of the control.
                 //adjust textBounds so that the text is still visible even if the image is larger than the button's size
-                //fixes Whidbey 234985
+
                 //why do we intersect with layout.field for textBounds while we intersect with maxBounds for imageBounds?
                 //this is because there are some legacy code which squeezes the button so small that text will get clipped
                 //if we intersect with maxBounds. Have to do this for backward compatibility.
-                //See Whidbey 341480
+
                 if (textImageRelation == TextImageRelation.TextBeforeImage || textImageRelation == TextImageRelation.ImageBeforeText) {
                     //adjust the vertical position of textBounds so that the text doesn't fall off the boundary of the button
                     int textBottom = Math.Min(layout.textBounds.Bottom, layout.field.Bottom);

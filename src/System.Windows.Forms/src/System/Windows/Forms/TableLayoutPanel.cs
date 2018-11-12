@@ -504,7 +504,7 @@ namespace System.Windows.Forms {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
             int i = 0;
             
-             // VSWhidbey 432427: the last row/column can be larger than the 
+             // The last row/column can be larger than the 
              // absolutely styled column width.
              int lastRowHeight = -1;
              int lastRow = containerInfo.Rows.Length -1;

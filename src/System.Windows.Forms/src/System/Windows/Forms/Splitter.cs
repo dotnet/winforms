@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_MOVING = new object();
         private static readonly object EVENT_MOVED = new object();
 
-        // refer to VsWhidbey : 423553 (Cannot expose IMessageFilter.PreFilterMessage through this unsealed class)
+        // Cannot expose IMessageFilter.PreFilterMessage through this unsealed class
         private SplitterMessageFilter splitterMessageFilter = null;
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Splitter"]/*' />

@@ -197,7 +197,7 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.Selectable, false);
             SetToolStripState(STATE_USEDEFAULTRENDERER | STATE_ALLOWMERGE, true);
 
-            SetState2(STATE2_MAINTAINSOWNCAPTUREMODE // VSWhidbey 458967: a toolstrip does not take capture on MouseDown.
+            SetState2(STATE2_MAINTAINSOWNCAPTUREMODE // A toolstrip does not take capture on MouseDown.
                       | STATE2_USEPREFERREDSIZECACHE, // this class overrides GetPreferredSizeCore, let Control automatically cache the result
                        true);
 
@@ -254,7 +254,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (IsInToolStripPanel && base.AutoSize && !value) {
-                    // VSWhidbey 351717 - restoring the bounds can change the location of the toolstrip - 
+                    // Restoring the bounds can change the location of the toolstrip - 
                     // which would join it to a new row.  Set the specified bounds to the new location to 
                     // prevent this.
                     Rectangle bounds = CommonProperties.GetSpecifiedBounds(this);
@@ -761,7 +761,6 @@ namespace System.Windows.Forms {
                         // The first is when the parent gets a Layout due to the DockChange, and the second comes from when we
                         // change the orientation.  Instead we've duplicated the logic of Control.Dock.set here, but with a 
                         // LayoutTransaction on the Parent as well.
-                        // See VSWhidbey:489688 and VSWhidbey:474781 for more details.
                         DefaultLayout.SetDock(this, value);
                         UpdateLayoutStyle(Dock);
                     }
@@ -2414,7 +2413,6 @@ namespace System.Windows.Forms {
              Size prefSize = LayoutEngine.GetPreferredSize(this, proposedSize - padding.Size);
              Padding newPadding = Padding;
                           
-             // VSWhidbey 471860: 
              // as a side effect of some of the layouts, we can change the padding.
              // if this happens, we need to clear the cache.
              if (padding != newPadding) {
@@ -2611,7 +2609,7 @@ namespace System.Windows.Forms {
         internal void HandleItemClick(ToolStripItem dismissingItem) {
             ToolStripItemClickedEventArgs e= new ToolStripItemClickedEventArgs(dismissingItem);
             OnItemClicked(e);
-            // VSWhidbey 395136 - ensure both the overflow and the main toolstrip fire ItemClick event
+            // Ensure both the overflow and the main toolstrip fire ItemClick event
             // otherwise the overflow wont dismiss.
             if (!IsDropDown && dismissingItem.IsOnOverflow) {
                 OverflowButton.DropDown.HandleItemClick(dismissingItem);
@@ -2790,7 +2788,6 @@ namespace System.Windows.Forms {
 
         // This function will print to the PrinterDC. ToolStrip have there own buffered painting and doesnt play very well
         // with the DC translations done by base Control class. Hence we do our own Painting and the BitBLT the DC into the printerDc.
-        // Refer to VsWhidbey : 400683.
         internal override void PrintToMetaFileRecursive(HandleRef hDC, IntPtr lParam, Rectangle bounds) {
             using (Bitmap image = new Bitmap(bounds.Width, bounds.Height))
             using (Graphics g = Graphics.FromImage(image)) {
@@ -2977,7 +2974,6 @@ namespace System.Windows.Forms {
             if (!inMenuMode && Control.ModifierKeys == Keys.Alt) {
                 // This is the case where someone hasnt released the ALT key yet, but has pushed another letter.
                 // In some cases we can activate the menu that is not the MainMenuStrip...
-                // See VSWhidbey 501382 for more details.
                 return ProcessMnemonicInternal(charCode);
             }
             else if (inMenuMode && ToolStripManager.ModalMenuFilter.GetActiveToolStrip() == this) {
@@ -3013,7 +3009,7 @@ namespace System.Windows.Forms {
                 if (string.IsNullOrEmpty(currentItem.Text) || !currentItem.Enabled) {
                     continue;
                 }
-                // VSWhidbey 429513 - only items which display text should be processed
+                // Only items which display text should be processed
                 if ((currentItem.DisplayStyle & ToolStripItemDisplayStyle.Text) != ToolStripItemDisplayStyle.Text) {
                     continue;
                 }
@@ -3063,7 +3059,7 @@ namespace System.Windows.Forms {
                 if (!(currentItem is ToolStripMenuItem)  || string.IsNullOrEmpty(currentItem.Text) || !currentItem.Enabled) {
                     continue;
                 }
-                // VSWhidbey 429513 - only items which display text should be processed
+                // Only items which display text should be processed
                 if ((currentItem.DisplayStyle & ToolStripItemDisplayStyle.Text) != ToolStripItemDisplayStyle.Text) {
                     continue;
                 }
@@ -3320,7 +3316,6 @@ namespace System.Windows.Forms {
             DoLayoutIfHandleCreated(e);
 
             if (!HasVisibleItems && e.Item != null && ((IArrangedElement)e.Item).ParticipatesInLayout) {
-                // VSWhidbey 441403
                 // in certain cases, we may not have laid out yet (e.g. a dropdown may not layout until
                 // it becomes visible.)   We will recalculate this in SetDisplayedItems, but for the moment
                 // if we find an item that ParticipatesInLayout, mark us as having visible items.
@@ -3829,7 +3824,7 @@ namespace System.Windows.Forms {
         }
 
         protected override void OnTabStopChanged(EventArgs e) {
-            // VSWhidbey 442518 - SelectNextControl can select non-tabstop things.
+            // SelectNextControl can select non-tabstop things.
             // we need to prevent this by changing the value of "CanSelect"
             SetStyle(ControlStyles.Selectable, TabStop);
             base.OnTabStopChanged(e);
@@ -3965,7 +3960,6 @@ namespace System.Windows.Forms {
         }
 
         private void RestoreFocusInternal(bool wasInMenuMode) {
-            // VSWhidbey 503500 
             // This is called from the RestoreFocusFilter.  If the state of MenuMode has changed
             // since we posted this message, we do not know enough information about whether
             // we should exit menu mode.
@@ -4265,7 +4259,6 @@ namespace System.Windows.Forms {
                     SetupGrip();
                 }               
 
-                // VSWhidbey 468104
                 // for splitstack layout we re-arrange the items in the displayed items
                 // collection so that we can easily tab through them in natural order
                 Rectangle displayRect = this.DisplayRectangle;
@@ -4307,7 +4300,7 @@ namespace System.Windows.Forms {
                             }
                             else if (placement == ToolStripItemPlacement.Overflow && !(item is ToolStripSeparator)) {
                                 if (item is ToolStripControlHost && this.OverflowButton.DropDown.IsRestrictedWindow) {
-                                   // VSWhidbey 436973: control hosts cannot be added to the overflow in the Internet
+                                   // Control hosts cannot be added to the overflow in the Internet
                                    // just set the placement to None.
                                    item.SetPlacement(ToolStripItemPlacement.None);
                                 }
@@ -4629,7 +4622,7 @@ namespace System.Windows.Forms {
 
                         if (!IsDropDown && !IsInDesignMode) {
 
-                            // VSWhidbey 473357: if our root HWND is not the active hwnd, 
+                            // If our root HWND is not the active hwnd, 
                             // eat the mouse message and bring the form to the front. 
                             HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(this);
                             if (rootHwnd.Handle != IntPtr.Zero) {
@@ -5240,7 +5233,6 @@ namespace System.Windows.Forms {
                         insertIndex = Math.Max(0, (owner.RightToLeft == RightToLeft.No) ? insertIndex + 1 : insertIndex);
                     }
 
-                    // VSWhidbey 517774
                     // If the control is moving from a lower to higher index, you actually want to set it one less than its position.  
                     // This is because it is being removed from its original position, which lowers the index of every control before 
                     // its new drop point by 1.

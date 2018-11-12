@@ -362,7 +362,7 @@ namespace System.Windows.Forms {
             
             PrinterUnit toUnit = PrinterUnit.ThousandthsOfAnInch;
 
-            // Refer VSWhidbey: 331160. Below was a breaking change from RTM and EVERETT even though this was a correct FIX.
+            // Below was a breaking change from RTM and EVERETT even though this was a correct FIX.
             // EnableMetric is a new Whidbey property which we allow the users to choose between the AutoConversion or not.
             if (EnableMetric)
             {

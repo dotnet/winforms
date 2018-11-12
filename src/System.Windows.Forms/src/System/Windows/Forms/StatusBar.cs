@@ -91,7 +91,7 @@ namespace System.Windows.Forms {
             get {
                 if (sizeGripWidth == 0) {
                     if (Application.RenderWithVisualStyles && VisualStyleRenderer != null){
-                        // VSWhidbey 207045: need to build up accurate gripper width to avoid cutting off other panes.
+                        // Need to build up accurate gripper width to avoid cutting off other panes.
                         VisualStyleRenderer vsRenderer = VisualStyleRenderer;
                         VisualStyleElement thisElement;
                         Size elementSize;

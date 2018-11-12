@@ -206,9 +206,9 @@ namespace System.Windows.Forms {
                 return upDownEdit.BackColor;
             }
             set {
-                base.BackColor = value; // Don't remove this or you will break serialization. See VSWhidbey #517574
+                base.BackColor = value; // Don't remove this or you will break serialization.
                 upDownEdit.BackColor = value;
-                Invalidate(); // VSWhidbey #335074
+                Invalidate();
             }
         }
 
@@ -1324,7 +1324,7 @@ namespace System.Windows.Forms {
             }
 
             internal override void WmContextMenu(ref Message m) {
-                // VSWhidbey 521337: want to make the SourceControl to be the UpDownBase, not the Edit.
+                // Want to make the SourceControl to be the UpDownBase, not the Edit.
                 if (ContextMenu == null && ContextMenuStrip != null) {
                     WmContextMenu(ref m, parent);
                 }

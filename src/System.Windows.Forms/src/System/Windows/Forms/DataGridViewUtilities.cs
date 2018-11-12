@@ -150,7 +150,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                //tff |= TextFormatFlags.NoFullWidthCharacterBreak;  VSWhidbey 518422
+                //tff |= TextFormatFlags.NoFullWidthCharacterBreak;
                 tff |= TextFormatFlags.WordBreak;
             }
             tff |= TextFormatFlags.NoPrefix;

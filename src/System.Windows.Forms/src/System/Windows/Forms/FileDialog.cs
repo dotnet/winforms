@@ -976,7 +976,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override bool RunDialog(IntPtr hWndOwner) {
-            // See VSWhidbey 
             if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA) {
                 throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
             }

@@ -75,7 +75,6 @@ namespace System.Windows.Forms {
         private static ColorMatrix DisabledImageColorMatrix {
             get {
                 if (disabledImageColorMatrix == null) {
-                    // VSWhidbey 233470
                     // this is the result of a GreyScale matrix multiplied by a transparency matrix of .5
                  
 
@@ -1044,7 +1043,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // VSWhidbey 252459: only paint background effects if no backcolor has been set or no background image has been set.
+        // Only paint background effects if no backcolor has been set or no background image has been set.
         internal bool ShouldPaintBackground (Control control) {
             return (control.RawBackColor == Color.Empty && control.BackgroundImage == null);
         }

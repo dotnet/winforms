@@ -597,7 +597,7 @@ namespace System.Windows.Forms {
             Debug.Assert(UserEdit == true, "ParseEditText() - UserEdit == false");
 
             try {
-                // VSWhidbey 173332: Verify that the user is not starting the string with a "-"
+                // Verify that the user is not starting the string with a "-"
                 // before attempting to set the Value property since a "-" is a valid character with
                 // which to start a string representing a negative number.
                 if (!string.IsNullOrEmpty(Text) &&
@@ -776,7 +776,7 @@ namespace System.Windows.Forms {
                 ParseEditText();
             }
 
-            // VSWhidbey 173332: Verify that the user is not starting the string with a "-"
+            // Verify that the user is not starting the string with a "-"
             // before attempting to set the Value property since a "-" is a valid character with
             // which to start a string representing a negative number.
             if (currentValueChanged || (!string.IsNullOrEmpty(Text) &&

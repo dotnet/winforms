@@ -768,7 +768,7 @@ namespace System.Windows.Forms {
         }
 
         protected override void OnPaddingChanged(EventArgs e) {
-            // VSWhidbey 340011: DockPaddingEdges compat.  
+            // DockPaddingEdges compat.  
             // dont call base in this instance - for App compat we should not fire Invalidate when 
             // the padding has changed.
             EventHandler handler = (EventHandler)Events[Control.EventPaddingChanged];
@@ -837,7 +837,7 @@ namespace System.Windows.Forms {
 
 
             Rectangle client = ClientRectangle;
-            //VSWhidbey 141644 - The DisplayRect property modifies
+            // The DisplayRect property modifies
             // the returned rect to include padding.  We don't want to
             // include this padding in our adjustment of the DisplayRect
             // because it interferes with the scrolling.

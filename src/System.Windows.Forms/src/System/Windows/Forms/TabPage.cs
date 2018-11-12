@@ -323,7 +323,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Location"]/*' />
         /// <internalonly/>
-        // VSWhidbey 94772: Make the Location property non-browsable for the TabPages.
+        // Make the Location property non-browsable for the TabPages.
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public Point Location {
             get {
@@ -390,7 +390,7 @@ namespace System.Windows.Forms {
 
 
         /// <devdoc>
-        /// Refer VsWhidbey : 440669: This property is required by certain controls (TabPage) to render its transparency using theming API.
+        /// This property is required by certain controls (TabPage) to render its transparency using theming API.
         /// We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
         /// </devdoc>
         /// <internalonly/>
@@ -688,12 +688,12 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.OnPaintBackground"]/*' />
         protected override void OnPaintBackground (PaintEventArgs e) {
 
-            // VSWhidbey 94759: Utilize the TabRenderer new to Whidbey to draw the tab pages so that the
+            // Utilize the TabRenderer new to Whidbey to draw the tab pages so that the
             // panels are drawn using the correct visual styles when the application supports using visual
             // styles.
 
             // Does this application utilize Visual Styles?
-            // VSWhidbey 167291: Utilize the UseVisualStyleBackColor property to determine whether or
+            // Utilize the UseVisualStyleBackColor property to determine whether or
             // not the themed background should be utilized.
             TabControl parent = ParentInternal as TabControl;
             if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (parent != null && parent.Appearance == TabAppearance.Normal)) {

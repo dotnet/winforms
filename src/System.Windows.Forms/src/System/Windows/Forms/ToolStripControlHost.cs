@@ -482,7 +482,6 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container. 
-        /// Refer to VsWhidbey : 390573.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site {

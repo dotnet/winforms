@@ -585,7 +585,7 @@ namespace System.Windows.Forms {
 
                     if (toolStripPanel != null && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
                         toolStripPanel.DragBounds.Contains(toolStripPanel.PointToClient(screenLocation))) {
-                        // VSWhidbey 342496 - ensure that we cant drag off one window to another.
+                        // Ensure that we cant drag off one window to another.
                         if (rootWindowCheck) {
                             if (IsOnSameWindow(draggedControl, toolStripPanel)) {
                                 return toolStripPanel;
@@ -1318,7 +1318,7 @@ namespace System.Windows.Forms {
             private class HostedWindowsFormsMessageHook {
                 [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
                 private IntPtr messageHookHandle = IntPtr.Zero;
-                private bool isHooked = false; //VSWHIDBEY # 474112
+                private bool isHooked = false;
                 private NativeMethods.HookProc hookProc;
 
                 public HostedWindowsFormsMessageHook() {
@@ -1564,7 +1564,7 @@ namespace System.Windows.Forms {
                             ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
                             ContextMenuStrip toplevelContextMenu = dropDown.GetFirstDropDown() as ContextMenuStrip;
 
-                            // VSWhidbey 433886: if a context menu is re-used between the main menu and the 
+                            // If a context menu is re-used between the main menu and the 
                             // and some other control's context menu, we should go ahead and evaluate it.
 
                             if (toplevelContextMenu != null) {
@@ -1601,7 +1601,6 @@ namespace System.Windows.Forms {
                                     if (mainForm != null && mainForm.IsMdiContainer) {
                                         Form toolStripForm = topMostToolStrip.FindFormInternal();
                                         if (toolStripForm != mainForm && toolStripForm != null) {                     
-                                           // VSWhidbey 530569
                                            // we should only process shortcuts of the ActiveMDIChild or the Main Form.
                                            rootWindowsMatch = (toolStripForm == mainForm.ActiveMdiChildInternal);                                            
                                         }                     
@@ -1685,7 +1684,7 @@ namespace System.Windows.Forms {
             else {
                 // this is the same as Control.ModifierKeys - but we save two p/invokes.
                 if (UnsafeNativeMethods.GetKeyState((int)Keys.ShiftKey) < 0 && (keyData == Keys.None)) {
-                    // VSWhidbey 381933 if it's Shift+F10 and we're already InMenuMode, then we
+                    // If it's Shift+F10 and we're already InMenuMode, then we
                     // need to cancel this message, otherwise we'll enter the native modal menu loop.
                     Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] DETECTED SHIFT+F10" + keyData.ToString());
                     return ToolStripManager.ModalMenuFilter.InMenuMode;
@@ -1761,7 +1760,7 @@ namespace System.Windows.Forms {
                 }
             }
             catch (Exception e) {
-                // VSWHIDBEY 80122 make sure we deal with non-critical failures gracefully. 
+                // Make sure we deal with non-critical failures gracefully. 
                 if (ClientUtils.IsCriticalException(e)) {
                     throw;
                 }
@@ -2061,7 +2060,7 @@ namespace System.Windows.Forms {
                         foundToolStrip = true;
                     }
                     else if (!revertMDIControls && sourceToolStrip == null) {
-                        // VSWhidbey 352431: Calling ToolStripManager.RevertMerge should not pull out MDIControlStrip && MDIWindowListStrip.
+                        // Calling ToolStripManager.RevertMerge should not pull out MDIControlStrip && MDIWindowListStrip.
                         if (IsSpecialMDIStrip(history.MergedToolStrip)) {
                             reApply.Push(history.MergedToolStrip);
                         }

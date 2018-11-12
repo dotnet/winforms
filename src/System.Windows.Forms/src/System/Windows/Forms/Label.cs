@@ -1161,7 +1161,7 @@ namespace System.Windows.Forms {
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 StopAnimate();
-                // VSWhidbey 318551: holding on to images and image list is a memory leak.
+                // Holding on to images and image list is a memory leak.
                 if (ImageList != null) {
                     ImageList.Disposed       -= new EventHandler(this.DetachImageList);
                     ImageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
@@ -1236,7 +1236,7 @@ namespace System.Windows.Forms {
         private Size GetBordersAndPadding() {
            Size bordersAndPadding = Padding.Size;
            
-           // COMPAT VSW 248415: Everett added random numbers to the height of the label               
+           // COMPAT: Everett added random numbers to the height of the label               
            if (UseCompatibleTextRendering) {               
               //Always return the Fontheight + some buffer else the Text gets clipped for Autosize = true..
               //(
@@ -1598,7 +1598,7 @@ namespace System.Windows.Forms {
         protected override void OnParentChanged(EventArgs e) {
             base.OnParentChanged(e);
             if (SelfSizing) {
-                // VSWhidbey 368232: in the case of SelfSizing
+                // In the case of SelfSizing
                 // we dont know what size to be until we're parented
                 AdjustSize();
             }

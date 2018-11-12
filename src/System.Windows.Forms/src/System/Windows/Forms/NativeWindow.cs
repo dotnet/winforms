@@ -713,8 +713,7 @@ namespace System.Windows.Forms {
                 CheckReleased();
                 WindowClass windowClass = WindowClass.Create(cp.ClassName, cp.ClassStyle);
                 lock (createWindowSyncObject) {
-
-                    // VSWhidbey 528778
+                    
                     // Why are we checking the handle again after calling CheckReleased()?  It turns                     
                     // out the CLR will sometimes pump messages while we're waiting on the lock.  If
                     // a message comes through (say a WM_ACTIVATE for the parent) which causes the 

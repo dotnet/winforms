@@ -105,7 +105,6 @@ namespace System.Windows.Forms
             }
             set
             {
-                // VSWhidbey 515823
                 //if (this.DataGridView != null && this.RowIndex == -1)
                 //{
                 //    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));

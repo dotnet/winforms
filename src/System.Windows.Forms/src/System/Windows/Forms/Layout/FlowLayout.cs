@@ -34,8 +34,7 @@ namespace System.Windows.Forms.Layout {
 #endif            
 
             // ScrollableControl will first try to get the layoutbounds from the derived control when 
-            // trying to figure out if ScrollBars should be added.
-            // VSWhidbey #392913            
+            // trying to figure out if ScrollBars should be added.         
             CommonProperties.SetLayoutBounds(container, xLayout(container, container.DisplayRectangle, /* measureOnly = */ false));
 #if DEBUG
             Debug.Unindent();
@@ -106,7 +105,7 @@ namespace System.Windows.Forms.Layout {
 
             if(!wrapContents) {
                 // pretend that the container is infinitely wide to prevent wrapping.
-                // VSWhidbey 161993: displayRectangle.Right is Width + X - subtract X to prevent overflow.
+                // DisplayRectangle.Right is Width + X - subtract X to prevent overflow.
                 displayRect.Width = Int32.MaxValue - displayRect.X;
             }
 
@@ -195,8 +194,7 @@ namespace System.Windows.Forms.Layout {
                 } else {
                     // If autosizing is turned off, we just use the element's current size as its preferred size.
                     prefSize = elementProxy.SpecifiedSize;
-
-                    // VSWhidbey 406227
+                    
                     // except if it is stretching - then ignore the affect of the height dimension.
                     if (elementProxy.Stretches) {
                         prefSize.Height = 0;

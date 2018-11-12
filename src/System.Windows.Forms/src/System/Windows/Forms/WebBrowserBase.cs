@@ -1511,7 +1511,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Text"]/*' />
-        // VSWhidbey 82018: Override this property so that the Bindable attribute can be set to false.
+        // Override this property so that the Bindable attribute can be set to false.
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),

@@ -1559,7 +1559,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // required for menus - see VSWhidbey 458967.
+        // required for menus
         internal bool MouseDownAndUpMustBeInSameItem {
             get { return state[stateMouseDownAndUpMustBeInSameItem]; }
             set { state[stateMouseDownAndUpMustBeInSameItem] = value; }
@@ -2615,7 +2615,7 @@ namespace System.Windows.Forms {
                    }
                    break;
                 case ToolStripItemEventType.MouseMove:
-                    // VSWhidbey 266970: disabled items typically dont get mouse move 
+                    // Disabled items typically dont get mouse move 
                     // but they should be allowed to re-order if the ALT key is pressed
                     if (!Enabled && ParentInternal != null) {
                         BeginDragForItemReorder();
@@ -2914,7 +2914,7 @@ namespace System.Windows.Forms {
 
             if (!fireMouseUp && !MouseDownAndUpMustBeInSameItem) {
                 // in the case of menus, you can mouse down on one item and mouse up 
-                // on another.  We do need to be careful (as in the case of VSWhidbey 482156)
+                // on another.  We do need to be careful
                 // that the mouse has actually moved from when a dropdown has been opened -
                 // otherwise we may accidentally click what's underneath the mouse at the time
                 // the dropdown is opened.
@@ -2940,7 +2940,7 @@ namespace System.Windows.Forms {
                     }
                     if (shouldFireDoubleClick) {
                         HandleDoubleClick(new System.EventArgs());
-                        // VSWhidbey 486983: if we actually fired DoubleClick - reset the lastClickTime.
+                        // If we actually fired DoubleClick - reset the lastClickTime.
                         lastClickTime = 0;
                     } 
                     else {
@@ -3357,7 +3357,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e) {
            cachedTextSize = Size.Empty;
-           // VSWhidbey 399025: make sure we clear the cache before we perform the layout.
+           // Make sure we clear the cache before we perform the layout.
            InvalidateItemLayout(PropertyNames.Text);
            RaiseEvent(EventText, e);  
         }
@@ -4365,7 +4365,7 @@ namespace System.Windows.Forms {
                 [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (Owner.IsOnDropDown) {
-                        // VSWhidbey 477274: return the owner item as the accessible parent.
+                        // Return the owner item as the accessible parent.
                         ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown();
                         if (dropDown.OwnerItem != null) {
                             return dropDown.OwnerItem.AccessibilityObject;

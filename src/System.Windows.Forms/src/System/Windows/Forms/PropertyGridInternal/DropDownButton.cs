@@ -26,7 +26,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        // VSWhidbey 375220 - when the holder is open, we don't fire clicks
+        // when the holder is open, we don't fire clicks
         //
         public bool IgnoreMouse {
 

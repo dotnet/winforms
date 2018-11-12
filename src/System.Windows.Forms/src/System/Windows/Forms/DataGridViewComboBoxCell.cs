@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         private static bool mouseInDropDownButtonBounds = false;
         private static int cachedDropDownWidth = -1;
 
-        // Autosizing changed for VS Whidbey 489227
+        // Autosizing changed for VS 
         // We need to make ItemFromComboBoxDataSource as fast as possible because ItemFromComboBoxDataSource is getting called a lot
         // during AutoSize. To do that we keep a copy of the key and the value.
         //private object keyUsedDuringAutoSize    = null;
@@ -1370,7 +1370,7 @@ namespace System.Windows.Forms
             int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
             TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(this.DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
 
-            /* Changing design of DGVComboBoxCell.GetPreferredSize for performance reasons. See VS Whidbey 489227.
+            /* Changing design of DGVComboBoxCell.GetPreferredSize for performance reasons.
              * Old design required looking through each combo item
             string formattedValue;
             if (freeDimension == DataGridViewFreeDimension.Height)
@@ -1652,8 +1652,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException("key");
             }
-
-            // See VS Whidbey 489227
+            
             //if (key == this.keyUsedDuringAutoSize)
             //{
             //    return this.valueUsedDuringAutoSize;

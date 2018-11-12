@@ -211,7 +211,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                   }
                   break;
                case NativeMethods.WM_NCHITTEST:
-                  // Fix for VSWhidbey#93985 and VSWhidbey#172903. When using v6 common controls, the native
+                  // When using v6 common controls, the native
                   // tooltip does not end up returning HTTRANSPARENT all the time, so its TTF_TRANSPARENT
                   // behavior does not work, ie. mouse events do not fall thru to controls underneath. This
                   // is due to a combination of old app-specific hacks in comctl32, functional changes between

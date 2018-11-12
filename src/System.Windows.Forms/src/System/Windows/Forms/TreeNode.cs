@@ -1926,7 +1926,7 @@ namespace System.Windows.Forms {
                 if (StateImageIndexer.ActualIndex != -1) {
                     item.state = ((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
                 }
-                // VSWhidbey 143401: ActualIndex == -1 means "don't use custom image list"
+                // ActualIndex == -1 means "don't use custom image list"
                 // so just leave item.state set to zero, that tells the unmanaged control
                 // to use no state image for this node.
             }

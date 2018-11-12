@@ -527,7 +527,7 @@ namespace System.Windows.Forms {
                 if (controlError.Contains(errBindings[j].Control))
                     outputError = (string) controlError[errBindings[j].Control];
 
-                // VSWhidbey 106890: Utilize the error string without including the field name.
+                // Utilize the error string without including the field name.
                 if (String.IsNullOrEmpty(outputError)) {
                     outputError = error;
                 } else {
@@ -876,9 +876,7 @@ namespace System.Windows.Forms {
             Rectangle windowBounds = Rectangle.Empty;
             System.Windows.Forms.Timer timer;
             NativeWindow tipWindow;
-
-
-            // VSWhidbey #455702
+            
             DeviceContext mirrordc= null;
             Size mirrordcExtent = Size.Empty;
             Point mirrordcOrigin = Point.Empty;
@@ -1009,9 +1007,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///
-            /// VSWhidbey #455702.
+            /// <devdoc>            
             ///
             /// Since we added mirroring to certain controls, we need to make sure the
             /// error icons show up in the correct place. We cannot mirror the errorwindow

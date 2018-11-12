@@ -996,7 +996,7 @@ namespace System.Windows.Forms {
    
             ClearDragFeedback();
 
-            // VSWhidbey 439542 - in design mode we get bogus values for client location.
+            // In design mode we get bogus values for client location.
             if (toolStripToDrag.Site != null && toolStripToDrag.Site.DesignMode && IsHandleCreated) {
 
                 if (clientLocation.X < 0 || clientLocation.Y < 0) {
@@ -1135,7 +1135,7 @@ namespace System.Windows.Forms {
 
 
                     if (RowsInternal.IndexOf(row) > 0) {
-                        // VSWhidbey 327225 - when joining a new row, move the cursor to to the location of
+                        // When joining a new row, move the cursor to to the location of
                         // the grip, otherwise budging the mouse can pull it down into the next row.
                         IntSecurity.AdjustCursorPosition.Assert();
                         try {

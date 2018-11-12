@@ -65,7 +65,7 @@ namespace System.Windows.Forms.VisualStyles {
 
                 
                 if (supported) {
-                    // VSWhidbey #171915: In some cases, this check isn't enough, since the theme handle creation
+                    // In some cases, this check isn't enough, since the theme handle creation
                     // could fail for some other reason. Try creating a theme handle here - if successful, return true,
                     // else return false.
                     IntPtr hTheme = GetHandle("BUTTON", false); //Button is an arbitrary choice.
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.VisualStyles {
                 return;
             }
 
-            // VSWhidbey #282742: DrawThemeIcon currently seems to do nothing, but still return S_OK. As a workaround,
+            // DrawThemeIcon currently seems to do nothing, but still return S_OK. As a workaround,
             // we call DrawImage on the graphics object itself for now.
 
             //int returnVal = NativeMethods.S_FALSE;

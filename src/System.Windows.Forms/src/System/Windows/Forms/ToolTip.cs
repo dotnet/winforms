@@ -343,7 +343,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // refer VsWhidbey 498263: ToolTips should be shown only on active Windows.
+        // ToolTips should be shown only on active Windows.
         private bool IsWindowActive(IWin32Window window)
         {
             Control windowControl = window as Control;
@@ -882,7 +882,7 @@ namespace System.Windows.Forms {
                 icc.dwICC = NativeMethods.ICC_TAB_CLASSES;
                 SafeNativeMethods.InitCommonControlsEx(icc);
 
-                CreateParams cp = CreateParams; // Avoid reentrant call to CreateHandle (VSWhidbey 570764)
+                CreateParams cp = CreateParams; // Avoid reentrant call to CreateHandle
                 if (GetHandleCreated()) {
                     return;
                 }
@@ -1974,7 +1974,7 @@ namespace System.Windows.Forms {
                     }
                 }
                 
-                // VSWhidbey 562045 - clear off the toplevel control.
+                // Clear off the toplevel control.
                 ClearTopLevelControlEvents();
                 topLevelControl = null;
             }
@@ -2104,7 +2104,7 @@ namespace System.Windows.Forms {
         ///     Stops the timer for hiding Positioned ToolTips
         /// </devdoc>
         protected void StopTimer() {
-            //VSWhidbey 363538: hold a local ref to timer
+            //Hold a local ref to timer
             //so that a posted message doesn't null this
             //out during disposal.
             ToolTipTimer timerRef = timer;
@@ -2354,7 +2354,6 @@ namespace System.Windows.Forms {
         ///     Handles the WM_WINDOWPOSCHANGED message.
         ///     We need to Hide the window since the native tooltip actually calls SetWindowPos in its TTN_SHOW even if we cancel showing the
         ///     tooltip : Hence we need to listen to the WindowPosChanged message can hide the window ourselves.
-        ///     Refer to VsWhidbey : 490044 for more details.
         /// </devdoc>
         /// <internalonly/>
         private bool WmWindowPosChanged() {
@@ -2610,7 +2609,7 @@ namespace System.Windows.Forms {
                                 font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.WM_GETFONT, 0, 0));
                             }
                             catch (ArgumentException) {
-                                // VSWhidbey 209345 - if the current default tooltip font is a non-TrueType font, then
+                                // If the current default tooltip font is a non-TrueType font, then
                                 // Font.FromHfont throws this exception, so fall back to the default control font.
                                 font = Control.DefaultFont;
                             }

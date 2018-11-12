@@ -48,7 +48,7 @@ namespace System.Windows.Forms
             Debug.Assert(controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
         }
 
-        // VSWhidbey 476889: Directly holding onto the Thread can prevent ThreadStatics from finalizing.
+        // Directly holding onto the Thread can prevent ThreadStatics from finalizing.
         private Thread DestinationThread {
             get { 
                 if ((destinationThreadRef != null) && (destinationThreadRef.IsAlive)) {

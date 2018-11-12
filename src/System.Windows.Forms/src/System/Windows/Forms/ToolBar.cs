@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private int hotItem = -1;
 
-        // VSWhidbey 219660: Track the current scale factor so we can scale our buttons
+        // Track the current scale factor so we can scale our buttons
         private float currentScaleDX = 1.0F;
         private float currentScaleDY = 1.0F;
 
@@ -818,7 +818,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ScaleCore"]/*' />
         /// <devdoc>
-        /// VSWhidbey 219660: We need to track the current scale factor so that we can tell the
+        /// We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
         /// </devdoc>
         /// <internalonly/>
@@ -832,7 +832,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ScaleControl"]/*' />
         /// <devdoc>
-        /// VSWhidbey 219660: We need to track the current scale factor so that we can tell the
+        /// We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
         /// </devdoc>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
@@ -1612,7 +1612,7 @@ namespace System.Windows.Forms {
             Marshal.StructureToPtr(ttt, m.LParam, false);
         }
 
-        // VSWhidbey 177016: Track the currently hot item since the user might be using the tab and
+        // Track the currently hot item since the user might be using the tab and
         // arrow keys to navigate the toolbar and if that's the case, we'll need to know where to re-
         // position the tooltip window when the underlying toolbar control attempts to display it.
         private void WmNotifyHotItemChange(ref Message m) {
@@ -1695,7 +1695,7 @@ namespace System.Windows.Forms {
                             }
                             break;
                         case NativeMethods.TTN_SHOW:
-                            // VSWhidbey 177016: Prevent the tooltip from displaying in the upper left corner of the
+                            // Prevent the tooltip from displaying in the upper left corner of the
                             // desktop when the control is nowhere near that location.
                             NativeMethods.WINDOWPLACEMENT wndPlacement = new NativeMethods.WINDOWPLACEMENT();
                             int nRet = UnsafeNativeMethods.GetWindowPlacement(new HandleRef(null, note.hwndFrom), ref wndPlacement);

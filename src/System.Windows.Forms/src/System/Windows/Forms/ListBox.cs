@@ -110,8 +110,7 @@ namespace System.Windows.Forms {
         DrawMode drawMode = System.Windows.Forms.DrawMode.Normal;
         BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
         SelectionMode selectionMode = System.Windows.Forms.SelectionMode.One;
-
-        // VsWhidbey : 447524
+               
         SelectionMode cachedSelectionMode = System.Windows.Forms.SelectionMode.One;
         //We need to know that we are in middle of handleRecreate through Setter of SelectionMode. 
         //In this case we set a bool denoting that we are changing SelectionMode and 
@@ -444,7 +443,7 @@ namespace System.Windows.Forms {
                     drawMode = value;
                     RecreateHandle();
                     if (drawMode == DrawMode.OwnerDrawVariable) {
-                        // VSWhidbey 139179 - force a layout after RecreateHandle() completes because now
+                        // Force a layout after RecreateHandle() completes because now
                         // the LB is definitely fully populated and can report a preferred size accurately.
                         LayoutTransaction.DoLayoutIf(AutoSize, this.ParentInternal, this, PropertyNames.DrawMode);
                     }
@@ -465,7 +464,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.Font"]/*' />
-        // VSWhidbey 95179: The scroll bars don't display properly when the IntegralHeight == false
+        // The scroll bars don't display properly when the IntegralHeight == false
         // and the control is resized before the font size is change and the new font size causes
         // the height of all the items to exceed the new height of the control. This is a bug in
         // the control, but can be easily worked around by removing and re-adding all the items.
@@ -478,7 +477,7 @@ namespace System.Windows.Forms {
                 base.Font = value;
 
                 if (false == integralHeight) {
-                    // VSWhidbey 95179: Refresh the list to force the scroll bars to display
+                    // Refresh the list to force the scroll bars to display
                     // when the integral height is false.
                     RefreshItems();
                 }
@@ -735,7 +734,7 @@ namespace System.Windows.Forms {
                 int height = 0;
 
                 if (drawMode == DrawMode.OwnerDrawVariable) {
-                    // VSWhidbey 139179 - don't try to get item heights from the LB when items haven't been
+                    // don't try to get item heights from the LB when items haven't been
                     // added to the LB yet. Just return current height.
                     if (RecreatingHandle || GetState(STATE_CREATINGHANDLE)) {
                         height = this.Height;
@@ -750,7 +749,6 @@ namespace System.Windows.Forms {
                     }
                 }
                 else {
-                    //VSWhidbey #148270
                     //When the list is empty, we don't want to multiply by 0 here.
                     int cnt = (itemsCollection == null || itemsCollection.Count == 0) ? 1 : itemsCollection.Count;
                     height = GetItemHeight(0) * cnt;
@@ -770,7 +768,7 @@ namespace System.Windows.Forms {
             int width;
 
             // Convert with a dummy height to add space required for borders
-            // VSWhidbey #151141 -PreferredSize should return either the new
+            // PreferredSize should return either the new
             // size of the control, or the default size if the handle has not been
             // created
             if (IsHandleCreated)
@@ -1423,7 +1421,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            // VSWhidbey 95158: The last item in the list is still a valid starting point for a search.
+            // The last item in the list is still a valid starting point for a search.
             if (startIndex < -1 || startIndex >= itemCount) {
                 throw new ArgumentOutOfRangeException("startIndex");
             }
@@ -1457,7 +1455,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            // VSWhidbey 95158: The last item in the list is still a valid starting point for a search.
+            // The last item in the list is still a valid starting point for a search.
             if (startIndex < -1 || startIndex >= itemCount) {
                 throw new ArgumentOutOfRangeException("startIndex");
             }
@@ -1896,13 +1894,13 @@ namespace System.Windows.Forms {
                 //read this as "if everett or   (whidbey and selindex is valid)"
                 if (!FormattingEnabled || this.SelectedIndex != -1)
                 {
-                    // VSWhidbey 95176: don't change dataManager position if we simply unselected everything.
+                    // Don't change dataManager position if we simply unselected everything.
                     // (Doing so would cause the first LB item to be selected...)
                     this.DataManager.Position = this.SelectedIndex;
                 }
             }
 
-            // VSWhidbey 163411: Call the handler after updating the DataManager's position so that
+            // Call the handler after updating the DataManager's position so that
             // the DataManager's selected index will be correct in an event handler.
             EventHandler handler = (EventHandler)Events[EVENT_SELECTEDINDEXCHANGED];
             if (handler != null) {
@@ -2436,7 +2434,7 @@ namespace System.Windows.Forms {
 
                     //
                     // If this control has been disposed in the user's event handler, then we need to ignore the WM_LBUTTONUP
-                    // message to avoid exceptions thrown as a result of handle re-creation (VSWhidbey#95150).
+                    // message to avoid exceptions thrown as a result of handle re-creation.
                     // We handle this situation here and not at the top of the window procedure since this is the only place
                     // where we can get disposed as an effect of external code (form.Close() for instance) and then pass the
                     // message to the base class.
@@ -3076,7 +3074,7 @@ namespace System.Windows.Forms {
                             owner.UpdateMaxItemWidth(item, false);
                             if (owner.selectedItems != null)
                             {
-                                // VSWhidbey 95187: sorting may throw the LB contents and the selectedItem array out of synch.
+                                // Sorting may throw the LB contents and the selectedItem array out of synch.
                                 owner.selectedItems.Dirty();
                             }
                         }
@@ -3338,7 +3336,7 @@ namespace System.Windows.Forms {
 
                 owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
 
-                // VSWhidbey 95181: Update InnerArray before calling NativeRemoveAt to ensure that when
+                // Update InnerArray before calling NativeRemoveAt to ensure that when
                 // SelectedIndexChanged is raised (by NativeRemoveAt), InnerArray's state matches wrapped LB state.
                 InnerArray.RemoveAt(index);
 
@@ -3375,8 +3373,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     else {
-                        // NEW - FOR COMPATIBILITY REASONS
-                        // Minimum compatibility fix for VSWhidbey 377287
+                        // FOR COMPATIBILITY REASONS
                         if (selected) {
                             owner.OnSelectedIndexChanged(EventArgs.Empty); //will fire selectedvaluechanged
                         }

@@ -419,7 +419,6 @@ namespace System.Windows.Forms {
                 {
                     // Since this is called thru the OnResize (and Layout) which is triggered by SetExtent if the TabControl is hosted as
                     // a ActiveX control, so check if this is ActiveX and dont force Handle Creation here as the native code breaks in this case.
-                    // please Refer to VsWhidbey :: 288940
                     if (!IsActiveX)
                     {
                         if (!IsHandleCreated) {
@@ -1339,7 +1338,7 @@ namespace System.Windows.Forms {
             NativeWindow.AddWindowToIDTable(this, this.Handle);
             handleInTable = true;
 
-            // VSWhidbey 123853: Set the padding BEFORE setting the control's font (as done
+            // Set the padding BEFORE setting the control's font (as done
             // in base.OnHandleCreated()) so that the tab control will honor both the
             // horizontal and vertical dimensions of the padding rectangle.
             if (!padding.IsEmpty) {
@@ -1398,7 +1397,7 @@ namespace System.Windows.Forms {
             }
             //Remove the Handle from NativewIndow....
 
-            // VSWhidbey 539185, Don't try to remove the Handle if we've already done so
+            // Don't try to remove the Handle if we've already done so
             if (handleInTable)
             {
                 handleInTable = false;
@@ -1907,7 +1906,6 @@ namespace System.Windows.Forms {
                 // make current panel invisible
                 TabPage[] tabPages = GetTabPages();
                 if (index != -1) {
-                    // VSWhidbey #163724
                     // Changing the bounds of the tabPage during scaling
                     // will force a layout to occur.  After this layout
                     // the tabpage will then be scaled again resulting

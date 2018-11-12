@@ -241,7 +241,7 @@ namespace System.Windows.Forms {
         private int GetFlags() {
             int flags = 0;
 
-            // VSWhidbey 93449: Only set this flag when using PRINTDLG and PrintDlg,
+            // Only set this flag when using PRINTDLG and PrintDlg,
             // and not when using PrintDlgEx and PRINTDLGEX.
             if (!UseEXDialog || (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
                 Environment.OSVersion.Version.Major < 5)) {
@@ -312,8 +312,8 @@ namespace System.Windows.Forms {
             return data;
         }
 
-        // VSWhidbey 93449: Use PRINTDLGEX on Win2k and newer OS'. Note that at the time of this
-        // fix, PrinterSettings did not support multiple page ranges. (See VSWhidbey 193829.)
+        // Use PRINTDLGEX on Win2k and newer OS'. Note that at the time of this
+        // fix, PrinterSettings did not support multiple page ranges.
         // Create a PRINTDLGEX with a few useful defaults.
         internal static NativeMethods.PRINTDLGEX CreatePRINTDLGEX() {
             NativeMethods.PRINTDLGEX data = new NativeMethods.PRINTDLGEX();
@@ -345,7 +345,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        // VSWhidbey 93449: Use PrintDlgEx and PRINTDLGEX on Win2k and newer OS'.
+        // Use PrintDlgEx and PRINTDLGEX on Win2k and newer OS'.
         protected override bool RunDialog(IntPtr hwndOwner) {
             bool returnValue = false;
 
@@ -366,7 +366,7 @@ namespace System.Windows.Forms {
             return returnValue;
         }
 
-        // VSWhidbey 93449: Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
+        // Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
         // are required for showing the print dialog on Win2k and newer OS'.
         private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.WndProc hookProcPtr, NativeMethods.PRINTDLG data) {
            

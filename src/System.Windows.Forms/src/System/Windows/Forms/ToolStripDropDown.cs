@@ -434,7 +434,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.DropShadowEnabled"]/*' />
         public bool DropShadowEnabled {
             get {
-                // VSWhidbey 338272 - DropShadows are only supported on TopMost windows 
+                // DropShadows are only supported on TopMost windows 
                 // due to the flakeyness of the way it's implemented in the OS. (Non toplevel 
                 // windows can have parts of the shadow disappear because another window can get
                 // sandwiched between the SysShadow window and the dropdown.)
@@ -1003,7 +1003,7 @@ namespace System.Windows.Forms {
 // }
 
           /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.TabIndex"]/*' />
-          /// VSWhidbey 233498: override base TabIndex property in order to avoid serialization
+          /// Override base TabIndex property in order to avoid serialization
           /// (since a dropdown shouldn't participate in the taborder...)
           [
           EditorBrowsable(EditorBrowsableState.Never),
@@ -1050,7 +1050,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.Visible"]/*' />
-        /// VSWhidbey 233498: override base Visible property in order to control serialization by setting default value
+        /// Override base Visible property in order to control serialization by setting default value
         [
                 SRCategory(nameof(SR.CatBehavior)),
                 Localizable(true),
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms {
         }
 
         internal override bool CanProcessMnemonic() {
-            // VSWhidbey 515812: Dont let mnemonics act as keyboard input in IE in the internet.
+            // Dont let mnemonics act as keyboard input in IE in the internet.
             if (IsRestrictedWindow && !Application.MessageLoop) {
                 return false;
             }
@@ -1304,7 +1304,7 @@ namespace System.Windows.Forms {
             SetState(STATE_VISIBLE, false);
             SetTopLevelInternal(true);
             
-            // VSWhidbey 82103 -- marking this as a modal form prevents it from being activated
+            // Marking this as a modal form prevents it from being activated
             // by the IMsoComponentManager, which will break keyboard routing in VS.
             //
             SetState(STATE_MODAL, true);
@@ -1375,7 +1375,7 @@ namespace System.Windows.Forms {
      
         /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.OnLayout"]/*' />
         protected override void OnLayout(LayoutEventArgs e) {
-            // VSWhidbey 480533 it's important to size the dropdown first, then layout so that 
+            // It's important to size the dropdown first, then layout so that 
             // the layout engine and SetDisplayedItems know how big the container is.
             AdjustSize();
             base.OnLayout(e);
@@ -1445,7 +1445,7 @@ namespace System.Windows.Forms {
             base.OnMouseUp(mea);
             Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ToolStripDropDown.OnMouseUp] mouse up outside of the toolstrip - this should dismiss the entire chain");
 
-            //VSWhidbey 384068 Menus should dismiss when you drag off
+            // Menus should dismiss when you drag off
             if (!ClientRectangle.Contains(mea.Location)) {
                 bool dismiss = true;
                 if (OwnerToolStrip != null && OwnerItem != null) {
@@ -1551,7 +1551,7 @@ namespace System.Windows.Forms {
                             DismissAll();
                         }
                         else if (isOnOverflow) {
-                            // VSWhidbey 478068: going backwards should roll us up and our children but not the overflow.
+                            // Going backwards should roll us up and our children but not the overflow.
                             Visible = false;
                         }
 
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms {
                     bool openingEventCancelled = true; // assume that it's been cancelled so that if we throw we do nothing.
                     
                     try {
-                        // VSWhidbey 313920 - add opening event.
+                        // Add opening event.
                         // Snap the foreground window BEFORE calling any user events so they dont have a 
                         // chance to activate something else.  This covers the case where someone handles the
                         // opening event and throws up a messagebox.
@@ -1820,7 +1820,7 @@ namespace System.Windows.Forms {
                                 // in the parent, make sure it retains where the mouse really was.
                                 OwnerToolStrip.SnapMouseLocation();
 
-                                // VSWhidbey 458967: make sure that mouse capture 
+                                // Make sure that mouse capture 
                                 // transitions between the owner and dropdown.
                                 if (OwnerToolStrip.CaptureInternal) {
                                     CaptureInternal = true;
@@ -1877,7 +1877,7 @@ namespace System.Windows.Forms {
                                 // setting to not visible.  Dismiss our child drop downs, reset, set ourselves visible false.
                                 DismissActiveDropDowns();
 
-                                // VSWhidbey 480392 and Dev10 490127: make sure we cancel auto expansion on the root
+                                // Make sure we cancel auto expansion on the root
                                 ToolStrip topLevelToolStrip = GetToplevelOwnerToolStrip();
                                 ToolStrip parentToolStrip = null;
                                 if (this.OwnerItem != null) {
@@ -1936,7 +1936,7 @@ namespace System.Windows.Forms {
                                         OwnerToolStrip.ActiveDropDowns.Remove(this);
                                     }
                                     ActiveDropDowns.Clear();
-                                    // VSWhidbey 389244: if the user traps the click event and starts
+                                    // If the user traps the click event and starts
                                     // pumping their own messages by calling Application.DoEvents, we 
                                     // should release mouse capture.
                                     if (CaptureInternal) {
@@ -1960,7 +1960,7 @@ namespace System.Windows.Forms {
                                     Debug.Assert(reason != ToolStripDropDownCloseReason.ItemClicked,
                                         "Why are we resetting SourceControl on a click event?");
 
-                                    // VSWhidbey 475650: If we're not about to fire a Click event, reset SourceControl.
+                                    // If we're not about to fire a Click event, reset SourceControl.
                                     SourceControlInternal = null;
                                 }
 
@@ -2032,7 +2032,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException("control");
             }
             SourceControlInternal = control;
-            // VSWhidbey 310328 - when we have no owner item and we're set to RTL.Inherit, translate the coordinates
+            // When we have no owner item and we're set to RTL.Inherit, translate the coordinates
             // so that the menu looks like it's swooping from the other side
             if (this.OwnerItem == null && control.RightToLeft == RightToLeft.Yes) {
                 AdjustSize();

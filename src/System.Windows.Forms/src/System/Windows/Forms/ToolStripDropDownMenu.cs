@@ -501,7 +501,7 @@ namespace System.Windows.Forms {
 
 
                 
-                // VSWhidbey 339274 - we need to make sure that the text really appears vertically centered - this can be a problem in 
+                // We need to make sure that the text really appears vertically centered - this can be a problem in 
                 // systems which force the text rectangle to be odd.
 
                 // force this to be an even height.

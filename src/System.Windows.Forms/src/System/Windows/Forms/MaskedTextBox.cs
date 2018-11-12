@@ -1999,7 +1999,7 @@ namespace System.Windows.Forms
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            // VSWhidbey 465708. Force repainting of the entire window frame
+            // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && this.IsHandleCreated && this.BorderStyle == BorderStyle.Fixed3D)
             {
                 SafeNativeMethods.RedrawWindow(new HandleRef(this, this.Handle), null, NativeMethods.NullHandleRef, NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_FRAME);

@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.GetHashCode"]/*' />
         public override int GetHashCode() {
-            // VSWhidbey #130081: Padding class should implement GetHashCode for perf
+            // Padding class should implement GetHashCode for perf
             return Left
                 ^ WindowsFormsUtils.RotateLeft(Top, 8)
                 ^ WindowsFormsUtils.RotateLeft(Right, 16)
