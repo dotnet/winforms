@@ -57,7 +57,7 @@ namespace System.Windows.Forms
             // Then the following sequence of Events happen:
             // 1. DGV deletes the row from Master
             // 2. The Child currency manager finds out that there are no rows in the Master table
-            // 3. The Child currency manager adds a row in the Master table - vsWhidbey 193802 which tracks removal of this feature was POSTPONED.
+            // 3. The Child currency manager adds a row in the Master table - which tracks removal of this feature was POSTPONED.
             // 4. The DGV bound to the Master table receives the ItemAdded event. At this point, no rows have been deleted from the DGV.
             // 5. The DGV bound to the Master table should not add a new DataGridViewRow to its Rows collection because it will be deleted later on.
             //    So the DGV marks _itemAddedInDeleteOperation to TRUE to know that the next event it expects is an ItemDeleted
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
             // This method pulls the information about which dataField is sorted on the IBindingList
             // and applies it to the DataGridView.
             //
-            // Here is how it does that (see vsWhidbey 230619 for reference):
+            // Here is how it does that:
             //      1. Updating the DataGridView::SortedColumn property:
             //          When multiple columns are bound to a sorted column
             //          in the backend then the DataGridView::SortedColumn property should return the
@@ -730,7 +730,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
-                            // VSWhidbey 533264. Repaint the row header cell to show potential error icon
+                            // Repaint the row header cell to show potential error icon
                             this.owner.InvalidateCell(-1, e.NewIndex);
                             // update the editing control value if the data changed in the row the user was editing
                             if (this.owner.CurrentCellAddress.Y == e.NewIndex && this.owner.IsCurrentCellInEditMode)
@@ -813,7 +813,7 @@ namespace System.Windows.Forms
                     if (!this.owner.InSortOperation)
                     {
                         bool scrollIntoView = true;
-                        // VSWhidbey 492203. When an item is repositioned in a sorted column, while its 
+                        // When an item is repositioned in a sorted column, while its 
                         // row is being committed, don't scroll it into view.
                         if (this.dataConnectionState[DATACONNECTIONSTATE_rowValidatingInAddNew])
                         {
@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms
                 }
                 else if (rowIndex < this.owner.Rows.Count)
                 {
-                    // vsWhidbey 419230: the currency manager sends the PositionChanged event before the ListChanged event.
+                    // the currency manager sends the PositionChanged event before the ListChanged event.
                     // This means that it is possible for the data grid view to receive the position changed event
                     // before it had a chance to created its rows.
                     // So, if the position inside the currency manager is greater than the number of rows in the data grid view

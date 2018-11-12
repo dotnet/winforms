@@ -679,7 +679,7 @@ namespace System.Resources {
             } else {
                 // schema is wrong and say minOccur for Value is 0,
                 // but it's too late to change it...
-                // we need to return null here vswhidbey 180605
+                // we need to return null here
                 return null;
             }    
             return result;

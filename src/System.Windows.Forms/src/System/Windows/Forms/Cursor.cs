@@ -673,7 +673,7 @@ namespace System.Windows.Forms {
                 stream.Write(cursorData, 0, cursorData.Length);
             }
             catch (SecurityException) {
-                // VSWhidbey 424904 - dont eat security exceptions.
+                // dont eat security exceptions.
                 throw;
             }
             catch (Exception e) {

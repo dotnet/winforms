@@ -1,13 +1,22 @@
+# This is a simple wrapper for eng/ci.yml so we have a place to define variables,
+# since yaml doesn't have good support for delayed variable expansion
 variables:
   Build.Repository.Clean: true
   _HelixType: build/product
   
-  # Change helix sources based on build project/reason
+  # Change some variables based on build conditions
   ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
     _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
+    _PublishType: none
+    _SignType: test
+    _DotNetPublishToBlobFeed : false
+  # else
   ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
     _TeamName: DotNetCore
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
+    _PublishType: blob
+    _SignType: real
+    _DotNetPublishToBlobFeed : true
 
 # only trigger builds for the master branch
 trigger:
@@ -17,45 +26,17 @@ trigger:
 # pr:
 # - master
 
+# Call the ci.yml template, which does the real work
 phases:
-- template: /eng/build.yml
+- template: /eng/ci.yml
   parameters:
-    name: Windows_NT
-    queue:
-      # Always use the internal pool. This is temporary while the github project is private.
-      # TODO: Once we go public, remove the following line and uncomment the lines below
-      name: dotnet-internal-temp
-      # If project is public, use the external pool. Otherwise, use internal.
-      #${{ if eq(variables['System.TeamProject'], 'public') }}:
-      #  name: dotnet-external-temp
-      #${{ if ne(variables['System.TeamProject'], 'public') }}:
-      #  name: dotnet-internal-temp
-      parallel: 99
-      matrix:
-        Build_Debug:
-          _BuildConfig: Debug
-          _PublishType: none
-          _SignType: test
-          _DotNetPublishToBlobFeed : false
-        Build_Release:
-          _BuildConfig: Release
-          # If the project is public or the build is for a PR, test sign and don't publish package updates to dotnet feed.
-          # If the project is not public AND the build is NOT for a PR, real sign and publish.
-          ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
-            _PublishType: none
-            _SignType: test
-            _DotNetPublishToBlobFeed : false
-          ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
-            _PublishType: blob
-            _SignType: real
-            _DotNetPublishToBlobFeed : true
-
-# If the project is NOT public AND the build is NOT for a PR, publish build assets
-- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
-  - template: /eng/common-local/templates/phases/publish-build-assets.yml
-    parameters:
-      dependsOn:
-        - Windows_NT
-      queue:
-        name: Hosted VS2017
-      configuration: Debug
+    # Workaround for agent pool not able to be read from a runtime variable
+    # Once the Azure DevOps team fixes this, move this up with the rest of the variables
+    # runAsPublic also controls some of template conditionals, so it can't be in a runtime variable
+    ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
+      agentPool: dotnet-internal-temp # todo: once github repo goes public, change this to dotnet-external-temp
+      runAsPublic: true
+    #else
+    ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+      agentPool: dotnet-internal-temp
+      runAsPublic: false

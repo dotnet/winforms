@@ -645,9 +645,7 @@ namespace System.Windows.Forms {
         // </devdoc>
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DAdvise"]/*' />
-        /// <internalonly/>
-        // SecReview : Vs# 416823 : Need to Demand UMC as IComDataObject is now public interface.
-        // This exposes security hole where the IComDataObject implementation can be used to bypass UMC security to call Win32 functions.
+        /// <internalonly/>        
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection) {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DAdvise");
@@ -664,8 +662,6 @@ namespace System.Windows.Forms {
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DUnadvise"]/*' />
         /// <internalonly/>
-        // SecReview : Vs# 416823 : Need to Demand UMC as IComDataObject is now public interface.
-        // This exposes security hole where the IComDataObject implementation can be used to bypass UMC security to call Win32 functions.
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.DUnadvise(int dwConnection) {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DUnadvise");
@@ -682,8 +678,6 @@ namespace System.Windows.Forms {
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumDAdvise"]/*' />
         /// <internalonly/>
-        // SecReview : Vs# 416823 : Need to Demand UMC as IComDataObject is now public interface.
-        // This exposes security hole where the IComDataObject implementation can be used to bypass UMC security to call Win32 functions.
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise) {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumDAdvise");
@@ -700,8 +694,6 @@ namespace System.Windows.Forms {
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumFormatEtc"]/*' />
         /// <internalonly/>
-        // SecReview : Vs# 416823 : Need to Demand UMC as IComDataObject is now public interface.
-        // This exposes security hole where the IComDataObject implementation can be used to bypass UMC security to call Win32 functions.
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection) {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumFormatEtc: " + dwDirection.ToString());
@@ -722,8 +714,6 @@ namespace System.Windows.Forms {
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetCanonicalFormatEtc"]/*' />
         /// <internalonly/>
-        // SecReview : Vs# 416823 : Need to Demand UMC as IComDataObject is now public interface.
-        // This exposes security hole where the IComDataObject implementation can be used to bypass UMC security to call Win32 functions.
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut) {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetCanonicalFormatEtc");
@@ -740,8 +730,6 @@ namespace System.Windows.Forms {
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetData"]/*' />
         /// <internalonly/>
-        // SecReview : Vs# 416823 : Need to Demand UMC as IComDataObject is now public interface.
-        // This exposes security hole where the IComDataObject implementation can be used to bypass UMC security to call Win32 functions.
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium) {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetData");
@@ -788,8 +776,6 @@ namespace System.Windows.Forms {
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetDataHere"]/*' />
         /// <internalonly/>
-        // SecReview : Vs# 416823 : Need to Demand UMC as IComDataObject is now public interface.
-        // This exposes security hole where the IComDataObject implementation can be used to bypass UMC security to call Win32 functions.
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium) {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetDataHere");
@@ -807,8 +793,6 @@ namespace System.Windows.Forms {
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.QueryGetData"]/*' />
         /// <internalonly/>
-        // SecReview : Vs# 416823 : Need to Demand UMC as IComDataObject is now public interface.
-        // This exposes security hole where the IComDataObject implementation can be used to bypass UMC security to call Win32 functions.
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.QueryGetData(ref FORMATETC formatetc) {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData");
@@ -848,8 +832,6 @@ namespace System.Windows.Forms {
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.SetData"]/*' />
         /// <internalonly/>
-        // SecReview : Vs# 416823 : Need to Demand UMC as IComDataObject is now public interface.
-        // This exposes security hole where the IComDataObject implementation can be used to bypass UMC security to call Win32 functions.
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease) {
 
@@ -858,7 +840,6 @@ namespace System.Windows.Forms {
                 ((OleConverter)innerData).OleDataObject.SetData(ref pFormatetcIn, ref pmedium, fRelease);
                 return;
             }
-            // 
 
             throw new NotImplementedException();
         }

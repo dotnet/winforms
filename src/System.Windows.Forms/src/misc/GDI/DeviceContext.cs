@@ -165,7 +165,6 @@ namespace System.Experimental.Gdi
             }
         }
 
-        // VSWhidbey 536325
         // Due to a problem with calling DeleteObject() on currently selected GDI objects,
         // we now track the initial set of objects when a DeviceContext is created.  Then,
         // we also track which objects are currently selected in the DeviceContext.  When 

@@ -51,7 +51,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     The last control that was acted upon that resulted in this context
         ///     menu being displayed.
-        ///     VSWHIDBEY 426099 - add demand for AllWindows.
         /// </devdoc>
         [
         Browsable(false),
@@ -99,7 +98,7 @@ namespace System.Windows.Forms {
         ///     is written from RightToLeft. When this property is true,
         ///     text alignment and reading order will be from right to left.
         /// </devdoc>
-        // VSWhidbey 164244: Add a DefaultValue attribute so that the Reset context menu becomes
+        // Add a DefaultValue attribute so that the Reset context menu becomes
         // available in the Property Grid but the default value remains No.
         [
         Localizable(true),

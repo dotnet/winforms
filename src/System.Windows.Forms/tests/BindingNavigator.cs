@@ -21,8 +21,8 @@ namespace System.Windows.Forms.Tests
             // assert
             Assert.NotNull(bn);
         }
-
-        [Fact(Skip = "Need to fix: MoveFirst.bmp not found error")]
+        
+       [Fact]
         public void ConstructorBindingSource()
         {
             // arrange
@@ -56,8 +56,8 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(bn);
             mockContainer.Verify(x => x.Add(bn));
         }
-
-        [Fact(Skip = "Need to fix: MoveFirst.bmp not found error")]
+        
+        [Fact]
         public void ConstructorBool()
         {
             // act

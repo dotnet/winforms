@@ -1883,7 +1883,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        // SECURITY WARNING: This property bypasses a security demand. Use with caution!
         private Form MdiParentInternal {
             get {
                 return (Form)Properties.GetObject(PropFormMdiParent);
@@ -2179,8 +2178,7 @@ namespace System.Windows.Forms {
                 UpdateHandleWithOwner();
             }
         }
-      
-        // SECURITY WARNING: This property bypasses a security demand. Use with caution!
+
         internal Form OwnerInternal {
             get {
                 return (Form)Properties.GetObject(PropOwner);
@@ -2239,7 +2237,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        // SECURITY WARNING: This property bypasses a security demand. Use with caution!
         internal override Control ParentInternal {
             get {
                 return base.ParentInternal;

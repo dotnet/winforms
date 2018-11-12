@@ -3,8 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 // Code taken from ASP.NET file xsp\System\Web\httpserverutility.cs
-// Don't entity encode high chars (160 to 256), to fix bugs VSWhidbey 85857/111927
-// ASP.NET team decided to postpone those bugs and leave behavior as is in Whidbey.
+// Don't entity encode high chars (160 to 256)
 #define ENTITY_ENCODE_HIGH_ASCII_CHARS
 
 namespace System.Windows.Forms
@@ -1320,7 +1319,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // VSWhidbey 481170. We don't want the grid to get the keyboard focus
+                        // We don't want the grid to get the keyboard focus
                         // when the editing control gets parented to the parking window, 
                         // because some other window is in the middle of receiving the focus.
                         UnsafeNativeMethods.SetFocus(new HandleRef(null, IntPtr.Zero));
@@ -2823,7 +2822,7 @@ namespace System.Windows.Forms
             }
 
             flags &= textFormatSupportedFlags;
-            // VSWhidbey 495922: dont use passed in graphics so we can optimze measurement
+            // Dont use passed in graphics so we can optimze measurement
             Size requiredSize = TextRenderer.MeasureText(text, font, new Size(maxWidth, System.Int32.MaxValue), flags);
             widthTruncated = (requiredSize.Width > maxWidth);
             return requiredSize.Height;
@@ -2871,7 +2870,7 @@ namespace System.Windows.Forms
             Size textSize;
             do
             {
-                // VSWhidbey 495922: dont use passed in graphics so we can optimze measurement
+                // Dont use passed in graphics so we can optimze measurement
                 textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, System.Int32.MaxValue), flags);
                 if ((float)(textSize.Width / textSize.Height) <= maxRatio || textSize.Width > (int)maxWidth)
                 {
@@ -2906,7 +2905,7 @@ namespace System.Windows.Forms
             }
 
             flags &= textFormatSupportedFlags;
-            // VSWhidbey 495922: dont use passed in graphics so we can optimze measurement
+            // Dont use passed in graphics so we can optimze measurement
             return TextRenderer.MeasureText(text, font, new Size(System.Int32.MaxValue, System.Int32.MaxValue), flags);
         }
 
@@ -2934,7 +2933,7 @@ namespace System.Windows.Forms
                 Size textSize;
                 do
                 {
-                    // VSWhidbey 495922: dont use passed in graphics so we can optimze measurement
+                    // Dont use passed in graphics so we can optimze measurement
                     textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, maxHeight), flags);
                     if (textSize.Height > maxHeight || textSize.Width > (int)maxWidth)
                     {
@@ -4555,7 +4554,7 @@ namespace System.Windows.Forms
             hEditingControl = cellBounds.Height - borderAndPaddingWidths.Y - borderAndPaddingWidths.Height;
             this.DataGridView.EditingPanel.Location = new Point(xEditingPanel, yEditingPanel);
             this.DataGridView.EditingPanel.Size = new Size(wEditingPanel, hEditingPanel);
-            /* Code was added for VSWhidbey 274393 and removed for 461211.
+            /* 
             if (this.DataGridView.RightToLeftInternal)
             {
                 xEditingControl = wEditingPanel - xEditingControl - wEditingControl;

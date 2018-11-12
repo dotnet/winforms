@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms.ButtonInternal {
                     layout.focus = layout.field;
                     layout.focus.Inflate(-1, -1);
 
-                    // Adjust for padding. VSWhidbey #387208
+                    // Adjust for padding.
                     layout.focus = LayoutUtils.InflateRect(layout.focus, this.padding);
                 }
                 else {
@@ -1414,7 +1414,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 int bottom;
                 // If we are using GDI to measure text, then we can get into a situation, where
                 // the proposed height is ignore. In this case, we want to clip it against
-                // maxbounds. VSWhidbey #480670
+                // maxbounds.
                 if (!useCompatibleTextRendering) {
                     bottom = Math.Min(layout.textBounds.Bottom, maxBounds.Bottom);
                     layout.textBounds.Y = Math.Max(layout.textBounds.Y, maxBounds.Y);

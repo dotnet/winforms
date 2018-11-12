@@ -359,7 +359,6 @@ namespace System.Windows.Forms
                         DataGridViewColumn dataGridViewColumn = this as DataGridViewColumn;
                         headerCell.OwningColumnInternal = dataGridViewColumn;
                         // Set the headerCell in the property store before setting the SortOrder.
-                        // vsWhidbey 411787.
                         this.Properties.SetObject(PropHeaderCell, headerCell);
                         if (this.DataGridView != null && this.DataGridView.SortedColumn == dataGridViewColumn)
                         {

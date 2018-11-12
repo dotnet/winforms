@@ -230,7 +230,7 @@ namespace System.Windows.Forms {
                     return null;
                 }
             }
-            // Vswhidbey :: 476911. We need to retry the GetDataObject() since the clipBaord is busy sometimes and hence the GetDataObject would fail with ClipBoardException.
+            // We need to retry the GetDataObject() since the clipBaord is busy sometimes and hence the GetDataObject would fail with ClipBoardException.
             return GetDataObject(10 /*retryTimes*/, 100 /*retryDelay*/);
         }
 
@@ -495,13 +495,13 @@ namespace System.Windows.Forms {
             if (filePaths == null) {
                 throw new ArgumentNullException("filePaths");
             }
-            // VsWhidbey:432618 throw Argument exception for zero-length filepath collection.
+            // throw Argument exception for zero-length filepath collection.
             if (filePaths.Count == 0)
             {
                 throw new ArgumentException(SR.CollectionEmptyException);
             }
 
-            //VSWhidbey #163538 - Validate the paths to make sure they don't contain invalid characters
+            //Validate the paths to make sure they don't contain invalid characters
             foreach (string path in filePaths) {
                 try {
                     string temp = Path.GetFullPath(path);

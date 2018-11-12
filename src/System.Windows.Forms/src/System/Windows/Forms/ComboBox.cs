@@ -240,7 +240,6 @@ namespace System.Windows.Forms {
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
 
-                // VSWhidbey 466300
                 if (value != AutoCompleteSource.None && 
                     value != AutoCompleteSource.CustomSource && 
                     value != AutoCompleteSource.ListItems)
@@ -842,7 +841,7 @@ namespace System.Windows.Forms {
             set {
                 if (mouseOver != value) {
                     mouseOver = value;
-                    // Nothing to see here... Just keep on walking... VSWhidbey 504477.
+                    // Nothing to see here... Just keep on walking...
                     // Turns out that with Theming off, we don't get quite the same messages as with theming on, so
                     // our drawing gets a little messed up. So in case theming is off, force a draw here.
                     if ((!ContainsFocus || !Application.RenderWithVisualStyles) && this.FlatStyle == FlatStyle.Popup) {
@@ -941,7 +940,7 @@ namespace System.Windows.Forms {
         }
 
 
-        // VSWhidbey 194386 - ComboBox.PreferredHeight returns incorrect values
+        // ComboBox.PreferredHeight returns incorrect values
         // This is translated from windows implementation.  Since we cannot control the size
         // of the combo box, we need to use the same calculation they do.
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // "0" is what Windows uses in all languages.
@@ -1361,7 +1360,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // VSWhidbey 95691: Prevent this event from being displayed in the Property Grid.
+        // Prevent this event from being displayed in the Property Grid.
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DoubleClick"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -2043,7 +2042,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            // VSWhidbey 95158: The last item in the list is still a valid starting point for a search.
+            // The last item in the list is still a valid starting point for a search.
             if (startIndex < -1 || startIndex >= itemsCollection.Count) {
                 throw new ArgumentOutOfRangeException("startIndex");
             }
@@ -2086,7 +2085,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            // VSWhidbey 95158: The last item in the list is still a valid starting point for a search.
+            // The last item in the list is still a valid starting point for a search.
             if (startIndex < -1 || startIndex >= itemsCollection.Count) {
                 throw new ArgumentOutOfRangeException("startIndex");
             }
@@ -2113,7 +2112,6 @@ namespace System.Windows.Forms {
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
             
             if (factor.Width != 1F && factor.Height != 1F) {
-                // VSWhidbey 440275
                 // we get called on scale before we get a notification that our font has changed.
                 // in this case, we need to reset our height cache.
                 ResetHeightCache();
@@ -2158,7 +2156,7 @@ namespace System.Windows.Forms {
                 return IntPtr.Zero;
             }
             else if ((msg == NativeMethods.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint)) {
-                // VSWhidbey#93929. Base class returns hollow brush when UserPaint style is set, to avoid flicker in
+                // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
                 // since hollow brush leaves the list background unpainted.
                 SafeNativeMethods.SetTextColor(new HandleRef(null, dc), ColorTranslator.ToWin32(ForeColor));
@@ -3248,7 +3246,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private void UpdateItemHeight() {
             if (!IsHandleCreated) {
-                // VSWhidbey 156992: if we don't create control here we report item heights incorrectly later on.
+                // if we don't create control here we report item heights incorrectly later on.
                 CreateControl();
             }
             if (DrawMode == DrawMode.OwnerDrawFixed) {
@@ -3516,7 +3514,7 @@ namespace System.Windows.Forms {
                     try {
                         fireLostFocus = false;
                         base.WndProc(ref m);
-                        // Nothing to see here... Just keep on walking... VSWhidbey 504477.
+                        // Nothing to see here... Just keep on walking...
                         // Turns out that with Theming off, we don't get quite the same messages as with theming on.
                         
                         // With theming on we get a WM_MOUSELEAVE after a WM_KILLFOCUS even if you use the Tab key
@@ -4235,7 +4233,7 @@ namespace System.Windows.Forms {
                     }
                     else {
                         // NEW - FOR COMPATIBILITY REASONS
-                        // Minimum compatibility fix for VSWhidbey 377287/444903
+                        // Minimum compatibility fix
                         if (selected) {
                             owner.OnSelectedItemChanged(EventArgs.Empty);   //we do this because set_SelectedIndex does this. (for consistency)
                             owner.OnSelectedIndexChanged(EventArgs.Empty);

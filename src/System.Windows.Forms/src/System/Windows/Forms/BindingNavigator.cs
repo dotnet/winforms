@@ -153,7 +153,6 @@ namespace System.Windows.Forms {
             // Set up strings
             //
 
-            // Hacky workaround for VSWhidbey 407243
             // Default to lowercase for null name, because C# dev is more likely to create controls programmatically than
             // vb dev.
             char ch = string.IsNullOrEmpty(Name) || char.IsLower(Name[0]) ? 'b' : 'B';
