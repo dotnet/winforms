@@ -1,28 +1,37 @@
-# This is a simple wrapper for eng/ci.yml so we have a place to define variables,
-# since yaml doesn't have good support for delayed variable expansion
+# This is a simple wrapper for eng/ci.yml to get around the limitation of
+# user-defined variables not being available in yaml template expressions.
+
+# Parameters ARE available in template expressions, and parameters can have default values,
+# so they can be used to control yaml flow.
+
 variables:
+
+  # clean the local repo on the build agents
   Build.Repository.Clean: true
-  _HelixType: build/product
   
-  # Change some variables based on build conditions
+  # Set some variables based on build conditions
+  # TODO: Remove the Build.DefinitionName check once the github repo goes public
   ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
+    _HelixType: build/product
     _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
     _PublishType: none
     _SignType: test
-    _DotNetPublishToBlobFeed : false
+    _DotNetPublishToBlobFeed: false
   # else
+  # TODO: Remove the Build.DefinitionName check once the github repo goes public
   ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
     _TeamName: DotNetCore
     _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
     _PublishType: blob
     _SignType: real
-    _DotNetPublishToBlobFeed : true
+    _DotNetPublishToBlobFeed: true
 
-# only trigger builds for the master branch
+# only trigger ci builds for the master branch
 trigger:
 - master
 
 # To be added in the future when VSTS supports this feature
+# only trigger pull request builds for the master branch
 # pr:
 # - master
 
@@ -30,13 +39,9 @@ trigger:
 phases:
 - template: /eng/ci.yml
   parameters:
-    # Workaround for agent pool not able to be read from a runtime variable
-    # Once the Azure DevOps team fixes this, move this up with the rest of the variables
-    # runAsPublic also controls some of template conditionals, so it can't be in a runtime variable
-    ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
-      agentPool: dotnet-internal-temp # todo: once github repo goes public, change this to dotnet-external-temp
-      runAsPublic: true
-    #else
+    # TODO: Remove the Build.DefinitionName check once the github repo goes public
     ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+      # agent pool can't be read from a user-defined variable (Azure DevOps limitation)
       agentPool: dotnet-internal-temp
+      # runAsPublic is used in expressions, which can't read from user-defined variables
       runAsPublic: false
