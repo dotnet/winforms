@@ -59,7 +59,7 @@ function OpenClose
 }
 
 $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-$pinfo.FileName = '..\..\..\..\..\artifacts\bin\WinformsControlsTest\Debug\netcoreapp3.0\WinformsControlsTest.exe' # 'WinformsControlsTest.exe' 
+$pinfo.FileName = '..\..\..\..\artifacts\bin\WinformsControlsTest\Debug\netcoreapp3.0\WinformsControlsTest.exe' # 'WinformsControlsTest.exe' 
 $pinfo.RedirectStandardError = $true
 $pinfo.RedirectStandardOutput = $true
 $pinfo.UseShellExecute = $false
