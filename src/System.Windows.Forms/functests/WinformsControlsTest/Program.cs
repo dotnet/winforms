@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest
@@ -21,7 +18,7 @@ namespace WinformsControlsTest
             {
                 Application.Run(new MainForm());
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 Environment.Exit(-1);
             }
