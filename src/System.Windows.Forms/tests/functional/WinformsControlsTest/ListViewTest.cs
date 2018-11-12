@@ -69,7 +69,7 @@ namespace WinformsControlsTest
             ImageList imageListSmall = new ImageList();
             ImageList imageListLarge = new ImageList();
 
-            // Initialize the ImageList objects with bitmaps.
+            // Initialize the ImageList objects with bitmaps.\
             imageListSmall.Images.Add(Bitmap.FromFile("SmallA.bmp"));
             imageListSmall.Images.Add(Bitmap.FromFile("SmallABlue.bmp"));
             imageListLarge.Images.Add(Bitmap.FromFile("LargeA.bmp"));

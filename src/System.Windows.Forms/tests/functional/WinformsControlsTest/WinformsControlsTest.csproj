@@ -68,6 +68,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="SmallA.bmp">
+      <LogicalName>WinformsControlsTest.SmallA.bmp</LogicalName>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SmallABlue.bmp">
+      <LogicalName>WinformsControlsTest.SmallABlue.bmp</LogicalName>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LargeA.bmp">
+      <LogicalName>WinformsControlsTest.LargeA.bmp</LogicalName>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LargeABlue.bmp">
+      <LogicalName>WinformsControlsTest.LargeABlue.bmp</LogicalName>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Buttons.resx">
       <DependentUpon>Buttons.cs</DependentUpon>
     </EmbeddedResource>
