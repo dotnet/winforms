@@ -235,14 +235,14 @@ namespace System.Windows.Forms {
            
             ToolStripDropDown dropDown = owner as ToolStripDropDown;
             if (dropDown != null) {
-                // VSWhidbey 436973: if we're on a dropdown, we can only add non-control host items
+                // If we're on a dropdown, we can only add non-control host items
                 // as we dont want anything on a dropdown to get keyboard messages in the Internet.
 
                 if (dropDown.OwnerItem == value) {
                    throw new NotSupportedException(SR.ToolStripItemCircularReference); 
                 }
                 
-                // VSWhidbey 496526: ScrollButton is the only allowed control host as it correctly eats key messages.
+                // ScrollButton is the only allowed control host as it correctly eats key messages.
                 if (value is ToolStripControlHost && !(value is System.Windows.Forms.ToolStripScrollButton)) {
                     if (dropDown.IsRestrictedWindow) {
                         IntSecurity.AllWindows.Demand();
@@ -321,7 +321,7 @@ namespace System.Windows.Forms {
             }
             catch (Exception e)
             {
-                // VSWHIDBEY 80122 make sure we deal with non-critical failures gracefully.
+                // Make sure we deal with non-critical failures gracefully.
                 if (ClientUtils.IsCriticalException(e))
                 {
                     throw;
@@ -435,7 +435,6 @@ namespace System.Windows.Forms {
                         ToolStripItemEventArgs e = new ToolStripItemEventArgs(item);
                         owner.OnItemRemoved(e);
 
-                        // VSWhidbey 505129
                         // dont fire the ItemRemoved event for Overflow
                         // it would fire constantly.... instead clear any state if the item
                         // is really being removed from the master collection.

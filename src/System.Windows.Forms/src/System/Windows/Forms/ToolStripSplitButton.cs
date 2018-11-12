@@ -564,7 +564,7 @@ namespace System.Windows.Forms {
                 }
                 if (shouldFireDoubleClick) {
                     OnButtonDoubleClick(new System.EventArgs());
-                    // VSWhidbey 486983: if we actually fired DoubleClick - reset the lastClickTime.
+                    // If we actually fired DoubleClick - reset the lastClickTime.
                     lastClickTime = 0;
                 } 
                 else {

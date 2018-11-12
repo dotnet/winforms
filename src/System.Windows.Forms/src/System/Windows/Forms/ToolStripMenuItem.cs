@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (textFields.Length >= 2) {
-                    // VSWhidbey 448242: We dont care about the shortcut here, the OS is going to 
+                    // We dont care about the shortcut here, the OS is going to 
                     // handle it for us by sending a WM_(SYS)COMMAND during TranslateAcellerator
                     // Just display whatever the OS would have.
                     this.ShowShortcutKeys = true;
@@ -940,7 +940,7 @@ namespace System.Windows.Forms {
             if (IsOnDropDown) {
               ToolStripDropDown dropDown = GetCurrentParentDropDown() as ToolStripDropDown;
 
-              // VSWhidbey 260536 - right click support for context menus.
+              // Right click support for context menus.
               // used in ToolStripItem to determine whether to fire click OnMouseUp.
               SupportsRightClick = (dropDown.GetFirstDropDown() is ContextMenuStrip);
             }

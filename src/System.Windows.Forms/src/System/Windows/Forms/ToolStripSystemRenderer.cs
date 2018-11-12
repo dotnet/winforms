@@ -389,13 +389,13 @@ namespace System.Windows.Forms {
                    // or items parented to a drop down
                    Rectangle fillRect = new Rectangle(Point.Empty, item.Size);
                    if (item.IsOnDropDown) {
-                       // VSWhidbey 518568: scoot in by 2 pixels when selected
+                       // Scoot in by 2 pixels when selected
                        fillRect.X += 2;
                        fillRect.Width -= 3; //its already 1 away from the right edge
                    }
 
                     if (item.Selected || item.Pressed) {
-                        // VSO 382373 - Legacy behavior is to always paint the menu item background.
+                        // Legacy behavior is to always paint the menu item background.
                         // The correct behavior is to only paint the background if the menu item is
                         // enabled.
                         if (!AccessibilityImprovements.Level1 || item.Enabled) {

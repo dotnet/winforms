@@ -354,7 +354,7 @@ namespace System.Windows.Forms {
                 && !_wrappedToolStrip.IsDisposed      // ensure we have a live-runtime only toolstrip.
                 && !_wrappedToolStrip.Disposing) {
                 
-                // VSWhidbey 395502 - rejoin the row when visibility is toggled.
+                // Rejoin the row when visibility is toggled.
                 // we dont want to do this logic at DT, as the DropSourceBehavior
                 // will set the toolstrip visible = false.
                 if (!Control.Visible) {

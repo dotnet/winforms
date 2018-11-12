@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
-        // VSWhidbey 152051: Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
+        // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
         [Browsable(false)]
         public int Count {
             get {

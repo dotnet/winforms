@@ -90,8 +90,8 @@ namespace System.Windows.Forms {
         private const int   TREEVIEWSTATE_mouseUpFired              = 0x00001000;
         private const int   TREEVIEWSTATE_showTreeViewContextMenu   = 0x00002000;
         private const int   TREEVIEWSTATE_lastControlValidated      = 0x00004000;  
-        private const int   TREEVIEWSTATE_stopResizeWindowMsgs      = 0x00008000;//VSWhidbey 466949
-        private const int   TREEVIEWSTATE_ignoreSelects             = 0x00010000;//VSWhidbey 384294, 490763.
+        private const int   TREEVIEWSTATE_stopResizeWindowMsgs      = 0x00008000;
+        private const int   TREEVIEWSTATE_ignoreSelects             = 0x00010000;
 
         // PERF: take all the bools and put them into a state variable
         private System.Collections.Specialized.BitVector32          treeViewState; // see TREEVIEWSTATE_ consts above
@@ -1847,7 +1847,7 @@ namespace System.Windows.Forms {
         private void UpdateImagesRecursive ( TreeNode node )
         {
             node.UpdateImage();
-            // VSWhidbey 208200: Iterate only through the Nodes collection rather than the
+            // Iterate only through the Nodes collection rather than the
             // array since an item might have been removed from the collection, and
             // correspondingly "removed" from the array, but still exist in the array
             // since the array isn't actually re-dimensioned down to a smaller size.
@@ -2651,7 +2651,6 @@ namespace System.Windows.Forms {
             // If the user shows the ContextMenu bu overiding the WndProc( ), then the treeview
             // goes into the weird state where the high-light gets locked to the node on which the ContextMenu was shown.
             // So we need to get the native TREEIVEW out of this weird state.
-            // Refer to VSWhidbey : 249191.
             SendMessage(NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, null);
 
             // Windows TreeView pushes its own message loop in WM_xBUTTONDOWN, so fire the
@@ -3098,7 +3097,6 @@ namespace System.Windows.Forms {
                     // Force task switch (see above)
                     UnsafeNativeMethods.PostMessage(new HandleRef(this, this.Handle), NativeMethods.WM_NULL, IntPtr.Zero, IntPtr.Zero);
                 }
-                // VsWhidbey : 432712.
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
                 else if (menu != null)
                 {
@@ -3109,7 +3107,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        // VsWhidbey : 432712.
         // Need to send TVM_SELECTITEM to reset the node-highlighting while the contextMenuStrip is being closed so that the treeview reselects the SelectedNode.
         private void ContextMenuStripClosing(object sender, ToolStripDropDownClosingEventArgs e)
         {
