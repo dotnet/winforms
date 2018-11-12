@@ -14,19 +14,18 @@ namespace WinformsControlsTest
         [STAThread]
         static void Main()
         {
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException); //UnhandledExceptionMode.ThrowException
-			try
-			{
-				Application.Run(new MainForm());
-			}
-			catch (System.Exception e)
-			{
-                Console.WriteLine(e.StackTrace);
-				Environment.Exit(-1);
-			}
-			Environment.Exit(0);
-		}
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException); //UnhandledExceptionMode.ThrowException
+            try
+            {
+                Application.Run(new MainForm());
+            }
+            catch (System.Exception e)
+            {
+                Environment.Exit(-1);
+            }
+            Environment.Exit(0);
+        }
     }
 }
