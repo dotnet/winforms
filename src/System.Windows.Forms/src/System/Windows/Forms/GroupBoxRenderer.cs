@@ -26,7 +26,7 @@ using Microsoft.Win32;
         private static VisualStyleRenderer visualStyleRenderer = null;
         private static readonly VisualStyleElement GroupBoxElement = VisualStyleElement.Button.GroupBox.Normal;
         private const int textOffset = 8;        //MAGIC NUMBER - WHERE DID IT COME FROM?
-        private const int boxHeaderWidth = 7;    // VSWhidbey 514912: The groupbox frame shows 7 pixels before the caption.
+        private const int boxHeaderWidth = 7;    // The groupbox frame shows 7 pixels before the caption.
         private static bool renderMatchingApplicationState = true;
         //cannot instantiate
         private GroupBoxRenderer() {

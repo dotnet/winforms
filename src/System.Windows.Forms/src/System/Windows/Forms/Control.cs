@@ -2349,7 +2349,7 @@ example usage
                 return DefaultLayout.GetDock(this);
             }
             set {
-                if(value != Dock) {                        // NDPWhidbey 29434
+                if(value != Dock) {
 #if DEBUG
                     int dbgLayoutCheck = LayoutSuspendCount;
 #endif
@@ -6431,7 +6431,7 @@ example usage
 
         internal virtual Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight) {
 
-            // COMPAT: 529991 - in Everett we would allow you to set negative values in pre-handle mode
+            // COMPAT: in Everett we would allow you to set negative values in pre-handle mode
             // in Whidbey, if you've set Min/Max size we will constrain you to 0,0.  Everett apps didnt 
             // have min/max size on control, which is why this works.
             if (MaximumSize != Size.Empty || MinimumSize != Size.Empty) {
@@ -6511,7 +6511,7 @@ example usage
 
     /// <devdoc>
         ///     This new Internal method checks the updateCount to signify that the control is within the "BeginUpdate" and "EndUpdate" cycle.
-        ///     Check out Vs whidbey : 310110 : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
+        ///     Check out : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
         ///     even if the control in "Begin - End" update cycle. Using thie Function we can guard against repetitively redrawing the control.
         /// </devdoc>
         internal bool IsUpdating()

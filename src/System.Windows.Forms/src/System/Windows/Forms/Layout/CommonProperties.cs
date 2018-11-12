@@ -621,7 +621,7 @@ namespace System.Windows.Forms.Layout {
         ///     This is the size used to determine whether or not we need scrollbars.
         ///
         ///     Used if the layoutengine always want to return the same layout bounds regardless
-        ///     of how it lays out. Example is TLP in RTL and LTR. VSWhidbey# 392913  
+        ///     of how it lays out. Example is TLP in RTL and LTR.
         internal static Size GetLayoutBounds(IArrangedElement element) {
             bool found;
             Size size = element.Properties.GetSize(_layoutBoundsProperty, out found);

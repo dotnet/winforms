@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
         ///     is written from RightToLeft. When this property is true,
         ///     text alignment and reading order will be from right to left.
         /// </devdoc>
-        // VSWhidbey 94189: Add an AmbientValue attribute so that the Reset context menu becomes available in the Property Grid.
+        // Add an AmbientValue attribute so that the Reset context menu becomes available in the Property Grid.
         [
         Localizable(true),
         AmbientValue(RightToLeft.Inherit),
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         public override string ToString() {
-            // VSWhidbey 495300: removing GetForm information 
+            // Removing GetForm information 
             return base.ToString();
         }
     }

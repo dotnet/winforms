@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
             if (str == null || items == null) {
                 return -1;
             }
-            // VSWhidbey 95158: The last item in the list is still a valid place to start looking!
+            // The last item in the list is still a valid place to start looking!
             if (startIndex < -1 || startIndex >= items.Count) {
                 return -1;
             }
@@ -525,7 +525,7 @@ namespace System.Windows.Forms {
             bool found = false;
             int length = str.Length;
 
-            // VSWhidbey 215677: start from the start index and wrap around until we find the string 
+            // Start from the start index and wrap around until we find the string 
             // in question.  Use a separate counter to ensure that we arent cycling through the list infinitely.
             int numberOfTimesThroughLoop = 0;
 

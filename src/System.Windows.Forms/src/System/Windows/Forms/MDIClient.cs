@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
                 // when made visible (no WM_MDIACTIVATE sent to it), and forcing activation on it changes the activation event sequence
                 // (MdiChildActivate/Enter/Focus/Activate/etc.).
                 // Comment for removed code: 
-                // VSWhidbey 93518, 93544, 93547, 93563, and 93568: Add the style MDIS_ALLCHILDSTYLES
+                // Add the style MDIS_ALLCHILDSTYLES
                 // so that MDI Client windows can have the WS_VISIBLE style removed from the window style
                 // to make them not visible but still present.
                 cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.WS_HSCROLL;
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
                         Control ctl = Controls[i];
                         if (ctl != null && ctl is Form) {
                             Form child = (Form)ctl;
-                            // VSWhidbey 93551: Only adjust the window position for visible MDI Child windows to prevent
+                            // Only adjust the window position for visible MDI Child windows to prevent
                             // them from being re-displayed.
                             if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized) {
                                 UnsafeNativeMethods.GetWindowPlacement(new HandleRef(child, child.Handle), ref wp);

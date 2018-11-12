@@ -3103,12 +3103,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                 }
 
-                // VSWhidbey 94890: Ensure that tooltips don't display when host application is not foreground app.
+                // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
                 IntPtr  foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
                 if (UnsafeNativeMethods.IsChild(new HandleRef(null, foregroundWindow), new HandleRef(null, this.Handle))) {
-                    // vs  75848 -- don't show the tips if a
-                    // dropdown is showing
+                    // Don't show the tips if a dropdown is showing
                     if ((dropDownHolder == null || dropDownHolder.Component == null) || rowMoveCur == selectedRow) {
                         ToolTip.ToolTip = tip;
                     }
@@ -3956,7 +3955,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             SetFlag(FlagNeedsRefresh, true);
             GridEntry gridEntry = null;
 
-            // VSWhidbey 361345 -- there are cases here where the grid could get be disposed.
+            // There are cases here where the grid could get be disposed.
             // so just bail.
             if (this.IsDisposed) {
                 return;

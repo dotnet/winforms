@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SpecialFolderEnumConverter.uex' path='docs/doc[@for="SpecialFolderEnumConverter.GetStandardValues"]/*' />
-        /// See VSWhidbey #376570. Personal appears twice in type editor because its numeric value matches with MyDocuments.
+        /// Personal appears twice in type editor because its numeric value matches with MyDocuments.
         /// This code filters out the duplicate value.
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             StandardValuesCollection values = base.GetStandardValues(context);

@@ -531,7 +531,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // VsWhidbey 434959 : Refer to IsContainerControl property on Control for more details.
+        // Refer to IsContainerControl property on Control for more details.
         internal override bool IsContainerControl
         {
             get
@@ -1516,7 +1516,7 @@ namespace System.Windows.Forms {
                 SplitterDistanceInternal = splitterDistance;
             }
 
-            // Refer to VsWhidbey : 467815: We need to invalidate when we have transparent backgournd.
+            // We need to invalidate when we have transparent backgournd.
             if (this.BackColor == Color.Transparent) {
                 // the panel1 retains the focus rect... so Invalidate the rect ...
                 Invalidate();

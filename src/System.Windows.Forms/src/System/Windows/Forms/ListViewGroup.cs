@@ -126,7 +126,7 @@ namespace System.Windows.Forms {
             }
             set
             {
-                // VSWhidbey 144699: Verify that the value is within the enum's range.
+                // Verify that the value is within the enum's range.
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
                     throw new InvalidEnumArgumentException("value", (int)value, typeof(HorizontalAlignment));

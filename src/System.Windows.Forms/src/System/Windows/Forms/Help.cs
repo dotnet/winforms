@@ -182,19 +182,18 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private static void ShowHTML10Help(Control parent, string url, HelpNavigator command, object param) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHTML10Help:: " + url + ", " + command.ToString("G") + ", " + param);
-
-            // See VSWhidbey #538252 for details on why we decided to add this demand.
+            
             IntSecurity.UnmanagedCode.Demand();
 
-            // VSWhidbey 106914: See if we can get a full path and file name and if that will
+            // See if we can get a full path and file name and if that will
             // resolve the out of memory condition with file names that include spaces.
             // If we can't, though, we can't assume that the path's no good: it might be in
-            // the Windows help directory (VSWhidbey 474069).
+            // the Windows help directory.
             Uri file = null;
             string pathAndFileName = url; //This is our best guess at the path yet.
             
             file = Resolve(url);
-            if (file != null) { // VSWhidbey 271337: can't assume we have a good url
+            if (file != null) { // Can't assume we have a good url
                 pathAndFileName = file.AbsoluteUri;
             }
             if (file == null || file.IsFile) {

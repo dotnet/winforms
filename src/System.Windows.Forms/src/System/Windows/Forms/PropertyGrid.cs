@@ -1063,7 +1063,7 @@ namespace System.Windows.Forms {
                         SelectedGridItem = selectedGridItem;
                     }
                     catch (System.ArgumentException) {
-                        // VSWhidbey#158036. When no row is selected, SelectedGridItem returns grid entry for root
+                        // When no row is selected, SelectedGridItem returns grid entry for root
                         // object. But this is not a selectable item. So don't worry if setting SelectedGridItem
                         // cause an argument exception whe ntrying to re-select the root object. Just leave the
                         // the grid with no selected row.
@@ -2091,8 +2091,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            // VSWhidbey 122645 -- don't show verbs if a prop grid is on the form at design time.
-            //s
+            // don't show verbs if a prop grid is on the form at design time.            
             if (!DesignMode) {
             
 

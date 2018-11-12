@@ -522,8 +522,7 @@ namespace System.Windows.Forms.Layout {
             return bounds;
         }
 
-        /// MeasureTextCache
-        /// Cache mechanism added for VSWhidbey 500516
+        /// MeasureTextCache       
         /// 3000 character strings take 9 seconds to load the form
         public sealed class MeasureTextCache {
               private Size unconstrainedPreferredSize = LayoutUtils.InvalidSize;

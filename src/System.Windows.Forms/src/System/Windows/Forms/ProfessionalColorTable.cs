@@ -1552,8 +1552,7 @@ namespace System.Windows.Forms {
                 InitSystemColors(ref rgbTable);
                 usingSystemColors = true;
                 initializedTable = true;
-
-                // VSWhidbey 533213
+                
                 // Exception to SystemColors, use the ButtonSelectedHighlight color otherwise
                 // the background for DropDown MenuStrip items will have no contrast
                 rgbTable[KnownColors.msocbvcrCBCtlBkgdMouseOver] = rgbTable[KnownColors.ButtonSelectedHighlight];

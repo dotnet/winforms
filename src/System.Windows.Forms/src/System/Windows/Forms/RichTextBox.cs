@@ -415,7 +415,7 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                // VSWhidbey 94843: Remove the WS_BORDER style from the control, if we're trying to set it,
+                // Remove the WS_BORDER style from the control, if we're trying to set it,
                 // to prevent the control from displaying the single point rectangle around the 3D border
                 if (BorderStyle.FixedSingle == BorderStyle && ((cp.Style & NativeMethods.WS_BORDER) != 0)) {
                     cp.Style &= (~NativeMethods.WS_BORDER);
@@ -464,8 +464,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.EnableAutoDragDrop"]/*' />
         /// <devdoc>
-        ///     We can't just enable drag/drop of text by default: it's a breaking change (VSWhidbey 
-        ///     375177).  Should be false by default.
+        ///     We can't just enable drag/drop of text by default: it's a breaking change.
+        ///     Should be false by default.
         /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1888,7 +1888,7 @@ namespace System.Windows.Forms {
                     }
 
                     case RichTextBox.INPUT: {
-                        // vsWhidbey 339358: several customers complained that they were getting Random NullReference exceptions inside EditStreamProc.
+                        // Several customers complained that they were getting Random NullReference exceptions inside EditStreamProc.
                         // We had a case of  acustomer using Everett bits and another case of a customer using Whidbey Beta1 bits.
                         // We don't have a repro in house which makes it problematic to determine the cause for this behavior.
                         // Looking at the code it seems that the only posibility for editStream to be null is when the user
@@ -2034,7 +2034,7 @@ namespace System.Windows.Forms {
                 //Look for kashidas in the string.  A kashida is an arabic visual justification character 
                 //that's not semantically meaningful.  Searching for ABC might find AB_C (where A,B, and C 
                 //represent Arabic characters and _ represents a kashida).  We should highlight the text
-                //including the kashida (VSWhidbey 94809).
+                //including the kashida.
                 char kashida = (char)0x640;
                 string text = this.Text;
                 string foundString = text.Substring(position, str.Length);
@@ -2477,7 +2477,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
-            //VSWhidbey# 325345.
             // When the RTL property is changed, here's what happens. Let's assume that we change from
             // RTL.No to RTL.Yes.
 
@@ -2492,7 +2491,7 @@ namespace System.Windows.Forms {
             // 4.   In the RTF setter, we get the current RTF, compare it to the old RTF, and
             //      since those are not equal, we set the RichEdit content to the old RTF.
             // 5.   But... since the original RTF had no reading-order info, the reading-order
-            //      will default to LTR - thus VSWhidbey #325345.
+            //      will default to LTR.
 
             // That's why in Everett we set the text back since that clears the RTF, thus restoring
             // the reading order to that of the window style. The problem here is that when there's
@@ -2569,7 +2568,7 @@ namespace System.Windows.Forms {
             // base sets the Text property.  It's important to do this *after* setting EM_AUTOUrlDETECT.
             base.OnHandleCreated(e);
             
-            // vsWhidbey 371584: for some reason, we need to set the OleCallback before setting the RTF property.
+            // For some reason, we need to set the OleCallback before setting the RTF property.
             UpdateOleCallback();
 
             // RTF property takes precedence over Text property
@@ -3326,7 +3325,7 @@ namespace System.Windows.Forms {
         private void EnLinkMsgHandler(ref Message m) {
             NativeMethods.ENLINK enlink;
             //On 64-bit, we do some custom marshalling to get this to work. The richedit control
-            //unfortunately does not respect IA64 struct alignment conventions. See VSWhidbey #122276 & 504502.
+            //unfortunately does not respect IA64 struct alignment conventions.
             if (IntPtr.Size == 8) {
                 enlink = ConvertFromENLINK64((NativeMethods.ENLINK64)m.GetLParam(typeof(NativeMethods.ENLINK64)));
             }
@@ -3483,7 +3482,7 @@ namespace System.Windows.Forms {
                             NativeMethods.ENPROTECTED enprotected;
                              
                             //On 64-bit, we do some custom marshalling to get this to work. The richedit control
-                            //unfortunately does not respect IA64 struct alignment conventions. See VSWhidbey #122276
+                            //unfortunately does not respect IA64 struct alignment conventions.
                             if (IntPtr.Size == 8) { 
                                 enprotected = ConvertFromENPROTECTED64((NativeMethods.ENPROTECTED64)m.GetLParam(typeof(NativeMethods.ENPROTECTED64)));
                             }
@@ -3596,7 +3595,7 @@ namespace System.Windows.Forms {
             int selEnd = selChange.chrg.cpMax;
             short selType = (short)selChange.seltyp;
 
-            // VSWhidbey 94804: The IME retains characters in the composition window even after MaxLength
+            // The IME retains characters in the composition window even after MaxLength
             // has been reached in the rich edit control. So, if the Hangul or HangulFull IME is in use, and the
             // number of characters in the control is equal to MaxLength, and the selection start equals the
             // selection end (nothing is currently selected), then kill and restore focus to the control. Then,

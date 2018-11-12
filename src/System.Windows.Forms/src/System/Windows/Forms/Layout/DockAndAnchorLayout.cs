@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Layout {
                 Debug.Assert(element.Bounds == GetCachedBounds(element), "Why do we have cachedBounds for a docked element?");
 
                 if (CommonProperties.GetNeedsDockLayout(element)) {
-                     // VSWhidbey #109974: Some controls modify their bounds when you call SetBoundsCore.  We
+                     // Some controls modify their bounds when you call SetBoundsCore.  We
                     // therefore need to read the value of bounds back when adjusting our layout rectangle.
                     switch (GetDock(element)) {
                         case DockStyle.Top: {
@@ -680,7 +680,7 @@ namespace System.Windows.Forms.Layout {
                         if (dockNeedsLayout) {
                             // We are transitioning from docked to not docked, restore the original bounds.
                             element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.None);
-                            // VSWHIDBEY 159532 restore Anchor information as its now relevant again.
+                            // Restore Anchor information as its now relevant again.
                             UpdateAnchorInfo(element);
                         }
                     }
@@ -728,7 +728,7 @@ namespace System.Windows.Forms.Layout {
 
         private static void ApplyCachedBounds(IArrangedElement container) {
             if (CommonProperties.GetAutoSize(container)) {
-                //Avoiding calling DisplayRectangle before checking AutoSize for Everett compat (VSWhidbey 421433)
+                //Avoiding calling DisplayRectangle before checking AutoSize for Everett compat
                 Rectangle displayRectangle = container.DisplayRectangle;
                 if ((displayRectangle.Width == 0) || (displayRectangle.Height == 0)) {
                     ClearCachedBounds(container);

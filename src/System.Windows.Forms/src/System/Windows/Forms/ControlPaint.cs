@@ -485,7 +485,7 @@ namespace System.Windows.Forms {
                 // We fill the entire cliprect with the backcolor in case the image is transparent.
                 // Also, if gdi+ can't quite fill the rect with the image, they will interpolate the remaining
                 // pixels, and make them semi-transparent. This is another reason why we need to fill the entire rect.
-                // If we didn't where ever the image was transparent, we would get garbage. VS Whidbey #504388
+                // If we didn't where ever the image was transparent, we would get garbage.
                 using (SolidBrush brush = new SolidBrush(backColor)) {
                     g.FillRectangle(brush, clipRect);
                 }

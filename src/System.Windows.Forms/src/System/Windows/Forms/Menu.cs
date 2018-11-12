@@ -365,7 +365,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        // VSWhidbey 94987: A new method for finding the approximate merge position. The original
+        // A new method for finding the approximate merge position. The original
         // method assumed (incorrectly) that the MergeOrder of the target menu would be sequential
         // as it's guaranteed to be in the MDI imlementation of merging container and child
         // menus. However, user code can call MergeMenu independently on a source and target
@@ -472,7 +472,7 @@ namespace System.Windows.Forms {
                 MenuItem mi = items[itemIndex];
                 if (mi != null && comparer(mi, key)) {
                     if (firstMatch < 0){
-                        // VSWhidbey 218021 using Index doesnt respect hidden items.
+                        // Using Index doesnt respect hidden items.
                         firstMatch = mi.MenuIndex;
                     }
                     else {
@@ -528,7 +528,7 @@ namespace System.Windows.Forms {
 
                 int mergeOrder = item.MergeOrder;
                 // Can we find a menu item with a matching merge order?
-                // VSWhidbey 94987: Use new method to find the approximate merge position. The original
+                // Use new method to find the approximate merge position. The original
                 // method assumed (incorrectly) that the MergeOrder of the target menu would be sequential
                 // as it's guaranteed to be in the MDI imlementation of merging container and child
                 // menus. However, user code can call MergeMenu independently on a source and target

@@ -639,7 +639,7 @@ namespace System.Windows.Forms {
 
             if (pictureBoxState[PICTUREBOXSTATE_asyncOperationInProgress])
             {
-                //We shouldn't throw here: just return (VSWhidbey 160308).
+                //We shouldn't throw here: just return.
                 return;
             }
 
@@ -1233,7 +1233,6 @@ namespace System.Windows.Forms {
                 return;
             }
             // Handle should be created, before calling the BeginInvoke.
-            // refer VsWhidbey : 315136.
             if (InvokeRequired && IsHandleCreated) {
                 lock (internalSyncObject) {
                     if (handleValid) {

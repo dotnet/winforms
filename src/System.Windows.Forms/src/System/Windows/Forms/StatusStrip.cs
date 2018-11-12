@@ -179,7 +179,6 @@ namespace System.Windows.Forms {
             }
        }
 
-       // VSWhidbey 430251
        // return whether we should paint the sizing grip.
        private bool ShowSizingGrip {
             get{

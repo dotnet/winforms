@@ -6269,7 +6269,7 @@ namespace System.Windows.Forms
                     }
                     if (keepFocus)
                     {
-                        // Debug.Assert(this.CanFocus || this.Focused); // Invalid assertion (VS Whidbey 325154)
+                        // Debug.Assert(this.CanFocus || this.Focused); // Invalid assertion
                         FocusInternal();
                     }
                     this.ImeMode = editingControlImeMode;
@@ -28302,7 +28302,7 @@ namespace System.Windows.Forms
             OnGlobalAutoSize();
             if (this.DataSource == null)
             {
-                // VSWhidbey 500898. Ensure that the Displayed states get set properly because they were wiped out by UpdateRowsDisplayedState above.
+                // Ensure that the Displayed states get set properly because they were wiped out by UpdateRowsDisplayedState above.
                 this.displayedBandsInfo.EnsureDirtyState();
             }
             ResetUIState(false /*useRowShortcut*/, false /*computeVisibleRows*/);
@@ -28651,7 +28651,6 @@ namespace System.Windows.Forms
                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                 // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
                 // DataGridView changes.
-                // See vsWhidbey: 325296.
                 // Debug.Assert(success);
             }
             else
@@ -28663,7 +28662,6 @@ namespace System.Windows.Forms
                 success = SetCurrentCellAddressCore(targetColumnIndex, targetRowIndex, true, false, false);
                 // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
                 // DataGridView changes.
-                // See vsWhidbey: 325296.
                 // Debug.Assert(success);
             }
             return true;
@@ -28817,7 +28815,6 @@ namespace System.Windows.Forms
                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                 // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
                 // DataGridView changes.
-                // See vsWhidbey: 325296.
                 // Debug.Assert(success);
             }
             else
@@ -28828,8 +28825,7 @@ namespace System.Windows.Forms
                 }
                 success = SetCurrentCellAddressCore(targetColumnIndex, targetRowIndex, true, false, false);
                 // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                // DataGridView changes.
-                // See vsWhidbey: 325296.
+                // DataGridView changes.                
                 // Debug.Assert(success);
             }
 

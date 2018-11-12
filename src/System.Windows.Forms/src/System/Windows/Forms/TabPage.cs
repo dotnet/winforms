@@ -323,7 +323,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Location"]/*' />
         /// <internalonly/>
-        // VSWhidbey 94772: Make the Location property non-browsable for the TabPages.
+        // Make the Location property non-browsable for the TabPages.
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public Point Location {
             get {

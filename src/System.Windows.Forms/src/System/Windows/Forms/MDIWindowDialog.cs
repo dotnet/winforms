@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         public void SetItems(Form active, Form[] all) {
             int selIndex = 0;
             for (int i=0; i<all.Length; i++) {
-                // VSWhidbey 260406: don't list non-visible windows
+                // Don't list non-visible windows
                 if(all[i].Visible) {
                     int n = itemList.Items.Add(new ListItem(all[i]));
                     if (all[i].Equals(active)) {

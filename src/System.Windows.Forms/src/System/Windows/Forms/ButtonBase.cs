@@ -1265,7 +1265,7 @@ namespace System.Windows.Forms {
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
-                // NDPWhidbey 28043 -- we don't respect this because the code below eats BM_SETSTATE.
+                // we don't respect this because the code below eats BM_SETSTATE.
                 // so we just invoke the click.
                 //
                 case NativeMethods.BM_CLICK:

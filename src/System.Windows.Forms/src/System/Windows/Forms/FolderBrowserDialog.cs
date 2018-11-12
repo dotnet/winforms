@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         // be bypassed or not.
         private bool selectedPathNeedsCheck;
 
-        // Callback function for the folder browser dialog (see VSWhidbey 551866)
+        // Callback function for the folder browser dialog
         private UnsafeNativeMethods.BrowseCallbackProc callback;
 
         /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.FolderBrowserDialog"]/*' />

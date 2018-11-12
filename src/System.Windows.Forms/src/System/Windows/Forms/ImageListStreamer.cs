@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
 
         private bool WriteImageList(IntPtr imagelistHandle, Stream stream) {
             // What we need to do here is use WriteEx if comctl 6 or above, and Write otherwise. However, till we can fix 
-            // VSWhidbey #248889, there isn't a reliable way to tell which version of comctl fusion is binding to. 
+            // There isn't a reliable way to tell which version of comctl fusion is binding to. 
             // So for now, we try to bind to WriteEx, and if that entry point isn't found, we use Write.
 
             try {

@@ -153,11 +153,11 @@ namespace System.Windows.Forms.ButtonInternal {
                     Rectangle bounds = Control.ClientRectangle;
                     if (up) {
                         // We are going to draw a 2 pixel border
-                        bounds.Inflate(-borderWidth, -borderWidth); // VS Whidbey #459900
+                        bounds.Inflate(-borderWidth, -borderWidth);
                     }
                     else {
                         // We are going to draw a 1 pixel border.
-                        bounds.Inflate(-1, -1); // VS Whidbey #503487
+                        bounds.Inflate(-1, -1);
                     }
                     
                     PaintButtonBackground(e, bounds, backbrush);

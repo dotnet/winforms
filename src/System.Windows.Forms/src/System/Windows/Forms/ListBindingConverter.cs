@@ -121,7 +121,7 @@ namespace System.Windows.Forms {
             // The BindingFormattingDialog turns on Binding::FormattingEnabled property.
             // however, when the user data binds a property using the PropertyBrowser, Binding::FormattingEnabled is set to false
             // The Binding class is not a component class, so we don't have the ComponentInitialize method where we can set FormattingEnabled to true
-            // so we set it here. VsWhidbey 241361
+            // so we set it here.
             b.FormattingEnabled = true;
 
             bool isComplete = true;

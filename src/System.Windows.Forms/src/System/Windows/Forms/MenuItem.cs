@@ -1159,13 +1159,13 @@ namespace System.Windows.Forms {
                         senderMenu.MenuItems.Add(sep);
                     }
 
-                    // VSWhidbey 93540: Build a list of child windows to be displayed in
+                    // Build a list of child windows to be displayed in
                     // the MDIList menu item...
                     // Show the first maxMenuForms visible elements of forms[] as Window menu items, except:
                     // Always show the active form, even if it's not in the first maxMenuForms visible elements of forms[].
                     // If the active form isn't in the first maxMenuForms forms, then show the first maxMenuForms-1 elements
                     // in forms[], and make the active form the last one on the menu.
-                    // VSWhidbey 260405: don't count nonvisible forms against the limit on Window menu items.
+                    // Don't count nonvisible forms against the limit on Window menu items.
 
                     const int maxMenuForms = 9; // Max number of Window menu items for forms
                     int visibleChildren = 0;    // the number of visible child forms (so we know to show More Windows...)
@@ -1195,7 +1195,7 @@ namespace System.Windows.Forms {
                         }
                     }
 
-                    // VSWhidbey 93540: Display the More Windows menu option when there are more than 9 MDI
+                    // Display the More Windows menu option when there are more than 9 MDI
                     // Child menu items to be displayed. This is necessary because we're managing our own
                     // MDI lists, rather than letting Windows do this for us.
                     if (visibleChildren > maxMenuForms) {

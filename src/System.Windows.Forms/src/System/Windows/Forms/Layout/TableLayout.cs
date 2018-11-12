@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Layout {
            PropertyNames.ChildIndex,   // Changing Z-order changes the row/column assignments
            PropertyNames.Parent,        // So does adding/removing controls
            PropertyNames.Visible,      // as well as visibility             
-           PropertyNames.Items,        // VSWhidbey 396702: Changing toolstrip items collection 
+           PropertyNames.Items,        // Changing toolstrip items collection 
            PropertyNames.Rows,
            PropertyNames.Columns,
            PropertyNames.RowStyles,
@@ -202,7 +202,6 @@ namespace System.Windows.Forms.Layout {
 
             // ScrollableControl will first try to get the layoutbounds from the derived control when 
             // trying to figure out if ScrollBars should be added.
-            // VSWhidbey #392913            
             CommonProperties.SetLayoutBounds(containerInfo.Container, new Size(SumStrips(containerInfo.Columns, 0, containerInfo.Columns.Length),
                                                             SumStrips(containerInfo.Rows, 0, containerInfo.Rows.Length)));      
 
@@ -697,7 +696,7 @@ namespace System.Windows.Forms.Layout {
             // as being unbounded. But in some scenarios, we actually do want to honor the constraints. When
             // we are docked or anchored in the right combination, and our parent's layout engine supports
             // dock and anchoring, and we are actually constrained in at least one direction,
-            // then we should honor the constraint. VSWhidbey #498627.
+            // then we should honor the constraint.
 
             // The Int16.MaxValue check will tell us whether we are actually constrained or not. It's a bit of a hack,
             // but it should be okay. 
@@ -747,7 +746,7 @@ namespace System.Windows.Forms.Layout {
 
             int width = DistributeStyles(containerInfo.CellBorderWidth, containerInfo.ColumnStyles, containerInfo.Columns, proposedConstraints.Width, dontHonorConstraint);
 
-            // VSWhidbey 344609 - TLP doesn't honor proposedConstraints
+            // TLP doesn't honor proposedConstraints
             if (dontHonorConstraint && width > proposedConstraints.Width && proposedConstraints.Width > 1) {
                 // Step 1: iterate through the rows or columns, 
                 //  - calculate the amount of space allocated
@@ -807,7 +806,7 @@ namespace System.Windows.Forms.Layout {
             // as being unbounded. But in some scenarios, we actually do want to honor the constraints. When
             // we are docked or anchored in the right combination, and our parent's layout engine supports
             // dock and anchoring, and we are actually constrained in at least one direction,
-            // then we should honor the constraint. VSWhidbey #498627.
+            // then we should honor the constraint.
 
             // The Int16.MaxValue check will tell us whether we are actually constrained or not. It's a bit of a hack,
             // but it should be okay. 
@@ -834,7 +833,7 @@ namespace System.Windows.Forms.Layout {
                     int currentWidth = SumStrips(containerInfo.Columns, layoutInfo.ColumnStart, layoutInfo.ColumnSpan);
                     //make sure that the total width is the actual final width to avoid 
                     //inconsistency of width between the ApplyStyles and SetElementBounds
-                    // VSWhidbey 382647 - only apply when there is one multiple percentage column
+                    // Only apply when there is one multiple percentage column
                     if (!dontHonorConstraint && layoutInfo.ColumnStart + layoutInfo.ColumnSpan >= containerInfo.MaxColumns && !multiplePercent) {                      
                         currentWidth += expandLastElementWidth;                   
                     }

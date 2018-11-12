@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         }
         
         public override int GetHashCode() {
-            // VSWhidbey #130081: structs should implement GetHashCode for perf
+            // Structs should implement GetHashCode for perf
            return WindowsFormsUtils.GetCombinedHashCodes(
                                                         this.row,
                                                         this.column);

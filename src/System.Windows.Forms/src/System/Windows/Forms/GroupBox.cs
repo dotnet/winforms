@@ -733,7 +733,7 @@ namespace System.Windows.Forms {
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
             
             if (factor.Width != 1F && factor.Height != 1F) {
-                // VSWHIDBEY 471445: make sure when we're scaling by non-unity to clear the font cache
+                // Make sure when we're scaling by non-unity to clear the font cache
                 // as the font has likely changed, but we dont know it yet as OnFontChanged has yet to
                 // be called on us by our parent.
                 fontHeight = -1;

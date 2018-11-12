@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
         private bool                            userHasSetValue = false;
         private DateTime                        value = DateTime.Now;
         private DateTime                        creationTime = DateTime.Now;
-        // VSWhidbey 400284: Reconcile out-of-range min/max values in the property getters.
+        // Reconcile out-of-range min/max values in the property getters.
         private DateTime                        max = DateTime.MaxValue;
         private DateTime                        min = DateTime.MinValue;
         private Color                           calendarForeColor = DefaultForeColor;

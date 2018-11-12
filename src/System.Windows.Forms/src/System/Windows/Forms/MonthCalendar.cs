@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
         // properties
         private Size        dimensions = new Size(1, 1);
         private int         maxSelectionCount = DEFAULT_MAX_SELECTION_COUNT;
-        // VSWhidbey 400284: Reconcile out-of-range min/max values in the property getters.
+        // Reconcile out-of-range min/max values in the property getters.
         private DateTime    maxDate = DateTime.MaxValue; 
         private DateTime    minDate = DateTime.MinValue; 
         private int         scrollChange = DEFAULT_SCROLL_CHANGE;
@@ -997,7 +997,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Unlike most controls, serializing the MonthCalendar's Size is really bad:
         ///     when it's restored at runtime, it uses a a default SingleMonthSize, which 
-        ///     may not be right, especially for JPN/CHS machines.  See VSWhidbey 527753.
+        ///     may not be right, especially for JPN/CHS machines.
         /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
