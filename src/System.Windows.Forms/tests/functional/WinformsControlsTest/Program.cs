@@ -23,6 +23,7 @@ namespace WinformsControlsTest
 			}
 			catch (System.Exception e)
 			{
+                Console.WriteLine(e.StackTrace);
 				Environment.Exit(-1);
 			}
 			Environment.Exit(0);
