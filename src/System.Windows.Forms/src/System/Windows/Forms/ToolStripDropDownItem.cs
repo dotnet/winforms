@@ -260,7 +260,7 @@ namespace System.Windows.Forms {
         [Browsable(false)]
         public virtual bool HasDropDownItems {
             get {
-                //VSWhidbey 354665: use count of visible DisplayedItems instead so that we take into account things that arent visible
+                //Use count of visible DisplayedItems instead so that we take into account things that arent visible
                 return (dropDown != null) && dropDown.HasVisibleItems;
             }
         }
@@ -545,7 +545,7 @@ namespace System.Windows.Forms {
 
             if (HasDropDownItems) {
 
-                // VSWhidbey 478068: items on the overflow should have the same kind of keyboard handling as a toplevel 
+                // Items on the overflow should have the same kind of keyboard handling as a toplevel 
                 bool isToplevel = (!IsOnDropDown || IsOnOverflow);
 
                 
@@ -673,7 +673,7 @@ namespace System.Windows.Forms {
         private void ShowDropDownInternal() {
 
             if (this.dropDown == null || (!this.dropDown.Visible)) {
-                // VSWhidbey 469145 we want to show if there's no dropdown
+                // We want to show if there's no dropdown
                 // or if the dropdown is not visible.
                 OnDropDownShow(EventArgs.Empty);
             }

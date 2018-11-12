@@ -193,7 +193,6 @@ namespace System.Windows.Forms {
                     throw new NotSupportedException(SR.TextBoxAutoCompleteSourceNoItems);
                 }
 
-                // VSWhidbey 466300
                 if (value != AutoCompleteSource.None && value != AutoCompleteSource.CustomSource)
                 {
                     FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
@@ -556,7 +555,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TextBox.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                // VSWhidbey 281668 - Reset this just in case, because the SHAutoComplete stuff
+                // Reset this just in case, because the SHAutoComplete stuff
                 // will subclass this guys wndproc (and nativewindow can't know about it).
                 // so this will undo it, but on a dispose we'll be Destroying the window anyay.
                 //
@@ -601,7 +600,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnBackColorChanged"]/*' />
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
-            // VSWhidbey 465708. Force repainting of the entire window frame
+            // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && this.IsHandleCreated && this.BorderStyle == BorderStyle.Fixed3D) {
                 SafeNativeMethods.RedrawWindow(new HandleRef(this, this.Handle), null, NativeMethods.NullHandleRef, NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_FRAME);
             }

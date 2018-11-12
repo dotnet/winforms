@@ -401,7 +401,7 @@ namespace System.Windows.Forms {
                 if ( (value == null && text != null) ||
                      (value != null && (text == null || !text.Equals(value)))) {
                     text = value;
-                    // 94943 VSWhidbey Adding a mnemonic requires a handle recreate.
+                    // Adding a mnemonic requires a handle recreate.
                     UpdateButton(WindowsFormsUtils.ContainsMnemonic(text), true, true);
                 }
             }
@@ -542,7 +542,7 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        // VSWhidbey 177016: This is necessary to get the width of the buttons in the toolbar,
+        // This is necessary to get the width of the buttons in the toolbar,
         // including the width of separators, so that we can accurately position the tooltip adjacent
         // to the currently hot button when the user uses keyboard navigation to access the toolbar.
         internal int GetButtonWidth() {

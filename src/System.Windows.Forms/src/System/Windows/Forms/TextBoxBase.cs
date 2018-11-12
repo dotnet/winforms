@@ -780,7 +780,7 @@ namespace System.Windows.Forms {
                 if (IsHandleCreated) {
                     bool curState = (0 != unchecked( (int) (long)SendMessage(NativeMethods.EM_GETMODIFY, 0, 0)));
                     if (textBoxFlags[modified] != curState) {
-                        // VSWhidbey 94719 - raise ModifiedChanged event.  See WmReflectCommand for more info.
+                        // Raise ModifiedChanged event.  See WmReflectCommand for more info.
                         textBoxFlags[modified] = curState;
                         OnModifiedChanged(EventArgs.Empty);
                     }
@@ -796,7 +796,7 @@ namespace System.Windows.Forms {
                 if (Modified != value) {
                     if (IsHandleCreated) {
                         SendMessage(NativeMethods.EM_SETMODIFY, value ? 1 : 0, 0);
-                        // VSWhidbey 94719 - must maintain this state always in order for the
+                        // Must maintain this state always in order for the
                         // test in the Get method to work properly.
                     }
 
@@ -937,7 +937,7 @@ namespace System.Windows.Forms {
         ]
         public int PreferredHeight {
             get {
-                // VSWhidbey 523205: COMPAT we must return the same busted height we did in Everett, even
+                // COMPAT we must return the same busted height we did in Everett, even
                 // if it doesnt take multiline and word wrap into account.  For better accuracy and/or wrapping use 
                 // GetPreferredSize instead.
                 int height = FontHeight;
@@ -949,7 +949,7 @@ namespace System.Windows.Forms {
         }
 
         //  GetPreferredSizeCore
-        //  VSWhidbey 523205: This method can return a different value than PreferredHeight!  It properly handles
+        //  This method can return a different value than PreferredHeight!  It properly handles
         //  border style + multiline and wordwrap.
         
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
@@ -966,7 +966,7 @@ namespace System.Windows.Forms {
             }
 
             if (BorderStyle == BorderStyle.FixedSingle) {
-                // VSWhidbey 321520: bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
+                // Bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
                 bordersAndPadding.Width +=2;
                 bordersAndPadding.Height +=2;
             }
@@ -1300,7 +1300,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     For VSWhidbey 325345. In certain circumstances we might have to force
+        ///     In certain circumstances we might have to force
         ///     text into the window whether or not the text is the same.
         ///     Make this a method on TextBoxBase rather than RichTextBox (which is the only
         ///     control that needs this at this point), since we need to set codeUpdateText.
@@ -1847,7 +1847,7 @@ namespace System.Windows.Forms {
                                 if (textDocument != null) {
                                     int selStart, selLength;
 
-                                    // vsWhidbey 372764: when the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
+                                    // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
                                     // much text as possible.
                                     // Here is how we do that:
                                     // 1. We scroll the RichTextBox all the way to the bottom so the last line of text is the last visible line.
@@ -2202,7 +2202,7 @@ namespace System.Windows.Forms {
                     OnTextChanged(EventArgs.Empty);
                 }
                 else if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.EN_UPDATE) {
-                    // VSWhidbey 94719: force update to the Modified property, which will trigger
+                    // Force update to the Modified property, which will trigger
                     // ModifiedChanged event handlers
                     bool force = this.Modified;
                 }
