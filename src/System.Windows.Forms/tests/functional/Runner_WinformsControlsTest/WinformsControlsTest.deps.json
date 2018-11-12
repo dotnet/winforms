@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v3.0",
-    "signature": "9a3a6125dbc4b0b7a7bc3f02ca5ac5bf79496345"
+    "signature": "8f30ce070da18266d5bb9af5fc1eff42526e4bf6"
   },
   "compilationOptions": {},
   "targets": {
@@ -112,15 +112,15 @@
           }
         }
       },
-      "System.Configuration.ConfigurationManager/4.5.0": {
+      "System.Configuration.ConfigurationManager/4.6.0-preview1-27018-01": {
         "dependencies": {
-          "System.Security.Cryptography.ProtectedData": "4.5.0",
-          "System.Security.Permissions": "4.5.0"
+          "System.Security.Cryptography.ProtectedData": "4.6.0-preview1-27018-01",
+          "System.Security.Permissions": "4.6.0-preview1-27018-01"
         },
         "runtime": {
           "lib/netstandard2.0/System.Configuration.ConfigurationManager.dll": {
-            "assemblyVersion": "4.0.1.0",
-            "fileVersion": "4.6.26515.6"
+            "assemblyVersion": "4.0.2.0",
+            "fileVersion": "4.6.27018.1"
           }
         }
       },
@@ -207,30 +207,30 @@
           }
         }
       },
-      "System.Security.Cryptography.ProtectedData/4.5.0": {
+      "System.Security.Cryptography.ProtectedData/4.6.0-preview1-27018-01": {
         "runtime": {
           "lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll": {
-            "assemblyVersion": "4.0.3.0",
-            "fileVersion": "4.6.26515.6"
+            "assemblyVersion": "4.0.4.0",
+            "fileVersion": "4.6.27018.1"
           }
         },
         "runtimeTargets": {
           "runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll": {
             "rid": "win",
             "assetType": "runtime",
-            "assemblyVersion": "4.0.3.0",
-            "fileVersion": "4.6.26515.6"
+            "assemblyVersion": "4.0.4.0",
+            "fileVersion": "4.6.27018.1"
           }
         }
       },
-      "System.Security.Permissions/4.5.0": {
+      "System.Security.Permissions/4.6.0-preview1-27018-01": {
         "dependencies": {
           "System.Security.AccessControl": "4.6.0-preview1-27018-01"
         },
         "runtime": {
           "lib/netstandard2.0/System.Security.Permissions.dll": {
-            "assemblyVersion": "4.0.1.0",
-            "fileVersion": "4.6.26515.6"
+            "assemblyVersion": "4.0.2.0",
+            "fileVersion": "4.6.27018.1"
           }
         }
       },
@@ -252,13 +252,13 @@
           "Accessibility": "4.6.0-alpha-27024-2",
           "Microsoft.Win32.Registry": "4.6.0-preview1-27018-01",
           "Microsoft.Win32.SystemEvents": "4.6.0-preview1-27018-01",
-          "System.Configuration.ConfigurationManager": "4.5.0",
+          "System.Configuration.ConfigurationManager": "4.6.0-preview1-27018-01",
           "System.Drawing.Common": "4.6.0-preview1-27018-01",
           "System.Drawing.Design.Primitives": "4.6.0-preview1-27018-01",
           "System.Drawing.Primitives": "4.3.0",
           "System.Media.SoundPlayer": "4.6.0-alpha-27024-2",
           "System.Security.Cryptography.Cng": "4.6.0-preview1-27018-01",
-          "System.Security.Permissions": "4.5.0"
+          "System.Security.Permissions": "4.6.0-preview1-27018-01"
         },
         "runtime": {
           "System.Windows.Forms.dll": {}
@@ -362,12 +362,12 @@
       "path": "microsoft.win32.systemevents/4.6.0-preview1-27018-01",
       "hashPath": "microsoft.win32.systemevents.4.6.0-preview1-27018-01.nupkg.sha512"
     },
-    "System.Configuration.ConfigurationManager/4.5.0": {
+    "System.Configuration.ConfigurationManager/4.6.0-preview1-27018-01": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-NIY8VUJuSNeXPrV5wjQBKKMcd/vctzEGzQuY15zt3/j7Vd4PXfk/QVIOBlqU1/ONRRUu0dsdk5uUTLSSNY+now==",
-      "path": "system.configuration.configurationmanager/4.5.0",
-      "hashPath": "system.configuration.configurationmanager.4.5.0.nupkg.sha512"
+      "sha512": "sha512-vJnPfTRHFKGZ+D5iSEpSiNu2krkVXug3urZ4cEBgs2hxDhUYNb/O99syZkzrTTCBD74YUw+YwJC7spILwnnZtg==",
+      "path": "system.configuration.configurationmanager/4.6.0-preview1-27018-01",
+      "hashPath": "system.configuration.configurationmanager.4.6.0-preview1-27018-01.nupkg.sha512"
     },
     "System.Drawing.Common/4.6.0-preview1-27018-01": {
       "type": "package",
@@ -425,19 +425,19 @@
       "path": "system.security.cryptography.cng/4.6.0-preview1-27018-01",
       "hashPath": "system.security.cryptography.cng.4.6.0-preview1-27018-01.nupkg.sha512"
     },
-    "System.Security.Cryptography.ProtectedData/4.5.0": {
+    "System.Security.Cryptography.ProtectedData/4.6.0-preview1-27018-01": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-wZGwRoLGTuEQBOYXlZmEK41OfmO+vYWbLk7q5ePoFqs6vOKP2kUsOeviEjQoR6MbW9udlDjx9iWhcWOTzSj05w==",
-      "path": "system.security.cryptography.protecteddata/4.5.0",
-      "hashPath": "system.security.cryptography.protecteddata.4.5.0.nupkg.sha512"
+      "sha512": "sha512-Dg1PhLkHjbsU7S2MbWtZtrCfeJJ2JYdse/ErkX9IQZW1DuaZIeQejG9uTmrZVK5LsD0H02Z+lNP3qTG0Ej6cOg==",
+      "path": "system.security.cryptography.protecteddata/4.6.0-preview1-27018-01",
+      "hashPath": "system.security.cryptography.protecteddata.4.6.0-preview1-27018-01.nupkg.sha512"
     },
-    "System.Security.Permissions/4.5.0": {
+    "System.Security.Permissions/4.6.0-preview1-27018-01": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-vDQ7q30Soe0a1cPhvxn+7IFmMeTG5IP+hTQrnKQDjTNpD2epqwbZSzMM2Git5TXBr4Kwwhc/0SEtJY0qPoiegA==",
-      "path": "system.security.permissions/4.5.0",
-      "hashPath": "system.security.permissions.4.5.0.nupkg.sha512"
+      "sha512": "sha512-j33N3/GkJZcKd4tC7f/MOkKrNLDbzckQOzDyyQkKfIKZKl1lKBbbNSnxLQ68/1PGo+3434CSLbInwDP5+DaiOw==",
+      "path": "system.security.permissions/4.6.0-preview1-27018-01",
+      "hashPath": "system.security.permissions.4.6.0-preview1-27018-01.nupkg.sha512"
     },
     "System.Security.Principal.Windows/4.6.0-preview1-27018-01": {
       "type": "package",
