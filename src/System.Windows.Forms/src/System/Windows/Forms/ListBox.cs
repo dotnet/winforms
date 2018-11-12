@@ -3373,8 +3373,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     else {
-                        // NEW - FOR COMPATIBILITY REASONS
-                        // Minimum compatibility fix for VSWhidbey
+                        // FOR COMPATIBILITY REASONS
                         if (selected) {
                             owner.OnSelectedIndexChanged(EventArgs.Empty); //will fire selectedvaluechanged
                         }

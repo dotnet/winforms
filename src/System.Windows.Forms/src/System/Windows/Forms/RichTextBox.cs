@@ -3721,7 +3721,6 @@ namespace System.Windows.Forms {
                     break;
 
                 case NativeMethods.WM_RBUTTONUP:
-                    //Whidbey 317086
                     //since RichEdit eats up the WM_CONTEXTMENU message, we need to force DefWndProc
                     //to spit out this message again on receiving WM_RBUTTONUP message. By setting UserMouse
                     //style to true, we effectily let the WmMouseUp method in Control.cs to generate

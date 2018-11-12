@@ -243,7 +243,6 @@ namespace System.Windows.Forms.Layout {
             int cellBorderWidth = containerInfo.CellBorderWidth;
             
             //pretend the last column is the size of the container if it is absolutely sized
-            //Whidbey 341438
             if (containerInfo.MaxColumns == 1 && containerInfo.ColumnStyles.Count > 0 && containerInfo.ColumnStyles[0].SizeType == SizeType.Absolute) {
                 //shrink the size of the display rectangle so that we have space to draw the border
                 Size containerSize = container.DisplayRectangle.Size - new Size(cellBorderWidth * 2, cellBorderWidth * 2);

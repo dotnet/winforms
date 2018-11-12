@@ -4819,7 +4819,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             Edit.DisableMouseHook = true;
             SetCommitError(ERROR_MSGBOX_UP, false);
 
-            // Fix for NdpWhidbey#28082: Before invoking the error dialog, flush all mouse messages in the message queue.
+            // Before invoking the error dialog, flush all mouse messages in the message queue.
             // Otherwise the click that triggered the error will still be in the queue, and will get eaten by the dialog,
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
@@ -4902,7 +4902,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             Edit.DisableMouseHook = true;
             SetCommitError(ERROR_MSGBOX_UP, false);
 
-            // Fix for NdpWhidbey#28082: Before invoking the error dialog, flush all mouse messages in the message queue.
+            // Before invoking the error dialog, flush all mouse messages in the message queue.
             // Otherwise the click that triggered the error will still be in the queue, and will get eaten by the dialog,
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
