@@ -6,6 +6,8 @@
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <StrongNameKeyId>ECMA</StrongNameKeyId>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>
