@@ -2,8 +2,6 @@
 <Project>
   <PropertyGroup>
     <ImportNetSdkFromRepoToolset>false</ImportNetSdkFromRepoToolset>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />

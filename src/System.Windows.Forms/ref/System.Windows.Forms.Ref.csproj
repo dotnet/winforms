@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <RootNamespace>System.Windows.Forms</RootNamespace>
-    <StrongNameKeyId>ECMA</StrongNameKeyId>
     <IsPackable>true</IsPackable>    
     <NoWarn>$(NoWarn);0169;</NoWarn>
   </PropertyGroup>
