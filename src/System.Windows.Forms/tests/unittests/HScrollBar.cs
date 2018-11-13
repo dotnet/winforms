@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var hsb = new HScrollBar();
-
-            // assert
+            
             Assert.NotNull(hsb);
             Assert.False(hsb.TabStop);
         }

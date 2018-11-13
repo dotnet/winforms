@@ -12,15 +12,12 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void CreateElement()
         {
-            // arrange
             var className = "a";
             var part = 1;
             var state = 2;
-
-            // act
+            
             var vse = VisualStyleElement.CreateElement(className, part, state);
-
-            // assert
+            
             Assert.NotNull(vse);
             Assert.Equal(className, vse.ClassName);
             Assert.Equal(part, vse.Part);

@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var box = new ComboBox();
-
-            // assert
+            
             Assert.NotNull(box);
         }
     }

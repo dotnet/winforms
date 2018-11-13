@@ -13,10 +13,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var lb = new ListBox();
-
-            // assert
+            
             Assert.NotNull(lb);
             Assert.Equal(0, lb.Location.X);
             Assert.Equal(0, lb.Location.Y);

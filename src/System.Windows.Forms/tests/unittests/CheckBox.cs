@@ -12,10 +12,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var box = new CheckBox();
-
-            // assert
+            
             Assert.NotNull(box);
             Assert.True(box.AutoCheck);
             Assert.Equal(ContentAlignment.MiddleLeft, box.TextAlign);

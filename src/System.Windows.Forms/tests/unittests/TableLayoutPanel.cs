@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var tlp = new TableLayoutPanel();
-
-            // assert
+            
             Assert.NotNull(tlp);
         }
     }

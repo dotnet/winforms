@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var pb = new PictureBox();
-
-            // assert
+            
             Assert.NotNull(pb);
             Assert.False(pb.TabStop);
         }

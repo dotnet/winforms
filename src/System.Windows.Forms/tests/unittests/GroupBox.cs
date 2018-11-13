@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var gb = new GroupBox();
-
-            // assert
+            
             Assert.NotNull(gb);
             Assert.False(gb.TabStop);
         }

@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var p = new Panel();
-
-            // assert
+            
             Assert.NotNull(p);
             Assert.False(p.TabStop);
         }

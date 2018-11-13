@@ -13,22 +13,18 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var il = new ImageList();
-
-            // assert
+            
             Assert.NotNull(il);
         }
 
         [Fact]
         public void ConstructorIContainer()
         {
-            // arrange
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<ImageList>())).Verifiable();
-
-            // act & assert
+            
             var ex = Assert.Throws<ArgumentNullException>(() => new ImageList(nullContainer));
             Assert.Equal("container", ex.ParamName);
 

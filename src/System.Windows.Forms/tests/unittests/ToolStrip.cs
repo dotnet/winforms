@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var ts = new ToolStrip();
-
-            // assert
+            
             Assert.NotNull(ts);
             Assert.False(ts.ImageScalingSize.IsEmpty);
             Assert.Equal(16, ts.ImageScalingSize.Width);
@@ -34,14 +32,11 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ConstructorItems()
         {
-            // arrange
             var button = new ToolStripButton();
             var items = new ToolStripItem[1] { button };
-
-            // act
+            
             var ts = new ToolStrip(items);
-
-            // assert
+            
             Assert.NotNull(ts);
             Assert.NotNull(ts.Items);
             Assert.Single(ts.Items);

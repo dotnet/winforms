@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var f = new Form();
-
-            // assert
+            
             Assert.NotNull(f);
         }
     }
