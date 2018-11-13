@@ -733,5 +733,251 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.IsAccessible);
         }
 
+        /// <summary>
+        /// Data for the MarginGetSet test
+        /// </summary>
+        public static TheoryData<Padding> MarginGetSetData =>
+            TestHelper.GetPaddingTheoryData();
+
+        [Theory]
+        [MemberData(nameof(MarginGetSetData))]
+        public void MarginGetSet(Padding expected)
+        {
+            // arrange
+            var cont = new Control();
+
+            // act
+            cont.Margin = expected;
+
+            // assert
+            Assert.Equal(expected, cont.Margin);
+        }
+
+        [Fact]
+        public void MarginChanged()
+        {
+            bool wasChanged = false;
+            var cont = new Control();
+            cont.MarginChanged += (sender, args) => wasChanged = true;
+
+            // act
+            cont.Margin = new Padding(1);
+
+            // assert
+            Assert.True(wasChanged);
+        }
+
+        /// <summary>
+        /// Data for the MaximumSizeGetSet test
+        /// </summary>
+        public static TheoryData<Size> MaximumSizeGetSetData =>
+            TestHelper.GetSizeTheoryData();
+
+        [Theory]
+        [MemberData(nameof(MaximumSizeGetSetData))]
+        public void MaximumSizeGetSet(Size expected)
+        {
+            // arrange
+            var cont = new Control();
+
+            // act
+            cont.MaximumSize = expected;
+
+            // assert
+            Assert.Equal(expected, cont.MaximumSize);
+        }
+
+        /// <summary>
+        /// Data for the MinimumSizeGetSet test
+        /// </summary>
+        public static TheoryData<Size> MinimumSizeGetSetData =>
+            TestHelper.GetSizeTheoryData();
+
+        [Theory]
+        [MemberData(nameof(MinimumSizeGetSetData))]
+        public void MinimumSizeGetSet(Size expected)
+        {
+            // arrange
+            var cont = new Control();
+
+            // act
+            cont.MinimumSize = expected;
+
+            // assert
+            Assert.Equal(expected, cont.MinimumSize);
+        }
+
+        /// <summary>
+        /// Data for the NameGetSet test
+        /// </summary>
+        public static TheoryData<string> NameGetSetData =>
+            TestHelper.GetStringTheoryData();
+
+        [Theory]
+        [MemberData(nameof(NameGetSetData))]
+        public void NameGetSet(string expected)
+        {
+            // arrange
+            var cont = new Control();
+
+            // act
+            cont.Name = expected;
+
+            // assert
+            Assert.Equal(expected, cont.Name);
+        }
+
+        [Fact]
+        public void ParentGetSet()
+        {
+            // arrange
+            var parent = new Control();
+            var cont = new Control();
+
+            // act
+            cont.Parent = parent;
+
+            // assert
+            Assert.NotNull(cont.Parent);
+            Assert.Equal(parent, cont.Parent);
+        }
+
+        [Fact]
+        public void ParentInternalGetSet()
+        {
+            // arrange
+            var parent = new Control();
+            var cont = new Control();
+
+            // act
+            cont.ParentInternal = parent;
+
+            // assert
+            Assert.NotNull(cont.Parent);
+            Assert.Equal(parent, cont.ParentInternal);
+            Assert.True(parent.Controls.Contains(cont));
+        }
+
+        [Fact]
+        public void RegionGetSet()
+        {
+            var cont = new Control();
+            var expected = new Region(new Rectangle(1,1,20,20));
+
+            // act
+            cont.Region = expected;
+
+            // assert
+            Assert.Equal(expected, cont.Region);
+        }
+
+        [Fact]
+        public void RegionChanged()
+        {
+            bool wasChanged = false;
+            var cont = new Control();
+            cont.RegionChanged += (sender, args) => wasChanged = true;
+
+            // act
+            cont.Region = new Region(new Rectangle(1, 1, 20, 20));
+
+            // assert
+            Assert.True(wasChanged);
+        }
+
+        /// <summary>
+        /// Data for the RequiredScaling test
+        /// </summary>
+        public static TheoryData<BoundsSpecified> RequiredScalingData =>
+            TestHelper.GetEnumTheoryData<BoundsSpecified>();
+
+        [Theory]
+        [MemberData(nameof(RequiredScalingData))]
+        public void RequiredScaling(BoundsSpecified expected)
+        {
+            // arrange
+            var cont = new Control();
+
+            // act
+            cont.RequiredScaling = expected;
+
+            // assert
+            Assert.Equal(expected, cont.RequiredScaling);
+        }
+
+        /// <summary>
+        /// Data for the RequiredScalingEnabled test
+        /// </summary>
+        public static TheoryData<bool> RequiredScalingEnabledData =>
+            TestHelper.GetBoolTheoryData();
+
+        [Theory]
+        [MemberData(nameof(RequiredScalingEnabledData))]
+        public void RequiredScalingEnabled(bool expected)
+        {
+            // arrange
+            var cont = new Control();
+
+            // act
+            cont.RequiredScalingEnabled = expected;
+
+            // assert
+            Assert.Equal(expected, cont.RequiredScalingEnabled);
+        }
+
+        /// <summary>
+        /// Data for the RightToLeft test
+        /// </summary>
+        public static TheoryData<RightToLeft> RightToLeftData =>
+            TestHelper.GetEnumTheoryData<RightToLeft>();
+
+        [Theory]
+        [InlineData(RightToLeft.Yes)]
+        [InlineData(RightToLeft.No)]
+        public void RightToLeftTest(RightToLeft expected)
+        {
+            // arrange
+            var cont = new Control();
+
+            // act
+            cont.RightToLeft = expected;
+
+            // assert
+            Assert.Equal(expected, cont.RightToLeft);
+        }
+
+        [Fact]
+        public void RightToLeftInherit()
+        {
+            // arrange
+            var parent = new Control();
+            var cont = new Control();
+            cont.Parent = parent;
+
+            // act
+            parent.RightToLeft = RightToLeft.Yes;
+            cont.RightToLeft = RightToLeft.Inherit;
+
+            // assert
+            Assert.Equal(RightToLeft.Yes, cont.RightToLeft);
+        }
+
+        /// <summary>
+        /// Data for the RightToLeftInvalid test
+        /// </summary>
+        public static TheoryData<RightToLeft> RightToLeftInvalidData =>
+            TestHelper.GetEnumTheoryDataInvalid<RightToLeft>();
+
+        [Theory]
+        [MemberData(nameof(RightToLeftInvalidData))]
+        public void RightToLeftInvalid(RightToLeft expected)
+        {
+            // arrange
+            var cont = new Control();
+
+            // act & assert
+            var ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.RightToLeft = expected);
+            Assert.Equal("RightToLeft", ex.ParamName);
+        }
     }
 }
