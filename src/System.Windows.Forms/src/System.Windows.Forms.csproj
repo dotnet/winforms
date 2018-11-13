@@ -8,6 +8,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
     <NoWarn>$(NoWarn);3019;649;618;CA2002;CA1821;CA1018;CA2229</NoWarn>
     <DefineConstants>$(DefineConstants);TRACE;WIN95_SUPPORT;ISOLATION_IN_CLICKONCE;WINDOWS_FORMS_SWITCHES;WINFORMS_NAMESPACE;USE_SECURITYTIP;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
   </PropertyGroup>
