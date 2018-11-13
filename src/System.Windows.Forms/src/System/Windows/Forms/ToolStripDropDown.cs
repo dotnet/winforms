@@ -322,7 +322,7 @@ namespace System.Windows.Forms {
                 // we're a borderless menuless control with no min/max boxes
                 // we dont want to show in the taskbar either
                 
-                //Q205158 HOWTO: Prevent a Window from Appearing on the Taskbar
+                //HOWTO: Prevent a Window from Appearing on the Taskbar
                 //Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side effect, the window will have a smaller caption than a normal window. 
                 //Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
 
@@ -2150,7 +2150,7 @@ namespace System.Windows.Forms {
 /*               case NativeMethods.WM_SYSKEYUP:
                     Keys keyData = (Keys)(int)m.WParam;
                     base.WndProc(ref m); 
-                    // VSW 423760: handle the case where the ALT key has been pressed down while a dropdown
+                    // handle the case where the ALT key has been pressed down while a dropdown
                     // was open.  We need to clear off the MenuKeyToggle so the next ALT will activate
                     // the menu.
                     if (IsMenuKey(keyData)) {

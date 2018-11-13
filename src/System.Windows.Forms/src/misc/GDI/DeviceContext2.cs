@@ -271,8 +271,7 @@ namespace System.Experimental.Gdi
             // in this case, we need to diposse the font since the original 
             // creator didn't fully dispose.
             if (previousFont != null) {                
-#if DEBUG
-                //Disabling this assert until DevDiv Bugs 95968 gets fixed
+#if DEBUG       
                 //Debug.Assert(previousFont.Hfont != IntPtr.Zero, "A font has been disposed before it was unselected from the DC.  This will leak a GDI handle on Win9x! Call ResetFont()");
 #endif 
                 if (MeasurementDCInfo.IsMeasurementDC(this)) {

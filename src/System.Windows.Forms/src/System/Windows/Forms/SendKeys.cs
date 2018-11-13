@@ -656,7 +656,7 @@ namespace System.Windows.Forms {
                         }
 
                         // We need this slight delay here for Alt-Tab to work on Vista when the Aero theme
-                        // is running.  See DevDiv bugs 23355.  Although this does not look good, a delay
+                        // is running.  Although this does not look good, a delay
                         // here actually more closely resembles the old JournalHook that processes each
                         // event individually in the hook callback.
                         System.Threading.Thread.Sleep(1);

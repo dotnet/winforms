@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
             } 
         }
         
-        public static PermissionSet AllPrintingAndUnmanagedCode { // Can't assert twice in the same method. See ASURT 52788.
+        public static PermissionSet AllPrintingAndUnmanagedCode { // Can't assert twice in the same method.
             get {
                 if (allPrintingAndUnmanagedCode == null) {
                     PermissionSet temp = new PermissionSet(PermissionState.None);

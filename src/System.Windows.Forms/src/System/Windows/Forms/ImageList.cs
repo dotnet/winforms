@@ -69,7 +69,7 @@ namespace System.Windows.Forms {
         // The usual handle virtualization problem, with a new twist: image
         // lists are lossy.  At runtime, we delay handle creation as long as possible, and store
         // away the original images until handle creation (and hope no one disposes of the images!).  At design time, we keep the originals around indefinitely.
-        // This variable will become null when the original images are lost. See ASURT 65162.
+        // This variable will become null when the original images are lost.
         private IList /* of Original */ originals = new ArrayList();
         private EventHandler recreateHandler = null;
         private EventHandler changeHandler = null;
@@ -533,8 +533,7 @@ namespace System.Windows.Forms {
                     break;
             }
 
-            //VSW #123063: We enclose the imagelist handle create in a theming scope. This is a temporary solution
-            //             till we tackle the bigger issue tracked by VSW #95247
+            // We enclose the imagelist handle create in a theming scope.
             IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
 
             try {

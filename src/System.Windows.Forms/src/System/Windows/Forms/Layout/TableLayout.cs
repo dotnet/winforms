@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Layout {
     
     internal class TableLayout : LayoutEngine {
 
-        // This code was taken from ndp\clr\src\BCL\System\Array.cs - CS#545966
+        // This code was taken from ndp\clr\src\BCL\System\Array.cs
         // This changeset replaced the sorting algorithm when elements with the same 
         // value are sorted. While Array.Sort() was documented as not a being stable sort,
         // we need to preserve the order of same elements as it used to be with the old algorithm since

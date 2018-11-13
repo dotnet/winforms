@@ -384,7 +384,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IPropertyNotifySink.OnChanged"]/*' />
         /// <internalonly/>
         void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid) {
-            // Some controls fire OnChanged() notifications when getting values of some properties. ASURT 20190.
+            // Some controls fire OnChanged() notifications when getting values of some properties.
             // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
             //
             if (this.Host.NoComponentChangeEvents != 0)

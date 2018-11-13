@@ -113,7 +113,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public CheckedListBox() : base() {
             // If we eat WM_ERASEBKGRND messages, the background will be
-            // painted sometimes but not others. See ASURT 28545.
+            // painted sometimes but not others.
             // SetStyle(ControlStyles.Opaque, true);
 
             // If a long item is drawn with ellipsis, we must redraw the ellipsed part

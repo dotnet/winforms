@@ -891,7 +891,6 @@ namespace System.Windows.Forms {
         public int PreferredHeight {
             get {
                 if (!FormattingEnabled) {
-                    //see #465057 for why I did this
 
                     //do preferred height the old broken way for everett apps
                     //we need this for compat reasons because (get this)
@@ -1751,7 +1750,7 @@ namespace System.Windows.Forms {
                     mousePressed = true;
                     mouseEvents = true;
                     CaptureInternal = true;
-                    //Call the DefWndProc() so that mousemove messages get to the windows edit(112079)
+                    //Call the DefWndProc() so that mousemove messages get to the windows edit
                     //
                     DefChildWndProc(ref m);
                     //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
@@ -1767,7 +1766,7 @@ namespace System.Windows.Forms {
                     mousePressed = true;
                     mouseEvents = true;
                     CaptureInternal = true;
-                    //Call the DefWndProc() so that mousemove messages get to the windows edit(112079)
+                    //Call the DefWndProc() so that mousemove messages get to the windows edit
                     //
                     DefChildWndProc(ref m);
                     //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
@@ -1783,7 +1782,7 @@ namespace System.Windows.Forms {
                     mousePressed = true;
                     mouseEvents = true;
                     CaptureInternal = true;
-                    //Call the DefWndProc() so that mousemove messages get to the windows edit(112079)
+                    //Call the DefWndProc() so that mousemove messages get to the windows edit
                     //
                     DefChildWndProc(ref m);
                     //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
@@ -1910,7 +1909,7 @@ namespace System.Windows.Forms {
 
                 case NativeMethods.WM_MOUSEMOVE:
                     Point point = EditToComboboxMapping(m);
-                    //Call the DefWndProc() so that mousemove messages get to the windows edit(112079)
+                    //Call the DefWndProc() so that mousemove messages get to the windows edit
                     //
                     DefChildWndProc(ref m);
                     OnMouseEnterInternal(EventArgs.Empty);
@@ -2457,7 +2456,7 @@ namespace System.Windows.Forms {
                     selectedIndex = -1;
                 }
             }
-            // NOTE: Setting SelectedIndex must be the last thing we do. See ASURT 73949.
+            // NOTE: Setting SelectedIndex must be the last thing we do.
 
         }
 
@@ -2805,12 +2804,12 @@ namespace System.Windows.Forms {
 
             if (IsHandleCreated) {
                 if (DropDownStyle == ComboBoxStyle.Simple && recreate) {
-                    // Control forgets to add a scrollbar. See ASURT 19113.
+                    // Control forgets to add a scrollbar.
                     RecreateHandle();
                 }
                 else {
                     UpdateItemHeight();
-                    // Force everything to repaint. See ASURT 19113.
+                    // Force everything to repaint.
                     InvalidateEverything();
                 }
             }
@@ -2823,7 +2822,7 @@ namespace System.Windows.Forms {
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
             if (DropDownStyle == ComboBoxStyle.Simple) {
-                // simple style combo boxes have more painting problems than you can shake a stick at (#19113)
+                // simple style combo boxes have more painting problems than you can shake a stick at
                 InvalidateEverything();
             }
         }
@@ -3273,13 +3272,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         private void UpdateText() {
-            // V#45724 - Fire text changed for dropdown combos when the selection
+            //           Fire text changed for dropdown combos when the selection
             //           changes, since the text really does change.  We've got
             //           to do this asynchronously because the actual edit text
-            //           isn't updated until a bit later (V#51240).
+            //           isn't updated until a bit later
             //
-
-            // QFE 2471:
+            
             // v1.0 - ComboBox::set_Text compared items w/ "value" and set the SelectedIndex accordingly
             // v1.0 - null values can't correspond to String.Empty
             // v1.0 - SelectedIndex == -1 corresponds to Text == String.Emtpy

@@ -260,7 +260,7 @@ namespace System.Windows.Forms
                 {
                     if (index == 0 && this.items.Count == 1)
                     {
-                        // Fix for DevDiv Bugs 40780. The only row present in the grid gets unshared.
+                        // The only row present in the grid gets unshared.
                         // Simply update the index and return the current row without cloning it.
                         dataGridViewRow.IndexInternal = 0;
                         dataGridViewRow.StateInternal = SharedRowState(0);

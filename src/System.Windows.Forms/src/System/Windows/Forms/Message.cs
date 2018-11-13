@@ -140,7 +140,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         public override string ToString() {
-            // ASSURT : 151574. Link Demand on System.Windows.Forms.Message
+            // Link Demand on System.Windows.Forms.Message
             // fails to protect overriden methods.
             bool unrestricted = false;
             try 

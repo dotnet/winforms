@@ -557,7 +557,7 @@ namespace System.Windows.Forms {
             return IntReleaseDC(hWnd, hDC);
         }
         
-        // AS/URT bug 53058, this will blow up unmarhsalling the IntPtr[]
+        // This will blow up unmarhsalling the IntPtr[]
         //[DllImport("user32.dll", CharSet=CharSet.Auto)]
         //public static extern bool SystemParametersInfo(int nAction, int nParam, [In, Out]IntPtr [] rc, int nUpdate);
         

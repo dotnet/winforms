@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         Right                       = IntTextFormatFlags.Right,
         RightToLeft                 = IntTextFormatFlags.RightToLeft,
         SingleLine                  = IntTextFormatFlags.SingleLine,
-        // NOTE: TextRenderer does not expose a way to set the tab stops (VSW#481267). Observe that ExapandTabs is available.
+        // NOTE: TextRenderer does not expose a way to set the tab stops. Observe that ExapandTabs is available.
         // TabStop                     = IntTextFormatFlags.TabStop,
         TextBoxControl              = IntTextFormatFlags.TextBoxControl,
         Top                         = IntTextFormatFlags.Top, // default

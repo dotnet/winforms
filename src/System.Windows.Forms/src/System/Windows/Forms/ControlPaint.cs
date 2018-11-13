@@ -1624,7 +1624,7 @@ namespace System.Windows.Forms {
             if (image is Bitmap)
                 bitmap = (Bitmap) image;
             else {
-                // #37659 -- metafiles can have extremely high resolutions,
+                // metafiles can have extremely high resolutions,
                 // so if we naively turn them into bitmaps, the performance will be very poor.
                 // bitmap = new Bitmap(image);
 

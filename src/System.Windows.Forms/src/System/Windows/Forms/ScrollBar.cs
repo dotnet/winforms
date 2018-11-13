@@ -920,7 +920,7 @@ namespace System.Windows.Forms {
                     break;
 
                 case NativeMethods.WM_SIZE:
-                    //VS7#13707 : Microsoft, 4/26/1999 - Fixes the scrollbar focus rect
+                    //Fixes the scrollbar focus rect
                     if (UnsafeNativeMethods.GetFocus() == this.Handle) {
                         DefWndProc(ref m);
                         SendMessage(NativeMethods.WM_KILLFOCUS, 0, 0);

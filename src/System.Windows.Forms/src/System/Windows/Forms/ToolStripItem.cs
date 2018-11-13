@@ -4205,7 +4205,7 @@ namespace System.Windows.Forms {
                             }
                         }
 
-                        // VSO 436154 - Disabled menu items that are selected must have focus
+                        // Disabled menu items that are selected must have focus
                         // state so that Narrator can announce them.
                         if (AccessibilityImprovements.Level1) {
                             if (ownerItem.Selected && ownerItem is ToolStripMenuItem) {

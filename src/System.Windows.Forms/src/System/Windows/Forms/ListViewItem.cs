@@ -750,14 +750,13 @@ namespace System.Windows.Forms {
                 if (listView != null && listView.IsHandleCreated) {
                     listView.SetItemState(Index, value ? NativeMethods.LVIS_SELECTED: 0, NativeMethods.LVIS_SELECTED);
 
-                    // vsw 451976: update comctl32's selection information.
+                    // update comctl32's selection information.
                     listView.SetSelectionMark(Index);
                 }
                 else {
                     StateSelected = value;
                     if (this.listView != null && this.listView.IsHandleCreated) {
                         // APPCOMPAT: set the selected state on the list view item only if the list view's Handle is already created.
-                        // vsw 448052.
                         listView.CacheSelectedStateForItem(this, value);
                     }
                 }

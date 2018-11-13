@@ -14455,7 +14455,6 @@ namespace System.Windows.Forms {
                 
                 public   int memidDestructor;
                 /*
-          SBurke, bug 38034,38851, this is a weird one:
           We get a TYPEATTR from COM through ITypeInfo::GetTypeAttr,
           inspect it, then give it back to ITypeInfo::ReleaseTypeAttr.
           Appearently, ITypeInfo::ReleaseTypeAttr blows away the structure completely.

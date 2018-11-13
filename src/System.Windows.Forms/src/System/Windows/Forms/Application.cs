@@ -2586,7 +2586,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             internal ParkingWindow GetParkingWindow(DpiAwarenessContext context) {
 
-                // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+                // Locking 'this' here is ok since this is an internal class.
                 lock(this) {
                     var parkingWindow = GetParkingWindowForContext(context);
                     if (parkingWindow == null) {
@@ -3764,11 +3764,11 @@ namespace System.Windows.Forms {
              ****************************************************************************************/
 
             // Things to test in VS when you change this code:
-            // - You can bring up dialogs multiple times (ie, the editor for TextBox.Lines -- ASURT 41876)
-            // - Double-click DataFormWizard, cancel wizard (ASURT 41562)
+            // - You can bring up dialogs multiple times (ie, the editor for TextBox.Lines)
+            // - Double-click DataFormWizard, cancel wizard
             // - When a dialog is open and you switch to another application, when you switch
-            //   back to VS the dialog gets the focus (ASURT 38961)
-            // - If one modal dialog launches another, they are all modal (ASURT 37154.  Try web forms Table\Rows\Cell)
+            //   back to VS the dialog gets the focus
+            // - If one modal dialog launches another, they are all modal (Try web forms Table\Rows\Cell)
             // - When a dialog is up, VS is completely disabled, including moving and resizing VS.
             // - After doing all this, you can ctrl-shift-N start a new project and VS is enabled.
 

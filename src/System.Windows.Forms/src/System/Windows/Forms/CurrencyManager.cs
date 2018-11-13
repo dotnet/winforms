@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
             // the user will want to navigate to
             int oldPosition = listposition;
             if (endCurrentEdit) {
-                // Do not PushData when pro. See ASURT 65095.
+                // Do not PushData when pro.
                 inChangeRecordState = true;
                 try {
                     EndCurrentEdit();
@@ -666,9 +666,9 @@ namespace System.Windows.Forms {
                             // the position changes, so end the current edit
                             ChangeRecordState(listposition + 1, true, true, listposition != list.Count - 2, false);
                             UpdateIsBinding();
-                            // 85426: refresh the list after we got the item added event
+                            // refresh the list after we got the item added event
                             OnItemChanged(resetEvent);
-                            // 84460: when we get the itemAdded, and the position was at the end
+                            // when we get the itemAdded, and the position was at the end
                             // of the list, do the right thing and notify the positionChanged after refreshing the list
                             if (listposition == list.Count - 1)
                                 OnPositionChanged(EventArgs.Empty);

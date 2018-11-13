@@ -1013,7 +1013,7 @@ namespace System.Windows.Forms {
         ///     room to show the buttons.
         /// </devdoc>
         /// <internalonly/>
-        // VS 30082 -- we pass in a value for dock rather than calling Dock ourselves
+        // we pass in a value for dock rather than calling Dock ourselves
         // because we can't change Dock until the size has been properly adjusted.
         private void AdjustSize(DockStyle dock) {
             int saveSize = requestedSize;
@@ -1077,7 +1077,7 @@ namespace System.Windows.Forms {
                 // 
                 lock(this) {
                     // We need to mark the Disposing state here so buttonsCollection won't attempt to update
-                    // the buttons. VSW#340606.
+                    // the buttons.
                     bool currentDisposing = GetState(STATE_DISPOSING);
                     
                     try {

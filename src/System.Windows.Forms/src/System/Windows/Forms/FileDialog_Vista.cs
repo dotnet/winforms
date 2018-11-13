@@ -42,7 +42,7 @@ namespace System.Windows.Forms
                     new EnvironmentPermission(PermissionState.Unrestricted).Assert();
                     try
                     {
-                        return SystemInformation.BootMode == BootMode.Normal; // see DDB#169589
+                        return SystemInformation.BootMode == BootMode.Normal;
                     }
                     finally
                     {
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             //Force no mini mode for the SaveFileDialog
             ret |= FileDialogNative.FOS.FOS_DEFAULTNOMINIMODE;
 
-            // DevDiv Bugs 107025: Make sure that the Open dialog allows the user to specify
+            // Make sure that the Open dialog allows the user to specify
             // non-file system locations. This flag will cause the dialog to copy the resource
             // to a local cache (Temporary Internet Files), and return that path instead. This
             // also affects the Save dialog by disallowing navigation to these areas.

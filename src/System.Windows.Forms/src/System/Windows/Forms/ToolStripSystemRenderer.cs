@@ -686,7 +686,7 @@ namespace System.Windows.Forms {
                 vsRenderer.DrawBackground(e.Graphics,new Rectangle(0,0,e.ToolStrip.Width-1, e.ToolStrip.Height-1));
             }
             else {
-                if (!SystemInformation.InLockedTerminalSession()) { // see ddb#191714
+                if (!SystemInformation.InLockedTerminalSession()) {
                     e.Graphics.Clear(e.BackColor);
                 }
             }

@@ -1557,7 +1557,7 @@ namespace System.Windows.Forms {
                 // the background for DropDown MenuStrip items will have no contrast
                 rgbTable[KnownColors.msocbvcrCBCtlBkgdMouseOver] = rgbTable[KnownColors.ButtonSelectedHighlight];
 
-                // DevDiv Bugs 83608, CheckedBackground of ToolStripMenuItem
+                // CheckedBackground of ToolStripMenuItem
                 rgbTable[KnownColors.msocbvcrCBCtlBkgdSelected] = rgbTable[KnownColors.msocbvcrCBCtlBkgdMouseOver];
             }
             else if (string.Equals(royaleFileName, themeFileName,StringComparison.OrdinalIgnoreCase)) {

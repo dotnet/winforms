@@ -343,7 +343,7 @@ namespace System.Windows.Forms {
                 }
                 
                 if (Multiline) {
-                    // vs 59731: Don't show horizontal scroll bars which won't do anything
+                    // Don't show horizontal scroll bars which won't do anything
                     if ((scrollBars & ScrollBars.Horizontal) == ScrollBars.Horizontal
                         && textAlign == HorizontalAlignment.Left
                         && !WordWrap) {
@@ -722,7 +722,7 @@ namespace System.Windows.Forms {
         ///     without resetting the undo buffer (if any).
         ///     This method is provided as an alternative to SelectedText which clears the undo buffer.
         ///     Observe that this method does not honor the MaxLength property as the parameter-less base's
-        ///     Paste does, see VSW#487664 for more info.
+        ///     Paste does
         /// </devdoc>
         public void Paste(string text){
             base.SetSelectedTextInternal(text, false);
@@ -869,7 +869,7 @@ namespace System.Windows.Forms {
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                // Work around a very obscure Windows issue. See ASURT 45255.
+                // Work around a very obscure Windows issue.
                 case NativeMethods.WM_LBUTTONDOWN:
                     MouseButtons realState = MouseButtons;
                     bool wasValidationCancelled = ValidationCancelled;

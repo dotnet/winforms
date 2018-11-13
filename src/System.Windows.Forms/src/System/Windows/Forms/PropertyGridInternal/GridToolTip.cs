@@ -179,7 +179,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                }
 
                // Setting the max width has the added benefit of enabling multiline
-               // tool tips! subhag 66503)
+               // tool tips!)
                //
                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
             }

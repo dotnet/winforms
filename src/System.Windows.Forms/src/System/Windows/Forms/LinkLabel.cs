@@ -1243,7 +1243,6 @@ namespace System.Windows.Forms {
                         if (UseCompatibleTextRendering) {
                             // APPCOMPAT: Use DisabledColor because Everett used DisabledColor.
                             // (ie, dont use Graphics.GetNearestColor(DisabledColor.)
-                            // vsw 495322.
                             StringFormat stringFormat = CreateStringFormat();
                             ControlPaint.DrawStringDisabled(e.Graphics, Text, Font, DisabledColor, ClientRectWithPadding, stringFormat);
                         }

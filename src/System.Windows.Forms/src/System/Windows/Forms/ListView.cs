@@ -3783,7 +3783,7 @@ namespace System.Windows.Forms {
                     itemList.AddRange(items);
                 }
 
-                // vsw 518637: add the list view item to the list view
+                // add the list view item to the list view
                 // this way we can retrieve the item's index inside BeginUpdate/EndUpdate
                 for (int i = 0; i < items.Length; i ++) {
                     items[i].Host(this, GenerateUniqueID(), -1);
@@ -4099,7 +4099,6 @@ namespace System.Windows.Forms {
                 // V1.* users implement virtualization by communicating directly to the native ListView and by passing our virtualization implementation.
                 // In that case, the native list view may have an item under the mouse even if our wrapper thinks the item count is 0.
                 // And that may cause GetItemAt to throw an out of bounds exception.
-                // See VSW 418791.
 
                 Point pos = Cursor.Position;
                 pos = PointToClientInternal(pos);
@@ -4222,7 +4221,6 @@ namespace System.Windows.Forms {
             // and AFTER that will set the window font on the native list view.
             // That means that when the list view computed its item's position it did so w/ the previous font.
             // The solution is to send LVM_UPDATE to the native list view EVEN if the list view is not in SmallIcon or LargeIcon.
-            // vsw 463436.
             if (!VirtualMode && IsHandleCreated && AutoArrange) {
                 BeginUpdate();
                 try {
@@ -4264,7 +4262,6 @@ namespace System.Windows.Forms {
             SendMessage(NativeMethods.LVM_SETBKCOLOR,0,color);
             SendMessage(NativeMethods.LVM_SETTEXTCOLOR,0,ColorTranslator.ToWin32(base.ForeColor));
 
-            // vsw 496340.
             // The native list view will not invalidate the entire list view item area if the BkColor is not CLR_NONE.
             // This not noticeable if the customer paints the items w/ the same background color as the list view itself.
             // However, if the customer paints the items w/ a color different from the list view's back color
@@ -4896,7 +4893,7 @@ namespace System.Windows.Forms {
 
                 if (0 == retval)
                     throw new InvalidOperationException(SR.ListViewColumnInfoSet);
-                // vsw 383220: when running on AMD64 the list view does not invalidate the column header.
+                // When running on AMD64 the list view does not invalidate the column header.
                 // So we do it ourselves.
                 InvalidateColumnHeaders();
             }
@@ -5423,7 +5420,7 @@ namespace System.Windows.Forms {
                 if (CheckBoxes) {
                     ListViewHitTestInfo lvhti = this.HitTest(x, y);
                     if (imageListState != null && imageListState.Images.Count < 2) {
-                        // vsw 156366: when the user clicks on the check box and the listView's state image list
+                        // When the user clicks on the check box and the listView's state image list
                         // does not have 2 images, comctl will give us an AttemptToDivideByZero exception.
                         // So don't send the message to DefWndProc in this situation.
                         if (lvhti.Location != ListViewHitTestLocations.StateImage) {
@@ -5660,7 +5657,6 @@ namespace System.Windows.Forms {
                         }
 
                         // sometimes ComCtl gives us bogus values for HDIItem.iOrder.
-                        // vsw 541880.
                         if (to < 0) {
                             return false;
                         }
@@ -5714,7 +5710,7 @@ namespace System.Windows.Forms {
                 bool columnResizeCancelled = false;
 
                 // ComCtl32 does not add enough padding when resizing the first column via mouse double click.
-                // See vsw 336709 for a complete explanation including listing of the comctl32 code.
+                // See for a complete explanation including listing of the comctl32 code.
                 // Our wrapper will add 2 pixels. (1 pixel is not enough, 3 pixels is too much)
 
                 // Send the message to ComCtl32 so that it resizes the column.
@@ -5933,7 +5929,6 @@ namespace System.Windows.Forms {
                                     // by passing our virtualization implementation.
                                     // In that case, the native list view may have an item under the mouse even if our wrapper thinks the item count is 0.
                                     // And that may cause GetItemAt to throw an out of bounds exception.
-                                    // See VSW 418791.
 
                                     if (this.Items.Count > 0) {
                                         ListViewItemSelectionChangedEventArgs lvisce = new ListViewItemSelectionChangedEventArgs(this.Items[nmlv->iItem],
@@ -6335,7 +6330,6 @@ namespace System.Windows.Forms {
                         // This means that we get a WM_SETFOCUS on the hWnd that was destroyed.
                         // Don't do anything because the information on the previous hWnd is most likely
                         // out of sync w/ the information in our ListView wrapper.
-                        // See comment in vsw 451268.
 
                         // We should set focus to the first item,
                         // if none of the items are focused already.
@@ -8298,7 +8292,7 @@ namespace System.Windows.Forms {
                 // Kept for APPCOMPAT reasons.
                 // In Whidbey this constructor is a no-op.
 
-                //vsw 481554: initialize the inner list w/ a dummy list.
+                // initialize the inner list w/ a dummy list.
                 this.innerList = new ListViewNativeItemCollection(owner);
             }
 

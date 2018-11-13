@@ -455,7 +455,7 @@ namespace System.Windows.Forms {
 
         }
 
-        // disable inlining optimization - VSW 454165
+        // disable inlining optimization
         // This method introduces a dependency on System.Configuration.dll
         // due to its usage of the type WindowsFormsSection
         //

@@ -59,8 +59,8 @@ namespace System.Windows.Forms {
         private string filter;
         private int filterIndex;
         private bool supportMultiDottedExtensions;
-        private bool ignoreSecondFileOkNotification;  // Used for VS Whidbey 95342
-        private int okNotificationCount;              // Same
+        private bool ignoreSecondFileOkNotification;
+        private int okNotificationCount;
         private CharBuffer charBuffer;
         private IntPtr dialogHWnd;
 
@@ -779,7 +779,7 @@ namespace System.Windows.Forms {
                             this.ignoreSecondFileOkNotification = false;
                             break;
                         case -604: /* CDN_SHAREVIOLATION */
-                            // See VS Whidbey 95342. When the selected file is locked for writing,
+                            // When the selected file is locked for writing,
                             // we get this notification followed by *two* CDN_FILEOK notifications.                            
                             this.ignoreSecondFileOkNotification = true;  // We want to ignore the second CDN_FILEOK
                             this.okNotificationCount = 0;                // to avoid a second prompt by PromptFileOverwrite.

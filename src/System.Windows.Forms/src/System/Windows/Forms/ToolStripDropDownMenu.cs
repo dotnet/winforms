@@ -508,7 +508,7 @@ namespace System.Windows.Forms {
                 this.maxItemSize.Height += this.maxItemSize.Height%2;
 
                 textRectangle.Y = LayoutUtils.VAlign(textRectangle.Size, new Rectangle(Point.Empty, maxItemSize), ContentAlignment.MiddleCenter).Y;
-                textRectangle.Y += (textRectangle.Height %2); // if the height is odd, push down by one px, see 339274 for picture
+                textRectangle.Y += (textRectangle.Height %2); // if the height is odd, push down by one px
                 state[stateMaxItemSizeValid]=true;
                 this.PaddingToTrim = trimPadding;
                 

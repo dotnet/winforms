@@ -152,7 +152,6 @@ namespace System.Windows.Forms {
 
             NativeMethods.HH_POPUP pop = new NativeMethods.HH_POPUP();
 
-            // ASURT 148069 
             // We have to marshal the string ourselves to prevent access violations.
             IntPtr pszText = Marshal.StringToCoTaskMemAuto(caption);
   	    
@@ -161,7 +160,6 @@ namespace System.Windows.Forms {
                 pop.idString = 0;
                 pop.pt = new NativeMethods.POINT(location.X, location.Y);
 
-                // ASURT 108580
                 // Looks like a windows 
 
 
@@ -320,7 +318,7 @@ namespace System.Windows.Forms {
             Debug.Indent();
 
             Uri file = null;
-            // VSW 426515: Catch specific exceptions
+
             if (!string.IsNullOrEmpty(partialUri)) {
                 try {
                     file = new Uri(partialUri);
@@ -330,7 +328,7 @@ namespace System.Windows.Forms {
                     //
                 }   
                 catch (ArgumentNullException) {
-                    // VSW 426515: Catch specific exceptions
+                    // Catch specific exceptions
                     // Shouldnt get here...
                 }
             }
@@ -363,12 +361,12 @@ namespace System.Windows.Forms {
                                    partialUri);
                 }
                 catch (UriFormatException) {
-                    // VSW 426515: Catch specific exceptions
+                    // Catch specific exceptions
                     // eat URI parse exceptions...
                     //
                 }
                 catch (ArgumentNullException) {
-                    // VSW 426515: Catch specific exceptions
+                    // Catch specific exceptions
                     // Shouldnt get here...                    
                 }
 

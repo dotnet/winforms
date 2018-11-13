@@ -593,7 +593,6 @@ namespace System.Windows.Forms {
                         // public interface ITeacher : IPerson {int ClassRoom { get; set; }}
                         // typeof (ITeacher).GetProperties() would return only the "ClassRoom" property
 
-                        // DevDiv2 518025   
                         // if (type.IsInterface) {
                         //     Type[] interfaces = type.GetInterfaces();
                         //    // initialize the list to an arbitrary length greater than pdc.Count

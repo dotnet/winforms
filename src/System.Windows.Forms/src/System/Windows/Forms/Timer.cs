@@ -391,7 +391,7 @@ namespace System.Windows.Forms {
                     return;
                 }        
 
-                // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+                // Locking 'this' here is ok since this is an internal class.
                 lock(this) {
 
                     if (_stoppingTimer || hWnd == IntPtr.Zero || !UnsafeNativeMethods.IsWindow(new HandleRef(this, hWnd))) {

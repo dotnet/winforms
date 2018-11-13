@@ -56,8 +56,7 @@ namespace System.Windows.Forms {
                     byte[] dat = (byte[])sie.Value;
                     if (dat != null)
                     {
-                        //VSW #123063: We enclose this imagelist handle create in a theming scope. This is a temporary 
-                        //             solution till we tackle the bigger issue tracked by VSW #95247
+                        // We enclose this imagelist handle create in a theming scope.                        
                         IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
 
                         try

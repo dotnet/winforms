@@ -568,7 +568,6 @@ namespace System.Windows.Forms.Layout {
                 int parentWidth = parentDisplayRect.Width;
                 int parentHeight = parentDisplayRect.Height;
 
-                // VS#46140
                 // The anchor is relative to the parent DisplayRectangle, so offset the anchor
                 // by the DisplayRect origin
                 anchorInfo.Left -= parentDisplayRect.X;
@@ -673,7 +672,7 @@ namespace System.Windows.Forms.Layout {
                 CommonProperties.xSetDock(element, value);
 
                 using (new LayoutTransaction(element.Container as Control, element, PropertyNames.Dock)) {   
-                    // VSWHDIBEY 227715 if the item is autosized, calling setbounds performs a layout, which
+                    // if the item is autosized, calling setbounds performs a layout, which
                     // if we havent set the anchor info properly yet makes dock/anchor layout cranky.
                     
                     if (value == DockStyle.None) {

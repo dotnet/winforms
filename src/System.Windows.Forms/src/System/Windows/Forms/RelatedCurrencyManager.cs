@@ -148,7 +148,6 @@ namespace System.Windows.Forms {
                 } else {
                     // APPCOMPAT: bring back the Everett behavior where the currency manager adds an item and 
                     // then it cancels the addition.
-                    // vsw 427731.
                     // 
                     // really, really hocky.
                     // will throw if the list in the curManager is not IBindingList

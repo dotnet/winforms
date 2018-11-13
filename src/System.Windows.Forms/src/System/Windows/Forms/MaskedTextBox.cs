@@ -1356,7 +1356,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///     Returns the length of the displayed text.  See VSW#502543.
+        ///     Returns the length of the displayed text.
         /// </devdoc>
         [Browsable( false )]
         public override int TextLength
@@ -2387,7 +2387,7 @@ namespace System.Windows.Forms
 
             MaskedTextProvider clonedProvider = (MaskedTextProvider) this.maskedTextProvider.Clone();
 
-            // Cache the current caret position so we restore it in case the text does not change. VSW#498875.
+            // Cache the current caret position so we restore it in case the text does not change.
             int currentCaretPos = this.caretTestPos;
 
             // First replace characters in the selection (if any and if any edit positions) until completed, or the test position falls 

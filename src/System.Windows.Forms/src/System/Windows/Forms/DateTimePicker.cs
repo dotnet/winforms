@@ -1755,7 +1755,6 @@ namespace System.Windows.Forms {
                     // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShorcut the previous label 
                     // takes precedence over DTP::Text.
                     // This code was copied from the Everett sources.
-                    // vsw 541672.
                     Label previousLabel = this.PreviousLabel;
 
                     if (previousLabel != null) {

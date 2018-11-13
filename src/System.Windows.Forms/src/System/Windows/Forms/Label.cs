@@ -1292,7 +1292,7 @@ namespace System.Windows.Forms {
             //
             
             if (string.IsNullOrEmpty(Text)) {    
-                // COMPAT VSW 248415: empty labels return the font height + borders
+                // empty labels return the font height + borders
                 using (WindowsFont font = WindowsFont.FromFont(this.Font)) {
                     // this is the character that Windows uses to determine the extent
                     requiredSize = WindowsGraphicsCacheManager.MeasurementGraphics.GetTextExtent("0", font);
@@ -1566,7 +1566,7 @@ namespace System.Windows.Forms {
                 else {
                     //Theme specs -- if the backcolor is darker than Control, we use
                     // ControlPaint.Dark(backcolor).  Otherwise we use ControlDark.
-                    // see VS#357226
+
                     Color disabledTextForeColor = TextRenderer.DisabledTextColor(this.BackColor);
                     TextRenderer.DrawText(e.Graphics, Text, Font, face, disabledTextForeColor, flags);
                 }

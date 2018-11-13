@@ -668,7 +668,6 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLayout(LayoutEventArgs levent) {
 
-            // V#33515 - Microsoft, 3/18/1998
             // We get into a problem when you change the docking of a control
             // with autosizing on. Since the control (affectedControl) has
             // already had the dock property changed, adjustFormScrollbars
@@ -927,7 +926,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> DCR 194760: allow containers to tweak autoscrolling.  when you tab between controls contained in the scrollable control
+        /// <devdoc> Allow containers to tweak autoscrolling.  when you tab between controls contained in the scrollable control
         /// this allows you to set the scroll location.  This would allow you to scroll to the middle of a control, where as the default is 
         /// the top of the control.
 
@@ -1361,7 +1360,7 @@ namespace System.Windows.Forms {
                     pos = maxPos;
                     break;
             }
-            // VsW: 178279: This bugs reproes on all those machine which have  SystemInformation.DragFullWindows set to false
+            // This bugs reproes on all those machine which have  SystemInformation.DragFullWindows set to false
             // "thumbTrack" was incorrectly used... the usage should be identical to WnHScroll which follows.
             if (GetScrollState(ScrollStateFullDrag) || thumbTrack ) {
                 SetScrollState(ScrollStateUserHasScrolled, true);

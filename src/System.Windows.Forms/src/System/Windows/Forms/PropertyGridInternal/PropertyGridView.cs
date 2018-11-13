@@ -2321,13 +2321,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return true;
         }
         
-        // This has no effect, see VSW#470693.
+        // This has no effect.
         protected override void OnImeModeChanged(EventArgs e) {
-            // VSW  #375530
+
             // Only update edit box mode if actually out of sync with grid's mode (to avoid re-entrancy issues)
             //
             if (edit != null && edit.ImeMode != this.ImeMode) {
-                // URT  #51190
+                
                 // Keep the ImeMode of the property grid and edit box in step
                 //
                 edit.ImeMode = this.ImeMode;
@@ -2494,7 +2494,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         /*
                 private void OnEditImeModeChanged(object sender, EventArgs e) {
-                    // URT  #51190
+
                     // The property grid ImeMode tracks the ImeMode of the edit control.
                     // We require this because the first character the goes into the edit control
                     // is composed while the PropertyGrid still has focus - so the ImeMode
@@ -2557,7 +2557,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return;
                 }
             }
-            // VS7 # 13336:  handle non-expand/collapse case of left & right as up & down
+            // Handle non-expand/collapse case of left & right as up & down
             else if ((ke.KeyCode == Keys.Left || ke.KeyCode == Keys.Right) &&
                      (ke.Modifiers & ~Keys.Shift) != 0) {
                 return;
@@ -2786,7 +2786,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         if (gridEntry.InternalExpanded)
                             SetExpand(gridEntry,false);
                         else {
-                            // VS7 # 13336:  handle non-expand/collapse case of left & right as up & down
+                            // Handle non-expand/collapse case of left & right as up & down
                             SelectGridEntry( GetGridEntryFromRow( selectedRow - 1 ), true );
                         }
                         return;
@@ -2805,7 +2805,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                                 SetExpand(gridEntry,true);
                         }
                         else {
-                            // VS7 # 13336:  handle non-expand/collapse case of left & right as up & down
+                            // Handle non-expand/collapse case of left & right as up & down
                             SelectGridEntry( GetGridEntryFromRow( selectedRow + 1 ), true );
                         }
                         return;
@@ -2936,7 +2936,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return;
             }
 
-            /* Microsoft, VS30371 -- Due to conflicts with other VS commands,
+            /* Due to conflicts with other VS commands,
                we are removing this functionality.
 
                // Ctrl + Shift + 'X' selects the property that starts with 'X'
@@ -3502,7 +3502,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return;
             }
          
-            fontBold = null;    // URT  #45662 - fontBold is cached based on Font                        
+            fontBold = null;    // fontBold is cached based on Font                        
                         
             ToolTip.Font = this.Font;
             SetFlag(FlagNeedUpdateUIBasedOnFont, true);
@@ -3631,7 +3631,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             CommonEditorHide();
 
             LayoutWindow(false);
-            // vs  69679
+
             bool selectionVisible = (selectedGridEntry != null && selectedRow >=0  && selectedRow <= visibleRows);
             SelectGridEntry(selectedGridEntry, selectionVisible);
             lastClientRect = newRect;
@@ -3764,10 +3764,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                      }
                      Refresh();
                      
-                     // as/urt  31468 -- we can't do this because
+                     // We can't do this because
                      // some dialogs are non-modal, and
                      // this will pull focus from them.
-                     // See ASURT 31468.
                      //
                      //if (fBtnDialog) {
                      //      this.Focus();
@@ -6505,7 +6504,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             [ResourceConsumption(ResourceScope.Process)]
             private void HookMouse() {
                 GC.KeepAlive(this);
-                // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+                // Locking 'this' here is ok since this is an internal class.
                 lock(this) {
                     if (mouseHookHandle != IntPtr.Zero) {
                         return;
@@ -6565,7 +6564,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <internalonly/>
             private void UnhookMouse() {
                 GC.KeepAlive(this);
-                // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+                // Locking 'this' here is ok since this is an internal class.
                 lock(this) {
                     if (mouseHookHandle != IntPtr.Zero) {
                         UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(this, mouseHookHandle));
@@ -6581,8 +6580,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             */
             private bool ProcessMouseDown(IntPtr hWnd, int x, int y) {
             
-               
-               // com+ 12678
+
                // if we put up the "invalid" message box, it appears this 
                // method is getting called re-entrantly when it shouldn't be.
                // this prevents us from recursing.

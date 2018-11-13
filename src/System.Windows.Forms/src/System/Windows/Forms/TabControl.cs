@@ -1855,7 +1855,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // Refer vsW: 543074: TabControl overrides this method to return true.
+        // TabControl overrides this method to return true.
         internal override bool ShouldPerformContainerValidation() {
             return true;
         }
@@ -2007,7 +2007,7 @@ namespace System.Windows.Forms {
             SetTabPage(index, tabPage, tabPage.GetTCITEM());
 
             // It's possible that changes to this TabPage will change the DisplayRectangle of the
-            // TabControl (e.g. ASURT 99087), so invalidate and resize the size of this page.
+            // TabControl, so invalidate and resize the size of this page.
             //
             cachedDisplayRect = Rectangle.Empty;
             UpdateTabSelection(false);
@@ -2538,7 +2538,7 @@ namespace System.Windows.Forms {
             public void Insert(int index, TabPage tabPage) {
                 owner.InsertItem(index, tabPage);
                 try {
-                    // 247078 : See InsertingItem property
+                    // See InsertingItem property
                     owner.InsertingItem = true;
                     owner.Controls.Add(tabPage);
                 }
@@ -2733,7 +2733,7 @@ namespace System.Windows.Forms {
 
                 TabPage tabPage = (TabPage)value;
 
-                // 247078 : See InsertingItem property
+                // See InsertingItem property
                 if (!owner.InsertingItem)
                 {
                     if (owner.IsHandleCreated) {

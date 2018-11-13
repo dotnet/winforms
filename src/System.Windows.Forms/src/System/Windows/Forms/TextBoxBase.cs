@@ -717,7 +717,6 @@ namespace System.Windows.Forms {
                 //unparse this string list...
                 if (value != null && value.Length > 0) {
 
-                    // Work Item #40689:
                     // Using a StringBuilder instead of a String
                     // speeds things up approx 150 times
                     StringBuilder text = new StringBuilder(value[0]);
@@ -1002,7 +1001,7 @@ namespace System.Windows.Forms {
                 // It is possible that the cached values are no longer valid if the Text has been changed
                 // while the control does not have a handle. We need to return valid values.  We also need
                 // to keep the old cached values in case the Text is changed again making the cached values
-                // valid again.  See VSW#495181.
+                // valid again.
                 AdjustSelectionStartAndEnd( this.selectionStart, this.selectionLength, out start, out end, -1 );
                 length = end - start;
             }
@@ -1249,7 +1248,7 @@ namespace System.Windows.Forms {
         [Browsable(false)]
         public virtual int TextLength {
             get {
-                // Note: Currently Winforms does not fully support surrogates - VSW#327396.  If 
+                // Note: Currently Winforms does not fully support surrogates.  If 
                 // the text contains surrogate characters this property may return incorrect values.
 
                 if (IsHandleCreated && Marshal.SystemDefaultCharSize == 2) {

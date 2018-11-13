@@ -236,7 +236,7 @@ namespace System.Experimental.Gdi
             // Note: Creating the WindowsFont from Font using a LOGFONT structure from GDI+ (Font.ToLogFont(logFont)) may sound like
             // a better choice (more accurate) for doing this but tests show that is not the case (see WindowsFontTests test suite),
             // the results are the same.  Also, that approach has some issues when the Font is created in a different application 
-            // domain since the LOGFONT cannot be marshalled properly, see VSW#451960.
+            // domain since the LOGFONT cannot be marshalled properly.
             // Now, creating it using the Font.SizeInPoints makes it GraphicsUnit-independent.
 
             return new WindowsFont(familyName, font.SizeInPoints, font.Style, font.GdiCharSet, fontQuality);
@@ -347,7 +347,7 @@ namespace System.Experimental.Gdi
             }
 
             // WARNING: don't use non-public fields/properties here, the passed-in font object could be a proxy in a
-            //          remoting scenario and proxies cannot access internal or private members.  VSW#465265 & 465647
+            //          remoting scenario and proxies cannot access internal or private members.
 
             // Compare params used to create the font.
             return  this.Name           == winFont.Name            &&

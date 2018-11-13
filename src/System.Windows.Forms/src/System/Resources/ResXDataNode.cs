@@ -345,7 +345,7 @@ namespace System.Resources {
 
         private void FillDataNodeInfoFromObject(DataNodeInfo nodeInfo, object value) {           
             CultureInfo ci = value as CultureInfo;
-            if( ci != null) { // special-case CultureInfo, cannot use CultureInfoConverter for serialization (see DevDiv#578701).
+            if( ci != null) { // special-case CultureInfo, cannot use CultureInfoConverter for serialization
                 nodeInfo.ValueData = ci.Name;
                 nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(CultureInfo), this.typeNameConverter);
             }

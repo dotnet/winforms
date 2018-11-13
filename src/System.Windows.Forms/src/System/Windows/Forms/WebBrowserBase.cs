@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
         private WebBrowserContainer wbContainer = null;
 
         // This flags the WebBrowser not to process dialog keys when the ActiveX control is doing it
-        // and calls back into the WebBrowser for some reason.  See DDB#147045
+        // and calls back into the WebBrowser for some reason.
         private bool ignoreDialogKeys;
 
         //
@@ -327,8 +327,8 @@ namespace System.Windows.Forms {
 
                             if (hr == NativeMethods.S_FALSE)
                             {
-                                // Same code as in AxHost (ignore dialog keys here, as a fix for ASURT 139468).
-                                // We have the same problem here (see DDB#147045).
+                                // Same code as in AxHost (ignore dialog keys here).
+                                // We have the same problem here
                                 bool ret = false;
 
                                 ignoreDialogKeys = true;
@@ -1351,7 +1351,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnHandleCreated(EventArgs e) {
             //
-            // ASURT 43741 This is needed to prevent some controls (for e.g. Office Web Components) from 
+            // This is needed to prevent some controls (for e.g. Office Web Components) from 
             // failing to InPlaceActivate() when they call RegisterDragDrop() but do not call 
             // OleInitialize(). The EE calls CoInitializeEx() on the thread, but I believe
             // that is not good enough for DragDrop.

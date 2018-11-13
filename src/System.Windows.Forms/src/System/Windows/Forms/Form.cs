@@ -317,7 +317,7 @@ namespace System.Windows.Forms {
             // (MDI: Roll back feature to Everett + QFE source base).  Code left here for ref.
             // Enabling this code introduces a breaking change that has was approved. 
             // If this needs to be enabled, also CanTabStop and TabStop code needs to be added back in Control.cs
-            // and Form.cs.  Look at RADBU CL#963988 for ref.
+            // and Form.cs.
             
             // Set this value to false
             // so that the window style will not include the WS_TABSTOP bit, which is
@@ -347,8 +347,7 @@ namespace System.Windows.Forms {
                     UpdateDefaultButton();
 
                     // this was removed as it breaks any accept button that isn't
-                    // an OK, like in the case of wizards 'next' button.  it was
-                    // added as a fix to 47209...which has been reactivated.
+                    // an OK, like in the case of wizards 'next' button. 
                     /*
                     if (acceptButton != null && acceptButton.DialogResult == DialogResult.None) {
                         acceptButton.DialogResult = DialogResult.OK;
@@ -3704,7 +3703,7 @@ namespace System.Windows.Forms {
                     form.ResumeUpdateMenuHandles();
 
                 // We need to reset the styles in case Windows tries to set us up
-                // with "correct" styles... See ASURT 81646.
+                // with "correct" styles
                 //
                 UpdateStyles();
             }
@@ -3959,7 +3958,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void FillInCreateParamsStartPosition(CreateParams cp) {
 
-            // V#42613 - removed logic that forced MDI children to always be
+            //           Removed logic that forced MDI children to always be
             //           default size and position... need to verify that
             //           this works on Win9X
             /*
@@ -3973,7 +3972,7 @@ namespace System.Windows.Forms {
             */
             if (formState[FormStateSetClientSize] != 0) {
 
-                // V7#37980 - when computing the client window size, don't tell them that
+                // When computing the client window size, don't tell them that
                 // we are going to be maximized!
                 //
                 int maskedStyle = cp.Style & ~(NativeMethods.WS_MAXIMIZE | NativeMethods.WS_MINIMIZE);
@@ -6166,7 +6165,6 @@ namespace System.Windows.Forms {
             try {
                 SetState(STATE_MODAL, true);
 
-                // ASURT 102728
                 // It's possible that while in the process of creating the control,
                 // (i.e. inside the CreateControl() call) the dialog can be closed.
                 // e.g. A user might call Close() inside the OnLoad() event.
@@ -6177,7 +6175,7 @@ namespace System.Windows.Forms {
                 //
                 dialogResult = DialogResult.None;
 
-                // V#36617 - if "this" is an MDI parent then the window gets activated,
+                // If "this" is an MDI parent then the window gets activated,
                 // causing GetActiveWindow to return "this.handle"... to prevent setting
                 // the owner of this to this, we must create the control AFTER calling
                 // GetActiveWindow.
@@ -7234,8 +7232,7 @@ namespace System.Windows.Forms {
         private void WmMenuChar(ref Message m) {
             MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
             if (curMenu == null) {
-                // KB article Q92527 tells us to forward these to our parent...
-                //
+                
                 Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
                 if (formMdiParent != null && formMdiParent.Menu != null) {
                     UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), NativeMethods.WM_SYSCOMMAND, new IntPtr(NativeMethods.SC_KEYMENU), m.WParam);
@@ -7464,38 +7461,13 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private void WmWindowPosChanged(ref Message m) {
 
-            // V#40654 - We must update the windowState, because resize is fired
+            //           We must update the windowState, because resize is fired
             //           from here... (in Control)
             UpdateWindowState();
             base.WndProc(ref m);
 
             RestoreWindowBoundsIfNecessary();
-        }
-
-        /*
-         * THIS CODE LEFT HERE FOR REF.
-         * There are several issues with the location of minimized MDI child forms that
-         * we are not fixing.  SEE VSW#431080
-        /// <devdoc>
-        ///     WM_WINDOWPOSCHANGING handler
-        /// </devdoc>
-        /// <internalonly/>
-        private unsafe void WmWindowPosChanging(ref Message m) {
-            // Handle minimized window location ourselves - see VSW#431080 for details.
-            if (IsMdiChild && WindowState == FormWindowState.Minimized) {
-                NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
-
-                if ((wp->flags & NativeMethods.SWP_NOMOVE) == 0 && (wp->flags & NativeMethods.SWP_NOSIZE) != 0) {
-                    int menuHeight = SystemInformation.MenuHeight;
-                    if ((MdiParent.MdiClient.ClientSize.Height - wp->y) < menuHeight) {
-                        wp->y -= menuHeight;
-                    }
-                }
-            }
-
-            base.WndProc(ref m);
-        }
-        */
+        }        
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.WndProc"]/*' />
         /// <devdoc>

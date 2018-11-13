@@ -705,7 +705,7 @@ namespace System.Windows.Forms {
                 return;
             }
 
-            if( SystemInformation.InLockedTerminalSession() ) { // see ddb#191714
+            if( SystemInformation.InLockedTerminalSession() ) {
                 return;
             }
 

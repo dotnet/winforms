@@ -185,7 +185,7 @@ namespace System.Windows.Forms {
                     // use the properties on the type of the first element in the list
                     // if offset == 0, then this means that the first dataSource did not have a strongly typed Item property.
                     // the dataSources are added only for relatedCurrencyManagers, so in this particular case
-                    // we need to use the dataSource in the currencyManager. See ASURT 83035.
+                    // we need to use the dataSource in the currencyManager.
                     IList list;
                     if (offset == 0)
                         list = this.DataSource as IList;

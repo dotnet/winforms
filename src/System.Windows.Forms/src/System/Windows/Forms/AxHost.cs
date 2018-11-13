@@ -1332,7 +1332,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLostFocus(EventArgs e) {
-            // ASURT 93669
             // Office WebControl and MS DDS control create a child window that gains
             // focus in order to handle keyboard input. Since, UIDeactivate() could
             // destroy that window, these controls will crash trying to process WM_CHAR.
@@ -3085,7 +3084,7 @@ namespace System.Windows.Forms {
         private void DepersistFromIStorage(UnsafeNativeMethods.IStorage storage) {
             storageType = STG_STORAGE;
 
-            // ASURT 65913 Looks like MapPoint control does not create a valid IStorage
+            // Looks like MapPoint control does not create a valid IStorage
             // until some property has changed. Since we end up creating a bogus (empty)
             // storage, we end up not being able to re-create a valid one and this would
             // fail.
@@ -3630,7 +3629,7 @@ namespace System.Windows.Forms {
         ///     Call base.OnHandleCreated first.
         /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
-            // ASURT 43741 This is needed to prevent some controls (for e.g. Office Web Components) from 
+            // This is needed to prevent some controls (for e.g. Office Web Components) from 
             // failing to InPlaceActivate() when they call RegisterDragDrop() but do not call 
             // OleInitialize(). The EE calls CoInitializeEx() on the thread, but I believe
             // that is not good enough for DragDrop.
@@ -4175,7 +4174,6 @@ namespace System.Windows.Forms {
                     // so we need to destroy our fake window first...
                     host.DestroyFakeWindow();
 
-                    // ASURT 46393
                     // The fact that we have a fake window means that the OCX inplace deactivated when we hid it. It means
                     // that we have to bring it back from RUNNING to INPLACE so that it can re-create its handle properly.
                     //
@@ -4319,7 +4317,6 @@ namespace System.Windows.Forms {
             }
 
             int UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(NativeMethods.COMRECT lprcPosRect) {
-                // ASURT 68752
                 // The MediaPlayer control has a AllowChangeDisplaySize property that users
                 // can set to control size changes at runtime, but the control itself ignores that and sets the new size.
                 // We prevent this by not allowing controls to call OnPosRectChange(), unless we instantiated the resize.
@@ -4343,7 +4340,7 @@ namespace System.Windows.Forms {
             // IPropertyNotifySink methods
 
             void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid) {
-                // Some controls fire OnChanged() notifications when getting values of some properties. ASURT 20190.
+                // Some controls fire OnChanged() notifications when getting values of some properties.
                 // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
                 //
                 if (host.NoComponentChangeEvents != 0)
@@ -7095,7 +7092,7 @@ namespace System.Windows.Forms {
                 }
 
                 try {
-                    // Some controls fire OnChanged() notifications when getting values of some properties. ASURT 20190.
+                    // Some controls fire OnChanged() notifications when getting values of some properties.
                     // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
                     //
                     owner.NoComponentChangeEvents++;

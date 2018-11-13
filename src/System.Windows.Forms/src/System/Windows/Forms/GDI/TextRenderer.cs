@@ -341,7 +341,6 @@ namespace System.Windows.Forms
 
             //Theme specs -- if the backcolor is darker than Control, we use
             // ControlPaint.Dark(backcolor).  Otherwise we use ControlDark.
-            // see VS#357226
             Color disabledTextForeColor = SystemColors.ControlDark;
             if (ControlPaint.IsDarker(backColor, SystemColors.Control)) {
                 disabledTextForeColor = ControlPaint.Dark(backColor);

@@ -2320,7 +2320,7 @@ namespace System.Windows.Forms {
             ///       rows are painted using a different background color.
             ///    </para>
             /// </devdoc>
-            // CUT by 53973 - Cleanup eventually to be static.
+            // Cleanup eventually to be static.
             internal bool LedgerStyle {
                 get {
                     return gridState[GRIDSTATE_isLedgerStyle];

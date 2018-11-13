@@ -350,7 +350,7 @@ namespace System.Windows.Forms {
             // the grid will receive an OnLayout message when there is more
             // than one parent in the grid
             if (parentsCount > rowHeights.Count) {
-                Debug.Assert(parentsCount == rowHeights.Count + 1 || rowHeights.Count == 0, "see bug 82808 for more info, or the comment above");
+                Debug.Assert(parentsCount == rowHeights.Count + 1 || rowHeights.Count == 0, "see comment above for more info");
                 int rowHeightsCount = this.rowHeights.Count;
                 for (int i = rowHeightsCount; i < parentsCount; i++) {
                     DataGridState dgs = (DataGridState) parents[i];

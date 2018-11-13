@@ -780,7 +780,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // vsw 517818 and vsw 530726: when the back end is still inside an AddNew we get a PositionChanged event before
+                // when the back end is still inside an AddNew we get a PositionChanged event before
                 // we get the list changed event. So, we get the position changed event before we have a chance to refresh our
                 // row collection.
                 // It may be the case that the new position in the currency manager corresponds to the DataGridView::AddNew row position.
@@ -1392,7 +1392,7 @@ namespace System.Windows.Forms
 
                     this.currencyManager.CancelCurrentEdit();
 
-                    // vsw 531871: CurrencyManager no longer starts a new transaction automatically
+                    // CurrencyManager no longer starts a new transaction automatically
                     // when we call CurrencyManager::CancelCurrentEdit.
                     // So, if the current item inside the currency manager did not change, we have to start a new transaction.
                     // (If the current item inside the currency manager changed, then the currency manager would have already started a new transaction).

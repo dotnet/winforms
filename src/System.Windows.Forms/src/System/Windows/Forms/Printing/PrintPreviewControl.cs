@@ -803,7 +803,7 @@ namespace System.Windows.Forms {
         ///     Handles the WM_KEYDOWN message.
         /// </devdoc>
         /// <internalonly/>
-        //added to handle keyboard events(71009)subhag
+        //added to handle keyboard events
         //
         private void WmKeyDown(ref Message msg) {
 
@@ -923,7 +923,7 @@ namespace System.Windows.Forms {
                 case NativeMethods.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
-                //added case to handle keyboard events(71009)subhag
+                //added case to handle keyboard events
                 //
                 case NativeMethods.WM_KEYDOWN:
                     WmKeyDown(ref m);

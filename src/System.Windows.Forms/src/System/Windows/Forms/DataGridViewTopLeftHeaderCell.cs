@@ -566,7 +566,7 @@ namespace System.Windows.Forms
                 [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
-                    // We changed DataGridViewTopLeftHeaderCellAccessibleObject::Name to return a string : vsw 393122
+                    // We changed DataGridViewTopLeftHeaderCellAccessibleObject::Name to return a string
                     // However, DataGridViewTopLeftHeaderCellAccessibleObject::Value should still return String.Empty.
                     return String.Empty;
                 }

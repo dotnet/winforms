@@ -279,7 +279,7 @@ namespace System.Windows.Forms {
         [DllImport("user32.dll", CharSet=CharSet.Auto, SetLastError=true)]
         public static extern bool GetKeyboardLayoutName(StringBuilder name);
         
-        // AS/URT bug 53058, this will blow up unmarhsalling the IntPtr[]
+        // this will blow up unmarhsalling the IntPtr[]
         //[DllImport("user32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
         //public static extern int GetKeyboardLayoutList(int size, [Out, MarshalAs(UnmanagedType.LPArray)] IntPtr [] hkls);
         

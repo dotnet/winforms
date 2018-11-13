@@ -212,7 +212,7 @@ namespace System.Experimental.Gdi
                 {
                     // If the Graphics object was created from a native DC the actual clipping region is the intersection
                     // beteween the original DC clip region and the GDI+ one - for display Graphics it is the same as 
-                    // Graphics.VisibleClipBounds. See VSW#490404.
+                    // Graphics.VisibleClipBounds.
                     wg.DeviceContext.IntersectClip(wr);
 
                 }

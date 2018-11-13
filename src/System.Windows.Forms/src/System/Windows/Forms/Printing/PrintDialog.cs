@@ -430,7 +430,7 @@ namespace System.Windows.Forms {
                     PrinterSettings.ToPage = data.nToPage;
                 }
 
-                // Fix Dev10 #575399, when the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
+                // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
                 // to print, and the PD_COLLATE flag in the Flags member indicates 
                 // whether the user wants to print them collated.
@@ -527,7 +527,7 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                // Fix Dev10 #575399, when the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
+                // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
                 // to print, and the PD_COLLATE flag in the Flags member indicates 
                 // whether the user wants to print them collated.
@@ -539,7 +539,6 @@ namespace System.Windows.Forms {
                 }
 
                 // We should return true only if the user pressed the "Print" button while dismissing the dialog.
-                // Please refer to VsW: 403124 for more details.
                 return (data.dwResultAction == NativeMethods.PD_RESULT_PRINT);
             }
             finally {

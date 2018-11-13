@@ -425,7 +425,6 @@ namespace System.Windows.Forms {
 
         internal override void RecreateHandleCore() {
             //If ToolStripContainer's Handle is getting created demand create the childControl handle's
-            // Refer vsw : 517556 for more details.
             if (IsHandleCreated) {
                 foreach(Control c in Controls) {
                     c.CreateControl(true);                

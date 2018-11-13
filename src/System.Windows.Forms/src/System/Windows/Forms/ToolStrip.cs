@@ -1769,7 +1769,6 @@ namespace System.Windows.Forms {
                         UpdateToolTip(null);
                     }
 
-                    // Fix for Dev10 889523
                     // If the overflow button has not been created, don't check its properties
                     // since this will force its creating and cause a re-layout of the control
                     if (toolStripOverflowButton != null && this.OverflowButton.HasDropDownItems) {
@@ -3046,7 +3045,7 @@ namespace System.Windows.Forms {
 
             index = startIndex;
 
-            // 242501 MenuStrip parity: key presses should change selection if mnemonic not present
+            // MenuStrip parity: key presses should change selection if mnemonic not present
             // if we havent found a mnemonic, cycle through the menu items and
             // checbbbMk if we match.
             

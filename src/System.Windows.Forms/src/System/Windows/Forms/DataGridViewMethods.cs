@@ -5655,7 +5655,6 @@ namespace System.Windows.Forms
                     }
 
                     // DGV should dispose the tool tip control before disposing itself.
-                    // vsw 559812.
                     this.toolTipControl.Dispose();
                 }
                 finally
@@ -11652,7 +11651,6 @@ namespace System.Windows.Forms
                     {
                         if (this.DesignMode)
                         {
-                            // This is the minimal fix for vsw 527646.
                             // If the DataMember became invalid at DesignTime then set it to String.Empty,
                             // regenerate the column collection and DO NOT send BindingContextChanged event.
                             this.DataMember = String.Empty;
@@ -15501,7 +15499,7 @@ namespace System.Windows.Forms
 
             base.OnEnter(e);
 
-            // vsw 453314: there are cases when a control is on the designer and it still receives the OnEnter event.
+            // There are cases when a control is on the designer and it still receives the OnEnter event.
             // Guard against this.
             if (this.DesignMode)
             {
@@ -19750,7 +19748,7 @@ namespace System.Windows.Forms
             // Paint potential block below rows
             Rectangle rcBelowRows = gridBounds;
 
-            // Fix Dev10 Bug473771 - Remaining cell images on DataGridView
+            // Remaining cell images on DataGridView
             int visibleRowsHeight = this.Rows.GetRowsHeight(DataGridViewElementStates.Displayed);
             if (this.layout.ColumnHeadersVisible)
             {
@@ -19771,7 +19769,7 @@ namespace System.Windows.Forms
             }
 
             // Paint potential block next to column headers and rows
-            // Fix Dev10 Bug473771 - Remaining cell images on DataGridView
+            // Remaining cell images on DataGridView
             int visibleColumnsWidth = this.Columns.GetColumnsWidth(DataGridViewElementStates.Displayed);
             Rectangle rcNextRows = gridBounds;
             if (this.Columns.Count > 0)

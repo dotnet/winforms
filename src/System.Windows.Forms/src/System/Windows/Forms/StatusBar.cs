@@ -1596,7 +1596,7 @@ namespace System.Windows.Forms {
                 //
                 owner.UpdateTooltip(panel);
 
-                // V#41207 - Microsoft, 4/1/1998 - We must reindex the panels after a removal...
+                // We must reindex the panels after a removal...
                 owner.UpdatePanelIndex();
                 owner.ForcePanelUpdate();
             }

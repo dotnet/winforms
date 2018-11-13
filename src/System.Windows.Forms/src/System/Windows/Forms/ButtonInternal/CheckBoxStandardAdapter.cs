@@ -44,7 +44,7 @@ namespace System.Windows.Forms.ButtonInternal {
                     layout.focus.Intersect(layout.textBounds);
 
                     if (layout.options.textAlign != LayoutUtils.AnyLeft && layout.options.useCompatibleTextRendering && layout.options.font.Italic) {
-                        // fixup for GDI+ text rendering.  VSW#515164
+                        // fixup for GDI+ text rendering.
                         layout.focus.Width += 2;
                     }
                 }

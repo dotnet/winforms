@@ -285,7 +285,7 @@ namespace System.Windows.Forms {
         // =------------------------------------------------------------------
 
         protected virtual void AddEventHandler(object key, Delegate handler) {
-            // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+            // Locking 'this' here is ok since this is an internal class.
             lock(this) {
                 if (handler == null) return;
                 for (EventEntry e = eventList; e != null; e = e.next) {
@@ -414,7 +414,7 @@ namespace System.Windows.Forms {
         }
 
         protected virtual Delegate GetEventHandler(object key) {
-            // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+            // Locking 'this' here is ok since this is an internal class.
             lock(this) {
                 for (EventEntry e = eventList; e != null; e = e.next) {
                     if (e.key == key) return e.handler;
@@ -696,7 +696,7 @@ namespace System.Windows.Forms {
         }
 
         protected virtual void RemoveEventHandler(object key, Delegate handler) {
-            // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+            // Locking 'this' here is ok since this is an internal class.
             lock(this) {
                 if (handler == null) return;
                 for (EventEntry e = eventList, prev = null; e != null; prev = e, e = e.next) {

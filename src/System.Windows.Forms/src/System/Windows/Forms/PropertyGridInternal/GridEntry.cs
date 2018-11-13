@@ -1422,7 +1422,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             cacheItems.lastValueFont = f;
             return cacheItems.lastValueTextWidth;
         }
-        //subhag (66503) To check if text contains multiple lines
+        // To check if text contains multiple lines
         //
         internal bool GetMultipleLines(string valueString) {
 
@@ -2163,7 +2163,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 int textWidth = GetValueTextWidth(strValue, g, f);
                 bool doToolTip = false;
                 
-                //subhag (66503) To check if text contains multiple lines
+                // To check if text contains multiple lines
                 //
                 if (textWidth >= rect.Width ||  GetMultipleLines(strValue)) 
                      doToolTip = true;
@@ -2175,9 +2175,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 // Do actual drawing
                 
                 //strValue = ReplaceCRLF(strValue);
-                
-                
-                 // AS/URT  55015
+
                 // bump the text down 2 pixels and over 1 pixel.
                 if ((paintFlags & PaintValueFlags.PaintInPlace) != PaintValueFlags.None) { 
                     rect.Offset(1, 2);
@@ -2648,7 +2646,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         private EventEntry eventList;
 
         protected virtual void AddEventHandler(object key, Delegate handler) {
-            // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+            // Locking 'this' here is ok since this is an internal class.
             lock(this) {
                 if (handler == null) return;
                 for (EventEntry e = eventList; e != null; e = e.next) {
@@ -2667,7 +2665,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         protected virtual Delegate GetEventHandler(object key) {
-            // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+            // Locking 'this' here is ok since this is an internal class.
             lock(this) {
                 for (EventEntry e = eventList; e != null; e = e.next) {
                     if (e.key == key) return e.handler;
@@ -2677,7 +2675,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         protected virtual void RemoveEventHandler(object key, Delegate handler) {
-            // Locking this here is ok since this is an internal class.  See VSW#464499.
+            // Locking this here is ok since this is an internal class.
             lock(this) {
                 if (handler == null) return;
                 for (EventEntry e = eventList, prev = null; e != null; prev = e, e = e.next) {
@@ -2992,7 +2990,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
 
-                // vs  77963 -- make sure we're on the right thread.
+                // make sure we're on the right thread.
                 //
                 if (PropertyGridView.InvokeRequired) {
                     PropertyGridView.Invoke(new SelectDelegate(this.Select), new object[]{flags});

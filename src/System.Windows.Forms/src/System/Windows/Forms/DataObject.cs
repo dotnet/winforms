@@ -1462,7 +1462,7 @@ namespace System.Windows.Forms {
                     else {
                         data = ReadObjectFromHandle(hglobal);
                         /*
-                        spb - 93835 dib support is a mess
+                        dib support is a mess
                         if (format.Equals(DataFormats.Dib)
                             && data is Stream) {
                             data = new Bitmap((Stream)data);
@@ -1568,7 +1568,7 @@ namespace System.Windows.Forms {
                     if (format.Equals(DataFormats.Bitmap)
                         //||format.Equals(DataFormats.Dib))
                     ) { 
-                        // as/urt 140870 -- GDI+ doesn't own this HBITMAP, but we can't
+                        // GDI+ doesn't own this HBITMAP, but we can't
                         // delete it while the object is still around.  So we have to do the really expensive
                         // thing of cloning the image so we can release the HBITMAP.
                         //
@@ -1768,7 +1768,7 @@ namespace System.Windows.Forms {
                 return stringData;
             }            
 
-            // Dev11 92568 Garbled Japanese is produced when a text message is cut and pasted on the editor in Team Explorer of TFS 2010 (was DTS)
+            // Garbled Japanese is produced when a text message is cut and pasted on the editor in Team Explorer of TFS 2010
             private unsafe string ReadHtmlFromHandle(IntPtr handle) {
                 string stringData = null;
                 IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, handle));

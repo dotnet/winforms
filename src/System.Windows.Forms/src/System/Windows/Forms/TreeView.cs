@@ -350,7 +350,7 @@ namespace System.Windows.Forms {
                 cp.ClassName = NativeMethods.WC_TREEVIEW;
 
 
-                // V#45599 Keep the scrollbar if we are just updating styles...
+                // Keep the scrollbar if we are just updating styles...
                 //
                 if (IsHandleCreated) {
                     int currentStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
@@ -2723,7 +2723,7 @@ namespace System.Windows.Forms {
                             si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
                             si.fMask = NativeMethods.SIF_POS;
                             if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ,si) != false) {
-                                // VsW : 432718
+
                                 // need to get the correct bounds if horizontal scroll bar is shown.
                                 // In this case the bounds.X needs to be negative and width needs to be updated to the increased width (scrolled region).
                                 int value = si.nPos;
@@ -3076,9 +3076,7 @@ namespace System.Windows.Forms {
 
                     NativeMethods.POINT pt = new NativeMethods.POINT();
                     UnsafeNativeMethods.GetCursorPos(pt);
-
-                    // VS7 #38994
-                    // The solution to this problem was found in MSDN Article ID: Q135788.
+                                        
                     // Summary: the current window must be made the foreground window
                     // before calling TrackPopupMenuEx, and a task switch must be
                     // forced after the call.
@@ -3161,7 +3159,6 @@ namespace System.Windows.Forms {
                     base.WndProc(ref m);
                     if (DrawMode == TreeViewDrawMode.OwnerDrawAll)
                     {
-                        //VsW : 432718
                         Invalidate();
                     }
                     break;
@@ -3348,7 +3345,6 @@ namespace System.Windows.Forms {
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
-                    //# VS7 15052
                 case NativeMethods.WM_SYSCOLORCHANGE:
                     SendMessage(NativeMethods.TVM_SETINDENT, Indent, 0);
                     base.WndProc(ref m);

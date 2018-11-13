@@ -8884,7 +8884,7 @@ example usage
                 // Some ActiveX controls throw exceptions when
                 // you ask for the text property after you have destroyed their handle. We
                 // don't want those exceptions to bubble all the way to the top, since
-                // we leave our state in a mess. See ASURT 49990.
+                // we leave our state in a mess.
                 //
             }
         }
@@ -10057,8 +10057,7 @@ example usage
             // IntSecurity.ScreenLocationOfThings.Demand();
             return PointToClientInternal(p);
         }
-        internal Point PointToClientInternal(Point p) {
-            // ASURT 42367.
+        internal Point PointToClientInternal(Point p) {            
             // Win9x reports incorrect values if you go outside the 16-bit range.
             // We're not going to do anything about it, though -- it's esoteric, it clutters up the code,
             // and potentially causes problems on systems that do support 32-bit coordinates.
@@ -11659,7 +11658,7 @@ example usage
         ///     forces focus to be moved to a visible control.
         /// </devdoc>
         private void SelectNextIfFocused() {
-            // V#32437 - We want to move focus away from hidden controls, so this
+            //           We want to move focus away from hidden controls, so this
             //           function was added.
             //
             if (ContainsFocus && ParentInternal != null) {
@@ -11988,7 +11987,7 @@ example usage
         protected void SetStyle(ControlStyles flag, bool value) {
             // WARNING: if we ever add argument checking to "flag", we will need
             // to move private styles like Layered to State.
-            // ASURT: 151576 Calling SetStyle(ControlStyles.EnableNotifyMessage,...) should require UnmanagedCode
+            // Calling SetStyle(ControlStyles.EnableNotifyMessage,...) should require UnmanagedCode
             if ((flag & ControlStyles.EnableNotifyMessage) != 0 && value)
             {
                 // demand security permission for this condition.
@@ -12183,7 +12182,7 @@ example usage
             }
         }
 
-        // Refer vsW: 543074: This method is called in PerformContainerValidation to check if this control supports containerValidation.
+        // This method is called in PerformContainerValidation to check if this control supports containerValidation.
         // TabControl overrides this method to return true.
         internal virtual bool ShouldPerformContainerValidation() {
             return GetStyle(ControlStyles.ContainerControl);
@@ -12581,7 +12580,6 @@ example usage
         ///     reflect it's index.
         /// </devdoc>
         private void UpdateChildControlIndex(Control ctl) {
-            // VSO 411856
             // Don't reorder the child control array for tab controls. Implemented as a special case
             // in order to keep the method private.
             if (!LocalAppContextSwitches.AllowUpdateChildControlIndexForTabControls) {
@@ -12740,9 +12738,7 @@ example usage
         }
 
         private void WmClose(ref Message m) {
-
-            // More generic fix for KB article Q125644...
-            //
+            
             if (ParentInternal != null) {
                 IntPtr parentHandle = Handle;
                 IntPtr lastParentHandle = parentHandle;
@@ -13609,7 +13605,7 @@ example usage
             try {
                 if (m.WParam == IntPtr.Zero) {
                     // Cache Handle not only for perf but to avoid object disposed exception in case the window
-                    // is destroyed in an event handler (VSW#261657).
+                    // is destroyed in an event handler.
                     hWnd = this.Handle;
                     dc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, hWnd), ref ps);
                     if (dc == IntPtr.Zero) {
@@ -16867,7 +16863,6 @@ example usage
                             // Now create an accelerator table and then free our memory.
                             //
 
-				// DevDiv Bugs 170945
 	                    if (accelTable != IntPtr.Zero) {
 	                        UnsafeNativeMethods.DestroyAcceleratorTable(new HandleRef(this, accelTable));
 				   accelTable = IntPtr.Zero;
@@ -18073,7 +18068,7 @@ example usage
                             // This the last ActiveX control and we are
                             // being hosted in IE.  Use private reflection
                             // to ask SystemEvents to shutdown.  This is to
-                            // prevent a crash (ASURT 139932).
+                            // prevent a crash.
 
                             // 
 
@@ -18148,7 +18143,7 @@ example usage
                         // being hosted in IE.  Use private reflection
                         // to ask SystemEvents to start.  Startup will only
                         // restart system events if we previously shut it down.
-                        // This is to prevent a crash (ASURT 139932).
+                        // This is to prevent a crash.
                         //
                         // 
 
@@ -20022,7 +20017,7 @@ example usage
             public WaitHandle AsyncWaitHandle {
                 get {
                     if (this.resetEvent == null) {
-                        // Locking 'this' here is ok since this is an internal class.  See VSW#464499.
+                        // Locking 'this' here is ok since this is an internal class.
                         lock (invokeSyncObject) {
                             // BeginInvoke hangs on Multi-proc system:
                             // taking the lock prevents a race condition between IsCompleted

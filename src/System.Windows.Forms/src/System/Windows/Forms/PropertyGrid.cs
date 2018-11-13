@@ -2409,8 +2409,7 @@ namespace System.Windows.Forms {
 
             // The commits sometimes cause transactions to open
             // and close, which will cause refreshes, which we want to ignore.
-            // See ASURT 71390.
-            //
+
             try {
 
                 if (this.designerHost != null) {
@@ -3736,7 +3735,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     return true;
-                /* This conflicts with VS tab linking (ASURT # 31433)
+                /* This conflicts with VS tab linking
                 case Keys.Prior: // PAGE_UP
                     if ((keyData & Keys.Control) != 0) {
                         SelectPriorView();

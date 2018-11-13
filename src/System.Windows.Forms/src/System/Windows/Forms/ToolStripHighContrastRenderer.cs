@@ -210,7 +210,7 @@ namespace System.Windows.Forms {
             }
 
 
-            // VSO-399067 ToolstripButtons that are checked are rendered with a highlight
+            // ToolstripButtons that are checked are rendered with a highlight
             // background. In that case, set the text color to highlight as well.
             if (AccessibilityImprovements.Level1 &&
                 typeof(ToolStripButton).IsAssignableFrom(e.Item.GetType()) &&

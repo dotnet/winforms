@@ -279,7 +279,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// Refer to 496832. This code is required to set the correct window region during the resize of the Form at design time.
+        /// This code is required to set the correct window region during the resize of the Form at design time.
         /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to 
         /// resize and hence draw the correct backcolor.
         /// </devdoc>

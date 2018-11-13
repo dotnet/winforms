@@ -74,7 +74,7 @@ namespace System.Windows.Forms.ButtonInternal {
             using( WindowsGraphics wg = WindowsGraphics.FromGraphics(e.Graphics) ) {
                 using( WindowsPen borderPen = new WindowsPen(wg.DeviceContext, border) ) {
                     using( WindowsBrush fieldBrush = new WindowsSolidBrush(wg.DeviceContext, field) ) {                                                
-                        // for Dev10 525537, in high DPI mode when we draw ellipse as three rectantles, 
+                        // In high DPI mode when we draw ellipse as three rectantles, 
                         // the quality of ellipse is poor. Draw it directly as ellipse
                         if(scale > 1.1) {
                             bounds.Width--;

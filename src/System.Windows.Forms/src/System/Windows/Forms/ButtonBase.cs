@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected ButtonBase() {
             // If Button doesn't want double-clicks, we should introduce a StandardDoubleClick style.
-            // Checkboxes probably want double-click's (#26120), and RadioButtons certainly do
+            // Checkboxes probably want double-click's, and RadioButtons certainly do
             // (useful e.g. on a Wizard).
             SetStyle( ControlStyles.SupportsTransparentBackColor | 
                       ControlStyles.Opaque | 
@@ -802,7 +802,7 @@ namespace System.Windows.Forms {
         protected override void OnLostFocus(EventArgs e) {
             base.OnLostFocus(e);
 
-            // Hitting tab while holding down the space key. See ASURT 38669.
+            // Hitting tab while holding down the space key.
             SetFlag(FlagMouseDown, false);
             CaptureInternal = false;
 
@@ -1282,7 +1282,7 @@ namespace System.Windows.Forms {
                 switch (m.Msg) {
                     case NativeMethods.BM_SETSTATE:
                         // Ignore BM_SETSTATE -- Windows gets confused and paints
-                        // things, even though we are ownerdraw. See ASURT 38669.
+                        // things, even though we are ownerdraw.
                         break;
 
                     case NativeMethods.WM_KILLFOCUS:

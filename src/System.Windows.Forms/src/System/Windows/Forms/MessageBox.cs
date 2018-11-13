@@ -440,8 +440,7 @@ namespace System.Windows.Forms {
             }
 
             // demand if not safe known options.
-            if ((options & ~(MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading)) != 0) {
-                // See DDB#163043.
+            if ((options & ~(MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading)) != 0) {                
                 IntSecurity.UnmanagedCode.Demand();
             }
 

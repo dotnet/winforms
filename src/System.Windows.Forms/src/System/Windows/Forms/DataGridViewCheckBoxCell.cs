@@ -1809,7 +1809,6 @@ namespace System.Windows.Forms
                     if (!this.Owner.ReadOnly)
                     {
                         // determine if we switch to Checked/Unchecked value
-                        // vsw 533813.
                         bool switchToCheckedState = true;
 
                         object formattedValue = this.Owner.FormattedValue;

@@ -942,7 +942,7 @@ namespace System.Windows.Forms {
                     return;
                 }
 
-                // VSW 423760: handle the case where the ALT key has been pressed down while a dropdown
+                // handle the case where the ALT key has been pressed down while a dropdown
                 // was open.  We need to clear off the MenuKeyToggle so the next ALT will activate
                 // the menu.
 

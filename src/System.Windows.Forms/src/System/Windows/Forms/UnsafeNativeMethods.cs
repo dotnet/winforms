@@ -8823,7 +8823,7 @@ namespace System.Windows.Forms {
         public static IntPtr LoadLibraryFromSystemPathIfAvailable(string libraryName) {
             IntPtr module = IntPtr.Zero;
 
-            // KB2533623 introduced the LOAD_LIBRARY_SEARCH_SYSTEM32 flag. It also introduced
+            // introduced the LOAD_LIBRARY_SEARCH_SYSTEM32 flag. It also introduced
             // the AddDllDirectory function. We test for presence of AddDllDirectory as an 
             // indirect evidence for the support of LOAD_LIBRARY_SEARCH_SYSTEM32 flag. 
             IntPtr kernel32 = GetModuleHandle(ExternDll.Kernel32);

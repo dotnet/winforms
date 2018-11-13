@@ -718,9 +718,7 @@ namespace System.Windows.Forms {
             if (contextMenu != null || contextMenuStrip != null) {
                 NativeMethods.POINT pt = new NativeMethods.POINT();
                 UnsafeNativeMethods.GetCursorPos(pt);
-
-                // VS7 #38994
-                // The solution to this problem was found in MSDN Article ID: Q135788.
+                                
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
                 // forced after the call.

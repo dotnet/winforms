@@ -1278,9 +1278,9 @@ namespace System.Windows.Forms {
 #if DEBUG
                         Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "  ...checking for mnemonics on " + ctl.ToString());
                         // Control.TraceMnemonicProcessing.Enabled disables CanProcessMnemonic consistency check.
-                        bool canProcess = Control.TraceMnemonicProcessing.Enabled ? true : ctl.CanProcessMnemonic(); // Processing the mnemonic can change the value of CanProcessMnemonic. See ASURT 39583.
+                        bool canProcess = Control.TraceMnemonicProcessing.Enabled ? true : ctl.CanProcessMnemonic(); // Processing the mnemonic can change the value of CanProcessMnemonic.
 #endif
-                        // Processing the mnemonic can change the value of CanProcessMnemonic. See ASURT 39583.
+                        // Processing the mnemonic can change the value of CanProcessMnemonic.
                         if (ctl.ProcessMnemonic(charCode)) {
 #if DEBUG
                             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "  ...mnemonics found");

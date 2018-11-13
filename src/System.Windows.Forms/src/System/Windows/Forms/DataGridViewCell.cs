@@ -4600,7 +4600,6 @@ namespace System.Windows.Forms
                             // do not mark the current row in the data grid view as being dirty.
                             // And because the data grid view cell which was edited became disconnected from the data grid view
                             // do not fire CellValueChanged event.
-                            // vsw 543015.
                             return true;
                         }
 
