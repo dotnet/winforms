@@ -4,10 +4,7 @@
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <RootNamespace>System.Windows.Forms</RootNamespace>
     <StrongNameKeyId>ECMA</StrongNameKeyId>
-    <IsPackable>true</IsPackable>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
+    <IsPackable>true</IsPackable>    
     <NoWarn>$(NoWarn);0169;</NoWarn>
   </PropertyGroup>
 

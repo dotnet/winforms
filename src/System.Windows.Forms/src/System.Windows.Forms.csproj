@@ -3,10 +3,7 @@
   <PropertyGroup>
     <StrongNameKeyId>ECMA</StrongNameKeyId>
     <IsPackable>true</IsPackable>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>    
     <NoWarn>$(NoWarn);618;649</NoWarn>
     <DefineConstants>$(DefineConstants);TRACE;WIN95_SUPPORT;ISOLATION_IN_CLICKONCE;WINDOWS_FORMS_SWITCHES;WINFORMS_NAMESPACE;USE_SECURITYTIP;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
   </PropertyGroup>
