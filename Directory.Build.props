@@ -2,7 +2,8 @@
 <Project>
   <PropertyGroup>
     <ImportNetSdkFromRepoToolset>false</ImportNetSdkFromRepoToolset>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
   </PropertyGroup>
-
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
 </Project>
