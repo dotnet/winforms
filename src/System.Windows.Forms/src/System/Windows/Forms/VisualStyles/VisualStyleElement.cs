@@ -3472,15 +3472,12 @@ namespace System.Windows.Forms.VisualStyles {
             private static readonly string className = "STATUS";
 
             public static class Bar {
-                private static readonly int part;
-            
-            
                 private static VisualStyleElement normal;
             
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
-                            normal = new VisualStyleElement(className, part, 0);
+                            normal = new VisualStyleElement(className, 0, 0);
                         }
             
                         return normal;
@@ -3761,14 +3758,12 @@ namespace System.Windows.Forms.VisualStyles {
 
             // 
             internal static class Bar {
-               private static readonly int part;
-           
                private static VisualStyleElement normal;
            
                public static VisualStyleElement Normal {
                    get {
                        if (normal == null) {
-                           normal = new VisualStyleElement(className, part, 0);
+                           normal = new VisualStyleElement(className, 0, 0);
                        }
            
                        return normal;

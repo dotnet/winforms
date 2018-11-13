@@ -4398,7 +4398,6 @@ namespace System.Windows.Forms {
         /// </summary>
         internal class ComboBoxUiaProvider : ComboBoxExAccessibleObject {
 
-            private ComboBoxChildDropDownButtonUiaProvider _dropDownButtonUiaProvider;
             private ComboBox _owner;
 
             /// <summary>
@@ -4414,7 +4413,7 @@ namespace System.Windows.Forms {
             /// </summary>
             public ComboBoxChildDropDownButtonUiaProvider DropDownButtonUiaProvider {
                 get {
-                    return (_dropDownButtonUiaProvider ?? new ComboBoxChildDropDownButtonUiaProvider(_owner, _owner.Handle));
+                    return (new ComboBoxChildDropDownButtonUiaProvider(_owner, _owner.Handle));
                 }
             }
 
