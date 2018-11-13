@@ -1848,7 +1848,7 @@ namespace System.Windows.Forms {
         private void DestroyFakeWindow() {
             Debug.Assert(axState[fFakingWindow], "have to be faking it in order to destroy it...");
 
-            // ASURT 70740: The problem seems to be that when we try to destroy the fake window,
+            // The problem seems to be that when we try to destroy the fake window,
             // we recurse in and transition the control down to OC_RUNNING. This causes the control's
             // new window to get destroyed also, and the control never shows up.
             // We now prevent this by changing our state about the fakeWindow _before_ we actually

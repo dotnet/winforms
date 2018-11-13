@@ -5515,7 +5515,7 @@ namespace System.Windows.Forms {
                 // the same problem with negative numbers:
                 // if the width passed in is negative, then return 0
                 //
-                // added the check for the columns.Count == 0 ( Microsoft, November 14, 2000)
+                // added the check for the columns.Count == 0
                 //
                 if (visibleWidth < 0 || columns.Count == 0)
                 {

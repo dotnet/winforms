@@ -1768,7 +1768,6 @@ namespace System.Windows.Forms {
                 return stringData;
             }            
 
-            // Garbled Japanese is produced when a text message is cut and pasted on the editor in Team Explorer of TFS 2010
             private unsafe string ReadHtmlFromHandle(IntPtr handle) {
                 string stringData = null;
                 IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, handle));

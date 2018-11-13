@@ -379,7 +379,6 @@ namespace System.Experimental.Gdi
                 byte[] textBytes = new byte[byteCount];
                 IntUnsafeNativeMethods.WideCharToMultiByte( IntNativeMethods.CP_ACP, 0, text, text.Length, textBytes, textBytes.Length, IntPtr.Zero, IntPtr.Zero );
 
-                // Security: Windows 95/98/Me: This value may not exceed 8192.
                 byteCount = Math.Min( byteCount, IntNativeMethods.MaxTextLengthInWin9x );
                 retVal = DrawTextA( hDC, textBytes, byteCount, ref lpRect, nFormat );
             }
@@ -417,8 +416,7 @@ namespace System.Experimental.Gdi
                 int byteCount = IntUnsafeNativeMethods.WideCharToMultiByte(IntNativeMethods.CP_ACP, 0, text, text.Length, null, 0, IntPtr.Zero, IntPtr.Zero);
                 byte[] textBytes = new byte[byteCount];
                 IntUnsafeNativeMethods.WideCharToMultiByte(IntNativeMethods.CP_ACP, 0, text, text.Length, textBytes, textBytes.Length, IntPtr.Zero, IntPtr.Zero);
-            
-                // Security: Windows 95/98/Me: This value may not exceed 8192.
+
                 byteCount = Math.Min( byteCount, IntNativeMethods.MaxTextLengthInWin9x);
                 retVal = DrawTextExA( hDC, textBytes, byteCount, ref lpRect, nFormat, lpDTParams );
             }
@@ -453,7 +451,6 @@ namespace System.Experimental.Gdi
                 byte[] textBytes = new byte[byteCount];
                 IntUnsafeNativeMethods.WideCharToMultiByte(IntNativeMethods.CP_ACP, 0, text, text.Length, textBytes, textBytes.Length, IntPtr.Zero, IntPtr.Zero);
 
-                // Security: Windows 95/98/Me: This value may not exceed 8192.
                 byteCount = Math.Min( text.Length, IntNativeMethods.MaxTextLengthInWin9x);
                 retVal = GetTextExtentPoint32A(hDC, textBytes, byteCount, size);
             }

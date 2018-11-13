@@ -2137,8 +2137,7 @@ namespace System.Windows.Forms {
                                 //
                                 // Reading through the rather sparse documentation,
                                 // it seems we should only call FPreTranslateMessage
-                                // on the active component.  But frankly, I'm afraid of what that might break.
-                                // See ASURT 29415 for more background.
+                                // on the active component.
                                 if (!component.FPreTranslateMessage(ref msg)) {
                                     UnsafeNativeMethods.TranslateMessage(ref msg);
                                     if (unicodeWindow) {

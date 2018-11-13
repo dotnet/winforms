@@ -16,7 +16,7 @@ namespace System.Collections.Specialized {
         internal BackCompatibleStringComparer() {
         }
 
-        //This comes from VS# 434837 and is specifically written to get backcompat
+        //For backcompat
         public static int GetHashCode(string obj) {
             unsafe {
                 fixed (char* src = obj) {

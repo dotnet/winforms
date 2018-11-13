@@ -5863,7 +5863,7 @@ example usage
                 try {
                     if (!IsHandleCreated) CreateHandle();
 
-                    // 58041 - must snapshot this array because
+                    // must snapshot this array because
                     // z-order updates from Windows may rearrange it!
                     //
                     ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);

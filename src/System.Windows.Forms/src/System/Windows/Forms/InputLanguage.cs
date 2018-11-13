@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
             set {
                 IntSecurity.AffectThreadBehavior.Demand();
 
-                // (NDPWhidbey 8362) OleInitialize needs to be called before we can call ActivateKeyboardLayout.
+                // OleInitialize needs to be called before we can call ActivateKeyboardLayout.
                 Application.OleRequired(); 
                 if (value == null) {
                     value = InputLanguage.DefaultInputLanguage;

@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
                 if (dataSource == value)
                     return;
                 // When we change the dataSource to null, we should reset
-                // the displayMember to "". See ASURT 85662.
+                // the displayMember to "".
                 try {
                     SetDataConnection(value, displayMember, false);
                 } catch {

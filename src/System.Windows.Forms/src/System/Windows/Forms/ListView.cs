@@ -4475,7 +4475,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         protected override void OnResize(EventArgs e) {
-            // KB 137520: if the list view is in Details mode and it is not Scrollable, we need to reposition the column header control.
+            // If the list view is in Details mode and it is not Scrollable, we need to reposition the column header control.
             if (this.View == View.Details && !this.Scrollable && this.IsHandleCreated) {
                 PositionHeader();
             }
