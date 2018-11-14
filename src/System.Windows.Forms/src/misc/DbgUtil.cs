@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-// 
-
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertFinalization(System.Object,System.Boolean):System.Void")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertFinalization(System.Object,System.Boolean):System.Void")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
