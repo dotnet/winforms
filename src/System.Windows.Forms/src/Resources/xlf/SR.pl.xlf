@@ -5092,11 +5092,6 @@
         <target state="new">Application does not support Windows Forms just-in-time (JIT)\r\ndebugging. Contact the application author for more\r\ninformation.\r\n</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgFooterSwitchable">
-        <source>To enable just-in-time (JIT) debugging, the .config file for this\r\napplication or computer (machine.config) must have the\r\njitDebugging value set in the system.windows.forms section.\r\nThe application must also be compiled with debugging\r\nenabled.\r\n\r\nFor example:\r\n\r\n\r\n    \r\n\r\n\r\nWhen JIT debugging is enabled, any unhandled exception\r\nwill be sent to the JIT debugger registered on the computer\r\nrather than be handled by this dialog box.\r\n</source>
-        <target state="new">To enable just-in-time (JIT) debugging, the .config file for this\r\napplication or computer (machine.config) must have the\r\njitDebugging value set in the system.windows.forms section.\r\nThe application must also be compiled with debugging\r\nenabled.\r\n\r\nFor example:\r\n\r\n\r\n    \r\n\r\n\r\nWhen JIT debugging is enabled, any unhandled exception\r\nwill be sent to the JIT debugger registered on the computer\r\nrather than be handled by this dialog box.\r\n</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
         <source>Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</source>
         <target state="new">Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</target>
@@ -11715,6 +11710,11 @@
       <trans-unit id="UnableToSetPanelText">
         <source>Unable to set the panel text.</source>
         <target state="new">Unable to set the panel text.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UnexpectedClipboardType">
+        <source>Clipboard contains an unexpected type.</source>
+        <target state="new">Clipboard contains an unexpected type.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnknownAttr">

@@ -3163,7 +3163,7 @@
     <value>Application does not support Windows Forms just-in-time (JIT)\r\ndebugging. Contact the application author for more\r\ninformation.\r\n</value>
   </data>
   <data name="ExDlgMsgFooterSwitchable" xml:space="preserve">
-    <value>To enable just-in-time (JIT) debugging, the .config file for this\r\napplication or computer (machine.config) must have the\r\njitDebugging value set in the system.windows.forms section.\r\nThe application must also be compiled with debugging\r\nenabled.\r\n\r\nFor example:\r\n\r\n<configuration>\r\n    <system.windows.forms jitDebugging="true" />\r\n</configuration>\r\n\r\nWhen JIT debugging is enabled, any unhandled exception\r\nwill be sent to the JIT debugger registered on the computer\r\nrather than be handled by this dialog box.\r\n</value>
+    <value />
   </data>
   <data name="ExDlgMsgHeaderNonSwitchable" xml:space="preserve">
     <value>Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</value>
@@ -7370,5 +7370,8 @@
   </data>
   <data name="DataGridViewEditingPanelUiaProviderDescription" xml:space="preserve">
     <value>DataGridView EditingPanel UIA Provider</value>
+  </data>
+  <data name="UnexpectedClipboardType" xml:space="preserve">
+    <value>Clipboard contains an unexpected type.</value>
   </data>
 </root>
