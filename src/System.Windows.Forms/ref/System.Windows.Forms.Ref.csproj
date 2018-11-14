@@ -5,7 +5,6 @@
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <RootNamespace>System.Windows.Forms</RootNamespace>
     <IsPackable>true</IsPackable>    
-    <NoWarn>$(NoWarn);0169;</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

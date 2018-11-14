@@ -7,4 +7,5 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
+  <Import Project="$(MSBuildThisFileDirectory)eng\ReferenceAssemblies.props" />
 </Project>
