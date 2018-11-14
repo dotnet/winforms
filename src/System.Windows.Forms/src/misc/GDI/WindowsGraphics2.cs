@@ -300,7 +300,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///    <para>
-        ///       Calculates the spacing required for drawing text w/o clipping hanging parts of a glyph.
+        ///       Calculates the spacing required for drawing text w/o clipping parts of a glyph.
         ///    </para>
         /// </devdoc>
         public float GetOverhangPadding( WindowsFont font )
