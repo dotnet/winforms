@@ -2,24 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using Accessibility;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
+    using Automation;
     using System;
-    using System.Collections;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
     using System.ComponentModel;
-    using System.Reflection;
+    using System.Diagnostics;
+    using System.Drawing;
     using System.Globalization;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
     using System.Security;
     using System.Security.Permissions;
-    using Automation;
-    
+
     /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject"]/*' />
     /// <devdoc>
     ///    <para>Provides an implementation for an object that can be inspected by an 
@@ -1474,7 +1470,7 @@ namespace System.Windows.Forms {
                 if (child != null) {
                     // Make sure we're not returning ourselves as our own child
                     //
-                    Debug.Assert(child != this, "An accessible object is returning itself as its own child. This can cause Accessibility client applications to hang.");
+                    Debug.Assert(child != this, "An accessible object is returning itself as its own child. This can cause Accessibility client applications to stop responding.");
                     if (child == this) {
                         return null;
                     }
@@ -1822,9 +1818,9 @@ namespace System.Windows.Forms {
                 if (parent != null) {
                     // Some debugging related tests
                     //
-                    Debug.Assert(parent != this, "An accessible object is returning itself as its own parent. This can cause accessibility clients to hang.");
+                    Debug.Assert(parent != this, "An accessible object is returning itself as its own parent. This can cause accessibility clients to stop responding.");
                     if (parent == this) {
-                        parent = null;  // This should prevent accessibility clients from hanging
+                        parent = null;  // This should prevent accessibility clients from stop responding
                     }                    
                 }
                 

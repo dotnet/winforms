@@ -3,21 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms.PropertyGridInternal {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
-    using System.Diagnostics;
-
+namespace System.Windows.Forms.PropertyGridInternal
+{
     using System;
-    using System.Collections;
-    
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.IO;
+    using System.Diagnostics;
     using System.Drawing;
-    using Microsoft.Win32;
+    using System.Runtime.InteropServices;
+    using System.Windows.Forms;
     using Message = System.Windows.Forms.Message;
 
     internal class GridToolTip : Control {
@@ -69,7 +61,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         this.Visible = false;
                      }
 
-                     // here's a hack.  if we give
+                     // here's a workaround.  if we give
                      // the tooltip an empty string, it won't come back
                      // so we just force it hidden instead
                      //
@@ -213,7 +205,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                   // When using v6 common controls, the native
                   // tooltip does not end up returning HTTRANSPARENT all the time, so its TTF_TRANSPARENT
                   // behavior does not work, ie. mouse events do not fall thru to controls underneath. This
-                  // is due to a combination of old app-specific hacks in comctl32, functional changes between
+                  // is due to a combination of old app-specific code in comctl32, functional changes between
                   // v5 and v6, and the specfic way the property grid drives its tooltip. Workaround is to just
                   // force HTTRANSPARENT all the time.
                   msg.Result = (IntPtr) NativeMethods.HTTRANSPARENT;

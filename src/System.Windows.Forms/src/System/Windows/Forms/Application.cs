@@ -2181,8 +2181,8 @@ namespace System.Windows.Forms {
                                 if (continueIdle) {
                                     // If someone has asked for idle time, give it to them.  However,
                                     // don't cycle immediately; wait up to 100ms.  Why?  Because we don't
-                                    // want someone to attach to idle, forget to detach, and then race
-                                    // the CPU.  For Windows Forms this generally isn't an issue because
+                                    // want someone to attach to idle, forget to detach, and then cause
+                                    // CPU to end up in race condition.  For Windows Forms this generally isn't an issue because
                                     // our component always returns false from its idle request
                                     UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 100, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
                                 }

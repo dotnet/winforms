@@ -399,7 +399,7 @@ namespace System.Windows.Forms {
                         ToolStripStatusLabel panel = item as ToolStripStatusLabel;
                         if (panel != null && panel.Spring) {
                             // once we get down to one pixel, there can always be a one pixel 
-                            // distribution problem with the TLP - there's usually a spare hanging around.
+                            // distribution problem with the TLP - there's usually a spare one around.
                             // so set this off to nomansland as well.
                             SetItemLocation(item, noMansLand);
                             item.SetPlacement(ToolStripItemPlacement.None);
