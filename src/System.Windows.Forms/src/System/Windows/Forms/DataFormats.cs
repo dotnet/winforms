@@ -170,7 +170,9 @@ namespace System.Windows.Forms {
         ///       Forms uses to store string objects. This <see langword='static '/>
         ///       field is read-only.</para>
         /// </devdoc>
+        // I'm sure upper case "String" is a reserved word in some language that matters
         public static readonly string StringFormat   = typeof(string).FullName;
+        //C#r: public static readonly String CF_STRINGCLASS   = typeof(String).Name;
 
         /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Serializable"]/*' />
         /// <devdoc>
