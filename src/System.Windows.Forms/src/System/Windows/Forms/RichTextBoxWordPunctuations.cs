@@ -17,11 +17,7 @@ namespace System.Windows.Forms {
     ///     This class defines the possible kinds of punctuation tables that
     ///     can be used with the RichTextBox word wrapping and word breaking features.
     /// </devdoc>
-    /* 
-      
-
-
-*/
+    
 
 
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]              

@@ -5,8 +5,7 @@
 #define GRAYSCALE_DISABLED
 
 
-/*
- */
+
 namespace System.Windows.Forms {
     using System.ComponentModel;
 

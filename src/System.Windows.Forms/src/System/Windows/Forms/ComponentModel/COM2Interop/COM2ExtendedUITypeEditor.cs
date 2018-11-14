@@ -4,8 +4,7 @@
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Drawing.Design.Com2ExtendedUITypeEditor..ctor(System.Type)")]
 
-/*
- */
+
 namespace System.Drawing.Design {
 
     using System.Diagnostics;

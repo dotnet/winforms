@@ -4,8 +4,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-/*
- */
+
 namespace System.Windows.Forms {
 
     /// <include file='doc\MessageBoxDefaultButton.uex' path='docs/doc[@for="MessageBoxDefaultButton"]/*' />

@@ -4,8 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-/*
- */
+
 namespace System.Windows.Forms {
     using System.Collections.Generic;
     using System.Drawing;

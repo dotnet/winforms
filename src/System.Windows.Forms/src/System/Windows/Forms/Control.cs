@@ -10,8 +10,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.Control.PreProcessControlMessageInternal(System.Windows.Forms.Control, System.Windows.Forms.Message):System.Windows.Forms.PreProcessControlState")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.Control.OnPreviewKeyDown(System.Windows.Forms.PreviewKeyDownEventArgs):System.Void")]
 
-/*
- */
+
 namespace System.Windows.Forms {
     using Accessibility;
     using Microsoft.Win32;

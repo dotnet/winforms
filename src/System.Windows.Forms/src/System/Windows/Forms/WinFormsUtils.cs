@@ -4,8 +4,7 @@
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.WindowsFormsUtils..ctor()")]
 
-/*
- */
+
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Remoting;

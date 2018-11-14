@@ -3,8 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 //#define PBRS_PAINT_DEBUG
-/*
- */
+
 namespace System.Windows.Forms.PropertyGridInternal {
     using System.Security.Permissions;
     using System.Runtime.Serialization.Formatters;

@@ -3,8 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 //#define PAINT_CATEGORY_TRIANGLE
-/*
- */
+
 namespace System.Windows.Forms.PropertyGridInternal {
 
     using System.Diagnostics;

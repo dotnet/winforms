@@ -5,8 +5,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 
-/*
- */
+
 namespace System.Windows.Forms {
     /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon"]/*' />
     /// <devdoc>
