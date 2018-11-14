@@ -29,12 +29,68 @@ namespace System.Windows.Forms.Tests
             return data;
         }
 
+        #region Primitives
+
         // helper method to generate theory data for all values of a boolean
         public static TheoryData<bool> GetBoolTheoryData()
         {
             var data = new TheoryData<bool>();
             data.Add(true);
             data.Add(false);
+            return data;
+        }
+
+        // helper method to generate theory data for some values of a int
+        public static TheoryData<int> GetIntTheoryData()
+        {
+            var data = new TheoryData<int>();
+            data.Add(int.MinValue);
+            data.Add(int.MaxValue);
+            data.Add(0);
+            data.Add(1);
+            data.Add(-1);
+            data.Add(int.MaxValue / 2);
+            return data;
+        }
+
+        // helper method to generate theory data for some values of a int
+        public static TheoryData<uint> GetUIntTheoryData()
+        {
+            var data = new TheoryData<uint>();
+            data.Add(int.MaxValue);
+            data.Add(0);
+            data.Add(1);
+            data.Add(int.MaxValue / 2);
+            return data;
+        }
+
+        // helper method to generate theory data for some values of a int
+        public static TheoryData<float> GetFloatTheoryData()
+        {
+            var data = new TheoryData<float>();
+            data.Add(float.MaxValue);
+            data.Add(float.MinValue);
+            data.Add(Single.Epsilon);
+            data.Add(Single.Epsilon * -1);
+            data.Add(Single.NegativeInfinity); // not sure about these two
+            data.Add(Single.PositiveInfinity); // 2
+            data.Add(0);
+            data.Add(-1);
+            data.Add(1);
+            data.Add(float.MaxValue/2);
+            return data;
+        }
+
+        // helper method to generate theory data for some values of a int
+        public static TheoryData<float> GetUFloatTheoryData()
+        {
+            var data = new TheoryData<float>();
+            data.Add(float.MaxValue);
+            data.Add(Single.Epsilon);
+            data.Add(Single.PositiveInfinity); // not sure about this one
+            data.Add(0);
+            data.Add(1);
+            data.Add(float.MaxValue / 2);
             return data;
         }
 
@@ -46,6 +102,8 @@ namespace System.Windows.Forms.Tests
             data.Add("reasonable");
             return data;
         }
+
+        #endregion
 
         #region System.Windows.Forms
 
