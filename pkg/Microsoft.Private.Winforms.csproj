@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Pack">
+<Project Sdk="Microsoft.NET.Sdk">
   <!-- 
-    This pkgproj is used to create a nuget package.
+    This project is used to create a nuget package.
     The ArcadeSDK uses vanilla 'dotnet pack', but creates one package per csproj, which is not what we want.
 
     There are two main ways to work around this: 
@@ -13,13 +13,7 @@
     2. A push model where projects control what they contribute to the package.
         a. An example of the push model is at https://github.com/dotnet/machinelearning/blob/master/pkg/Directory.Build.props. 
   -->
-
   <PropertyGroup>
-
-    <!-- Don't build this project -->
-    <NoBuild>true</NoBuild>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <IncludeSymbols>false</IncludeSymbols>
 
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
@@ -29,6 +23,7 @@
   <!-- nuspec properties -->
   <PropertyGroup>
     <PackageId>Microsoft.Private.Winforms</PackageId>
+    <Description>Private Windows Forms package, public consumption is not supported</Description>
     <Authors>Microsoft</Authors>
     <RepositoryUrl>https://github.com/dotnet/winforms</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/dotnet/winforms/blob/master/LICENSE.TXT</PackageLicenseUrl>
@@ -45,6 +40,12 @@
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </TfmSpecificPackageFile>
     
+      <!-- System.Windows.Forms.pdb -->
+      <!-- See $(repoRoot)\Directory.Build.props for instructions on how to produce a pdb if you don't have one -->
+      <TfmSpecificPackageFile Include="$(ArtifactsBinDir)System.Windows.Forms\$(Configuration)\$(TargetFramework)\System.Windows.Forms.pdb">
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+
       <!-- Resource dll's -->
       <TfmSpecificPackageFile Include="$(ArtifactsBinDir)System.Windows.Forms\$(Configuration)\$(TargetFramework)\**\*.dll">
         <PackagePath>lib\$(TargetFramework)</PackagePath>
