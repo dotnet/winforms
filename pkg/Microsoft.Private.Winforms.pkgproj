@@ -38,8 +38,6 @@
   <!-- Define the PackCustom target, which pulls in everything the package needs -->
   <Target Name="PackCustom">
 
-    <!-- Todo: use an item group to define file names and loop over those when creating the package -->
-
     <!-- lib -->
     <ItemGroup>
       <!-- System.Windows.Forms.dll -->
