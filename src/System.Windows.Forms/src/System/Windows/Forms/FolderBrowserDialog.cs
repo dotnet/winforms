@@ -128,7 +128,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Gets the directory path of the folder the user picked.
         ///     Sets the directory path of the initial folder shown in the dialog box.
-        ///     This property has no effect if the Vista style is used.
         /// </devdoc>
         [
         Browsable(true),
@@ -138,30 +137,15 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatFolderBrowsing)),
         SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))
         ]
-        /// 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
         public string SelectedPath
         {
             get
             {
-                if (selectedPath == null || selectedPath.Length == 0)
-                {
-                    return selectedPath;
-                }
-
-                if (selectedPathNeedsCheck)
-                {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileIO(" + selectedPath + ") Demanded");
-                    new FileIOPermission(FileIOPermissionAccess.PathDiscovery, selectedPath).Demand();
-                }
                 return selectedPath;
             }
             set
             {
                 selectedPath = (value == null) ? String.Empty : value;
-                selectedPathNeedsCheck = false;
             }
         }
 
@@ -231,24 +215,13 @@ namespace System.Windows.Forms
         [Category("Folder Browsing"), DefaultValue(false), Description("A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.")]
         public bool UseDescriptionForTitle { get; set; }
 
-        [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
         internal bool UseVistaDialogInternal
         {
             get
             {
-                if (UnsafeNativeMethods.IsVista && autoUpgradeEnabled)
+                if (autoUpgradeEnabled)
                 {
-                    // 
-
-                    new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                    try
-                    {
-                        return SystemInformation.BootMode == BootMode.Normal; // see DDB#169589
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    return SystemInformation.BootMode == BootMode.Normal; // see DDB#169589 // TODO: How should this be doc'd?
                 }
 
                 return false;
@@ -276,7 +249,6 @@ namespace System.Windows.Forms
             rootFolder = System.Environment.SpecialFolder.Desktop;
             descriptionText = String.Empty;
             selectedPath = String.Empty;
-            selectedPathNeedsCheck = false;
             showNewFolderButton = true;
         }
 
@@ -413,10 +385,6 @@ namespace System.Windows.Forms
                 {
                     // Then retrieve the path from the IDList
                     UnsafeNativeMethods.Shell32.SHGetPathFromIDListLongPath(pidlRet, ref pszSelectedPath);
-
-                    // set the flag to True before selectedPath is set to
-                    // assure security check and avoid bogus race condition
-                    selectedPathNeedsCheck = true;
 
                     // Convert to a string
                     selectedPath = Marshal.PtrToStringAuto(pszSelectedPath);
