@@ -1,13 +1,699 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
-    <Configurations>netcoreapp-Windows_NT-Debug;netcoreapp-Windows_NT-Release</Configurations>
-
-    <!-- Identity needs to match what was in desktop so we remain compatible with desktop assemblies built against winforms -->
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
-    <StrongNameKeyId>ECMA</StrongNameKeyId>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>    
+    <NoWarn>$(NoWarn);618;649</NoWarn>
+    <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;WINFORMS_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="$(AccessibilityPackage)" Version="$(AccessibilityPackageVersion)" />
+    <PackageReference Include="$(MicrosoftWin32RegistryPackage)" Version="$(MicrosoftWin32RegistryPackageVersion)" />
+    <PackageReference Include="$(MicrosoftWin32SystemEventsPackage)" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
+    <PackageReference Include="$(SystemConfigurationConfigurationManagerPackage)" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
+    <PackageReference Include="$(SystemDrawingCommonPackage)" Version="$(SystemDrawingCommonPackageVersion)" />
+    <PackageReference Include="$(SystemDrawingDesignPrimitivesPackage)" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
+    <PackageReference Include="$(SystemDrawingPrimitivesPackage)" Version="$(SystemDrawingPrimitivesPackageVersion)" />
+    <PackageReference Include="$(SystemMediaSoundPlayerPackage)" Version="$(SystemMediaSoundPlayerPackageVersion)" />
+    <PackageReference Include="$(SystemSecurityCryptographyCngPackage)" Version="$(SystemSecurityCryptographyCngPackageVersion)" />
+    <PackageReference Include="$(SystemSecurityPermissionsPackage)" Version="$(SystemSecurityPermissionsPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SR.resx">
+      <GenerateSource>true</GenerateSource>
+      <Namespace>System</Namespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\System\Windows\Forms\TrustManagerPromptUI.resx">
+      <LogicalName>System.Security.Policy.TrustManagerPromptUI.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\System\Windows\Forms\TrustManagerMoreInformation.resx">
+      <LogicalName>System.Security.Policy.TrustManagerMoreInformation.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\System\Windows\Forms\mdiwindowdialog.resx">
+      <LogicalName>System.Windows.Forms.MdiWindowDialog.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\System\Windows\Forms\PrintPreviewDialog.resx">
+      <LogicalName>System.Windows.Forms.PrintPreviewDialog.resources</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Animation.bmp">
+      <LogicalName>System.Windows.Forms.Animation.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ActiveDocumentHost.bmp">
+      <LogicalName>System.Windows.Forms.ActiveDocumentHost.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\BindingNavigator.bmp">
+      <LogicalName>System.Windows.Forms.BindingNavigator.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewButtonColumn.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewButtonColumn.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewCheckBoxColumn.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewCheckBoxColumn.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewComboBoxColumn.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewComboBoxColumn.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewImageColumn.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewImageColumn.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewLinkColumn.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewLinkColumn.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewTextBoxColumn.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewTextBoxColumn.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\BindingNavigator.MoveFirst.bmp">
+      <LogicalName>System.Windows.Forms.BindingNavigator.MoveFirst.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\BindingNavigator.MoveLast.bmp">
+      <LogicalName>System.Windows.Forms.BindingNavigator.MoveLast.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\BindingNavigator.MovePrevious.bmp">
+      <LogicalName>System.Windows.Forms.BindingNavigator.MovePrevious.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\BindingNavigator.MoveNext.bmp">
+      <LogicalName>System.Windows.Forms.BindingNavigator.MoveNext.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\BindingNavigator.AddNew.bmp">
+      <LogicalName>System.Windows.Forms.BindingNavigator.AddNew.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\BindingNavigator.Delete.bmp">
+      <LogicalName>System.Windows.Forms.BindingNavigator.Delete.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\BindingSource.bmp">
+      <LogicalName>System.Windows.Forms.BindingSource.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Button.bmp">
+      <LogicalName>System.Windows.Forms.Button.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\CheckBox.bmp">
+      <LogicalName>System.Windows.Forms.CheckBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Checked.bmp">
+      <LogicalName>System.Windows.Forms.Checked.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Checked.ico">
+      <LogicalName>System.Windows.Forms.Checked.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\CheckedListBox.bmp">
+      <LogicalName>System.Windows.Forms.CheckedListBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ColorDialog.bmp">
+      <LogicalName>System.Windows.Forms.ColorDialog.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ComboBox.bmp">
+      <LogicalName>System.Windows.Forms.ComboBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ContextMenu.bmp">
+      <LogicalName>System.Windows.Forms.ContextMenu.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGrid.bmp">
+      <LogicalName>System.Windows.Forms.DataGrid.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridCaption.down.bmp">
+      <LogicalName>System.Windows.Forms.DataGridCaption.down.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridCaption.backarrow.bmp">
+      <LogicalName>System.Windows.Forms.DataGridCaption.backarrow.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridCaption.backarrow_bidi.bmp">
+      <LogicalName>System.Windows.Forms.DataGridCaption.backarrow_bidi.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridCaption.Details.bmp">
+      <LogicalName>System.Windows.Forms.DataGridCaption.Details.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridCaption.right.bmp">
+      <LogicalName>System.Windows.Forms.DataGridCaption.right.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridCaption.up.bmp">
+      <LogicalName>System.Windows.Forms.DataGridCaption.up.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridRow.right.bmp">
+      <LogicalName>System.Windows.Forms.DataGridRow.right.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridRow.left.bmp">
+      <LogicalName>System.Windows.Forms.DataGridRow.left.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridRow.error.bmp">
+      <LogicalName>System.Windows.Forms.DataGridRow.error.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridRow.star.bmp">
+      <LogicalName>System.Windows.Forms.DataGridRow.star.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridRow.pencil.bmp">
+      <LogicalName>System.Windows.Forms.DataGridRow.pencil.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridParentRows.LeftArrow.bmp">
+      <LogicalName>System.Windows.Forms.DataGridParentRows.LeftArrow.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridParentRows.RightArrow.bmp">
+      <LogicalName>System.Windows.Forms.DataGridParentRows.RightArrow.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataConnector.bmp">
+      <LogicalName>System.Windows.Forms.DataConnector.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataNavigator.bmp">
+      <LogicalName>System.Windows.Forms.DataNavigator.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataNavigator.MoveFirst.bmp">
+      <LogicalName>System.Windows.Forms.DataNavigator.MoveFirst.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataNavigator.MoveLast.bmp">
+      <LogicalName>System.Windows.Forms.DataNavigator.MoveLast.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataNavigator.MovePrevious.bmp">
+      <LogicalName>System.Windows.Forms.DataNavigator.MovePrevious.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataNavigator.MoveNext.bmp">
+      <LogicalName>System.Windows.Forms.DataNavigator.MoveNext.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataNavigator.AddNew.bmp">
+      <LogicalName>System.Windows.Forms.DataNavigator.AddNew.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataNavigator.Delete.bmp">
+      <LogicalName>System.Windows.Forms.DataNavigator.Delete.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DateTimePicker.bmp">
+      <LogicalName>System.Windows.Forms.DateTimePicker.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DefaultControl.bmp">
+      <LogicalName>System.Windows.Forms.DefaultControl.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DomainUpDown.bmp">
+      <LogicalName>System.Windows.Forms.DomainUpDown.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Edit.bmp">
+      <LogicalName>System.Windows.Forms.Edit.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TextBox.bmp">
+      <LogicalName>System.Windows.Forms.TextBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\MaskedTextBox.bmp">
+      <LogicalName>System.Windows.Forms.MaskedTextBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Error.ico">
+      <LogicalName>System.Windows.Forms.Error.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ErrorProvider.bmp">
+      <LogicalName>System.Windows.Forms.ErrorProvider.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\FlowLayoutPanel.bmp">
+      <LogicalName>System.Windows.Forms.FlowLayoutPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\FolderBrowserDialog.bmp">
+      <LogicalName>System.Windows.Forms.FolderBrowserDialog.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Form.bmp">
+      <LogicalName>System.Windows.Forms.Form.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\FontDialog.bmp">
+      <LogicalName>System.Windows.Forms.FontDialog.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Grid.bmp">
+      <LogicalName>System.Windows.Forms.Grid.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridView.bmp">
+      <LogicalName>System.Windows.Forms.DataGridView.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.error.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.error.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.left.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.left.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.left.ico">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.left.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.leftstar.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.leftstar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.leftstar.ico">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.leftstar.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.pencil_ltr.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.pencil_ltr.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.pencil_ltr.ico">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.pencil_ltr.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.pencil_rtl.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.pencil_rtl.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.pencil_rtl.ico">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.pencil_rtl.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.right.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.right.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.right.ico">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.right.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.rightstar.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.rightstar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.rightstar.ico">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.rightstar.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.star.bmp">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.star.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\DataGridViewRow.star.ico">
+      <LogicalName>System.Windows.Forms.DataGridViewRow.star.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\GroupBox.bmp">
+      <LogicalName>System.Windows.Forms.GroupBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\HelpProvider.bmp">
+      <LogicalName>System.Windows.Forms.HelpProvider.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\HScrollBar.bmp">
+      <LogicalName>System.Windows.Forms.HScrollBar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\HTMLControl.bmp">
+      <LogicalName>System.Windows.Forms.HTMLControl.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\IndeterminateChecked.bmp">
+      <LogicalName>System.Windows.Forms.IndeterminateChecked.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\IndeterminateChecked.ico">
+      <LogicalName>System.Windows.Forms.IndeterminateChecked.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ImageList.bmp">
+      <LogicalName>System.Windows.Forms.ImageList.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Label.bmp">
+      <LogicalName>System.Windows.Forms.Label.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\LinkLabel.bmp">
+      <LogicalName>System.Windows.Forms.LinkLabel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ListBox.bmp">
+      <LogicalName>System.Windows.Forms.ListBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ListView.bmp">
+      <LogicalName>System.Windows.Forms.ListView.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\MainMenu.bmp">
+      <LogicalName>System.Windows.Forms.MainMenu.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\MonthCalendar.bmp">
+      <LogicalName>System.Windows.Forms.MonthCalendar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\MultiplexPanel.bmp">
+      <LogicalName>System.Windows.Forms.MultiplexPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\NotifyIcon.bmp">
+      <LogicalName>System.Windows.Forms.NotifyIcon.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\NumericUpDown.bmp">
+      <LogicalName>System.Windows.Forms.NumericUpDown.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\OpenFileDialog.bmp">
+      <LogicalName>System.Windows.Forms.OpenFileDialog.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Panel.bmp">
+      <LogicalName>System.Windows.Forms.Panel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PictureBox.bmp">
+      <LogicalName>System.Windows.Forms.PictureBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PrintPreviewControl.bmp">
+      <LogicalName>System.Windows.Forms.PrintPreviewControl.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\WebBrowser.bmp">
+      <LogicalName>System.Windows.Forms.WebBrowser.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PrintPreviewDialog.bmp">
+      <LogicalName>System.Windows.Forms.PrintPreviewDialog.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PrintPreviewStrip.bmp">
+      <LogicalName>System.Windows.Forms.PrintPreviewStrip.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ProgressBar.bmp">
+      <LogicalName>System.Windows.Forms.ProgressBar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\RadioButton.bmp">
+      <LogicalName>System.Windows.Forms.RadioButton.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Rebar.bmp">
+      <LogicalName>System.Windows.Forms.Rebar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\RichEdit.bmp">
+      <LogicalName>System.Windows.Forms.RichEdit.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\RichTextBox.bmp">
+      <LogicalName>System.Windows.Forms.RichTextBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\SaveFileDialog.bmp">
+      <LogicalName>System.Windows.Forms.SaveFileDialog.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Splitter.bmp">
+      <LogicalName>System.Windows.Forms.Splitter.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\SplitterPanel.bmp">
+      <LogicalName>System.Windows.Forms.SplitterPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\SplitContainer.bmp">
+      <LogicalName>System.Windows.Forms.SplitContainer.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ErrorControl.bmp">
+      <LogicalName>System.Windows.Forms.ErrorControl.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\StatusBar.bmp">
+      <LogicalName>System.Windows.Forms.StatusBar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TabControl.bmp">
+      <LogicalName>System.Windows.Forms.TabControl.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TableLayoutPanel.bmp">
+      <LogicalName>System.Windows.Forms.TableLayoutPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TabStrip.bmp">
+      <LogicalName>System.Windows.Forms.TabStrip.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TabPage.bmp">
+      <LogicalName>System.Windows.Forms.TabPage.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolBar.bmp">
+      <LogicalName>System.Windows.Forms.ToolBar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolTip.bmp">
+      <LogicalName>System.Windows.Forms.ToolTip.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrackBar.bmp">
+      <LogicalName>System.Windows.Forms.TrackBar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrayIcon.bmp">
+      <LogicalName>System.Windows.Forms.TrayIcon.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TreeView.bmp">
+      <LogicalName>System.Windows.Forms.TreeView.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerGlobe.bmp">
+      <LogicalName>System.Windows.Forms.TrustManagerGlobe.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerGlobe.ico">
+      <LogicalName>System.Windows.Forms.TrustManagerGlobe.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerOK.bmp">
+      <LogicalName>System.Windows.Forms.TrustManagerOK.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerOK.ico">
+      <LogicalName>System.Windows.Forms.TrustManagerOK.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerOKSm.bmp">
+      <LogicalName>System.Windows.Forms.TrustManagerOKSm.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerHighRisk.bmp">
+      <LogicalName>System.Windows.Forms.TrustManagerHighRisk.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerHighRisk.ico">
+      <LogicalName>System.Windows.Forms.TrustManagerHighRisk.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerHighRiskSm.bmp">
+      <LogicalName>System.Windows.Forms.TrustManagerHighRiskSm.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerWarning.bmp">
+      <LogicalName>System.Windows.Forms.TrustManagerWarning.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerWarning.ico">
+      <LogicalName>System.Windows.Forms.TrustManagerWarning.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerWarningSm.bmp">
+      <LogicalName>System.Windows.Forms.TrustManagerWarningSm.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\UserControl.bmp">
+      <LogicalName>System.Windows.Forms.UserControl.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\VScrollBar.bmp">
+      <LogicalName>System.Windows.Forms.VScrollBar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\wfc.ico">
+      <LogicalName>System.Windows.Forms.wfc.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\wfsecurity.ico">
+      <LogicalName>System.Windows.Forms.wfsecurity.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\App\Timer.bmp">
+      <LogicalName>System.Windows.Forms.Timer.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ComponentModel\OrderImages.bmp">
+      <LogicalName>System.Windows.Forms.ComponentModel.OrderImages.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Printing\PageSetupDialog.bmp">
+      <LogicalName>System.Windows.Forms.PageSetupDialog.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Printing\PrintDialog.bmp">
+      <LogicalName>System.Windows.Forms.PrintDialog.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\Arrow.ico">
+      <LogicalName>System.Windows.Forms.Arrow.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\dotdotdot.png">
+      <LogicalName>System.Windows.Forms.dotdotdot.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\dotdotdot.ico">
+      <LogicalName>System.Windows.Forms.dotdotdot.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\EventsTab.bmp">
+      <LogicalName>System.Windows.Forms.Design.EventsTab.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBAlpha.bmp">
+      <LogicalName>System.Windows.Forms.PBAlpha.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBCatego.bmp">
+      <LogicalName>System.Windows.Forms.PBCatego.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBEvent.bmp">
+      <LogicalName>System.Windows.Forms.PBEvent.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBPPage.bmp">
+      <LogicalName>System.Windows.Forms.PBPPage.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBProp.bmp">
+      <LogicalName>System.Windows.Forms.PBProp.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PropertiesTab.bmp">
+      <LogicalName>System.Windows.Forms.PropertyGridInternal.PropertiesTab.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PropertyGrid.bmp">
+      <LogicalName>System.Windows.Forms.PropertyGrid.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Server\Arrow.bmp">
+      <LogicalName>System.Windows.Forms.Server.Arrow.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PictureBox\Loading.bmp">
+      <LogicalName>System.Windows.Forms.PictureBox.Loading.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\IconInError.ico">
+      <LogicalName>System.Windows.Forms.IconInError.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ImageInError.bmp">
+      <LogicalName>System.Windows.Forms.ImageInError.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\east.cur">
+      <LogicalName>System.Windows.Forms.east.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\hand.cur">
+      <LogicalName>System.Windows.Forms.hand.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\hsplit.cur">
+      <LogicalName>System.Windows.Forms.hsplit.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ne.cur">
+      <LogicalName>System.Windows.Forms.ne.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\nomove2d.cur">
+      <LogicalName>System.Windows.Forms.nomove2d.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\nomoveh.cur">
+      <LogicalName>System.Windows.Forms.nomoveh.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\nomovev.cur">
+      <LogicalName>System.Windows.Forms.nomovev.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\north.cur">
+      <LogicalName>System.Windows.Forms.north.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\nw.cur">
+      <LogicalName>System.Windows.Forms.nw.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\se.cur">
+      <LogicalName>System.Windows.Forms.se.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\south.cur">
+      <LogicalName>System.Windows.Forms.south.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\sw.cur">
+      <LogicalName>System.Windows.Forms.sw.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\vsplit.cur">
+      <LogicalName>System.Windows.Forms.vsplit.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\west.cur">
+      <LogicalName>System.Windows.Forms.west.cur</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\System\Windows\Forms\up.bmp">
+      <LogicalName>System.Windows.Forms.up.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\System\Windows\Forms\down.bmp">
+      <LogicalName>System.Windows.Forms.down.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\System\Windows\Forms\design\componenteditorpage.ico">
+      <LogicalName>System.Windows.Forms.Design.ComponentEditorPage.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ScrollButtonUp.bmp">
+      <LogicalName>System.Windows.Forms.ScrollButtonUp.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ScrollButtonDown.bmp">
+      <LogicalName>System.Windows.Forms.ScrollButtonDown.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\overflowButton-Temporary.bmp">
+      <LogicalName>System.Windows.Forms.overflowButton.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolBarGrip-Temporary.bmp">
+      <LogicalName>System.Windows.Forms.ToolBarGrip.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStrip.bmp">
+      <LogicalName>System.Windows.Forms.ToolStrip.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripContainer.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripContainer.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripPanel.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripPanel_standalone.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripContentPanel.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripContentPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripContainer_TopToolStripPanel.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripContainer_TopToolStripPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripContainer_BottomToolStripPanel.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripContainer_BottomToolStripPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripContainer_LeftToolStripPanel.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripContainer_LeftToolStripPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripContainer_RightToolStripPanel.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripContainer_RightToolStripPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\MenuStrip.bmp">
+      <LogicalName>System.Windows.Forms.MenuStrip.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\StatusStrip.bmp">
+      <LogicalName>System.Windows.Forms.StatusStrip.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\StatusStripPanel.bmp">
+      <LogicalName>System.Windows.Forms.StatusStripPanel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripStatusLabel.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripStatusLabel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripProgressBar.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripProgressBar.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ContextMenuStrip.bmp">
+      <LogicalName>System.Windows.Forms.ContextMenuStrip.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ContextMenuStrip_copy.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripDropDownMenu.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripDropDown.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripDropDown.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripButton.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripButton.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripLabel.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripLabel.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripTextBox.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripTextBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripComboBox.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripComboBox.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripMenuItem.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripDropDownButton.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripDropDownButton.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripSplitButton.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripSplitButton.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripSeparator.bmp">
+      <LogicalName>System.Windows.Forms.ToolStripSeparator.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\copyToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.copy.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\cutToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.cut.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\helpToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.help.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\newToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.new.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\openToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.open.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\pasteToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.paste.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\deleteToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.delete.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\viewcodeToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.viewcode.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\propertiesToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.properties.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\imageToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.image.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\alignmentToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.alignment.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\displaystyleToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.displaystyle.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\editdropdownlistToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.editdropdownlist.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\printToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.print.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\printPreviewToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.printPreview.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\saveToolStripMenuItem.bmp">
+      <LogicalName>System.Windows.Forms.save.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\lockControls.bmp">
+      <LogicalName>System.Windows.Forms.lockControls.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\AlignToGridHS.bmp">
+      <LogicalName>System.Windows.Forms.alignToGrid.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\BringToFrontHS.bmp">
+      <LogicalName>System.Windows.Forms.bringToFront.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\SendToBackHS.bmp">
+      <LogicalName>System.Windows.Forms.sendToBack.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\blanktoolStrip.bmp">
+      <LogicalName>System.Windows.Forms.blank.bmp</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

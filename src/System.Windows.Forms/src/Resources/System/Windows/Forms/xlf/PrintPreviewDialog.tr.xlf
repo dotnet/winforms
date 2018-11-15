@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="tr" original="../PrintPreviewDialog.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Print preview</source>
+        <target state="new">Print preview</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="autoToolStripMenuItem.AccessibleDescription">
+        <source>Fit to window</source>
+        <target state="new">Fit to window</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="autoToolStripMenuItem.AccessibleName">
+        <source>Auto</source>
+        <target state="new">Auto</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="autoToolStripMenuItem.Text">
+        <source>Auto</source>
+        <target state="new">Auto</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="closeToolStripButton.AccessibleDescription">
+        <source>Close this window</source>
+        <target state="new">Close this window</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="closeToolStripButton.AccessibleName">
+        <source>Close</source>
+        <target state="new">Close</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="closeToolStripButton.Text">
+        <source>&amp;Close</source>
+        <target state="new">&amp;Close</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="fourpagesToolStripButton.AccessibleDescription">
+        <source>Display four pages</source>
+        <target state="new">Display four pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="fourpagesToolStripButton.AccessibleName">
+        <source>Four pages</source>
+        <target state="new">Four pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="fourpagesToolStripButton.Text">
+        <source>Four pages</source>
+        <target state="new">Four pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="onepageToolStripButton.AccessibleDescription">
+        <source>Display one page</source>
+        <target state="new">Display one page</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="onepageToolStripButton.AccessibleName">
+        <source>One page</source>
+        <target state="new">One page</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="onepageToolStripButton.Text">
+        <source>One page</source>
+        <target state="new">One page</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pageCounter.AccessibleDescription">
+        <source>Page up and down</source>
+        <target state="new">Page up and down</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pageCounter.AccessibleName">
+        <source>PageUpDown</source>
+        <target state="new">PageUpDown</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pageToolStripLabel.Text">
+        <source>&amp;Page</source>
+        <target state="new">&amp;Page</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="previewControl.AccessibleName">
+        <source>PreviewControl</source>
+        <target state="new">PreviewControl</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="printToolStripButton.AccessibleDescription">
+        <source>Print the document</source>
+        <target state="new">Print the document</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="printToolStripButton.AccessibleName">
+        <source>Print Button</source>
+        <target state="new">Print Button</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="printToolStripButton.Text">
+        <source>Print</source>
+        <target state="new">Print</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sixpagesToolStripButton.AccessibleDescription">
+        <source>Display six pages</source>
+        <target state="new">Display six pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sixpagesToolStripButton.AccessibleName">
+        <source>Six pages</source>
+        <target state="new">Six pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sixpagesToolStripButton.Text">
+        <source>Six pages</source>
+        <target state="new">Six pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="threepagesToolStripButton.AccessibleDescription">
+        <source>Display three pages</source>
+        <target state="new">Display three pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="threepagesToolStripButton.AccessibleName">
+        <source>Three pages</source>
+        <target state="new">Three pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="threepagesToolStripButton.Text">
+        <source>Three pages</source>
+        <target state="new">Three pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStrip1.AccessibleName">
+        <source>PrintPreviewToolStrip</source>
+        <target state="new">PrintPreviewToolStrip</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStrip1.Text">
+        <source>toolStrip1</source>
+        <target state="new">toolStrip1</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem1.AccessibleDescription">
+        <source>500%</source>
+        <target state="new">500%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem1.AccessibleName">
+        <source>500%</source>
+        <target state="new">500%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem1.Text">
+        <source>500%</source>
+        <target state="new">500%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem2.AccessibleDescription">
+        <source>200%</source>
+        <target state="new">200%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem2.AccessibleName">
+        <source>200%</source>
+        <target state="new">200%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem2.Text">
+        <source>200%</source>
+        <target state="new">200%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem3.AccessibleDescription">
+        <source>150%</source>
+        <target state="new">150%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem3.AccessibleName">
+        <source>150%</source>
+        <target state="new">150%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem3.Text">
+        <source>150%</source>
+        <target state="new">150%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem4.AccessibleDescription">
+        <source>100%</source>
+        <target state="new">100%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem4.AccessibleName">
+        <source>100%</source>
+        <target state="new">100%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem4.Text">
+        <source>100%</source>
+        <target state="new">100%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem5.AccessibleDescription">
+        <source>75%</source>
+        <target state="new">75%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem5.AccessibleName">
+        <source>75%</source>
+        <target state="new">75%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem5.Text">
+        <source>75%</source>
+        <target state="new">75%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem6.AccessibleDescription">
+        <source>50%</source>
+        <target state="new">50%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem6.AccessibleName">
+        <source>50%</source>
+        <target state="new">50%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem6.Text">
+        <source>50%</source>
+        <target state="new">50%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem7.AccessibleDescription">
+        <source>25%</source>
+        <target state="new">25%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem7.AccessibleName">
+        <source>25%</source>
+        <target state="new">25%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem7.Text">
+        <source>25%</source>
+        <target state="new">25%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem8.AccessibleDescription">
+        <source>10%</source>
+        <target state="new">10%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem8.AccessibleName">
+        <source>10%</source>
+        <target state="new">10%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="toolStripMenuItem8.Text">
+        <source>10%</source>
+        <target state="new">10%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="twopagesToolStripButton.AccessibleDescription">
+        <source>Display two pages</source>
+        <target state="new">Display two pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="twopagesToolStripButton.AccessibleName">
+        <source>Two pages</source>
+        <target state="new">Two pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="twopagesToolStripButton.Text">
+        <source>Two pages</source>
+        <target state="new">Two pages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="zoomToolStripSplitButton.AccessibleDescription">
+        <source>Zoom the document</source>
+        <target state="new">Zoom the document</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="zoomToolStripSplitButton.AccessibleName">
+        <source>Zoom</source>
+        <target state="new">Zoom</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="zoomToolStripSplitButton.Text">
+        <source>Zoom</source>
+        <target state="new">Zoom</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

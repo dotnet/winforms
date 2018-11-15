@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>System.Windows.Forms</AssemblyName>
+    <RootNamespace>System.Windows.Forms</RootNamespace>
+    <IsPackable>true</IsPackable>    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="$(AccessibilityPackage)" Version="$(AccessibilityPackageVersion)" />
+    <PackageReference Include="$(MicrosoftWin32RegistryPackage)" Version="$(MicrosoftWin32RegistryPackageVersion)" />
+    <PackageReference Include="$(SystemConfigurationConfigurationManagerPackage)" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
+    <PackageReference Include="$(SystemDrawingCommonPackage)" Version="$(SystemDrawingCommonPackageVersion)" />
+  </ItemGroup>
+
+</Project>
