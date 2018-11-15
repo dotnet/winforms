@@ -65,6 +65,16 @@ namespace System.Windows.Forms.Tests
         }
 
         // helper method to generate theory data for some values of a int
+        public static TheoryData<int> GetNIntTheoryData()
+        {
+            var data = new TheoryData<int>();
+            data.Add(int.MinValue);
+            data.Add(-1);
+            data.Add(int.MinValue / 2);
+            return data;
+        }
+
+        // helper method to generate theory data for some values of a int
         public static TheoryData<float> GetFloatTheoryData()
         {
             var data = new TheoryData<float>();

@@ -1213,6 +1213,36 @@ namespace System.Windows.Forms.Tests
         #region Events
 
         [Fact]
+        public void Enter()
+        {
+            // arrange
+            bool wasChanged = false;
+            var cont = new Control();
+            cont.Enter += (sender, args) => wasChanged = true;
+
+            // act
+            cont.NotifyEnter();
+
+            // assert
+            Assert.True(wasChanged);
+        }
+
+        [Fact]
+        public void Leave()
+        {
+            // arrange
+            bool wasChanged = false;
+            var cont = new Control();
+            cont.Leave += (sender, args) => wasChanged = true;
+
+            // act
+            cont.NotifyLeave();
+
+            // assert
+            Assert.True(wasChanged);
+        }
+
+        [Fact]
         public void PaddingChanged()
         {
             // arrange
