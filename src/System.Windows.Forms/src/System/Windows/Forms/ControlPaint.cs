@@ -1151,7 +1151,7 @@ namespace System.Windows.Forms {
         ///     Draws a Win32 checkbox control in the given rectangle with the given state.
         /// </devdoc>
         public static void DrawCheckBox(Graphics graphics, int x, int y, int width, int height, ButtonState state) {
-            // Windows flat check box is too ugly for words.  We draw our own here
+            // We overwrite the windows checkbox
             if ((state & ButtonState.Flat) == ButtonState.Flat) {
                 DrawFlatCheckBox(graphics, new Rectangle(x, y, width, height), state);
             }

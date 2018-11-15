@@ -4,9 +4,7 @@
 
 namespace System.Windows.Forms {
 
-    using System.Diagnostics;
     using System;
-
 
     /// <include file='doc\IDataObject.uex' path='docs/doc[@for="IDataObject"]/*' />
     /// <devdoc>

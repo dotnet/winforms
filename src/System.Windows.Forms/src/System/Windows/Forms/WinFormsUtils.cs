@@ -2,39 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.WindowsFormsUtils..ctor()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Windows.Forms.WindowsFormsUtils..ctor()")]
 
 
-namespace System.Windows.Forms {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
+namespace System.Windows.Forms
+{
+    using System;
+    using System.Collections;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Security;
-    using System.Security.Permissions;
-    using System.Globalization;
-    using System.Windows.Forms;
-    using System.Drawing.Design;
-    using System.ComponentModel;
-    using System.Windows.Forms.ComponentModel;
-    using System.Collections;
     using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using Microsoft.Win32;
-    using System.Text;
-    using Util = NativeMethods.Util;
+    using System.Globalization;
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
-    using System.Reflection;
-    
+    using System.Security;
+    using System.Text;
+    using System.Windows.Forms.Internal;
+
     // Miscellaneous Windows Forms utilities
     internal sealed class WindowsFormsUtils {
 
         // A better initializer than Size.Empty to force code using uninitialized to noticably fail.
         public static readonly Size UninitializedSize = new Size(-7199369, -5999471);
-        private static bool _targetsAtLeast_v4_5 = RunningOnCheck("TargetsAtLeast_Desktop_V4_5");
-
         
         public static readonly ContentAlignment AnyRightAlign   = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
         public static readonly ContentAlignment AnyLeftAlign    = ContentAlignment.TopLeft | ContentAlignment.MiddleLeft | ContentAlignment.BottomLeft;
@@ -738,38 +728,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        // All 4.x version of the .NET framework are installed in place. For compatibility reasons, we
-        // want to know when an application is targeting netfx 4.5 or later vs 4.0
-        internal static bool TargetsAtLeast_v4_5 {
-            get {
-                return _targetsAtLeast_v4_5;
-            }
-        }
-
-        [SecuritySafeCritical]
-        [ReflectionPermission(SecurityAction.Assert, Unrestricted = true)]
-        private static bool RunningOnCheck(string propertyName) {
-            Type binaryCompatibitlityType;
-            try {
-                binaryCompatibitlityType = typeof(Object).GetTypeInfo().Assembly.GetType("System.Runtime.Versioning.BinaryCompatibility", false);
-            }
-            catch (TypeLoadException) {
-                return false;
-            }
-
-            if (binaryCompatibitlityType == null) {
-                return false;
-            }
-
-            PropertyInfo runningOnV4_5_Property = binaryCompatibitlityType.GetProperty(propertyName, Reflection.BindingFlags.Public | Reflection.BindingFlags.NonPublic | Reflection.BindingFlags.Static);
-            if (runningOnV4_5_Property == null) {
-                return false;
-            }
-
-            return (bool)runningOnV4_5_Property.GetValue(null);
-        }
-    }
-    
+    }    
 }
 
    

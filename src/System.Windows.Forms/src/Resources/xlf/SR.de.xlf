@@ -11717,6 +11717,16 @@
         <target state="new">Unable to set the panel text.</target>
         <note />
       </trans-unit>
+      <trans-unit id="UnexpectedClipboardType">
+        <source>Clipboard contains an unexpected type.</source>
+        <target state="new">Clipboard contains an unexpected type.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UnexpectedTypeForClipboardFormat">
+        <source>The specified Clipboard format is not compatible with '{0}' type.</source>
+        <target state="new">The specified Clipboard format is not compatible with '{0}' type.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UnknownAttr">
         <source>Unknown ATTRIBUTE type.</source>
         <target state="new">Unknown ATTRIBUTE type.</target>

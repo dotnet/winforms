@@ -7371,4 +7371,10 @@
   <data name="DataGridViewEditingPanelUiaProviderDescription" xml:space="preserve">
     <value>DataGridView EditingPanel UIA Provider</value>
   </data>
+  <data name="UnexpectedClipboardType" xml:space="preserve">
+    <value>Clipboard contains an unexpected type.</value>
+  </data>
+  <data name="UnexpectedTypeForClipboardFormat" xml:space="preserve">
+    <value>The specified Clipboard format is not compatible with '{0}' type.</value>
+  </data>
 </root>
