@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" InitialTargets="SetOutputItemType">
   <!-- 
-    This project is used to create a nuget package.
+    This pkgproj is used to create a nuget package.
     The ArcadeSDK uses vanilla 'dotnet pack', but creates one package per csproj, which is not what we want.
 
     There are two main ways to work around this: 
@@ -13,11 +13,19 @@
     2. A push model where projects control what they contribute to the package.
         a. An example of the push model is at https://github.com/dotnet/machinelearning/blob/master/pkg/Directory.Build.props. 
   -->
+
   <PropertyGroup>
+
+    <!-- Don't build this project -->
+    <NoBuild>true</NoBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
 
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
 
+    <!-- Call a specific target (defined later) when creating the package -->
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);SetPackagePath</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
   <!-- nuspec properties -->
@@ -29,42 +37,39 @@
     <PackageLicenseUrl>https://github.com/dotnet/winforms/blob/master/LICENSE.TXT</PackageLicenseUrl>
     <PackageTags>WinForms Windows Forms</PackageTags>
   </PropertyGroup>
- 
-  <!-- Define the PackCustom target, which pulls in everything the package needs -->
-  <Target Name="PackCustom">
 
-    <!-- lib -->
+  <!-- Force project references to avoid packaging their dependencies -->
+  <ItemDefinitionGroup>
+    <ProjectReference>
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+
+  <!-- Any projects referenced here will have their outputs automatically put into the package, with directories preserved -->
+  <ItemGroup>
+    <ProjectReference Include="..\src\System.Windows.Forms\ref\System.Windows.Forms.Ref.csproj" />
+    <ProjectReference Include="..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+  <!-- Force the output item type for all project references to "TfmSpecificPackageFile", which makes them get packed -->
+  <Target Name="SetOutputItemType">
     <ItemGroup>
-      <!-- System.Windows.Forms.dll -->
-      <TfmSpecificPackageFile Include="$(ArtifactsBinDir)System.Windows.Forms\$(Configuration)\$(TargetFramework)\System.Windows.Forms.dll">
-        <PackagePath>lib\$(TargetFramework)</PackagePath>
-      </TfmSpecificPackageFile>
-    
-      <!-- System.Windows.Forms.pdb -->
-      <!-- See $(repoRoot)\Directory.Build.props for instructions on how to produce a pdb if you don't have one -->
-      <TfmSpecificPackageFile Include="$(ArtifactsBinDir)System.Windows.Forms\$(Configuration)\$(TargetFramework)\System.Windows.Forms.pdb">
-        <PackagePath>lib\$(TargetFramework)</PackagePath>
-      </TfmSpecificPackageFile>
-
-      <!-- Resource dll's -->
-      <TfmSpecificPackageFile Include="$(ArtifactsBinDir)System.Windows.Forms\$(Configuration)\$(TargetFramework)\**\*.dll">
-        <PackagePath>lib\$(TargetFramework)</PackagePath>
-      </TfmSpecificPackageFile>
+      <ProjectReference>
+        <OutputItemType>TfmSpecificPackageFile</OutputItemType>
+      </ProjectReference>
     </ItemGroup>
-
-    <!-- ref -->
-    <ItemGroup>
-      <!-- System.Windows.Forms.dll -->
-      <TfmSpecificPackageFile Include="$(ArtifactsBinDir)System.Windows.Forms.Ref\$(Configuration)\$(TargetFramework)\System.Windows.Forms.dll">
-        <PackagePath>ref\$(TargetFramework)</PackagePath>
-      </TfmSpecificPackageFile>
-    </ItemGroup>
-
   </Target>
 
-  <!-- Extend package creation by appending the PackCustom target -->
-  <PropertyGroup>
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackCustom</TargetsForTfmSpecificContentInPackage>
-  </PropertyGroup>
+  <!-- Set the package path for all TfmSpecificPackageFile items, after references are resolved-->
+  <Target Name="SetPackagePath" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <TfmSpecificPackageFile>
+        <!-- Put everything under lib by default -->
+        <PackagePath>lib/$(TargetFramework)</PackagePath>
+        <!-- If the reference ends with Ref.csproj, it's a reference binary, so put it under ref -->
+        <PackagePath Condition="$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj'))">ref/$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
 
 </Project>
