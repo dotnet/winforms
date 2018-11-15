@@ -12,24 +12,30 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var mtb = new MaskedTextBox();
-            
+
+            // assert
             Assert.NotNull(mtb);
         }
 
         [Fact]
         public void ConstructorString()
         {
+            // act
             var mtb = new MaskedTextBox("Hello World!");
-            
+
+            // assert
             Assert.NotNull(mtb);
         }
 
         [Fact]
         public void ConstructorMaskedTextProvider()
         {
+            // act
             var mtb = new MaskedTextBox(new MaskedTextProvider("Hello World!"));
-            
+
+            // assert
             Assert.NotNull(mtb);
         }
     }

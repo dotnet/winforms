@@ -11,8 +11,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var sc = new SplitContainer();
-            
+
+            // assert
             Assert.NotNull(sc);
             Assert.NotNull(sc.Panel1);
             Assert.Equal(sc, sc.Panel1.Owner);

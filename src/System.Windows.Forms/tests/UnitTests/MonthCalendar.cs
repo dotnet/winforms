@@ -11,8 +11,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var mc = new MonthCalendar();
-            
+
+            // assert
             Assert.NotNull(mc);
             Assert.True(mc.TabStop);
         }

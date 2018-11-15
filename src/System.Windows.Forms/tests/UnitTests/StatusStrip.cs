@@ -11,8 +11,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var ss = new StatusStrip();
-            
+
+            // assert
             Assert.NotNull(ss);
             Assert.False(ss.CanOverflow);
             Assert.Equal(ToolStripLayoutStyle.Table, ss.LayoutStyle);

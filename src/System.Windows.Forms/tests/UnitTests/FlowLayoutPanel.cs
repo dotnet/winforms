@@ -11,8 +11,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var flp = new FlowLayoutPanel();
-            
+
+            // assert
             Assert.NotNull(flp);
         }
     }

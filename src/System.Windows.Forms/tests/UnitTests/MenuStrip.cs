@@ -13,8 +13,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var ms = new MenuStrip();
-            
+
+            // assert
             Assert.NotNull(ms);
             Assert.False(ms.CanOverflow);
             Assert.Equal(ToolStripGripStyle.Hidden, ms.GripStyle);

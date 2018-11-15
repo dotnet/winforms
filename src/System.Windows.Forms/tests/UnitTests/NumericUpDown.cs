@@ -11,8 +11,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var nud = new NumericUpDown();
-            
+
+            // assert
             Assert.NotNull(nud);
             Assert.Equal("0", nud.Text);
         }

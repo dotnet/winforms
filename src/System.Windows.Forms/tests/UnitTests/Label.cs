@@ -11,8 +11,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var label = new Label();
-            
+
+            // assert
             Assert.NotNull(label);
             Assert.False(label.TabStop);
         }

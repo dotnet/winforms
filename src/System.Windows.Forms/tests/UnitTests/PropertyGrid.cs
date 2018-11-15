@@ -13,8 +13,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var pg = new PropertyGrid();
-            
+
+            // assert
             Assert.NotNull(pg);
             Assert.Equal(AutoScaleMode.None, pg.AutoScaleMode);
             Assert.Equal(0, pg.TabIndex);

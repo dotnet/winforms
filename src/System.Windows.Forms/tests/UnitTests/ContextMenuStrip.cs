@@ -13,18 +13,22 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var cms = new ContextMenuStrip();
-            
+
+            // assert
             Assert.NotNull(cms);
         }
 
         [Fact]
         public void ConstructorIContainer()
         {
+            // arrange
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<ContextMenuStrip>())).Verifiable();
-            
+
+            // act & assert
             var ex = Assert.Throws<ArgumentNullException>(() => new ContextMenuStrip(nullContainer));
             Assert.Equal("container", ex.ParamName);
 

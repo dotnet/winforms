@@ -13,8 +13,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var button = new RadioButton();
-            
+
+            // assert
             Assert.NotNull(button);
             Assert.Equal(ContentAlignment.MiddleLeft, button.TextAlign);
             Assert.False(button.TabStop);

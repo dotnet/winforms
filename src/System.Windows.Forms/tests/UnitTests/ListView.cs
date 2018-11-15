@@ -13,8 +13,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var lv = new ListView();
-            
+
+            // assert
             Assert.NotNull(lv);
             Assert.Equal(0, lv.Location.X);
             Assert.Equal(0, lv.Location.Y);

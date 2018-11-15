@@ -11,8 +11,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var s = new Splitter();
-            
+
+            // assert
             Assert.NotNull(s);
             Assert.False(s.TabStop);
             Assert.Equal(25, s.MinSize);

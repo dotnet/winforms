@@ -15,20 +15,25 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
+            // act
             var bn = new BindingNavigator();
-            
+
+            // assert
             Assert.NotNull(bn);
         }
         
        [Fact]
         public void ConstructorBindingSource()
         {
+            // arrange
             var bindingSource = new BindingSource();
             var data = new List<string>() { "Foo", "Bar" };
             bindingSource.DataSource = data;
-            
+
+            // act
             var bn = new BindingNavigator(bindingSource);
-            
+
+            // assert
             Assert.NotNull(bn);
             Assert.Equal(bindingSource, bn.BindingSource);
             
@@ -38,10 +43,12 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ConstructorIContainer()
         {
+            // arrange
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<BindingNavigator>())).Verifiable();
-            
+
+            // act & assert
             var ex = Assert.Throws<ArgumentNullException>(() => new BindingNavigator(nullContainer));
             Assert.Equal("container", ex.ParamName);
 
@@ -53,8 +60,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ConstructorBool()
         {
+            // act
             var bn = new BindingNavigator(true);
-                     
+
+            // assert
             Assert.NotNull(bn);
 
             Assert.NotNull(bn.PositionItem);
