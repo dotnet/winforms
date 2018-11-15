@@ -212,7 +212,13 @@ namespace System.Windows.Forms
         /// </summary>
         /// <value><see langword="true" /> to indicate that the value of the <see cref="Description" /> property is used as dialog title; <see langword="false" />
         /// to indicate the value is added as additional text to the dialog. The default is <see langword="false" />.</value>
-        [Category("Folder Browsing"), DefaultValue(false), Description("A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.")]
+        [
+        Browsable(true),
+        DefaultValue(false),
+        Localizable(true),
+        Category("Folder Browsing"),
+        Description("A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.")
+        ]
         public bool UseDescriptionForTitle { get; set; }
 
         internal bool UseVistaDialogInternal
