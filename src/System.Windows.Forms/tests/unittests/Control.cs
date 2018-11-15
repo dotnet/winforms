@@ -567,7 +567,7 @@ namespace System.Windows.Forms.Tests
             bootstrap.Parent = paradox;
 
             // act and assert
-            var ex = Assert.Throws<ArgumentException>(() => paradox.Parent = bootstrap);
+            Assert.Throws<ArgumentException>(() => paradox.Parent = bootstrap);
         }
 
         [Fact]
