@@ -4,7 +4,6 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <RootNamespace>System.Windows.Forms</RootNamespace>
-    <IsPackable>true</IsPackable>    
   </PropertyGroup>
 
   <ItemGroup>

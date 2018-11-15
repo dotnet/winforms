@@ -1,0 +1,71 @@
+<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Pack">
+  <!-- 
+    This pkgproj is used to create a nuget package.
+    The ArcadeSDK uses vanilla 'dotnet pack', but creates one package per csproj, which is not what we want.
+
+    There are two main ways to work around this: 
+    
+    1. A pull model where a single project pulls in everything that the package needs.
+        a. This is the model we're using because it's less work and we only have a few more binaries coming in the future.
+        b. An example of the pull model is at https://github.com/nuget/home/issues/3891#issuecomment-377319939, with official docs
+        at https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets#targetsfortfmspecificbuildoutput
+
+    2. A push model where projects control what they contribute to the package.
+        a. An example of the push model is at https://github.com/dotnet/machinelearning/blob/master/pkg/Directory.Build.props. 
+  -->
+
+  <PropertyGroup>
+
+    <!-- Don't build this project -->
+    <NoBuild>true</NoBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+
+  </PropertyGroup>
+
+  <!-- nuspec properties -->
+  <PropertyGroup>
+    <PackageId>Microsoft.Private.Winforms</PackageId>
+    <Authors>Microsoft</Authors>
+    <RepositoryUrl>https://github.com/dotnet/winforms</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/dotnet/winforms/blob/master/LICENSE.TXT</PackageLicenseUrl>
+    <PackageTags>WinForms Windows Forms</PackageTags>
+  </PropertyGroup>
+ 
+  <!-- Define the PackCustom target, which pulls in everything the package needs -->
+  <Target Name="PackCustom">
+
+    <!-- Todo: use an item group to define file names and loop over those when creating the package -->
+
+    <!-- lib -->
+    <ItemGroup>
+      <!-- System.Windows.Forms.dll -->
+      <TfmSpecificPackageFile Include="$(ArtifactsBinDir)System.Windows.Forms\$(Configuration)\$(TargetFramework)\System.Windows.Forms.dll">
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+    
+      <!-- Resource dll's -->
+      <TfmSpecificPackageFile Include="$(ArtifactsBinDir)System.Windows.Forms\$(Configuration)\$(TargetFramework)\**\*.dll">
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+
+    <!-- ref -->
+    <ItemGroup>
+      <!-- System.Windows.Forms.dll -->
+      <TfmSpecificPackageFile Include="$(ArtifactsBinDir)System.Windows.Forms.Ref\$(Configuration)\$(TargetFramework)\System.Windows.Forms.dll">
+        <PackagePath>ref\$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+
+  </Target>
+
+  <!-- Extend package creation by appending the PackCustom target -->
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackCustom</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+</Project>
