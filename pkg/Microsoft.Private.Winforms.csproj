@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk" InitialTargets="SetOutputItemType">
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="SetOutputItemType">
   <!-- 
     This pkgproj is used to create a nuget package.
     The ArcadeSDK uses vanilla 'dotnet pack', but creates one package per csproj, which is not what we want.
@@ -25,7 +25,7 @@
     <IsPackable>true</IsPackable>
 
     <!-- Call a specific target (defined later) when creating the package -->
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);SetPackagePath</TargetsForTfmSpecificContentInPackage>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);SetPackagePath;AddRelativePackageFiles</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
   <!-- nuspec properties -->
@@ -68,6 +68,28 @@
         <PackagePath>lib/$(TargetFramework)</PackagePath>
         <!-- If the reference ends with Ref.csproj, it's a reference binary, so put it under ref -->
         <PackagePath Condition="$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj'))">ref/$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
+  
+  <!-- Look next to each file going into the package for companion files (pdb, xml, resources) -->
+  <Target Name="AddRelativePackageFiles"
+          Inputs="%(TfmSpecificPackageFile.Identity);%(TfmSpecificPackageFile.PackagePath)"
+          Outputs="unused">
+    <PropertyGroup>
+      <_baseDirectory>%(TfmSpecificPackageFile.RootDir)%(TfmSpecificPackageFile.Directory)</_baseDirectory>
+      <_baseFileName>%(TfmSpecificPackageFile.FileName)</_baseFileName>
+      <_packagePath>%(TfmSpecificPackageFile.PackagePath)</_packagePath>
+    </PropertyGroup>
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(_baseDirectory)$(_baseFileName).pdb" Condition="Exists('$(_baseDirectory)$(_baseFileName).pdb')">
+        <PackagePath>$(_packagePath)</PackagePath>
+      </TfmSpecificPackageFile>
+      <TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).xml">
+        <PackagePath>$(_packagePath)%(RecursiveDir)</PackagePath>
+      </TfmSpecificPackageFile>
+      <TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).resources.dll">
+        <PackagePath>$(_packagePath)%(RecursiveDir)</PackagePath>
       </TfmSpecificPackageFile>
     </ItemGroup>
   </Target>
