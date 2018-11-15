@@ -2,17 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-// based on \env\shell\PackageFramework\Current\Shell\UI\Common\DpiHelper.cs
-// changes: WPF-related code is removed, class is internal, and initialization is done lazily
-using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
-using System.Runtime.Versioning;
 
 #if WINFORMS_NAMESPACE
-using System.Windows.Forms.Internal;
 using CAPS = System.Windows.Forms.NativeMethods;
 #elif DRAWING_NAMESPACE
 using CAPS = System.Drawing.SafeNativeMethods;
