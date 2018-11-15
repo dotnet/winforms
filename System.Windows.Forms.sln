@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.28223.9000
+VisualStudioVersion = 16.0.28222.4001
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src\System.Windows.Forms\src\System.Windows.Forms.csproj", "{0D23A41B-2626-4703-9E4A-87C07F69B0B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Ref", "src\System.Windows.Forms\ref\System.Windows.Forms.Ref.csproj", "{334C343B-9D39-498E-89D8-B6526028FD5C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Tests", "src\System.Windows.Forms\tests\System.Windows.Forms.Tests.csproj", "{47B0F92F-683B-4711-B23A-8965743F2792}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Tests", "src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj", "{AB38E262-F206-4820-8F29-23C5F72A4A16}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\functests\WinformsControlsTest\WinformsControlsTest.csproj", "{93D3E2BE-297B-40E0-B3E3-5E1029AC59B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\tests\functests\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,19 +25,19 @@ Global
 		{334C343B-9D39-498E-89D8-B6526028FD5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{334C343B-9D39-498E-89D8-B6526028FD5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{334C343B-9D39-498E-89D8-B6526028FD5C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{47B0F92F-683B-4711-B23A-8965743F2792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47B0F92F-683B-4711-B23A-8965743F2792}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47B0F92F-683B-4711-B23A-8965743F2792}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47B0F92F-683B-4711-B23A-8965743F2792}.Release|Any CPU.Build.0 = Release|Any CPU
-		{93D3E2BE-297B-40E0-B3E3-5E1029AC59B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93D3E2BE-297B-40E0-B3E3-5E1029AC59B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93D3E2BE-297B-40E0-B3E3-5E1029AC59B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93D3E2BE-297B-40E0-B3E3-5E1029AC59B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB38E262-F206-4820-8F29-23C5F72A4A16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB38E262-F206-4820-8F29-23C5F72A4A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB38E262-F206-4820-8F29-23C5F72A4A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB38E262-F206-4820-8F29-23C5F72A4A16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{657472B8-FDA3-49DF-B8BE-0246046A4348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{657472B8-FDA3-49DF-B8BE-0246046A4348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{657472B8-FDA3-49DF-B8BE-0246046A4348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{657472B8-FDA3-49DF-B8BE-0246046A4348}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {56D5F4DA-F710-4026-8F49-4A903BCAA9B5}
+		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
 	EndGlobalSection
 EndGlobal
