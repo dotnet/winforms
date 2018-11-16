@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class NotifyIconTests
     {
         [Fact]
-        public void Constructor()
+        public void NotifyIconTests_Constructor()
         {
             var icon = new NotifyIcon();
 
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ConstructorIContainer()
+        public void NotifyIconTests_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);

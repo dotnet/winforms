@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class ListBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void ListBoxTests_Constructor()
         {
             var lb = new ListBox();
 

@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class ToolStripContainerTests
     {
         [Fact]
-        public void Constructor()
+        public void ToolStripContainerTests_Constructor()
         {
             var tsc = new ToolStripContainer();
 

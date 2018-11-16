@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
         #region Constructor
 
         [Fact]
-        public void Constructor()
+        public void ControlTests_Constructor()
         {
             var cont = new Control();
 
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ConstructorText()
+        public void ControlTests_ConstructorText()
         {
             var cont = new Control("Foo");
 
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ConstructorSize()
+        public void ControlTests_ConstructorSize()
         {
             var cont = new Control("Foo", 1, 2, 3, 4);
 
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ConstructorParent()
+        public void ControlTests_ConstructorParent()
         {
             var parent = new Control();
 
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ConstructorAll()
+        public void ControlTests_ConstructorAll()
         {
             var parent = new Control();
 
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Tests
         #region Control Creation
 
         [Fact]
-        public void CreateControl()
+        public void ControlTests_CreateControl()
         {
             var cont = new Control();
 
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(CreateControlInternalData))]
-        public void CreateControlInternal(bool fIgnoreVisible)
+        public void ControlTests_CreateControlInternal(bool fIgnoreVisible)
         {
             var cont = new Control();
 
@@ -162,7 +162,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(TabIndexGetSetData))]
-        public void TabIndexGetSet(uint expected)
+        public void ControlTests_TabIndexGetSet(uint expected)
         {
             var cont = new Control();
 
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(TabStopGetSetData))]
-        public void TabStopGetSet(bool expected)
+        public void ControlTests_TabStopGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -196,7 +196,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(TabStopInternalGetSetData))]
-        public void TabStopInternalGetSet(bool expected)
+        public void ControlTests_TabStopInternalGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -206,7 +206,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetChildControlsInTabOrder()
+        public void ControlTests_GetChildControlsInTabOrder()
         {
             var cont = new Control();
             var first = new Control();
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetChildControlsInTabOrderHandlesOnly()
+        public void ControlTests_GetChildControlsInTabOrderHandlesOnly()
         {
             var cont = new Control();
             var first = new Control();
@@ -258,7 +258,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetFirstChildControlInTabOrder()
+        public void ControlTests_GetFirstChildControlInTabOrder()
         {
             var cont = new Control();
             var first = new Control();
@@ -280,7 +280,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetFirstChildControlInTabOrderReverse()
+        public void ControlTests_GetFirstChildControlInTabOrderReverse()
         {
             var cont = new Control();
             var first = new Control();
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetNextControl()
+        public void ControlTests_GetNextControl()
         {
             var cont = new Control();
             var first = new Control();
@@ -324,7 +324,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetNextControlReverse()
+        public void ControlTests_GetNextControlReverse()
         {
             var cont = new Control();
             var first = new Control();
@@ -346,7 +346,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetNextControlNoNext()
+        public void ControlTests_GetNextControlNoNext()
         {
             var cont = new Control();
             var first = new Control();
@@ -368,7 +368,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetNextControlNoNextReverse()
+        public void ControlTests_GetNextControlNoNextReverse()
         {
             var cont = new Control();
             var first = new Control();
@@ -392,7 +392,7 @@ namespace System.Windows.Forms.Tests
         #endregion
 
         [Fact]
-        public void AssignParent()
+        public void ControlTests_AssignParent()
         {
             var cont = new Control();
             var parent = new Control();
@@ -403,7 +403,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ParentChangedFromAssign()
+        public void ControlTests_ParentChangedFromAssign()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -416,7 +416,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ParentChangedFromSet()
+        public void ControlTests_ParentChangedFromSet()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -429,7 +429,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ParentGetSet()
+        public void ControlTests_ParentGetSet()
         {
             var parent = new Control();
             var cont = new Control();
@@ -441,7 +441,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ParentInternalGetSet()
+        public void ControlTests_ParentInternalGetSet()
         {
             var parent = new Control();
             var cont = new Control();
@@ -454,7 +454,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetContainerControl()
+        public void ControlTests_GetContainerControl()
         {
             var cont = new Control();
 
@@ -466,7 +466,7 @@ namespace System.Windows.Forms.Tests
         #region Contains
 
         [Fact]
-        public void Contains()
+        public void ControlTests_Contains()
         {
             var cont = new Control();
             var child = new Control();
@@ -477,7 +477,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ContainsGrandchild()
+        public void ControlTests_ContainsGrandchild()
         {
             var cont = new Control();
             var child = new Control();
@@ -490,7 +490,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ContainsNot()
+        public void ControlTests_ContainsNot()
         {
             var cont = new Control();
             var child = new Control();
@@ -502,7 +502,7 @@ namespace System.Windows.Forms.Tests
         #endregion
 
         [Fact]
-        public void ParentingExcpetion()
+        public void ControlTests_ParentingExcpetion()
         {
             var bootstrap = new Control();
             var paradox = new Control();
@@ -513,7 +513,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ChildingExcpetion()
+        public void ControlTests_ChildingExcpetion()
         {
             var bootstrap = new Control();
             var paradox = new Control();
@@ -528,7 +528,7 @@ namespace System.Windows.Forms.Tests
         #region Accesability
 
         [Fact]
-        public void AccessibleNameGetSet()
+        public void ControlTests_AccessibleNameGetSet()
         {
             var cont = new Control();
 
@@ -545,7 +545,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AccessibleRoleData))]
-        public void SetItemCheckState(AccessibleRole expected)
+        public void ControlTests_SetItemCheckState(AccessibleRole expected)
         {
             var cont = new Control();
 
@@ -562,7 +562,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AccessibleRoleInvalidData))]
-        public void AccessibleRoleInvalid(AccessibleRole expected)
+        public void ControlTests_AccessibleRoleInvalid(AccessibleRole expected)
         {
             var cont = new Control();
 
@@ -578,7 +578,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(IsAccessibleGetSetData))]
-        public void IsAccessibleGetSet(bool expected)
+        public void ControlTests_IsAccessibleGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -599,7 +599,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(BackColorGetSetData))]
-        public void BackColorGetSet(Color expected)
+        public void ControlTests_BackColorGetSet(Color expected)
         {
             var cont = new Control();
 
@@ -609,7 +609,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void BackColorChanged()
+        public void ControlTests_BackColorChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -629,7 +629,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ForeColorGetSetData))]
-        public void ForeColorGetSet(Color expected)
+        public void ControlTests_ForeColorGetSet(Color expected)
         {
             var cont = new Control();
 
@@ -639,7 +639,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ForeColorChanged()
+        public void ControlTests_ForeColorChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -662,7 +662,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(BackgroundImageLayoutData))]
-        public void BackgroundImageLayoutGetSet(ImageLayout expected)
+        public void ControlTests_BackgroundImageLayoutGetSet(ImageLayout expected)
         {
             var cont = new Control();
 
@@ -679,7 +679,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(BackgroundImageLayoutGetSetInvalidData))]
-        public void BackgroundImageLayoutGetSetInvalid(ImageLayout expected)
+        public void ControlTests_BackgroundImageLayoutGetSetInvalid(ImageLayout expected)
         {
             var cont = new Control();
 
@@ -692,7 +692,7 @@ namespace System.Windows.Forms.Tests
         #region Place and Shape
 
         [Fact]
-        public void RegionGetSet()
+        public void ControlTests_RegionGetSet()
         {
             var cont = new Control();
             var expected = new Region(new Rectangle(1, 1, 20, 20));
@@ -704,7 +704,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoSizeGetSetData))]
-        public void AutoSizeGetSet(bool expected)
+        public void ControlTests_AutoSizeGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -714,7 +714,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PreferedSizeGet()
+        public void ControlTests_PreferedSizeGet()
         {
             var cont = new Control();
 
@@ -732,7 +732,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ApplySizeConstraintsData))]
-        public void ApplySizeConstraints(int expected)
+        public void ControlTests_ApplySizeConstraints(int expected)
         {
             var cont = new Control();
             var expectedSize = new Size(expected, expected);
@@ -750,7 +750,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ApplySizeConstraintsSizeData))]
-        public void ApplySizeConstraintsSize(Size expectedSize)
+        public void ControlTests_ApplySizeConstraintsSize(Size expectedSize)
         {
             var cont = new Control();
 
@@ -771,7 +771,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ApplySizeConstraintsData))]
-        public void ApplyBoundsConstraints(int expected)
+        public void ControlTests_ApplyBoundsConstraints(int expected)
         {
             var cont = new Control();
             var expectedBounds = new Rectangle(expected, expected, expected, expected);
@@ -791,7 +791,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(PaddingGetSetData))]
-        public void PaddingGetSet(Padding expected)
+        public void ControlTests_PaddingGetSet(Padding expected)
         {
             var cont = new Control();
 
@@ -808,7 +808,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AnchorData))]
-        public void AnchorGetSet(AnchorStyles expected)
+        public void ControlTests_AnchorGetSet(AnchorStyles expected)
         {
             var cont = new Control();
 
@@ -818,7 +818,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void BoundsGetSet()
+        public void ControlTests_BoundsGetSet()
         {
             var cont = new Control();
             var expected = new Rectangle(1, 1, 20, 20);
@@ -836,7 +836,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(HeightGetSetData))]
-        public void HeightGetSet(int expected)
+        public void ControlTests_HeightGetSet(int expected)
         {
             var cont = new Control();
 
@@ -853,7 +853,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(LeftGetSetData))]
-        public void LeftGetSet(int expected)
+        public void ControlTests_LeftGetSet(int expected)
         {
             var cont = new Control();
 
@@ -870,7 +870,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(TopGetSetData))]
-        public void TopGetSet(int expected)
+        public void ControlTests_TopGetSet(int expected)
         {
             var cont = new Control();
 
@@ -887,7 +887,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(LocationGetSetData))]
-        public void LocationGetSet(Point expected)
+        public void ControlTests_LocationGetSet(Point expected)
         {
             var cont = new Control();
 
@@ -904,7 +904,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(MarginGetSetData))]
-        public void MarginGetSet(Padding expected)
+        public void ControlTests_MarginGetSet(Padding expected)
         {
             var cont = new Control();
 
@@ -921,7 +921,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(MaximumSizeGetSetData))]
-        public void MaximumSizeGetSet(Size expected)
+        public void ControlTests_MaximumSizeGetSet(Size expected)
         {
             var cont = new Control();
 
@@ -938,7 +938,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(MinimumSizeGetSetData))]
-        public void MinimumSizeGetSet(Size expected)
+        public void ControlTests_MinimumSizeGetSet(Size expected)
         {
             var cont = new Control();
 
@@ -955,7 +955,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(RequiredScalingData))]
-        public void RequiredScaling(BoundsSpecified expected)
+        public void ControlTests_RequiredScaling(BoundsSpecified expected)
         {
             var cont = new Control();
 
@@ -972,7 +972,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(RequiredScalingEnabledData))]
-        public void RequiredScalingEnabled(bool expected)
+        public void ControlTests_RequiredScalingEnabled(bool expected)
         {
             var cont = new Control();
 
@@ -984,7 +984,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(RightToLeft.Yes)]
         [InlineData(RightToLeft.No)]
-        public void RightToLeftTest(RightToLeft expected)
+        public void ControlTests_RightToLeftTest(RightToLeft expected)
         {
             var cont = new Control();
 
@@ -994,7 +994,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void RightToLeftInherit()
+        public void ControlTests_RightToLeftInherit()
         {
             var parent = new Control();
             var cont = new Control();
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(RightToLeftInvalidData))]
-        public void RightToLeftInvalid(RightToLeft expected)
+        public void ControlTests_RightToLeftInvalid(RightToLeft expected)
         {
             var cont = new Control();
 
@@ -1031,7 +1031,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(SizeGetSetData))]
-        public void SizeGetSet(Size expected)
+        public void ControlTests_SizeGetSet(Size expected)
         {
             var cont = new Control();
 
@@ -1048,7 +1048,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(WidthGetSetData))]
-        public void WidthGetSet(int expected)
+        public void ControlTests_WidthGetSet(int expected)
         {
             var cont = new Control();
 
@@ -1064,7 +1064,7 @@ namespace System.Windows.Forms.Tests
         #region Events
 
         [Fact]
-        public void Enter()
+        public void ControlTests_Enter()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1076,7 +1076,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Leave()
+        public void ControlTests_Leave()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1088,7 +1088,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PaddingChanged()
+        public void ControlTests_PaddingChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1100,7 +1100,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ControlAddedAndRemoved()
+        public void ControlTests_ControlAddedAndRemoved()
         {
             bool wasAdded = false;
             bool wasRemoved = false;
@@ -1117,7 +1117,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TextChanged()
+        public void ControlTests_TextChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1129,7 +1129,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void LocationChanged()
+        public void ControlTests_LocationChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1141,7 +1141,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void EnabledChanged()
+        public void ControlTests_EnabledChanged()
         {
             bool wasEnabled = false;
             var cont = new Control();
@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void FontChanged()
+        public void ControlTests_FontChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1165,7 +1165,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void MarginChanged()
+        public void ControlTests_MarginChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1177,7 +1177,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void RegionChanged()
+        public void ControlTests_RegionChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void RightToLeftChanged()
+        public void ControlTests_RightToLeftChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1201,7 +1201,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void VisibleChanged()
+        public void ControlTests_VisibleChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1213,7 +1213,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void SizeChanged()
+        public void ControlTests_SizeChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TabIndexChanged()
+        public void ControlTests_TabIndexChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1237,7 +1237,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TabStopChanged()
+        public void ControlTests_TabStopChanged()
         {
             bool wasChanged = false;
             var cont = new Control();
@@ -1260,7 +1260,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(EnabledGetSetData))]
-        public void EnabledGetSet(bool expected)
+        public void ControlTests_EnabledGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -1277,7 +1277,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(VisibleGetSetData))]
-        public void VisibleGetSet(bool expected)
+        public void ControlTests_VisibleGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -1287,7 +1287,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetVisibleCoreNoParent()
+        public void ControlTests_GetVisibleCoreNoParent()
         {
             var cont = new Control();
 
@@ -1297,7 +1297,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetVisibleCoreVisibleParent()
+        public void ControlTests_GetVisibleCoreVisibleParent()
         {
             var cont = new Control();
             var parent = new Control();
@@ -1308,7 +1308,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Hide()
+        public void ControlTests_Hide()
         {
             var cont = new Control();
             cont.Visible = true;
@@ -1330,7 +1330,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(FontGetSetData))]
-        public void FontGetSet(Font expected)
+        public void ControlTests_FontGetSet(Font expected)
         {
             var cont = new Control();
 
@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(10.0f)]
         [InlineData(0.1f)]
         [InlineData(System.Single.Epsilon)]
-        public void ScaleFont(float expected)
+        public void ControlTests_ScaleFont(float expected)
         {
             var cont = new Control();
             cont.Font = new Font(new FontFamily(Drawing.Text.GenericFontFamilies.Serif), 1.0f);
@@ -1365,7 +1365,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(WindowTextGetSetData))]
-        public void WindowTextGetSet(string expected)
+        public void ControlTests_WindowTextGetSet(string expected)
         {
             var cont = new Control();
 
@@ -1382,7 +1382,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(NameGetSetData))]
-        public void NameGetSet(string expected)
+        public void ControlTests_NameGetSet(string expected)
         {
             var cont = new Control();
 
@@ -1399,7 +1399,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(TextGetSetData))]
-        public void TextGetSet(string expected)
+        public void ControlTests_TextGetSet(string expected)
         {
             var cont = new Control();
 
@@ -1420,7 +1420,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(CaptureGetSetData))]
-        public void CaptureGetSet(bool expected)
+        public void ControlTests_CaptureGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -1437,7 +1437,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(CaptureInternalGetSetData))]
-        public void CaptureInternalGetSet(bool expected)
+        public void ControlTests_CaptureInternalGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -1451,7 +1451,7 @@ namespace System.Windows.Forms.Tests
         #region CanProcessMnemonic
 
         [Fact]
-        public void CanProcessMnemonic()
+        public void ControlTests_CanProcessMnemonic()
         {
             var cont = new Control();
 
@@ -1460,7 +1460,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CanProcessMnemonicNotEnabled()
+        public void ControlTests_CanProcessMnemonicNotEnabled()
         {
             var cont = new Control();
             cont.Enabled = false;
@@ -1470,7 +1470,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CanProcessMnemonicNotVisible()
+        public void ControlTests_CanProcessMnemonicNotVisible()
         {
             var cont = new Control();
             cont.Visible = false;
@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CanProcessMnemonicParent()
+        public void ControlTests_CanProcessMnemonicParent()
         {
             var cont = new Control();
             var parent = new Control();
@@ -1495,7 +1495,7 @@ namespace System.Windows.Forms.Tests
         #region CanSelectCore
 
         [Fact]
-        public void CanSelectCore()
+        public void ControlTests_CanSelectCore()
         {
             var cont = new Control();
 
@@ -1504,7 +1504,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CanSelectCoreNotEnabled()
+        public void ControlTests_CanSelectCoreNotEnabled()
         {
             var cont = new Control();
             cont.Enabled = false;
@@ -1514,7 +1514,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CanSelectCoreParentNotEnabled()
+        public void ControlTests_CanSelectCoreParentNotEnabled()
         {
             var cont = new Control();
             cont.Enabled = true;
@@ -1531,7 +1531,7 @@ namespace System.Windows.Forms.Tests
         #region FindForm
 
         [Fact]
-        public void FindForm()
+        public void ControlTests_FindForm()
         {
             var cont = new Control();
             var form = new Form();
@@ -1542,7 +1542,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void FindFormNot()
+        public void ControlTests_FindFormNot()
         {
             var cont = new Control();
 
@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void FindFormInternal()
+        public void ControlTests_FindFormInternal()
         {
             var cont = new Control();
             var form = new Form();
@@ -1563,7 +1563,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void FindFormInternalNot()
+        public void ControlTests_FindFormInternalNot()
         {
             var cont = new Control();
 
@@ -1584,7 +1584,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetChildAtPointNullData))]
-        public void GetChildAtPointNull(GetChildAtPointSkip skip)
+        public void ControlTests_GetChildAtPointNull(GetChildAtPointSkip skip)
         {
             var cont = new Control();
 
@@ -1601,7 +1601,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetChildAtPointInvalidData))]
-        public void GetChildAtPointInvalid(GetChildAtPointSkip skip)
+        public void ControlTests_GetChildAtPointInvalid(GetChildAtPointSkip skip)
         {
             var cont = new Control();
 
@@ -1613,7 +1613,7 @@ namespace System.Windows.Forms.Tests
         #endregion
 
         [Fact]
-        public void GetHandle()
+        public void ControlTests_GetHandle()
         {
             var cont = new Control();
 
@@ -1623,7 +1623,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetHandleInternalShouldBeZero()
+        public void ControlTests_GetHandleInternalShouldBeZero()
         {
             var cont = new Control();
 
@@ -1641,7 +1641,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DoDragDropData))]
-        public void DoDragDrop(DragDropEffects expected)
+        public void ControlTests_DoDragDrop(DragDropEffects expected)
         {
             var cont = new Control();
             var mock = new Mock<IDataObject>(MockBehavior.Strict);
@@ -1653,7 +1653,7 @@ namespace System.Windows.Forms.Tests
 
         // TODO: create a focus test that returns true when a handle has been created
         [Fact]
-        public void FocusHandleNotCreated()
+        public void ControlTests_FocusHandleNotCreated()
         {
             var cont = new Control();
 
@@ -1665,7 +1665,7 @@ namespace System.Windows.Forms.Tests
         #region Misc. GetSet
 
         [Fact]
-        public void SiteGetSet()
+        public void ControlTests_SiteGetSet()
         {
             var cont = new Control();
             var mock = new Mock<ISite>(MockBehavior.Strict);
@@ -1684,7 +1684,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(UseWaitCursorGetSetData))]
-        public void UseWaitCursorGetSet(bool expected)
+        public void ControlTests_UseWaitCursorGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -1698,7 +1698,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, true)]
         [InlineData(false, true)] // setting is impossible; default is false
         // SupportsUseCompatibleTextRendering is always false
-        public void UseCompatibleTextRenderingIntGetSet(bool given, bool expected)
+        public void ControlTests_UseCompatibleTextRenderingIntGetSet(bool given, bool expected)
         {
             var cont = new Control();
 
@@ -1708,7 +1708,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void WindowTargetGetSet()
+        public void ControlTests_WindowTargetGetSet()
         {
             var cont = new Control();
             var mock = new Mock<IWindowTarget>(MockBehavior.Strict);
@@ -1726,7 +1726,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AllowDropData))]
-        public void AllowDropGetSet(bool expected)
+        public void ControlTests_AllowDropGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -1749,7 +1749,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoScrollOffsetGetSetData))]
-        public void AutoScrollOffsetGetSet(Point expected)
+        public void ControlTests_AutoScrollOffsetGetSet(Point expected)
         {
             var cont = new Control();
 
@@ -1759,7 +1759,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void BindingContextGetSet()
+        public void ControlTests_BindingContextGetSet()
         {
             var cont = new Control();
             var expected = new BindingContext();
@@ -1778,7 +1778,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(CausesValidationData))]
-        public void CausesValidationGetSet(bool expected)
+        public void ControlTests_CausesValidationGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -1790,7 +1790,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(false, false)]
         [InlineData(true, false)] // giving true cannot set to true
-        public void CacheTextInternalGetSet(bool given, bool expected)
+        public void ControlTests_CacheTextInternalGetSet(bool given, bool expected)
         {
             var cont = new Control();
 
@@ -1807,7 +1807,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ClientSizeGetSetData))]
-        public void ClientSizeGetSet(Size expected)
+        public void ControlTests_ClientSizeGetSet(Size expected)
         {
             var cont = new Control();
 
@@ -1817,7 +1817,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ContextMenuGetSet()
+        public void ControlTests_ContextMenuGetSet()
         {
             var cont = new Control();
             var expected = new ContextMenu();
@@ -1828,7 +1828,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ContextMenuStripGetSet()
+        public void ControlTests_ContextMenuStripGetSet()
         {
             var cont = new Control();
             var expected = new ContextMenuStrip();
@@ -1846,7 +1846,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ValidationCancelledGetSetData))]
-        public void ValidationCancelledGetSet(bool expected)
+        public void ControlTests_ValidationCancelledGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -1863,7 +1863,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(IsTopMdiWindowClosingGetSetData))]
-        public void IsTopMdiWindowClosingGetSet(bool expected)
+        public void ControlTests_IsTopMdiWindowClosingGetSet(bool expected)
         {
             var cont = new Control();
 
@@ -1880,7 +1880,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(CursorGetSetData))]
-        public void CursorGetSet(Cursor expected)
+        public void ControlTests_CursorGetSet(Cursor expected)
         {
             var cont = new Control();
 
@@ -1897,7 +1897,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DockGetSetData))]
-        public void DockGetSet(DockStyle expected)
+        public void ControlTests_DockGetSet(DockStyle expected)
         {
             var cont = new Control();
 

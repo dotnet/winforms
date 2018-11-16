@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class NumericUpDownTests
     {
         [Fact]
-        public void Constructor()
+        public void NumericUpDownTests_Constructor()
         {
             var nud = new NumericUpDown();
 

@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class PictureBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void PictureBoxTests_Constructor()
         {
             var pb = new PictureBox();
 

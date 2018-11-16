@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests
     {
         // WebBrowser needs to be run in STA
         [StaFact]
-        public void Constructor()
+        public void WebBrowserTests_Constructor()
         {
             var wb = new WebBrowser();
 

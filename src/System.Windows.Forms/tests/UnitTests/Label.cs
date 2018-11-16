@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class LabelTests
     {
         [Fact]
-        public void Constructor()
+        public void LabelTests_Constructor()
         {
             var label = new Label();
 

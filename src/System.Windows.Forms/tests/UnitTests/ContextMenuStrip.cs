@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class ContextMenuStripTests
     {
         [Fact]
-        public void Constructor()
+        public void ContextMenuStripTests_Constructor()
         {
             var cms = new ContextMenuStrip();
 
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ConstructorIContainer()
+        public void ContextMenuStripTests_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);

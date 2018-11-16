@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests
     public class DataObjectTests
     {
         [Fact]
-        private void Defaults()
+        private void DataObjectTests_Defaults()
         {
             var dataObject = new DataObject();
             var formats = dataObject.GetFormats(true);
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
         }
         [Theory]
         [MemberData(nameof(GetClipboardFormats))]
-        private void SetGetDataRoundTrip(string format)
+        private void DataObjectTests_SetGetDataRoundTrip(string format)
         {
             string input = "payload";
             DataObject dataObject = new DataObject();

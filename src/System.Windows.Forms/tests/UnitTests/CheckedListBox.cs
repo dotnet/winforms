@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class CheckedListBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void CheckedListBoxTests_Constructor()
         {
             var box = new CheckedListBox();
 
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(CheckOnClickData))]
-        public void CheckOnClick(bool expected)
+        public void CheckedListBoxTests_CheckOnClick(bool expected)
         {
             var box = new CheckedListBox();
 
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CheckedIndexCollectionNotNull()
+        public void CheckedListBoxTests_CheckedIndexCollectionNotNull()
         {
             var box = new CheckedListBox();
 
@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CheckedItemCollectionNotNull()
+        public void CheckedListBoxTests_CheckedItemCollectionNotNull()
         {
             var box = new CheckedListBox();
 
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DisplayMemberData))]
-        public void DisplayMember(string expected)
+        public void CheckedListBoxTests_DisplayMember(string expected)
         {
             var box = new CheckedListBox();
 
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DrawModeReturnsNormalOnly()
+        public void CheckedListBoxTests_DrawModeReturnsNormalOnly()
         {
             var box = new CheckedListBox();
 
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(SelectionMode.None)]
         [InlineData(SelectionMode.One)]
-        public void SelectionModeGetSet(SelectionMode expected)
+        public void CheckedListBoxTests_SelectionModeGetSet(SelectionMode expected)
         {
             var box = new CheckedListBox();
 
@@ -97,7 +97,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(SelectionMode.MultiSimple)]
         [InlineData(SelectionMode.MultiExtended)]
-        public void SelectionModeGetSetInvalidFromEnum(SelectionMode expected)
+        public void CheckedListBoxTests_SelectionModeGetSetInvalidFromEnum(SelectionMode expected)
         {
             var box = new CheckedListBox();
 
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(SelectionModeGetSetInvalidData))]
-        public void CheckStateGetSetInvalid(SelectionMode expected)
+        public void CheckedListBoxTests_CheckStateGetSetInvalid(SelectionMode expected)
         {
             var box = new CheckedListBox();
 
@@ -128,7 +128,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ThreeDCheckBoxesData))]
-        public void ThreeDCheckBoxes(bool expected)
+        public void CheckedListBoxTests_ThreeDCheckBoxes(bool expected)
         {
             var box = new CheckedListBox();
 
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ValueMemberData))]
-        public void ValueMember(string expected)
+        public void CheckedListBoxTests_ValueMember(string expected)
         {
             var box = new CheckedListBox();
 
@@ -162,7 +162,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(PaddingData))]
-        public void Padding(Padding expected)
+        public void CheckedListBoxTests_Padding(Padding expected)
         {
             var box = new CheckedListBox();
 
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(PaddingDataInvalid))]
-        public void PaddingInvalid(Padding attempted)
+        public void CheckedListBoxTests_PaddingInvalid(Padding attempted)
         {
             var box = new CheckedListBox();
 
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(1)]
         [InlineData(-1)]
         [InlineData(int.MaxValue)]
-        public void GetItemCheckStateOutOfRange(int index)
+        public void CheckedListBoxTests_GetItemCheckStateOutOfRange(int index)
         {
             var box = new CheckedListBox();
 
@@ -205,7 +205,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(1)]
         [InlineData(-1)]
         [InlineData(int.MaxValue)]
-        public void SetItemCheckStateOutOfRange(int index)
+        public void CheckedListBoxTests_SetItemCheckStateOutOfRange(int index)
         {
             var box = new CheckedListBox();
 
@@ -221,7 +221,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(SetItemCheckStateData))]
-        public void SetItemCheckState(CheckState expected)
+        public void CheckedListBoxTests_SetItemCheckState(CheckState expected)
         {
             var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
@@ -239,7 +239,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(SetItemCheckStateInvalidData))]
-        public void SetItemCheckStateInvalid(CheckState expected)
+        public void CheckedListBoxTests_SetItemCheckStateInvalid(CheckState expected)
         {
             var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
@@ -251,7 +251,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(true, CheckState.Checked)]
         [InlineData(false, CheckState.Unchecked)]
-        public void SetItemChecked(bool send, CheckState expected)
+        public void CheckedListBoxTests_SetItemChecked(bool send, CheckState expected)
         {
             var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);

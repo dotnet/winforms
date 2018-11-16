@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class SplitContainerTests
     {
         [Fact]
-        public void Constructor()
+        public void SplitContainerTests_Constructor()
         {
             var sc = new SplitContainer();
 

@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class VScrollBarTests
     {
         [Fact]
-        public void Constructor()
+        public void VScrollBarTests_Constructor()
         {
             var vsb = new VScrollBar();
 

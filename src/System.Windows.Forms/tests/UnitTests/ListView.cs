@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class ListViewTests
     {
         [Fact]
-        public void Constructor()
+        public void ListViewTests_Constructor()
         {
             var lv = new ListView();
 

@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class RichTextBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void RichTextBoxTests_Constructor()
         {
             var rtb = new RichTextBox();
 

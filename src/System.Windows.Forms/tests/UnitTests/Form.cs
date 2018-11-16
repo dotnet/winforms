@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class FormTests
     {
         [Fact]
-        public void Constructor()
+        public void FormTests_Constructor()
         {
             var form = new Form();
 
@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void AcceptButtonGetSet()
+        public void FormTests_AcceptButtonGetSet()
         {
             var form = new Form();
             var mock = new Mock<IButtonControl>(MockBehavior.Strict);
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ActiveGetSetData))]
-        public void ActiveGetSet(bool expected)
+        public void FormTests_ActiveGetSet(bool expected)
         {
             var form = new Form();
 
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
 
         // non deterministic, commenting out for now
         /*[Fact]
-        public void ActiveFormNotSetActive()
+        public void FormTests_ActiveFormNotSetActive()
         {
             var form = new Form();
 
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Tests
         }*/
 
         [Fact]
-        public void ActiveMdiChildInternalGetSet()
+        public void FormTests_ActiveMdiChildInternalGetSet()
         {
             var form = new Form();
             var child = new Form();
@@ -80,7 +80,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ActiveMdiChildGetSet()
+        public void FormTests_ActiveMdiChildGetSet()
         {
             var form = new Form();
             var child = new Form();
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ActiveMdiChildGetSetChildNotVisible()
+        public void FormTests_ActiveMdiChildGetSetChildNotVisible()
         {
             var form = new Form();
             var child = new Form();
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ActiveMdiChildGetSetChildNotEnabled()
+        public void FormTests_ActiveMdiChildGetSetChildNotEnabled()
         {
             var form = new Form();
             var child = new Form();
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ActiveMdiChildNoSet()
+        public void FormTests_ActiveMdiChildNoSet()
         {
             var form = new Form();
 
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AllowTransparencyGetSetData))]
-        public void AllowTransparencyGetSet(bool expected)
+        public void FormTests_AllowTransparencyGetSet(bool expected)
         {
             var form = new Form();
 
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoScaleModeGetSetData))]
-        public void AutoScaleModeGetSet(AutoScaleMode expected)
+        public void FormTests_AutoScaleModeGetSet(AutoScaleMode expected)
         {
             var form = new Form();
 
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoScrollGetSetData))]
-        public void AutoScrollGetSet(bool expected)
+        public void FormTests_AutoScrollGetSet(bool expected)
         {
             var form = new Form();
 
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoSizeGetSetData))]
-        public void AutoSizeGetSet(bool expected)
+        public void FormTests_AutoSizeGetSet(bool expected)
         {
             var form = new Form();
 

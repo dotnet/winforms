@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
     public class ButtonTests
     {
         [Fact]
-        public void Constructor()
+        public void ButtonTests_Constructor()
         {
             var button = new Button();
 
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoSizeModeGetSetData))]
-        public void AutoSizeModeGetSet(AutoSizeMode expected)
+        public void ButtonTests_AutoSizeModeGetSet(AutoSizeMode expected)
         {
             var button = new Button();
 
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoSizeModeGetSetInvalidData))]
-        public void AutoSizeModeGetSetInvalid(AutoSizeMode expected)
+        public void ButtonTests_AutoSizeModeGetSetInvalid(AutoSizeMode expected)
         {
             var button = new Button();
 
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CreateFlatAdapter()
+        public void ButtonTests_CreateFlatAdapter()
         {
             var button = new Button();
 
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CreatePopupAdapter()
+        public void ButtonTests_CreatePopupAdapter()
         {
             var button = new Button();
 
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CreateStandardAdapter()
+        public void ButtonTests_CreateStandardAdapter()
         {
             var button = new Button();
 
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetPreferredSizeCoreData))]
-        public void GetPreferredSizeCore(Button button, Size proposed, Size expected)
+        public void ButtonTests_GetPreferredSizeCore(Button button, Size proposed, Size expected)
         {
             var actual = button.GetPreferredSizeCore(proposed);
 
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DialogResultGetSetData))]
-        public void DialogResultGetSet(DialogResult expected)
+        public void ButtonTests_DialogResultGetSet(DialogResult expected)
         {
             var button = new Button();
 
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DialogResultGetSetInvalidData))]
-        public void DialogResultGetSetInvalid(DialogResult expected)
+        public void ButtonTests_DialogResultGetSetInvalid(DialogResult expected)
         {
             var button = new Button();
 
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(NotifyDefaultData))]
-        public void NotifyDefault(bool expected)
+        public void ButtonTests_NotifyDefault(bool expected)
         {
             var button = new Button();
 
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PerformClick()
+        public void ButtonTests_PerformClick()
         {
             var wasClicked = false;
             var button = new Button();
@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ToStringTest()
+        public void ButtonTests_ToStringTest()
         {
             var button = new Button();
             button.Text = "Hello World!";

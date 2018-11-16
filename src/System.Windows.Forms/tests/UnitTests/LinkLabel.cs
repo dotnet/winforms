@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class LinkLabelTests
     {
         [Fact]
-        public void Constructor()
+        public void LinkLabelTests_Constructor()
         {
             var label = new LinkLabel();
 

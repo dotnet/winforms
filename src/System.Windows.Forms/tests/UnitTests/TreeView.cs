@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class TreeViewTests
     {
         [Fact]
-        public void Constructor()
+        public void TreeViewTests_Constructor()
         {
             var tv = new TreeView();
 

@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class RadioButtonTests
     {
         [Fact]
-        public void Constructor()
+        public void RadioButtonTests_Constructor()
         {
             var button = new RadioButton();
 

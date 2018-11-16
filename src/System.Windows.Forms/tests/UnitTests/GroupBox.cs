@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class GroupBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void GroupBoxTests_Constructor()
         {
             var gb = new GroupBox();
 
