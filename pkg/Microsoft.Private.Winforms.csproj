@@ -24,8 +24,6 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
 
-    <!-- Call a specific target (defined later) when creating the package -->
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);SetPackagePath;AddRelativePackageFiles</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
   <!-- nuspec properties -->
@@ -45,7 +43,8 @@
     </ProjectReference>
   </ItemDefinitionGroup>
 
-  <!-- Any projects referenced here will have their outputs automatically put into the package, with directories preserved -->
+  <!-- Any projects referenced here will have their outputs automatically put into the package -->
+  <!-- If you add a new csproj, and you want the outputs in the package, you must add it here -->
   <ItemGroup>
     <ProjectReference Include="..\src\System.Windows.Forms\ref\System.Windows.Forms.Ref.csproj" />
     <ProjectReference Include="..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
@@ -60,7 +59,12 @@
     </ItemGroup>
   </Target>
 
-  <!-- Set the package path for all TfmSpecificPackageFile items, after references are resolved-->
+  <!-- Call custom targets (defined below) when creating the package -->
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);SetPackagePath;AddRelativePackageFiles</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <!-- Set package paths for project reference outputs -->
   <Target Name="SetPackagePath" DependsOnTargets="ResolveReferences">
     <ItemGroup>
       <TfmSpecificPackageFile>
