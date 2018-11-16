@@ -13,7 +13,6 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // arrange
             var form = new Form();
 
             // and & assert
@@ -26,15 +25,12 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void AcceptButtonGetSet()
         {
-            // arrange
             var form = new Form();
             var mock = new Mock<IButtonControl>(MockBehavior.Strict);
             mock.Setup(x => x.NotifyDefault(It.IsAny<bool>()));
 
-            // act
             form.AcceptButton = mock.Object;
 
-            // assert
             Assert.Equal(mock.Object, form.AcceptButton);
         }
 
@@ -50,13 +46,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ActiveGetSetData))]
         public void ActiveGetSet(bool expected)
         {
-            // arrange
             var form = new Form();
 
-            // act
             form.Active = expected;
 
-            // assert
             Assert.Equal(expected, form.Active);
         }
 
@@ -64,14 +57,11 @@ namespace System.Windows.Forms.Tests
         /*[Fact]
         public void ActiveFormNotSetActive()
         {
-            // arrange
             var form = new Form();
 
-            // act
             form.Visible = true;
             form.Active = false;
 
-            // assert
             Assert.NotNull(Form.ActiveForm);
             Assert.Equal(form, Form.ActiveForm);
             Assert.False(Form.ActiveForm.Active);
@@ -80,14 +70,11 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ActiveMdiChildInternalGetSet()
         {
-            // arrange
             var form = new Form();
             var child = new Form();
 
-            // act
             form.ActiveMdiChildInternal = child;
 
-            // assert
             Assert.NotNull(form.ActiveMdiChildInternal);
             Assert.Equal(child, form.ActiveMdiChildInternal);
         }
@@ -95,16 +82,13 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ActiveMdiChildGetSet()
         {
-            // arrange
             var form = new Form();
             var child = new Form();
             child.Visible = true;
             child.Enabled = true;
 
-            // act
             form.ActiveMdiChildInternal = child;
 
-            // assert
             Assert.NotNull(form.ActiveMdiChild);
             Assert.Equal(child, form.ActiveMdiChild);
         }
@@ -112,44 +96,36 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ActiveMdiChildGetSetChildNotVisible()
         {
-            // arrange
             var form = new Form();
             var child = new Form();
             child.Visible = false;
             child.Enabled = true;
 
-            // act
             form.ActiveMdiChildInternal = child;
 
-            // assert
             Assert.Null(form.ActiveMdiChild);
         }
 
         [Fact]
         public void ActiveMdiChildGetSetChildNotEnabled()
         {
-            // arrange
             var form = new Form();
             var child = new Form();
             child.Visible = true;
             child.Enabled = false;
 
-            // act
             form.ActiveMdiChildInternal = child;
 
-            // assert
             Assert.Null(form.ActiveMdiChild);
         }
 
         [Fact]
         public void ActiveMdiChildNoSet()
         {
-            // arrange
             var form = new Form();
 
             // act          
 
-            // assert
             Assert.Null(form.ActiveMdiChild);
         }
 
@@ -165,13 +141,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AllowTransparencyGetSetData))]
         public void AllowTransparencyGetSet(bool expected)
         {
-            // arrange
             var form = new Form();
 
-            // act
             form.AllowTransparency = expected;
 
-            // assert
             Assert.Equal(expected, form.AllowTransparency);
         }
 
@@ -185,13 +158,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AutoScaleModeGetSetData))]
         public void AutoScaleModeGetSet(AutoScaleMode expected)
         {
-            // arrange
             var form = new Form();
 
-            // act
             form.AutoScaleMode = expected;
 
-            // assert
             Assert.Equal(expected, form.AutoScaleMode);
         }
 
@@ -205,13 +175,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AutoScrollGetSetData))]
         public void AutoScrollGetSet(bool expected)
         {
-            // arrange
             var form = new Form();
 
-            // act
             form.AutoScroll = expected;
 
-            // assert
             Assert.Equal(expected, form.AutoScroll);
         }
 
@@ -225,13 +192,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AutoSizeGetSetData))]
         public void AutoSizeGetSet(bool expected)
         {
-            // arrange
             var form = new Form();
 
-            // act
             form.AutoSize = expected;
 
-            // assert
             Assert.Equal(expected, form.AutoSize);
         }
 

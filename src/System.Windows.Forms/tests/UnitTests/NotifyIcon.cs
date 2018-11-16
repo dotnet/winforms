@@ -13,17 +13,14 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var icon = new NotifyIcon();
 
-            // assert
             Assert.NotNull(icon);
         }
 
         [Fact]
         public void ConstructorIContainer()
         {
-            // arrange
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<NotifyIcon>())).Verifiable();

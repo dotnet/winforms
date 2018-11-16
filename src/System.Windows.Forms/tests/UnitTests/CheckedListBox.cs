@@ -13,10 +13,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var box = new CheckedListBox();
 
-            // assert
             Assert.NotNull(box);   
         }
 
@@ -30,39 +28,30 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CheckOnClickData))]
         public void CheckOnClick(bool expected)
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             box.CheckOnClick = expected;
 
-            // assert
             Assert.Equal(expected, box.CheckOnClick);
         }
 
         [Fact]
         public void CheckedIndexCollectionNotNull()
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             var collection = box.CheckedIndices;
 
-            // assert
             Assert.NotNull(collection);
         }
 
         [Fact]
         public void CheckedItemCollectionNotNull()
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             var collection = box.CheckedItems;
 
-            // assert
             Assert.NotNull(collection);
         }
 
@@ -76,26 +65,20 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(DisplayMemberData))]
         public void DisplayMember(string expected)
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             box.DisplayMember = expected;
 
-            // assert
             Assert.Equal(expected, box.DisplayMember);
         }
 
         [Fact]
         public void DrawModeReturnsNormalOnly()
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             var result = box.DrawMode;
 
-            // assert
             Assert.Equal(DrawMode.Normal, result);
         }
 
@@ -104,13 +87,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(SelectionMode.One)]
         public void SelectionModeGetSet(SelectionMode expected)
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             box.SelectionMode = expected;
 
-            // assert
             Assert.Equal(expected, box.SelectionMode);
         }
 
@@ -119,7 +99,6 @@ namespace System.Windows.Forms.Tests
         [InlineData(SelectionMode.MultiExtended)]
         public void SelectionModeGetSetInvalidFromEnum(SelectionMode expected)
         {
-            // arrange
             var box = new CheckedListBox();
 
             var ex = Assert.Throws<ArgumentException>(() => box.SelectionMode = expected);
@@ -135,7 +114,6 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(SelectionModeGetSetInvalidData))]
         public void CheckStateGetSetInvalid(SelectionMode expected)
         {
-            // arrange
             var box = new CheckedListBox();
 
             var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SelectionMode = expected);
@@ -152,13 +130,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ThreeDCheckBoxesData))]
         public void ThreeDCheckBoxes(bool expected)
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             box.ThreeDCheckBoxes = expected;
 
-            // assert
             Assert.Equal(expected, box.ThreeDCheckBoxes);
         }
 
@@ -172,13 +147,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ValueMemberData))]
         public void ValueMember(string expected)
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             box.ValueMember = expected;
 
-            // assert
             Assert.Equal(expected, box.ValueMember);
         }
 
@@ -192,13 +164,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(PaddingData))]
         public void Padding(Padding expected)
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             box.Padding = expected;
 
-            // assert
             Assert.Equal(expected, box.Padding);
         }
 
@@ -212,13 +181,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(PaddingDataInvalid))]
         public void PaddingInvalid(Padding attempted)
         {
-            // arrange
             var box = new CheckedListBox();
 
-            // act
             box.Padding = attempted;
 
-            // assert
             Assert.NotEqual(attempted, box.Padding); //paddings cannot be negative
             Assert.Equal(new Padding(), box.Padding);
         }
@@ -229,7 +195,6 @@ namespace System.Windows.Forms.Tests
         [InlineData(int.MaxValue)]
         public void GetItemCheckStateOutOfRange(int index)
         {
-            // arrange
             var box = new CheckedListBox();
 
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.GetItemCheckState(index));
@@ -242,7 +207,6 @@ namespace System.Windows.Forms.Tests
         [InlineData(int.MaxValue)]
         public void SetItemCheckStateOutOfRange(int index)
         {
-            // arrange
             var box = new CheckedListBox();
 
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.SetItemCheckState(index, CheckState.Checked));
@@ -259,14 +223,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(SetItemCheckStateData))]
         public void SetItemCheckState(CheckState expected)
         {
-            // arrange
             var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
 
-            // act
             box.SetItemCheckState(0, expected);
 
-            // assert
             Assert.Equal(expected, box.GetItemCheckState(0));
         }
 
@@ -280,7 +241,6 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(SetItemCheckStateInvalidData))]
         public void SetItemCheckStateInvalid(CheckState expected)
         {
-            // arrange
             var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
 
@@ -293,14 +253,11 @@ namespace System.Windows.Forms.Tests
         [InlineData(false, CheckState.Unchecked)]
         public void SetItemChecked(bool send, CheckState expected)
         {
-            // arrange
             var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
 
-            // act
             box.SetItemChecked(0, send);
 
-            // assert
             Assert.Equal(expected, box.GetItemCheckState(0));
         }
 

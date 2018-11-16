@@ -13,17 +13,14 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var tt = new ToolTip();
 
-            // assert
             Assert.NotNull(tt);
         }
 
         [Fact]
         public void ConstructorIContainer()
         {
-            // arrange
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<ToolTip>())).Verifiable();

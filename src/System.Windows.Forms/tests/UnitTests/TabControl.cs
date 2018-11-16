@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var tc = new TabControl();
 
-            // assert
             Assert.NotNull(tc);
             Assert.NotNull(tc.TabPages);
         }

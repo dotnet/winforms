@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var tsc = new ToolStripContainer();
 
-            // assert
             Assert.NotNull(tsc);
             Assert.NotNull(tsc.TopToolStripPanel);
             Assert.NotNull(tsc.BottomToolStripPanel);

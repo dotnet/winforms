@@ -13,10 +13,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var box = new CheckBox();
 
-            // assert
             Assert.NotNull(box);
             Assert.True(box.AutoCheck);
             Assert.Equal(ContentAlignment.MiddleLeft, box.TextAlign);
@@ -33,13 +31,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AppearanceGetSetData))]
         public void AutoSizeModeGetSet(Appearance expected)
         {
-            // arrange
             var box = new CheckBox();
 
-            // act
             box.Appearance = expected;
 
-            // assert
             Assert.Equal(expected, box.Appearance);
         }
 
@@ -53,7 +48,6 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AppearanceGetSetInvalidData))]
         public void AppearanceGetSetInvalid(Appearance expected)
         {
-            // arrange
             var box = new CheckBox();
 
             var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.Appearance = expected);
@@ -70,13 +64,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AutoCheckData))]
         public void AutoCheck(bool expected)
         {
-            // arrange
             var box = new CheckBox();
 
-            // act
             box.AutoCheck = expected;
 
-            // assert
             Assert.Equal(expected, box.AutoCheck);
         }
 
@@ -90,14 +81,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ContentAlignmentGetSetData))]
         public void ContentAlignmentGetSet(ContentAlignment expected)
         {
-            // arrange
             var box = new CheckBox();
 
-            // act
             box.CheckAlign = expected;
             box.TextAlign = expected;
 
-            // assert
             Assert.Equal(expected, box.CheckAlign);
             Assert.Equal(expected, box.TextAlign);
         }
@@ -112,7 +100,6 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ContentAlignmentGetSetInvalidData))]
         public void ContentAlignmentGetSetInvalid(ContentAlignment expected)
         {
-            // arrange
             var box = new CheckBox();
 
             var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckAlign = expected);
@@ -152,13 +139,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CheckStateGetSetData))]
         public void CheckStateGetSet(CheckState expected)
         {
-            // arrange
             var box = new CheckBox();
 
-            // act
             box.CheckState = expected;
 
-            // assert
             Assert.Equal(expected, box.CheckState);
         }
 
@@ -172,7 +156,6 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CheckStateGetSetInvalidData))]
         public void CheckStateGetSetInvalid(CheckState expected)
         {
-            // arrange
             var box = new CheckBox();
 
             var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckState = expected);
@@ -189,52 +172,40 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ThreeStateData))]
         public void ThreeState(bool expected)
         {
-            // arrange
             var box = new CheckBox();
 
-            // act
             box.ThreeState = expected;
 
-            // assert
             Assert.Equal(expected, box.ThreeState);
         }
 
         [Fact]
         public void CreateFlatAdapter()
         {
-            // arrange
             var box = new CheckBox();
 
-            // act
             var buttonBaseAdptr = box.CreateFlatAdapter();
 
-            // assert
             Assert.NotNull(buttonBaseAdptr);
         }
 
         [Fact]
         public void CreatePopupAdapter()
         {
-            // arrange
             var box = new CheckBox();
 
-            // act
             var checkBoxPopupAdptr = box.CreatePopupAdapter();
 
-            // assert
             Assert.NotNull(checkBoxPopupAdptr);
         }
 
         [Fact]
         public void CreateStandardAdapter()
         {
-            // arrange
             var box = new CheckBox();
 
-            // act
             var checkBoxSndAdptr = box.CreateStandardAdapter();
 
-            // assert
             Assert.NotNull(checkBoxSndAdptr);
         }
 
@@ -242,14 +213,11 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ToStringTest()
         {
-            // arrange
             var box = new CheckBox();
             var expected = "System.Windows.Forms.CheckBox, CheckState: 0";
 
-            // act
             var actual = box.ToString();
 
-            // assert
             Assert.Equal(expected, actual);
         }
 

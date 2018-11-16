@@ -13,10 +13,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var ep = new ErrorProvider();
 
-            // assert
             Assert.NotNull(ep);
             Assert.NotNull(ep.Icon);
         }
@@ -24,13 +22,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ConstructorContainerControl()
         {
-            // arrange
             var parent = new ContainerControl();
 
-            // act
             var ep = new ErrorProvider(parent);
 
-            // assert
             Assert.NotNull(ep);
             Assert.NotNull(ep.Icon);
         }
@@ -38,7 +33,6 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ConstructorIContainer()
         {
-            // arrange
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<ErrorProvider>())).Verifiable();

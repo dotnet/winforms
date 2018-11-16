@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var label = new LinkLabel();
 
-            // assert
             Assert.NotNull(label);
             Assert.True(label.LinkArea.IsEmpty);            
             Assert.Equal(0, label.LinkArea.Start);

@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var dtp = new DateTimePicker();
 
-            // assert
             Assert.NotNull(dtp);
             Assert.Equal(DateTimePickerFormat.Long, dtp.Format);
         }

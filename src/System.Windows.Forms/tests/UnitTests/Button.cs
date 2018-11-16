@@ -14,10 +14,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var button = new Button();
 
-            // assert
             Assert.NotNull(button);
         }
 
@@ -31,13 +29,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AutoSizeModeGetSetData))]
         public void AutoSizeModeGetSet(AutoSizeMode expected)
         {
-            // arrange
             var button = new Button();
 
-            // act
             button.AutoSizeMode = expected;
 
-            // assert
             Assert.Equal(expected, button.AutoSizeMode);
         }
 
@@ -51,7 +46,6 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AutoSizeModeGetSetInvalidData))]
         public void AutoSizeModeGetSetInvalid(AutoSizeMode expected)
         {
-            // arrange
             var button = new Button();
 
             // act & assert
@@ -62,39 +56,30 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void CreateFlatAdapter()
         {
-            // arrange
             var button = new Button();
 
-            // act
             var adaptor = button.CreateFlatAdapter();
 
-            // assert
             Assert.NotNull(adaptor);
         }
 
         [Fact]
         public void CreatePopupAdapter()
         {
-            // arrange
             var button = new Button();
 
-            // act
             var adaptor = button.CreatePopupAdapter();
 
-            // assert
             Assert.NotNull(adaptor);
         }
 
         [Fact]
         public void CreateStandardAdapter()
         {
-            // arrange
             var button = new Button();
 
-            // act
             var adaptor = button.CreateStandardAdapter();
 
-            // assert
             Assert.NotNull(adaptor);
         }
 
@@ -105,10 +90,8 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(GetPreferredSizeCoreData))]
         public void GetPreferredSizeCore(Button button, Size proposed, Size expected)
         {
-            // act
             var actual = button.GetPreferredSizeCore(proposed);
 
-            // assert
             Assert.Equal(expected, actual);
         }
 
@@ -122,13 +105,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(DialogResultGetSetData))]
         public void DialogResultGetSet(DialogResult expected)
         {
-            // arrange
             var button = new Button();
 
-            // act
             button.DialogResult = expected;
 
-            // assert
             Assert.Equal(expected, button.DialogResult);
         }
 
@@ -142,7 +122,6 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(DialogResultGetSetInvalidData))]
         public void DialogResultGetSetInvalid(DialogResult expected)
         {
-            // arrange
             var button = new Button();
 
             // act & assert
@@ -160,43 +139,34 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(NotifyDefaultData))]
         public void NotifyDefault(bool expected)
         {
-            // arrange
             var button = new Button();
 
-            // act
             button.NotifyDefault(expected);
 
-            // assert
             Assert.Equal(expected, button.IsDefault);
         }
 
         [Fact]
         public void PerformClick()
         {
-            // arrange
             var wasClicked = false;
             var button = new Button();
             button.Click += (sender, args) => wasClicked = true;
 
-            // act
             button.PerformClick();
 
-            // assert
             Assert.True(wasClicked);
         }
 
         [Fact]
         public void ToStringTest()
         {
-            // arrange
             var button = new Button();
             button.Text = "Hello World!";
             var expected = "System.Windows.Forms.Button, Text: " + button.Text;
 
-            // act
             var actual = button.ToString();
 
-            // assert
             Assert.Equal(expected, actual);
         }
 

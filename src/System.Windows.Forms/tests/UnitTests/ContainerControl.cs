@@ -19,10 +19,8 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AutoScaleBaseSizeData))]
         public void AutoScaleBaseSize(System.Drawing.Size expected)
         {
-            // arrange
             var contCont = new ContainerControl();
 
-            // act
             if (expected.Width < 0 || expected.Height < 0)
             {
                 Assert.Throws<ArgumentOutOfRangeException>(() => contCont.AutoScaleDimensions = expected);
@@ -32,7 +30,6 @@ namespace System.Windows.Forms.Tests
                 contCont.AutoScaleDimensions = expected;
                 var actual = contCont.AutoScaleDimensions;
 
-                // assert
                 Assert.Equal(expected, actual);
             }
 

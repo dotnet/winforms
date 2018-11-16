@@ -12,10 +12,8 @@ namespace System.Windows.Forms.Tests
         [StaFact]
         public void Constructor()
         {
-            // act
             var wb = new WebBrowser();
 
-            // assert
             Assert.NotNull(wb);
             Assert.True(wb.AllowNavigation);
         }

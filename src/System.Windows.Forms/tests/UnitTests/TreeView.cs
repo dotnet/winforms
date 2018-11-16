@@ -11,10 +11,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var tv = new TreeView();
 
-            // assert
             Assert.NotNull(tv);
             Assert.NotNull(tv.root);
             Assert.NotNull(tv.SelectedImageIndexer);

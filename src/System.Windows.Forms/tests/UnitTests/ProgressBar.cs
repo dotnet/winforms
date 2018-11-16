@@ -13,10 +13,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Constructor()
         {
-            // act
             var pb = new ProgressBar();
 
-            // assert
             Assert.NotNull(pb);
             Assert.Equal(SystemColors.Highlight, pb.ForeColor);
         }
