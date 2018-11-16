@@ -17,6 +17,7 @@
   <PropertyGroup>
 
     <!-- Don't build this project -->
+    <!-- Todo: this doesn't seem to work, find another way to prevent build outputs -->
     <NoBuild>true</NoBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
@@ -86,14 +87,14 @@
       <_baseDirectory>%(TfmSpecificPackageFile.RootDir)%(TfmSpecificPackageFile.Directory)</_baseDirectory>
       <_baseFileName>%(TfmSpecificPackageFile.FileName)</_baseFileName>
       <_packagePath>%(TfmSpecificPackageFile.PackagePath)</_packagePath>
+      <_isReferenceAssembly>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj'))</_isReferenceAssembly>
     </PropertyGroup>
     
     <ItemGroup>
 
       <!-- Get pdbs, but not for reference binaries -->
       <TfmSpecificPackageFile Include="$(_baseDirectory)$(_baseFileName).pdb" 
-                              Condition="Exists('$(_baseDirectory)$(_baseFileName).pdb') And
-                                        !($([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj')))">
+                              Condition="Exists('$(_baseDirectory)$(_baseFileName).pdb') And !$(_isReferenceAssembly)">
         <PackagePath>$(_packagePath)</PackagePath>
       </TfmSpecificPackageFile>
 
