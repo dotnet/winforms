@@ -60,8 +60,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, form.Active);
         }
 
-
-        [Fact]
+        // non deterministic, commenting out for now
+        /*[Fact]
         public void ActiveFormNotSetActive()
         {
             // arrange
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(Form.ActiveForm);
             Assert.Equal(form, Form.ActiveForm);
             Assert.False(Form.ActiveForm.Active);
-        }
+        }*/
 
         [Fact]
         public void ActiveMdiChildInternalGetSet()
