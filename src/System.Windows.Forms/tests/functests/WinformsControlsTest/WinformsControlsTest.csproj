@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>WinformsControlsTest</AssemblyName>
     <ApplicationIcon />
     <OutputType>WinExe</OutputType>
     <StartupObject />
