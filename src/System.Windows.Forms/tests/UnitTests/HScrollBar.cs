@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class HScrollBarTests
     {
         [Fact]
-        public void HScrollBarTests_Constructor()
+        public void HScrollBar_Constructor()
         {
             var hsb = new HScrollBar();
 

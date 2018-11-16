@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class DataGridViewTests
     {
         [Fact]
-        public void DataGridViewTests_Constructor()
+        public void DataGridView_Constructor()
         {
             var dgv = new DataGridView();
 

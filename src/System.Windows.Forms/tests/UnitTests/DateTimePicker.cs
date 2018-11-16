@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class DateTimePickerTests
     {
         [Fact]
-        public void DateTimePickerTests_Constructor()
+        public void DateTimePicker_Constructor()
         {
             var dtp = new DateTimePicker();
 

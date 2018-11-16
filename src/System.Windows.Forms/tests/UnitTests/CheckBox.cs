@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class CheckBoxTests
     {
         [Fact]
-        public void CheckBoxTests_Constructor()
+        public void CheckBox_Constructor()
         {
             var box = new CheckBox();
 
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AppearanceGetSetData))]
-        public void CheckBoxTests_AutoSizeModeGetSet(Appearance expected)
+        public void CheckBox_AutoSizeModeGetSet(Appearance expected)
         {
             var box = new CheckBox();
 
@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AppearanceGetSetInvalidData))]
-        public void CheckBoxTests_AppearanceGetSetInvalid(Appearance expected)
+        public void CheckBox_AppearanceGetSetInvalid(Appearance expected)
         {
             var box = new CheckBox();
 
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoCheckData))]
-        public void CheckBoxTests_AutoCheck(bool expected)
+        public void CheckBox_AutoCheck(bool expected)
         {
             var box = new CheckBox();
 
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ContentAlignmentGetSetData))]
-        public void CheckBoxTests_ContentAlignmentGetSet(ContentAlignment expected)
+        public void CheckBox_ContentAlignmentGetSet(ContentAlignment expected)
         {
             var box = new CheckBox();
 
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ContentAlignmentGetSetInvalidData))]
-        public void CheckBoxTests_ContentAlignmentGetSetInvalid(ContentAlignment expected)
+        public void CheckBox_ContentAlignmentGetSetInvalid(ContentAlignment expected)
         {
             var box = new CheckBox();
 
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CheckBoxTests_ShouldBeChecked()
+        public void CheckBox_ShouldBeChecked()
         {
             var box = new CheckBox();
 
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CheckBoxTests_ShouldBeNotChecked()
+        public void CheckBox_ShouldBeNotChecked()
         {
             var box = new CheckBox();
 
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(CheckStateGetSetData))]
-        public void CheckBoxTests_CheckStateGetSet(CheckState expected)
+        public void CheckBox_CheckStateGetSet(CheckState expected)
         {
             var box = new CheckBox();
 
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(CheckStateGetSetInvalidData))]
-        public void CheckBoxTests_CheckStateGetSetInvalid(CheckState expected)
+        public void CheckBox_CheckStateGetSetInvalid(CheckState expected)
         {
             var box = new CheckBox();
 
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ThreeStateData))]
-        public void CheckBoxTests_ThreeState(bool expected)
+        public void CheckBox_ThreeState(bool expected)
         {
             var box = new CheckBox();
 
@@ -180,7 +180,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CheckBoxTests_CreateFlatAdapter()
+        public void CheckBox_CreateFlatAdapter()
         {
             var box = new CheckBox();
 
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CheckBoxTests_CreatePopupAdapter()
+        public void CheckBox_CreatePopupAdapter()
         {
             var box = new CheckBox();
 
@@ -200,7 +200,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CheckBoxTests_CreateStandardAdapter()
+        public void CheckBox_CreateStandardAdapter()
         {
             var box = new CheckBox();
 
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.Tests
 
         // the zero here may be an issue with cultural variance
         [Fact]
-        public void CheckBoxTests_ToStringTest()
+        public void CheckBox_ToStringTest()
         {
             var box = new CheckBox();
             var expected = "System.Windows.Forms.CheckBox, CheckState: 0";

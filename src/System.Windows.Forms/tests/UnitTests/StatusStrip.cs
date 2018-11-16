@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class StatusStripTests
     {
         [Fact]
-        public void StatusStripTests_Constructor()
+        public void StatusStrip_Constructor()
         {
             var ss = new StatusStrip();
 

@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests
     public class BindingNavigatorTests
     {
         [Fact]
-        public void BindingNavigatorTests_Constructor()
+        public void BindingNavigator_Constructor()
         {
             var bn = new BindingNavigator();
 
@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
         }
         
        [Fact]
-        public void BindingNavigatorTests_BindingNavigatorTests_ConstructorBindingSource()
+        public void BindingNavigator_BindingNavigator_ConstructorBindingSource()
         {
             var bindingSource = new BindingSource();
             var data = new List<string>() { "Foo", "Bar" };
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void BindingNavigatorTests_ConstructorIContainer()
+        public void BindingNavigator_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Tests
         }
         
         [Fact]
-        public void BindingNavigatorTests_ConstructorBool()
+        public void BindingNavigator_ConstructorBool()
         {
             var bn = new BindingNavigator(true);
 

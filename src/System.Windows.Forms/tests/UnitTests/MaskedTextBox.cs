@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests
     public class MaskedTextBoxTests
     {
         [Fact]
-        public void MaskedTextBoxTests_Constructor()
+        public void MaskedTextBox_Constructor()
         {
             var mtb = new MaskedTextBox();
 
@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void MaskedTextBoxTests_ConstructorString()
+        public void MaskedTextBox_ConstructorString()
         {
             var mtb = new MaskedTextBox("Hello World!");
 
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void MaskedTextBoxTests_ConstructorMaskedTextProvider()
+        public void MaskedTextBox_ConstructorMaskedTextProvider()
         {
             var mtb = new MaskedTextBox(new MaskedTextProvider("Hello World!"));
 

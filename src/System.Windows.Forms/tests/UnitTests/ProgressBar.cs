@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class ProgressBarTests
     {
         [Fact]
-        public void ProgressBarTests_Constructor()
+        public void ProgressBar_Constructor()
         {
             var pb = new ProgressBar();
 

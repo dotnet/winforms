@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class PropertyGridTests
     {
         [Fact]
-        public void PropertyGridTests_Constructor()
+        public void PropertyGrid_Constructor()
         {
             var pg = new PropertyGrid();
 

@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class ToolStripTests
     {
         [Fact]
-        public void ToolStripTests_Constructor()
+        public void ToolStrip_Constructor()
         {
             var ts = new ToolStrip();
 
@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ToolStripTests_ConstructorItems()
+        public void ToolStrip_ConstructorItems()
         {
             var button = new ToolStripButton();
             var items = new ToolStripItem[1] { button };

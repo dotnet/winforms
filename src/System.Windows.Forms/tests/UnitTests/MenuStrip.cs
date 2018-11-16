@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class MenuStripTests
     {
         [Fact]
-        public void MenuStripTests_Constructor()
+        public void MenuStrip_Constructor()
         {
             var ms = new MenuStrip();
 

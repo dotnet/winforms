@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests
     public class VisualStyleElementTests
     {
         [Fact]
-        public void VisualStyleElementTests_CreateElement()
+        public void VisualStyleElement_CreateElement()
         {
             var className = "a";
             var part = 1;

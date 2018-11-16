@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class ImageListTests
     {
         [Fact]
-        public void ImageListTests_Constructor()
+        public void ImageList_Constructor()
         {
             var il = new ImageList();
 
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ImageListTests_ConstructorIContainer()
+        public void ImageList_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);

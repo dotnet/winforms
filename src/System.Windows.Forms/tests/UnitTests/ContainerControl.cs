@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoScaleBaseSizeData))]
-        public void ContainerControlTests_AutoScaleBaseSize(System.Drawing.Size expected)
+        public void ContainerControl_AutoScaleBaseSize(System.Drawing.Size expected)
         {
             var contCont = new ContainerControl();
 

@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class TableLayoutPanelTests
     {
         [Fact]
-        public void TableLayoutPanelTests_Constructor()
+        public void TableLayoutPanel_Constructor()
         {
             var tlp = new TableLayoutPanel();
 

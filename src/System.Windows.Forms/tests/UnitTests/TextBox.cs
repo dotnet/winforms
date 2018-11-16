@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class TextBoxTests
     {
         [Fact]
-        public void TextBoxTests_Constructor()
+        public void TextBox_Constructor()
         {
             var tb = new TextBox();
 

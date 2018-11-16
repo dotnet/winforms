@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class PanelTests
     {
         [Fact]
-        public void PanelTests_Constructor()
+        public void Panel_Constructor()
         {
             var p = new Panel();
 

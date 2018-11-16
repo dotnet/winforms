@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class MonthCalendarTests
     {
         [Fact]
-        public void MonthCalendarTests_Constructor()
+        public void MonthCalendar_Constructor()
         {
             var mc = new MonthCalendar();
 

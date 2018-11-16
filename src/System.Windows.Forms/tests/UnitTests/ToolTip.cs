@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class ToolTipTests
     {
         [Fact]
-        public void ToolTipTests_Constructor()
+        public void ToolTip_Constructor()
         {
             var tt = new ToolTip();
 
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ToolTipTests_ConstructorIContainer()
+        public void ToolTip_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);

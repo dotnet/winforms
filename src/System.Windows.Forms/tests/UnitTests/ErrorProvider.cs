@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class ErrorProviderTests
     {
         [Fact]
-        public void ErrorProviderTests_Constructor()
+        public void ErrorProvider_Constructor()
         {
             var ep = new ErrorProvider();
 
@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Tests
         }
         
         [Fact]
-        public void ErrorProviderTests_ConstructorContainerControl()
+        public void ErrorProvider_ConstructorContainerControl()
         {
             var parent = new ContainerControl();
 
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests
         }
         
         [Fact]
-        public void ErrorProviderTests_ConstructorIContainer()
+        public void ErrorProvider_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);

@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class TrackBarTests
     {
         [Fact]
-        public void TrackBarTests_Constructor()
+        public void TrackBar_Constructor()
         {
             var tb = new TrackBar();
 

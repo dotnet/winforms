@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests
     public class FlowLayoutPanelTests
     {
         [Fact]
-        public void FlowLayoutPanelTests_Constructor()
+        public void FlowLayoutPanel_Constructor()
         {
             var flp = new FlowLayoutPanel();
 
