@@ -32,7 +32,7 @@
     <SystemDrawingPrimitivesPackageVersion>4.3.0</SystemDrawingPrimitivesPackageVersion>
     <SystemMediaSoundPlayerPackageVersion>4.6.0-alpha-27024-2</SystemMediaSoundPlayerPackageVersion>
     <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview1-27018-01</SystemSecurityCryptographyCngPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>4.6.0-preview1-27018-01</SystemSecurityPermissionsPackageVersion>    
+    <SystemSecurityPermissionsPackageVersion>4.6.0-preview1-27018-01</SystemSecurityPermissionsPackageVersion>
     <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
   </PropertyGroup>
