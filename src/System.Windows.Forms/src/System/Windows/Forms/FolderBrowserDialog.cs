@@ -46,13 +46,6 @@ namespace System.Windows.Forms
         // Show the 'New Folder' button?
         private bool showNewFolderButton;
 
-        // set to True when selectedPath is set after the dialog box returns
-        // set to False when selectedPath is set via the SelectedPath property.
-        // Warning! Be careful about race conditions when touching this variable.
-        // This variable is determining if the PathDiscovery security check should
-        // be bypassed or not.
-        private bool selectedPathNeedsCheck;
-
         // Callback function for the folder browser dialog
         private UnsafeNativeMethods.BrowseCallbackProc callback;
 
