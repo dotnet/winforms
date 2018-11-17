@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>System.Windows.Forms.Design.Editors</AssemblyName>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>    
+    <NoWarn>$(NoWarn);618;649</NoWarn>
+    <DefineConstants>$(DefineConstants);CODE_ANALYSIS;RESOURCE_ANNOTATION_WORK;DEBUGRESOURCES;SIGNED</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="$(SystemDrawingDesignPrimitivesPackage)" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
+    <!--<PackageReference Include="$(AccessibilityPackage)" Version="$(AccessibilityPackageVersion)" />
+    <PackageReference Include="$(MicrosoftWin32RegistryPackage)" Version="$(MicrosoftWin32RegistryPackageVersion)" />
+    <PackageReference Include="$(MicrosoftWin32SystemEventsPackage)" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
+    <PackageReference Include="$(SystemConfigurationConfigurationManagerPackage)" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
+    <PackageReference Include="$(SystemDrawingCommonPackage)" Version="$(SystemDrawingCommonPackageVersion)" />
+    
+    <PackageReference Include="$(SystemDrawingPrimitivesPackage)" Version="$(SystemDrawingPrimitivesPackageVersion)" />
+    <PackageReference Include="$(SystemMediaSoundPlayerPackage)" Version="$(SystemMediaSoundPlayerPackageVersion)" />
+    <PackageReference Include="$(SystemSecurityCryptographyCngPackage)" Version="$(SystemSecurityCryptographyCngPackageVersion)" />
+    <PackageReference Include="$(SystemSecurityPermissionsPackage)" Version="$(SystemSecurityPermissionsPackageVersion)" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\xlf\" />
+  </ItemGroup>
+
+</Project>
