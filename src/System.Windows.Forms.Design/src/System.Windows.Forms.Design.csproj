@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>System.Windows.Forms.Design</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>    
+    <NoWarn>$(NoWarn);618;649</NoWarn>
+    <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;WINFORMS_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SR.resx">
+      <GenerateSource>true</GenerateSource>
+      <Namespace>System</Namespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="$(SystemCodeDomPackage)" Version="$(SystemCodeDomPackageVersion)" />
+    <PackageReference Include="$(SystemDrawingDesignPrimitivesPackage)" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />    
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+</Project>

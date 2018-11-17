@@ -23,6 +23,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System.Windows.Forms", "Sys
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System.Windows.Forms.Design.Editors", "System.Windows.Forms.Design.Editors", "{14AC99D8-5CEB-41A2-BDED-651F5373D8CC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Tests", "src\System.Windows.Forms.Design\tests\System.Windows.Forms.Design.Tests.csproj", "{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design", "src\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj", "{61D06BBD-B0CF-4CE1-9139-1CC4B82F0F9B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Ref", "src\System.Windows.Forms.Design\ref\System.Windows.Forms.Design.Ref.csproj", "{351EA462-BCB8-42E7-8595-A4FE55E3B25D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System.Windows.Forms.Design", "System.Windows.Forms.Design", "{0B1FF2D8-E13F-47F6-9442-F646EA2C5389}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Drawing.Design", "src\System.Drawing.Design\src\System.Drawing.Design.csproj", "{A2B1148A-1747-47BD-8048-416C2C2AF14C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +71,22 @@ Global
 		{27F24D0C-5F0A-472E-AE12-98B386A13D50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27F24D0C-5F0A-472E-AE12-98B386A13D50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27F24D0C-5F0A-472E-AE12-98B386A13D50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61D06BBD-B0CF-4CE1-9139-1CC4B82F0F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61D06BBD-B0CF-4CE1-9139-1CC4B82F0F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61D06BBD-B0CF-4CE1-9139-1CC4B82F0F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61D06BBD-B0CF-4CE1-9139-1CC4B82F0F9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{351EA462-BCB8-42E7-8595-A4FE55E3B25D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{351EA462-BCB8-42E7-8595-A4FE55E3B25D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{351EA462-BCB8-42E7-8595-A4FE55E3B25D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{351EA462-BCB8-42E7-8595-A4FE55E3B25D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2B1148A-1747-47BD-8048-416C2C2AF14C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2B1148A-1747-47BD-8048-416C2C2AF14C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2B1148A-1747-47BD-8048-416C2C2AF14C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2B1148A-1747-47BD-8048-416C2C2AF14C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +99,9 @@ Global
 		{5A619DC4-854A-450E-8F9A-AC72D2F5B59A} = {14AC99D8-5CEB-41A2-BDED-651F5373D8CC}
 		{B50AC96F-2655-4687-A404-16DF51882CBC} = {14AC99D8-5CEB-41A2-BDED-651F5373D8CC}
 		{27F24D0C-5F0A-472E-AE12-98B386A13D50} = {14AC99D8-5CEB-41A2-BDED-651F5373D8CC}
+		{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E} = {0B1FF2D8-E13F-47F6-9442-F646EA2C5389}
+		{61D06BBD-B0CF-4CE1-9139-1CC4B82F0F9B} = {0B1FF2D8-E13F-47F6-9442-F646EA2C5389}
+		{351EA462-BCB8-42E7-8595-A4FE55E3B25D} = {0B1FF2D8-E13F-47F6-9442-F646EA2C5389}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
