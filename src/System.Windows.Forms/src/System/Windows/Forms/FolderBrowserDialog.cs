@@ -41,8 +41,6 @@ namespace System.Windows.Forms
         // Folder picked by the user.
         private string selectedPath;
 
-        private bool autoUpgradeEnabled = true;
-
         // Show the 'New Folder' button?
         private bool showNewFolderButton;
 
@@ -67,17 +65,8 @@ namespace System.Windows.Forms
         [
             DefaultValue(true)
         ]
-        public bool AutoUpgradeEnabled
-        {
-            get
-            {
-                return autoUpgradeEnabled;
-            }
-            set
-            {
-                autoUpgradeEnabled = value;
-            }
-        }
+        public bool AutoUpgradeEnabled { get; set; } = true;
+
         /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.HelpRequest"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -218,9 +207,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (autoUpgradeEnabled)
+                if (AutoUpgradeEnabled)
                 {
-                    return SystemInformation.BootMode == BootMode.Normal; // see DDB#169589 // TODO: How should this be doc'd?
+                    return SystemInformation.BootMode == BootMode.Normal; 
                 }
 
                 return false;

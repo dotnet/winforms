@@ -431,7 +431,7 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Unicode)]
         private static extern int SHCreateItemFromParsingName([MarshalAs(UnmanagedType.LPWStr)] string pszPath, IntPtr pbc, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out object ppv);
 
-        public static IShellItem CreateItemFromParsingName(string path)
+        internal static IShellItem CreateItemFromParsingName(string path)
         {
             Guid guid = new Guid(IIDGuid.IShellItem);
             int hr = SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out object item);
