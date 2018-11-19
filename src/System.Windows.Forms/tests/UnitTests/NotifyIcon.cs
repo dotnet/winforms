@@ -11,20 +11,21 @@ namespace System.Windows.Forms.Tests
     public class NotifyIconTests
     {
         [Fact]
-        public void Constructor()
+        public void NotifyIcon_Constructor()
         {
             var icon = new NotifyIcon();
-            
+
             Assert.NotNull(icon);
         }
 
         [Fact]
-        public void ConstructorIContainer()
+        public void NotifyIcon_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<NotifyIcon>())).Verifiable();
-            
+
+            // act & assert
             var ex = Assert.Throws<ArgumentNullException>(() => new NotifyIcon(nullContainer));
             Assert.Equal("container", ex.ParamName);
 

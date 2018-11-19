@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class TreeViewTests
     {
         [Fact]
-        public void Constructor()
+        public void TreeView_Constructor()
         {
             var tv = new TreeView();
-            
+
             Assert.NotNull(tv);
             Assert.NotNull(tv.root);
             Assert.NotNull(tv.SelectedImageIndexer);

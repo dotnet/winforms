@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class PictureBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void PictureBox_Constructor()
         {
             var pb = new PictureBox();
-            
+
             Assert.NotNull(pb);
             Assert.False(pb.TabStop);
         }

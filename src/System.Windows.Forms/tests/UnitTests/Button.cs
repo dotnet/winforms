@@ -12,10 +12,10 @@ namespace System.Windows.Forms.Tests
     public class ButtonTests
     {
         [Fact]
-        public void Constructor()
+        public void Button_Constructor()
         {
             var button = new Button();
-            
+
             Assert.NotNull(button);
         }
 
@@ -27,12 +27,12 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoSizeModeGetSetData))]
-        public void AutoSizeModeGetSet(AutoSizeMode expected)
+        public void Button_AutoSizeModeGetSet(AutoSizeMode expected)
         {
             var button = new Button();
-            
+
             button.AutoSizeMode = expected;
-            
+
             Assert.Equal(expected, button.AutoSizeMode);
         }
 
@@ -44,41 +44,42 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(AutoSizeModeGetSetInvalidData))]
-        public void AutoSizeModeGetSetInvalid(AutoSizeMode expected)
+        public void Button_AutoSizeModeGetSetInvalid(AutoSizeMode expected)
         {
             var button = new Button();
-            
+
+            // act & assert
             var ex = Assert.Throws<InvalidEnumArgumentException>(() => button.AutoSizeMode = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
         [Fact]
-        public void CreateFlatAdapter()
+        public void Button_CreateFlatAdapter()
         {
             var button = new Button();
-            
+
             var adaptor = button.CreateFlatAdapter();
-            
+
             Assert.NotNull(adaptor);
         }
 
         [Fact]
-        public void CreatePopupAdapter()
+        public void Button_CreatePopupAdapter()
         {
             var button = new Button();
-            
+
             var adaptor = button.CreatePopupAdapter();
-            
+
             Assert.NotNull(adaptor);
         }
 
         [Fact]
-        public void CreateStandardAdapter()
+        public void Button_CreateStandardAdapter()
         {
             var button = new Button();
-            
+
             var adaptor = button.CreateStandardAdapter();
-            
+
             Assert.NotNull(adaptor);
         }
 
@@ -87,10 +88,10 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetPreferredSizeCoreData))]
-        public void GetPreferredSizeCore(Button button, Size proposed, Size expected)
+        public void Button_GetPreferredSizeCore(Button button, Size proposed, Size expected)
         {
             var actual = button.GetPreferredSizeCore(proposed);
-            
+
             Assert.Equal(expected, actual);
         }
 
@@ -102,12 +103,12 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DialogResultGetSetData))]
-        public void DialogResultGetSet(DialogResult expected)
+        public void Button_DialogResultGetSet(DialogResult expected)
         {
             var button = new Button();
-            
+
             button.DialogResult = expected;
-            
+
             Assert.Equal(expected, button.DialogResult);
         }
 
@@ -119,10 +120,11 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DialogResultGetSetInvalidData))]
-        public void DialogResultGetSetInvalid(DialogResult expected)
+        public void Button_DialogResultGetSetInvalid(DialogResult expected)
         {
             var button = new Button();
-            
+
+            // act & assert
             var ex = Assert.Throws<InvalidEnumArgumentException>(() => button.DialogResult = expected);
             Assert.Equal("value", ex.ParamName);
         }
@@ -135,36 +137,36 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(NotifyDefaultData))]
-        public void NotifyDefault(bool expected)
+        public void Button_NotifyDefault(bool expected)
         {
             var button = new Button();
-            
+
             button.NotifyDefault(expected);
-            
+
             Assert.Equal(expected, button.IsDefault);
         }
 
         [Fact]
-        public void PerformClick()
+        public void Button_PerformClick()
         {
             var wasClicked = false;
             var button = new Button();
             button.Click += (sender, args) => wasClicked = true;
-            
+
             button.PerformClick();
-            
+
             Assert.True(wasClicked);
         }
 
         [Fact]
-        public void ToStringTest()
+        public void Button_ToStringTest()
         {
             var button = new Button();
             button.Text = "Hello World!";
             var expected = "System.Windows.Forms.Button, Text: " + button.Text;
-            
+
             var actual = button.ToString();
-            
+
             Assert.Equal(expected, actual);
         }
 

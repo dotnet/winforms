@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Tests
     public class RichTextBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void RichTextBox_Constructor()
         {
             var rtb = new RichTextBox();
-            
+
             Assert.NotNull(rtb);
             Assert.True(rtb.DetectUrls);
             Assert.Equal(RichTextBoxScrollBars.Both, rtb.ScrollBars);

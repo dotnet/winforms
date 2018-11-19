@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class ComboBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void ComboBox_Constructor()
         {
             var box = new ComboBox();
-            
+
             Assert.NotNull(box);
         }
     }

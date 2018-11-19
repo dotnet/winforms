@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Tests
     public class ListBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void ListBox_Constructor()
         {
             var lb = new ListBox();
-            
+
             Assert.NotNull(lb);
             Assert.Equal(0, lb.Location.X);
             Assert.Equal(0, lb.Location.Y);

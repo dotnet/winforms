@@ -11,20 +11,21 @@ namespace System.Windows.Forms.Tests
     public class ToolTipTests
     {
         [Fact]
-        public void Constructor()
+        public void ToolTip_Constructor()
         {
             var tt = new ToolTip();
-            
+
             Assert.NotNull(tt);
         }
 
         [Fact]
-        public void ConstructorIContainer()
+        public void ToolTip_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<ToolTip>())).Verifiable();
-            
+
+            // act & assert
             var ex = Assert.Throws<ArgumentNullException>(() => new ToolTip(nullContainer));
             Assert.Equal("cont", ex.ParamName);
 

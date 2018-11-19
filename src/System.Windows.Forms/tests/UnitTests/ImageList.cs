@@ -11,20 +11,21 @@ namespace System.Windows.Forms.Tests
     public class ImageListTests
     {
         [Fact]
-        public void Constructor()
+        public void ImageList_Constructor()
         {
             var il = new ImageList();
-            
+
             Assert.NotNull(il);
         }
 
         [Fact]
-        public void ConstructorIContainer()
+        public void ImageList_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<ImageList>())).Verifiable();
-            
+
+            // act & assert
             var ex = Assert.Throws<ArgumentNullException>(() => new ImageList(nullContainer));
             Assert.Equal("container", ex.ParamName);
 

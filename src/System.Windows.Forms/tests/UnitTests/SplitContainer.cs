@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class SplitContainerTests
     {
         [Fact]
-        public void Constructor()
+        public void SplitContainer_Constructor()
         {
             var sc = new SplitContainer();
-            
+
             Assert.NotNull(sc);
             Assert.NotNull(sc.Panel1);
             Assert.Equal(sc, sc.Panel1.Owner);

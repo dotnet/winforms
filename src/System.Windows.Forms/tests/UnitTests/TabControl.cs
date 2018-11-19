@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class TabControlTest
     {
         [Fact]
-        public void Constructor()
+        public void TabControlTest_Constructor()
         {
             var tc = new TabControl();
-            
+
             Assert.NotNull(tc);
             Assert.NotNull(tc.TabPages);
         }

@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Tests
     public class RadioButtonTests
     {
         [Fact]
-        public void Constructor()
+        public void RadioButton_Constructor()
         {
             var button = new RadioButton();
-            
+
             Assert.NotNull(button);
             Assert.Equal(ContentAlignment.MiddleLeft, button.TextAlign);
             Assert.False(button.TabStop);

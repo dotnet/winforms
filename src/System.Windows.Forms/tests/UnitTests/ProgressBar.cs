@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Tests
     public class ProgressBarTests
     {
         [Fact]
-        public void Constructor()
+        public void ProgressBar_Constructor()
         {
             var pb = new ProgressBar();
-            
+
             Assert.NotNull(pb);
             Assert.Equal(SystemColors.Highlight, pb.ForeColor);
         }

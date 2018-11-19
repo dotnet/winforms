@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class PanelTests
     {
         [Fact]
-        public void Constructor()
+        public void Panel_Constructor()
         {
             var p = new Panel();
-            
+
             Assert.NotNull(p);
             Assert.False(p.TabStop);
         }

@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class ToolStripContainerTests
     {
         [Fact]
-        public void Constructor()
+        public void ToolStripContainer_Constructor()
         {
             var tsc = new ToolStripContainer();
-            
+
             Assert.NotNull(tsc);
             Assert.NotNull(tsc.TopToolStripPanel);
             Assert.NotNull(tsc.BottomToolStripPanel);

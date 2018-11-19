@@ -10,14 +10,14 @@ namespace System.Windows.Forms.Tests
     public class VisualStyleElementTests
     {
         [Fact]
-        public void CreateElement()
+        public void VisualStyleElement_CreateElement()
         {
             var className = "a";
             var part = 1;
             var state = 2;
-            
+
             var vse = VisualStyleElement.CreateElement(className, part, state);
-            
+
             Assert.NotNull(vse);
             Assert.Equal(className, vse.ClassName);
             Assert.Equal(part, vse.Part);

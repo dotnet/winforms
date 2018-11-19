@@ -13,22 +13,22 @@ namespace System.Windows.Forms.Tests
     public class BindingNavigatorTests
     {
         [Fact]
-        public void Constructor()
+        public void BindingNavigator_Constructor()
         {
             var bn = new BindingNavigator();
-            
+
             Assert.NotNull(bn);
         }
         
        [Fact]
-        public void ConstructorBindingSource()
+        public void BindingNavigator_ConstructorBindingSource()
         {
             var bindingSource = new BindingSource();
             var data = new List<string>() { "Foo", "Bar" };
             bindingSource.DataSource = data;
-            
+
             var bn = new BindingNavigator(bindingSource);
-            
+
             Assert.NotNull(bn);
             Assert.Equal(bindingSource, bn.BindingSource);
             
@@ -36,12 +36,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ConstructorIContainer()
+        public void BindingNavigator_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<BindingNavigator>())).Verifiable();
-            
+
+            // act & assert
             var ex = Assert.Throws<ArgumentNullException>(() => new BindingNavigator(nullContainer));
             Assert.Equal("container", ex.ParamName);
 
@@ -51,10 +52,10 @@ namespace System.Windows.Forms.Tests
         }
         
         [Fact]
-        public void ConstructorBool()
+        public void BindingNavigator_ConstructorBool()
         {
             var bn = new BindingNavigator(true);
-                     
+
             Assert.NotNull(bn);
 
             Assert.NotNull(bn.PositionItem);

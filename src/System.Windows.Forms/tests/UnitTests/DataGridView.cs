@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class DataGridViewTests
     {
         [Fact]
-        public void Constructor()
+        public void DataGridView_Constructor()
         {
             var dgv = new DataGridView();
-            
+
             Assert.NotNull(dgv);
         }
     }

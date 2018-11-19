@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Tests
     public class ListViewTests
     {
         [Fact]
-        public void Constructor()
+        public void ListView_Constructor()
         {
             var lv = new ListView();
-            
+
             Assert.NotNull(lv);
             Assert.Equal(0, lv.Location.X);
             Assert.Equal(0, lv.Location.Y);

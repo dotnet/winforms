@@ -11,32 +11,33 @@ namespace System.Windows.Forms.Tests
     public class ErrorProviderTests
     {
         [Fact]
-        public void Constructor()
+        public void ErrorProvider_Constructor()
         {
             var ep = new ErrorProvider();
-            
+
             Assert.NotNull(ep);
             Assert.NotNull(ep.Icon);
         }
         
         [Fact]
-        public void ConstructorContainerControl()
+        public void ErrorProvider_ConstructorContainerControl()
         {
             var parent = new ContainerControl();
-            
+
             var ep = new ErrorProvider(parent);
-            
+
             Assert.NotNull(ep);
             Assert.NotNull(ep.Icon);
         }
         
         [Fact]
-        public void ConstructorIContainer()
+        public void ErrorProvider_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<ErrorProvider>())).Verifiable();
-            
+
+            // act & assert
             var ex = Assert.Throws<ArgumentNullException>(() => new ErrorProvider(nullContainer));
             Assert.Equal("container", ex.ParamName);
 

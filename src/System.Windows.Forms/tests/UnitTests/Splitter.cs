@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class SplitterTest
     {
         [Fact]
-        public void Constructor()
+        public void SplitterTest_Constructor()
         {
             var s = new Splitter();
-            
+
             Assert.NotNull(s);
             Assert.False(s.TabStop);
             Assert.Equal(25, s.MinSize);

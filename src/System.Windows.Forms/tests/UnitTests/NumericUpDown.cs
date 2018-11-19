@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class NumericUpDownTests
     {
         [Fact]
-        public void Constructor()
+        public void NumericUpDown_Constructor()
         {
             var nud = new NumericUpDown();
-            
+
             Assert.NotNull(nud);
             Assert.Equal("0", nud.Text);
         }

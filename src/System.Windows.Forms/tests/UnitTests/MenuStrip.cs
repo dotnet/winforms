@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Tests
     public class MenuStripTests
     {
         [Fact]
-        public void Constructor()
+        public void MenuStrip_Constructor()
         {
             var ms = new MenuStrip();
-            
+
             Assert.NotNull(ms);
             Assert.False(ms.CanOverflow);
             Assert.Equal(ToolStripGripStyle.Hidden, ms.GripStyle);

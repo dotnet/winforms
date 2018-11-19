@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class HScrollBarTests
     {
         [Fact]
-        public void Constructor()
+        public void HScrollBar_Constructor()
         {
             var hsb = new HScrollBar();
-            
+
             Assert.NotNull(hsb);
             Assert.False(hsb.TabStop);
         }

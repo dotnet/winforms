@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class DateTimePickerTests
     {
         [Fact]
-        public void Constructor()
+        public void DateTimePicker_Constructor()
         {
             var dtp = new DateTimePicker();
-            
+
             Assert.NotNull(dtp);
             Assert.Equal(DateTimePickerFormat.Long, dtp.Format);
         }
