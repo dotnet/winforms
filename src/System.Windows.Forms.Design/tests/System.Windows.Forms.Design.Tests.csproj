@@ -5,14 +5,5 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <!--<PackageReference Include="$(MoqPackage)" Version="$(MoqPackageVersion)" />
-    <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />-->
-  </ItemGroup>
-
-  <ItemGroup>    
-    <!--<ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />-->
-  </ItemGroup>
-
+  
 </Project>

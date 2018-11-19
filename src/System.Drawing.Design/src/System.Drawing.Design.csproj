@@ -3,22 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Drawing.Design</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>    
-    <NoWarn>$(NoWarn);618;649</NoWarn>
-    <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;WINFORMS_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <!--<PackageReference Include="$(AccessibilityPackage)" Version="$(AccessibilityPackageVersion)" />
-    <PackageReference Include="$(MicrosoftWin32RegistryPackage)" Version="$(MicrosoftWin32RegistryPackageVersion)" />
-    <PackageReference Include="$(MicrosoftWin32SystemEventsPackage)" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
-    <PackageReference Include="$(SystemConfigurationConfigurationManagerPackage)" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
-    <PackageReference Include="$(SystemDrawingCommonPackage)" Version="$(SystemDrawingCommonPackageVersion)" />
-    <PackageReference Include="$(SystemDrawingDesignPrimitivesPackage)" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
-    <PackageReference Include="$(SystemDrawingPrimitivesPackage)" Version="$(SystemDrawingPrimitivesPackageVersion)" />
-    <PackageReference Include="$(SystemMediaSoundPlayerPackage)" Version="$(SystemMediaSoundPlayerPackageVersion)" />
-    <PackageReference Include="$(SystemSecurityCryptographyCngPackage)" Version="$(SystemSecurityCryptographyCngPackageVersion)" />
-    <PackageReference Include="$(SystemSecurityPermissionsPackage)" Version="$(SystemSecurityPermissionsPackageVersion)" />-->
-  </ItemGroup>
+</PropertyGroup>
 
 </Project>
