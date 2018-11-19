@@ -1,4 +1,5 @@
 # Windows Forms
+ [![Build status](https://dnceng.visualstudio.com/7ea9116e-9fac-403d-b258-b31fcf1bb293/_apis/build/status/199?branchName=master)](https://dnceng.visualstudio.com/internal/_build/latest?definitionId=199&branch=master)
 
 Windows Forms (WinForms) is a framework for building rich Windows desktop applications using .NET. Since it leverages a what-you-see-is-what-you-get (WYSIWYG) graphical editor with drag & drop, it's also one of the easiest and most productive ways to create desktop applications.
 
