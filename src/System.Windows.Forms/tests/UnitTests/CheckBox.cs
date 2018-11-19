@@ -104,29 +104,18 @@ namespace System.Windows.Forms.Tests
 
             var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckAlign = expected);
             Assert.Equal("value", ex.ParamName);
-
-            //var ex2 = Assert.Throws<InvalidEnumArgumentException>(() => box.TextAlign = expected);
-            //Assert.Equal("value", ex2.ParamName);
         }
 
-        [Fact]
-        public void CheckBox_ShouldBeChecked()
+        [Theory]
+        [InlineData(true, CheckState.Checked)]
+        [InlineData(false, CheckState.Unchecked)]
+        public void CheckBox_CheckedGetSet(bool sent, CheckState expected)
         {
             var box = new CheckBox();
 
-            box.Checked = true;
+            box.Checked = sent;
 
-            Assert.Equal(CheckState.Checked, box.CheckState);
-        }
-
-        [Fact]
-        public void CheckBox_ShouldBeNotChecked()
-        {
-            var box = new CheckBox();
-
-            box.Checked = false;
-
-            Assert.NotEqual(CheckState.Checked, box.CheckState);
+            Assert.Equal(expected, box.CheckState);
         }
 
         /// <summary>

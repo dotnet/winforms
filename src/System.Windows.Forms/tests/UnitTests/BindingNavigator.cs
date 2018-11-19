@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
         }
         
        [Fact]
-        public void BindingNavigator_BindingNavigator_ConstructorBindingSource()
+        public void BindingNavigator_ConstructorBindingSource()
         {
             var bindingSource = new BindingSource();
             var data = new List<string>() { "Foo", "Bar" };

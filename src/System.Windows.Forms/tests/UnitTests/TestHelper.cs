@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using System.Drawing;
 
 namespace System.Windows.Forms.Tests
 {
@@ -108,7 +109,7 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<string> GetStringTheoryData()
         {
             var data = new TheoryData<string>();
-            data.Add("");
+            data.Add(string.Empty);
             data.Add("reasonable");
             return data;
         }
@@ -153,59 +154,59 @@ namespace System.Windows.Forms.Tests
 
         #endregion
 
-        #region System.Drawing
+        #region 
 
         // helper method to generate theory data Point values
-        public static TheoryData<System.Drawing.Point> GetPointTheoryData()
+        public static TheoryData<Point> GetPointTheoryData()
         {
-            var data = new TheoryData<System.Drawing.Point>();
-            data.Add(new System.Drawing.Point());
-            data.Add(new System.Drawing.Point(10));
-            data.Add(new System.Drawing.Point(1, 2));
-            data.Add(new System.Drawing.Point(int.MaxValue, int.MinValue));
+            var data = new TheoryData<Point>();
+            data.Add(new Point());
+            data.Add(new Point(10));
+            data.Add(new Point(1, 2));
+            data.Add(new Point(int.MaxValue, int.MinValue));
             return data;
         }
 
         // helper method to generate theory data Color values
-        public static TheoryData<System.Drawing.Color> GetColorTheoryData()
+        public static TheoryData<Color> GetColorTheoryData()
         {
-            var data = new TheoryData<System.Drawing.Color>();
-            data.Add(System.Drawing.Color.Red);
-            data.Add(System.Drawing.Color.Blue);
-            data.Add(System.Drawing.Color.Black);
+            var data = new TheoryData<Color>();
+            data.Add(Color.Red);
+            data.Add(Color.Blue);
+            data.Add(Color.Black);
             return data;
         }
         
         // helper method to generate invalid theory data Color value(s)
-        public static TheoryData<System.Drawing.Color> GetColorTheoryDataInvalid()
+        public static TheoryData<Color> GetColorTheoryDataInvalid()
         {
-            var data = new TheoryData<System.Drawing.Color>();
-            data.Add(new System.Drawing.Color());
-            data.Add(System.Drawing.Color.Empty);
+            var data = new TheoryData<Color>();
+            data.Add(new Color());
+            data.Add(Color.Empty);
             return data;
         }
 
         // helper method to generate theory data Point values
-        public static TheoryData<System.Drawing.Size> GetSizeTheoryData()
+        public static TheoryData<Size> GetSizeTheoryData()
         {
-            var data = new TheoryData<System.Drawing.Size>();
-            data.Add(new System.Drawing.Size());
-            data.Add(new System.Drawing.Size(new System.Drawing.Point(1,1)));
-            data.Add(new System.Drawing.Size(1, 2));
-            data.Add(new System.Drawing.Size(int.MaxValue, int.MinValue));
+            var data = new TheoryData<Size>();
+            data.Add(new Size());
+            data.Add(new Size(new Point(1,1)));
+            data.Add(new Size(1, 2));
+            data.Add(new Size(int.MaxValue, int.MinValue));
             return data;
         }
 
-        public static TheoryData<System.Drawing.Font> GetFontTheoryData()
+        public static TheoryData<Font> GetFontTheoryData()
         {
-            var data = new TheoryData<System.Drawing.Font>();
+            var data = new TheoryData<Font>();
             foreach (Drawing.Text.GenericFontFamilies genericFontFamily in Enum.GetValues(typeof(Drawing.Text.GenericFontFamilies)))
             {
-                var family = new Drawing.FontFamily(genericFontFamily);
-                data.Add(new Drawing.Font(family, System.Single.Epsilon));
-                data.Add(new Drawing.Font(family, 10));
-                data.Add(new Drawing.Font(family, 84));
-                data.Add(new Drawing.Font(family, System.Single.MaxValue));
+                var family = new FontFamily(genericFontFamily);
+                data.Add(new Font(family, System.Single.Epsilon));
+                data.Add(new Font(family, 10));
+                data.Add(new Font(family, 84));
+                data.Add(new Font(family, System.Single.MaxValue));
             }
             return data;
         }
