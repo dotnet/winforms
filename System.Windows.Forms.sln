@@ -13,6 +13,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Private.Winforms", "pkg\Microsoft.Private.Winforms.csproj", "{F133342A-3040-4005-A2F0-7685AA7CB82D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pkg", "pkg", "{C611474D-0DFF-4E30-A22A-4A0C0776AB0D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02770A27-2DAC-4D90-BD56-2C3749E92917}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ref", "ref", "{6F8B68FA-FC93-4EB2-973E-89CBF96A1676}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A306DE68-8EF5-403F-93E3-AC309655B5D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +50,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0D23A41B-2626-4703-9E4A-87C07F69B0B2} = {02770A27-2DAC-4D90-BD56-2C3749E92917}
+		{334C343B-9D39-498E-89D8-B6526028FD5C} = {6F8B68FA-FC93-4EB2-973E-89CBF96A1676}
+		{AB38E262-F206-4820-8F29-23C5F72A4A16} = {A306DE68-8EF5-403F-93E3-AC309655B5D2}
+		{657472B8-FDA3-49DF-B8BE-0246046A4348} = {A306DE68-8EF5-403F-93E3-AC309655B5D2}
+		{F133342A-3040-4005-A2F0-7685AA7CB82D} = {C611474D-0DFF-4E30-A22A-4A0C0776AB0D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
