@@ -65,7 +65,7 @@ cd MyWinFormsApp
 dotnet run
 ```
 
-## Porting existing application
+## Porting existing applications
 
 To port your existing WinForms application from .NET Framework to .NET Core 3.0, refer to our [porting guidelines](https://github.com/dotnet/winforms/blob/master/porting-guidelines.md).
 
