@@ -50,10 +50,10 @@ Install [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download).
 [Daily builds](https://aka.ms/netcore3sdk) are also available in the
 [dotnet/code-sdk repo](https://github.com/dotnet/core-sdk).
 
-To use the **WinForms designer**, you'll need Visual Studio. We recommend Visual Studio 2019 Preview 1 which is available at[https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/). Select the **.NET desktop development** workload with the options: **.NET
+To use the **WinForms designer**, you'll need Visual Studio. We recommend Visual Studio 2019 Preview 1 which is available at [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/). Select the **.NET desktop development** workload with the options: **.NET
 Framework 4.7.2 development tools** and **.NET Core 3.0 development tools**. 
 
-## Creating new application
+## Creating new applications
 
 You can create a new WinForms application with `dotnet new` command, using the
 new templates for WinForms.
@@ -65,7 +65,7 @@ cd MyWinFormsApp
 dotnet run
 ```
 
-## Porting existing application
+## Porting existing applications
 
 To port your existing WinForms application from .NET Framework to .NET Core 3.0, refer to our [porting guidelines](https://github.com/dotnet/winforms/blob/master/porting-guidelines.md).
 
@@ -73,7 +73,7 @@ To port your existing WinForms application from .NET Framework to .NET Core 3.0,
 
 Since we're currently still porting parts of the code to GitHub, we're not
 equipped to handle larger contributions yet. Our goal is to accept contributions
-on day 1, but we'll only be able to accept minor modifications (typos, build
+on day one, but we'll only be able to accept minor modifications (typos, build
 fixes, test breaks etc). We'll be happy to hear your feedback!
 
 * For WinForms on .NET Core, you can simply file bugs and feature requests in
