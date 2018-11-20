@@ -15,7 +15,7 @@ source code is on GitHub. You can expect us to complete this over the next
 months. The reason it takes some time is that we need to support & build all the
 pieces in an open source way, which requires decoupling the code base from our
 internal engineering system. At the same time, we don't want to block open
-sourcing until the port is complete either. This is similar to how other .NET
+sourcing until the port is complete. This is similar to how other .NET
 Core repos with existing code have been brought up, such as
 [CoreFx](https://github.com/dotnet/corefx).
 
@@ -50,10 +50,7 @@ Install [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download).
 [Daily builds](https://aka.ms/netcore3sdk) are also available in the
 [dotnet/code-sdk repo](https://github.com/dotnet/core-sdk).
 
-To use the **WinForms designer**, you'll need Visual Studio 2017 Update 15.8 or
-higher. You can install it from
-[https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/),
-selecting the **.NET desktop development** workload with the options: **.NET
+To use the **WinForms designer**, you'll need Visual Studio. We recommend Visual Studio 2019 Preview 1 which is available at[https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/). Select the **.NET desktop development** workload with the options: **.NET
 Framework 4.7.2 development tools** and **.NET Core 3.0 development tools**. 
 
 ## Creating new application
@@ -70,8 +67,7 @@ dotnet run
 
 ## Porting existing application
 
-To port your existing WinForms application from .NET Framework to .NET Core 3.0
-use our [porting guidelines](https://github.com/OliaG/winforms/blob/master/Documentation/porting-guidelines.md).
+To port your existing WinForms application from .NET Framework to .NET Core 3.0, refer to our [porting guidelines](https://github.com/dotnet/winforms/blob/master/porting-guidelines.md).
 
 ## Contributing
 
