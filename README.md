@@ -53,7 +53,7 @@ Install [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download).
 To use the **WinForms designer**, you'll need Visual Studio. We recommend Visual Studio 2019 Preview 1 which is available at[https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/). Select the **.NET desktop development** workload with the options: **.NET
 Framework 4.7.2 development tools** and **.NET Core 3.0 development tools**. 
 
-## Creating new application
+## Creating new applications
 
 You can create a new WinForms application with `dotnet new` command, using the
 new templates for WinForms.
