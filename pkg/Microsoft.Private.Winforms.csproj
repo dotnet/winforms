@@ -24,6 +24,7 @@
 
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
+    <NoWarn>$(NoWarn);NU5125</NoWarn>
 
   </PropertyGroup>
 
