@@ -73,7 +73,7 @@ To port your existing WinForms application from .NET Framework to .NET Core 3.0,
 
 Since we're currently still porting parts of the code to GitHub, we're not
 equipped to handle larger contributions yet. Our goal is to accept contributions
-on day 1, but we'll only be able to accept minor modifications (typos, build
+on day one, but we'll only be able to accept minor modifications (typos, build
 fixes, test breaks etc). We'll be happy to hear your feedback!
 
 * For WinForms on .NET Core, you can simply file bugs and feature requests in
