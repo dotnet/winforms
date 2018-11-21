@@ -1,25 +1,23 @@
 parameters:
 
   # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  # Defaults to dotnet-external-temp
-  # TODO: CHANGE THIS TO dotnet-external-temp ONCE THE GITHUB REPO GOES PUBLIC
+  # TODO: CHANGE DEFAULT VALUE TO dotnet-external-temp ONCE THE GITHUB REPO GOES PUBLIC
   agentPool: dotnet-internal-temp
 
   # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
-  # Defaults to true
   runAsPublic: true
 
   variables:
 
     # Set some variables based on build conditions
-    ${{ if eq(parameters.runAsPublic, 'true') }}:
+  - ${{ if eq(parameters.runAsPublic, 'true') }}:
       _HelixType: build/product
       _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
       _PublishType: none
       _SignType: test
       _DotNetPublishToBlobFeed: false
     # else
-    ${{ if eq(parameters.runAsPublic, 'false') }}:
+  - ${{ if eq(parameters.runAsPublic, 'false') }}:
       _TeamName: DotNetCore
       _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
       _PublishType: blob
@@ -30,6 +28,7 @@ parameters:
 phases:
 - template: /eng/build.yml
   parameters:
+    # pass the variables down
     variables:
       ${{ insert }}: ${{ parameters.variables }}
     name: Windows_NT
@@ -51,6 +50,7 @@ phases:
 - ${{ if eq(parameters.runAsPublic, 'false') }}:
   - template: /eng/common/templates/phases/publish-build-assets.yml
     parameters:
+      # pass the variables down
       variables:
         ${{ insert }}: ${{ parameters.variables }}
       dependsOn: Windows_NT
