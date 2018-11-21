@@ -10,4 +10,9 @@
     <ProjectReference Include="..\..\System.Windows.Forms.Design\ref\System.Windows.Forms.Design.Ref.csproj" />
   </ItemGroup>
 
+  <ItemGroup>    
+    <PackageReference Include="$(MicrosoftDotNetGenFacadesPackage)" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" />
+    <PackageReference Include="$(MicrosoftTargetingPackNETFrameworkv472Package)" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" />
+  </ItemGroup>
+  
 </Project>

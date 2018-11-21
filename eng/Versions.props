@@ -21,7 +21,10 @@
     <SystemCodeDomPackage>System.CodeDom</SystemCodeDomPackage>    
     <XUnitStaFactPackage>xunit.stafact</XUnitStaFactPackage>
     <MoqPackage>Moq</MoqPackage>
+    <MicrosoftDotNetGenFacadesPackage>Microsoft.DotNet.GenFacades</MicrosoftDotNetGenFacadesPackage>
+    <MicrosoftTargetingPackNETFrameworkv472Package>Microsoft.TargetingPack.NETFramework.v4.7.2</MicrosoftTargetingPackNETFrameworkv472Package>
   </PropertyGroup>
+  
   <!-- Package versions -->
   <PropertyGroup>
     <AccessibilityPackageVersion>4.6.0-alpha-27024-2</AccessibilityPackageVersion>
@@ -37,5 +40,7 @@
     <SystemCodeDomPackageVersion>4.5.0</SystemCodeDomPackageVersion>    
     <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.18570.9</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
   </PropertyGroup>
 </Project>
