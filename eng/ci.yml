@@ -9,27 +9,29 @@ parameters:
   # Defaults to true
   runAsPublic: true
 
-variables:
+  variables:
 
-  # Set some variables based on build conditions
-  ${{ if eq(parameters.runAsPublic, 'true') }}:
-    _HelixType: build/product
-    _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
-    _PublishType: none
-    _SignType: test
-    _DotNetPublishToBlobFeed: false
-  # else
-  ${{ if eq(parameters.runAsPublic, 'false') }}:
-    _TeamName: DotNetCore
-    _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
-    _PublishType: blob
-    _SignType: real
-    _DotNetPublishToBlobFeed: true
+    # Set some variables based on build conditions
+    ${{ if eq(parameters.runAsPublic, 'true') }}:
+      _HelixType: build/product
+      _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
+      _PublishType: none
+      _SignType: test
+      _DotNetPublishToBlobFeed: false
+    # else
+    ${{ if eq(parameters.runAsPublic, 'false') }}:
+      _TeamName: DotNetCore
+      _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
+      _PublishType: blob
+      _SignType: real
+      _DotNetPublishToBlobFeed: true
 
 # Call build.yml, which runs common build tasks
 phases:
 - template: /eng/build.yml
   parameters:
+    variables:
+      ${{ insert }}: ${{ parameters.variables }}
     name: Windows_NT
     runAsPublic: ${{ parameters.runAsPublic }}
     queue:
@@ -49,6 +51,8 @@ phases:
 - ${{ if eq(parameters.runAsPublic, 'false') }}:
   - template: /eng/common/templates/phases/publish-build-assets.yml
     parameters:
+      variables:
+        ${{ insert }}: ${{ parameters.variables }}
       dependsOn: Windows_NT
       queue:
         name: Hosted VS2017
