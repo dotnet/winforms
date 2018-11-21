@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class StatusStripTests
     {
         [Fact]
-        public void Constructor()
+        public void StatusStrip_Constructor()
         {
             var ss = new StatusStrip();
-            
+
             Assert.NotNull(ss);
             Assert.False(ss.CanOverflow);
             Assert.Equal(ToolStripLayoutStyle.Table, ss.LayoutStyle);

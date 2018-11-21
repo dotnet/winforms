@@ -10,26 +10,26 @@ namespace System.Windows.Forms.Tests
     public class MaskedTextBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void MaskedTextBox_Constructor()
         {
             var mtb = new MaskedTextBox();
-            
+
             Assert.NotNull(mtb);
         }
 
         [Fact]
-        public void ConstructorString()
+        public void MaskedTextBox_ConstructorString()
         {
             var mtb = new MaskedTextBox("Hello World!");
-            
+
             Assert.NotNull(mtb);
         }
 
         [Fact]
-        public void ConstructorMaskedTextProvider()
+        public void MaskedTextBox_ConstructorMaskedTextProvider()
         {
             var mtb = new MaskedTextBox(new MaskedTextProvider("Hello World!"));
-            
+
             Assert.NotNull(mtb);
         }
     }

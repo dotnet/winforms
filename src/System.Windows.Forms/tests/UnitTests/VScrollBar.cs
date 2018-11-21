@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class VScrollBarTests
     {
         [Fact]
-        public void Constructor()
+        public void VScrollBar_Constructor()
         {
             var vsb = new VScrollBar();
-            
+
             Assert.NotNull(vsb);
             Assert.False(vsb.TabStop);
         }

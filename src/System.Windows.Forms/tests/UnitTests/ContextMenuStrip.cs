@@ -11,20 +11,21 @@ namespace System.Windows.Forms.Tests
     public class ContextMenuStripTests
     {
         [Fact]
-        public void Constructor()
+        public void ContextMenuStrip_Constructor()
         {
             var cms = new ContextMenuStrip();
-            
+
             Assert.NotNull(cms);
         }
 
         [Fact]
-        public void ConstructorIContainer()
+        public void ContextMenuStrip_ConstructorIContainer()
         {
             IContainer nullContainer = null;
             var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
             mockContainer.Setup(x => x.Add(It.IsAny<ContextMenuStrip>())).Verifiable();
-            
+
+            // act & assert
             var ex = Assert.Throws<ArgumentNullException>(() => new ContextMenuStrip(nullContainer));
             Assert.Equal("container", ex.ParamName);
 

@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class GroupBoxTests
     {
         [Fact]
-        public void Constructor()
+        public void GroupBox_Constructor()
         {
             var gb = new GroupBox();
-            
+
             Assert.NotNull(gb);
             Assert.False(gb.TabStop);
         }

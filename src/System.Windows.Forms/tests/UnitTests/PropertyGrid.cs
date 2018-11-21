@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Tests
     public class PropertyGridTests
     {
         [Fact]
-        public void Constructor()
+        public void PropertyGrid_Constructor()
         {
             var pg = new PropertyGrid();
-            
+
             Assert.NotNull(pg);
             Assert.Equal(AutoScaleMode.None, pg.AutoScaleMode);
             Assert.Equal(0, pg.TabIndex);

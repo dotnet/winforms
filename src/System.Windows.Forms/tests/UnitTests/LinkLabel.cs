@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class LinkLabelTests
     {
         [Fact]
-        public void Constructor()
+        public void LinkLabel_Constructor()
         {
             var label = new LinkLabel();
-            
+
             Assert.NotNull(label);
             Assert.True(label.LinkArea.IsEmpty);            
             Assert.Equal(0, label.LinkArea.Start);

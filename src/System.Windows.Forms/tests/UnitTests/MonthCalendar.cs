@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class MonthCalendarTests
     {
         [Fact]
-        public void Constructor()
+        public void MonthCalendar_Constructor()
         {
             var mc = new MonthCalendar();
-            
+
             Assert.NotNull(mc);
             Assert.True(mc.TabStop);
         }

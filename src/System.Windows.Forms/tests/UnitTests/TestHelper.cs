@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using System.Drawing;
 
 namespace System.Windows.Forms.Tests
 {
@@ -29,6 +30,8 @@ namespace System.Windows.Forms.Tests
             return data;
         }
 
+        #region Primitives
+
         // helper method to generate theory data for all values of a boolean
         public static TheoryData<bool> GetBoolTheoryData()
         {
@@ -37,5 +40,177 @@ namespace System.Windows.Forms.Tests
             data.Add(false);
             return data;
         }
+
+        // helper method to generate theory data for some values of a int
+        public static TheoryData<int> GetIntTheoryData()
+        {
+            var data = new TheoryData<int>();
+            data.Add(int.MinValue);
+            data.Add(int.MaxValue);
+            data.Add(0);
+            data.Add(1);
+            data.Add(-1);
+            data.Add(int.MaxValue / 2);
+            return data;
+        }
+
+        // helper method to generate theory data for some values of a int
+        public static TheoryData<uint> GetUIntTheoryData()
+        {
+            var data = new TheoryData<uint>();
+            data.Add(int.MaxValue);
+            data.Add(0);
+            data.Add(1);
+            data.Add(int.MaxValue / 2);
+            return data;
+        }
+
+        // helper method to generate theory data for some values of a int
+        public static TheoryData<int> GetNIntTheoryData()
+        {
+            var data = new TheoryData<int>();
+            data.Add(int.MinValue);
+            data.Add(-1);
+            data.Add(int.MinValue / 2);
+            return data;
+        }
+
+        // helper method to generate theory data for some values of a int
+        public static TheoryData<float> GetFloatTheoryData()
+        {
+            var data = new TheoryData<float>();
+            data.Add(float.MaxValue);
+            data.Add(float.MinValue);
+            data.Add(Single.Epsilon);
+            data.Add(Single.Epsilon * -1);
+            data.Add(Single.NegativeInfinity); // not sure about these two
+            data.Add(Single.PositiveInfinity); // 2
+            data.Add(0);
+            data.Add(-1);
+            data.Add(1);
+            data.Add(float.MaxValue/2);
+            return data;
+        }
+
+        // helper method to generate theory data for some values of a int
+        public static TheoryData<float> GetUFloatTheoryData()
+        {
+            var data = new TheoryData<float>();
+            data.Add(float.MaxValue);
+            data.Add(Single.Epsilon);
+            data.Add(Single.PositiveInfinity); // not sure about this one
+            data.Add(0);
+            data.Add(1);
+            data.Add(float.MaxValue / 2);
+            return data;
+        }
+
+        // helper method to generate theory data for a span of string values
+        public static TheoryData<string> GetStringTheoryData()
+        {
+            var data = new TheoryData<string>();
+            data.Add(string.Empty);
+            data.Add("reasonable");
+            return data;
+        }
+
+        #endregion
+
+        #region System.Windows.Forms
+
+        // helper method to generate theory data for Padding
+        public static TheoryData<Padding> GetPaddingTheoryData()
+        {
+            var data = new TheoryData<Padding>();
+            data.Add(new Padding());
+            data.Add(new Padding(0));
+            data.Add(new Padding(1));
+            data.Add(new Padding(int.MaxValue));
+            return data;
+        }
+
+        // helper method to generate invalid theory data for Padding
+        public static TheoryData<Padding> GetPaddingTheoryDataInvalid()
+        {
+            var data = new TheoryData<Padding>();
+            data.Add(new Padding(-1));
+            data.Add(new Padding(int.MinValue));
+            return data;
+        }
+
+        public static TheoryData<Cursor> GetCursorTheoryData()
+        {
+
+            var data = new TheoryData<Cursor>();
+            foreach (System.Reflection.MethodInfo info in typeof(Cursors).GetMethods())
+            {
+                if(info.ReturnType == typeof(Cursor))
+                {
+                    data.Add(info.Invoke(null, null) as Cursor);
+                }
+            }
+            return data;
+        }
+
+        #endregion
+
+        #region 
+
+        // helper method to generate theory data Point values
+        public static TheoryData<Point> GetPointTheoryData()
+        {
+            var data = new TheoryData<Point>();
+            data.Add(new Point());
+            data.Add(new Point(10));
+            data.Add(new Point(1, 2));
+            data.Add(new Point(int.MaxValue, int.MinValue));
+            return data;
+        }
+
+        // helper method to generate theory data Color values
+        public static TheoryData<Color> GetColorTheoryData()
+        {
+            var data = new TheoryData<Color>();
+            data.Add(Color.Red);
+            data.Add(Color.Blue);
+            data.Add(Color.Black);
+            return data;
+        }
+        
+        // helper method to generate invalid theory data Color value(s)
+        public static TheoryData<Color> GetColorTheoryDataInvalid()
+        {
+            var data = new TheoryData<Color>();
+            data.Add(new Color());
+            data.Add(Color.Empty);
+            return data;
+        }
+
+        // helper method to generate theory data Point values
+        public static TheoryData<Size> GetSizeTheoryData()
+        {
+            var data = new TheoryData<Size>();
+            data.Add(new Size());
+            data.Add(new Size(new Point(1,1)));
+            data.Add(new Size(1, 2));
+            data.Add(new Size(int.MaxValue, int.MinValue));
+            return data;
+        }
+
+        public static TheoryData<Font> GetFontTheoryData()
+        {
+            var data = new TheoryData<Font>();
+            foreach (Drawing.Text.GenericFontFamilies genericFontFamily in Enum.GetValues(typeof(Drawing.Text.GenericFontFamilies)))
+            {
+                var family = new FontFamily(genericFontFamily);
+                data.Add(new Font(family, System.Single.Epsilon));
+                data.Add(new Font(family, 10));
+                data.Add(new Font(family, 84));
+                data.Add(new Font(family, System.Single.MaxValue));
+            }
+            return data;
+        }
+
+        #endregion
     }
 }

@@ -2,6 +2,7 @@
 <Project>
   <Import Project="..\..\Directory.Build.props" />
   <PropertyGroup>
+    <!-- Identity needs to match what was in desktop so we remain compatible with desktop assemblies built against winforms -->
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <StrongNameKeyId>ECMA</StrongNameKeyId>
   </PropertyGroup>

@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
     public class LabelTests
     {
         [Fact]
-        public void Constructor()
+        public void Label_Constructor()
         {
             var label = new Label();
-            
+
             Assert.NotNull(label);
             Assert.False(label.TabStop);
         }
