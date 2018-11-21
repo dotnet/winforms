@@ -9,6 +9,23 @@ parameters:
   # Defaults to true
   runAsPublic: true
 
+variables:
+
+  # Set some variables based on build conditions
+  ${{ if eq(parameters.runAsPublic, 'true') }}:
+    _HelixType: build/product
+    _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
+    _PublishType: none
+    _SignType: test
+    _DotNetPublishToBlobFeed: false
+  # else
+  ${{ if eq(parameters.runAsPublic, 'false') }}:
+    _TeamName: DotNetCore
+    _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
+    _PublishType: blob
+    _SignType: real
+    _DotNetPublishToBlobFeed: true
+
 # Call build.yml, which runs common build tasks
 phases:
 - template: /eng/build.yml
@@ -21,14 +38,14 @@ phases:
       matrix:
         Build_Debug:
           _BuildConfig: Debug
-          # hardcode some values when building debug
+          # override some variables when building debug
           _PublishType: none
           _SignType: test
           _DotNetPublishToBlobFeed : false
         Build_Release:
           _BuildConfig: Release
 
-# only publish build assets if we're running internally
+# only publish build assets for private builds
 - ${{ if eq(parameters.runAsPublic, 'false') }}:
   - template: /eng/common/templates/phases/publish-build-assets.yml
     parameters:
