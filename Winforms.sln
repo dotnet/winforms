@@ -19,25 +19,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Editors.UnitTests", "src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.UnitTests.csproj", "{27F24D0C-5F0A-472E-AE12-98B386A13D50}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System.Windows.Forms", "System.Windows.Forms", "{7DA61866-0887-4572-9491-5BC05AEEB830}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System.Windows.Forms.Design.Editors", "System.Windows.Forms.Design.Editors", "{14AC99D8-5CEB-41A2-BDED-651F5373D8CC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Tests", "src\System.Windows.Forms.Design\tests\System.Windows.Forms.Design.Tests.csproj", "{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design", "src\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj", "{61D06BBD-B0CF-4CE1-9139-1CC4B82F0F9B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Ref", "src\System.Windows.Forms.Design\ref\System.Windows.Forms.Design.Ref.csproj", "{351EA462-BCB8-42E7-8595-A4FE55E3B25D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System.Windows.Forms.Design", "System.Windows.Forms.Design", "{0B1FF2D8-E13F-47F6-9442-F646EA2C5389}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Drawing.Design.Facade", "src\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj", "{A2B1148A-1747-47BD-8048-416C2C2AF14C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System.Drawing.Design", "System.Drawing.Design", "{8C96477B-F0E0-480C-A642-1AE1BC4C8456}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Design.Facade", "src\System.Design\src\System.Design.Facade.csproj", "{9BEC2806-D8E0-443B-8B58-9D344E0C2D24}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System.Design", "System.Design", "{DBBD7BBA-644B-4BE1-A1CC-E58C2D057F47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,20 +90,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{0D23A41B-2626-4703-9E4A-87C07F69B0B2} = {7DA61866-0887-4572-9491-5BC05AEEB830}
-		{334C343B-9D39-498E-89D8-B6526028FD5C} = {7DA61866-0887-4572-9491-5BC05AEEB830}
-		{AB38E262-F206-4820-8F29-23C5F72A4A16} = {7DA61866-0887-4572-9491-5BC05AEEB830}
-		{657472B8-FDA3-49DF-B8BE-0246046A4348} = {7DA61866-0887-4572-9491-5BC05AEEB830}
-		{5A619DC4-854A-450E-8F9A-AC72D2F5B59A} = {14AC99D8-5CEB-41A2-BDED-651F5373D8CC}
-		{B50AC96F-2655-4687-A404-16DF51882CBC} = {14AC99D8-5CEB-41A2-BDED-651F5373D8CC}
-		{27F24D0C-5F0A-472E-AE12-98B386A13D50} = {14AC99D8-5CEB-41A2-BDED-651F5373D8CC}
-		{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E} = {0B1FF2D8-E13F-47F6-9442-F646EA2C5389}
-		{61D06BBD-B0CF-4CE1-9139-1CC4B82F0F9B} = {0B1FF2D8-E13F-47F6-9442-F646EA2C5389}
-		{351EA462-BCB8-42E7-8595-A4FE55E3B25D} = {0B1FF2D8-E13F-47F6-9442-F646EA2C5389}
-		{A2B1148A-1747-47BD-8048-416C2C2AF14C} = {8C96477B-F0E0-480C-A642-1AE1BC4C8456}
-		{9BEC2806-D8E0-443B-8B58-9D344E0C2D24} = {DBBD7BBA-644B-4BE1-A1CC-E58C2D057F47}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

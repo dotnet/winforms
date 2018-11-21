@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <AssemblyName>System.Windows.Forms.Design</AssemblyName>    
+    <AssemblyName>System.Windows.Forms.Design</AssemblyName>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
