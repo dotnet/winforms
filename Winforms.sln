@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Editors", "src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj", "{B50AC96F-2655-4687-A404-16DF51882CBC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Editors.UnitTests", "src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.UnitTests.csproj", "{27F24D0C-5F0A-472E-AE12-98B386A13D50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Editors.Tests", "src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj", "{27F24D0C-5F0A-472E-AE12-98B386A13D50}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Tests", "src\System.Windows.Forms.Design\tests\System.Windows.Forms.Design.Tests.csproj", "{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E}"
 EndProject
