@@ -30,7 +30,7 @@ jobs:
           value: test
         - name: _SignArgs
           value: ''
-      
+
         # needed for darc (dependency flow) publishing
         - name: _PublishType
           value: none
@@ -42,7 +42,7 @@ jobs:
           value: ''
       
       # Override some values if we're building internally
-      - ${{ if eq(parameters.runAsPublic, 'false') }}:
+      ${{ if eq(parameters.runAsPublic, 'false') }}:
 
         # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
         - name: _PublishType
@@ -55,7 +55,7 @@ jobs:
         - group: DotNet-Symbol-Server-Pats
         - name: _PublishBlobFeedUrl
           value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
-
+        
         # note: User defined variables (like $(_SignType)) are not resolved until the agent is running on the machine,
         # and they can be overridden in the job matrix (like in Build_Debug below)
         - name: _SignArgs
