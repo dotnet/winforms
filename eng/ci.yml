@@ -24,15 +24,22 @@ jobs:
       variables:
 
         # needed for signing
-        _TeamName: DotNetCore
-        _SignType: test
-        _SignArgs: ''
+        - name: _TeamName
+          value: DotNetCore
+        - name: _SignType
+          value: test
+        - name: _SignArgs
+          value: ''
       
         # needed for darc (dependency flow) publishing
-        _PublishType: none
-        _DotNetPublishToBlobFeed: false
-        _PublishArgs: ''
-        _OfficialBuildIdArgs: ''
+        - name: _PublishType
+          value: none
+        - name: _DotNetPublishToBlobFeed
+          value: false
+        - name: _PublishArgs
+          value: ''
+        - name: _OfficialBuildIdArgs
+          value: ''
 
       # Override some values if we're building internally
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
