@@ -21,6 +21,7 @@ jobs:
     jobs:
     - job: Windows_NT
       pool: ${{ parameters.agentPool }}
+
       variables:
 
         # needed for signing
@@ -40,10 +41,9 @@ jobs:
           value: ''
         - name: _OfficialBuildIdArgs
           value: ''
-      
+
       # Override some values if we're building internally
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
-
         # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
         - name: _PublishType
           value: blob
@@ -55,7 +55,7 @@ jobs:
         - group: DotNet-Symbol-Server-Pats
         - name: _PublishBlobFeedUrl
           value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
-        
+
         # note: User defined variables (like $(_SignType)) are not resolved until the agent is running on the machine,
         # and they can be overridden in the job matrix (like in Build_Debug below)
         - name: _SignArgs
@@ -79,7 +79,7 @@ jobs:
             _DotNetPublishToBlobFeed : false
           Build_Release:
             _BuildConfig: Release
-
+            
       steps:
       - checkout: self
         clean: true
