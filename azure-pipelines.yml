@@ -9,23 +9,6 @@ variables:
   # clean the local repo on the build agents
   Build.Repository.Clean: true
   
-  # Set some variables based on build conditions
-  # TODO: Remove the Build.DefinitionName check once the github repo goes public
-  ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.DefinitionName'], 'github')) }}:
-    _HelixType: build/product
-    _HelixSource: pr/dotnet/winforms/$(Build.SourceBranch)
-    _PublishType: none
-    _SignType: test
-    _DotNetPublishToBlobFeed: false
-  # else
-  # TODO: Remove the Build.DefinitionName check once the github repo goes public
-  ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
-    _TeamName: DotNetCore
-    _HelixSource: official/dotnet/winforms/$(Build.SourceBranch)
-    _PublishType: blob
-    _SignType: real
-    _DotNetPublishToBlobFeed: true
-
 # only trigger ci builds for the master branch
 trigger:
 - master
@@ -36,7 +19,7 @@ trigger:
 # - master
 
 # Call the ci.yml template, which does the real work
-phases:
+jobs:
 - template: /eng/ci.yml
   parameters:
     # TODO: Remove the Build.DefinitionName check once the github repo goes public
