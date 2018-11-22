@@ -25,25 +25,19 @@ jobs:
       variables:
 
         # needed for signing
-        - name: _TeamName
-          value: DotNetCore
-        - name: _SignType
-          value: test
-        - name: _SignArgs
-          value: ''
+        _TeamName: DotNetCore
+        _SignType: test
+        _SignArgs: ''
 
         # needed for darc (dependency flow) publishing
-        - name: _PublishType
-          value: none
-        - name: _DotNetPublishToBlobFeed
-          value: false
-        - name: _PublishArgs
-          value: ''
-        - name: _OfficialBuildIdArgs
-          value: ''
+        _PublishType: none
+        _DotNetPublishToBlobFeed: false
+        _PublishArgs: ''
+        _OfficialBuildIdArgs: ''
 
         # Override some values if we're building internally
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
+
           # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
           - name: _PublishType
             value: blob
@@ -56,8 +50,9 @@ jobs:
           - name: _PublishBlobFeedUrl
             value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
 
-          # note: User defined variables (like $(_SignType)) are not resolved until the agent is running on the machine,
-          # and they can be overridden in the job matrix (like in Build_Debug below)
+          # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
+          # until the agent is running on the machine. They can be overridden any time before they are resolved,
+          # like in the job matrix below (see Build_Debug)
           - name: _SignArgs
             value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName)
           - name: _PublishArgs
