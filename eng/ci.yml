@@ -42,7 +42,7 @@ jobs:
           value: ''
       
       # Override some values if we're building internally
-      ${{ if eq(parameters.runAsPublic, 'false') }}:
+      - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
         # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
         - name: _PublishType
