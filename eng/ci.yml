@@ -42,32 +42,32 @@ jobs:
         - name: _OfficialBuildIdArgs
           value: ''
 
-      # Override some values if we're building internally
-      - ${{ if eq(parameters.runAsPublic, 'false') }}:
-        # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
-        - name: _PublishType
-          value: blob
-        - name: _SignType
-          value: real
-        - name: _DotNetPublishToBlobFeed
-          value: true
-        - group: DotNet-Blob-Feed
-        - group: DotNet-Symbol-Server-Pats
-        - name: _PublishBlobFeedUrl
-          value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
+        # Override some values if we're building internally
+        - ${{ if eq(parameters.runAsPublic, 'false') }}:
+          # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
+          - name: _PublishType
+            value: blob
+          - name: _SignType
+            value: real
+          - name: _DotNetPublishToBlobFeed
+            value: true
+          - group: DotNet-Blob-Feed
+          - group: DotNet-Symbol-Server-Pats
+          - name: _PublishBlobFeedUrl
+            value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
 
-        # note: User defined variables (like $(_SignType)) are not resolved until the agent is running on the machine,
-        # and they can be overridden in the job matrix (like in Build_Debug below)
-        - name: _SignArgs
-          value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName)
-        - name: _PublishArgs
-          value: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
-            /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
-            /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
-            /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
-            /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
-        - name: _OfficialBuildIdArgs
-          value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+          # note: User defined variables (like $(_SignType)) are not resolved until the agent is running on the machine,
+          # and they can be overridden in the job matrix (like in Build_Debug below)
+          - name: _SignArgs
+            value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName)
+          - name: _PublishArgs
+            value: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
+              /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
+              /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
+              /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
+              /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
+          - name: _OfficialBuildIdArgs
+            value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
       strategy:
         matrix:
@@ -79,7 +79,7 @@ jobs:
             _DotNetPublishToBlobFeed : false
           Build_Release:
             _BuildConfig: Release
-            
+
       steps:
       - checkout: self
         clean: true
