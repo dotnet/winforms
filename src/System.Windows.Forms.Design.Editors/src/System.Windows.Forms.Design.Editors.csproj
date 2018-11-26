@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\Resource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <GenerateSource>true</GenerateSource>
+      <Namespace>System.Windows.Forms.Design.Editors.Resources</Namespace>
     </EmbeddedResource>
   </ItemGroup>
   
@@ -19,14 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resources\Resource.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>
