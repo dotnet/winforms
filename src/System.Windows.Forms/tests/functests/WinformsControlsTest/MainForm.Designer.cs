@@ -48,6 +48,7 @@ namespace WinformsControlsTest
             this.propertyGrid = new System.Windows.Forms.Button();
             this.listViewButton = new System.Windows.Forms.Button();
             this.DateTimePickerButton = new System.Windows.Forms.Button();
+            this.FolderBrowserDialogButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonsButton
@@ -210,11 +211,22 @@ namespace WinformsControlsTest
             this.DateTimePickerButton.UseVisualStyleBackColor = true;
             this.DateTimePickerButton.Click += new System.EventHandler(this.button1_Click_1);
             // 
+            // FolderBrowserDialogButton
+            // 
+            this.FolderBrowserDialogButton.Location = new System.Drawing.Point(13, 223);
+            this.FolderBrowserDialogButton.Name = "FolderBrowserDialogButton";
+            this.FolderBrowserDialogButton.Size = new System.Drawing.Size(259, 23);
+            this.FolderBrowserDialogButton.TabIndex = 18;
+            this.FolderBrowserDialogButton.Text = "FolderBrowserDialog";
+            this.FolderBrowserDialogButton.UseVisualStyleBackColor = true;
+            this.FolderBrowserDialogButton.Click += new System.EventHandler(this.folderBrowserDialogButton_Click);
+            // 
             // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(578, 402);
+            this.Controls.Add(this.FolderBrowserDialogButton);
             this.Controls.Add(this.DateTimePickerButton);
             this.Controls.Add(this.listViewButton);
             this.Controls.Add(this.propertyGrid);
@@ -258,6 +270,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button propertyGrid;
         private System.Windows.Forms.Button listViewButton;
         private System.Windows.Forms.Button DateTimePickerButton;
+        private System.Windows.Forms.Button FolderBrowserDialogButton;
     }
 }
 
