@@ -132,7 +132,7 @@ namespace System.Windows.Forms
             {
                 if (dpiContext == DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
                 {
-                    throw new ArgumentException("dpiContext", dpiContext.ToString());
+                    throw new ArgumentException(nameof(dpiContext), dpiContext.ToString());
                 }
                 return SetThreadDpiAwarenessContext(dpiContext);
             }
