@@ -156,6 +156,8 @@ If ($testInner -eq $true)
     $overall = ((OpenTabTimesEnter -p $p -tabs 12 -nameOfTest 'ListView' -enters 1) -eq 0) -and $overall
 
     $overall = ((OpenTabTimesEnter -p $p -tabs 13 -nameOfTest 'DateTimePickerButton' -enters 1) -eq 0) -and $overall
+    
+    $overall = ((OpenTabTimesEnter -p $p -tabs 14 -nameOfTest 'FolderBrowserDialogButton' -enters 1) -eq 0) -and $overall
 }
 
 if ($overall -eq $true)
