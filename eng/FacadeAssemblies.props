@@ -5,13 +5,7 @@
     <IsFacadeAssembly Condition="'$(IsFacadeAssembly)'=='' AND ($(MSBuildProjectName.EndsWith('.Facade')))">true</IsFacadeAssembly>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(IsFacadeAssembly)'=='true'">    
-    <StrongNameKeyId>Microsoft</StrongNameKeyId>
-    <AssemblyOriginatorKeyFile>Microsoft</AssemblyOriginatorKeyFile>
-    <PublicKey>$(MicrosoftPublicKey)</PublicKey>
-    <PublicKeyToken>b03f5f7f11d50a3a</PublicKeyToken>
-    <SignAssembly>true</SignAssembly>
-    <DelaySign>true</DelaySign>
+  <PropertyGroup Condition="'$(IsFacadeAssembly)'=='true'"> 
     <IsPartialFacadeAssembly>true</IsPartialFacadeAssembly>
     <GenFacadesIgnoreMissingTypes>true</GenFacadesIgnoreMissingTypes>
 
@@ -19,6 +13,11 @@
     <AssetTargetFallback>net472</AssetTargetFallback>
     <NoWarn>$(NoWarn);NU1701</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsFacadeAssembly)'=='true'">
+    <PackageReference Include="$(MicrosoftDotNetGenFacadesPackage)" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" />
+    <PackageReference Include="$(MicrosoftTargetingPackNETFrameworkv472Package)" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" />
+  </ItemGroup>
   
   <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" AfterTargets="ResolvePackageDependenciesForBuild">
     <ItemGroup>
