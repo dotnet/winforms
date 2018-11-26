@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
         public void DpiHelper_LogicalToDeviceUnits(int value)
         {
             var expected = Math.Round(value * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi));
-  
+
             Assert.Equal(expected, DpiHelper.LogicalToDeviceUnits(value));
         }
 
