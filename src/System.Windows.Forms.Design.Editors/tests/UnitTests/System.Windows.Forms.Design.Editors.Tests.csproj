@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>    
-    <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />
+    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
   </ItemGroup>
 
 </Project>

@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="$(SystemDrawingDesignPrimitivesPackage)" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
+    <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
   </ItemGroup>
   
 </Project>

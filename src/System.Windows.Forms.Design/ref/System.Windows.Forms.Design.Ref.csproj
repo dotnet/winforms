@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="$(SystemCodeDomPackage)" Version="$(SystemCodeDomPackageVersion)"/>
-    <PackageReference Include="$(SystemDrawingDesignPrimitivesPackage)" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
+    <PackageReference Include="System.CodeDom" Version="$(SystemCodeDomPackageVersion)"/>
+    <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

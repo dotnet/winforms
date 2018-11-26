@@ -12,16 +12,18 @@
     <!-- allow desktop references -->
     <AssetTargetFallback>net472</AssetTargetFallback>
     <NoWarn>$(NoWarn);NU1701</NoWarn>
+    <MicrosoftTargetingPackNETFrameworkv472Package>Microsoft.TargetingPack.NETFramework.v4.7.2</MicrosoftTargetingPackNETFrameworkv472Package>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsFacadeAssembly)'=='true'">
-    <PackageReference Include="$(MicrosoftDotNetGenFacadesPackage)" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" />
+    
+    <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" />
     <PackageReference Include="$(MicrosoftTargetingPackNETFrameworkv472Package)" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" />
   </ItemGroup>
   
   <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" AfterTargets="ResolvePackageDependenciesForBuild">
     <ItemGroup>
-      <_desktopReference Include="@(Reference)" Condition="'%(Reference.NuGetPackageId)' == 'Microsoft.TargetingPack.NETFramework.v4.7.2'" />
+      <_desktopReference Include="@(Reference)" Condition="'%(Reference.NuGetPackageId)' == '$(MicrosoftTargetingPackNETFrameworkv472Package)'" />
       <Reference Remove="@(_desktopReference)" />
       <ResolvedMatchingContract Include="@(_desktopReference)" Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'" />
 
