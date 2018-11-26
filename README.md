@@ -12,34 +12,34 @@ part of the .NET Framework.
 
 We haven't finished porting WinForms to .NET Core yet, which means not all
 source code is on GitHub. You can expect us to complete this over the next
-months. The reason it takes some time is that we need to support & build all the
+months in 2019. The reason it takes some time is that we need to support & build all the
 pieces in an open source way, which requires decoupling the code base from our
 internal engineering system. At the same time, we don't want to block open
 sourcing until the port is complete. This is similar to how other .NET
 Core repos with existing code have been brought up, such as
-[CoreFx](https://github.com/dotnet/corefx).
+[CoreFx](https://github.com/dotnet/corefx) in 2014.
 
 Even though .NET Core is a cross-platform technology, WinForms only runs on
 Windows.
 
-## What are the benefits of building WinForm apps with .NET Core?
+## What are the benefits of building WinForms apps with .NET Core?
 
 There are three primary reasons for considering .NET Core over the .NET
 Framework for building desktop apps with WinForms:
 
-1. **More deployment options**. You can deploy .NET Core  side-by-side or even
+1. **More deployment options**. You can deploy .NET Core side-by-side or even
    produce self-contained apps that you can just XCOPY deploy.
 
 2. **Contains features that we can't provide in .NET Framework**. Due to the
    fact that .NET Framework is deployed as an in-place update, the
-   compatibility is extremely high, which prevents us from making fundamental
+   compatibility requirements are extremely high, which prevents us from making fundamental
    changes, such as performance improvements or making the UI more high-DPI
    aware by default.
 
-3. **.NET Core goodness**. As an open source platform, .NET Core is receiving a
-   lot of contributions from the open source community. As an application
-   writer, you also benefit from those when building WinForms apps with .NET
-   Core.
+3. **.NET Core goodness**. As an open source platform with side-by-side deployment, 
+   .NET Core is receiving a lot of innovations and contributions from Microsoft teams and 
+   from the open source community. As an application author, you also benefit from those 
+   when building WinForms apps with .NET Core.
 
 To learn more, read the blog post [Update on .NET Core 3.0 and .NET Framework 4.8][update-post].
 
@@ -50,8 +50,8 @@ Install [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download).
 [Daily builds](https://aka.ms/netcore3sdk) are also available in the
 [dotnet/code-sdk repo](https://github.com/dotnet/core-sdk).
 
-To use the **WinForms designer**, you'll need Visual Studio. We recommend Visual Studio 2019 Preview 1 which is available at [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/). Select the **.NET desktop development** workload with the options: **.NET
-Framework 4.7.2 development tools** and **.NET Core 3.0 development tools**. 
+To use the **WinForms designer**, you'll need Visual Studio. We recommend Visual Studio 2019 Preview 1 which is available at [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/).
+Select the **.NET desktop development** workload with the options: **.NET Framework 4.7.2 development tools** and **.NET Core 3.0 development tools**.
 
 ## Creating new applications
 
@@ -87,20 +87,19 @@ Guidelines](https://github.com/dotnet/coreclr/blob/master/Documentation/project-
 
 ## Community
 
-This project has adopted the code of conduct defined by the [Contributor
-Covenant](https://contributor-covenant.org/) to clarify expected behavior in our
-community. For more information, see the [.NET Foundation Code of
-Conduct](https://dotnetfoundation.org/code-of-conduct).
+This project has adopted the code of conduct defined by the [Contributor Covenant](https://contributor-covenant.org/) 
+to clarify expected behavior in our community.
+For more information, see the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
 
 ## Samples
 
 Check out the WinForms
-[samples](https://github.com/dotnet/samples/tree/master/windowsforms) for Hello
-World examples and more advanced scenarios.
+[samples](https://github.com/dotnet/samples/tree/master/windowsforms) for 
+HelloWorld examples and more advanced scenarios.
 
 ## License
 
-Code in this repo is licensed under the [MIT license](LICENSE).
+.NET Core (including WinForms repo) is licensed under the [MIT license](LICENSE.TXT).
 
 ## .NET Foundation
 
