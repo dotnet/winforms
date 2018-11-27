@@ -75,10 +75,10 @@ dotnet_naming_style.static_prefix_style.capitalization = camel_case
 #dotnet_naming_rule.camel_case_for_private_internal_fields.symbols  = private_internal_fields
 #dotnet_naming_rule.camel_case_for_private_internal_fields.style    = camel_case_underscore_style
 
-# Private instance fields are camelCased
-dotnet_naming_rule.private_instance_fields_must_be_camel_cased.symbols  = private_field_symbols
-dotnet_naming_rule.private_instance_fields_must_be_camel_cased.style    = camel_case_style
-dotnet_naming_rule.private_instance_fields_must_be_camel_cased.severity = warning
+# internal and private fields should be _camelCase
+dotnet_naming_rule.camel_case_for_private_internal_fields.severity = suggestion
+dotnet_naming_rule.camel_case_for_private_internal_fields.symbols  = private_internal_fields
+dotnet_naming_rule.camel_case_for_private_internal_fields.style    = camel_case_underscore_style
 
 dotnet_naming_symbols.private_internal_fields.applicable_kinds = field
 dotnet_naming_symbols.private_internal_fields.applicable_accessibilities = private, internal
