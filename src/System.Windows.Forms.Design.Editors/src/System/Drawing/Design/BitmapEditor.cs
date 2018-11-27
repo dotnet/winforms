@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms.Design.Editors.Resources;
 
@@ -14,6 +15,8 @@ namespace System.Drawing.Design
     [CLSCompliant(false)]
     public class BitmapEditor : ImageEditor
     {
+        internal static List<string> BitmapExtensions = new List<string>() { "bmp", "gif", "jpg", "jpeg", "png", "ico" };
+
         protected override string GetFileDialogDescription()
         {
             return SR.bitmapFileDescription;
@@ -21,12 +24,12 @@ namespace System.Drawing.Design
 
         protected override string[] GetExtensions()
         {
-            return new[] { "bmp", "gif", "jpg", "jpeg", "png", "ico" };
+            return BitmapExtensions.ToArray();
         }
 
         protected override Image LoadFromStream(Stream stream)
         {
             return new Bitmap(stream);
-        }
+        }        
     }
 }

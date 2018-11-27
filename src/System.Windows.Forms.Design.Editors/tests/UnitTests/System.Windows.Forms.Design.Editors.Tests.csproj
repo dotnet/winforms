@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>    
-    <AssemblyName>System.Windows.Forms.Design.Editors.UnitTests</AssemblyName>
+    <AssemblyName>System.Windows.Forms.Design.Editors.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>    
     <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Design.Editors.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,5 +5,9 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\System.Windows.Forms.Design.csproj" />
+  </ItemGroup>
   
 </Project>
