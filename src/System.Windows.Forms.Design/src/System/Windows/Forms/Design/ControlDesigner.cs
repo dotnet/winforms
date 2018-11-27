@@ -256,7 +256,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override void Initialize(IComponent component)
         {
-            //
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
