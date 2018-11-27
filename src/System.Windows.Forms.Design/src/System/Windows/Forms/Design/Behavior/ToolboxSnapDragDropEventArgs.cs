@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -47,7 +46,6 @@ namespace System.Windows.Forms.Design.Behavior
         ///     the drop happened...
         /// </summary>
         public SnapDirection SnapDirections => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     The offset in pixel between the mouse cursor (at time of drop) and the

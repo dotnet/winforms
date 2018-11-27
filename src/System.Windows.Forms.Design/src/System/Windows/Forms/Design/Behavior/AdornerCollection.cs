@@ -262,7 +262,6 @@ namespace System.Windows.Forms.Design.Behavior
         }
     }
 
-
     public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
     {
         public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
@@ -273,7 +272,6 @@ namespace System.Windows.Forms.Design.Behavior
         public Adorner Current => throw new NotImplementedException(SR.NotImplementedByDesign);
 
         object IEnumerator.Current => throw new NotImplementedException();
-
 
         public bool MoveNext()
         {

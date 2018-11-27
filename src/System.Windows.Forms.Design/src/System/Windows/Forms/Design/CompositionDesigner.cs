@@ -8,7 +8,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 
-
 namespace System.Windows.Forms.Design
 {
     /// <summary>
@@ -21,7 +20,6 @@ namespace System.Windows.Forms.Design
         ///     <para>Gets  the control for this designer.</para>
         /// </summary>
         public Control Control => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     <para>Indicates whether the tray should auto arrange controls.</para>
@@ -69,7 +67,6 @@ namespace System.Windows.Forms.Design
         }
 
         ViewTechnology[] IRootDesigner.SupportedTechnologies => throw new NotImplementedException();
-
 
         /// <summary>
         ///     <para>

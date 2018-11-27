@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
@@ -55,36 +54,30 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public string Filter => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Returns true if the SnapLine is of a horizontal type.
         /// </summary>
         public bool IsHorizontal => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Returns true if the SnapLine is of a vertical type.
         /// </summary>
         public bool IsVertical => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Read-only property that returns the distance from the origin to where this SnapLine is defined.
         /// </summary>
         public int Offset => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Read-only property that returns the priority of the SnapLine.
         /// </summary>
         public SnapLinePriority Priority => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Read-only property that represents the 'type' of SnapLine.
         /// </summary>
         public SnapLineType SnapLineType => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Adjusts the offset property of the SnapLine.

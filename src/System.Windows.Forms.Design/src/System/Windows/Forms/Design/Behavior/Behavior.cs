@@ -32,12 +32,10 @@ namespace System.Windows.Forms.Design.Behavior
 
         private Behavior GetNextBehavior => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     The cursor that should be displayed for this behavior.
         /// </summary>
         public virtual Cursor Cursor => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Rerturning true from here indicates to the BehaviorService that
@@ -45,7 +43,6 @@ namespace System.Windows.Forms.Design.Behavior
         ///     state set to 'Enabled = false' when this Behavior is active.
         /// </summary>
         public virtual bool DisableAllCommands => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Called from the BehaviorService, this function provides an opportunity
@@ -153,7 +150,6 @@ namespace System.Windows.Forms.Design.Behavior
 
         //OLE DragDrop virtual methods
         //
-
 
         /// <summary>
         ///     OnDragDrop can be overridden so that a Behavior can specify its own

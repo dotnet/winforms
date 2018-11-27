@@ -34,7 +34,6 @@ namespace System.ComponentModel.Design
 
         public virtual string DisplayName => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         public IDictionary Properties => throw new NotImplementedException(SR.NotImplementedByDesign);
 
         /// <summary>

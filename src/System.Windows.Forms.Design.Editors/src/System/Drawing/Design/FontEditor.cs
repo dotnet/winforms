@@ -21,7 +21,6 @@ namespace System.Drawing.Design
         private FontDialog fontDialog;
         private object value;
 
-
         /// <summary>
         ///      Edits the given object value using the editor style provided by
         ///      GetEditorStyle.  A service provider is provided so that any
@@ -77,7 +76,6 @@ namespace System.Drawing.Design
 
             return value;
         }
-
 
         /// <summary>
         ///      Retrieves the editing style of the Edit method.  If the method

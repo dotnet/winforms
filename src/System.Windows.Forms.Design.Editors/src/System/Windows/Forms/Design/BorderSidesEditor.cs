@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -20,7 +19,6 @@ namespace System.Windows.Forms.Design
     public class BorderSidesEditor : UITypeEditor
     {
         private BorderSidesEditorUI borderSidesEditorUI;
-
 
         /// <summary>
         /// Edits the given object value using the editor style provided by BorderSidesEditor.GetEditStyle.
@@ -78,7 +76,6 @@ namespace System.Windows.Forms.Design
 
             private bool updateCurrentValue;
 
-
             public BorderSidesEditorUI(BorderSidesEditor editor)
             {
                 this.editor = editor;
@@ -102,7 +99,6 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public object Value { get; private set; }
 
-
             public void End()
             {
                 EditorService = null;
@@ -119,7 +115,6 @@ namespace System.Windows.Forms.Design
                 base.OnGotFocus(e);
                 noneCheckBox.Focus();
             }
-
 
             private void InitializeComponent()
             {
@@ -212,7 +207,6 @@ namespace System.Windows.Forms.Design
                 tableLayoutPanel1.PerformLayout();
                 ResumeLayout(false);
                 PerformLayout();
-
 
                 //Events
                 rightCheckBox.CheckedChanged += rightCheckBox_CheckedChanged;

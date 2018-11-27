@@ -52,7 +52,6 @@ namespace System.Drawing.Design
             return desc + "(" + exts + ")|" + extsSemis;
         }
 
-
         /// <summary>
         ///      Edits the given object value using the editor style provided by
         ///      GetEditorStyle.  A service provider is provided so that any
@@ -104,7 +103,6 @@ namespace System.Drawing.Design
             return value;
         }
 
-
         /// <summary>
         ///      Retrieves the editing style of the Edit method.  If the method
         ///      is not supported, this will return None.
@@ -134,7 +132,6 @@ namespace System.Drawing.Design
             return (string[])list.ToArray(typeof(string));
         }
 
-
         /// <summary>
         ///      Determines if this editor supports the painting of a representation
         ///      of an object's value.
@@ -157,7 +154,6 @@ namespace System.Drawing.Design
 
             return Image.FromStream(ms);
         }
-
 
         /// <summary>
         ///       Paints a representative value of the given object to the provided

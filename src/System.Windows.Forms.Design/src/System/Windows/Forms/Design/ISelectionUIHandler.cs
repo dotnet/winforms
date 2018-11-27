@@ -24,7 +24,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY);
 
-
         /// <summary>
         ///     Called when the user has moved the mouse.  This will only be called on
         ///     the designer that returned true from beginDrag.  The designer
@@ -32,13 +31,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         void DragMoved(object[] components, Rectangle offset);
 
-
         /// <summary>
         ///     Called when the user has completed the drag.  The designer should
         ///     remove any UI feedback it may be providing.
         /// </summary>
         void EndDrag(object[] components, bool cancel);
-
 
         /// <summary>
         ///     Retrieves the shape of the component.  The component's shape should be in
@@ -47,14 +44,12 @@ namespace System.Windows.Forms.Design
         /// </summary>
         Rectangle GetComponentBounds(object component);
 
-
         /// <summary>
         ///     Retrieves a set of rules concerning the movement capabilities of a component.
         ///     This should be one or more flags from the SelectionRules class.  If no designer
         ///     provides rules for a component, the component will not get any UI services.
         /// </summary>
         SelectionRules GetComponentRules(object component);
-
 
         /// <summary>
         ///     Determines the rectangle that any selection adornments should be clipped
@@ -63,13 +58,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         Rectangle GetSelectionClipRect(object component);
 
-
         /// <summary>
         ///     Handle a double-click on the selection rectangle
         ///     of the given component.
         /// </summary>
         void OnSelectionDoubleClick(IComponent component);
-
 
         /// <summary>
         ///     Queries to see if a drag operation

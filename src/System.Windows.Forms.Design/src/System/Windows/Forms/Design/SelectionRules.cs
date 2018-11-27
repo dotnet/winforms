@@ -25,7 +25,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         None = 0x00000000,
 
-
         /// <summary>
         ///     <para>
         ///         Indicates
@@ -35,7 +34,6 @@ namespace System.Windows.Forms.Design
         ///     </para>
         /// </summary>
         Moveable = 0x10000000,
-
 
         /// <summary>
         ///     <para>
@@ -50,7 +48,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         Visible = 0x40000000,
 
-
         /// <summary>
         ///     <para>
         ///         Indicates
@@ -60,7 +57,6 @@ namespace System.Windows.Forms.Design
         ///     </para>
         /// </summary>
         Locked = unchecked((int)0x80000000),
-
 
         /// <summary>
         ///     <para>
@@ -72,7 +68,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         TopSizeable = 0x00000001,
 
-
         /// <summary>
         ///     <para>
         ///         Indicates
@@ -82,7 +77,6 @@ namespace System.Windows.Forms.Design
         ///     </para>
         /// </summary>
         BottomSizeable = 0x00000002,
-
 
         /// <summary>
         ///     <para>
@@ -94,7 +88,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         LeftSizeable = 0x00000004,
 
-
         /// <summary>
         ///     <para>
         ///         Indicates
@@ -104,7 +97,6 @@ namespace System.Windows.Forms.Design
         ///     </para>
         /// </summary>
         RightSizeable = 0x00000008,
-
 
         /// <summary>
         ///     <para>

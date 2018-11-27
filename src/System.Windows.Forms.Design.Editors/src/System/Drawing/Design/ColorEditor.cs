@@ -24,7 +24,6 @@ namespace System.Drawing.Design
     {
         private ColorUI colorUI;
 
-
         /// <summary>
         ///     Edits the given object value using the editor style
         ///     provided by ColorEditor.GetEditStyle.
@@ -53,14 +52,12 @@ namespace System.Drawing.Design
                         value = colorUI.Value;
                     }
 
-
                     colorUI.End();
                 }
             }
 
             return value;
         }
-
 
         /// <summary>
         ///     Gets the editing style of the Edit method. If the method
@@ -72,7 +69,6 @@ namespace System.Drawing.Design
             return UITypeEditorEditStyle.DropDown;
         }
 
-
         /// <summary>
         ///     Gets a value indicating if this editor supports the painting of a representation
         ///     of an object's value.
@@ -82,7 +78,6 @@ namespace System.Drawing.Design
         {
             return true;
         }
-
 
         /// <summary>
         ///     Paints a representative value of the given object to the provided
@@ -499,7 +494,6 @@ namespace System.Drawing.Design
                             ControlPaint.DrawFocusRectangle(g, Rectangle.Inflate(rect, 5, 5), SystemColors.ControlText, SystemColors.Control);
                         }
 
-
                         ControlPaint.DrawBorder(g, Rectangle.Inflate(rect, 2, 2),
                                                 SystemColors.Control, 2, ButtonBorderStyle.Inset,
                                                 SystemColors.Control, 2, ButtonBorderStyle.Inset,
@@ -562,12 +556,10 @@ namespace System.Drawing.Design
                 }
             }
 
-
             [ComVisible(true)]
             public class ColorPaletteAccessibleObject : ControlAccessibleObject
             {
                 private readonly ColorCellAccessibleObject[] cells;
-
 
                 public ColorPaletteAccessibleObject(ColorPalette owner) : base(owner)
                 {
@@ -576,12 +568,10 @@ namespace System.Drawing.Design
 
                 internal ColorPalette ColorPalette => (ColorPalette)Owner;
 
-
                 public override int GetChildCount()
                 {
                     return CELLS_ACROSS * CELLS_DOWN;
                 }
-
 
                 public override AccessibleObject GetChild(int id)
                 {
@@ -596,7 +586,6 @@ namespace System.Drawing.Design
                     }
                     return cells[id];
                 }
-
 
                 public override AccessibleObject HitTest(int x, int y)
                 {
@@ -614,14 +603,12 @@ namespace System.Drawing.Design
                     return base.HitTest(x, y);
                 }
 
-
                 [ComVisible(true)]
                 public class ColorCellAccessibleObject : AccessibleObject
                 {
                     private readonly Color color;
                     private readonly ColorPaletteAccessibleObject parent;
                     private readonly int cell;
-
 
                     public ColorCellAccessibleObject(ColorPaletteAccessibleObject parent, Color color, int cell)
                     {
@@ -691,8 +678,6 @@ namespace System.Drawing.Design
             private bool commonHeightSet;
             private bool systemHeightSet;
 
-
-
             public ColorUI(ColorEditor editor)
             {
                 this.editor = editor;
@@ -700,12 +685,10 @@ namespace System.Drawing.Design
                 AdjustListBoxItemHeight();
             }
 
-
             /// <summary>
             /// Array of standard colors.
             /// </summary>
             private object[] ColorValues => colorConstants ?? (colorConstants = GetConstants(typeof(Color)));
-
 
             /// <summary>
             /// Retrieves the array of custom colors for our use.
@@ -733,12 +716,10 @@ namespace System.Drawing.Design
                 }
             }
 
-
             /// <summary>
             /// Allows someone else to close our dropdown.
             /// </summary>
             public IWindowsFormsEditorService EditorService => edSvc;
-
 
             /// <summary> 
             /// Array of system colors.
@@ -770,7 +751,6 @@ namespace System.Drawing.Design
                 lbCommon.ItemHeight = Font.Height + 2;
             }
 
-
             /// <summary>
             /// Takes the given color and looks for an instance in the ColorValues table.
             /// </summary>
@@ -787,7 +767,6 @@ namespace System.Drawing.Design
                 }
                 return color;
             }
-
 
             /// <summary>
             /// Retrieves an array of color constants for the given object.

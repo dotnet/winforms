@@ -173,7 +173,6 @@ namespace System.Internal
                 {
                     return;
                 }
-                
 
                 if (performCollect)
                 {
@@ -211,7 +210,6 @@ namespace System.Internal
                 }
             }
 
-            
             /// <devdoc>
             ///     Determines if this handle type needs a garbage collection pass.
             /// </devdoc>
@@ -248,7 +246,6 @@ namespace System.Internal
                 return false;
             }
 
-           
             /// <devdoc>
             ///     Removes the given handle from our monitor list.
             /// </devdoc>

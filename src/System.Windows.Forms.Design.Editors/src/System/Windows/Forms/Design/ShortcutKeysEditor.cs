@@ -105,7 +105,6 @@ namespace System.Windows.Forms.Design
             private Keys unknownKeyCode;
             private bool updateCurrentValue;
 
-
             public ShortcutKeysUI(ShortcutKeysEditor editor)
             {
                 this.editor = editor;
@@ -179,7 +178,6 @@ namespace System.Windows.Forms.Design
             {
                 UpdateCurrentValue();
             }
-
 
             public void End()
             {

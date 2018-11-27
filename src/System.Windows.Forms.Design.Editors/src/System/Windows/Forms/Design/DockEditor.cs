@@ -19,7 +19,6 @@ namespace System.Windows.Forms.Design
     {
         private DockUI dockUI;
 
-
         /// <summary>
         ///     Edits the given object value using the editor style provided by
         ///     GetEditorStyle.  A service provider is provided so that any
@@ -383,7 +382,6 @@ namespace System.Windows.Forms.Design
             {
                 protected override bool ShowFocusCues => true;
 
-
                 protected override bool IsInputKey(Keys keyData)
                 {
                     switch (keyData)
@@ -399,7 +397,6 @@ namespace System.Windows.Forms.Design
                     return base.IsInputKey(keyData);
                 }
             }
-
 
             private class ContainerPlaceholder : Control
             {

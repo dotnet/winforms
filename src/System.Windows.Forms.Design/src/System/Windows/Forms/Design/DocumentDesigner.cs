@@ -31,7 +31,6 @@ namespace System.Windows.Forms.Design
 
         ViewTechnology[] IRootDesigner.SupportedTechnologies => throw new NotImplementedException();
 
-
         /// <summary>
         ///     Initializes the designer with the given component.  The designer can
         ///     get the component's site and request services from it in this call.

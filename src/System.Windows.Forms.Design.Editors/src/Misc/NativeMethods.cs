@@ -99,12 +99,10 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
 
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
         [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern IntPtr PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
-
 
         [StructLayout(LayoutKind.Sequential)]
         public class NMHEADER
@@ -190,7 +188,6 @@ namespace System.Windows.Forms.Design
             public readonly POINT ptDrag = null;
         }
 
-
         [StructLayout(LayoutKind.Sequential)]
         public class TCHITTESTINFO
         {
@@ -217,7 +214,6 @@ namespace System.Windows.Forms.Design
             public readonly int dwHoverTime = 0;
             public readonly IntPtr hwndTrack;
         }
-
 
         [ComVisible(false)]
         public enum StructFormat
@@ -623,47 +619,37 @@ namespace System.Windows.Forms.Design
         {
             IntPtr GetWindow();
 
-
             void ContextSensitiveHelp(
                 [In] [MarshalAs(UnmanagedType.I4)] int fEnterMode);
-
 
             void GetBorder(
                 [Out] COMRECT lprectBorder);
 
-
             void RequestBorderSpace(
                 [In] COMRECT pborderwidths);
 
-
             void SetBorderSpace(
                 [In] COMRECT pborderwidths);
-
 
             void SetActiveObject(
                 [In] [MarshalAs(UnmanagedType.Interface)]
                 IOleInPlaceActiveObject pActiveObject,
                 [In] [MarshalAs(UnmanagedType.LPWStr)] string pszObjName);
 
-
             void InsertMenus(
                 [In] IntPtr hmenuShared,
                 [In] [Out] object lpMenuWidths);
-
 
             void SetMenu(
                 [In] IntPtr hmenuShared,
                 [In] IntPtr holemenu,
                 [In] IntPtr hwndActiveObject);
 
-
             void RemoveMenus(
                 [In] IntPtr hmenuShared);
 
-
             void SetStatusText(
                 [In] [MarshalAs(UnmanagedType.BStr)] string pszStatusText);
-
 
             void EnableModeless(
                 [In] [MarshalAs(UnmanagedType.I4)] int fEnable);
@@ -683,22 +669,17 @@ namespace System.Windows.Forms.Design
         {
             IntPtr GetWindow();
 
-
             void ContextSensitiveHelp(
                 [In] [MarshalAs(UnmanagedType.I4)] int fEnterMode);
-
 
             void GetBorder(
                 [Out] COMRECT lprectBorder);
 
-
             void RequestBorderSpace(
                 [In] COMRECT pborderwidths);
 
-
             void SetBorderSpace(
                 [In] COMRECT pborderwidths);
-
 
             void SetActiveObject(
                 [In] [MarshalAs(UnmanagedType.Interface)]
@@ -714,7 +695,6 @@ namespace System.Windows.Forms.Design
         {
             int GetWindow(out IntPtr hwnd);
 
-
             void ContextSensitiveHelp(
                 [In] [MarshalAs(UnmanagedType.I4)] int fEnterMode);
 
@@ -723,20 +703,16 @@ namespace System.Windows.Forms.Design
             int TranslateAccelerator(
                 [In] ref MSG lpmsg);
 
-
             void OnFrameWindowActivate(
                 [In] [MarshalAs(UnmanagedType.I4)] int fActivate);
 
-
             void OnDocWindowActivate(
                 [In] [MarshalAs(UnmanagedType.I4)] int fActivate);
-
 
             void ResizeBorder(
                 [In] COMRECT prcBorder,
                 [In] IOleInPlaceUIWindow pUIWindow,
                 [In] [MarshalAs(UnmanagedType.I4)] int fFrameWindow);
-
 
             void EnableModeless(
                 [In] [MarshalAs(UnmanagedType.I4)] int fEnable);
@@ -757,12 +733,10 @@ namespace System.Windows.Forms.Design
                 [Out] [MarshalAs(UnmanagedType.LPArray)]
                 object[] ppmkOut);
 
-
             void EnumObjects(
                 [In] [MarshalAs(UnmanagedType.U4)] int grfFlags,
                 [Out] [MarshalAs(UnmanagedType.Interface)]
                 out object ppenum);
-
 
             void LockContainer(
                 [In] [MarshalAs(UnmanagedType.I4)] int fLock);
@@ -785,13 +759,10 @@ namespace System.Windows.Forms.Design
             int GetContainer(
                 [Out] out IOleContainer ppContainer);
 
-
             void ShowObject();
-
 
             void OnShowWindow(
                 [In] [MarshalAs(UnmanagedType.I4)] int fShow);
-
 
             void RequestNewObjectLayout();
         }
@@ -825,14 +796,11 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             object GetDocument();
 
-
             void SetRect(
                 [In] COMRECT prcView);
 
-
             void GetRect(
                 [Out] COMRECT prcView);
-
 
             void SetRectComplex(
                 [In] COMRECT prcView,
@@ -840,31 +808,24 @@ namespace System.Windows.Forms.Design
                 [In] COMRECT prcVScroll,
                 [In] COMRECT prcSizeBox);
 
-
             void Show(
                 [In] [MarshalAs(UnmanagedType.I4)] int fShow);
-
 
             void UIActivate(
                 [In] [MarshalAs(UnmanagedType.I4)] int fUIActivate);
 
-
             void Open();
-
 
             void CloseView(
                 [In] [MarshalAs(UnmanagedType.U4)] int dwReserved);
-
 
             void SaveViewState(
                 [In] [MarshalAs(UnmanagedType.Interface)]
                 IStream pstm);
 
-
             void ApplyViewState(
                 [In] [MarshalAs(UnmanagedType.Interface)]
                 IStream pstm);
-
 
             void Clone(
                 [In] [MarshalAs(UnmanagedType.Interface)]
@@ -881,7 +842,6 @@ namespace System.Windows.Forms.Design
         {
             IntPtr GetWindow();
 
-
             void ContextSensitiveHelp(
                 [In] [MarshalAs(UnmanagedType.I4)] int fEnterMode);
 
@@ -889,12 +849,9 @@ namespace System.Windows.Forms.Design
             [PreserveSig]
             int CanInPlaceActivate();
 
-
             void OnInPlaceActivate();
 
-
             void OnUIActivate();
-
 
             void GetWindowContext(
                 [Out] out IOleInPlaceFrame ppFrame,
@@ -908,16 +865,12 @@ namespace System.Windows.Forms.Design
             int Scroll(
                 [In] [MarshalAs(UnmanagedType.U4)] tagSIZE scrollExtant);
 
-
             void OnUIDeactivate(
                 [In] [MarshalAs(UnmanagedType.I4)] int fUndoable);
 
-
             void OnInPlaceDeactivate();
 
-
             void DiscardUndoState();
-
 
             void DeactivateAndUndo();
 
@@ -948,7 +901,6 @@ namespace System.Windows.Forms.Design
                 [In] [MarshalAs(UnmanagedType.I8)] long dlibMove,
                 [In] [MarshalAs(UnmanagedType.I4)] int dwOrigin);
 
-
             void SetSize(
                 [In] [MarshalAs(UnmanagedType.I8)] long libNewSize);
 
@@ -960,25 +912,20 @@ namespace System.Windows.Forms.Design
                 [Out] [MarshalAs(UnmanagedType.LPArray)]
                 long[] pcbRead);
 
-
             void Commit(
                 [In] [MarshalAs(UnmanagedType.I4)] int grfCommitFlags);
 
-
             void Revert();
-
 
             void LockRegion(
                 [In] [MarshalAs(UnmanagedType.I8)] long libOffset,
                 [In] [MarshalAs(UnmanagedType.I8)] long cb,
                 [In] [MarshalAs(UnmanagedType.I4)] int dwLockType);
 
-
             void UnlockRegion(
                 [In] [MarshalAs(UnmanagedType.I8)] long libOffset,
                 [In] [MarshalAs(UnmanagedType.I8)] long cb,
                 [In] [MarshalAs(UnmanagedType.I4)] int dwLockType);
-
 
             void Stat(
                 [In] IntPtr pStatstg,
@@ -1106,19 +1053,15 @@ namespace System.Windows.Forms.Design
                 [In] FORMATETC pFormatetc,
                 [In] STGMEDIUM pStgmed);
 
-
             void OnViewChange(
                 [In] [MarshalAs(UnmanagedType.U4)] int dwAspect,
                 [In] [MarshalAs(UnmanagedType.I4)] int lindex);
-
 
             void OnRename(
                 [In] [MarshalAs(UnmanagedType.Interface)]
                 object pmk);
 
-
             void OnSave();
-
 
             void OnClose();
         }
@@ -1136,22 +1079,18 @@ namespace System.Windows.Forms.Design
             [PreserveSig]
             int IsDirty();
 
-
             void Load(
                 [In] [MarshalAs(UnmanagedType.Interface)]
                 IStream pstm);
-
 
             void Save(
                 [In] [MarshalAs(UnmanagedType.Interface)]
                 IStream pstm,
                 [In] [MarshalAs(UnmanagedType.Bool)] bool fClearDirty);
 
-
             void GetSizeMax(
                 [Out] [MarshalAs(UnmanagedType.LPArray)]
                 long pcbSize);
-
 
             void InitNew();
         }
@@ -1201,7 +1140,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLElementCollection GetAnchors();
 
-            
             void SetTitle(
                          [In, MarshalAs(UnmanagedType.BStr)]
                          string p);
@@ -1212,7 +1150,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLElementCollection GetScripts();
 
-            
             void SetDesignMode(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -1235,7 +1172,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLElementCollection GetPlugins();
 
-            
             void SetAlinkColor(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1243,7 +1179,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             object GetAlinkColor();
 
-            
             void SetBgColor(
                            [In, MarshalAs(UnmanagedType.Struct)]
                            Object p);
@@ -1251,7 +1186,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             object GetBgColor();
 
-            
             void SetFgColor(
                            [In, MarshalAs(UnmanagedType.Struct)]
                            Object p);
@@ -1259,7 +1193,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             object GetFgColor();
 
-            
             void SetLinkColor(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -1267,7 +1200,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             object GetLinkColor();
 
-            
             void SetVlinkColor(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1284,7 +1216,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetLastModified();
 
-            
             void SetURL(
                        [In, MarshalAs(UnmanagedType.BStr)]
                        string p);
@@ -1292,7 +1223,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetURL();
 
-            
             void SetDomain(
                           [In, MarshalAs(UnmanagedType.BStr)]
                           string p);
@@ -1300,7 +1230,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetDomain();
 
-            
             void SetCookie(
                           [In, MarshalAs(UnmanagedType.BStr)]
                           string p);
@@ -1308,7 +1237,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetCookie();
 
-            
             void SetExpando(
                            [In, MarshalAs(UnmanagedType.Bool)]
                            bool p);
@@ -1316,7 +1244,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetExpando();
 
-            
             void SetCharset(
                            [In, MarshalAs(UnmanagedType.BStr)]
                            string p);
@@ -1324,7 +1251,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetCharset();
 
-            
             void SetDefaultCharset(
                                   [In, MarshalAs(UnmanagedType.BStr)]
                                   string p);
@@ -1356,12 +1282,10 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetNameProp();
 
-            
             void DummyWrite(
                            [In, MarshalAs(UnmanagedType.I4)]
                            int psarray);
 
-            
             void DummyWriteln(
                              [In, MarshalAs(UnmanagedType.I4)]
                              int psarray);
@@ -1377,10 +1301,8 @@ namespace System.Windows.Forms.Design
                        [In, MarshalAs(UnmanagedType.Struct)]
                        Object replace);
 
-            
             void Close();
 
-            
             void Clear();
 
             [return: MarshalAs(UnmanagedType.Bool)]
@@ -1432,7 +1354,6 @@ namespace System.Windows.Forms.Design
                                       [In, MarshalAs(UnmanagedType.BStr)]
                                       string eTag);
 
-            
             void SetOnhelp(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -1440,7 +1361,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnhelp();
 
-            
             void SetOnclick(
                            [In, MarshalAs(UnmanagedType.Struct)]
                            Object p);
@@ -1448,7 +1368,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnclick();
 
-            
             void SetOndblclick(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1456,7 +1375,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndblclick();
 
-            
             void SetOnkeyup(
                            [In, MarshalAs(UnmanagedType.Struct)]
                            Object p);
@@ -1464,7 +1382,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnkeyup();
 
-            
             void SetOnkeydown(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -1472,7 +1389,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnkeydown();
 
-            
             void SetOnkeypress(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1480,7 +1396,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnkeypress();
 
-            
             void SetOnmouseup(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -1488,7 +1403,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmouseup();
 
-            
             void SetOnmousedown(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -1496,7 +1410,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmousedown();
 
-            
             void SetOnmousemove(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -1504,7 +1417,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmousemove();
 
-            
             void SetOnmouseout(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1512,7 +1424,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmouseout();
 
-            
             void SetOnmouseover(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -1520,7 +1431,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmouseover();
 
-            
             void SetOnreadystatechange(
                                       [In, MarshalAs(UnmanagedType.Struct)]
                                       Object p);
@@ -1528,7 +1438,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnreadystatechange();
 
-            
             void SetOnafterupdate(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -1536,7 +1445,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnafterupdate();
 
-            
             void SetOnrowexit(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -1544,7 +1452,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnrowexit();
 
-            
             void SetOnrowenter(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1552,7 +1459,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnrowenter();
 
-            
             void SetOndragstart(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -1560,7 +1466,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndragstart();
 
-            
             void SetOnselectstart(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -1581,7 +1486,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             object GetStyleSheets();
 
-            
             void SetOnbeforeupdate(
                                   [In, MarshalAs(UnmanagedType.Struct)]
                                   Object p);
@@ -1589,7 +1493,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnbeforeupdate();
 
-            
             void SetOnerrorupdate(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -1611,7 +1514,6 @@ namespace System.Windows.Forms.Design
         [System.Runtime.InteropServices.ComVisible(true), System.Runtime.InteropServices.ComImport(), Guid("3050F1FF-98B5-11CF-BB82-00AA00BDCE0B"), System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLElement {
 
-            
             void SetAttribute(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string strAttributeName,
@@ -1620,7 +1522,6 @@ namespace System.Windows.Forms.Design
                              [In, MarshalAs(UnmanagedType.I4)]
                              int lFlags);
 
-            
             void GetAttribute(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string strAttributeName,
@@ -1636,7 +1537,6 @@ namespace System.Windows.Forms.Design
                                 [In, MarshalAs(UnmanagedType.I4)]
                                 int lFlags);
 
-            
             void SetClassName(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -1644,7 +1544,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetClassName();
 
-            
             void SetId(
                       [In, MarshalAs(UnmanagedType.BStr)]
                       string p);
@@ -1661,7 +1560,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLStyle GetStyle();
 
-            
             void SetOnhelp(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -1669,7 +1567,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnhelp();
 
-            
             void SetOnclick(
                            [In, MarshalAs(UnmanagedType.Struct)]
                            Object p);
@@ -1677,7 +1574,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnclick();
 
-            
             void SetOndblclick(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1685,7 +1581,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndblclick();
 
-            
             void SetOnkeydown(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -1693,7 +1588,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnkeydown();
 
-            
             void SetOnkeyup(
                            [In, MarshalAs(UnmanagedType.Struct)]
                            Object p);
@@ -1701,7 +1595,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnkeyup();
 
-            
             void SetOnkeypress(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1709,7 +1602,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnkeypress();
 
-            
             void SetOnmouseout(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1717,7 +1609,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmouseout();
 
-            
             void SetOnmouseover(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -1725,7 +1616,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmouseover();
 
-            
             void SetOnmousemove(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -1733,7 +1623,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmousemove();
 
-            
             void SetOnmousedown(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -1741,7 +1630,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmousedown();
 
-            
             void SetOnmouseup(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -1752,7 +1640,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLDocument2 GetDocument();
 
-            
             void SetTitle(
                          [In, MarshalAs(UnmanagedType.BStr)]
                          string p);
@@ -1760,7 +1647,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetTitle();
 
-            
             void SetLanguage(
                             [In, MarshalAs(UnmanagedType.BStr)]
                             string p);
@@ -1768,7 +1654,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetLanguage();
 
-            
             void SetOnselectstart(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -1776,7 +1661,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnselectstart();
 
-            
             void ScrollIntoView(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object varargStart);
@@ -1792,7 +1676,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetRecordNumber();
 
-            
             void SetLang(
                         [In, MarshalAs(UnmanagedType.BStr)]
                         string p);
@@ -1815,7 +1698,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLElement GetOffsetParent();
 
-            
             void SetInnerHTML(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -1823,7 +1705,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetInnerHTML();
 
-            
             void SetInnerText(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -1831,7 +1712,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetInnerText();
 
-            
             void SetOuterHTML(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -1839,7 +1719,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetOuterHTML();
 
-            
             void SetOuterText(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -1847,14 +1726,12 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetOuterText();
 
-            
             void InsertAdjacentHTML(
                                    [In, MarshalAs(UnmanagedType.BStr)]
                                    string where,
                                    [In, MarshalAs(UnmanagedType.BStr)]
                                    string html);
 
-            
             void InsertAdjacentText(
                                    [In, MarshalAs(UnmanagedType.BStr)]
                                    string where,
@@ -1867,13 +1744,11 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetIsTextEdit();
 
-            
             void Click();
 
             [return: MarshalAs(UnmanagedType.Interface)]
             object GetFilters();
 
-            
             void SetOndragstart(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -1884,7 +1759,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string toString();
 
-            
             void SetOnbeforeupdate(
                                   [In, MarshalAs(UnmanagedType.Struct)]
                                   Object p);
@@ -1892,7 +1766,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnbeforeupdate();
 
-            
             void SetOnafterupdate(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -1900,7 +1773,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnafterupdate();
 
-            
             void SetOnerrorupdate(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -1908,7 +1780,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnerrorupdate();
 
-            
             void SetOnrowexit(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -1916,7 +1787,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnrowexit();
 
-            
             void SetOnrowenter(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -1924,7 +1794,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnrowenter();
 
-            
             void SetOndatasetchanged(
                                     [In, MarshalAs(UnmanagedType.Struct)]
                                     Object p);
@@ -1932,7 +1801,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndatasetchanged();
 
-            
             void SetOndataavailable(
                                    [In, MarshalAs(UnmanagedType.Struct)]
                                    Object p);
@@ -1940,7 +1808,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndataavailable();
 
-            
             void SetOndatasetcomplete(
                                      [In, MarshalAs(UnmanagedType.Struct)]
                                      Object p);
@@ -1948,7 +1815,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndatasetcomplete();
 
-            
             void SetOnfilterchange(
                                   [In, MarshalAs(UnmanagedType.Struct)]
                                   Object p);
@@ -1969,15 +1835,12 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetScopeName();
 
-            
             void SetCapture(
                            [In, MarshalAs(UnmanagedType.Bool)]
                            bool containerCapture);
 
-            
             void ReleaseCapture();
 
-            
             void SetOnlosecapture(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -1992,12 +1855,10 @@ namespace System.Windows.Forms.Design
                                      [In, MarshalAs(UnmanagedType.I4)]
                                      int y);
 
-            
             void DoScroll(
                          [In, MarshalAs(UnmanagedType.Struct)]
                          Object component);
 
-            
             void SetOnscroll(
                             [In, MarshalAs(UnmanagedType.Struct)]
                             Object p);
@@ -2005,7 +1866,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnscroll();
 
-            
             void SetOndrag(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -2013,7 +1873,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndrag();
 
-            
             void SetOndragend(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -2021,7 +1880,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndragend();
 
-            
             void SetOndragenter(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -2029,7 +1887,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndragenter();
 
-            
             void SetOndragover(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -2037,7 +1894,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndragover();
 
-            
             void SetOndragleave(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -2045,7 +1901,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndragleave();
 
-            
             void SetOndrop(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -2053,7 +1908,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOndrop();
 
-            
             void SetOnbeforecut(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -2061,7 +1915,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnbeforecut();
 
-            
             void SetOncut(
                          [In, MarshalAs(UnmanagedType.Struct)]
                          Object p);
@@ -2069,7 +1922,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOncut();
 
-            
             void SetOnbeforecopy(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -2077,7 +1929,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnbeforecopy();
 
-            
             void SetOncopy(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -2085,7 +1936,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOncopy();
 
-            
             void SetOnbeforepaste(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -2093,7 +1943,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnbeforepaste();
 
-            
             void SetOnpaste(
                            [In, MarshalAs(UnmanagedType.Struct)]
                            Object p);
@@ -2104,7 +1953,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLCurrentStyle GetCurrentStyle();
 
-            
             void SetOnpropertychange(
                                     [In, MarshalAs(UnmanagedType.Struct)]
                                     Object p);
@@ -2118,7 +1966,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLRect GetBoundingClientRect();
 
-            
             void SetExpression(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string propname,
@@ -2137,7 +1984,6 @@ namespace System.Windows.Forms.Design
                                  [In, MarshalAs(UnmanagedType.BStr)]
                                  string propname);
 
-            
             void SetTabIndex(
                             [In, MarshalAs(UnmanagedType.I2)]
                             short p);
@@ -2145,10 +1991,8 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I2)]
             short GetTabIndex();
 
-            
             void Focus();
 
-            
             void SetAccessKey(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -2156,7 +2000,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetAccessKey();
 
-            
             void SetOnblur(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -2164,7 +2007,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnblur();
 
-            
             void SetOnfocus(
                            [In, MarshalAs(UnmanagedType.Struct)]
                            Object p);
@@ -2172,7 +2014,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnfocus();
 
-            
             void SetOnresize(
                             [In, MarshalAs(UnmanagedType.Struct)]
                             Object p);
@@ -2180,15 +2021,12 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnresize();
 
-            
             void Blur();
 
-            
             void AddFilter(
                           [In, MarshalAs(UnmanagedType.Interface)]
                           object pUnk);
 
-            
             void RemoveFilter(
                              [In, MarshalAs(UnmanagedType.Interface)]
                              object pUnk);
@@ -2212,7 +2050,6 @@ namespace System.Windows.Forms.Design
                             [In, MarshalAs(UnmanagedType.Interface)]
                             object pdisp);
 
-            
             void DetachEvent(
                             [In, MarshalAs(UnmanagedType.BStr)]
                             string ev,
@@ -2222,7 +2059,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetReadyState();
 
-            
             void SetOnreadystatechange(
                                       [In, MarshalAs(UnmanagedType.Struct)]
                                       Object p);
@@ -2230,7 +2066,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnreadystatechange();
 
-            
             void SetOnrowsdelete(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -2238,7 +2073,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnrowsdelete();
 
-            
             void SetOnrowsinserted(
                                   [In, MarshalAs(UnmanagedType.Struct)]
                                   Object p);
@@ -2246,7 +2080,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnrowsinserted();
 
-            
             void SetOncellchange(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -2254,7 +2087,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOncellchange();
 
-            
             void SetDir(
                        [In, MarshalAs(UnmanagedType.BStr)]
                        string p);
@@ -2271,7 +2103,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetScrollWidth();
 
-            
             void SetScrollTop(
                              [In, MarshalAs(UnmanagedType.I4)]
                              int p);
@@ -2279,7 +2110,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetScrollTop();
 
-            
             void SetScrollLeft(
                               [In, MarshalAs(UnmanagedType.I4)]
                               int p);
@@ -2287,15 +2117,12 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetScrollLeft();
 
-            
             void ClearAttributes();
 
-            
             void MergeAttributes(
                                 [In, MarshalAs(UnmanagedType.Interface)]
                                 IHTMLElement mergeThis);
 
-            
             void SetOncontextmenu(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -2350,7 +2177,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             object GetBehaviorUrns();
 
-            
             void SetTagUrn(
                           [In, MarshalAs(UnmanagedType.BStr)]
                           string p);
@@ -2358,7 +2184,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetTagUrn();
 
-            
             void SetOnbeforeeditfocus(
                                      [In, MarshalAs(UnmanagedType.Struct)]
                                      Object p);
@@ -2383,7 +2208,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLStyle GetBaseRuntimeStyle();
 
-            
             void SetOnmousehover(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -2391,7 +2215,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnmousehover();
 
-            
             void SetOnkeydownpreview(
                                     [In, MarshalAs(UnmanagedType.Struct)]
                                     Object p);
@@ -2410,7 +2233,6 @@ namespace System.Windows.Forms.Design
         [System.Runtime.InteropServices.ComVisible(true), System.Runtime.InteropServices.ComImport(), Guid("3050F673-98B5-11CF-BB82-00AA00BDCE0B"), System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLElement3 {
 
-            
             void MergeAttributes(
                                 [In, MarshalAs(UnmanagedType.Interface)]
                                 IHTMLElement mergeThis,
@@ -2423,7 +2245,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetCanHaveHTML();
 
-            
             void SetOnLayoutComplete(
                                     [In, MarshalAs(UnmanagedType.Struct)]
                                     Object p);
@@ -2431,7 +2252,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnLayoutComplete();
 
-            
             void SetOnPage(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -2439,7 +2259,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnPage();
 
-            
             void SetInflateBlock(
                                 [In, MarshalAs(UnmanagedType.Bool)]
                                 bool inflate);
@@ -2447,7 +2266,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetInflateBlock();
 
-            
             void SetOnBeforeDeactivate(
                                       [In, MarshalAs(UnmanagedType.Struct)]
                                       Object p);
@@ -2455,10 +2273,8 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnBeforeDeactivate();
 
-            
             void SetActive();
 
-            
             void SetContentEditable(
                                    [In, MarshalAs(UnmanagedType.BStr)]
                                    string p);
@@ -2469,7 +2285,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetIsContentEditable();
 
-            
             void SetHideFocus(
                              [In, MarshalAs(UnmanagedType.Bool)]
                              bool v);
@@ -2477,7 +2292,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetHideFocus();
 
-            
             void SetDisabled(
                             [In, MarshalAs(UnmanagedType.Bool)]
                             bool v);
@@ -2488,7 +2302,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetIsDisabled();
 
-            
             void SetOnMove(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -2496,7 +2309,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnMove();
 
-            
             void SetOnControlSelect(
                                    [In, MarshalAs(UnmanagedType.Struct)]
                                    Object p);
@@ -2511,7 +2323,6 @@ namespace System.Windows.Forms.Design
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object eventObject);
 
-            
             void SetOnResizeStart(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -2519,7 +2330,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnResizeStart();
 
-            
             void SetOnResizeEnd(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -2527,7 +2337,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnResizeEnd();
 
-            
             void SetOnMoveStart(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -2535,7 +2344,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnMoveStart();
 
-            
             void SetOnMoveEnd(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -2543,7 +2351,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnMoveEnd();
 
-            
             void SetOnMouseEnter(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -2551,7 +2358,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnMouseEnter();
 
-            
             void SetOnMouseLeave(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -2559,7 +2365,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnMouseLeave();
 
-            
             void SetOnActivate(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -2567,7 +2372,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnActivate();
 
-            
             void SetOnDeactivate(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -2585,7 +2389,6 @@ namespace System.Windows.Forms.Design
         [System.Runtime.InteropServices.ComVisible(true), System.Runtime.InteropServices.ComImport(), Guid("3050F1D8-98B5-11CF-BB82-00AA00BDCE0B"), System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLBodyElement {
 
-            
             void SetBackground(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -2593,7 +2396,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBackground();
 
-            
             void SetBgProperties(
                                 [In, MarshalAs(UnmanagedType.BStr)]
                                 string p);
@@ -2601,7 +2403,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBgProperties();
 
-            
             void SetLeftMargin(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -2609,7 +2410,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetLeftMargin();
 
-            
             void SetTopMargin(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -2617,7 +2417,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetTopMargin();
 
-            
             void SetRightMargin(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -2625,7 +2424,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetRightMargin();
 
-            
             void SetBottomMargin(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -2633,7 +2431,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBottomMargin();
 
-            
             void SetNoWrap(
                           [In, MarshalAs(UnmanagedType.Bool)]
                           bool p);
@@ -2641,7 +2438,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetNoWrap();
 
-            
             void SetBgColor(
                            [In, MarshalAs(UnmanagedType.Struct)]
                            Object p);
@@ -2649,7 +2445,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBgColor();
 
-            
             void SetText(
                         [In, MarshalAs(UnmanagedType.Struct)]
                         Object p);
@@ -2657,7 +2452,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetText();
 
-            
             void SetLink(
                         [In, MarshalAs(UnmanagedType.Struct)]
                         Object p);
@@ -2665,7 +2459,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetLink();
 
-            
             void SetVLink(
                          [In, MarshalAs(UnmanagedType.Struct)]
                          Object p);
@@ -2673,7 +2466,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetVLink();
 
-            
             void SetALink(
                          [In, MarshalAs(UnmanagedType.Struct)]
                          Object p);
@@ -2681,7 +2473,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetALink();
 
-            
             void SetOnload(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -2689,7 +2480,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnload();
 
-            
             void SetOnunload(
                             [In, MarshalAs(UnmanagedType.Struct)]
                             Object p);
@@ -2697,7 +2487,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnunload();
 
-            
             void SetScroll(
                           [In, MarshalAs(UnmanagedType.BStr)]
                           string p);
@@ -2705,7 +2494,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetScroll();
 
-            
             void SetOnselect(
                             [In, MarshalAs(UnmanagedType.Struct)]
                             Object p);
@@ -2713,7 +2501,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetOnselect();
 
-            
             void SetOnbeforeunload(
                                   [In, MarshalAs(UnmanagedType.Struct)]
                                   Object p);
@@ -2728,7 +2515,6 @@ namespace System.Windows.Forms.Design
         [System.Runtime.InteropServices.ComVisible(true), System.Runtime.InteropServices.ComImport(), Guid("3050F2E3-98B5-11CF-BB82-00AA00BDCE0B"), System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLStyleSheet {
 
-            
             void SetTitle(
                          [In, MarshalAs(UnmanagedType.BStr)] 
                          string p);
@@ -2742,7 +2528,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLElement GetOwningElement();
 
-            
             void SetDisabled(
                             [In, MarshalAs(UnmanagedType.Bool)] 
                             bool p);
@@ -2756,7 +2541,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Interface)]
             object GetImports();
 
-            
             void SetHref(
                         [In, MarshalAs(UnmanagedType.BStr)] 
                         string p);
@@ -2786,17 +2570,14 @@ namespace System.Windows.Forms.Design
                        [In, MarshalAs(UnmanagedType.I4)] 
                        int lIndex);
 
-            
             void RemoveImport(
                              [In, MarshalAs(UnmanagedType.I4)] 
                              int lIndex);
 
-            
             void RemoveRule(
                            [In, MarshalAs(UnmanagedType.I4)] 
                            int lIndex);
 
-            
             void SetMedia(
                          [In, MarshalAs(UnmanagedType.BStr)] 
                          string p);
@@ -2804,7 +2585,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetMedia();
 
-            
             void SetCssText(
                            [In, MarshalAs(UnmanagedType.BStr)] 
                            string p);
@@ -2819,7 +2599,6 @@ namespace System.Windows.Forms.Design
         [System.Runtime.InteropServices.ComVisible(true), System.Runtime.InteropServices.ComImport(), Guid("3050F25E-98B5-11CF-BB82-00AA00BDCE0B"), System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLStyle {
 
-            
             void SetFontFamily(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -2827,7 +2606,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetFontFamily();
 
-            
             void SetFontStyle(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -2835,7 +2613,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetFontStyle();
 
-            
             void SetFontObject(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -2843,7 +2620,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetFontObject();
 
-            
             void SetFontWeight(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -2851,7 +2627,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetFontWeight();
 
-            
             void SetFontSize(
                             [In, MarshalAs(UnmanagedType.Struct)]
                             Object p);
@@ -2859,7 +2634,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetFontSize();
 
-            
             void SetFont(
                         [In, MarshalAs(UnmanagedType.BStr)]
                         string p);
@@ -2867,7 +2641,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetFont();
 
-            
             void SetColor(
                          [In, MarshalAs(UnmanagedType.Struct)]
                          Object p);
@@ -2875,7 +2648,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetColor();
 
-            
             void SetBackground(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -2883,7 +2655,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBackground();
 
-            
             void SetBackgroundColor(
                                    [In, MarshalAs(UnmanagedType.Struct)]
                                    Object p);
@@ -2891,7 +2662,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBackgroundColor();
 
-            
             void SetBackgroundImage(
                                    [In, MarshalAs(UnmanagedType.BStr)]
                                    string p);
@@ -2899,7 +2669,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBackgroundImage();
 
-            
             void SetBackgroundRepeat(
                                     [In, MarshalAs(UnmanagedType.BStr)]
                                     string p);
@@ -2907,7 +2676,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBackgroundRepeat();
 
-            
             void SetBackgroundAttachment(
                                         [In, MarshalAs(UnmanagedType.BStr)]
                                         string p);
@@ -2915,7 +2683,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBackgroundAttachment();
 
-            
             void SetBackgroundPosition(
                                       [In, MarshalAs(UnmanagedType.BStr)]
                                       string p);
@@ -2923,7 +2690,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBackgroundPosition();
 
-            
             void SetBackgroundPositionX(
                                        [In, MarshalAs(UnmanagedType.Struct)]
                                        Object p);
@@ -2931,7 +2697,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBackgroundPositionX();
 
-            
             void SetBackgroundPositionY(
                                        [In, MarshalAs(UnmanagedType.Struct)]
                                        Object p);
@@ -2939,7 +2704,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBackgroundPositionY();
 
-            
             void SetWordSpacing(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -2947,7 +2711,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetWordSpacing();
 
-            
             void SetLetterSpacing(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -2955,7 +2718,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetLetterSpacing();
 
-            
             void SetTextDecoration(
                                   [In, MarshalAs(UnmanagedType.BStr)]
                                   string p);
@@ -2963,7 +2725,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetTextDecoration();
 
-            
             void SetTextDecorationNone(
                                       [In, MarshalAs(UnmanagedType.Bool)]
                                       bool p);
@@ -2971,7 +2732,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetTextDecorationNone();
 
-            
             void SetTextDecorationUnderline(
                                            [In, MarshalAs(UnmanagedType.Bool)]
                                            bool p);
@@ -2979,7 +2739,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetTextDecorationUnderline();
 
-            
             void SetTextDecorationOverline(
                                           [In, MarshalAs(UnmanagedType.Bool)]
                                           bool p);
@@ -2987,7 +2746,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetTextDecorationOverline();
 
-            
             void SetTextDecorationLineThrough(
                                              [In, MarshalAs(UnmanagedType.Bool)]
                                              bool p);
@@ -2995,7 +2753,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetTextDecorationLineThrough();
 
-            
             void SetTextDecorationBlink(
                                        [In, MarshalAs(UnmanagedType.Bool)]
                                        bool p);
@@ -3003,7 +2760,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Bool)]
             bool GetTextDecorationBlink();
 
-            
             void SetVerticalAlign(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -3011,7 +2767,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetVerticalAlign();
 
-            
             void SetTextTransform(
                                  [In, MarshalAs(UnmanagedType.BStr)]
                                  string p);
@@ -3019,7 +2774,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetTextTransform();
 
-            
             void SetTextAlign(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -3027,7 +2781,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetTextAlign();
 
-            
             void SetTextIndent(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -3035,7 +2788,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetTextIndent();
 
-            
             void SetLineHeight(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -3043,7 +2795,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetLineHeight();
 
-            
             void SetMarginTop(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -3051,7 +2802,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetMarginTop();
 
-            
             void SetMarginRight(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -3059,7 +2809,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetMarginRight();
 
-            
             void SetMarginBottom(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -3067,7 +2816,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetMarginBottom();
 
-            
             void SetMarginLeft(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -3075,7 +2823,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetMarginLeft();
 
-            
             void SetMargin(
                           [In, MarshalAs(UnmanagedType.BStr)]
                           string p);
@@ -3083,7 +2830,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetMargin();
 
-            
             void SetPaddingTop(
                               [In, MarshalAs(UnmanagedType.Struct)]
                               Object p);
@@ -3091,7 +2837,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetPaddingTop();
 
-            
             void SetPaddingRight(
                                 [In, MarshalAs(UnmanagedType.Struct)]
                                 Object p);
@@ -3099,7 +2844,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetPaddingRight();
 
-            
             void SetPaddingBottom(
                                  [In, MarshalAs(UnmanagedType.Struct)]
                                  Object p);
@@ -3107,7 +2851,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetPaddingBottom();
 
-            
             void SetPaddingLeft(
                                [In, MarshalAs(UnmanagedType.Struct)]
                                Object p);
@@ -3115,7 +2858,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetPaddingLeft();
 
-            
             void SetPadding(
                            [In, MarshalAs(UnmanagedType.BStr)]
                            string p);
@@ -3123,7 +2865,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetPadding();
 
-            
             void SetBorder(
                           [In, MarshalAs(UnmanagedType.BStr)]
                           string p);
@@ -3131,7 +2872,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorder();
 
-            
             void SetBorderTop(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -3139,7 +2879,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderTop();
 
-            
             void SetBorderRight(
                                [In, MarshalAs(UnmanagedType.BStr)]
                                string p);
@@ -3147,7 +2886,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderRight();
 
-            
             void SetBorderBottom(
                                 [In, MarshalAs(UnmanagedType.BStr)]
                                 string p);
@@ -3155,7 +2893,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderBottom();
 
-            
             void SetBorderLeft(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -3163,7 +2900,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderLeft();
 
-            
             void SetBorderColor(
                                [In, MarshalAs(UnmanagedType.BStr)]
                                string p);
@@ -3171,7 +2907,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderColor();
 
-            
             void SetBorderTopColor(
                                   [In, MarshalAs(UnmanagedType.Struct)]
                                   Object p);
@@ -3179,7 +2914,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBorderTopColor();
 
-            
             void SetBorderRightColor(
                                     [In, MarshalAs(UnmanagedType.Struct)]
                                     Object p);
@@ -3187,7 +2921,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBorderRightColor();
 
-            
             void SetBorderBottomColor(
                                      [In, MarshalAs(UnmanagedType.Struct)]
                                      Object p);
@@ -3195,7 +2928,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBorderBottomColor();
 
-            
             void SetBorderLeftColor(
                                    [In, MarshalAs(UnmanagedType.Struct)]
                                    Object p);
@@ -3203,7 +2935,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBorderLeftColor();
 
-            
             void SetBorderWidth(
                                [In, MarshalAs(UnmanagedType.BStr)]
                                string p);
@@ -3211,7 +2942,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderWidth();
 
-            
             void SetBorderTopWidth(
                                   [In, MarshalAs(UnmanagedType.Struct)]
                                   Object p);
@@ -3219,7 +2949,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBorderTopWidth();
 
-            
             void SetBorderRightWidth(
                                     [In, MarshalAs(UnmanagedType.Struct)]
                                     Object p);
@@ -3227,7 +2956,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBorderRightWidth();
 
-            
             void SetBorderBottomWidth(
                                      [In, MarshalAs(UnmanagedType.Struct)]
                                      Object p);
@@ -3235,7 +2963,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBorderBottomWidth();
 
-            
             void SetBorderLeftWidth(
                                    [In, MarshalAs(UnmanagedType.Struct)]
                                    Object p);
@@ -3243,7 +2970,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetBorderLeftWidth();
 
-            
             void SetBorderStyle(
                                [In, MarshalAs(UnmanagedType.BStr)]
                                string p);
@@ -3251,7 +2977,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderStyle();
 
-            
             void SetBorderTopStyle(
                                   [In, MarshalAs(UnmanagedType.BStr)]
                                   string p);
@@ -3259,7 +2984,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderTopStyle();
 
-            
             void SetBorderRightStyle(
                                     [In, MarshalAs(UnmanagedType.BStr)]
                                     string p);
@@ -3267,7 +2991,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderRightStyle();
 
-            
             void SetBorderBottomStyle(
                                      [In, MarshalAs(UnmanagedType.BStr)]
                                      string p);
@@ -3275,7 +2998,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderBottomStyle();
 
-            
             void SetBorderLeftStyle(
                                    [In, MarshalAs(UnmanagedType.BStr)]
                                    string p);
@@ -3283,7 +3005,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetBorderLeftStyle();
 
-            
             void SetWidth(
                          [In, MarshalAs(UnmanagedType.Struct)]
                          Object p);
@@ -3291,7 +3012,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetWidth();
 
-            
             void SetHeight(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -3299,7 +3019,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetHeight();
 
-            
             void SetStyleFloat(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -3307,7 +3026,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetStyleFloat();
 
-            
             void SetClear(
                          [In, MarshalAs(UnmanagedType.BStr)]
                          string p);
@@ -3315,7 +3033,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetClear();
 
-            
             void SetDisplay(
                            [In, MarshalAs(UnmanagedType.BStr)]
                            string p);
@@ -3323,7 +3040,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetDisplay();
 
-            
             void SetVisibility(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -3331,7 +3047,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetVisibility();
 
-            
             void SetListStyleType(
                                  [In, MarshalAs(UnmanagedType.BStr)]
                                  string p);
@@ -3339,7 +3054,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetListStyleType();
 
-            
             void SetListStylePosition(
                                      [In, MarshalAs(UnmanagedType.BStr)]
                                      string p);
@@ -3347,7 +3061,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetListStylePosition();
 
-            
             void SetListStyleImage(
                                   [In, MarshalAs(UnmanagedType.BStr)]
                                   string p);
@@ -3355,7 +3068,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetListStyleImage();
 
-            
             void SetListStyle(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string p);
@@ -3363,7 +3075,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetListStyle();
 
-            
             void SetWhiteSpace(
                               [In, MarshalAs(UnmanagedType.BStr)]
                               string p);
@@ -3371,7 +3082,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetWhiteSpace();
 
-            
             void SetTop(
                        [In, MarshalAs(UnmanagedType.Struct)]
                        Object p);
@@ -3379,7 +3089,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetTop();
 
-            
             void SetLeft(
                         [In, MarshalAs(UnmanagedType.Struct)]
                         Object p);
@@ -3390,7 +3099,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetPosition();
 
-            
             void SetZIndex(
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object p);
@@ -3398,7 +3106,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.Struct)]
             Object GetZIndex();
 
-            
             void SetOverflow(
                             [In, MarshalAs(UnmanagedType.BStr)]
                             string p);
@@ -3406,7 +3113,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetOverflow();
 
-            
             void SetPageBreakBefore(
                                    [In, MarshalAs(UnmanagedType.BStr)]
                                    string p);
@@ -3414,7 +3120,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetPageBreakBefore();
 
-            
             void SetPageBreakAfter(
                                   [In, MarshalAs(UnmanagedType.BStr)]
                                   string p);
@@ -3422,7 +3127,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetPageBreakAfter();
 
-            
             void SetCssText(
                            [In, MarshalAs(UnmanagedType.BStr)]
                            string p);
@@ -3430,7 +3134,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetCssText();
 
-            
             void SetPixelTop(
                             [In, MarshalAs(UnmanagedType.I4)]
                             int p);
@@ -3438,7 +3141,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetPixelTop();
 
-            
             void SetPixelLeft(
                              [In, MarshalAs(UnmanagedType.I4)]
                              int p);
@@ -3446,7 +3148,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetPixelLeft();
 
-            
             void SetPixelWidth(
                               [In, MarshalAs(UnmanagedType.I4)]
                               int p);
@@ -3454,7 +3155,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetPixelWidth();
 
-            
             void SetPixelHeight(
                                [In, MarshalAs(UnmanagedType.I4)]
                                int p);
@@ -3462,7 +3162,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetPixelHeight();
 
-            
             void SetPosTop(
                           [In, MarshalAs(UnmanagedType.R4)]
                           float p);
@@ -3470,7 +3169,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.R4)]
             float GetPosTop();
 
-            
             void SetPosLeft(
                            [In, MarshalAs(UnmanagedType.R4)]
                            float p);
@@ -3478,7 +3176,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.R4)]
             float GetPosLeft();
 
-            
             void SetPosWidth(
                             [In, MarshalAs(UnmanagedType.R4)]
                             float p);
@@ -3486,7 +3183,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.R4)]
             float GetPosWidth();
 
-            
             void SetPosHeight(
                              [In, MarshalAs(UnmanagedType.R4)]
                              float p);
@@ -3494,7 +3190,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.R4)]
             float GetPosHeight();
 
-            
             void SetCursor(
                           [In, MarshalAs(UnmanagedType.BStr)]
                           string p);
@@ -3502,7 +3197,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetCursor();
 
-            
             void SetClip(
                         [In, MarshalAs(UnmanagedType.BStr)]
                         string p);
@@ -3510,7 +3204,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetClip();
 
-            
             void SetFilter(
                           [In, MarshalAs(UnmanagedType.BStr)]
                           string p);
@@ -3518,7 +3211,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetFilter();
 
-            
             void SetAttribute(
                              [In, MarshalAs(UnmanagedType.BStr)]
                              string strAttributeName,
@@ -3759,7 +3451,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string toString();
 
-            
             void SetLength(
                           [In, MarshalAs(UnmanagedType.I4)] 
                           int p);
@@ -3786,7 +3477,6 @@ namespace System.Windows.Forms.Design
         [System.Runtime.InteropServices.ComVisible(true), System.Runtime.InteropServices.ComImport(), Guid("3050F4A3-98B5-11CF-BB82-00AA00BDCE0B"), System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLRect {
 
-            
             void SetLeft(
                         [In, MarshalAs(UnmanagedType.I4)] 
                         int p);
@@ -3794,7 +3484,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetLeft();
 
-            
             void SetTop(
                        [In, MarshalAs(UnmanagedType.I4)] 
                        int p);
@@ -3802,7 +3491,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetTop();
 
-            
             void SetRight(
                          [In, MarshalAs(UnmanagedType.I4)] 
                          int p);
@@ -3810,7 +3498,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.I4)]
             int GetRight();
 
-            
             void SetBottom(
                           [In, MarshalAs(UnmanagedType.I4)] 
                           int p);
@@ -3901,7 +3588,6 @@ namespace System.Windows.Forms.Design
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetNodeName();
 
-            
             void SetNodeValue(
                              [In, MarshalAs(UnmanagedType.Struct)]
                              Object p);
@@ -4213,7 +3899,6 @@ namespace System.Windows.Forms.Design
             WM_SIZE = 0x0005,
             WM_TIMER = 0x0113,
             WM_PRINT = 0x0317;
-
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
@@ -4564,7 +4249,6 @@ namespace System.Windows.Forms.Design
             public const int OLEVERBATTRIB_NEVERDIRTIES = 0x1;
             public const int OLEVERBATTRIB_ONCONTAINERMENU = 0x2;
 
-
             public static readonly Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
         }
 
@@ -4597,9 +4281,7 @@ namespace System.Windows.Forms.Design
             int Skip(
                 [In] [MarshalAs(UnmanagedType.U4)] int celt);
 
-
             void Reset();
-
 
             void Clone(
                 out IEnumOLEVERB ppenum);
@@ -4616,13 +4298,10 @@ namespace System.Windows.Forms.Design
                 [Out] [MarshalAs(UnmanagedType.LPArray)]
                 int[] pceltFetched);
 
-
             void Skip(
                 [In] [MarshalAs(UnmanagedType.U4)] int celt);
 
-
             void Reset();
-
 
             void Clone(
                 [Out] [MarshalAs(UnmanagedType.LPArray)]
@@ -4697,7 +4376,6 @@ namespace System.Windows.Forms.Design
             public readonly uint dwLowDateTime = 0;
         }
 
-
         [ComImport]
         [Guid("00000103-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -4710,15 +4388,12 @@ namespace System.Windows.Forms.Design
                 [In] [Out] [MarshalAs(UnmanagedType.LPArray)]
                 int[] pceltFetched);
 
-
             [PreserveSig]
             int Skip(
                 [In] [MarshalAs(UnmanagedType.U4)] int celt);
 
-
             [PreserveSig]
             int Reset();
-
 
             [PreserveSig]
             int Clone(
@@ -4765,7 +4440,6 @@ namespace System.Windows.Forms.Design
         public const int GWL_EXSTYLE = -20,
             GWL_STYLE = -16,
             WS_EX_LAYOUTRTL = 0x00400000;
-
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class LOGFONT
@@ -4892,7 +4566,6 @@ namespace System.Windows.Forms.Design
             /// </devdoc>
             public static readonly int Window = System.Internal.HandleCollector.RegisterType("Window", 5, 1000);
         }
-
 
 #if LEGACY
         [StructLayout(LayoutKind.Sequential)]

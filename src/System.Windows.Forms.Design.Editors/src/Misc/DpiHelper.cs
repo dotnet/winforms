@@ -144,7 +144,6 @@ namespace System.Windows.Forms
             return dpiAwarenessValueSet;
         }
 
-        
         // Following quirks and public properties are not used in System.Drawing.  Making sure they light up only in the required binaries.
 #if (!DRAWING_NAMESPACE)
         internal static void InitializeDpiHelperForWinforms()

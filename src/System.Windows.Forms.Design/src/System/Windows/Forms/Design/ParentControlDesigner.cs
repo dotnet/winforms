@@ -26,13 +26,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual bool AllowControlLasso => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     This is called to check whether a generic dragbox should be drawn when dragging a toolbox item
         ///     over the designer's surface.
         /// </summary>
         protected virtual bool AllowGenericDragBox => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     This is called to check whether the z-order of dragged controls should be maintained when dropped on a
@@ -48,13 +46,11 @@ namespace System.Windows.Forms.Design
         protected internal virtual bool AllowSetChildIndexOnDrop =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Determines the default location for a control added to this designer.
         ///     it is usualy (0,0), but may be modified if the container has special borders, etc.
         /// </summary>
         protected virtual Point DefaultControlLocation => new Point(0, 0);
-
 
         /// <summary>
         ///     Accessor method for the DrawGrid property.  This property determines
@@ -72,7 +68,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override bool EnableDragRect => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Gets/Sets the GridSize property for a form or user control.
         /// </summary>
@@ -88,7 +83,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         [CLSCompliant(false)]
         protected ToolboxItem MouseDragTool => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Returns a list of SnapLine objects representing interesting
@@ -142,7 +136,6 @@ namespace System.Windows.Forms.Design
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
-
 
         [SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")]
         // We need to allocation new ArrayList and pass it to the caller..

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
@@ -33,7 +32,6 @@ namespace System.Windows.Forms.Design
             return folderBrowser.DirectoryPath;
         }
 
-
         /// <summary>
         ///     Retrieves the editing style of the Edit method.  If the method
         ///     is not supported, this will return None.
@@ -45,7 +43,6 @@ namespace System.Windows.Forms.Design
             return UITypeEditorEditStyle.Modal;
         }
 
-
         /// <summary>
         ///     Initializes the folder browser dialog when it is created.  This gives you
         ///     an opportunity to configure the dialog as you please.  The default
@@ -54,7 +51,6 @@ namespace System.Windows.Forms.Design
         protected virtual void InitializeDialog(FolderBrowser folderBrowser)
         {
         }
-
 
         /// <summary>>[To be supplied.]            /// </summary>
         protected sealed class FolderBrowser : Component
@@ -75,21 +71,15 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public FolderBrowserStyles Style { get; set; } = FolderBrowserStyles.RestrictToFilesystem;
 
-
-    
             /// <summary>
             ///     Gets the directory path of the folder the user picked.
             /// </summary>
             public string DirectoryPath { get; private set; } = string.Empty;
 
-
-
             /// <summary>
             ///     Gets/sets the start location of the root node.
             /// </summary>
             public FolderBrowserFolder StartLocation { get; set; } = FolderBrowserFolder.Desktop;
-
-
 
             /// <summary>>
             ///         Gets or sets a description to show above the folders. Here you can provide instructions for
@@ -113,7 +103,6 @@ namespace System.Windows.Forms.Design
                 return malloc[0];
             }
 
-
             /// <summary>
             ///     Shows the folder browser dialog.
             /// </summary>
@@ -121,7 +110,6 @@ namespace System.Windows.Forms.Design
             {
                 return ShowDialog(null);
             }
-
 
             /// <summary>
             ///     Shows the folder browser dialog with the specified owner.
@@ -192,66 +180,47 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
         protected enum FolderBrowserFolder
         {
             Desktop = 0x0000,
 
-
             Favorites = 0x0006,
-
 
             MyComputer = 0x0011,
 
-
             MyDocuments = 0x0005,
-
 
             MyPictures = 0x0027,
 
-
             NetAndDialUpConnections = 0x0031,
-
 
             NetworkNeighborhood = 0x0012,
 
-
             Printers = 0x0004,
-
 
             Recent = 0x0008,
 
-
             SendTo = 0x0009,
-
 
             StartMenu = 0x000b,
 
-
             Templates = 0x0015
         }
-
 
         [Flags]
         protected enum FolderBrowserStyles
         {
             BrowseForComputer = UnsafeNativeMethods.BrowseInfos.BrowseForComputer,
 
-
             BrowseForEverything = UnsafeNativeMethods.BrowseInfos.BrowseForEverything,
-
 
             BrowseForPrinter = UnsafeNativeMethods.BrowseInfos.BrowseForPrinter,
 
-
             RestrictToDomain = UnsafeNativeMethods.BrowseInfos.DontGoBelowDomain,
-
 
             RestrictToFilesystem = UnsafeNativeMethods.BrowseInfos.ReturnOnlyFSDirs,
 
-
             RestrictToSubfolders = UnsafeNativeMethods.BrowseInfos.ReturnFSAncestors,
-
 
             ShowTextBox = UnsafeNativeMethods.BrowseInfos.EditBox
         }

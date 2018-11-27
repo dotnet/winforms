@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
@@ -32,13 +31,11 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual Behavior Behavior => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     This read-only property will return the Bounds associated with
         ///     this Glyph.  The Bounds can be empty.
         /// </summary>
         public virtual Rectangle Bounds => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Abstract method that forces Glyph implementations to provide
@@ -49,7 +46,6 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public abstract Cursor GetHitTest(Point p);
 
-
         /// <summary>
         ///     Abstract method that forces Glyph implementations to provide
         ///     paint logic.  The PaintEventArgs object passed into this method
@@ -57,7 +53,6 @@ namespace System.Windows.Forms.Design.Behavior
         ///     AdornerWindow.
         /// </summary>
         public abstract void Paint(PaintEventArgs pe);
-
 
         /// <summary>
         ///     This method is called by inheriting classes to change the

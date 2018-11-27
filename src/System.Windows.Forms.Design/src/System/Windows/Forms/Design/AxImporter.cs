@@ -82,9 +82,7 @@ namespace System.Windows.Forms.Design
 
             string ResolveComReference(UCOMITypeLib typeLib);
 
-
             string ResolveComReference(AssemblyName name);
-
 
             string ResolveActiveXReference(UCOMITypeLib typeLib);
         }

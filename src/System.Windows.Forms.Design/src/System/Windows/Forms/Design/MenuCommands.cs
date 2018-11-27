@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.Design
@@ -72,7 +71,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private static readonly Guid VSStandardCommandSet97 = new Guid("{5efc7975-14bc-11cf-9b2b-00aa00573819}");
 
-
         /// <summary>
         ///     This guid corresponds to the menu grouping Windows Forms will use for its menus.  This is
         ///     defined in the Windows Forms menu CTC file, but we need it here so we can define what
@@ -80,18 +78,15 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private static readonly Guid wfMenuGroup = new Guid("{74D21312-2AEE-11d1-8BFB-00A0C90F26F7}");
 
-
         /// <summary>
         ///     This guid corresponds to the Windows Forms command set.
         /// </summary>
         private static readonly Guid wfCommandSet = new Guid("{74D21313-2AEE-11d1-8BFB-00A0C90F26F7}");
 
-
         /// <summary>
         ///     This guid is the standard vs 2k commands for key bindings
         /// </summary>
         private static readonly Guid guidVSStd2K = new Guid("{1496A755-94DE-11D0-8C3F-00C04FC2AAE2}");
-
 
         /// <summary>
         ///     <para>[To be supplied.]</para>
@@ -237,42 +232,35 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static readonly CommandID KeyTabOrderSelect = new CommandID(wfCommandSet, cmdidSpace);
 
-
         /// <summary>
         ///     <para>[To be supplied.]</para>
         /// </summary>
         public static readonly CommandID EditLabel = new CommandID(VSStandardCommandSet97, cmdidEditLabel);
-
 
         /// <summary>
         ///     <para>[To be supplied.]</para>
         /// </summary>
         public static readonly CommandID KeyHome = new CommandID(guidVSStd2K, ECMD_HOME);
 
-
         /// <summary>
         ///     <para>[To be supplied.]</para>
         /// </summary>
         public static readonly CommandID KeyEnd = new CommandID(guidVSStd2K, ECMD_END);
-
 
         /// <summary>
         ///     <para>[To be supplied.]</para>
         /// </summary>
         public static readonly CommandID KeyShiftHome = new CommandID(guidVSStd2K, ECMD_HOME_EXT);
 
-
         /// <summary>
         ///     <para>[To be supplied.]</para>
         /// </summary>
         public static readonly CommandID KeyShiftEnd = new CommandID(guidVSStd2K, ECMD_END_EXT);
 
-
         /// <summary>
         ///     <para>[To be supplied.]</para>
         /// </summary>
         public static readonly CommandID SetStatusText = new CommandID(wfCommandSet, cmdidSetStatusText);
-
 
         /// <summary>
         ///     <para>[To be supplied.]</para>

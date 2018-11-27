@@ -33,7 +33,6 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public IComponent RelatedComponent => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Overrides GetHitTest - this implementation does nothing.
         /// </summary>

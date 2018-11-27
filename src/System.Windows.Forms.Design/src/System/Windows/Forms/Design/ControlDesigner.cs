@@ -42,25 +42,21 @@ namespace System.Windows.Forms.Design
         public override ICollection AssociatedComponents =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     <para>[To be supplied.]</para>
         /// </summary>
         public virtual AccessibleObject AccessibilityObject =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Retrieves the control we're designing.
         /// </summary>
         public virtual Control Control => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Determines whether drag rects can be drawn on this designer.
         /// </summary>
         protected virtual bool EnableDragRect => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Returns the parent component for this control designer.
@@ -70,7 +66,6 @@ namespace System.Windows.Forms.Design
         ///     is no parent component.
         /// </summary>
         protected override IComponent ParentComponent => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Determines whether or not the ControlDesigner will allow SnapLine alignment during a
@@ -94,7 +89,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public virtual SelectionRules SelectionRules => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Returns a list of SnapLine objects representing interesting
         ///     alignment points for this control.  These SnapLines are used
@@ -103,10 +97,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public virtual IList SnapLines => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         protected override InheritanceAttribute InheritanceAttribute =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Returns the number of internal control designers in the ControlDesigner. An internal control
@@ -473,7 +465,6 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-
         [ComVisible(true)]
         public class ControlDesignerAccessibleObject : AccessibleObject
         {
@@ -490,48 +481,40 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public override Rectangle Bounds => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
             /// <summary>
             ///     <para>[To be supplied.]</para>
             /// </summary>
             public override string Description => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
             /// <summary>
             ///     <para>[To be supplied.]</para>
             /// </summary>
             public override string DefaultAction => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
             /// <summary>
             ///     <para>[To be supplied.]</para>
             /// </summary>
             public override string Name => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
             /// <summary>
             ///     <para>[To be supplied.]</para>
             /// </summary>
             public override AccessibleObject Parent => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
             /// <summary>
             ///     <para>[To be supplied.]</para>
             /// </summary>
             public override AccessibleRole Role => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
             /// <summary>
             ///     <para>[To be supplied.]</para>
             /// </summary>
             public override AccessibleStates State => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
             /// <summary>
             ///     <para>[To be supplied.]</para>
             /// </summary>
             public override string Value => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
             /// <summary>
             ///     <para>[To be supplied.]</para>
@@ -541,24 +524,20 @@ namespace System.Windows.Forms.Design
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-
             public override int GetChildCount()
             {
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
-
 
             public override AccessibleObject GetFocused()
             {
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-
             public override AccessibleObject GetSelected()
             {
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
-
 
             public override AccessibleObject HitTest(int x, int y)
             {

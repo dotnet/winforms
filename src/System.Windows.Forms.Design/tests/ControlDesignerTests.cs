@@ -160,7 +160,6 @@ namespace System.Windows.Forms.Design.Tests
         public static TheoryData<Behavior.GlyphSelectionType> GlyphSelectionTypeData =>
                         UtilityMethods.GetEnumTheoryData<Behavior.GlyphSelectionType>();
 
-
         [Theory]
         [MemberData(nameof(GlyphSelectionTypeData))]
         public void GetControlGlyphTest(Behavior.GlyphSelectionType glyphSelectionType)

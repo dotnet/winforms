@@ -18,12 +18,10 @@ namespace System.Drawing.Design
     {
         private CursorUI cursorUI;
 
-
         /// <summary>
         ///     Returns true, indicating that this drop-down control can be resized.
         /// </summary>
         public override bool IsDropDownResizable => true;
-
 
         /// <summary>
         ///     Edits the given object value using the editor style provided by
@@ -52,7 +50,6 @@ namespace System.Drawing.Design
             return value;
         }
 
-
         /// <summary>
         ///     Retrieves the editing style of the Edit method.  If the method
         ///     is not supported, this will return None.
@@ -61,7 +58,6 @@ namespace System.Drawing.Design
         {
             return UITypeEditorEditStyle.DropDown;
         }
-
 
         /// <summary>
         ///     The user interface for the cursor drop-down.  This is just an owner-drawn

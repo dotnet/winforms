@@ -22,7 +22,6 @@ namespace System.ComponentModel.Design
         public virtual DesignerActionListCollection ActionLists =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     <para>
         ///         Retrieves a list of associated components.  These are components that should be incluced in a cut or copy
@@ -32,7 +31,6 @@ namespace System.ComponentModel.Design
         public virtual ICollection AssociatedComponents =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     <para>
         ///         Gets or sets a value
@@ -40,7 +38,6 @@ namespace System.ComponentModel.Design
         ///     </para>
         /// </summary>
         protected bool Inherited => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     This property provides a generic mechanism for discovering parent relationships within designers,
@@ -52,7 +49,6 @@ namespace System.ComponentModel.Design
         protected virtual IComponent ParentComponent =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     <para>
         ///         Gets or sets the inheritance attribute for this component.
@@ -61,7 +57,6 @@ namespace System.ComponentModel.Design
         protected virtual InheritanceAttribute InheritanceAttribute =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Gets a collection that houses shadow properties.  Shadow properties. are properties that fall
         ///     through to the underlying component before they are set, but return their set values once they
@@ -69,7 +64,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected ShadowPropertyCollection ShadowProperties =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     This method is called when an existing component is being re-initialized.  This may occur after
@@ -137,7 +131,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         public IComponent Component => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     <para>
         ///         Gets the design-time verbs supported by the component associated with the designer.
@@ -148,7 +141,6 @@ namespace System.ComponentModel.Design
         ICollection ITreeDesigner.Children => throw new NotImplementedException();
 
         IDesigner ITreeDesigner.Parent => throw new NotImplementedException();
-
 
         /// <summary>
         ///     <para>
@@ -193,7 +185,6 @@ namespace System.ComponentModel.Design
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
-
 
         ~ComponentDesigner()
         {

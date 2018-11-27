@@ -53,18 +53,15 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected abstract IComponent GetComponent();
 
-
         /// <summary>
         ///     Retrieves the base component's UI control for the selection handler.
         /// </summary>
         protected abstract Control GetControl();
 
-
         /// <summary>
         ///     Retrieves the UI control for the given component.
         /// </summary>
         protected abstract Control GetControl(IComponent component);
-
 
         /// <summary>
         ///     Retrieves the current grid snap size we should snap objects
@@ -72,19 +69,16 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected abstract Size GetCurrentSnapSize();
 
-
         /// <summary>
         ///     We use this to request often-used services.
         /// </summary>
         protected abstract object GetService(Type serviceType);
-
 
         /// <summary>
         ///     Determines if the selection UI handler should attempt to snap
         ///     objects to a grid.
         /// </summary>
         protected abstract bool GetShouldSnapToGrid();
-
 
         /// <summary>
         ///     Given a rectangle, this updates the dimensions of it
@@ -93,7 +87,6 @@ namespace System.Windows.Forms.Design
         ///     may return the same rectangle.
         /// </summary>
         public abstract Rectangle GetUpdatedRect(Rectangle orignalRect, Rectangle dragRect, bool updateSize);
-
 
         /// <summary>
         ///     Queries to see if a drag operation

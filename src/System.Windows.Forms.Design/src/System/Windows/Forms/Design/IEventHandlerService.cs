@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 namespace System.Windows.Forms.Design
 {
     /// <summary>
@@ -35,12 +34,10 @@ namespace System.Windows.Forms.Design
 
         event EventHandler EventHandlerChanged;
 
-
         /// <summary>
         ///     <para>Gets the currently active event handler of the specified type.</para>
         /// </summary>
         object GetHandler(Type handlerType);
-
 
         /// <summary>
         ///     <para>
@@ -49,7 +46,6 @@ namespace System.Windows.Forms.Design
         ///     </para>
         /// </summary>
         void PopHandler(object handler);
-
 
         /// <summary>
         ///     <para>Pushes a new event handler on the stack.</para>

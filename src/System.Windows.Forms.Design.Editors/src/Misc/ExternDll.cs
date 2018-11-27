@@ -34,7 +34,6 @@ namespace System
         public const string Kernel32 = "coreclr";
         public const string User32 = "coreclr";
 
-
 #else
         public const string Activeds = "activeds.dll";
         public const string Advapi32 = "advapi32.dll";

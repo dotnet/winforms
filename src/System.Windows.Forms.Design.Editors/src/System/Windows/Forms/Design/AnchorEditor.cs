@@ -21,7 +21,6 @@ namespace System.Windows.Forms.Design
     {
         private AnchorUI anchorUI;
 
-
         /// <summary>>
         /// Edits the given object value using the editor style provided by
         /// GetEditorStyle.

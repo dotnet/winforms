@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
@@ -35,14 +34,12 @@ namespace System.Windows.Forms.Design.Behavior
         public BehaviorServiceAdornerCollection Adorners =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
-
         /// <summary>
         ///     Creates and returns a Graphics object for the AdornerWindow
         /// </summary>
         public Graphics AdornerWindowGraphics => throw new NotImplementedException(SR.NotImplementedByDesign);
 
         public Behavior CurrentBehavior => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Disposes the behavior service.

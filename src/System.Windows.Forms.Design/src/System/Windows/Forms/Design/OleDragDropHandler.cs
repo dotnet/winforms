@@ -236,7 +236,6 @@ namespace System.Windows.Forms.Design
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-
             public void Deserialize(IServiceProvider serviceProvider, bool removeCurrentComponents)
             {
                 throw new NotImplementedException(SR.NotImplementedByDesign);

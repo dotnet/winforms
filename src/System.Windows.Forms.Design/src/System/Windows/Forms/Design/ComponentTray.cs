@@ -23,7 +23,6 @@ namespace System.Windows.Forms.Design
     {
         // Empty class for build time dependancy
 
-
         /// <summary>
         ///     Creates a new component tray.  The component tray
         ///     will monitor component additions and removals and create
@@ -51,7 +50,6 @@ namespace System.Windows.Forms.Design
         ///     </para>
         /// </summary>
         public int ComponentCount => throw new NotImplementedException(SR.NotImplementedByDesign);
-
 
         /// <summary>
         ///     Determines whether the tray will show large icon view or not.

@@ -9,7 +9,6 @@ using System.Security;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
-
 // Investigate removing this if the duplicate code in OleDragDropHandler.cs is removed
 [assembly:
     SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope = "member",
@@ -18,7 +17,6 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
     SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope = "member",
         Target =
             "System.Design.UnsafeNativeMethods.IntReleaseDC(System.Runtime.InteropServices.HandleRef,System.Runtime.InteropServices.HandleRef):System.Int32")]
-
 
 namespace System.Windows.Forms.Design
 {
@@ -31,7 +29,6 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int ScreenToClient(HandleRef hWnd, [In, Out] NativeMethods.POINT pt);
-
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
@@ -126,8 +123,6 @@ namespace System.Windows.Forms.Design
             return IntReleaseDC(hWnd, hDC);
         }
 
-
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public static extern int GetDeviceCaps(HandleRef hDC, int nIndex);
@@ -189,7 +184,6 @@ namespace System.Windows.Forms.Design
         [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, HandleRef dwNewLong);
 
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public static extern bool UnhookWindowsHookEx(HandleRef hhook);
@@ -209,7 +203,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.Ole32, PreserveSig = false)]
         [ResourceExposure(ResourceScope.None)]
         public static extern IStorage StgCreateDocfileOnILockBytes(ILockBytes iLockBytes, int grfMode, int reserved);
-
 
         [Flags]
         public enum BrowseInfos
@@ -310,7 +303,6 @@ namespace System.Windows.Forms.Design
             [PreserveSig]
             void HeapMinimize();
         }
-
 
         [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         [StructLayout(LayoutKind.Sequential)]
@@ -425,7 +417,6 @@ namespace System.Windows.Forms.Design
                 [In] [MarshalAs(UnmanagedType.Interface)]
                 IStorage stgDest);
 
-
             void MoveElementTo(
                 [In] [MarshalAs(UnmanagedType.BStr)] string pwcsName,
                 [In] [MarshalAs(UnmanagedType.Interface)]
@@ -433,13 +424,10 @@ namespace System.Windows.Forms.Design
                 [In] [MarshalAs(UnmanagedType.BStr)] string pwcsNewName,
                 [In] [MarshalAs(UnmanagedType.U4)] int grfFlags);
 
-
             void Commit(
                 int grfCommitFlags);
 
-
             void Revert();
-
 
             void EnumElements(
                 [In] [MarshalAs(UnmanagedType.U4)] int reserved1,
@@ -449,15 +437,12 @@ namespace System.Windows.Forms.Design
                 [Out] [MarshalAs(UnmanagedType.Interface)]
                 out object ppVal); // IEnumSTATSTG
 
-
             void DestroyElement(
                 [In] [MarshalAs(UnmanagedType.BStr)] string pwcsName);
-
 
             void RenameElement(
                 [In] [MarshalAs(UnmanagedType.BStr)] string pwcsOldName,
                 [In] [MarshalAs(UnmanagedType.BStr)] string pwcsNewName);
-
 
             void SetElementTimes(
                 [In] [MarshalAs(UnmanagedType.BStr)] string pwcsName,
@@ -465,15 +450,12 @@ namespace System.Windows.Forms.Design
                 [In] NativeMethods.FILETIME patime,
                 [In] NativeMethods.FILETIME pmtime);
 
-
             void SetClass(
                 [In] ref Guid clsid);
-
 
             void SetStateBits(
                 int grfStateBits,
                 int grfMask);
-
 
             void Stat(
                 [Out] NativeMethods.STATSTG pStatStg,
@@ -490,7 +472,6 @@ namespace System.Windows.Forms.Design
                 IntPtr buf,
                 int len);
 
-
             int Write(
                 IntPtr buf,
                 int len);
@@ -499,7 +480,6 @@ namespace System.Windows.Forms.Design
             long Seek(
                 [In] [MarshalAs(UnmanagedType.I8)] long dlibMove,
                 int dwOrigin);
-
 
             void SetSize(
                 [In] [MarshalAs(UnmanagedType.I8)] long libNewSize);
@@ -512,25 +492,20 @@ namespace System.Windows.Forms.Design
                 [Out] [MarshalAs(UnmanagedType.LPArray)]
                 long[] pcbRead);
 
-
             void Commit(
                 int grfCommitFlags);
 
-
             void Revert();
-
 
             void LockRegion(
                 [In] [MarshalAs(UnmanagedType.I8)] long libOffset,
                 [In] [MarshalAs(UnmanagedType.I8)] long cb,
                 int dwLockType);
 
-
             void UnlockRegion(
                 [In] [MarshalAs(UnmanagedType.I8)] long libOffset,
                 [In] [MarshalAs(UnmanagedType.I8)] long cb,
                 int dwLockType);
-
 
             void Stat(
                 [Out] NativeMethods.STATSTG pStatstg,
@@ -552,7 +527,6 @@ namespace System.Windows.Forms.Design
                 [Out] [MarshalAs(UnmanagedType.LPArray)]
                 int[] pcbRead);
 
-
             void WriteAt(
                 [In] [MarshalAs(UnmanagedType.U8)] long ulOffset,
                 IntPtr pv,
@@ -560,25 +534,20 @@ namespace System.Windows.Forms.Design
                 [Out] [MarshalAs(UnmanagedType.LPArray)]
                 int[] pcbWritten);
 
-
             void Flush();
-
 
             void SetSize(
                 [In] [MarshalAs(UnmanagedType.U8)] long cb);
-
 
             void LockRegion(
                 [In] [MarshalAs(UnmanagedType.U8)] long libOffset,
                 [In] [MarshalAs(UnmanagedType.U8)] long cb,
                 [In] [MarshalAs(UnmanagedType.U4)] int dwLockType);
 
-
             void UnlockRegion(
                 [In] [MarshalAs(UnmanagedType.U8)] long libOffset,
                 [In] [MarshalAs(UnmanagedType.U8)] long cb,
                 [In] [MarshalAs(UnmanagedType.U4)] int dwLockType);
-
 
             void Stat(
                 [Out] NativeMethods.STATSTG pstatstg,
