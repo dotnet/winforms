@@ -314,6 +314,7 @@ namespace System.Drawing.Design
                     }
                 }
             }
+
             private void InvalidateFocus()
             {
                 Rectangle r = new Rectangle();
@@ -403,6 +404,7 @@ namespace System.Drawing.Design
                         break;
                 }
             }
+
             protected override void OnLostFocus(EventArgs e)
             {
                 base.OnLostFocus(e);
@@ -422,6 +424,7 @@ namespace System.Drawing.Design
                     }
                 }
             }
+
             protected override void OnMouseMove(MouseEventArgs me)
             {
                 base.OnMouseMove(me);
@@ -436,6 +439,7 @@ namespace System.Drawing.Design
                     }
                 }
             }
+
             protected override void OnMouseUp(MouseEventArgs me)
             {
                 base.OnMouseUp(me);
@@ -1213,4 +1217,3 @@ namespace System.Drawing.Design
         }
     }
 }
-
