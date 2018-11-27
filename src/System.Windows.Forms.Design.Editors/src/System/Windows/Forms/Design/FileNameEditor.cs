@@ -72,8 +72,8 @@ namespace System.Windows.Forms.Design
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         protected virtual void InitializeDialog(OpenFileDialog openFileDialog)
         {
-            openFileDialog.Filter = Resource.GenericFileFilter;
-            openFileDialog.Title = Resource.GenericOpenFile;
+            openFileDialog.Filter = SR.GenericFileFilter;
+            openFileDialog.Title = SR.GenericOpenFile;
         }
     }
 }

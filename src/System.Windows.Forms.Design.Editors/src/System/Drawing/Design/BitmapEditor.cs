@@ -16,7 +16,7 @@ namespace System.Drawing.Design
     {
         protected override string GetFileDialogDescription()
         {
-            return Resource.bitmapFileDescription;
+            return SR.bitmapFileDescription;
         }
 
         protected override string[] GetExtensions()

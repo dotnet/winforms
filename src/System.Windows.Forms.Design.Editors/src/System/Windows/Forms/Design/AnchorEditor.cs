@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Design
                 int YBORDER = SystemInformation.Border3DSize.Height;
                 SetBounds(0, 0, 90, 90);
 
-                AccessibleName = Resource.AnchorEditorAccName;
+                AccessibleName = SR.AnchorEditorAccName;
 
                 container.Location = new Point(0, 0);
                 container.Size = new Size(90, 90);
@@ -121,28 +121,28 @@ namespace System.Windows.Forms.Design
                 right.TabIndex = 2;
                 right.TabStop = true;
                 right.Anchor = AnchorStyles.Right;
-                right.AccessibleName = Resource.AnchorEditorRightAccName;
+                right.AccessibleName = SR.AnchorEditorRightAccName;
 
                 left.Location = new Point(XBORDER, 40);
                 left.Size = new Size(30 - XBORDER, 10);
                 left.TabIndex = 0;
                 left.TabStop = true;
                 left.Anchor = AnchorStyles.Left;
-                left.AccessibleName = Resource.AnchorEditorLeftAccName;
+                left.AccessibleName = SR.AnchorEditorLeftAccName;
 
                 top.Location = new Point(40, YBORDER);
                 top.Size = new Size(10, 30 - YBORDER);
                 top.TabIndex = 1;
                 top.TabStop = true;
                 top.Anchor = AnchorStyles.Top;
-                top.AccessibleName = Resource.AnchorEditorTopAccName;
+                top.AccessibleName = SR.AnchorEditorTopAccName;
 
                 bottom.Location = new Point(40, 60);
                 bottom.Size = new Size(10, 30 - YBORDER);
                 bottom.TabIndex = 3;
                 bottom.TabStop = true;
                 bottom.Anchor = AnchorStyles.Bottom;
-                bottom.AccessibleName = Resource.AnchorEditorBottomAccName;
+                bottom.AccessibleName = SR.AnchorEditorBottomAccName;
 
                 Controls.Clear();
                 Controls.AddRange(new Control[]

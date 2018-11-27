@@ -818,11 +818,11 @@ namespace System.Drawing.Design
 
             private void InitializeComponent()
             {
-                paletteTabPage = new TabPage(Resource.ColorEditorPaletteTab);
-                commonTabPage = new TabPage(Resource.ColorEditorStandardTab);
-                systemTabPage = new TabPage(Resource.ColorEditorSystemTab);
+                paletteTabPage = new TabPage(SR.ColorEditorPaletteTab);
+                commonTabPage = new TabPage(SR.ColorEditorStandardTab);
+                systemTabPage = new TabPage(SR.ColorEditorSystemTab);
 
-                AccessibleName = Resource.ColorEditorAccName;
+                AccessibleName = SR.ColorEditorAccName;
 
                 tabControl = new ColorEditorTabControl();
                 tabControl.TabPages.Add(paletteTabPage);

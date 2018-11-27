@@ -162,7 +162,7 @@ namespace System.Windows.Forms.Design
 
                 BackColor = SystemColors.Control;
                 ForeColor = SystemColors.ControlText;
-                AccessibleName = Resource.DockEditorAccName;
+                AccessibleName = SR.DockEditorAccName;
 
                 none.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
                 none.Location = new Point(offset2X, noneY);
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Design
                 none.Appearance = Appearance.Button;
                 none.Click += OnClick;
                 none.KeyDown += OnKeyDown;
-                none.AccessibleName = Resource.DockEditorNoneAccName;
+                none.AccessibleName = SR.DockEditorNoneAccName;
 
                 container.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
                 container.Location = new Point(offset2X, offset2Y);
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.Design
                 right.Appearance = Appearance.Button;
                 right.Click += OnClick;
                 right.KeyDown += OnKeyDown;
-                right.AccessibleName = Resource.DockEditorRightAccName;
+                right.AccessibleName = SR.DockEditorRightAccName;
 
                 left.Dock = DockStyle.Left;
                 left.Size = buttonSize;
@@ -200,7 +200,7 @@ namespace System.Windows.Forms.Design
                 left.Appearance = Appearance.Button;
                 left.Click += OnClick;
                 left.KeyDown += OnKeyDown;
-                left.AccessibleName = Resource.DockEditorLeftAccName;
+                left.AccessibleName = SR.DockEditorLeftAccName;
 
                 top.Dock = DockStyle.Top;
                 top.Size = buttonSize;
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design
                 top.Appearance = Appearance.Button;
                 top.Click += OnClick;
                 top.KeyDown += OnKeyDown;
-                top.AccessibleName = Resource.DockEditorTopAccName;
+                top.AccessibleName = SR.DockEditorTopAccName;
 
                 bottom.Dock = DockStyle.Bottom;
                 bottom.Size = buttonSize;
@@ -220,7 +220,7 @@ namespace System.Windows.Forms.Design
                 bottom.Appearance = Appearance.Button;
                 bottom.Click += OnClick;
                 bottom.KeyDown += OnKeyDown;
-                bottom.AccessibleName = Resource.DockEditorBottomAccName;
+                bottom.AccessibleName = SR.DockEditorBottomAccName;
 
                 fill.Dock = DockStyle.Fill;
                 fill.Size = buttonSize;
@@ -230,7 +230,7 @@ namespace System.Windows.Forms.Design
                 fill.Appearance = Appearance.Button;
                 fill.Click += OnClick;
                 fill.KeyDown += OnKeyDown;
-                fill.AccessibleName = Resource.DockEditorFillAccName;
+                fill.AccessibleName = SR.DockEditorFillAccName;
 
                 Controls.Clear();
                 Controls.AddRange(new Control[]

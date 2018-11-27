@@ -432,7 +432,7 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    cmbKey.Items.Insert(0, Resource.ShortcutKeys_InvalidKey);
+                    cmbKey.Items.Insert(0, SR.ShortcutKeys_InvalidKey);
                     cmbKey.SelectedIndex = 0;
                     unknownKeyCode = keyCode;
                 }

@@ -117,7 +117,7 @@ namespace System.Drawing.Design
 
         protected virtual string GetFileDialogDescription()
         {
-            return Resource.imageFileDescription;
+            return SR.imageFileDescription;
         }
 
         [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
