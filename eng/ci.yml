@@ -93,3 +93,7 @@ jobs:
           $(_SignArgs)
           $(_OfficialBuildIdArgs)
         displayName: Windows Build / Publish
+
+      # run bare-minimum functional test suite
+      - script: src\System.Windows.Forms\tests\functests\Runner_WinformsControlsTest\run_individual_exe.bat
+        displayName: Winforms Control Tests
