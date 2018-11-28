@@ -1,1 +1,1 @@
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; .\run_individual_exe.ps1"
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& """%~dp0run_individual_exe.ps1""" "
