@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Windows.Forms.Design</AssemblyName>
-    <IsPackable>true</IsPackable>
+    <!--<IsPackable>true</IsPackable>-->
     <CLSCompliant>false</CLSCompliant>
   </PropertyGroup>
 
