@@ -8,6 +8,9 @@ Add-Type @"
 } 
 "@
 
+# stop running on error
+$ErrorActionPreference = "Stop"
+
 # changeable parameters
 $testInner = $true
 $logfile = 'results.log'
@@ -108,7 +111,7 @@ function OpenTabTimesEnter()
 }
 
 $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-$pinfo.FileName = '..\..\..\..\..\artifacts\bin\WinformsControlsTest\Debug\netcoreapp3.0\WinformsControlsTest.exe' # 'WinformsControlsTest.exe' 
+$pinfo.FileName = Join-Path $PSScriptRoot '\..\..\..\..\..\artifacts\bin\WinformsControlsTest\Debug\netcoreapp3.0\WinformsControlsTest.exe' -Resolve
 $pinfo.RedirectStandardError = $true
 $pinfo.RedirectStandardOutput = $true
 $pinfo.UseShellExecute = $false
@@ -116,7 +119,7 @@ $pinfo.Arguments = ""
 
 # Set the dotnet root to the .dotnet folder that the build installed so we don't use the machine-wide installed one
 # TODO: Change this to a script parameter instead of being hardcoded here
-$pinfo.EnvironmentVariables['DOTNET_ROOT'] = '..\..\..\..\..\.dotnet'
+$pinfo.EnvironmentVariables['DOTNET_ROOT'] = Join-Path $PSScriptRoot '\..\..\..\..\..\.dotnet' -Resolve
 
 $p = New-Object System.Diagnostics.Process
 $p.StartInfo = $pinfo
