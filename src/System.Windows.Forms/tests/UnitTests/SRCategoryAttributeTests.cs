@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
         public void InvalidCategoryShouldReturnCategoryNameAsIs()
         {
             const string fakeCategory = "fakeCategory";
-            SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(nameof(fakeCategory));
+            SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(fakeCategory);
             Assert.True(string.Compare(srCategoryAttribute.Category, fakeCategory, StringComparison.InvariantCulture) == 0);
         }
     }
