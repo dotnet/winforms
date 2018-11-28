@@ -113,6 +113,11 @@ $pinfo.RedirectStandardError = $true
 $pinfo.RedirectStandardOutput = $true
 $pinfo.UseShellExecute = $false
 $pinfo.Arguments = ""
+
+# Set the dotnet root to the .dotnet folder that the build installed so we don't use the machine-wide installed one
+# TODO: Change this to a script parameter instead of being hardcoded here
+$pinfo.EnvironmentVariables['DOTNET_ROOT'] = '..\..\..\..\..\.dotnet'
+
 $p = New-Object System.Diagnostics.Process
 $p.StartInfo = $pinfo
 
