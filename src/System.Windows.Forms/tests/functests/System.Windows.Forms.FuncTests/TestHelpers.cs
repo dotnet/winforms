@@ -8,21 +8,22 @@ namespace System.Windows.Forms.FuncTests
         /// <summary>
         /// Calls StartProcess for the ProcessStartInfo containing the bin path of this directory plsu the given byPathFromBin
         /// </summary>
-        /// <param name="byPathFromBin">The string path to add onto the end of the bin path; trimed for tailing \'s</param>
+        /// <param name="byPathFromBinToExe">The string path to add onto the end of the bin path in order to reach the exe to run; trimed for tailing \'s</param>
         /// <seealso cref="StartProcess(ProcessStartInfo)"/>
         /// <seealso cref="BinPath()"/>
         /// <seealso cref="System.Diagnostics.Process"/>
         /// <remarks>Throws ArgumentException if string byPathFromBin is null</remarks>
         /// <returns>The new Process</returns>
-        public static Process StartProcess(string byPathFromBin)
+        public static Process StartProcess(string byPathFromBinToExe)
         {
-            if(null == byPathFromBin)
+            if(null == byPathFromBinToExe)
             {
-                throw new ArgumentException(nameof(byPathFromBin) + " must not be null.");
+                throw new ArgumentException(nameof(byPathFromBinToExe) + " must not be null.");
             }
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = BinPath() + byPathFromBin.Trim('\\');
+            startInfo.FileName = BinPath() + byPathFromBinToExe.Trim('\\');
+            startInfo.EnvironmentVariables["DOTNET_ROOT"] = RepoPath() + ".dotnet";
             // ...
 
             return StartProcess(startInfo);
@@ -50,12 +51,33 @@ namespace System.Windows.Forms.FuncTests
 
         /// <summary>
         /// Returns the bin directory of this project on a given machine
-        /// </summary>
-        /// <seealso cref="System.AppDomain.CurrentDomain.BaseDirectory"/>
-        /// <seealso cref="System.IO.Path.DirectorySeparatorChar"/>
+        /// </summary>/>
         /// <remarks>Returns the entire path of this project if the bin is not part of it</remarks>
         /// <returns>The bin path as a string; example: example:\Project\bin\</returns>
         public static string BinPath()
+        {
+            return RelativePathTo("bin");
+        }
+
+        /// <summary>
+        /// Returns the repo base directory of this project on a given machine
+        /// </summary>/>
+        /// <remarks>Returns the entire path of this project if the bin is not part of it</remarks>
+        /// <returns>The repo base path as a string; example: example:\Project\</returns>
+        public static string RepoPath()
+        {
+            return RelativePathTo("winforms");
+        }
+
+        /// <summary>
+        /// Returns the stop directory of this project on a given machine
+        /// </summary>
+        /// <param name="stop">The string to stop at in the path; compared all lower</param>
+        /// <seealso cref="System.AppDomain.CurrentDomain.BaseDirectory"/>
+        /// <seealso cref="System.IO.Path.DirectorySeparatorChar"/>
+        /// <remarks>Returns the entire path of this project if the stop is not part of it</remarks>
+        /// <returns>The path as a string; example: example:\Project\bin\ given "bin" if bin is present in the path</returns>
+        public static string RelativePathTo(string stop)
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
             var pathParts = path.Split('\\');
@@ -64,7 +86,7 @@ namespace System.Windows.Forms.FuncTests
             while (i < pathParts.Length)
             {
                 ret += pathParts[i] + IO.Path.DirectorySeparatorChar;
-                if (pathParts[i].ToLower().Equals("bin".ToLower()))
+                if (pathParts[i].ToLower().Equals(stop.ToLower()))
                 {
                     break;
                 }
@@ -72,6 +94,8 @@ namespace System.Windows.Forms.FuncTests
             }
             return ret;
         }
+
+
 
         /// <summary>
         /// Presses Enter on the given process if it can be made the foreground process
