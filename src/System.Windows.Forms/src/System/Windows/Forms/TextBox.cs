@@ -855,9 +855,88 @@ namespace System.Windows.Forms {
                 }
             }
         }
-	
-	//-------------------------------------------------------------------------------------------------
-        
+
+
+        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.NullText"]/*' />
+        /// <devdoc>
+        ///       Gets or sets the text that is displayed when the control has no Text and is not on focus.
+        /// </devdoc>
+        [
+        Localizable(true),
+        DefaultValue(""),
+        SRDescription(nameof(SR.TextBoxNullTextDescr)),
+        Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
+        ]
+        public string NullText
+        {
+            get
+            {
+                return nullText;
+            }
+            set
+            {
+                if (nullText != value)
+                {
+                    nullText = value;
+                    this.Invalidate();
+                }
+            }
+        }
+
+
+        //-------------------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Draws the NullText in the client area of the TextBox using the default font and color.
+        /// </summary>
+        private void DrawNullText(Graphics graphics)
+        {
+            TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top |
+                                    TextFormatFlags.EndEllipsis;
+            Rectangle rectangle = this.ClientRectangle;
+
+            if (this.RightToLeft == RightToLeft.Yes)
+            {
+                flags |= TextFormatFlags.RightToLeft;
+                switch (this.TextAlign)
+                {
+                    case HorizontalAlignment.Center:
+                        flags = flags | TextFormatFlags.HorizontalCenter;
+                        rectangle.Offset(0, 1);
+                        break;
+                    case HorizontalAlignment.Left:
+                        flags = flags | TextFormatFlags.Right;
+                        rectangle.Offset(1, 1);
+                        break;
+                    case HorizontalAlignment.Right:
+                        flags = flags | TextFormatFlags.Left;
+                        rectangle.Offset(0, 1);
+                        break;
+                }
+            }
+            else
+            {
+                flags &= ~TextFormatFlags.RightToLeft;
+                switch (this.TextAlign)
+                {
+                    case HorizontalAlignment.Center:
+                        flags = flags | TextFormatFlags.HorizontalCenter;
+                        rectangle.Offset(0, 1);
+                        break;
+                    case HorizontalAlignment.Left:
+                        flags = flags | TextFormatFlags.Left;
+                        rectangle.Offset(1, 1);
+                        break;
+                    case HorizontalAlignment.Right:
+                        flags = flags | TextFormatFlags.Right;
+                        rectangle.Offset(0, 1);
+                        break;
+                }
+            }
+
+            TextRenderer.DrawText(graphics, nullText, this.Font, rectangle, SystemColors.GrayText, this.BackColor, flags);
+        }
+
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.WndProc"]/*' />
         /// <internalonly/>
         /// <devdoc>
@@ -890,7 +969,17 @@ namespace System.Windows.Forms {
                     base.WndProc(ref m);
                     break;
             }
-            
+
+            if ((m.Msg == NativeMethods.WM_PAINT || m.Msg == NativeMethods.WM_KILLFOCUS) &&
+                 !this.GetStyle(ControlStyles.UserPaint) &&
+                   string.IsNullOrEmpty(this.Text) &&
+                   !this.Focused)
+            {
+                using (Graphics g = this.CreateGraphics())
+                {
+                    DrawNullText(g);
+                }
+            }
         }
         
     }

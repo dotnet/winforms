@@ -9967,6 +9967,11 @@
         <target state="new">Controls whether the text of the edit control can span more than one line.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TextBoxNullTextDescr">
+        <source>Specifies the NullText of the TextBox control.</source>
+        <target state="new">Specifies the NullText of the TextBox control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextBoxPasswordCharDescr">
         <source>Indicates the character to display for password input for single-line edit controls.</source>
         <target state="new">Indicates the character to display for password input for single-line edit controls.</target>

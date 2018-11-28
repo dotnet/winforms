@@ -7377,4 +7377,7 @@
   <data name="UnexpectedTypeForClipboardFormat" xml:space="preserve">
     <value>The specified Clipboard format is not compatible with '{0}' type.</value>
   </data>
+  <data name="TextBoxNullTextDescr" xml:space="preserve">
+    <value>Specifies the NullText of the TextBox control.</value>
+  </data>
 </root>
