@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Design.Editors</AssemblyName>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <!--<IsPackable>true</IsPackable>-->
+    <TargetFramework>netcoreapp3.0</TargetFramework>    
     <CLSCompliant>false</CLSCompliant>
   </PropertyGroup>
 

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Windows.Forms.Design.Editors.Resources;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Editors.Tests
@@ -14,10 +13,10 @@ namespace System.Windows.Forms.Design.Editors.Tests
         public void Defaults()
         {
             MockBitmapEditor mockBitmapEditor = new MockBitmapEditor();
-            Assert.Equal(SR.bitmapFileDescription, mockBitmapEditor.GetBitmapEditorFileDialogDescription());
+            Assert.NotNull(mockBitmapEditor.GetBitmapEditorFileDialogDescription());
 
             string[] actualExtensions = mockBitmapEditor.GetBitmapExtensions();
-            List<string> expectedExtensions = MockBitmapEditor.BitmapExtensions;
+            List<string> expectedExtensions = mockBitmapEditor.GetExpectedBitmapExtensions();
             Assert.NotNull(actualExtensions);
             Assert.NotNull(expectedExtensions);
             Assert.Equal(expectedExtensions.Count, actualExtensions.Length);

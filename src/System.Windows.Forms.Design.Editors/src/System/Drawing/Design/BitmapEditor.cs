@@ -15,7 +15,7 @@ namespace System.Drawing.Design
     [CLSCompliant(false)]
     public class BitmapEditor : ImageEditor
     {
-        internal static List<string> BitmapExtensions = new List<string>() { "bmp", "gif", "jpg", "jpeg", "png", "ico" };
+        protected static List<string> BitmapExtensions = new List<string>() { "bmp", "gif", "jpg", "jpeg", "png", "ico" };
 
         protected override string GetFileDialogDescription()
         {

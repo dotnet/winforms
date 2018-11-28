@@ -19,7 +19,7 @@
 
     <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
       <AssemblyInfoLines Condition="'$(CLSCompliant)'=='true'" Include="[assembly:System.CLSCompliant(true)]" />
-	    <AssemblyInfoLines Condition="'$(CLSCompliant)'=='false'" Include="[assembly:System.CLSCompliant(false)]" />
+      <AssemblyInfoLines Condition="'$(CLSCompliant)'=='false'" Include="[assembly:System.CLSCompliant(false)]" />
     </ItemGroup>
 
     <WriteLinesToFile File="$(AssemblyInfoFile)"

@@ -11,13 +11,6 @@ namespace System.Windows.Forms.Design.Tests
     {
         internal MockControlDesigner controlDesigner = new MockControlDesigner();
 
-        [Fact]        
-        public void ForceVisibleProperty()
-        {   
-            Assert.Throws<NotImplementedException>(() => controlDesigner.ForceVisible = true);            
-            Assert.Throws<NotImplementedException>(() => controlDesigner.ForceVisible);
-        }
-
         [Fact]
         public void AccessibleObjectField()
         {

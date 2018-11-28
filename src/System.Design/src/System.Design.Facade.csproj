@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Design</AssemblyName>
-    <StrongNameKeyId>Microsoft</StrongNameKeyId>
   </PropertyGroup>
 
   <ItemGroup>
