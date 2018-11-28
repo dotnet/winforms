@@ -198,8 +198,8 @@ namespace System.Windows.Forms
         Browsable(true),
         DefaultValue(false),
         Localizable(true),
-        Category("Folder Browsing"),
-        Description("A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.")
+        SRCategory(nameof(SR.CatFolderBrowsing)),
+        Description(nameof(SR.FolderBrowserDialogUseDescriptionForTitle))
         ]
         public bool UseDescriptionForTitle { get; set; }
 
