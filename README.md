@@ -63,7 +63,7 @@ Some of the best ways to contribute are to try things out, file bugs, join in de
     * Issues with WinForms on .NET Framework should be filed on [VS developer community](https://developercommunity.visualstudio.com/spaces/61/index.html), or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support) if you have a contract.
 
 **IMPORTANT:** WinForms for .NET Core 3.0 release focuses on parity with WinForms for .NET Framework.
-We do not plan to take contributions or address bugs that are not unique to WinForms on .NET Core.
+We do not plan to take contributions or address bugs that are not unique to WinForms on .NET Core in 3.0 release.
 Bugs which are present on both WinForms platforms (for .NET Core and .NET Framework) will be prioritized for future releases of .NET Core (post-3.0).
 
 ### Issue Guide
