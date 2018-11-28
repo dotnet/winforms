@@ -1,17 +1,21 @@
 ﻿using System.Diagnostics;
 using System.Threading;
+using System.IO;
+using System.Reflection;
 
 namespace System.Windows.Forms.FuncTests
-{
+{ 
     public class TestHelpers
-    {
+    {       
+
         /// <summary>
-        /// Calls StartProcess for the ProcessStartInfo containing the bin path of this directory plsu the given byPathFromBin
+        /// Calls StartProcess for the ProcessStartInfo containing the bin path of this directory plus the given byPathFromBinToExe; also ensures that repo\.dotnet\dotnet.exe exists
         /// </summary>
         /// <param name="byPathFromBinToExe">The string path to add onto the end of the bin path in order to reach the exe to run; trimed for tailing \'s</param>
         /// <seealso cref="StartProcess(ProcessStartInfo)"/>
         /// <seealso cref="BinPath()"/>
         /// <seealso cref="System.Diagnostics.Process"/>
+        /// <seealso cref="System.IO.File.Exists(string)"/>
         /// <remarks>Throws ArgumentException if string byPathFromBin is null</remarks>
         /// <returns>The new Process</returns>
         public static Process StartProcess(string byPathFromBinToExe)
@@ -21,9 +25,21 @@ namespace System.Windows.Forms.FuncTests
                 throw new ArgumentNullException(nameof(byPathFromBinToExe));
             }
 
+            if(byPathFromBinToExe.Length < 4 || 
+                !byPathFromBinToExe.Substring(byPathFromBinToExe.Length-4).ToLower().Equals((".exe".ToLower())))
+            {
+                throw new ArgumentException(nameof(byPathFromBinToExe) + " must end in a .exe");
+            }
+
+            var dotnetPath = DotNetPath();
+            if (!Directory.Exists(dotnetPath))
+            {
+                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
+            }
+
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = BinPath() + byPathFromBinToExe.Trim('\\');
-            startInfo.EnvironmentVariables["DOTNET_ROOT"] = RepoPath() + ".dotnet";
+            startInfo.FileName = Path.Combine(BinPath(), byPathFromBinToExe.Trim('\\'));
+            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;
             // ...
 
             return StartProcess(startInfo);
@@ -56,17 +72,13 @@ namespace System.Windows.Forms.FuncTests
         /// <returns>The bin path as a string; example: example:\Project\bin\</returns>
         public static string BinPath()
         {
-            return RelativePathTo("bin");
+            return RelativePathForwardTo("bin");
         }
 
-        /// <summary>
-        /// Returns the repo base directory of this project on a given machine
-        /// </summary>
-        /// <remarks>Returns the entire path of this project if the bin is not part of it</remarks>
-        /// <returns>The repo base path as a string; example: example:\Project\</returns>
-        public static string RepoPath()
+
+        public static string DotNetPath()
         {
-            return RelativePathTo("winforms");
+            return RelativePathBackwardsUntilFind(".dotnet");
         }
 
         /// <summary>
@@ -77,20 +89,20 @@ namespace System.Windows.Forms.FuncTests
         /// <seealso cref="System.IO.Path.DirectorySeparatorChar"/>
         /// <remarks>Returns the entire path of this project if the stop is not part of it</remarks>
         /// <returns>The path as a string; example: example:\Project\bin\ given "bin" if bin is present in the path</returns>
-        public static string RelativePathTo(string stop)
+        public static string RelativePathForwardTo(string stop)
         {
             if(string.IsNullOrEmpty(stop))
             {
-                throw new ArgumentException(nameof(stop) + " should not be null or empty.");
+                throw new ArgumentException(nameof(stop) + " must not be null or empty.");
             }
 
+            string ret = string.Empty;
             var path = AppDomain.CurrentDomain.BaseDirectory;
             var pathParts = path.Split('\\');
-            string ret = string.Empty;
             uint i = 0;
             while (i < pathParts.Length)
             {
-                ret += pathParts[i] + IO.Path.DirectorySeparatorChar;
+                ret = Path.Combine(ret, pathParts[i]);
                 if (pathParts[i].ToLower().Equals(stop.ToLower()))
                 {
                     break;
@@ -99,6 +111,30 @@ namespace System.Windows.Forms.FuncTests
             }
             return ret;
         }
+
+        public static string RelativePathBackwardsUntilFind(string seek)
+        {
+            if (string.IsNullOrEmpty(seek))
+            {
+                throw new ArgumentNullException(nameof(seek));
+            }
+
+            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+            var currentDirectory = Path.GetDirectoryName(codeBasePath);
+            var root = Directory.GetDirectoryRoot(currentDirectory);
+            while (!currentDirectory.Equals(root))
+            {
+                if (Directory.GetDirectories(currentDirectory, seek, SearchOption.TopDirectoryOnly).Length == 1)
+                {
+                    var ret = Path.Combine(currentDirectory, seek);
+                    return ret;
+                }
+                currentDirectory = Directory.GetParent(currentDirectory).FullName;
+            }
+            throw new Exception("no dotnet folder was found");           
+        }
+
 
 
 
