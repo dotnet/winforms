@@ -97,6 +97,12 @@ Check out the WinForms
 [samples](https://github.com/dotnet/samples/tree/master/windowsforms) for 
 HelloWorld examples and more advanced scenarios.
 
+## Reporting security issues and security bugs
+
+Security issues and bugs should be reported privately, via email, to the Microsoft Security Response Center (MSRC) <secure@microsoft.com>. You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message. Further information, including the MSRC PGP key, can be found in the [Security TechCenter](https://www.microsoft.com/msrc/faqs-report-an-issue).
+
+Also see info about related [Microsoft .NET Core and ASP.NET Core Bug Bounty Program](https://www.microsoft.com/msrc/bounty-dot-net-core).
+
 ## License
 
 .NET Core (including WinForms repo) is licensed under the [MIT license](LICENSE.TXT).
