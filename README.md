@@ -45,29 +45,7 @@ To learn more, read the blog post [Update on .NET Core 3.0 and .NET Framework 4.
 
 ## Installation
 
-Install [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download).
-
-[Daily builds](https://aka.ms/netcore3sdk) are also available in the
-[dotnet/code-sdk repo](https://github.com/dotnet/core-sdk).
-
-To use the **WinForms designer**, you'll need Visual Studio. We recommend Visual Studio 2019 Preview 1 which is available at [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/).
-Select the **.NET desktop development** workload with the options: **.NET Framework 4.7.2 development tools** and **.NET Core 3.0 development tools**.
-
-## Creating new applications
-
-You can create a new WinForms application with `dotnet new` command, using the
-new templates for WinForms.
-
-In your favorite console run:
-```cmd
-dotnet new winforms -o MyWinFormsApp
-cd MyWinFormsApp
-dotnet run
-```
-
-## Porting existing applications
-
-To port your existing WinForms application from .NET Framework to .NET Core 3.0, refer to our [porting guidelines](https://github.com/dotnet/winforms/blob/master/porting-guidelines.md).
+TODO: Add link
 
 ## Contributing
 
@@ -90,12 +68,6 @@ Guidelines](https://github.com/dotnet/coreclr/blob/master/Documentation/project-
 This project has adopted the code of conduct defined by the [Contributor Covenant](https://contributor-covenant.org/) 
 to clarify expected behavior in our community.
 For more information, see the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
-
-## Samples
-
-Check out the WinForms
-[samples](https://github.com/dotnet/samples/tree/master/windowsforms) for 
-HelloWorld examples and more advanced scenarios.
 
 ## Reporting security issues and security bugs
 
