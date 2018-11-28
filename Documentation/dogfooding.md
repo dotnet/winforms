@@ -1,4 +1,4 @@
-# Dogfooding WinForms for .NET Core 3.0
+# Dogfooding WinForms for .NET Core
 
 ## Installation
 
