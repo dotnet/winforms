@@ -16,9 +16,9 @@ namespace System.Windows.Forms.FuncTests
         /// <returns>The new Process</returns>
         public static Process StartProcess(string byPathFromBinToExe)
         {
-            if(null == byPathFromBinToExe)
+            if(byPathFromBinToExe == null)
             {
-                throw new ArgumentException(nameof(byPathFromBinToExe) + " must not be null.");
+                throw new ArgumentNullException(nameof(byPathFromBinToExe));
             }
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.FuncTests
 
         /// <summary>
         /// Returns the bin directory of this project on a given machine
-        /// </summary>/>
+        /// </summary>
         /// <remarks>Returns the entire path of this project if the bin is not part of it</remarks>
         /// <returns>The bin path as a string; example: example:\Project\bin\</returns>
         public static string BinPath()
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.FuncTests
 
         /// <summary>
         /// Returns the repo base directory of this project on a given machine
-        /// </summary>/>
+        /// </summary>
         /// <remarks>Returns the entire path of this project if the bin is not part of it</remarks>
         /// <returns>The repo base path as a string; example: example:\Project\</returns>
         public static string RepoPath()
@@ -79,9 +79,14 @@ namespace System.Windows.Forms.FuncTests
         /// <returns>The path as a string; example: example:\Project\bin\ given "bin" if bin is present in the path</returns>
         public static string RelativePathTo(string stop)
         {
+            if(string.IsNullOrEmpty(stop))
+            {
+                throw new ArgumentException(nameof(stop) + " should not be null or empty.");
+            }
+
             var path = AppDomain.CurrentDomain.BaseDirectory;
             var pathParts = path.Split('\\');
-            string ret = "";
+            string ret = string.Empty;
             uint i = 0;
             while (i < pathParts.Length)
             {
