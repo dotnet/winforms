@@ -68,9 +68,14 @@ Bugs which are present on both WinForms platforms (for .NET Core and .NET Framew
 
 ### Issue Guide
 
-TODO
+Read our detailed [issue guide](Documentation/issue-guide.md) which covers:
 
-For general .NET Core 3 issues, use the [.NET Core repo](https://github.com/dotnet/core/issues/).
+* High-quality bug reports guide
+* Use of Labels, Milestones, Assignees and Upvotes on issues
+* How to escalate (accidentally) neglected issue or PR
+* Triage rules we use
+
+For general .NET Core 3 issues (not specific to WinForms), use the [.NET Core repo](https://github.com/dotnet/core/issues) or other repos if appropriate (e.g. [CoreFX](https://github.com/dotnet/corefx/issues), [WPF](https://github.com/dotnet/wpf/issues)).
 
 ### Contributing Guide
 
