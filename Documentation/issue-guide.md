@@ -52,7 +52,8 @@ We can [sort issues by number of upvotes](https://github.com/dotnet/winforms/iss
 
 ## Escalations
 
-If you think some issue or PR is not getting the right attention, or if you notice some [Code of Conduct](https://dotnetfoundation.org/code-of-conduct) violation we might miss, you can escalate to WinForms team by tagging some of us (e.g. [@karelz](https://github.com/karelz)).
+If you think some issue or PR is not getting the right attention, or if you notice some [Code of Conduct](https://dotnetfoundation.org/code-of-conduct) violation we might miss, 
+you can escalate to WinForms team by tagging some of us (e.g. [@merriemcgaw](https://github.com/merriemcgaw), [@karelz](https://github.com/karelz)). Please do not overuse it.
 
 
 
