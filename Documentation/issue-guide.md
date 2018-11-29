@@ -79,8 +79,8 @@ Feel free to use other labels if it helps your triage efforts (e.g. **needs-more
     * Motivation: Helps communicate desire/timeline to community. Can spark further priority/impact discussion.
 1. Each issue has exactly one "*issue type*" label (**bug**, **enhancement**, **api-suggestion**, **test-bug**, **test-enhancement**, **question**, **documentation**, etc.).
     * Don't be afraid to be wrong when deciding 'bug' vs. 'test-bug' (flip a coin if you must). The most useful values for tracking are 'api-&#42;' vs. 'enhancement', 'question', and 'documentation'.
-1. Don't be afraid to say no, or close issues - just explain why and be polite
-1. Don't be afraid to be wrong - just be flexible when new information appears
+1. Don't be afraid to say no, or close issues - just explain why and be polite.
+1. Don't be afraid to be wrong - just be flexible when new information appears.
 
 ### PR guidance
 
@@ -89,4 +89,4 @@ Feel free to use other labels if it helps your triage efforts (e.g. **needs-more
 1. Push PRs forward, don't let them go stale (response every 5+ days, ideally no PRs older than 2 weeks).
 1. Stuck or long-term blocked PRs (e.g. due to missing API approval, etc.) should be closed and reopened once they are unstuck.
     * Motivation: Keep only active PRs. WIP (work-in-progress) PRs should be rare and should not become stale (2+ weeks old). If a PR is stale and there is not immediate path forward, consider closing the PR until it is unblocked/unstuck.
-1. PR should be linked to related issue, use [auto-closing](https://help.github.com/articles/closing-issues-via-commit-messages/) (add "Fixes #12345" into your PR description)
+1. PR should be linked to related issue, use [auto-closing](https://help.github.com/articles/closing-issues-via-commit-messages/) (add "Fixes #12345" into your PR description).
