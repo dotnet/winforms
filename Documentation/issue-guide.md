@@ -106,9 +106,9 @@ Feel free to use other labels if it helps your triage efforts (e.g. **needs-more
 
 ### PR guidance
 
-1. Any labels on PRs are superfluous and not needed (exceptions: **NO MERGE**).
+1. Dont't set any  labels on PRs. They are superfluous and not needed (exceptions: **NO MERGE**).
     * Motivation: All the important info (*issue type* label, API approval label, etc.) is already captured on the associated issue.
 1. Push PRs forward, don't let them go stale (response every 5+ days, ideally no PRs older than 2 weeks).
-1. Stuck or long-term blocked PRs (e.g. due to missing API approval, etc.) should be closed and reopened once they are unstuck.
+1. Close stuck or long-term blocked PRs (e.g. due to missing API approval, etc.) and reopen them once they are unstuck.
     * Motivation: Keep only active PRs. WIP (work-in-progress) PRs should be rare and should not become stale (2+ weeks old). If a PR is stale and there is not immediate path forward, consider closing the PR until it is unblocked/unstuck.
-1. PR should be linked to related issue, use [auto-closing](https://help.github.com/articles/closing-issues-via-commit-messages/) (add "Fixes #12345" into your PR description).
+1. Link PR to related issue via [auto-closing](https://help.github.com/articles/closing-issues-via-commit-messages/) (add "Fixes #12345" into your PR description).
