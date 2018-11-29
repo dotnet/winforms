@@ -21,6 +21,9 @@ namespace System.Windows.Forms.FuncTests
             process.Kill();
             process.WaitForExit();
 
+            uint x = 5;
+            x + 1;
+
             Assert.True(process.HasExited);
         }
 
