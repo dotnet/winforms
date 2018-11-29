@@ -8,6 +8,27 @@ We will keep issues open even if the WinForms team internally has no plans to ad
 
 
 
+## How to file issues
+
+You can help us streamline our response time to your feedback and ideas by filing high-quality reports.
+
+### High-quality bugs
+
+In general, try to be specific. Get straight to the main point. Leave additional details, options and alternatives to the end (hint: separate them visually). Don't write too long bug reports, unless you have to.
+
+* Include minimal repro in your bug if at all possible (chop off dependencies, remove as much code as possible). If it is not possible, say why.
+    * Note: Yes, it may take some time to minimize a repro from your larger app - but that is exactly what we would do in most cases anyway. Issues with clear small repros are easier for us to reproduce/investigate and therefore have higher chance to be addressed quickly.
+* Include callstacks, symptom description, or what is the difference between actual and expected behavior.
+
+### High-quality features and API suggestions
+
+Provide clear description of your suggestion. Explain scenarios in which it would be helpful and why (motivation).
+Ideally, assume that the reader has minimal knowledge and experience with writing apps/libraries that would benefit from the feature.
+
+For API suggestions, check [API review process](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/api-review-process.md), especially examples of [good API proposals](https://github.com/dotnet/corefx/issues/271).
+
+
+
 ## Labels
 
 We use GitHub [labels](https://github.com/dotnet/winforms/labels) on our issues in order to classify them. We have the following categories per issue:
