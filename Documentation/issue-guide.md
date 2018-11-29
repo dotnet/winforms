@@ -12,7 +12,7 @@ We will keep issues open even if the WinForms team internally has no plans to ad
 
 You can help us streamline our response time to your feedback and ideas by filing high-quality reports.
 
-### High-quality bugs
+### High-quality bug reports
 
 In general, try to be specific. Get straight to the main point. Leave additional details, options and alternatives to the end (hint: separate them visually). Don't write too long bug reports, unless you have to.
 
