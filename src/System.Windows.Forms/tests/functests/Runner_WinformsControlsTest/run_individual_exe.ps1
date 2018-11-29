@@ -47,12 +47,14 @@ function OpenTabTimesEnter()
         [parameter(Mandatory=$true)] [Int] $enters
     )
 
-    $p.Start() | Out-Null
+    # Open the form
+    $p.Start() | Out-Null 
 
     $wshell = New-Object -ComObject wscript.shell
     $wshell.AppActivate('MenuForm') *>$null
     Start-Sleep -m 200
 
+    # Tab over to the appropriate button
     For($i = 0; $i -lt $tabs; $i++)
     {
         if($p.HasExited -ne $true -and (SeeActiveWindow -eq $p.ProcessName))
@@ -61,6 +63,7 @@ function OpenTabTimesEnter()
         } 
     }
 
+    # Open that button
     For($j = 0; $j -lt $enters; $j++)
     {
         if($p.HasExited -ne $true -and (SeeActiveWindow -eq $p.ProcessName))
@@ -69,19 +72,38 @@ function OpenTabTimesEnter()
         } 
     }    
     
+    # Wait for new window to be open for half a second
     Start-Sleep -m 500
 
-    if ($p.HasExited -ne $true)
+    if ($p.HasExited -ne $true) # if the window has not closed due to an error
     {
-        Stop-Process -name $p.Name
-        $p.WaitForExit() 
-        LogWrite($nameOfTest + ' passed.')
-        return 0 #no issues have occured  
+        Stop-Process -name $p.Name # shut 'er down
+        $stopwatch =  [system.diagnostics.stopwatch]::StartNew()
+        $timeout = $true
+        while ($stopwatch.Elapsed.TotalSeconds -lt 5) # if we can't turn it off in 5 seconds, this will be considered a timeout
+        {
+            if ($p.HasExited -eq $true) # if Stop-Process has worked
+            {
+                $timeout = $false # then we're a-ok!
+                break
+            }
+            $timeout = $true # if Stop-Process has not worked...
+        }
+        if ($timeout -eq $true) # ... then we timed out
+        {
+            LogWrite($nameOfTest + ' timed out.')
+            return -2 # new error code for timing out; application returns -1 for all its failures
+        }
+        else 
+        {
+            LogWrite($nameOfTest + ' passed.')
+            return 0 # no issues have occured  
+        }
     }
-    else 
+    else # the window closed due to an error
     {
         LogWrite($nameOfTest + ' failed.')
-        return $p.ExitCode
+        return $p.ExitCode 
     }
 }
 
@@ -91,6 +113,11 @@ $pinfo.RedirectStandardError = $true
 $pinfo.RedirectStandardOutput = $true
 $pinfo.UseShellExecute = $false
 $pinfo.Arguments = ""
+
+# Set the dotnet root to the .dotnet folder that the build installed so we don't use the machine-wide installed one
+# TODO: Change this to a script parameter instead of being hardcoded here
+$pinfo.EnvironmentVariables['DOTNET_ROOT'] = '..\..\..\..\..\.dotnet'
+
 $p = New-Object System.Diagnostics.Process
 $p.StartInfo = $pinfo
 
