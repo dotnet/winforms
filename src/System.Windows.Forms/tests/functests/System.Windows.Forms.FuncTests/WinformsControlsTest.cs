@@ -7,7 +7,7 @@ namespace System.Windows.Forms.FuncTests
     public class WinformsControlsTestTests
     {
 
-        public const string PathToTestFromBin = "WinformsControlsTest\\Debug\\netcoreapp3.0\\WinformsControlsTest.exe";
+        public const string PathToTestFromBin = "WinformsControlsTest\\Release\\netcoreapp3.0\\WinformsControlsTest.exe";
 
         [Fact]
         public void WinformsControlsTest_OpenAndClose()
