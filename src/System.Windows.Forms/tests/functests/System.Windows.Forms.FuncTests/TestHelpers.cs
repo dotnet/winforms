@@ -25,8 +25,7 @@ namespace System.Windows.Forms.FuncTests
                 throw new ArgumentNullException(nameof(byPathFromBinToExe));
             }
 
-            if(byPathFromBinToExe.Length < 4 || 
-                !byPathFromBinToExe.Substring(byPathFromBinToExe.Length-4).ToLower().Equals((".exe".ToLower())))
+            if (!byPathFromBinToExe.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase))
             {
                 throw new ArgumentException(nameof(byPathFromBinToExe) + " must end in a .exe");
             }
@@ -103,7 +102,7 @@ namespace System.Windows.Forms.FuncTests
             while (i < pathParts.Length)
             {
                 ret = Path.Combine(ret, pathParts[i]);
-                if (pathParts[i].ToLower().Equals(stop.ToLower()))
+                if (pathParts[i].Equals(stop, StringComparison.CurrentCultureIgnoreCase))
                 {
                     break;
                 }
@@ -123,7 +122,7 @@ namespace System.Windows.Forms.FuncTests
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             var currentDirectory = Path.GetDirectoryName(codeBasePath);
             var root = Directory.GetDirectoryRoot(currentDirectory);
-            while (!currentDirectory.Equals(root))
+            while (!currentDirectory.Equals(root, StringComparison.CurrentCultureIgnoreCase))
             {
                 if (Directory.GetDirectories(currentDirectory, seek, SearchOption.TopDirectoryOnly).Length == 1)
                 {
