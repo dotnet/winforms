@@ -1,4 +1,4 @@
-# Dogfooding WinForms for .NET Core
+# Getting started with WinForms for .NET Core
 
 ## Installation
 

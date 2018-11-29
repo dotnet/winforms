@@ -54,11 +54,17 @@ To learn more, read the blog post [Update on .NET Core 3.0 and .NET Framework 4.
 
 
 
+## Getting started with WinForms on .NET Core
+
+Follow [getting started instructions](Documentation/getting-started.md).
+
+
+
 ## How to Engage, Contribute and Provide Feedback
 
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
-* [Dogfood daily builds](Documentation/dogfooding.md#installation).
+* Use [daily builds](Documentation/getting-started.md#installation).
 * If you have a question or found a bug, [file a new issue](https://github.com/dotnet/winforms/issues/new).
     * Issues with WinForms on .NET Framework should be filed on [VS developer community](https://developercommunity.visualstudio.com/spaces/61/index.html), or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support) if you have a contract.
 
