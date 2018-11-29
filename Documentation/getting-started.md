@@ -29,3 +29,10 @@ To port your existing WinForms application from .NET Framework to .NET Core 3.0,
 
 Check out the .NET Core 3.0 WinForms [samples](https://github.com/dotnet/samples/tree/master/windowsforms) 
 for HelloWorld examples and more advanced scenarios.
+
+## How to build
+See [building guidelines](building-guidelines.md)
+
+## How to test
+See [testing guidelines](testing-guidelines.md).
+
