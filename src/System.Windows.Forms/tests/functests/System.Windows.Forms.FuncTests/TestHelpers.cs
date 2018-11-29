@@ -86,6 +86,7 @@ namespace System.Windows.Forms.FuncTests
         /// <param name="stop">The string to stop at in the path; compared all lower</param>
         /// <seealso cref="System.AppDomain.CurrentDomain.BaseDirectory"/>
         /// <seealso cref="System.IO.Path.DirectorySeparatorChar"/>
+        /// <seealso cref="System.IO.Path.Combine(string, string)"/>
         /// <remarks>Returns the entire path of this project if the stop is not part of it</remarks>
         /// <returns>The path as a string; example: example:\Project\bin\ given "bin" if bin is present in the path</returns>
         public static string RelativePathForwardTo(string stop)
@@ -97,7 +98,7 @@ namespace System.Windows.Forms.FuncTests
 
             string ret = string.Empty;
             var path = AppDomain.CurrentDomain.BaseDirectory;
-            var pathParts = path.Split('\\');
+            var pathParts = path.Split(Path.DirectorySeparatorChar);
             uint i = 0;
             while (i < pathParts.Length)
             {
@@ -111,6 +112,17 @@ namespace System.Windows.Forms.FuncTests
             return ret;
         }
 
+        /// <summary>
+        /// Looks backwards form the current executing directory until it finds a sibling directory seek, then returns the full path of that sibling
+        /// </summary>
+        /// <param name="seek">The sibling directory to look for</param>
+        /// <seealso cref="System.Reflection.Assembly.GetExecutingAssembly()"/>
+        /// <seealso cref="System.IO.Path.GetDirectoryName(ReadOnlySpan{char})"/>
+        /// <seealso cref="System.IO.Directory.GetDirectoryRoot(string)"/>
+        /// <seealso cref="System.IO.Directory.GetDirectories(string, string, SearchOption)"/>
+        /// <seealso cref="System.IO.Path.Combine(string, string)"/>
+        /// <seealso cref="System.IO.Directory.GetParent(string)"/>
+        /// <returns>The full path of the first sibling directory by the current executing directory, away from the root</returns>
         public static string RelativePathBackwardsUntilFind(string seek)
         {
             if (string.IsNullOrEmpty(seek))
@@ -131,11 +143,8 @@ namespace System.Windows.Forms.FuncTests
                 }
                 currentDirectory = Directory.GetParent(currentDirectory).FullName;
             }
-            throw new Exception("no dotnet folder was found");           
+            throw new Exception("no " + nameof(seek) +  " sibling folder was found");           
         }
-
-
-
 
         /// <summary>
         /// Presses Enter on the given process if it can be made the foreground process
