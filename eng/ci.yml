@@ -86,8 +86,7 @@ jobs:
         clean: true
 
       - script: |
-          echo BinariesDir = $(Build.BinariesDirectory)
-          echo ArtifactsBinDir = $(ArtifactsBinDir)
+          set
 
       # Use utility script to run script command dependent on agent OS.
       - script: eng\common\cibuild.cmd
@@ -99,8 +98,7 @@ jobs:
         displayName: Windows Build / Publish
 
       - script: |
-          echo BinariesDir = $(Build.BinariesDirectory)
-          echo ArtifactsBinDir = $(ArtifactsBinDir)
+          set
 
       # Copy files for helix job
       # - task: CopyFiles@2
