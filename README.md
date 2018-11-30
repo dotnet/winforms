@@ -85,12 +85,11 @@ For general .NET Core 3 issues (not specific to WinForms), use the [.NET Core re
 
 ### Contributing Guide
 
-Since we're currently still porting parts of WinForms codebase to GitHub, we're not
-equipped to handle larger contributions yet. Our goal is to accept contributions
-on day one, but we'll only be able to accept minor modifications (typos, build
-fixes, test breaks etc). We'll be happy to hear your feedback!
+Read our detailed [contributing guide](Documentation\contributing-guide.md) which covers:
 
-For more details, take a look at the [.NET Core Contribution Guidelines](https://github.com/dotnet/coreclr/blob/master/Documentation/project-docs/contributing.md).
+* Which kind of PRs we accept/reject for .NET Core 3.0 release
+* Coding style and PR gotchas
+* Developer guide for building and testing WinForms code
 
 ### Community
 
