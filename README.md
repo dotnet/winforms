@@ -85,7 +85,7 @@ For general .NET Core 3 issues (not specific to WinForms), use the [.NET Core re
 
 ### Contributing Guide
 
-Read our detailed [contributing guide](Documentation\contributing-guide.md) which covers:
+Read our detailed [contributing guide](Documentation/contributing-guide.md) which covers:
 
 * Which kind of PRs we accept/reject for .NET Core 3.0 release
 * Coding style and PR gotchas
