@@ -88,8 +88,9 @@ For general .NET Core 3 issues (not specific to WinForms), use the [.NET Core re
 Read our detailed [contributing guide](Documentation/contributing-guide.md) which covers:
 
 * Which kind of PRs we accept/reject for .NET Core 3.0 release
-* Coding style and PR gotchas
-* Developer guide for building and testing WinForms code
+* Coding style
+* PR style preferences (squashing vs. merging, etc.)
+* Developer guide for building and testing locally
 
 ### Community
 
