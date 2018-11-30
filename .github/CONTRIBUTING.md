@@ -1,6 +1,6 @@
 # Contributing
 
-See [Contributing](https://github.com/karelz/winforms/blob/contributing-guide/Documentation/contributing-guide.md) for information about:
+See [Contributing Guide](https://github.com/karelz/winforms/blob/contributing-guide/Documentation/contributing-guide.md) for information about:
 
 * Which kind of PRs we accept/reject for .NET Core 3.0 release
 * Coding style
