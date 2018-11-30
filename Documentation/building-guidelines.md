@@ -24,3 +24,7 @@ Note that VS behaves slightly differently than the command line. **Therefore, we
 * Other times, the error occurs elsewhere in MSBuild, and you need to examine the logs.
  * The logs are generated at log\$(BuildConfig)\Build.binlog
  * The file format is an MSBuild Binary Log. Install the [MSBuild Structured Log Viewer](http://msbuildlog.com/) to read them.
+
+## Creating a package
+* The winforms package is intended for Microsoft internal consumption only. However, if you want to create the package locally, just pass -pack to the build command:
+ * ```.\build -pack```

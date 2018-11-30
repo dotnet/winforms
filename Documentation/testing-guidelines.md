@@ -4,7 +4,7 @@ This doc coveres Winfors Forms **unit testing** guidelines.
 We are still working on a scalable solution for functional testing and will update this doc when we have one.
 
 ## Building tests
-* Tests are automatically built since all test projects are referenced in System.Windows.Forms.sln at the repo root.
+* Tests are automatically built when running ```.\build``` since all test projects are referenced in System.Windows.Forms.sln at the repo root.
 
 ## Running tests
 
