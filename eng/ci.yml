@@ -41,6 +41,16 @@ jobs:
         - name: _OfficialBuildIdArgs
           value: ''
 
+        # needed for helix jobs
+        - name: _HelixAgentPool
+          value: 'Windows.10.Amd64.Open'
+        - name: _WinformsControlsTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
+        - name: _WinformsFuncTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
+        - name: _HelixStagingDir
+          value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+
         # Override some values if we're building internally
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
@@ -70,6 +80,9 @@ jobs:
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
+          - name: _HelixAgentPool
+            value: 'Windows.10.Amd64'
+
       strategy:
         matrix:
           Build_Debug:
@@ -85,9 +98,6 @@ jobs:
       - checkout: self
         clean: true
 
-      - script: |
-          set
-
       # Use utility script to run script command dependent on agent OS.
       - script: eng\common\cibuild.cmd
           -configuration $(_BuildConfig) 
@@ -97,37 +107,44 @@ jobs:
           $(_OfficialBuildIdArgs)
         displayName: Windows Build / Publish
 
-      - script: |
-          set
-
       # Copy files for helix job
-      # - task: CopyFiles@2
-      #   inputs:
-      #     #sourceFolder: # Optional
-      #     #contents: '**' 
-      #     targetFolder: 
-      #     #cleanTargetFolder: false # Optional
-      #     #overWrite: false # Optional
-      #     #flattenFolders: false # Optional
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: $(_WinformsControlsTestBinDir)
+          contents: '**' 
+          targetFolder: $(_HelixStagingDir)
+          cleanTargetFolder: true
+          #overWrite: false # Optional
+        displayName: Copy winforms controls tests to helix staging dir
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: $(_WinformsFuncTestBinDir)
+          contents: '**' 
+          targetFolder: $(_HelixStagingDir)
+          overWrite: true
+        displayName: Copy xUnit func tests to helix staging dir
 
-      # - template: /eng/common/templates/steps/helix-publish.yml
-      #   parameters:
-      #     HelixSource: $(_HelixSource)
-      #     HelixType: ̓'tests/functional'
-      #     #HelixTargetQueues: ''
-      #     HelixAccessToken: $(helix-token) # secret variable set in Azure DevOps build definition
-      #     #HelixPreCommands: ''
-      #     #HelixPostCommands: ''
-      #     WorkItemDirectory: ''
-      #     WorkItemCommand: ''
-      #     #CorrelationPayloadDirectory: ''
-      #     XUnitProjects: ''
-      #     XUnitTargetFramework: ''
-      #     XUnitRunnerVersion: ''
-      #     IncludeDotNetCli: false
-      #     DotNetCliPackageType: ''
-      #     DotNetCliVersion: ''
-      #     EnableXUnitReporter: false
-      #     WaitForWorkItemCompletion: true
-      #     condition: succeeded()
-      #     continueOnError: false
+      - template: /eng/common/templates/steps/helix-publish.yml
+        parameters:
+          HelixSource: $(_HelixSource)
+          HelixType: ̓'tests/functional'
+          HelixTargetQueues: $(_HelixAgentPool)
+          # secret variable set in Azure DevOps build definition
+          # todo: when we go public, get this value from the Helix Anonymous variable group
+          # for internal builds, get this value from the DotNet-HelixApi-Access variable group
+          HelixAccessToken: $(helix-token) 
+          #HelixPreCommands: ''
+          #HelixPostCommands: ''
+          WorkItemDirectory: $(_HelixStagingDir)
+          WorkItemCommand: 'dotnet.exe exec --depsfile System.Windows.Forms.Func.Tests.deps.json --runtimeconfig System.Windows.Forms.Func.Tests.runtimeconfig.json xunit.console.dll System.Windows.Forms.Func.Tests.dll -noautoreporters -xml System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.xml -html System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.html'
+          #CorrelationPayloadDirectory: ''
+          #XUnitProjects: ''
+          #XUnitTargetFramework: ''
+          #XUnitRunnerVersion: ''
+          IncludeDotNetCli: true
+          DotNetCliPackageType: 'sdk'
+          DotNetCliVersion: '3.0.100-preview-009764'
+          EnableXUnitReporter: true
+          WaitForWorkItemCompletion: true
+          condition: succeeded()
+          continueOnError: false
