@@ -84,6 +84,7 @@ jobs:
       steps:
       - checkout: self
         clean: true
+
       # Use utility script to run script command dependent on agent OS.
       - script: eng\common\cibuild.cmd
           -configuration $(_BuildConfig) 
@@ -92,4 +93,38 @@ jobs:
           $(_SignArgs)
           $(_OfficialBuildIdArgs)
         displayName: Windows Build / Publish
-        timeoutInMinutes: 5
+
+      - script: |
+          echo BinariesDir = $(Build.BinariesDirectory)
+
+      # Copy files for helix job
+      # - task: CopyFiles@2
+      #   inputs:
+      #     #sourceFolder: # Optional
+      #     #contents: '**' 
+      #     targetFolder: 
+      #     #cleanTargetFolder: false # Optional
+      #     #overWrite: false # Optional
+      #     #flattenFolders: false # Optional
+
+      # - template: /eng/common/templates/steps/helix-publish.yml
+      #   parameters:
+      #     HelixSource: $(_HelixSource)
+      #     HelixType: ̓'tests/functional'
+      #     #HelixTargetQueues: ''
+      #     HelixAccessToken: $(helix-token) # secret variable set in Azure DevOps build definition
+      #     #HelixPreCommands: ''
+      #     #HelixPostCommands: ''
+      #     WorkItemDirectory: ''
+      #     WorkItemCommand: ''
+      #     #CorrelationPayloadDirectory: ''
+      #     XUnitProjects: ''
+      #     XUnitTargetFramework: ''
+      #     XUnitRunnerVersion: ''
+      #     IncludeDotNetCli: false
+      #     DotNetCliPackageType: ''
+      #     DotNetCliVersion: ''
+      #     EnableXUnitReporter: false
+      #     WaitForWorkItemCompletion: true
+      #     condition: succeeded()
+      #     continueOnError: false

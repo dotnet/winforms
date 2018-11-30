@@ -8,7 +8,6 @@ variables:
 
   # clean the local repo on the build agents
   Build.Repository.Clean: true
-  System.Debug: true
   
 # only trigger ci builds for the master branch
 trigger:
