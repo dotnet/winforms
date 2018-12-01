@@ -318,7 +318,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0xffffffff to 0x40
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AccessibleRole.Default, (int)AccessibleRole.OutlineButton)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AccessibleRole));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AccessibleRole));
                 }
                 Properties.SetInteger(PropAccessibleRole, (int)value);
                 OnAccessibleRoleChanged(EventArgs.Empty);
@@ -345,7 +345,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripItemAlignment.Left, (int)ToolStripItemAlignment.Right))
                 {
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripItemAlignment));
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripItemAlignment));
                 }
                 if (alignment != value) {
                     alignment = value;
@@ -509,7 +509,7 @@ namespace System.Windows.Forms {
                   //valid values are 0x0 to 0x4
                   if (!ClientUtils.IsEnumValid(value, (int)value, (int)ImageLayout.None, (int)ImageLayout.Zoom))
                   {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ImageLayout));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImageLayout));
                   }
                   Properties.SetObject(PropBackgroundImageLayout, value);
                   Invalidate();
@@ -666,7 +666,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x5
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DockStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DockStyle));
                 }
                 if(value != Dock) {               
                     // since we dont support DefaultLayout go directly against the CommonProperties
@@ -754,7 +754,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x3
                      if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripItemDisplayStyle.None, (int)ToolStripItemDisplayStyle.ImageAndText))
                      {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripItemDisplayStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripItemDisplayStyle));
                     }               
                     displayStyle = value;
                     if (!state[stateContstructing]) {
@@ -1190,7 +1190,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
                 if (imageAlign != value) {
                     imageAlign = value;
@@ -1301,7 +1301,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
                 
               
@@ -1368,7 +1368,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripItemImageScaling.None, (int)ToolStripItemImageScaling.SizeToFit))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripItemImageScaling));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripItemImageScaling));
                 }
                 if (imageScaling != value) {
                     imageScaling = value;
@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)MergeAction.Append, (int)MergeAction.MatchOnly))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(MergeAction));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MergeAction));
                 }
                 Properties.SetInteger(PropMergeAction, (int)value);
             }
@@ -1821,7 +1821,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripItemOverflow.Never, (int)ToolStripItemOverflow.AsNeeded))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripGripStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripGripStyle));
                 }
                 if (overflow != value) {
                    overflow = value;
@@ -2024,7 +2024,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit))
                 {
-                    throw new InvalidEnumArgumentException("RightToLeft", (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
                 }
                 
                 RightToLeft oldValue = RightToLeft;
@@ -2270,7 +2270,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
                 if (textAlign != value) {
                     textAlign = value;
@@ -2320,7 +2320,7 @@ namespace System.Windows.Forms {
                  //valid values are 0x0 to 0x3
                  if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripTextDirection.Inherit, (int)ToolStripTextDirection.Vertical270))
                  {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripTextDirection));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripTextDirection));
                  }   
                  Properties.SetObject(ToolStripItem.PropTextDirection, value);
                  InvalidateItemLayout("TextDirection");
@@ -2338,7 +2338,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidTextImageRelation(value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(TextImageRelation));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextImageRelation));
                 }
                 if(value != TextImageRelation) {
                     textImageRelation = value;
@@ -4016,7 +4016,7 @@ namespace System.Windows.Forms {
 
                 Debug.Assert(ownerItem != null, "Cannot construct a ToolStripItemAccessibleObject with a null ownerItem");
                 if (ownerItem == null) {
-                    throw new ArgumentNullException("ownerItem");
+                    throw new ArgumentNullException(nameof(ownerItem));
                 }
 
                 this.ownerItem = ownerItem;
@@ -4475,7 +4475,7 @@ namespace System.Windows.Forms {
      
         public ToolStripItemInternalLayout(ToolStripItem ownerItem) {
             if (ownerItem == null) {
-               throw new ArgumentNullException("ownerItem");
+               throw new ArgumentNullException(nameof(ownerItem));
             }
             this.ownerItem = ownerItem;
         }

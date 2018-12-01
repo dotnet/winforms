@@ -531,7 +531,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
             
                 ImageIndexer.Index = value;
@@ -610,7 +610,7 @@ namespace System.Windows.Forms {
                 if (value == indentCount)
                     return;
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("IndentCount", SR.ListViewIndentCountCantBeNegative);
+                    throw new ArgumentOutOfRangeException(nameof(IndentCount), SR.ListViewIndentCountCantBeNegative);
                 }
                 indentCount = value;
                 if (listView != null && listView.IsHandleCreated) {
@@ -786,7 +786,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1 || value > 14)
-                    throw new ArgumentOutOfRangeException("StateImageIndex", string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(StateImageIndex), string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
 
                 if (listView != null && listView.IsHandleCreated) {
                     this.state[StateImageMaskSet] = (value == -1 ? 0 : 1);
@@ -1770,13 +1770,13 @@ namespace System.Windows.Forms {
             public ListViewSubItem this[int index] {
                 get {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                     return owner.subItems[index];
                 }
                 set {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                     owner.subItems[index] = value;
                     owner.UpdateSubItems(index);                    
@@ -1850,7 +1850,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.AddRange"]/*' />
             public void AddRange(ListViewSubItem[] items) {
                 if (items == null) {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
                 EnsureSubItemSpace(items.Length, -1);
                 
@@ -1866,7 +1866,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.AddRange1"]/*' />
             public void AddRange(string[] items) {
                 if (items == null) {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
                 EnsureSubItemSpace(items.Length, -1);
                 
@@ -1882,7 +1882,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.AddRange2"]/*' />
             public void AddRange(string[] items, Color foreColor, Color backColor, Font font) {
                 if (items == null) {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
                 EnsureSubItemSpace(items.Length, -1);
                 
@@ -2073,7 +2073,7 @@ namespace System.Windows.Forms {
             public void Insert(int index, ListViewSubItem item) {
             
                 if (index < 0 || index > Count) {
-                    throw new ArgumentOutOfRangeException("index");
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
                 
                 item.owner = owner;
@@ -2124,7 +2124,7 @@ namespace System.Windows.Forms {
             public void RemoveAt(int index) {
             
                 if (index < 0 || index >= Count) {
-                    throw new ArgumentOutOfRangeException("index");
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
                 
                 // Collapse the items

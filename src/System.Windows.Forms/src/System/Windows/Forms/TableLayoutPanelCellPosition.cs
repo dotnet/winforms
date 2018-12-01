@@ -18,10 +18,10 @@ namespace System.Windows.Forms {
         
         public TableLayoutPanelCellPosition(int column, int row) {
             if (row < -1) {
-                throw new ArgumentOutOfRangeException("row", string.Format(SR.InvalidArgument, "row", (row).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.InvalidArgument, "row", (row).ToString(CultureInfo.CurrentCulture)));
             } 
             if (column < -1) {
-                throw new ArgumentOutOfRangeException("column", string.Format(SR.InvalidArgument, "column", (column).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(column), string.Format(SR.InvalidArgument, "column", (column).ToString(CultureInfo.CurrentCulture)));
             }
             this.row = row;
             this.column = column;
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
         
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
-                throw new ArgumentNullException("destinationType");
+                throw new ArgumentNullException(nameof(destinationType));
             }
         
             if (destinationType == typeof(InstanceDescriptor) && value is TableLayoutPanelCellPosition) {

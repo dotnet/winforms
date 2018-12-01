@@ -420,7 +420,7 @@ namespace System.Windows.Forms {
 
         bool UnsafeNativeMethods.IMsoComponentManager.FRegisterComponent(UnsafeNativeMethods.IMsoComponent component, NativeMethods.MSOCRINFOSTRUCT pcrinfo, out IntPtr dwComponentID) {
             if (component == null) {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
 
             dwComponentID = (IntPtr)0;

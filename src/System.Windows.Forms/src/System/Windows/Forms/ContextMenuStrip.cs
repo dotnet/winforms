@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
         public ContextMenuStrip(IContainer container) : base() {
             // this constructor ensures ContextMenuStrip is disposed properly since its not parented to the form.
             if (container == null) {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
             container.Add(this);
         }

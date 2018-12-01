@@ -57,9 +57,9 @@ namespace System.Windows.Forms {
             Debug.Assert(tipWindow != null && tipWindow.Handle != IntPtr.Zero, "the tipWindow was not initialized, bailing out");
 
             if (toolTipString == null)
-                throw new ArgumentNullException("toolTipString");
+                throw new ArgumentNullException(nameof(toolTipString));
             if (iconBounds.IsEmpty)
-                throw new ArgumentNullException("iconBounds", SR.DataGridToolTipEmptyIcon);
+                throw new ArgumentNullException(nameof(iconBounds), SR.DataGridToolTipEmptyIcon);
 
             NativeMethods.TOOLINFO_T toolInfo = new NativeMethods.TOOLINFO_T();
             toolInfo.cbSize = Marshal.SizeOf(toolInfo);

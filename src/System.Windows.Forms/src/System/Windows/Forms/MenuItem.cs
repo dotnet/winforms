@@ -340,7 +340,7 @@ namespace System.Windows.Forms {
                 int oldIndex = Index;
                 if (oldIndex >= 0) {
                     if (value < 0 || value >= menu.ItemCount) {
-                        throw new ArgumentOutOfRangeException("Index", string.Format(SR.InvalidArgument, "Index", (value).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(Index), string.Format(SR.InvalidArgument, "Index", (value).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     if (value != oldIndex) {
@@ -508,7 +508,7 @@ namespace System.Windows.Forms {
 
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)MenuMerge.Add, (int)MenuMerge.Remove)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(MenuMerge));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MenuMerge));
                 }
 
                 data.MergeType = value;
@@ -631,7 +631,7 @@ namespace System.Windows.Forms {
             [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set {
                 if (!Enum.IsDefined(typeof(Shortcut), value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(Shortcut));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Shortcut));
                 }
 
                 data.shortcut = value;

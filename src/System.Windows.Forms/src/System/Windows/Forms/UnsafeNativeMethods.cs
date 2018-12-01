@@ -6626,7 +6626,7 @@ namespace System.Windows.Forms {
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public ComStreamFromDataStream(Stream dataStream)
         {
-            if (dataStream == null) throw new ArgumentNullException("dataStream");
+            if (dataStream == null) throw new ArgumentNullException(nameof(dataStream));
             this.dataStream = dataStream;
         }
 

@@ -414,16 +414,16 @@ namespace System.Windows.Forms {
                                              MessageBoxOptions options, bool showHelp) {
        
             if (!ClientUtils.IsEnumValid(buttons, (int)buttons, (int)MessageBoxButtons.OK, (int)MessageBoxButtons.RetryCancel)){
-               throw new InvalidEnumArgumentException("buttons", (int)buttons, typeof(MessageBoxButtons));
+               throw new InvalidEnumArgumentException(nameof(buttons), (int)buttons, typeof(MessageBoxButtons));
             }
 
             // valid values are 0x0 0x10 0x20 0x30 0x40, chop off the last 4 bits and check that it's between 0 and 4.
             if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(icon, /*numBitsToShift*/4, /*min*/0x0,/*max*/0x4)) {
-                throw new InvalidEnumArgumentException("icon", (int)icon, typeof(MessageBoxIcon));
+                throw new InvalidEnumArgumentException(nameof(icon), (int)icon, typeof(MessageBoxIcon));
             }
             // valid values are 0x0 0x100, 0x200, chop off the last 8 bits and check that it's between 0 and 2.
             if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(defaultButton, /*numBitsToShift*/8, /*min*/0x0,/*max*/0x2)) {
-                throw new InvalidEnumArgumentException("defaultButton", (int)defaultButton, typeof(DialogResult));
+                throw new InvalidEnumArgumentException(nameof(defaultButton), (int)defaultButton, typeof(DialogResult));
             }
             
             // options intentionally not verified because we don't expose all the options Win32 supports.

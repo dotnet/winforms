@@ -115,7 +115,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void AddRange(string[] value) {
             if (value == null) {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
             data.AddRange(value);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));

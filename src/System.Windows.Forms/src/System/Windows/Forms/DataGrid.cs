@@ -551,7 +551,7 @@ namespace System.Windows.Forms {
                 set {
                     //valid values are 0x0 to 0x2. 
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                     }
                     if (borderStyle != value) {
                         borderStyle = value;
@@ -1854,7 +1854,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x1.
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridLineStyle.None, (int)DataGridLineStyle.Solid))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridLineStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridLineStyle));
                     }
                     if (gridLineStyle != value) {
                         gridLineStyle = value;
@@ -1893,7 +1893,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x3
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridParentRowsLabelStyle.None, (int)DataGridParentRowsLabelStyle.Both))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridParentRowsLabelStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridParentRowsLabelStyle));
                     }
     
                     if (parentRowsLabels != value)
@@ -2125,7 +2125,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value == null)
-                        throw new ArgumentNullException("HeaderFont");
+                        throw new ArgumentNullException(nameof(HeaderFont));
                     if (!value.Equals(headerFont)) {
                         headerFont = value;
                         RecalculateFonts();
@@ -3011,9 +3011,9 @@ namespace System.Windows.Forms {
                 get {
                     EnsureBound();
                     if (rowIndex < 0 || rowIndex >= DataGridRowsLength)
-                        throw new ArgumentOutOfRangeException("rowIndex");
+                        throw new ArgumentOutOfRangeException(nameof(rowIndex));
                     if (columnIndex < 0 || columnIndex >= myGridTable.GridColumnStyles.Count)
-                        throw new ArgumentOutOfRangeException("columnIndex");
+                        throw new ArgumentOutOfRangeException(nameof(columnIndex));
                     CurrencyManager listManager = this.listManager;
                     DataGridColumnStyle column = myGridTable.GridColumnStyles[columnIndex];
                     return column.GetColumnValueAtRow(listManager, rowIndex);
@@ -3021,9 +3021,9 @@ namespace System.Windows.Forms {
                 set {
                     EnsureBound();
                     if (rowIndex < 0 || rowIndex >= DataGridRowsLength)
-                        throw new ArgumentOutOfRangeException("rowIndex");
+                        throw new ArgumentOutOfRangeException(nameof(rowIndex));
                     if (columnIndex < 0 || columnIndex >= myGridTable.GridColumnStyles.Count)
-                        throw new ArgumentOutOfRangeException("columnIndex");
+                        throw new ArgumentOutOfRangeException(nameof(columnIndex));
                     CurrencyManager listManager = this.listManager;
                     if (listManager.Position != rowIndex)
                         listManager.Position = rowIndex;
@@ -6676,7 +6676,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public bool IsExpanded(int rowNumber) {
                 if (rowNumber < 0 || rowNumber > DataGridRowsLength)
-                    throw new ArgumentOutOfRangeException("rowNumber");
+                    throw new ArgumentOutOfRangeException(nameof(rowNumber));
                 DataGridRow[] localGridRows = DataGridRows;
     
                 // 
@@ -6969,7 +6969,7 @@ namespace System.Windows.Forms {
                     return;
                 DataGridRow[] localGridRows = DataGridRows;
                 if (rowNumber < 0 || rowNumber > DataGridRowsLength - (policy.AllowAdd ? 2:1)) {
-                    throw new ArgumentOutOfRangeException("rowNumber");
+                    throw new ArgumentOutOfRangeException(nameof(rowNumber));
                 }
                 EnsureBound();
     
@@ -8902,7 +8902,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private void SetRowExpansionState(int row, bool expanded) {
                 if (row < -1 || row > DataGridRowsLength - (policy.AllowAdd ? 2:1)) {
-                    throw new ArgumentOutOfRangeException("row");
+                    throw new ArgumentOutOfRangeException(nameof(row));
                 }
     
                 DataGridRow[] localGridRows = DataGridRows;

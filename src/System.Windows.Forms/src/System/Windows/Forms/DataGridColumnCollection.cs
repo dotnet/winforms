@@ -296,7 +296,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.AddRange"]/*' />
         public void AddRange(DataGridColumnStyle[] columns) {
             if (columns == null) {
-                throw new ArgumentNullException("columns");
+                throw new ArgumentNullException(nameof(columns));
             }
             for (int i = 0; i < columns.Length; i++) {
                 Add(columns[i]);            

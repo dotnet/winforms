@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
             get { return columns;}
             set {
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException("Columns", string.Format(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(Columns), string.Format(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 columns = value;
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
             set {
                 
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException("Rows", string.Format(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(Rows), string.Format(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 rows = value;
@@ -290,7 +290,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0 ) {
-                    throw new ArgumentOutOfRangeException("StartPage", string.Format(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(StartPage), string.Format(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 int oldValue = StartPage;
                 startPage = value;

@@ -296,7 +296,7 @@ namespace System.Windows.Forms {
             //valid values are 0x80000001 to 0x80000007
             if (!ClientUtils.IsEnumValid(navigator, (int)navigator, (int)HelpNavigator.Topic, (int)HelpNavigator.TopicId)){
                 //validate the HelpNavigator enum
-                throw new InvalidEnumArgumentException("navigator", (int)navigator, typeof(HelpNavigator));
+                throw new InvalidEnumArgumentException(nameof(navigator), (int)navigator, typeof(HelpNavigator));
             }
 
             navigators[ctl] = navigator;

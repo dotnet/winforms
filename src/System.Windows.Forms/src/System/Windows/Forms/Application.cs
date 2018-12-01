@@ -770,7 +770,7 @@ namespace System.Windows.Forms {
 				{
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)VisualStyleState.NoneEnabled, (int)VisualStyleState.ClientAndNonClientAreasEnabled)
                         && LocalAppContextSwitches.EnableVisualStyleValidation) {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(VisualStyleState));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStyleState));
                     }
 
                     SafeNativeMethods.SetThemeAppProperties((int)value);

@@ -305,7 +305,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("BulletIndent", string.Format(SR.InvalidArgument, "BulletIndent", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(BulletIndent), string.Format(SR.InvalidArgument, "BulletIndent", (value).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 this.bulletIndent = value;
@@ -704,7 +704,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.rightMargin != value) {
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("RightMargin", string.Format(SR.InvalidLowBoundArgumentEx, "RightMargin", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(RightMargin), string.Format(SR.InvalidLowBoundArgumentEx, "RightMargin", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     this.rightMargin = value;
 
                     if (value == 0) {
@@ -796,7 +796,7 @@ namespace System.Windows.Forms {
                     (int)RichTextBoxScrollBars.ForcedVertical,
                     (int)RichTextBoxScrollBars.ForcedBoth)) {
 
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(RichTextBoxScrollBars));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RichTextBoxScrollBars));
                 }
 
                 if (value != ScrollBars) {
@@ -852,7 +852,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(HorizontalAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
 
                 ForceHandleCreate();
@@ -964,7 +964,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value > 2000 || value < -2000)
-                    throw new ArgumentOutOfRangeException("SelectionCharOffset", string.Format(SR.InvalidBoundArgument, "SelectionCharOffset", value, -2000, 2000));
+                    throw new ArgumentOutOfRangeException(nameof(SelectionCharOffset), string.Format(SR.InvalidBoundArgument, "SelectionCharOffset", value, -2000, 2000));
 
                 ForceHandleCreate();
                 NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA();
@@ -1289,7 +1289,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException("SelectionRightIndent", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionRightIndent", value, 0));
+                    throw new ArgumentOutOfRangeException(nameof(SelectionRightIndent), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionRightIndent", value, 0));
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms {
             set {
                 // Verify the argument, and throw an error if is bad
                 if (value != null && value.Length > RichTextBoxConstants.MAX_TAB_STOPS)
-                    throw new ArgumentOutOfRangeException("SelectionTabs", SR.SelTabCountRange);
+                    throw new ArgumentOutOfRangeException(nameof(SelectionTabs), SR.SelTabCountRange);
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
@@ -1593,7 +1593,7 @@ namespace System.Windows.Forms {
                 if (zoomMultiplier == value) return;
 
                 if (value <= 0.015625f || value >= 64.0f)
-                    throw new ArgumentOutOfRangeException("ZoomFactor", string.Format(SR.InvalidExBoundArgument, "ZoomFactor", (value).ToString(CultureInfo.CurrentCulture), (0.015625f).ToString(CultureInfo.CurrentCulture), (64.0f).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ZoomFactor), string.Format(SR.InvalidExBoundArgument, "ZoomFactor", (value).ToString(CultureInfo.CurrentCulture), (0.015625f).ToString(CultureInfo.CurrentCulture), (64.0f).ToString(CultureInfo.CurrentCulture)));
                 SendZoomFactor(value);
             }
         }
@@ -1960,11 +1960,11 @@ namespace System.Windows.Forms {
             int textLen = TextLength;
 
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (start < 0 || start > textLen)
-                throw new ArgumentOutOfRangeException("start", string.Format(SR.InvalidBoundArgument, "start", start, 0, textLen));
+                throw new ArgumentOutOfRangeException(nameof(start), string.Format(SR.InvalidBoundArgument, "start", start, 0, textLen));
             if (end < -1)
-                throw new ArgumentOutOfRangeException("end", string.Format(SR.RichTextFindEndInvalid, end));
+                throw new ArgumentOutOfRangeException(nameof(end), string.Format(SR.RichTextFindEndInvalid, end));
 
             bool selectWord = true;
             NativeMethods.FINDTEXT ft = new NativeMethods.FINDTEXT();
@@ -2098,11 +2098,11 @@ namespace System.Windows.Forms {
             int textLength = TextLength;
 
             if (characterSet == null)
-                throw new ArgumentNullException("characterSet");
+                throw new ArgumentNullException(nameof(characterSet));
             if (start < 0 || start > textLength)
-                throw new ArgumentOutOfRangeException("start", string.Format(SR.InvalidBoundArgument, "start", start, 0, textLength));
+                throw new ArgumentOutOfRangeException(nameof(start), string.Format(SR.InvalidBoundArgument, "start", start, 0, textLength));
             if (end < start && end != -1)
-                throw new ArgumentOutOfRangeException("end", string.Format(SR.InvalidLowBoundArgumentEx, "end", end, "start"));
+                throw new ArgumentOutOfRangeException(nameof(end), string.Format(SR.InvalidLowBoundArgumentEx, "end", end, "start"));
 
             // Don't do anything if we get nothing to look for
             if (characterSet.Length == 0)
@@ -2409,7 +2409,7 @@ namespace System.Windows.Forms {
         public void LoadFile(string path, RichTextBoxStreamType fileType) {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText)){
-                throw new InvalidEnumArgumentException("fileType", (int)fileType, typeof(RichTextBoxStreamType));
+                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
         
             Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -2429,7 +2429,7 @@ namespace System.Windows.Forms {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
             {
-                throw new InvalidEnumArgumentException("fileType", (int)fileType, typeof(RichTextBoxStreamType));
+                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
         
             int flags;
@@ -2760,7 +2760,7 @@ namespace System.Windows.Forms {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
             {
-                throw new InvalidEnumArgumentException("fileType", (int)fileType, typeof(RichTextBoxStreamType));
+                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
             
             Stream file = File.Create(path);
@@ -2795,7 +2795,7 @@ namespace System.Windows.Forms {
                     flags = RichTextBoxConstants.SF_TEXTIZED;
                     break;
                 default:
-                    throw new InvalidEnumArgumentException("fileType", (int)fileType, typeof(RichTextBoxStreamType));
+                    throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
 
             StreamOut(data, flags, true);

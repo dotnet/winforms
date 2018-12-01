@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
             set {
                 if (value < 0) {
                     // throw if less than 0.
-                    throw new ArgumentOutOfRangeException("DropDownButtonWidth", string.Format(SR.InvalidLowBoundArgumentEx, "DropDownButtonWidth", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));                
+                    throw new ArgumentOutOfRangeException(nameof(DropDownButtonWidth), string.Format(SR.InvalidLowBoundArgumentEx, "DropDownButtonWidth", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));                
                 }
             
                 if (dropDownButtonWidth != value) {

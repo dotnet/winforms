@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
             this.ToolStripPanelRow = parent;
             this._wrappedToolStrip = control as ToolStrip;
             if (control == null) {
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
             }
             else if (_wrappedToolStrip == null) {
                throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);

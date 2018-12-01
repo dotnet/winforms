@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoCompleteMode.None, (int)AutoCompleteMode.SuggestAppend)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoCompleteMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteMode));
                 }
                 bool resetAutoComplete = false;
                 if (autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None) {
@@ -186,7 +186,7 @@ namespace System.Windows.Forms {
                                              (int)AutoCompleteSource.HistoryList,
                                              (int)AutoCompleteSource.ListItems,
                                              (int)AutoCompleteSource.RecentlyUsedList)){   
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoCompleteSource));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteSource));
                 }
                 if (value == AutoCompleteSource.ListItems) {
                     throw new NotSupportedException(SR.TextBoxAutoCompleteSourceNoItems);
@@ -262,7 +262,7 @@ namespace System.Windows.Forms {
                     //verify that 'value' is a valid enum type...
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)CharacterCasing.Normal, (int)CharacterCasing.Lower)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(CharacterCasing));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CharacterCasing));
                     }
 
                     characterCasing = value;
@@ -423,7 +423,7 @@ namespace System.Windows.Forms {
                 if (scrollBars != value) {
                     //valid values are 0x0 to 0x3
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)ScrollBars.None, (int)ScrollBars.Both)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(ScrollBars));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ScrollBars));
                     }
 
                     scrollBars = value;
@@ -492,7 +492,7 @@ namespace System.Windows.Forms {
 
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(HorizontalAlignment));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                     }
 
                     textAlign = value;

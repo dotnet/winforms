@@ -912,7 +912,7 @@ namespace System.Windows.Forms {
 
         public void Join(ToolStrip toolStripToDrag, int row) {
             if (row < 0) {
-                throw new ArgumentOutOfRangeException("row", string.Format(SR.IndexOutOfRange, row.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.IndexOutOfRange, row.ToString(CultureInfo.CurrentCulture)));
             }
 
             Point location = Point.Empty;
@@ -944,7 +944,7 @@ namespace System.Windows.Forms {
         ]
         public void Join(ToolStrip toolStripToDrag, Point location) {
             if (toolStripToDrag == null) {
-                throw new ArgumentNullException("toolStripToDrag");
+                throw new ArgumentNullException(nameof(toolStripToDrag));
             }
             if (!state[stateBeginInit] && !state[stateInJoin]) {
                 try {
@@ -1347,7 +1347,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public int Add(ToolStripPanelRow value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 int retVal = InnerList.Add(value);
                 OnAdd(value, retVal);
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void AddRange(ToolStripPanelRow[] value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 ToolStripPanel currentOwner = this.owner;
@@ -1386,7 +1386,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void AddRange(ToolStripPanelRowCollection value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 ToolStripPanel currentOwner = this.owner;
@@ -1464,7 +1464,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Insert"]/*' />
             public void Insert(int index, ToolStripPanelRow value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 InnerList.Insert(index, value);

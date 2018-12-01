@@ -89,7 +89,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(HorizontalAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
                 if (alignment != value) {
                     alignment = value;
@@ -120,7 +120,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x1 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelAutoSize.None, (int)StatusBarPanelAutoSize.Contents)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(StatusBarPanelAutoSize));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelAutoSize));
                 }
                 if (this.autoSize != value) {
                     this.autoSize = value;
@@ -153,7 +153,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x1 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelBorderStyle.None, (int)StatusBarPanelBorderStyle.Sunken)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(StatusBarPanelBorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelBorderStyle));
                 }
                 if (this.borderStyle != value) {
                     this.borderStyle = value;
@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("MinWidth", string.Format(SR.InvalidLowBoundArgumentEx, "MinWidth", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(MinWidth), string.Format(SR.InvalidLowBoundArgumentEx, "MinWidth", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (value != this.minWidth) {
@@ -357,7 +357,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x1 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelStyle.Text, (int)StatusBarPanelStyle.OwnerDraw)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(StatusBarPanelStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelStyle));
                 }
                 if (this.style != value) {
                     this.style = value;
@@ -490,7 +490,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!initializing && value < this.minWidth)
-                    throw new ArgumentOutOfRangeException("Width", SR.WidthGreaterThanMinWidth);
+                    throw new ArgumentOutOfRangeException(nameof(Width), SR.WidthGreaterThanMinWidth);
 
                 this.width = value;
                 UpdateSize();

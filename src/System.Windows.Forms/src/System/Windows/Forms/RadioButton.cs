@@ -126,7 +126,7 @@ namespace System.Windows.Forms {
                 if (appearance != value) {
                     //valid values are 0x0 to 0x1
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)Appearance.Normal, (int)Appearance.Button)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(Appearance));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
                     }
 
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, this.ParentInternal, this, PropertyNames.Appearance)) {                                                         
@@ -182,7 +182,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
 
                 checkAlign = value;

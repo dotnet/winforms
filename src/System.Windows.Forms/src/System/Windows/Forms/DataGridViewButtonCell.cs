@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
                 {
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(FlatStyle)); 
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle)); 
                 }
                 if (value != this.FlatStyle)
                 {
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             if (this.DataGridView == null || rowIndex < 0 || this.OwningColumn == null)
@@ -265,7 +265,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             if (this.DataGridView == null ||
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
 
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             Size preferredSize;
@@ -657,7 +657,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             PaintPrivate(graphics, 

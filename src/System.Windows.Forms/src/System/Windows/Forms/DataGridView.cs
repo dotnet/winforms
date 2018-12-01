@@ -1111,7 +1111,7 @@ namespace System.Windows.Forms
                     case DataGridViewAutoSizeColumnsMode.Fill:
                         break;
                     default: 
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewAutoSizeColumnsMode)); 
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnsMode)); 
                  }
 
 
@@ -1194,7 +1194,7 @@ namespace System.Windows.Forms
                    case DataGridViewAutoSizeRowsMode.DisplayedCells:
                        break;
                    default: 
-                       throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewAutoSizeRowsMode)); 
+                       throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeRowsMode)); 
                 }
                 if ((value == DataGridViewAutoSizeRowsMode.AllHeaders || value == DataGridViewAutoSizeRowsMode.DisplayedHeaders) && 
                     !this.RowHeadersVisible)
@@ -1411,7 +1411,7 @@ namespace System.Windows.Forms
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle)); 
                 }
                 if (this.borderStyle != value) 
                 {
@@ -1580,7 +1580,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0xa
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewCellBorderStyle.Custom, (int)DataGridViewCellBorderStyle.SunkenHorizontal))
                 {
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewCellBorderStyle)); 
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewCellBorderStyle)); 
                 }
 
                 if (value != this.CellBorderStyle)
@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewClipboardCopyMode.Disable, (int)DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText))
                 {
-                   throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewClipboardCopyMode)); 
+                   throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewClipboardCopyMode)); 
                 }
                 this.clipboardCopyMode = value;
             }
@@ -1767,7 +1767,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("ColumnCount", string.Format(SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ColumnCount), string.Format(SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.DataSource != null)
                 {
@@ -1849,7 +1849,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewHeaderBorderStyle.Custom, (int)DataGridViewHeaderBorderStyle.None))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewHeaderBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewHeaderBorderStyle)); 
                 }
                 if (value != this.ColumnHeadersBorderStyle)
                 {
@@ -1991,11 +1991,11 @@ namespace System.Windows.Forms
             {
                 if (value < minimumColumnHeadersHeight)
                 {
-                    throw new ArgumentOutOfRangeException("ColumnHeadersHeight", string.Format(SR.InvalidLowBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (minimumColumnHeadersHeight).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ColumnHeadersHeight), string.Format(SR.InvalidLowBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (minimumColumnHeadersHeight).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (value > maxHeadersThickness)
                 {
-                    throw new ArgumentOutOfRangeException("ColumnHeadersHeight", string.Format(SR.InvalidHighBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ColumnHeadersHeight), string.Format(SR.InvalidHighBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
                 {
@@ -2053,7 +2053,7 @@ namespace System.Windows.Forms
                // Sequential enum.  Valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewColumnHeadersHeightSizeMode.EnableResizing, (int)DataGridViewColumnHeadersHeightSizeMode.AutoSize))
                 {
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewColumnHeadersHeightSizeMode)); 
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewColumnHeadersHeightSizeMode)); 
                 }
                 if (this.columnHeadersHeightSizeMode != value)
                 {
@@ -2711,7 +2711,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewEditMode.EditOnEnter, (int)DataGridViewEditMode.EditProgrammatically))
                 {
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewEditMode)); 
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewEditMode)); 
                 }               
                 if (this.editMode != value)
                 {
@@ -3081,7 +3081,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0 || value >= this.Columns.Count)
                 {
-                    throw new ArgumentOutOfRangeException("value");
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 }
                 if (!this.Columns[value].Visible)
                 {
@@ -3157,7 +3157,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0 || value >= this.Rows.Count)
                 {
-                    throw new ArgumentOutOfRangeException("value");
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 }
                 if ((this.Rows.GetRowState(value) & DataGridViewElementStates.Visible) == 0)
                 {
@@ -3492,7 +3492,7 @@ namespace System.Windows.Forms
                 // int widthNotVisible = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width;
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("HorizontalScrollingOffset", string.Format(SR.InvalidLowBoundArgumentEx, "HorizontalScrollingOffset", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(HorizontalScrollingOffset), string.Format(SR.InvalidLowBoundArgumentEx, "HorizontalScrollingOffset", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 // Intentionally ignoring the out of range situation. 
                 // else if (value > widthNotVisible && widthNotVisible > 0)
@@ -3502,7 +3502,7 @@ namespace System.Windows.Forms
                 else if (value > 0 && (this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width) <= 0)
                 {
                     // Intentionally ignoring the case where dev tries to set value while there is no horizontal scrolling possible.
-                    // throw new ArgumentOutOfRangeException("HorizontalScrollingOffset", string.Format(SR.DataGridView_PropertyMustBeZero));
+                    // throw new ArgumentOutOfRangeException(nameof(HorizontalScrollingOffset), string.Format(SR.DataGridView_PropertyMustBeZero));
                     Debug.Assert(this.horizontalOffset == 0);
                     return;
                 }
@@ -4035,14 +4035,14 @@ namespace System.Windows.Forms
                 {
                     if (value < 1)
                     {
-                        throw new ArgumentOutOfRangeException("RowCount", string.Format(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(RowCount), string.Format(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                     }
                 }
                 else
                 {
                     if (value < 0)
                     {
-                        throw new ArgumentOutOfRangeException("RowCount", string.Format(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(RowCount), string.Format(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                 }
                 if (this.DataSource != null)
@@ -4126,7 +4126,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewHeaderBorderStyle.Custom, (int)DataGridViewHeaderBorderStyle.None))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewHeaderBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewHeaderBorderStyle)); 
                 }
 
                 if (value != this.RowHeadersBorderStyle)
@@ -4293,11 +4293,11 @@ namespace System.Windows.Forms
             {
                 if (value < minimumRowHeadersWidth)
                 {
-                    throw new ArgumentOutOfRangeException("RowHeadersWidth", string.Format(SR.InvalidLowBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (minimumRowHeadersWidth).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(RowHeadersWidth), string.Format(SR.InvalidLowBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (minimumRowHeadersWidth).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (value > maxHeadersThickness)
                 {
-                    throw new ArgumentOutOfRangeException("RowHeadersWidth", string.Format(SR.InvalidHighBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(RowHeadersWidth), string.Format(SR.InvalidHighBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
                     this.RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.DisableResizing)
@@ -4383,7 +4383,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewRowHeadersWidthSizeMode.EnableResizing, (int)DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewRowHeadersWidthSizeMode)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewRowHeadersWidthSizeMode)); 
                 }
                 if (this.rowHeadersWidthSizeMode != value)
                 {
@@ -4556,7 +4556,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ScrollBars.None, (int)ScrollBars.Both))
                 {
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(ScrollBars)); 
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ScrollBars)); 
                 }
 
                 if (this.scrollBars != value)
@@ -4729,7 +4729,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewSelectionMode.CellSelect, (int)DataGridViewSelectionMode.ColumnHeaderSelect))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewSelectionMode)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewSelectionMode)); 
                 }
 
                 if (this.SelectionMode != value)

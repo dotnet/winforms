@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
                 if (style != value) {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)ProgressBarStyle.Blocks, (int)ProgressBarStyle.Marquee)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(ProgressBarStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ProgressBarStyle));
                     }
                     style = value;
                     if (IsHandleCreated)
@@ -389,7 +389,7 @@ namespace System.Windows.Forms {
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("Maximum", string.Format(SR.InvalidLowBoundArgumentEx, "Maximum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(Maximum), string.Format(SR.InvalidLowBoundArgumentEx, "Maximum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
 
                     if (minimum > value) minimum = value;
 
@@ -427,7 +427,7 @@ namespace System.Windows.Forms {
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("Minimum", string.Format(SR.InvalidLowBoundArgumentEx, "Minimum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(Minimum), string.Format(SR.InvalidLowBoundArgumentEx, "Minimum", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     if (maximum < value) maximum = value;
 
                     minimum = value;
@@ -622,7 +622,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if ((value < minimum) || (value > maximum))
-                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
+                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
                     this.value = value;
                     UpdatePos() ;
                 }

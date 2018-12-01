@@ -339,7 +339,7 @@ namespace System.Windows.Forms {
         
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
-                throw new ArgumentNullException("destinationType");
+                throw new ArgumentNullException(nameof(destinationType));
             }
         
             if (value is Padding) {
@@ -382,10 +382,10 @@ namespace System.Windows.Forms {
 
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues) {
             if (context == null) {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (propertyValues == null) {
-                throw new ArgumentNullException("propertyValues");
+                throw new ArgumentNullException(nameof(propertyValues));
             }
 
             Padding original = (Padding) context.PropertyDescriptor.GetValue(context.Instance);

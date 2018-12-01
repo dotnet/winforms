@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public ErrorProvider(IContainer container) : this() {
             if (container == null) {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
             container.Add(this);
@@ -151,7 +151,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ErrorBlinkStyle.BlinkIfDifferentError, (int)ErrorBlinkStyle.NeverBlink)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ErrorBlinkStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ErrorBlinkStyle));
                 }
 
                 // If the blinkRate == 0, then set blinkStyle = neverBlink
@@ -560,7 +560,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("BlinkRate", value, SR.BlinkRateMustBeZeroOrMore);
+                    throw new ArgumentOutOfRangeException(nameof(BlinkRate), value, SR.BlinkRateMustBeZeroOrMore);
                 }
                 blinkRate = value;
                 // If we set the blinkRate = 0 then set BlinkStyle = NeverBlink
@@ -604,7 +604,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 icon = value;
                 DisposeRegion();
                 ErrorWindow[] array = new ErrorWindow[windows.Values.Count];
@@ -740,7 +740,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private ControlItem EnsureControlItem(Control control) {
             if (control == null)
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
             ControlItem item = (ControlItem)items[control];
             if (item == null) {
                 item = new ControlItem(this, control, (IntPtr)(++itemIdCounter));
@@ -1459,7 +1459,7 @@ namespace System.Windows.Forms {
                         //valid values are 0x0 to 0x5
                         if (!ClientUtils.IsEnumValid(value, (int)value, (int)ErrorIconAlignment.TopLeft, (int)ErrorIconAlignment.BottomRight))
                         {
-                            throw new InvalidEnumArgumentException("value", (int)value, typeof(ErrorIconAlignment));
+                            throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ErrorIconAlignment));
                         }
                         iconAlignment = value;
                         UpdateWindow();

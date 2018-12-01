@@ -724,7 +724,7 @@ namespace System.Windows.Forms {
 
             public EnumChildren( StatusBar peer ) {
                 if (peer == null)
-                    throw new ArgumentNullException("peer");
+                    throw new ArgumentNullException(nameof(peer));
                 this.peer = peer;
             }
 
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms {
                 set {
 
                     if (value == null)
-                        throw new ArgumentNullException("StatusBarPanel");
+                        throw new ArgumentNullException(nameof(StatusBarPanel));
 
                     owner.layoutDirty = true;
 
@@ -1236,7 +1236,7 @@ namespace System.Windows.Forms {
                     int length = owner.panels.Count;
 
                     if (index < 0|| index >= length)
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                     StatusBarPanel oldPanel = (StatusBarPanel) owner.panels[index];
                     oldPanel.ParentInternal = null;
@@ -1382,7 +1382,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void AddRange(StatusBarPanel[] panels) {
                 if (panels == null) {
-                    throw new ArgumentNullException("panels");
+                    throw new ArgumentNullException(nameof(panels));
                 }
                 foreach(StatusBarPanel panel in panels) {
                     Add(panel);
@@ -1483,7 +1483,7 @@ namespace System.Windows.Forms {
 
                 //check for the value not to be null
                 if (value == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 //end check
 
 
@@ -1494,7 +1494,7 @@ namespace System.Windows.Forms {
                 int length = owner.panels.Count;
 
                 if (index < 0 || index > length)
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                 value.ParentInternal = owner;
 
                 switch (value.AutoSize) {
@@ -1554,7 +1554,7 @@ namespace System.Windows.Forms {
 
                 //check for the value not to be null
                 if (value == null)
-                    throw new ArgumentNullException("StatusBarPanel");
+                    throw new ArgumentNullException(nameof(StatusBarPanel));
                 //end check
 
                 if (value.Parent != owner) {
@@ -1581,7 +1581,7 @@ namespace System.Windows.Forms {
             public virtual void RemoveAt(int index) {
                 int length = Count;
                 if (index < 0 || index >= length)
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                 // clear any tooltip
                 //

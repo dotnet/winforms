@@ -166,7 +166,7 @@ namespace System.Windows.Forms
                 // leaving in Enum.IsDefined because this Enum is likely to grow and we dont own it.
                 if (!Enum.IsDefined(typeof(System.Environment.SpecialFolder), value)) 
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(System.Environment.SpecialFolder));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(System.Environment.SpecialFolder));
                 }
                 rootFolder = value;
             }

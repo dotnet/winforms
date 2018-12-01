@@ -356,7 +356,7 @@ namespace System.Windows.Forms
                 // column header cell
                 if (rowIndex != -1)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 state |= (this.OwningColumn.State & DataGridViewElementStates.Frozen);
                 if (this.OwningColumn.Resizable == DataGridViewTriState.True ||
@@ -378,7 +378,7 @@ namespace System.Windows.Forms
                 // top left header cell
                 if (rowIndex != -1)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 state |= DataGridViewElementStates.Frozen;
                 if (this.DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || this.DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing)
@@ -438,7 +438,7 @@ namespace System.Windows.Forms
                 // detached cell
                 if (rowIndex != -1)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 return new Size(-1, -1);
             }
@@ -447,7 +447,7 @@ namespace System.Windows.Forms
                 // must be a column header cell
                 if (rowIndex != -1)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 return new Size(this.OwningColumn.Thickness, this.DataGridView.ColumnHeadersHeight);
             }
@@ -456,7 +456,7 @@ namespace System.Windows.Forms
                 // must be a row header cell
                 if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 if (this.DataGridView.Rows.SharedRow(rowIndex) != this.OwningRow)
                 {
@@ -469,7 +469,7 @@ namespace System.Windows.Forms
                 // must be the top left header cell
                 if (rowIndex != -1)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 return new Size(this.DataGridView.RowHeadersWidth, this.DataGridView.ColumnHeadersHeight);
             }
@@ -518,7 +518,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             return this.Properties.GetObject(PropCellValue);
         }
@@ -633,7 +633,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             if (DataGridViewCell.PaintBorder(paintParts))

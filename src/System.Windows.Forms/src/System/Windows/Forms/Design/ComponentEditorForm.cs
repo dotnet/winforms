@@ -545,7 +545,7 @@ namespace System.Windows.Forms.Design {
                 this.isDirty = false;
 
                 if (form == null)
-                    throw new ArgumentNullException("form");
+                    throw new ArgumentNullException(nameof(form));
 
                 this.form = form;
 
