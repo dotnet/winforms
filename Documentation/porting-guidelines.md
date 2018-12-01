@@ -12,9 +12,9 @@ The migration process includes two steps: **preparing your project for porting**
 1. **Run [.NET Portability Analyzer][api-port]** first to determine if there are
    any APIs your application depends on that are missing in .NET Core. If there
    are, you have a few options.
-    * remove not supported APIs or replace them with those, that are included in
+    * Remove not supported APIs or replace them with those, that are included in
       .NET Core
-    * separate your code into different projects: the one that contains only
+    * Separate your code into different projects: the one that contains only
       .NET Core supported APIs and another with APIs not supported in .NET Core.
       Migrate only the first project.
 
