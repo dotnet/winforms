@@ -4,13 +4,12 @@ This doc coveres Winfors Forms **unit testing** guidelines.
 We are still working on a scalable solution for functional testing and will update this doc when we have one.
 
 ## Building tests
-* Tests are automatically built when running ```.\build``` since all test projects are referenced in System.Windows.Forms.sln at the repo root.
+Tests are automatically built when running ```.\build``` since all test projects are referenced in System.Windows.Forms.sln at the repo root.
 
 ## Running tests
 
 ### Testing from the command line
-* To run unit tests, add -test to your build command
-  * For example, ```.\build -test```
+To execute unit tests, run ```.\build -test```
 
 If all the tests are successful, you should see something like this:
 ```
@@ -23,7 +22,7 @@ Build succeeded.
 ```
 
 ### Troubleshooting command-line test errors
-* When testing from the command line, a failed test should look something like this:
+When testing from the command line, a failed test should look something like this:
 ```
 Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\netcoreapp3.0\System.Windows.Forms.Tests.dll [netcoreapp3.0|x64]
 XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults\Debug\System.Windows.Forms.Tests_netcoreapp3.0_x64.html [netcoreapp3.0|x64] [E:\src\repos\github\winforms\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj]
@@ -31,10 +30,10 @@ XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults
 
 Build FAILED.
 ```
-* To see the actual test(s) that failed, along with their error message(s), open the .html file that is displayed in the error message.
+To see the actual test(s) that failed, along with their error message(s), open the .html file that is displayed in the error message.
 
 ### Testing from Visual Studio
-* To test from Visual Studio, open System.Windows.Forms.sln in Visual Studio and test how you normally would (using the test explorer, for example)
+To test from Visual Studio, open System.Windows.Forms.sln in Visual Studio and test how you normally would (using the test explorer, for example)
 
 ### Troubleshooting Visual Studio test errors
 * When testing from Visual Studio, test errors show up as normal in the test explorer.

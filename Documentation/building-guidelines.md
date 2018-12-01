@@ -1,10 +1,10 @@
 # Windows Forms Building Guidelines
 
 ## Building from the command line
-* To build the source, run ```.\build``` from the repo root.
-  * This will build the System.Windows.Forms.sln using the default config (Debug|Any CPU)
-* To specify the config, add -configuration followed by the config
-  * For example, ```.\build -configuration Release```
+To build the source, run ```.\build``` from the repo root.
+* This will build the System.Windows.Forms.sln using the default config (Debug|Any CPU)
+To specify the config, add -configuration followed by the config
+* For example, ```.\build -configuration Release```
 
 If your build is successful, you should see something like this:
 ```
@@ -26,5 +26,4 @@ Note that VS behaves slightly differently than the command line. **Therefore, we
   * The file format is an MSBuild Binary Log. Install the [MSBuild Structured Log Viewer](http://msbuildlog.com/) to read them.
 
 ## Creating a package
-* The winforms package is intended for Microsoft internal consumption only. 
-* However, if you want to create the package locally, just run ```.\build -pack```
+The winforms package is intended for Microsoft internal consumption only. However, if you want to create the package locally, just run ```.\build -pack```
