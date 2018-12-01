@@ -1,10 +1,10 @@
 # Windows Forms Building Guidelines
 
 ## Building from the command line
-To build the source, run ```.\build``` from the repo root.
-* This will build the System.Windows.Forms.sln using the default config (Debug|Any CPU)
-To specify the config, add -configuration followed by the config
-* For example, ```.\build -configuration Release```
+* To build the source, run ```.\build``` from the repo root.
+  * This will build the System.Windows.Forms.sln using the default config (Debug|Any CPU)
+* To specify the config, add -configuration followed by the config
+  * For example, ```.\build -configuration Release```
 
 If your build is successful, you should see something like this:
 ```

@@ -56,22 +56,22 @@ Tests are built and executed by file name convention
 
 ### Test best pactices ###
 Naming
-1. Test files names should match the class they are testing
+* Test files names should match the class they are testing
   * For example, tests for the Button class should be in Button.cs
-2. Test class names should match the class they are testing, followed by "Tests"
+* Test class names should match the class they are testing, followed by "Tests"
   * For example, tests for the Button class should in the ButtonTests class
-3. Test names should start with the class they are testing
+* Test names should start with the class they are testing
   * For example, all tests for the button class should start with "Button"
-4. Test names should end with a description of what the test does
+* Test names should end with a description of what the test does
   * For example, Button_AutoSizeModeGetSet
   * This is very useful when viewing test results, and when browsing in the test explorer
 
 Strategy
-1. Avoid duplicating tests just for different inputs
+* Avoid duplicating tests just for different inputs
   * Use ```[Theory]``` for this, followed by either ```[InlineData]``` or ```[MemberData]```. See existing tests for examples on how to use these attributes
   * The exception to this is if the code behavior is fundamentally different based on the inputs. For example, if a method throws an ArgumentException for invalid inputs, that should be a separate test.
-2. One test (or test data) per code path please
+* One test (or test data) per code path please
   * The most common exception to this is when testing a property, most people test get/set together
-3. Whenever possible, mock up dependencies to run tests in isolation
+* Whenever possible, mock up dependencies to run tests in isolation
   * For example, if your method accepts an abstraction, use Moq to mock it up
   * Search for Mock in the existing tests for examples, and see [Moq](https://github.com/Moq/moq4/wiki/Quickstart) for details on how to use Moq.
