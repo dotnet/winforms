@@ -399,7 +399,7 @@ namespace System.Windows.Forms
         {
             if (audioBytes.IsEmpty)
             {
-                throw new ArgumentException(nameof(audioBytes));
+                throw new ArgumentNullException("audioBytes");
             }
 
             var stream = new MemoryStream(audioBytes.Length);
