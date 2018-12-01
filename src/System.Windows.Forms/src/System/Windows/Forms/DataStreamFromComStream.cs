@@ -87,6 +87,16 @@ namespace System.Windows.Forms {
             return bytesRead;
         }
 
+        public unsafe override int Read(Span<byte> buffer) {
+            int bytesRead = 0;
+            if (!buffer.IsEmpty) {
+                fixed (byte* ch = &buffer[0]) {
+                    bytesRead = _Read(ch, buffer.Length); 
+                }
+            }
+            return bytesRead;
+        }
+
         public override void SetLength(long value) {
             comStream.SetSize(value);
         }
@@ -107,6 +117,28 @@ namespace System.Windows.Forms {
                 }
             }
             if (bytesWritten < count) {
+                throw new IOException(SR.DataStreamWrite);
+            }
+        }
+
+        public unsafe void Write(Span<byte> buffer)
+        {
+            int bytesWritten = 0;
+            if (!buffer.IsEmpty)
+            {
+                try
+                {
+                    fixed (byte* b = &buffer[0])
+                    {
+                        bytesWritten = _Write(b, buffer.Length);
+                    }
+                }
+                catch
+                {
+                }
+            }
+            if (bytesWritten < buffer.Length)
+            {
                 throw new IOException(SR.DataStreamWrite);
             }
         }
