@@ -1,98 +1,50 @@
 # Windows Forms
  [![Build status](https://dnceng.visualstudio.com/7ea9116e-9fac-403d-b258-b31fcf1bb293/_apis/build/status/199?branchName=master)](https://dnceng.visualstudio.com/internal/_build/latest?definitionId=199&branch=master)
 
-Windows Forms (WinForms) is a framework for building rich Windows desktop
-applications using .NET. Since it leverages a what-you-see-is-what-you-get
-(WYSIWYG) graphical editor with drag & drop, it's also one of the easiest and
-most productive ways to create desktop applications.
+Windows Forms (WinForms) is a framework for building Windows desktop
+applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms. 
 
-This repo contains the open-source components of WinForms that run on top of
-.NET Core. It is based on, but separate from, the version of WinForms that is
-part of the .NET Framework.
+WinForms applications typically have good performance because WinForms is a thin layer over Windows for much of the functionality. It also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enable drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
-We haven't finished porting WinForms to .NET Core yet, which means not all
-source code is on GitHub. You can expect us to complete this over the next
-months in 2019. The reason it takes some time is that we need to support & build all the
-pieces in an open source way, which requires decoupling the code base from our
-internal engineering system. At the same time, we don't want to block open
-sourcing until the port is complete. This is similar to how other .NET
-Core repos with existing code have been brought up, such as
-[CoreFx](https://github.com/dotnet/corefx) in 2014.
+## Getting started
 
-Even though .NET Core is a cross-platform technology, WinForms only runs on
-Windows.
-
-
-
-## What are the benefits of building WinForms apps with .NET Core?
-
-There are three primary reasons for considering .NET Core over the .NET
-Framework for building desktop apps with WinForms:
-
-1. **More deployment options**. You can deploy .NET Core side-by-side or even
-   produce self-contained apps that you can just XCOPY deploy.
-
-2. **Contains features that we can't provide in .NET Framework**. Due to the
-   fact that .NET Framework is deployed as an in-place update, the
-   compatibility requirements are extremely high, which prevents us from making fundamental
-   changes, such as performance improvements or making the UI more high-DPI
-   aware by default.
-
-3. **.NET Core goodness**. As an open source platform with side-by-side deployment, 
-   .NET Core is receiving a lot of innovations and contributions from Microsoft teams and 
-   from the open source community. As an application author, you also benefit from those 
-   when building WinForms apps with .NET Core.
-
-To learn more, read the blog post [Update on .NET Core 3.0 and .NET Framework 4.8][update-post].
-
-
-
-## Quick Links
-
+* [Getting started instructions](Documentation/getting-started.md)
 * [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download)
-* [Overall .NET Core roadmap & shipdates](https://github.com/dotnet/core/blob/master/roadmap.md)
+* [Contributing guide](Documentation/contributing-guide.md)
+* [Filing issues](Documentation/issue-guide.md)
 
+## Status
 
+We are in the process of doing four projects with Windows Forms:
 
-## Getting started with WinForms on .NET Core
+* Port Windows Forms to .NET Core.
+* Publish source to GitHub.
+* Publish (and in some cases write) tests to GitHub and enable automated testing infrastructure.
+* Enable the Visual Studio designer to work with Windows Forms running on .NET Core.
 
-Follow [getting started instructions](Documentation/getting-started.md).
+We first two tasks are well underway. Most of the source has been published to GitHub although we are still bringing the codebase up to functionality and performance parity with .NET Framework.
 
+We have published very few tests and have very limited coverage for PRs at this time as a result. We will add more tests in 2019, however, it will be a progressive process. We welcome test contributions to increase converage and help us validate PRs more easily.
 
+See [.NET Core roadmap](https://github.com/dotnet/core/blob/master/roadmap.md) for information on ship dates and priorities.
 
 ## How to Engage, Contribute and Provide Feedback
 
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
-* Use [daily builds](Documentation/getting-started.md#installation).
-* If you have a question or found a bug, [file a new issue](https://github.com/dotnet/winforms/issues/new).
-    * Issues with WinForms on .NET Framework should be filed on [VS developer community](https://developercommunity.visualstudio.com/spaces/61/index.html), or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support) if you have a contract.
+* This repo defines [contributing guidelines](Documentation/contributing-guide.md) and also follows the more general[.NET Core contributing guide](https://github.com/dotnet/coreclr/blob/master/Documentation/project-docs/contributing.md).
+* If you have a question or found a bug, [file an issue](https://github.com/dotnet/winforms/issues/new).
+* Use [daily builds](Documentation/getting-started.md#installation) if you want to contribute and stay up to date with the team.
 
-**IMPORTANT:** WinForms for .NET Core 3.0 release focuses on parity with WinForms for .NET Framework.
-We do not plan to take contributions or address bugs that are not unique to WinForms on .NET Core in 3.0 release.
-Bugs which are present on both WinForms platforms (for .NET Core and .NET Framework) will be prioritized for future releases of .NET Core (post-3.0).
+## Relationship to .NET Framework
 
-### Issue Guide
+This code base is a fork of the Windows Forms code in the .NET Framework. We intend to release .NET Core 3.0 with Windows Forms having parity with the .NET Framework version. Over time, the two implementations may diverge.
 
-Read our detailed [issue guide](Documentation/issue-guide.md) which covers:
+The [Update on .NET Core 3.0 and .NET Framework 4.8](https://blogs.msdn.microsoft.com/dotnet/2018/10/04/update-on-net-core-3-0-and-net-framework-4-8/) provides a good description of the forward-looking differences between .NET Core and .NET Framework.
 
-* How to file high-quality bug reports
-* How to use and understand Labels, Milestones, Assignees and Upvotes on issues
-* How to escalate (accidentally) neglected issue or PR
-* How we triage issues
+Issues with .NET Framework, including WinForms, should be filed on [VS developer community](https://developercommunity.visualstudio.com/spaces/61/index.html), or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support). They should not be filed on this repo.
 
-For general .NET Core 3 issues (not specific to WinForms), use the [.NET Core repo](https://github.com/dotnet/core/issues) or other repos if appropriate (e.g. [CoreFX](https://github.com/dotnet/corefx/issues), [WPF](https://github.com/dotnet/wpf/issues)).
-
-### Contributing Guide
-
-Read our detailed [contributing guide](Documentation/contributing-guide.md) which covers:
-
-* Which kind of PRs we accept/reject for .NET Core 3.0 release
-* Coding style
-* PR style preferences (squashing vs. merging, etc.)
-* Developer guide for building and testing locally
-
-### Community
+### Code of Conduct
 
 This project has adopted the code of conduct defined by the [Contributor Covenant](https://contributor-covenant.org/) 
 to clarify expected behavior in our community.
@@ -104,13 +56,9 @@ Security issues and bugs should be reported privately, via email, to the Microso
 
 Also see info about related [Microsoft .NET Core and ASP.NET Core Bug Bounty Program](https://www.microsoft.com/msrc/bounty-dot-net-core).
 
-
-
 ## License
 
 .NET Core (including WinForms repo) is licensed under the [MIT license](LICENSE.TXT).
-
-
 
 ## .NET Foundation
 
@@ -120,5 +68,3 @@ There are many .NET related projects on GitHub.
 
 - [.NET home repo](https://github.com/Microsoft/dotnet) - links to 100s of .NET
   projects, from Microsoft and the community.
-
-[update-post]: https://blogs.msdn.microsoft.com/dotnet/2018/10/04/update-on-net-core-3-0-and-net-framework-4-8/
