@@ -22,9 +22,11 @@ We are in the process of doing four projects with Windows Forms:
 * Publish (and in some cases write) tests to GitHub and enable automated testing infrastructure.
 * Enable the Visual Studio designer to work with Windows Forms running on .NET Core.
 
-We first two tasks are well underway. Most of the source has been published to GitHub although we are still bringing the codebase up to functionality and performance parity with .NET Framework.
+We first two tasks are well underway. Most of the source has been published to GitHub although we are still bringing the codebase up to functionality and performance parity with .NET Framework. 
 
 We have published very few tests and have very limited coverage for PRs at this time as a result. We will add more tests in 2019, however, it will be a progressive process. We welcome test contributions to increase converage and help us validate PRs more easily.
+
+The Visual Studio WinForms designer is not yet available. In short, we need to move to an out-of-proc model (relative to Visual Studio) with the designer. This work will be part of Visual Studio 2019.
 
 See [.NET Core roadmap](https://github.com/dotnet/core/blob/master/roadmap.md) for information on ship dates and priorities.
 
