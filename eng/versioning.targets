@@ -1,0 +1,35 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <GenerateAssemblyInfo Condition="'$(GenerateAssemblyInfo)'==''">true</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GenerateAssemblyInfo)'=='true'">
+    <AssemblyInfoFile Condition="'$(MSBuildProjectExtension)' == '.csproj'">$(IntermediateOutputPath)_AssemblyInfo.cs</AssemblyInfoFile>
+  </PropertyGroup>
+
+  <PropertyGroup>        
+    <Description Condition="'$(Description)' == ''">$(AssemblyName)</Description>
+  </PropertyGroup>
+
+  <!-- Note: ReferenceAssemblies.targets still uses @(AssemblyInfoLines) as well. So if you remove this, those need to migrate too. -->
+  <Target Name="_WriteNonStringAssemblyInfoAttributes"
+          AfterTargets="CoreGenerateAssemblyInfo"
+          Inputs="$(MSBuildProjectFile)"
+          Outputs="$(AssemblyInfoFile)">
+
+    <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+      <AssemblyInfoLines Condition="'$(CLSCompliant)'=='true'" Include="[assembly:System.CLSCompliant(true)]" />
+      <AssemblyInfoLines Condition="'$(CLSCompliant)'=='false'" Include="[assembly:System.CLSCompliant(false)]" />
+    </ItemGroup>
+
+    <WriteLinesToFile File="$(AssemblyInfoFile)"
+                      Lines="@(AssemblyInfoLines)"
+                      Condition="'@(AssemblyInfoLines)' != ''"
+                      Overwrite="true" />
+
+    <ItemGroup Condition="'@(AssemblyInfoLines)' != ''">
+      <Compile Include="$(AssemblyInfoFile)" />
+      <FileWrites Include="$(AssemblyInfoFile)" />
+    </ItemGroup>
+  </Target>
+</Project>
