@@ -6,23 +6,21 @@ of .NET Core.  Although .NET Core is cross-platform, WinForms relies heavily on
 Windows-specific platform pieces and for now will remain Windows only.
 
 At present, our team's primary focus is making additional components of WinForms
-available as open source in this repo, and adding the ability to run tests
+available as open source in this repo, ensuring functional parity with the WinForms as it currently exists .NET Framework, and adding the ability to run tests
 publicly so we can accept PRs from the open source community. Here are our
 short-term and long-term goals.
 
 ## Short-Term
 
-* Finish porting all components to open source
-* Add more functional tests for CI/CD
-* Add unit tests across all components
+* Port existing functional tests and infrastructure to this repo
 * Add Application property for DPI Awareness setting
 
-## Longer-Term
+## Long-Term
 
-* Support for next generation of Per Monitor Awareness (PMA) for all controls
+* Add WinForms Designer support for .NET Core 3 projects in Visual Studio
 * Fix existing PMA bugs
 * Add a new “clean" way of calculating location/size information in PMA mode.
-* Make new projects to be per monitor aware
+* Make new projects be per monitor aware
 * Add Edge browser control
 * Add Data Visualization controls
 * Improve accessibility support for some missing UIA interfaces
@@ -36,9 +34,9 @@ roadmap](https://github.com/dotnet/core/blob/master/roadmap.md).
 | Milestone | Release Date |
 |---|---|
 |Initial launch of WinForms on .NET Core repository |Dec 4, 2018|
-|Designer support in Visual Studio|middle 2019|
-|Finish porting WinForms components to open source|Early 2019|
-|First version of open source WinForms|.NET Core v1|
+|Functional parity with .NET Framework WinForms |Q1 2019|
+|First version of open source WinForms|.NET Core GA|
+|Designer support in Visual Studio|Update to VS 2019|
 
 ## Feedback
 
@@ -57,7 +55,7 @@ dotnet/winforms](https://github.com/dotnet/winforms/issues/) repo.
   repos](https://github.com/dotnet/core/blob/master/Documentation/core-repos.md)
   suitable for the topic you'd like to discuss.
 
-Some of the feedback we find most valuable is feedback on:
+Some of the feedback we find most valuable pertains to:
 
 * Existing features that are missing some capability or otherwise don't work
   well enough.
