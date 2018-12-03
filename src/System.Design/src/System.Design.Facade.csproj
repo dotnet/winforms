@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>System.Design</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms.Design.Editors\ref\System.Windows.Forms.Design.Editors.Ref.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms.Design\ref\System.Windows.Forms.Design.Ref.csproj" />
+  </ItemGroup>
+  
+</Project>

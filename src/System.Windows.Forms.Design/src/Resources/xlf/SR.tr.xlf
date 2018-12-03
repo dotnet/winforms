@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="tr" original="../SR.resx">
+    <body>
+      <trans-unit id="DesignerOptions_CodeGenDisplay">
+        <source>Optimized Code Generation</source>
+        <target state="new">Optimized Code Generation</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_CodeGenSettings">
+        <source>Code Generation Settings</source>
+        <target state="new">Code Generation Settings</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_EnableInSituEditingCat">
+        <source>InSitu Editing</source>
+        <target state="new">InSitu Editing</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_EnableInSituEditingDesc">
+        <source>Controls whether InSitu editing is enabled.</source>
+        <target state="new">Controls whether InSitu editing is enabled.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_EnableInSituEditingDisplay">
+        <source>Enable InSitu Editing</source>
+        <target state="new">Enable InSitu Editing</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_GridSizeDesc">
+        <source>Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</source>
+        <target state="new">Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_GridSizeDisplayName">
+        <source>Default Grid Cell Size</source>
+        <target state="new">Default Grid Cell Size</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_LayoutSettings">
+        <source>Layout Settings</source>
+        <target state="new">Layout Settings</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
+        <source>Controls whether designer smart tag windows should be shown by default.</source>
+        <target state="new">Controls whether designer smart tag windows should be shown by default.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
+        <source>Automatically Open Smart Tags</source>
+        <target state="new">Automatically Open Smart Tags</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_ObjectBoundSmartTagSettings">
+        <source>Object Bound Smart Tag Settings</source>
+        <target state="new">Object Bound Smart Tag Settings</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_OptimizedCodeGen">
+        <source>Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</source>
+        <target state="new">Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_ShowGridDesc">
+        <source>Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</source>
+        <target state="new">Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_ShowGridDisplayName">
+        <source>Show Grid</source>
+        <target state="new">Show Grid</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_SnapToGridDesc">
+        <source>Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</source>
+        <target state="new">Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_SnapToGridDisplayName">
+        <source>Snap to Grid</source>
+        <target state="new">Snap to Grid</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_UseSmartTags">
+        <source>Controls whether designers should show smart tag popup windows.</source>
+        <target state="new">Controls whether designers should show smart tag popup windows.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerOptions_UseSnapLines">
+        <source>Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</source>
+        <target state="new">Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropSetDataError">
+        <source>This IDataObject doesn't support SetData.</source>
+        <target state="new">This IDataObject doesn't support SetData.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="NotImplementedByDesign">
+        <source>This method/object is not implemented by design.</source>
+        <target state="new">This method/object is not implemented by design.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PlatformNotSupported_WinformsDesigner">
+        <source>Winforms Designer is not supported on this platform.</source>
+        <target state="new">Winforms Designer is not supported on this platform.</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

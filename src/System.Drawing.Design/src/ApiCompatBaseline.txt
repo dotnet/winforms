@@ -1,0 +1,8 @@
+Compat issues with assembly System.Drawing.Design:
+TypesMustExist : Type 'System.Drawing.Design.ContentAlignmentEditor' does not exist in the implementation but it does exist in the contract.
+TypesMustExist : Type 'System.Drawing.Design.FontNameEditor' does not exist in the implementation but it does exist in the contract.
+TypesMustExist : Type 'System.Drawing.Design.IconEditor' does not exist in the implementation but it does exist in the contract.
+TypesMustExist : Type 'System.Drawing.Design.ToolboxItemContainer' does not exist in the implementation but it does exist in the contract.
+TypesMustExist : Type 'System.Drawing.Design.ToolboxItemCreator' does not exist in the implementation but it does exist in the contract.
+TypesMustExist : Type 'System.Drawing.Design.ToolboxService' does not exist in the implementation but it does exist in the contract.
+Total Issues: 6
