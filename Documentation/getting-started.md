@@ -31,8 +31,8 @@ Check out the .NET Core 3.0 WinForms [samples](https://github.com/dotnet/samples
 for HelloWorld examples and more advanced scenarios.
 
 ## How to build
-See [building guidelines](building-guidelines.md)
+See [Building Windows Forms](building.md)
 
 ## How to test
-See [testing guidelines](testing-guidelines.md).
+See [Testing Windows Forms](testing.md).
 
