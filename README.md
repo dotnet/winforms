@@ -5,6 +5,8 @@ Windows Forms (WinForms) is a UI framework for building Windows desktop applicat
 
 WinForms applications typically have good performance because WinForms is a thin layer over Windows for much of the functionality. It also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enable drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
+> Note: The visual designer is not yet available and will be part of Visual Studio 2019.
+
 This repo contains WinForms for .NET Core. It does not contain the .NET Framework variant of WinForms.
 
 [WPF](https://github.com/dotnet/wpf) is another UI framework for building Windows desktop applications that is supported on .NET Core. WPF and WinForms applications only run on Windows. They are part of the `Microsoft.NET.Sdk.WindowsDesktop` SDK.
@@ -26,7 +28,7 @@ We are in the process of doing four projects with Windows Forms:
 
 We first two tasks are well underway. Most of the source has been published to GitHub although we are still bringing the codebase up to functional and performance parity with .NET Framework. 
 
-We have published very few tests and have very limited coverage for PRs at this time as a result. We will add more tests in 2019, however, it will be a progressive process. We welcome test contributions to increase converage and help us validate PRs more easily.
+We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be a progressive process. We welcome test contributions to increase converage and help us validate PRs more easily. 
 
 The Visual Studio WinForms designer is not yet available. In short, we need to move to an out-of-proc model (relative to Visual Studio) with the designer. This work will be part of Visual Studio 2019.
 
@@ -50,9 +52,7 @@ Issues with .NET Framework, including WinForms, should be filed on [VS developer
 
 ## Code of Conduct
 
-This project has adopted the code of conduct defined by the [Contributor Covenant](https://contributor-covenant.org/) 
-to clarify expected behavior in our community.
-For more information, see the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
+This project uses the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct) to define expected conduct in our community. Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting a project maintainer at conduct@dotnetfoundation.org.
 
 ## Reporting security issues and security bugs
 
