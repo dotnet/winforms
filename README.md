@@ -25,10 +25,10 @@ This repo contains WinForms for .NET Core. It does not contain the .NET Framewor
 
 We are in the process of doing four projects with Windows Forms:
 
-* Port Windows Forms to .NET Core.
-* Publish source to GitHub.
-* Publish (and in some cases write) tests to GitHub and enable automated testing infrastructure.
-* Enable the Visual Studio WinForms designer to work with WinForms running on .NET Core.
+1. Port Windows Forms to .NET Core.
+2. Publish source to GitHub.
+3. Publish (and in some cases write) tests to GitHub and enable automated testing infrastructure.
+4. Enable the Visual Studio WinForms designer to work with WinForms running on .NET Core.
 
 The first two tasks are well underway. Most of the source has been published to GitHub although we are still bringing the codebase up to functional and performance parity with .NET Framework. 
 
@@ -36,7 +36,7 @@ We have published very few tests and have very limited coverage for PRs at this 
 
 The Visual Studio WinForms designer is not yet available and will be part of a Visual Studio 2019 update. In short, we need to move to an out-of-proc model (relative to Visual Studio) for the designer.
 
-## How to Engage, Contribute and Provide Feedback
+## How to Engage, Contribute, and Provide Feedback
 
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
