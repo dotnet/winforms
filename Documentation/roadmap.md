@@ -61,7 +61,6 @@ Some of the feedback we find most valuable pertains to:
   well enough.
 * Missing features that should be added to the product.
 * Design choices for a feature that is currently in-progress.
-* Which WinForms assemblies we should prioritize making available as open source
   as quickly as possible.
 
 If you'd like to contribute to WinForms, please take a look at our [Contributing
