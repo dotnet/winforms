@@ -23,7 +23,7 @@ jobs:
 - template: /eng/ci.yml
   parameters:
     # TODO: Remove the Build.DefinitionName check once the github repo goes public
-    ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(contains(variables['Build.DefinitionName'], 'github'))) }}:
+    ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
       # agent pool can't be read from a user-defined variable (Azure DevOps limitation)
       agentPool: dotnet-internal-temp
       # runAsPublic is used in expressions, which can't read from user-defined variables
