@@ -13,8 +13,9 @@ This repo contains WinForms for .NET Core. It does not contain the .NET Framewor
 
 ## Getting started
 
-* [Getting started instructions](Documentation/getting-started.md)
 * [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download)
+* [Getting started instructions](Documentation/getting-started.md)
+* [Porting guide](Documentation/porting-guide.md)
 * [Contributing guide](Documentation/contributing-guide.md)
 
 ## Status
@@ -42,23 +43,19 @@ Some of the best ways to contribute are to try things out, file bugs, join in de
 * If you have a question or have found a bug, [file an issue](https://github.com/dotnet/winforms/issues/new).
 * Use [daily builds](Documentation/getting-started.md#installation) if you want to contribute and stay up to date with the team.
 
+Security issues and bugs should be reported privately via email to the Microsoft Security Response Center (MSRC) <secure@microsoft.com>. You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message. Further information, including the MSRC PGP key, can be found in the [Security TechCenter](https://www.microsoft.com/msrc/faqs-report-an-issue). Also see info about related [Microsoft .NET Core and ASP.NET Core Bug Bounty Program](https://www.microsoft.com/msrc/bounty-dot-net-core).
+
+Issues with .NET Framework, including WinForms, should be filed on [VS developer community](https://developercommunity.visualstudio.com/spaces/61/index.html), or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support). They should not be filed on this repo.
+
 ## Relationship to .NET Framework
 
 This code base is a fork of the Windows Forms code in the .NET Framework. We intend to release .NET Core 3.0 with Windows Forms having parity with the .NET Framework version. Over time, the two implementations may diverge.
 
 The [Update on .NET Core 3.0 and .NET Framework 4.8](https://blogs.msdn.microsoft.com/dotnet/2018/10/04/update-on-net-core-3-0-and-net-framework-4-8/) provides a good description of the forward-looking differences between .NET Core and .NET Framework.
 
-Issues with .NET Framework, including WinForms, should be filed on [VS developer community](https://developercommunity.visualstudio.com/spaces/61/index.html), or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support). They should not be filed on this repo.
-
 ## Code of Conduct
 
 This project uses the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct) to define expected conduct in our community. Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting a project maintainer at conduct@dotnetfoundation.org.
-
-## Reporting security issues and security bugs
-
-Security issues and bugs should be reported privately, via email, to the Microsoft Security Response Center (MSRC) <secure@microsoft.com>. You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message. Further information, including the MSRC PGP key, can be found in the [Security TechCenter](https://www.microsoft.com/msrc/faqs-report-an-issue).
-
-Also see info about related [Microsoft .NET Core and ASP.NET Core Bug Bounty Program](https://www.microsoft.com/msrc/bounty-dot-net-core).
 
 ## License
 
