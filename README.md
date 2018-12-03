@@ -7,6 +7,8 @@ WinForms applications typically have good performance because WinForms is a thin
 
 > Note: The visual designer is not yet available and will be part of a Visual Studio 2019 update.
 
+Consult the [Windows Forms Roadmap](roadmap.md) to learn about project priorities, status and ship dates. 
+
 This repo contains WinForms for .NET Core. It does not contain the .NET Framework variant of WinForms.
 
 [WPF](https://github.com/dotnet/wpf) is another UI framework for building Windows desktop applications that is supported on .NET Core. WPF and WinForms applications only run on Windows. They are part of the `Microsoft.NET.Sdk.WindowsDesktop` SDK.
@@ -32,8 +34,6 @@ We first two tasks are well underway. Most of the source has been published to G
 We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be a progressive process. We welcome test contributions to increase coverage and help us validate PRs more easily. 
 
 The Visual Studio WinForms designer is not yet available. In short, we need to move to an out-of-proc model (relative to Visual Studio) with the designer. This work will be part of Visual Studio 2019.
-
-See [.NET Core roadmap](https://github.com/dotnet/core/blob/master/roadmap.md) for information on ship dates and priorities.
 
 ## How to Engage, Contribute and Provide Feedback
 
