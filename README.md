@@ -28,7 +28,7 @@ We are in the process of doing four projects with Windows Forms:
 
 We first two tasks are well underway. Most of the source has been published to GitHub although we are still bringing the codebase up to functional and performance parity with .NET Framework. 
 
-We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be a progressive process. We welcome test contributions to increase converage and help us validate PRs more easily. 
+We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be a progressive process. We welcome test contributions to increase coverage and help us validate PRs more easily. 
 
 The Visual Studio WinForms designer is not yet available. In short, we need to move to an out-of-proc model (relative to Visual Studio) with the designer. This work will be part of Visual Studio 2019.
 
