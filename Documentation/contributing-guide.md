@@ -30,7 +30,7 @@ In order to contribute you will need to (1) clone this repository locally, (2) e
 
 ### 1. Clone this repository
 
-* Fork your own copy of the [WinForms repository]( https://github.com/dotnet/winforms) with the _Fork_ button on the Repo’s web page to your account. 
+* Fork your own copy of the [WinForms repository]( https://github.com/dotnet/winforms) with the _Fork_ button on the repository’s web page to your account. 
 * Clone locally with the _Clone_ button or using **`git clone https://github.com/[YourGitHubAccount]/winforms`**.
 
 ### 2. Machine Setup
