@@ -32,5 +32,5 @@ To work in this repository, begin by observing the following:
     * Clone locally with the _Clone_ button or using **`git clone https://github.com/[YourGitHubAccount]/winforms`**.
 2. [Machine Setup](https://github.com/dotnet/winforms/blob/master/Documentation/machine-setup.md) instructions
 3. [Building](https://github.com/dotnet/winforms/blob/master/Documentation/building.md) instructions to build from source
-4. [Debugging](https://github.com/dotnet/winforms/blob/master/Documentation/debugging.md) recomendations and techniques
+4. [Debugging](https://github.com/dotnet/winforms/blob/master/Documentation/debugging.md) recommendations and techniques
 5. [Testing](https://github.com/dotnet/winforms/blob/master/Documentation/testing.md) instructions, guidance, and rules
