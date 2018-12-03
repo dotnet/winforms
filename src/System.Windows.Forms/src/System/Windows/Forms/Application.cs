@@ -1038,10 +1038,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void EnableVisualStyles() {
             string assemblyLoc = null;
-
-            // 
-
-
+            
             FileIOPermission fiop = new FileIOPermission(PermissionState.None);
             fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
             fiop.Assert();
@@ -1066,6 +1063,8 @@ namespace System.Windows.Forms {
             //Note that if the following call fails, we don't throw an exception.
             //Theming scope won't work, thats all.
             useVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyFileName, nativeResourceID);
+
+            Debug.Assert(useVisualStyles, "Enable Visual Styles failed");
         }
 
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.EndModalMessageLoop"]/*' />
