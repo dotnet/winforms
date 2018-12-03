@@ -856,6 +856,7 @@ namespace System.Windows.Forms {
             }
         }
 
+        private string placeholderText;
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.NullText"]/*' />
         /// <devdoc>
@@ -867,17 +868,17 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxNullTextDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
-        public string NullText
+        public string PlaceholderText
         {
             get
             {
-                return nullText;
+                return placeholderText;
             }
             set
             {
-                if (nullText != value)
+                if (placeholderText != value)
                 {
-                    nullText = value;
+                    placeholderText = value;
                     this.Invalidate();
                 }
             }
@@ -889,7 +890,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// Draws the NullText in the client area of the TextBox using the default font and color.
         /// </summary>
-        private void DrawNullText(Graphics graphics)
+        private void DrawPlaceholderText(Graphics graphics)
         {
             TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top |
                                     TextFormatFlags.EndEllipsis;
@@ -934,7 +935,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            TextRenderer.DrawText(graphics, nullText, this.Font, rectangle, SystemColors.GrayText, this.BackColor, flags);
+            TextRenderer.DrawText(graphics, this.PlaceholderText, this.Font, rectangle, SystemColors.GrayText, this.BackColor, flags);
         }
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.WndProc"]/*' />
@@ -977,10 +978,23 @@ namespace System.Windows.Forms {
             {
                 using (Graphics g = this.CreateGraphics())
                 {
-                    DrawNullText(g);
+                    DrawPlaceholderText(g);
                 }
             }
         }
-        
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            if (string.IsNullOrEmpty(this.Text))
+            {
+                AccessibleObject accessibleObject = base.CreateAccessibilityInstance();
+                accessibleObject.Value = this.PlaceholderText;
+                return accessibleObject;
+            }
+            else
+            {
+                return base.CreateAccessibilityInstance();
+            }
+        }
     }
 }
