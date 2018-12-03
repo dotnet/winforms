@@ -27,9 +27,7 @@ Before you start, please review [WinForms contributing doc](TODO) and **[.NET Co
 * [Coding guidelines](https://github.com/dotnet/corefx/tree/master/Documentation#coding-guidelines)
 
 To work in this repository, begin by observing the following:
-1. Clone this repository
-    * Fork your own copy of the [WinForms repository]( https://github.com/dotnet/winforms) with the _Fork_ button on the repository’s web page to your account. 
-    * Clone locally with the _Clone_ button or using **`git clone https://github.com/[YourGitHubAccount]/winforms`**.
+1. [Fork](https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#fork-the-repository) and [Clone](https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#clone-the-repository) this WinForms repository
 2. [Machine Setup](https://github.com/dotnet/winforms/blob/master/Documentation/machine-setup.md) instructions
 3. [Building](https://github.com/dotnet/winforms/blob/master/Documentation/building.md) instructions to build from source
 4. [Debugging](https://github.com/dotnet/winforms/blob/master/Documentation/debugging.md) recommendations and techniques
