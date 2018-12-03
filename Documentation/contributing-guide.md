@@ -35,16 +35,16 @@ In order to contribute you will need to (1) clone this repository locally, (2) e
 
 ### 2. Machine Setup
 
-Please see our [Machine Setup](https://github.com/dotnet/corefx/blob/master/Documentation/machine-setup.md) document for machine setup instructions.
+Please see our [Machine Setup](https://github.com/dotnet/winforms/blob/master/Documentation/machine-setup.md) document for machine setup instructions.
 
 ### 3. Building
 
-Once you have clones and set up your machine, please follow our [Building](https://github.com/dotnet/corefx/blob/master/Documentation/building.md) instructions to build from source.
+Once you have clones and set up your machine, please follow our [Building](https://github.com/dotnet/winforms/blob/master/Documentation/building.md) instructions to build from source.
 
 ### 4. Debugging
 
-For instructions on Debugging, please see our [Debugging](https://github.com/dotnet/corefx/blob/master/Documentation/debugging.md) document.
+For instructions on Debugging, please see our [Debugging](https://github.com/dotnet/winforms/blob/master/Documentation/debugging.md) document.
 
 ### 5. Testing
 
-For instructions on how test your changes before submitting a pull request, please see our [Testing](https://github.com/dotnet/corefx/blob/master/Documentation/testing.md) document. It contains directions on how to run our tests as well as guidelines for writing new ones.
+For instructions on how test your changes before submitting a pull request, please see our [Testing](https://github.com/dotnet/winforms/blob/master/Documentation/testing.md) document. It contains directions on how to run our tests as well as guidelines for writing new ones.
