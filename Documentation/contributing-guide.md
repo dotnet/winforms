@@ -26,25 +26,11 @@ Before you start, please review [WinForms contributing doc](TODO) and **[.NET Co
 * Pick issue: [up-for-grabs](https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs) or [easy](https://github.com/dotnet/winforms/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3Aeasy)
 * [Coding guidelines](https://github.com/dotnet/corefx/tree/master/Documentation#coding-guidelines)
 
-In order to contribute you will need to (1) clone this repository locally, (2) ensure your machine is setup to build and run, and (3) learn how to build this project. Those instructions as well as instructions for how to (4) debug and (5) write / run tests can be found below.
-
-### 1. Clone this repository
-
-* Fork your own copy of the [WinForms repository]( https://github.com/dotnet/winforms) with the _Fork_ button on the repository’s web page to your account. 
-* Clone locally with the _Clone_ button or using **`git clone https://github.com/[YourGitHubAccount]/winforms`**.
-
-### 2. Machine Setup
-
-Please see our [Machine Setup](https://github.com/dotnet/winforms/blob/master/Documentation/machine-setup.md) document for machine setup instructions.
-
-### 3. Building
-
-Once you have clones and set up your machine, please follow our [Building](https://github.com/dotnet/winforms/blob/master/Documentation/building.md) instructions to build from source.
-
-### 4. Debugging
-
-For instructions on Debugging, please see our [Debugging](https://github.com/dotnet/winforms/blob/master/Documentation/debugging.md) document.
-
-### 5. Testing
-
-For instructions on how test your changes before submitting a pull request, please see our [Testing](https://github.com/dotnet/winforms/blob/master/Documentation/testing.md) document. It contains directions on how to run our tests as well as guidelines for writing new ones.
+To work in this repository, begin by observing the following:
+1. Clone this repository
+    * Fork your own copy of the [WinForms repository]( https://github.com/dotnet/winforms) with the _Fork_ button on the repository’s web page to your account. 
+    * Clone locally with the _Clone_ button or using **`git clone https://github.com/[YourGitHubAccount]/winforms`**.
+2. [Machine Setup](https://github.com/dotnet/winforms/blob/master/Documentation/machine-setup.md) instructions
+3. [Building](https://github.com/dotnet/winforms/blob/master/Documentation/building.md) instructions to build from source
+4. [Debugging](https://github.com/dotnet/winforms/blob/master/Documentation/debugging.md) recomendations and techniques
+5. [Testing](https://github.com/dotnet/winforms/blob/master/Documentation/testing.md) instructions, guidance, and rules
