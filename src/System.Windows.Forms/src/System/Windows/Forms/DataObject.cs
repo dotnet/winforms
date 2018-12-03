@@ -419,7 +419,7 @@ namespace System.Windows.Forms
         {
             if (audioBytes == null)
             {
-                throw new ArgumentNullException("audioBytes");
+                throw new ArgumentNullException(nameof(audioBytes));
             }
             SetAudio(new MemoryStream(audioBytes));
         }
@@ -432,7 +432,7 @@ namespace System.Windows.Forms
         {
             if (audioBytes.IsEmpty)
             {
-                throw new ArgumentNullException("audioBytes");
+                throw new ArgumentException(nameof(audioBytes));
             }
 
             var stream = new MemoryStream(audioBytes.Length);
