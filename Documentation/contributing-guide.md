@@ -22,16 +22,29 @@ Such PRs may be closed and reconsidered later after we ship .NET Core 3.0.
 
 Before you start, please review [WinForms contributing doc](TODO) and **[.NET Core contributing doc](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md)** for coding style and PR gotchas.
 
-* Per-machine setup: [Machine setup](#machine-setup) and [Fork and clone repo](https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository)
-* [Build and run tests](#build-and-run-tests)
 * [git commands and workflow](https://github.com/dotnet/corefx/wiki/git-reference) - for newbies on GitHub
 * Pick issue: [up-for-grabs](https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs) or [easy](https://github.com/dotnet/winforms/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3Aeasy)
 * [Coding guidelines](https://github.com/dotnet/corefx/tree/master/Documentation#coding-guidelines)
 
-### Machine Setup
+In order to contribute you will need to (1) clone this repository locally, (2) ensure your machine is setup to build and run, and (3) learn how to build this project. Those instructions as well as instructions for how to (4) debug and (5) write / run tests can be found below.
 
-TODO
+### 1. Clone this repository
 
-### Build and run tests
+* Fork your own copy of the [WinForms repository]( https://github.com/dotnet/winforms) with the _Fork_ button on the repository’s web page to your account. 
+* Clone locally with the _Clone_ button or using **`git clone https://github.com/[YourGitHubAccount]/winforms`**.
 
-TODO
+### 2. Machine Setup
+
+Please see our [Machine Setup](https://github.com/dotnet/corefx/blob/master/Documentation/machine-setup.md) document for machine setup instructions.
+
+### 3. Building
+
+Once you have clones and set up your machine, please follow our [Building](https://github.com/dotnet/corefx/blob/master/Documentation/building.md) instructions to build from source.
+
+### 4. Debugging
+
+For instructions on Debugging, please see our [Debugging](https://github.com/dotnet/corefx/blob/master/Documentation/debugging.md) document.
+
+### 5. Testing
+
+For instructions on how test your changes before submitting a pull request, please see our [Testing](https://github.com/dotnet/corefx/blob/master/Documentation/testing.md) document. It contains directions on how to run our tests as well as guidelines for writing new ones.
