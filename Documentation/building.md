@@ -18,8 +18,9 @@ Build succeeded.
 Note that this does **not** build using your machine-wide installed version of the dotnet sdk. It builds using the dotnet sdk specified in the global.json in the repo root.
 
 ## Building from Visual Studio
-To build from Visual Studio, open System.Windows.Forms.sln in Visual Studio and build how you normally would.
-Note that VS behaves slightly differently than the command line. **Therefore, we highly recommend building from the command line.**
+* To build from Visual Studio, open System.Windows.Forms.sln in Visual Studio and build how you normally would.
+* Visual Studio behaves slightly differently than the command line. It uses the machine-wide installed SDK instead of the one specified in the global.json.
+  * Please make sure you have the [latest .Net Core Daily Build](https://github.com/dotnet/core/blob/master/daily-builds.md) installed.
 
 ## Build outputs
 * All build outputs are generated under the artifacts folder.
