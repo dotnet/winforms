@@ -1,7 +1,7 @@
 # Windows Forms Unit Testing #
 
 ## Building tests
-Tests are automatically built when running `.\build` since all test projects are referenced in System.Windows.Forms.sln at the repo root.
+Tests are automatically built when running `.\build` since all test projects are referenced in `System.Windows.Forms.sln` at the repo root.
 
 ## Running tests
 
@@ -29,7 +29,7 @@ Build FAILED.
 ```
 
 * The test summary can be found under artifacts\log
-* To see the actual test(s) that failed, along with their error message(s), open the .html file that is displayed in the error message (which is always under artifacts\TestResults)
+* To see the actual test(s) that failed, along with their error message(s), open the .html file that is displayed in the error message (which is always under `artifacts\TestResults`)
 
 ### Testing from Visual Studio
 To test from Visual Studio, open System.Windows.Forms.sln in Visual Studio and test how you normally would (using the Test Explorer, for example)
@@ -53,7 +53,7 @@ Tests are built and executed by file name convention
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
   * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
 
-### Test best pactices ###
+### Test best pactices
 Naming
 * Test files names should match the class they are testing
   * For example, tests for the Button class should be in Button.cs
