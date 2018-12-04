@@ -18,7 +18,7 @@ This repo contains WinForms for .NET Core. It does not contain the .NET Framewor
 * [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download)
 * [Getting started instructions](Documentation/getting-started.md)
 * [Contributing guide](Documentation/contributing.md)
-* [Porting guide](Documentation/porting-guide.md)
+* [Porting guide](Documentation/porting-guidelines.md)
 
 ## Status
 
