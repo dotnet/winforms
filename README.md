@@ -7,7 +7,7 @@ WinForms also provides one of the most productive ways to create desktop applica
 
 > Note: The visual designer is not yet available and will be part of a Visual Studio 2019 update.
 
-Consult the [Windows Forms Roadmap](roadmap.md) to learn about project priorities, status and ship dates.
+See the [Windows Forms Roadmap](roadmap.md) to learn about project priorities, status and ship dates.
 
 This repo contains WinForms for .NET Core. It does not contain the .NET Framework variant of WinForms.
 
@@ -64,7 +64,7 @@ This project uses the [.NET Foundation Code of Conduct](https://dotnetfoundation
 
 ## License
 
-.NET Core (including WinForms repo) is licensed under the [MIT license](LICENSE.TXT).
+.NET Core (including the WinForms repo) is licensed under the [MIT license](LICENSE.TXT).
 
 ## .NET Foundation
 
