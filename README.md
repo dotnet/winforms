@@ -3,23 +3,22 @@
 
 Windows Forms (WinForms) is a UI framework for building Windows desktop applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms.
 
-WinForms applications typically have good performance because WinForms is a thin layer over Windows for much of the functionality. It also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enable drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
+WinForms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enable drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
-> Note: The visual designer is not yet available and will be part of a Visual Studio 2019 update. You are recommended to use Visual Studio 2019 Preview 1 to use Windows Forms on .NET Core.
+> Note: The visual designer is not yet available and will be part of a Visual Studio 2019 update.
 
-Consult the [Windows Forms Roadmap](roadmap.md) to learn about project priorities, status and ship dates. 
+Consult the [Windows Forms Roadmap](roadmap.md) to learn about project priorities, status and ship dates.
 
 This repo contains WinForms for .NET Core. It does not contain the .NET Framework variant of WinForms.
 
-[WPF](https://github.com/dotnet/wpf) is another UI framework for building Windows desktop applications that is supported on .NET Core. WPF and WinForms applications only run on Windows. They are part of the `Microsoft.NET.Sdk.WindowsDesktop` SDK.
+[WPF](https://github.com/dotnet/wpf) is another UI framework for building Windows desktop applications that is supported on .NET Core. WPF and WinForms applications only run on Windows. They are part of the `Microsoft.NET.Sdk.WindowsDesktop` SDK. You are recommended to use Visual Studio 2019 Preview 1 to use WPF and WinForms with .NET Core.
 
 ## Getting started
 
 * [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download)
 * [Getting started instructions](Documentation/getting-started.md)
-* [Issue guide](Documentation/issue-guide.md)
+* [Contributing guide](Documentation/contributing.md)
 * [Porting guide](Documentation/porting-guide.md)
-* [Contributing guide](Documentation/contributing-guide.md)
 
 ## Status
 
@@ -30,9 +29,9 @@ We are in the process of doing four projects with Windows Forms:
 3. Publish (and in some cases write) tests to GitHub and enable automated testing infrastructure.
 4. Enable the Visual Studio WinForms designer to work with WinForms running on .NET Core.
 
-The first two tasks are well underway. Most of the source has been published to GitHub although we are still bringing the codebase up to functional and performance parity with .NET Framework. 
+The first two tasks are well underway. Most of the source has been published to GitHub although we are still bringing the codebase up to functional and performance parity with .NET Framework.
 
-We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be an incremental process. We welcome test contributions to increase coverage and help us validate PRs more easily. 
+We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be an incremental process. We welcome test contributions to increase coverage and help us validate PRs more easily.
 
 The Visual Studio WinForms designer is not yet available and will be part of a Visual Studio 2019 update. In short, we need to move to an out-of-proc model (relative to Visual Studio) for the designer.
 
@@ -40,7 +39,8 @@ The Visual Studio WinForms designer is not yet available and will be part of a V
 
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
-* This repo defines [contributing guidelines](Documentation/contributing-guide.md) and also follows the more general [.NET Core contributing guide](https://github.com/dotnet/coreclr/blob/master/Documentation/project-docs/contributing.md).
+* The [contributing guidelines](Documentation/contributing.md) and the more general [.NET Core contributing guide](https://github.com/dotnet/coreclr/blob/master/Documentation/project-docs/contributing.md) define contributing rules.
+* The [Developer Guide](developer-guide.md) defines the setup and workflow for working on this repo.
 * If you have a question or have found a bug, [file an issue](https://github.com/dotnet/winforms/issues/new).
 * Use [daily builds](Documentation/getting-started.md#installation) if you want to contribute and stay up to date with the team.
 
@@ -70,7 +70,4 @@ This project uses the [.NET Foundation Code of Conduct](https://dotnetfoundation
 
 .NET Core WinForms is a [.NET Foundation](https://www.dotnetfoundation.org/projects) project.
 
-There are many .NET related projects on GitHub.
-
-- [.NET home repo](https://github.com/Microsoft/dotnet) - links to 100s of .NET
-  projects, from Microsoft and the community.
+See the [.NET home repo](https://github.com/Microsoft/dotnet) to find other .NET-related projects.
