@@ -420,7 +420,7 @@ namespace System.Windows.Forms {
         public static Cursor Hand {
             get {
                 if (hand == null)
-                    hand        = new Cursor("hand.cur", 0);
+                    hand        = new Cursor(NativeMethods.IDC_HAND, 0);
                 return hand;
             }
         }
