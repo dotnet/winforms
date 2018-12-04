@@ -6963,6 +6963,8 @@ namespace System.Windows.Forms
     public sealed partial class FolderBrowserDialog : System.Windows.Forms.CommonDialog
     {
         public FolderBrowserDialog() { }
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool AutoUpgradeEnabled { get { throw null; } set { } }
         [System.ComponentModel.BrowsableAttribute(true)]
         [System.ComponentModel.DefaultValueAttribute("")]
         [System.ComponentModel.LocalizableAttribute(true)]
@@ -6979,6 +6981,10 @@ namespace System.Windows.Forms
         [System.ComponentModel.DefaultValueAttribute(true)]
         [System.ComponentModel.LocalizableAttribute(false)]
         public bool ShowNewFolderButton { get { throw null; } set { } }
+        [System.ComponentModel.BrowsableAttribute(true)]
+        [System.ComponentModel.DefaultValueAttribute(false)]
+        [System.ComponentModel.LocalizableAttribute(true)]
+        public bool UseDescriptionForTitle { get{ throw null; } set { } }
         [System.ComponentModel.BrowsableAttribute(false)]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public new event System.EventHandler HelpRequest { add { } remove { } }
