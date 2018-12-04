@@ -136,6 +136,13 @@ _TeamCity*
 *.coverage
 *.coveragexml
 
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
 # NCrunch
 _NCrunch_*
 .*crunch*.local.xml
