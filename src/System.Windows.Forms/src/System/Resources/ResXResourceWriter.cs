@@ -297,7 +297,7 @@ namespace System.Resources {
             if (xmlTextWriter == null) {
                 // 
 
-                bool writeHeaderHeaderRequired = false;
+                bool writeHeaderRequired = false;
 
                 if (textWriter != null) {
                     textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
