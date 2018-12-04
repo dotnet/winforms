@@ -9,6 +9,8 @@ We need the most help with the following types of changes:
 
 Please [file an issue](https://github.com/dotnet/winforms/issues) for any larger change you would like to propose.
 
+See [Developer Guide](developer-guide.md) to learn how to develop changes for this repo.
+
 This project follows the general [.NET Core Contribution Guidelines](https://github.com/dotnet/coreclr/blob/master/Documentation/project-docs/contributing.md). The contribution bar from the general contribution guidelines is copied below.
 
 ## Contribution "Bar"
