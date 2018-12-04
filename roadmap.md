@@ -15,12 +15,24 @@ As we complete those goals, we'll update our roadmap to include additional featu
 For general information regarding .NET Core plans, see [.NET Core
 roadmap](https://github.com/dotnet/core/blob/master/roadmap.md).
 
-## Shorter-Term
+## Timelines
+
+| Milestone | Date |
+|---|---|
+|Initial launch of WinForms on .NET Core repository |Dec 4, 2018|
+|Functional parity with .NET Framework WinForms |Q1 2019|
+|First version of WinForms on .NET Core |.NET Core 3.0 GA|
+|Designer support in Visual Studio|Update to VS 2019|
+
+If you'd like to contribute to WinForms, please take a look at our [Contributing
+Guide](Documentation/contributing-guide.md).
+
+## Shorter-Term Feature Backlog
 
 * Port existing functional tests and test infrastructure to this repo
 * Add Application property for DPI Awareness setting
 
-## Longer-Term
+## Longer-Term Feature Backlog
 
 * Add WinForms Designer support for .NET Core 3 projects in a Visual Studio 2019 update
 * Fix existing scaling bugs in Per Monitor DPI aware applications
@@ -30,15 +42,3 @@ roadmap](https://github.com/dotnet/core/blob/master/roadmap.md).
 * Add Data Visualization controls
 * Improve accessibility support for some missing UIA interfaces
 * Improve performance of WinForms runtime
-
-## Timelines
-
-| Milestone | Release Date |
-|---|---|
-|Initial launch of WinForms on .NET Core repository |Dec 4, 2018|
-|Functional parity with .NET Framework WinForms |Q1 2019|
-|First version of open source WinForms|.NET Core GA|
-|Designer support in Visual Studio|Update to VS 2019|
-
-If you'd like to contribute to WinForms, please take a look at our [Contributing
-Guide](Documentation/contributing-guide.md).
