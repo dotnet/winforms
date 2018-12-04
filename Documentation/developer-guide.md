@@ -23,9 +23,9 @@ We use the following workflow for building and testing features and fixes.
 
 You first need to [Fork](https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#fork-the-repository) and [Clone](https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#clone-the-repository) this WinForms repository. This is a one-time task.
 
-1. [Build](https://github.com/dotnet/winforms/blob/master/Documentation/building.md) the repo.
-2. [Debug](https://github.com/dotnet/winforms/blob/master/Documentation/debugging.md) the change, as needed.
-3. [Test](https://github.com/dotnet/winforms/blob/master/Documentation/testing.md) the change, to validate quality.
+1. [Build](building.md) the repo.
+2. [Debug](debugging.md) the change, as needed.
+3. [Test](testing.md) the change, to validate quality.
 
 ## More Information
 
