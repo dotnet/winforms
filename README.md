@@ -40,7 +40,7 @@ The Visual Studio WinForms designer is not yet available and will be part of a V
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
 * The [contributing guidelines](Documentation/contributing.md) and the more general [.NET Core contributing guide](https://github.com/dotnet/coreclr/blob/master/Documentation/project-docs/contributing.md) define contributing rules.
-* The [Developer Guide](https://github.com/dotnet/winforms/blob/master/Documentation/developer-guide.md) defines the setup and workflow for working on this repo.
+* The [Developer Guide](Documentation/developer-guide.md) defines the setup and workflow for working on this repo.
 * If you have a question or have found a bug, [file an issue](https://github.com/dotnet/winforms/issues/new).
 * Use [daily builds](Documentation/getting-started.md#installation) if you want to contribute and stay up to date with the team.
 
