@@ -12,11 +12,11 @@ If you do not want to modify your local SDK, you may with to perform technique 2
 
 copy the resulting assembly(-ies) from the base of the repository  
 
-```[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.0_ ```
+`[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.0_ `
 
 to your dotnet folder at:  
 
-```[Drive]:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\[Version]``` 
+`[Drive]:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\[Version]`
 
 where **[Drive]** is your OS drive (for example, C:) and and **path-to-repo** is the additional path to our repository from the base drive. **[Version]** is your DesktopUI version directory (for example, 3.0.0-alpha-27017-4). Note if you have Microsoft.DesktopUI.App instead of Microsoft.WindowsDesktop.App, this is the outdated version.
 
@@ -28,8 +28,7 @@ Add references to the binary(-ies) to your project ported to Core. For example, 
 
 ```xml
 <ItemGroup>
-    <Reference Include="[Drive]:[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.0\System.Windows.Forms.dll" />
-    
+    <Reference Include="[Drive]:[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.0\System.Windows.Forms.dll" />   
 </ItemGroup>
 ```
 
