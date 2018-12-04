@@ -66,8 +66,7 @@ using Microsoft.Win32;
 
            visualStyleRenderer.DrawBackground(g, bounds);
 
-           // I need this hack since GetBackgroundContentRectangle() returns same rectangle
-           // as bounds for this control!
+           // GetBackgroundContentRectangle() returns same rectangle as bounds for this control!
            Rectangle contentBounds = Rectangle.Inflate(bounds, -3, -3);
            if (focused) {
                ControlPaint.DrawFocusRectangle(g, contentBounds);
@@ -106,8 +105,7 @@ using Microsoft.Win32;
            InitializeRenderer(VisualStyleElement.Tab.TabItem.Normal, (int)state);
            visualStyleRenderer.DrawBackground(g, bounds);
 
-           // I need this hack since GetBackgroundContentRectangle() returns same rectangle
-           // as bounds for this control!
+           // GetBackgroundContentRectangle() returns same rectangle as bounds for this control!
            Rectangle contentBounds = Rectangle.Inflate(bounds, -3, -3);
            Color textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
            TextRenderer.DrawText(g, tabItemText, font, contentBounds, textColor, flags);
@@ -128,8 +126,7 @@ using Microsoft.Win32;
 
            visualStyleRenderer.DrawBackground(g, bounds);
 
-           // I need this hack since GetBackgroundContentRectangle() returns same rectangle
-           // as bounds for this control!
+           // GetBackgroundContentRectangle() returns same rectangle as bounds for this control!
            Rectangle contentBounds = Rectangle.Inflate(bounds, -3, -3);
            
            visualStyleRenderer.DrawImage(g, imageRectangle, image);
@@ -162,8 +159,7 @@ using Microsoft.Win32;
 
            visualStyleRenderer.DrawBackground(g, bounds);
 
-           // I need this hack since GetBackgroundContentRectangle() returns same rectangle
-           // as bounds for this control!
+           // GetBackgroundContentRectangle() returns same rectangle as bounds for this control!
            Rectangle contentBounds = Rectangle.Inflate(bounds, -3, -3);
            visualStyleRenderer.DrawImage(g, imageRectangle, image);
            Color textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);

@@ -297,11 +297,11 @@ namespace System.Resources {
             if (xmlTextWriter == null) {
                 // 
 
-                bool writeHeaderHack = false;
+                bool writeHeaderHeaderRequired = false;
 
                 if (textWriter != null) {
                     textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                    writeHeaderHack = true;
+                    writeHeaderHeaderRequired = true;
 
                     xmlTextWriter = new XmlTextWriter(textWriter);
                 }
@@ -315,7 +315,7 @@ namespace System.Resources {
                 xmlTextWriter.Formatting = Formatting.Indented;
                 xmlTextWriter.Indentation = 2;
 
-                if (!writeHeaderHack) {
+                if (!writeHeaderHeaderRequired) {
                     xmlTextWriter.WriteStartDocument(); // writes <?xml version="1.0" encoding="utf-8"?>
                 }
             }

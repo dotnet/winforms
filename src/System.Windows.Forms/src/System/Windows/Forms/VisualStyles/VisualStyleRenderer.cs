@@ -1032,7 +1032,9 @@ namespace System.Windows.Forms.VisualStyles {
                 // Let all threads know their cached handles are no longer valid; 
                 // cache refresh will happen at next handle access.
                 // Note that if the theme changes 2^sizeof(long) times before a thread uses 
-                // its handle, this whole version hack won't work, but I don't see that happening.
+                // its handle, this whole version check won't work, but I don't see that happening.
+
+                // this is not ideal.
                 globalCacheVersion++; 
             }
         }

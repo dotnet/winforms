@@ -799,8 +799,7 @@ namespace System.Windows.Forms {
                         throw new Win32Exception();
                     }
                     try {
-                        // Dont set the clipping region based on the WParam - windows seems to hack out the two pixels
-                        // intended for the non-client border.
+                        // Don't set the clipping region based on the WParam - windows seems to take out the two pixels intended for the non-client border.
                         
                         Color outerBorderColor = (MouseIsOver || Focused) ? ColorTable.TextBoxBorder : this.BackColor;
                         Color innerBorderColor = this.BackColor;

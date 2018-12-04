@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
                     int lastWin32Error = Marshal.GetLastWin32Error();
 
                     // This code has been here since the inception of the project, 
-                    // we can’t determine why we have to compare w/ 32 here.
+                    // we canï¿½t determine why we have to compare w/ 32 here.
                     // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space) (see Dev10 
                     if ((ulong)moduleHandle < (ulong)32) {
                         throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
@@ -3059,7 +3059,7 @@ namespace System.Windows.Forms {
 
         
                 // go get the text for the control
-                //Weird hack needed for 64-bit
+                // Needed for 64-bit
                 if (IntPtr.Size == 8) { 
                     NativeMethods.EDITSTREAM64 es64 = ConvertToEDITSTREAM64(es);
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_STREAMIN, flags, es64);
@@ -3155,8 +3155,8 @@ namespace System.Windows.Forms {
                 es.dwCookie = (IntPtr) cookieVal;
                 es.pfnCallback = new NativeMethods.EditStreamCallback(this.EditStreamProc);
 
-                //Get Text
-                //Weird hack needed for 64-bit
+                // Get Text
+                // Needed for 64-bit
                 if (IntPtr.Size == 8) { 
                     NativeMethods.EDITSTREAM64 es64 = ConvertToEDITSTREAM64(es);
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_STREAMOUT, flags, es64);

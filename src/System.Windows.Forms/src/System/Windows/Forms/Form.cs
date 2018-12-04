@@ -450,7 +450,7 @@ namespace System.Windows.Forms {
             get {
                 Form mdiChild = ActiveMdiChildInternal;
 
-                // Hack: We keep the active mdi child in the cached in the property store; when changing its value 
+                // We keep the active mdi child in the cached in the property store; when changing its value 
                 // (due to a change to one of the following properties/methods: Visible, Enabled, Active, Show/Hide, 
                 // Focus() or as the  result of WM_SETFOCUS/WM_ACTIVATE/WM_MDIACTIVATE) we temporarily set it to null 
                 // (to properly handle menu merging among other things) rendering the cache out-of-date; the problem 
@@ -5157,10 +5157,10 @@ namespace System.Windows.Forms {
         ///     scale window size non-lineary. If this message is not processed, the size is scaled linearly by Windows.
         ///     This message is sent to top level windows before WM_DPICHANGED.
         ///     If the application responds to this message, the resulting size will be the candidate rectangle 
-        ///     sent to WM_DPICHANGED. The WPARAM contains a DPI value.  The size needs to be computed if 
-        ///     the window were to switch to this DPI. LPARAM is unused and will be zero. 
+        ///     sent to WM_DPICHANGED. The WPARAM contains a DPI value.ï¿½ The size needs to be computed if 
+        ///     the window were to switch to this DPI.ï¿½LPARAM is unused and will be zero. 
         ///     The return value is a size, where the LOWORD is the desired width of the window and the HIWORD 
-        ///     is the desired height of the window.  A return value of zero indicates that the app does not 
+        ///     is the desired height of the window.ï¿½ A return value of zero indicates that the app does not 
         ///     want any special behavior and the candidate rectangle will be computed linearly.
         /// </devdoc>
         private void WmGetDpiScaledSize(ref Message m) {
