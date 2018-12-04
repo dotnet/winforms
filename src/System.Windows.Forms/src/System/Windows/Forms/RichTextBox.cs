@@ -393,12 +393,7 @@ namespace System.Windows.Forms {
                 }
 
                 CreateParams cp = base.CreateParams;
-                if (Marshal.SystemDefaultCharSize == 1) {
-                    cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITA : RichTextBoxConstants.WC_RICHEDITA_41;
-                }
-                else {
-                    cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITW : RichTextBoxConstants.WC_RICHEDITW_41;
-                }
+                cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITW : RichTextBoxConstants.WC_RICHEDITW_41;
 
                 if (Multiline) {
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_HORIZ) != 0 && !WordWrap) {
@@ -1224,16 +1219,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        ///     Specifies whether the control uses unicode to set/get text selection information (WM_GESEL/WM_SETSEL)
-        ///     in Win9x.
-        /// </devdoc>
-        internal override bool SelectionUsesDbcsOffsetsInWin9x {
-            get {
-                return false; // false for RichEdit, true for Edit.
-            }
-        }
-
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectedRtf"]/*' />
         /// <devdoc>
         ///     The currently selected text of a RichTextBox control, including
@@ -1498,22 +1483,15 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.TextLength"]/*' />
         [Browsable(false)]
         public override int TextLength {
-            get 
+            get
             {
-                NativeMethods.GETTEXTLENGTHEX gtl = new NativeMethods.GETTEXTLENGTHEX();
-
-                gtl.flags = RichTextBoxConstants.GTL_NUMCHARS;
-
-                if (Marshal.SystemDefaultCharSize == 1 /*ANSI*/)
+                NativeMethods.GETTEXTLENGTHEX gtl = new NativeMethods.GETTEXTLENGTHEX
                 {
-                    gtl.codepage = 0;  /* CP_ANSI */;
-                }
-                else
-                {
-                    gtl.codepage = 1200; /* CP_UNICODE */
-                }
+                    flags = RichTextBoxConstants.GTL_NUMCHARS,
+                    codepage = 1200 /* CP_UNICODE */
+                };
 
-                return unchecked( (int) (long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETTEXTLENGTHEX, gtl, 0 /*ignored*/)); 
+                return unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETTEXTLENGTHEX, gtl, 0 /*ignored*/));
             }
         }
 
@@ -2894,37 +2872,19 @@ namespace System.Windows.Forms {
             if (value.Strikeout) dwEffects |= RichTextBoxConstants.CFE_STRIKEOUT;
             if (value.Underline) dwEffects |= RichTextBoxConstants.CFE_UNDERLINE;
 
-            if (Marshal.SystemDefaultCharSize == 1)            
-            {
-                bytesFaceName = Encoding.Default.GetBytes(logfont.lfFaceName);
+            bytesFaceName = Encoding.Unicode.GetBytes(logfont.lfFaceName);
 
-                NativeMethods.CHARFORMATA cfA = new NativeMethods.CHARFORMATA();
-                for (int i=0; i<bytesFaceName.Length; i++) cfA.szFaceName[i] = bytesFaceName[i];
-                cfA.dwMask = dwMask;
-                cfA.dwEffects = dwEffects;
-                cfA.yHeight = (int) (value.SizeInPoints * 20);
-                cfA.bCharSet = logfont.lfCharSet;
-                cfA.bPitchAndFamily = logfont.lfPitchAndFamily;
+            NativeMethods.CHARFORMATW cfW = new NativeMethods.CHARFORMATW();
+            for (int i=0; i<bytesFaceName.Length; i++) cfW.szFaceName[i] = bytesFaceName[i];
+            cfW.dwMask = dwMask;
+            cfW.dwEffects = dwEffects;
+            cfW.yHeight = (int) (value.SizeInPoints * 20);
+            cfW.bCharSet = logfont.lfCharSet;
+            cfW.bPitchAndFamily = logfont.lfPitchAndFamily;
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfA);
-            }
-            else
-            {
-                bytesFaceName = Encoding.Unicode.GetBytes(logfont.lfFaceName);
-
-                NativeMethods.CHARFORMATW cfW = new NativeMethods.CHARFORMATW();
-                for (int i=0; i<bytesFaceName.Length; i++) cfW.szFaceName[i] = bytesFaceName[i];
-                cfW.dwMask = dwMask;
-                cfW.dwEffects = dwEffects;
-                cfW.yHeight = (int) (value.SizeInPoints * 20);
-                cfW.bCharSet = logfont.lfCharSet;
-                cfW.bPitchAndFamily = logfont.lfPitchAndFamily;
-
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfW);
-            }
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfW);
         }
 
-        
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.FontToLogFont"]/*' />
         /// <devdoc>
         /// This is just here as a minor perf improvement, so we don't have to call expensive RevertAssert.
@@ -3716,7 +3676,7 @@ namespace System.Windows.Forms {
                     // the WM_GETOBJECT+OBJID_QUERYCLASSNAMEIDX message. But RICHEDIT20 doesn't do that - so we must do it ourselves.
                     // Otherwise OLEACC will treat rich edit controls as custom controls, so the accessible Role and Value will be wrong.
                     if (unchecked((int)(long)m.LParam) == NativeMethods.OBJID_QUERYCLASSNAMEIDX) {
-                        m.Result = (IntPtr) ((Marshal.SystemDefaultCharSize == 1) ? (65536+29) : (65536+30));
+                        m.Result = (IntPtr)(65536+30);
                     }
                     break;
 

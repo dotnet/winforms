@@ -71,8 +71,6 @@ namespace System.Windows.Forms {
         public const int DefaultItemHeight = 13; // 13 == listbox's non-ownerdraw item height.  That's with Win2k and
         // the default font; on other platforms and with other fonts, it may be different.
 
-        private const int maxWin9xHeight = 32767; //Win9x doesn't deal with height > 32K
-
         private static readonly object EVENT_SELECTEDINDEXCHANGED = new object();
         private static readonly object EVENT_DRAWITEM             = new object();
         private static readonly object EVENT_MEASUREITEM          = new object();
@@ -83,8 +81,6 @@ namespace System.Windows.Forms {
         SelectedObjectCollection selectedItems;
         SelectedIndexCollection selectedIndices;
         ObjectCollection itemsCollection;
-
-        // 
 
         int itemHeight = DefaultItemHeight;
         int columnWidth;

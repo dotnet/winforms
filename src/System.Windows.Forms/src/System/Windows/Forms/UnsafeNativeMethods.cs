@@ -6514,10 +6514,6 @@ namespace System.Windows.Forms {
 
         public static CharBuffer CreateBuffer(int size)
         {
-            if (Marshal.SystemDefaultCharSize == 1)
-            {
-                return new AnsiCharBuffer(size);
-            }
             return new UnicodeCharBuffer(size);
         }
 
@@ -6525,52 +6521,6 @@ namespace System.Windows.Forms {
         public abstract string GetString();
         public abstract void PutCoTaskMem(IntPtr ptr);
         public abstract void PutString(string s);
-    }
-
-    public class AnsiCharBuffer : CharBuffer
-    {
-
-        internal byte[] buffer;
-        internal int offset;
-
-        public AnsiCharBuffer(int size)
-        {
-            buffer = new byte[size];
-        }
-
-        public override IntPtr AllocCoTaskMem()
-        {
-            IntPtr result = Marshal.AllocCoTaskMem(buffer.Length);
-            Marshal.Copy(buffer, 0, result, buffer.Length);
-            return result;
-        }
-
-        public override string GetString()
-        {
-            int i = offset;
-            while (i < buffer.Length && buffer[i] != 0)
-                i++;
-            string result = Encoding.Default.GetString(buffer, offset, i - offset);
-            if (i < buffer.Length)
-                i++;
-            offset = i;
-            return result;
-        }
-
-        public override void PutCoTaskMem(IntPtr ptr)
-        {
-            Marshal.Copy(ptr, buffer, 0, buffer.Length);
-            offset = 0;
-        }
-
-        public override void PutString(string s)
-        {
-            byte[] bytes = Encoding.Default.GetBytes(s);
-            int count = Math.Min(bytes.Length, buffer.Length - offset);
-            Array.Copy(bytes, 0, buffer, offset, count);
-            offset += count;
-            if (offset < buffer.Length) buffer[offset++] = 0;
-        }
     }
 
     public class UnicodeCharBuffer : CharBuffer
@@ -7591,8 +7541,6 @@ namespace System.Windows.Forms {
             public static bool SHGetPathFromIDListLongPath(IntPtr pidl, ref IntPtr pszPath)
             {
                 int noOfTimes = 1;
-                // This is how size was allocated in the calling method.
-                int bufferSize = NativeMethods.MAX_PATH * Marshal.SystemDefaultCharSize;
                 int length = NativeMethods.MAX_PATH;
                 bool result = false;
 
@@ -7610,12 +7558,12 @@ namespace System.Windows.Forms {
                     noOfTimes += 2; //520 chars capacity increase in each iteration.
                     length = noOfTimes * length >= NativeMethods.MAX_UNICODESTRING_LEN 
                         ? NativeMethods.MAX_UNICODESTRING_LEN : noOfTimes * length;
-                    pszPath = Marshal.ReAllocHGlobal(pszPath, (IntPtr)((length + 1) * Marshal.SystemDefaultCharSize));
+                    pszPath = Marshal.ReAllocHGlobal(pszPath, (IntPtr)((length + 1) * sizeof(char)));
                 }
 
                 return result;
             }
-            
+
             [DllImport(ExternDll.Shell32, CharSet=CharSet.Auto)]
             [ResourceExposure(ResourceScope.None)]
             public static extern IntPtr SHBrowseForFolder([In] BROWSEINFO lpbi);        

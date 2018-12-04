@@ -6054,14 +6054,8 @@ namespace System.Windows.Forms {
                                     text = text.Substring(0, dispInfo.item.cchTextMax - 1);
                                 }
 
-                                if (Marshal.SystemDefaultCharSize == 1) {
-                                    // ANSI. Use byte
-                                    byte[] buff = System.Text.Encoding.Default.GetBytes(text + "\0");
-                                    Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
-                                } else {
-                                    char[] buff = (text + "\0").ToCharArray();
-                                    Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
-                                }
+                                char[] buff = (text + "\0").ToCharArray();
+                                Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
                             }
 
                             if ((dispInfo.item.mask & NativeMethods.LVIF_IMAGE) != 0 && lvItem.ImageIndex != -1) {
@@ -6138,17 +6132,11 @@ namespace System.Windows.Forms {
                                 
                                 UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
-                                if (Marshal.SystemDefaultCharSize == 1) {
-                                    // ANSI. Use byte.
-                                    // we need to copy the null terminator character ourselves
-                                    byte[] byteBuf = System.Text.Encoding.Default.GetBytes(lvi.ToolTipText + "\0");
-                                    Marshal.Copy(byteBuf, 0, infoTip.lpszText, Math.Min(byteBuf.Length, infoTip.cchTextMax));
-                                } else {
-                                    // UNICODE. Use char.
-                                    // we need to copy the null terminator character ourselves
-                                    char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
-                                    Marshal.Copy(charBuf, 0, infoTip.lpszText, Math.Min(charBuf.Length, infoTip.cchTextMax));
-                                }
+                                // UNICODE. Use char.
+                                // we need to copy the null terminator character ourselves
+                                char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
+                                Marshal.Copy(charBuf, 0, infoTip.lpszText, Math.Min(charBuf.Length, infoTip.cchTextMax));
+
                                 Marshal.StructureToPtr(infoTip, (IntPtr) m.LParam, false);
                             }
                         }

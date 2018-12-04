@@ -1682,17 +1682,13 @@ namespace System.Windows.Forms {
                             return;
 
                         case NativeMethods.TTN_NEEDTEXTW:
-                            // On Win 98/IE 5,we still get W messages.  If we ignore them, it will send the A version.
-                            if (Marshal.SystemDefaultCharSize == 2) {
-                                // MSDN:
-                                // Setting the max width has the added benefit of enabling multiline
-                                // tool tips!
+                            // MSDN:
+                            // Setting the max width has the added benefit of enabling multiline
+                            // tool tips!
 
-                                WmNotifyNeedText(ref m);
-                                m.Result = (IntPtr)1;
-                                return;
-                            }
-                            break;
+                            WmNotifyNeedText(ref m);
+                            m.Result = (IntPtr)1;
+                            return;
                         case NativeMethods.TTN_SHOW:
                             // Prevent the tooltip from displaying in the upper left corner of the
                             // desktop when the control is nowhere near that location.

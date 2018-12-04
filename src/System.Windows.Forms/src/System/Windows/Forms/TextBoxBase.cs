@@ -1016,12 +1016,6 @@ namespace System.Windows.Forms {
                 // ditto for end
                 end = Math.Max( 0, end );
 
-                if( this.SelectionUsesDbcsOffsetsInWin9x && Marshal.SystemDefaultCharSize == 1 ) {
-                    // When processing EM_GETSEL, EDIT control returns byte offsets instead of character offsets, this 
-                    // makes a difference in unicode code pages like Japanese.  We need to adjust the offsets.
-                    ToUnicodeOffsets( WindowText, ref start, ref end );
-                }
-
                 length = end - start;
             }
 
@@ -1243,31 +1237,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.TextLength"]/*' />
         [Browsable(false)]
-        public virtual int TextLength {
-            get {
-                // Note: Currently Winforms does not fully support surrogates.  If 
-                // the text contains surrogate characters this property may return incorrect values.
+        public virtual int TextLength
+            // Note: Currently Winforms does not fully support surrogates.  If
+            // the text contains surrogate characters this property may return incorrect values.
 
-                if (IsHandleCreated && Marshal.SystemDefaultCharSize == 2) {
-                    return SafeNativeMethods.GetWindowTextLength(new HandleRef(this, Handle));
-                }
-                else {
-                    return Text.Length;
-                }
-            }
-        }
-
-        /// <devdoc>
-        ///     Specifies whether the control uses unicode to set/get text selection information (WM_GESEL/WM_SETSEL)
-        ///     in Win9x.
-        /// </devdoc>
-        internal virtual bool SelectionUsesDbcsOffsetsInWin9x {
-            get {
-                return true;
-            }
-        }
+            => IsHandleCreated ? SafeNativeMethods.GetWindowTextLength(new HandleRef(this, Handle)) : Text.Length;
 
         // Since setting the WindowText while the handle is created
         // generates a WM_COMMAND message, we must trap that case
@@ -2038,13 +2013,6 @@ namespace System.Windows.Forms {
                 }
                 else if (end > textLength) {
                     end = textLength;
-                }
-
-                if (this.SelectionUsesDbcsOffsetsInWin9x && Marshal.SystemDefaultCharSize == 1) {
-                    // EDIT control expects selection values to be byte offsets instead of character offsets, 
-                    // this makes a difference in unicode code pages like Japanese.  
-                    // We need to adjust the offsets.
-                    ToDbcsOffsets(WindowText, ref start, ref end);
                 }
             }
         }

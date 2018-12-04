@@ -2437,196 +2437,99 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         static NativeMethods()
         {
-            if (Marshal.SystemDefaultCharSize == 1) {
-                BFFM_SETSELECTION = NativeMethods.BFFM_SETSELECTIONA;
-                CBEM_GETITEM = NativeMethods.CBEM_GETITEMA;
-                CBEM_SETITEM = NativeMethods.CBEM_SETITEMA;
-                CBEN_ENDEDIT = NativeMethods.CBEN_ENDEDITA;
-                CBEM_INSERTITEM = NativeMethods.CBEM_INSERTITEMA;
-                LVM_GETITEMTEXT = NativeMethods.LVM_GETITEMTEXTA;
-                LVM_SETITEMTEXT = NativeMethods.LVM_SETITEMTEXTA;
-                ACM_OPEN = NativeMethods.ACM_OPENA;
-                DTM_SETFORMAT = NativeMethods.DTM_SETFORMATA;
-                DTN_USERSTRING = NativeMethods.DTN_USERSTRINGA;
-                DTN_WMKEYDOWN = NativeMethods.DTN_WMKEYDOWNA;
-                DTN_FORMAT = NativeMethods.DTN_FORMATA;
-                DTN_FORMATQUERY = NativeMethods.DTN_FORMATQUERYA;
-                EMR_POLYTEXTOUT = NativeMethods.EMR_POLYTEXTOUTA;
-                HDM_INSERTITEM = NativeMethods.HDM_INSERTITEMA;
-                HDM_GETITEM = NativeMethods.HDM_GETITEMA;
-                HDM_SETITEM = NativeMethods.HDM_SETITEMA;
-                HDN_ITEMCHANGING = NativeMethods.HDN_ITEMCHANGINGA;
-                HDN_ITEMCHANGED = NativeMethods.HDN_ITEMCHANGEDA;
-                HDN_ITEMCLICK = NativeMethods.HDN_ITEMCLICKA;
-                HDN_ITEMDBLCLICK = NativeMethods.HDN_ITEMDBLCLICKA;
-                HDN_DIVIDERDBLCLICK = NativeMethods.HDN_DIVIDERDBLCLICKA;
-                HDN_BEGINTRACK = NativeMethods.HDN_BEGINTRACKA;
-                HDN_ENDTRACK = NativeMethods.HDN_ENDTRACKA;
-                HDN_TRACK = NativeMethods.HDN_TRACKA;
-                HDN_GETDISPINFO = NativeMethods.HDN_GETDISPINFOA;
-                LVM_SETBKIMAGE = NativeMethods.LVM_SETBKIMAGEA;
-                LVM_GETITEM = NativeMethods.LVM_GETITEMA;
-                LVM_SETITEM = NativeMethods.LVM_SETITEMA;
-                LVM_INSERTITEM = NativeMethods.LVM_INSERTITEMA;
-                LVM_FINDITEM = NativeMethods.LVM_FINDITEMA;
-                LVM_GETSTRINGWIDTH = NativeMethods.LVM_GETSTRINGWIDTHA;
-                LVM_EDITLABEL = NativeMethods.LVM_EDITLABELA;
-                LVM_GETCOLUMN = NativeMethods.LVM_GETCOLUMNA;
-                LVM_SETCOLUMN = NativeMethods.LVM_SETCOLUMNA;
-                LVM_GETISEARCHSTRING = NativeMethods.LVM_GETISEARCHSTRINGA;
-                LVM_INSERTCOLUMN = NativeMethods.LVM_INSERTCOLUMNA;
-                LVN_BEGINLABELEDIT = NativeMethods.LVN_BEGINLABELEDITA;
-                LVN_ENDLABELEDIT = NativeMethods.LVN_ENDLABELEDITA;
-                LVN_ODFINDITEM = NativeMethods.LVN_ODFINDITEMA;
-                LVN_GETDISPINFO = NativeMethods.LVN_GETDISPINFOA;
-                LVN_GETINFOTIP = NativeMethods.LVN_GETINFOTIPA;
-                LVN_SETDISPINFO = NativeMethods.LVN_SETDISPINFOA;
-                PSM_SETTITLE = NativeMethods.PSM_SETTITLEA;
-                PSM_SETFINISHTEXT = NativeMethods.PSM_SETFINISHTEXTA;
-                RB_INSERTBAND = NativeMethods.RB_INSERTBANDA;
-                SB_SETTEXT = NativeMethods.SB_SETTEXTA;
-                SB_GETTEXT = NativeMethods.SB_GETTEXTA;
-                SB_GETTEXTLENGTH = NativeMethods.SB_GETTEXTLENGTHA;
-                SB_SETTIPTEXT = NativeMethods.SB_SETTIPTEXTA;
-                SB_GETTIPTEXT = NativeMethods.SB_GETTIPTEXTA;
-                TB_SAVERESTORE = NativeMethods.TB_SAVERESTOREA;
-                TB_ADDSTRING = NativeMethods.TB_ADDSTRINGA;
-                TB_GETBUTTONTEXT = NativeMethods.TB_GETBUTTONTEXTA;
-                TB_MAPACCELERATOR = NativeMethods.TB_MAPACCELERATORA;
-                TB_GETBUTTONINFO = NativeMethods.TB_GETBUTTONINFOA;
-                TB_SETBUTTONINFO = NativeMethods.TB_SETBUTTONINFOA;
-                TB_INSERTBUTTON = NativeMethods.TB_INSERTBUTTONA;
-                TB_ADDBUTTONS = NativeMethods.TB_ADDBUTTONSA;
-                TBN_GETBUTTONINFO = NativeMethods.TBN_GETBUTTONINFOA;
-                TBN_GETINFOTIP = NativeMethods.TBN_GETINFOTIPA;
-                TBN_GETDISPINFO = NativeMethods.TBN_GETDISPINFOA;
-                TTM_ADDTOOL = NativeMethods.TTM_ADDTOOLA;
-                TTM_SETTITLE = NativeMethods.TTM_SETTITLEA;
-                TTM_DELTOOL = NativeMethods.TTM_DELTOOLA;
-                TTM_NEWTOOLRECT = NativeMethods.TTM_NEWTOOLRECTA;
-                TTM_GETTOOLINFO = NativeMethods.TTM_GETTOOLINFOA;
-                TTM_SETTOOLINFO = NativeMethods.TTM_SETTOOLINFOA;
-                TTM_HITTEST = NativeMethods.TTM_HITTESTA;
-                TTM_GETTEXT = NativeMethods.TTM_GETTEXTA;
-                TTM_UPDATETIPTEXT = NativeMethods.TTM_UPDATETIPTEXTA;
-                TTM_ENUMTOOLS = NativeMethods.TTM_ENUMTOOLSA;
-                TTM_GETCURRENTTOOL = NativeMethods.TTM_GETCURRENTTOOLA;
-                TTN_GETDISPINFO = NativeMethods.TTN_GETDISPINFOA;
-                TTN_NEEDTEXT = NativeMethods.TTN_NEEDTEXTA;
-                TVM_INSERTITEM = NativeMethods.TVM_INSERTITEMA;
-                TVM_GETITEM = NativeMethods.TVM_GETITEMA;
-                TVM_SETITEM = NativeMethods.TVM_SETITEMA;
-                TVM_EDITLABEL = NativeMethods.TVM_EDITLABELA;
-                TVM_GETISEARCHSTRING = NativeMethods.TVM_GETISEARCHSTRINGA;
-                TVN_SELCHANGING = NativeMethods.TVN_SELCHANGINGA;
-                TVN_SELCHANGED = NativeMethods.TVN_SELCHANGEDA;
-                TVN_GETDISPINFO = NativeMethods.TVN_GETDISPINFOA;
-                TVN_SETDISPINFO = NativeMethods.TVN_SETDISPINFOA;
-                TVN_ITEMEXPANDING = NativeMethods.TVN_ITEMEXPANDINGA;
-                TVN_ITEMEXPANDED = NativeMethods.TVN_ITEMEXPANDEDA;
-                TVN_BEGINDRAG = NativeMethods.TVN_BEGINDRAGA;
-                TVN_BEGINRDRAG = NativeMethods.TVN_BEGINRDRAGA;
-                TVN_BEGINLABELEDIT = NativeMethods.TVN_BEGINLABELEDITA;
-                TVN_ENDLABELEDIT = NativeMethods.TVN_ENDLABELEDITA;
-                TCM_GETITEM = NativeMethods.TCM_GETITEMA;
-                TCM_SETITEM = NativeMethods.TCM_SETITEMA;
-                TCM_INSERTITEM = NativeMethods.TCM_INSERTITEMA;
-            }
-            else {
-                BFFM_SETSELECTION = NativeMethods.BFFM_SETSELECTIONW;
-                CBEM_GETITEM = NativeMethods.CBEM_GETITEMW;
-                CBEM_SETITEM = NativeMethods.CBEM_SETITEMW;
-                CBEN_ENDEDIT = NativeMethods.CBEN_ENDEDITW;
-                CBEM_INSERTITEM = NativeMethods.CBEM_INSERTITEMW;
-                LVM_GETITEMTEXT = NativeMethods.LVM_GETITEMTEXTW;
-                LVM_SETITEMTEXT = NativeMethods.LVM_SETITEMTEXTW;
-                ACM_OPEN = NativeMethods.ACM_OPENW;
-                DTM_SETFORMAT = NativeMethods.DTM_SETFORMATW;
-                DTN_USERSTRING = NativeMethods.DTN_USERSTRINGW;
-                DTN_WMKEYDOWN = NativeMethods.DTN_WMKEYDOWNW;
-                DTN_FORMAT = NativeMethods.DTN_FORMATW;
-                DTN_FORMATQUERY = NativeMethods.DTN_FORMATQUERYW;
-                EMR_POLYTEXTOUT = NativeMethods.EMR_POLYTEXTOUTW;
-                HDM_INSERTITEM = NativeMethods.HDM_INSERTITEMW;
-                HDM_GETITEM = NativeMethods.HDM_GETITEMW;
-                HDM_SETITEM = NativeMethods.HDM_SETITEMW;
-                HDN_ITEMCHANGING = NativeMethods.HDN_ITEMCHANGINGW;
-                HDN_ITEMCHANGED = NativeMethods.HDN_ITEMCHANGEDW;
-                HDN_ITEMCLICK = NativeMethods.HDN_ITEMCLICKW;
-                HDN_ITEMDBLCLICK = NativeMethods.HDN_ITEMDBLCLICKW;
-                HDN_DIVIDERDBLCLICK = NativeMethods.HDN_DIVIDERDBLCLICKW;
-                HDN_BEGINTRACK = NativeMethods.HDN_BEGINTRACKW;
-                HDN_ENDTRACK = NativeMethods.HDN_ENDTRACKW;
-                HDN_TRACK = NativeMethods.HDN_TRACKW;
-                HDN_GETDISPINFO = NativeMethods.HDN_GETDISPINFOW;
-                LVM_SETBKIMAGE = NativeMethods.LVM_SETBKIMAGEW;
-                LVM_GETITEM = NativeMethods.LVM_GETITEMW;
-                LVM_SETITEM = NativeMethods.LVM_SETITEMW;
-                LVM_INSERTITEM = NativeMethods.LVM_INSERTITEMW;
-                LVM_FINDITEM = NativeMethods.LVM_FINDITEMW;
-                LVM_GETSTRINGWIDTH = NativeMethods.LVM_GETSTRINGWIDTHW;
-                LVM_EDITLABEL = NativeMethods.LVM_EDITLABELW;
-                LVM_GETCOLUMN = NativeMethods.LVM_GETCOLUMNW;
-                LVM_SETCOLUMN = NativeMethods.LVM_SETCOLUMNW;
-                LVM_GETISEARCHSTRING = NativeMethods.LVM_GETISEARCHSTRINGW;
-                LVM_INSERTCOLUMN = NativeMethods.LVM_INSERTCOLUMNW;
-                LVN_BEGINLABELEDIT = NativeMethods.LVN_BEGINLABELEDITW;
-                LVN_ENDLABELEDIT = NativeMethods.LVN_ENDLABELEDITW;
-                LVN_ODFINDITEM = NativeMethods.LVN_ODFINDITEMW;
-                LVN_GETDISPINFO = NativeMethods.LVN_GETDISPINFOW;
-                LVN_GETINFOTIP = NativeMethods.LVN_GETINFOTIPW;
-                LVN_SETDISPINFO = NativeMethods.LVN_SETDISPINFOW;
-                PSM_SETTITLE = NativeMethods.PSM_SETTITLEW;
-                PSM_SETFINISHTEXT = NativeMethods.PSM_SETFINISHTEXTW;
-                RB_INSERTBAND = NativeMethods.RB_INSERTBANDW;
-                SB_SETTEXT = NativeMethods.SB_SETTEXTW;
-                SB_GETTEXT = NativeMethods.SB_GETTEXTW;
-                SB_GETTEXTLENGTH = NativeMethods.SB_GETTEXTLENGTHW;
-                SB_SETTIPTEXT = NativeMethods.SB_SETTIPTEXTW;
-                SB_GETTIPTEXT = NativeMethods.SB_GETTIPTEXTW;
-                TB_SAVERESTORE = NativeMethods.TB_SAVERESTOREW;
-                TB_ADDSTRING = NativeMethods.TB_ADDSTRINGW;
-                TB_GETBUTTONTEXT = NativeMethods.TB_GETBUTTONTEXTW;
-                TB_MAPACCELERATOR = NativeMethods.TB_MAPACCELERATORW;
-                TB_GETBUTTONINFO = NativeMethods.TB_GETBUTTONINFOW;
-                TB_SETBUTTONINFO = NativeMethods.TB_SETBUTTONINFOW;
-                TB_INSERTBUTTON = NativeMethods.TB_INSERTBUTTONW;
-                TB_ADDBUTTONS = NativeMethods.TB_ADDBUTTONSW;
-                TBN_GETBUTTONINFO = NativeMethods.TBN_GETBUTTONINFOW;
-                TBN_GETINFOTIP = NativeMethods.TBN_GETINFOTIPW;
-                TBN_GETDISPINFO = NativeMethods.TBN_GETDISPINFOW;
-                TTM_ADDTOOL = NativeMethods.TTM_ADDTOOLW;
-                TTM_SETTITLE = NativeMethods.TTM_SETTITLEW;
-                TTM_DELTOOL = NativeMethods.TTM_DELTOOLW;
-                TTM_NEWTOOLRECT = NativeMethods.TTM_NEWTOOLRECTW;
-                TTM_GETTOOLINFO = NativeMethods.TTM_GETTOOLINFOW;
-                TTM_SETTOOLINFO = NativeMethods.TTM_SETTOOLINFOW;
-                TTM_HITTEST = NativeMethods.TTM_HITTESTW;
-                TTM_GETTEXT = NativeMethods.TTM_GETTEXTW;
-                TTM_UPDATETIPTEXT = NativeMethods.TTM_UPDATETIPTEXTW;
-                TTM_ENUMTOOLS = NativeMethods.TTM_ENUMTOOLSW;
-                TTM_GETCURRENTTOOL = NativeMethods.TTM_GETCURRENTTOOLW;
-                TTN_GETDISPINFO = NativeMethods.TTN_GETDISPINFOW;
-                TTN_NEEDTEXT = NativeMethods.TTN_NEEDTEXTW;
-                TVM_INSERTITEM = NativeMethods.TVM_INSERTITEMW;
-                TVM_GETITEM = NativeMethods.TVM_GETITEMW;
-                TVM_SETITEM = NativeMethods.TVM_SETITEMW;
-                TVM_EDITLABEL = NativeMethods.TVM_EDITLABELW;
-                TVM_GETISEARCHSTRING = NativeMethods.TVM_GETISEARCHSTRINGW;
-                TVN_SELCHANGING = NativeMethods.TVN_SELCHANGINGW;
-                TVN_SELCHANGED = NativeMethods.TVN_SELCHANGEDW;
-                TVN_GETDISPINFO = NativeMethods.TVN_GETDISPINFOW;
-                TVN_SETDISPINFO = NativeMethods.TVN_SETDISPINFOW;
-                TVN_ITEMEXPANDING = NativeMethods.TVN_ITEMEXPANDINGW;
-                TVN_ITEMEXPANDED = NativeMethods.TVN_ITEMEXPANDEDW;
-                TVN_BEGINDRAG = NativeMethods.TVN_BEGINDRAGW;
-                TVN_BEGINRDRAG = NativeMethods.TVN_BEGINRDRAGW;
-                TVN_BEGINLABELEDIT = NativeMethods.TVN_BEGINLABELEDITW;
-                TVN_ENDLABELEDIT = NativeMethods.TVN_ENDLABELEDITW;
-                TCM_GETITEM = NativeMethods.TCM_GETITEMW;
-                TCM_SETITEM = NativeMethods.TCM_SETITEMW;
-                TCM_INSERTITEM = NativeMethods.TCM_INSERTITEMW;
-            }
+            BFFM_SETSELECTION = NativeMethods.BFFM_SETSELECTIONW;
+            CBEM_GETITEM = NativeMethods.CBEM_GETITEMW;
+            CBEM_SETITEM = NativeMethods.CBEM_SETITEMW;
+            CBEN_ENDEDIT = NativeMethods.CBEN_ENDEDITW;
+            CBEM_INSERTITEM = NativeMethods.CBEM_INSERTITEMW;
+            LVM_GETITEMTEXT = NativeMethods.LVM_GETITEMTEXTW;
+            LVM_SETITEMTEXT = NativeMethods.LVM_SETITEMTEXTW;
+            ACM_OPEN = NativeMethods.ACM_OPENW;
+            DTM_SETFORMAT = NativeMethods.DTM_SETFORMATW;
+            DTN_USERSTRING = NativeMethods.DTN_USERSTRINGW;
+            DTN_WMKEYDOWN = NativeMethods.DTN_WMKEYDOWNW;
+            DTN_FORMAT = NativeMethods.DTN_FORMATW;
+            DTN_FORMATQUERY = NativeMethods.DTN_FORMATQUERYW;
+            EMR_POLYTEXTOUT = NativeMethods.EMR_POLYTEXTOUTW;
+            HDM_INSERTITEM = NativeMethods.HDM_INSERTITEMW;
+            HDM_GETITEM = NativeMethods.HDM_GETITEMW;
+            HDM_SETITEM = NativeMethods.HDM_SETITEMW;
+            HDN_ITEMCHANGING = NativeMethods.HDN_ITEMCHANGINGW;
+            HDN_ITEMCHANGED = NativeMethods.HDN_ITEMCHANGEDW;
+            HDN_ITEMCLICK = NativeMethods.HDN_ITEMCLICKW;
+            HDN_ITEMDBLCLICK = NativeMethods.HDN_ITEMDBLCLICKW;
+            HDN_DIVIDERDBLCLICK = NativeMethods.HDN_DIVIDERDBLCLICKW;
+            HDN_BEGINTRACK = NativeMethods.HDN_BEGINTRACKW;
+            HDN_ENDTRACK = NativeMethods.HDN_ENDTRACKW;
+            HDN_TRACK = NativeMethods.HDN_TRACKW;
+            HDN_GETDISPINFO = NativeMethods.HDN_GETDISPINFOW;
+            LVM_SETBKIMAGE = NativeMethods.LVM_SETBKIMAGEW;
+            LVM_GETITEM = NativeMethods.LVM_GETITEMW;
+            LVM_SETITEM = NativeMethods.LVM_SETITEMW;
+            LVM_INSERTITEM = NativeMethods.LVM_INSERTITEMW;
+            LVM_FINDITEM = NativeMethods.LVM_FINDITEMW;
+            LVM_GETSTRINGWIDTH = NativeMethods.LVM_GETSTRINGWIDTHW;
+            LVM_EDITLABEL = NativeMethods.LVM_EDITLABELW;
+            LVM_GETCOLUMN = NativeMethods.LVM_GETCOLUMNW;
+            LVM_SETCOLUMN = NativeMethods.LVM_SETCOLUMNW;
+            LVM_GETISEARCHSTRING = NativeMethods.LVM_GETISEARCHSTRINGW;
+            LVM_INSERTCOLUMN = NativeMethods.LVM_INSERTCOLUMNW;
+            LVN_BEGINLABELEDIT = NativeMethods.LVN_BEGINLABELEDITW;
+            LVN_ENDLABELEDIT = NativeMethods.LVN_ENDLABELEDITW;
+            LVN_ODFINDITEM = NativeMethods.LVN_ODFINDITEMW;
+            LVN_GETDISPINFO = NativeMethods.LVN_GETDISPINFOW;
+            LVN_GETINFOTIP = NativeMethods.LVN_GETINFOTIPW;
+            LVN_SETDISPINFO = NativeMethods.LVN_SETDISPINFOW;
+            PSM_SETTITLE = NativeMethods.PSM_SETTITLEW;
+            PSM_SETFINISHTEXT = NativeMethods.PSM_SETFINISHTEXTW;
+            RB_INSERTBAND = NativeMethods.RB_INSERTBANDW;
+            SB_SETTEXT = NativeMethods.SB_SETTEXTW;
+            SB_GETTEXT = NativeMethods.SB_GETTEXTW;
+            SB_GETTEXTLENGTH = NativeMethods.SB_GETTEXTLENGTHW;
+            SB_SETTIPTEXT = NativeMethods.SB_SETTIPTEXTW;
+            SB_GETTIPTEXT = NativeMethods.SB_GETTIPTEXTW;
+            TB_SAVERESTORE = NativeMethods.TB_SAVERESTOREW;
+            TB_ADDSTRING = NativeMethods.TB_ADDSTRINGW;
+            TB_GETBUTTONTEXT = NativeMethods.TB_GETBUTTONTEXTW;
+            TB_MAPACCELERATOR = NativeMethods.TB_MAPACCELERATORW;
+            TB_GETBUTTONINFO = NativeMethods.TB_GETBUTTONINFOW;
+            TB_SETBUTTONINFO = NativeMethods.TB_SETBUTTONINFOW;
+            TB_INSERTBUTTON = NativeMethods.TB_INSERTBUTTONW;
+            TB_ADDBUTTONS = NativeMethods.TB_ADDBUTTONSW;
+            TBN_GETBUTTONINFO = NativeMethods.TBN_GETBUTTONINFOW;
+            TBN_GETINFOTIP = NativeMethods.TBN_GETINFOTIPW;
+            TBN_GETDISPINFO = NativeMethods.TBN_GETDISPINFOW;
+            TTM_ADDTOOL = NativeMethods.TTM_ADDTOOLW;
+            TTM_SETTITLE = NativeMethods.TTM_SETTITLEW;
+            TTM_DELTOOL = NativeMethods.TTM_DELTOOLW;
+            TTM_NEWTOOLRECT = NativeMethods.TTM_NEWTOOLRECTW;
+            TTM_GETTOOLINFO = NativeMethods.TTM_GETTOOLINFOW;
+            TTM_SETTOOLINFO = NativeMethods.TTM_SETTOOLINFOW;
+            TTM_HITTEST = NativeMethods.TTM_HITTESTW;
+            TTM_GETTEXT = NativeMethods.TTM_GETTEXTW;
+            TTM_UPDATETIPTEXT = NativeMethods.TTM_UPDATETIPTEXTW;
+            TTM_ENUMTOOLS = NativeMethods.TTM_ENUMTOOLSW;
+            TTM_GETCURRENTTOOL = NativeMethods.TTM_GETCURRENTTOOLW;
+            TTN_GETDISPINFO = NativeMethods.TTN_GETDISPINFOW;
+            TTN_NEEDTEXT = NativeMethods.TTN_NEEDTEXTW;
+            TVM_INSERTITEM = NativeMethods.TVM_INSERTITEMW;
+            TVM_GETITEM = NativeMethods.TVM_GETITEMW;
+            TVM_SETITEM = NativeMethods.TVM_SETITEMW;
+            TVM_EDITLABEL = NativeMethods.TVM_EDITLABELW;
+            TVM_GETISEARCHSTRING = NativeMethods.TVM_GETISEARCHSTRINGW;
+            TVN_SELCHANGING = NativeMethods.TVN_SELCHANGINGW;
+            TVN_SELCHANGED = NativeMethods.TVN_SELCHANGEDW;
+            TVN_GETDISPINFO = NativeMethods.TVN_GETDISPINFOW;
+            TVN_SETDISPINFO = NativeMethods.TVN_SETDISPINFOW;
+            TVN_ITEMEXPANDING = NativeMethods.TVN_ITEMEXPANDINGW;
+            TVN_ITEMEXPANDED = NativeMethods.TVN_ITEMEXPANDEDW;
+            TVN_BEGINDRAG = NativeMethods.TVN_BEGINDRAGW;
+            TVN_BEGINRDRAG = NativeMethods.TVN_BEGINRDRAGW;
+            TVN_BEGINLABELEDIT = NativeMethods.TVN_BEGINLABELEDITW;
+            TVN_ENDLABELEDIT = NativeMethods.TVN_ENDLABELEDITW;
+            TCM_GETITEM = NativeMethods.TCM_GETITEMW;
+            TCM_SETITEM = NativeMethods.TCM_SETITEMW;
+            TCM_INSERTITEM = NativeMethods.TCM_INSERTITEMW;
         }
 
         /*
@@ -6052,53 +5955,22 @@ namespace System.Windows.Forms {
                 
                 return i;
             }
-    
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.Util.GetPInvokeStringLength"]/*' />
-            /// <devdoc>
-            ///     Computes the string size that should be passed to a typical Win32 call.
-            ///     This will be the character count under NT, and the ubyte count for Windows 95.
-            /// </devdoc>
-            public static int GetPInvokeStringLength(String s) {
-                if (s == null) {
-                    return 0;
-                }
-    
-                if (Marshal.SystemDefaultCharSize == 2) {
-                    return s.Length;
-                }
-                else {
-                    if (s.Length == 0) {
-                        return 0;
-                    }
-                    if (s.IndexOf('\0') > -1) {
-                        return GetEmbeddedNullStringLengthAnsi(s);
-                    }
-                    else {
-                        return lstrlen(s);
-                    }
-                }
-            }
-    
+
             private static int GetEmbeddedNullStringLengthAnsi(String s) {
                 int n = s.IndexOf('\0');
                 if (n > -1) {
                     String left = s.Substring(0, n);
                     String right = s.Substring(n+1);
-                    return GetPInvokeStringLength(left) + GetEmbeddedNullStringLengthAnsi(right) + 1;
+                    return left.Length + GetEmbeddedNullStringLengthAnsi(right) + 1;
                 }
                 else {
-                    return GetPInvokeStringLength(s);
+                    return s.Length;
                 }
             }
     
             [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]
             [ResourceExposure(ResourceScope.None)]
             private static extern int lstrlen(String s);
-    
-            /* Unused
-            [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-            internal static extern int RegisterWindowMessage(string msg);
-            */
         }
     
         public enum  tagTYPEKIND {
@@ -6113,8 +5985,6 @@ namespace System.Windows.Forms {
             TKIND_MAX = 8
         }
 
-        
-    
         [StructLayout(LayoutKind.Sequential)]
         public  class  tagTYPEDESC {
             public   IntPtr unionMember;

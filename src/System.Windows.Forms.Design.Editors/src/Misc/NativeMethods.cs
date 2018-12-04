@@ -3609,7 +3609,7 @@ namespace System.Windows.Forms.Design
         }
 #endif
         public static readonly int WM_MOUSEENTER = Util.RegisterWindowMessage("WinFormsMouseEnter");
-        public static readonly int HDN_ENDTRACK = Marshal.SystemDefaultCharSize == 1 ? HDN_ENDTRACKA : HDN_ENDTRACKW;
+        public static readonly int HDN_ENDTRACK = HDN_ENDTRACKW;
 
         public const int
             DT_CALCRECT = 0x00000400,
