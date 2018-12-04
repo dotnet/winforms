@@ -440,7 +440,7 @@ namespace System.Windows.Forms
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)MaskFormat.ExcludePromptAndLiterals, (int)MaskFormat.IncludePromptAndLiterals))
                 {
-                      throw new InvalidEnumArgumentException("value", (int)value, typeof(MaskFormat));
+                      throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MaskFormat));
                 }
 
                 if( value == MaskFormat.IncludePrompt )
@@ -565,7 +565,7 @@ namespace System.Windows.Forms
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)InsertKeyMode.Default, (int)InsertKeyMode.Overwrite))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(InsertKeyMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(InsertKeyMode));
                 }
 
                 if (this.insertMode != value)
@@ -1413,7 +1413,7 @@ namespace System.Windows.Forms
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(HorizontalAlignment));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                     }
 
                     textAlign = value;
@@ -1486,7 +1486,7 @@ namespace System.Windows.Forms
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)MaskFormat.ExcludePromptAndLiterals, (int)MaskFormat.IncludePromptAndLiterals))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(MaskFormat));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MaskFormat));
                 }
 
                 // Changing the TextMaskFormat will likely change the 'output' text (Text getter value).  Cache old value to 

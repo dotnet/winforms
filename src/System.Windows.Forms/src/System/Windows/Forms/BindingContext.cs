@@ -155,9 +155,9 @@ namespace System.Windows.Forms {
         protected virtual void AddCore(object dataSource, BindingManagerBase listManager) {
             /* !!THIS METHOD IS OBSOLETE AND UNUSED!! */
             if (dataSource == null)
-                throw new ArgumentNullException("dataSource");
+                throw new ArgumentNullException(nameof(dataSource));
             if (listManager == null)
-                throw new ArgumentNullException("listManager");
+                throw new ArgumentNullException(nameof(listManager));
 
             // listManagers[dataSource] = listManager;
             listManagers[GetKey(dataSource, "")] = new WeakReference(listManager, false);
@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
 
             internal HashKey(object dataSource, string dataMember) {
                 if (dataSource == null)
-                    throw new ArgumentNullException("dataSource");
+                    throw new ArgumentNullException(nameof(dataSource));
                 if (dataMember == null)
                     dataMember = "";
                 // The dataMember should be case insensitive.

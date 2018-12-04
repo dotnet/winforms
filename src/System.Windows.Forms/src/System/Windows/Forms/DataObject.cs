@@ -342,7 +342,7 @@ namespace System.Windows.Forms
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
             {
-                throw new InvalidEnumArgumentException("format", (int)format, typeof(TextDataFormat));
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
 
             return GetDataPresent(ConvertToDataFormats(format), false);
@@ -399,7 +399,7 @@ namespace System.Windows.Forms
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
             {
-                throw new InvalidEnumArgumentException("format", (int)format, typeof(TextDataFormat));
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
 
             string text = GetData(ConvertToDataFormats(format), false) as string;
@@ -449,7 +449,7 @@ namespace System.Windows.Forms
         {
             if (audioStream == null)
             {
-                throw new ArgumentNullException("audioStream");
+                throw new ArgumentNullException(nameof(audioStream));
             }
             SetData(DataFormats.WaveAudio, false, audioStream);
         }
@@ -462,7 +462,7 @@ namespace System.Windows.Forms
         {
             if (filePaths == null)
             {
-                throw new ArgumentNullException("filePaths");
+                throw new ArgumentNullException(nameof(filePaths));
             }
             string[] strings = new string[filePaths.Count];
             filePaths.CopyTo(strings, 0);
@@ -477,7 +477,7 @@ namespace System.Windows.Forms
         {
             if (image == null)
             {
-                throw new ArgumentNullException("image");
+                throw new ArgumentNullException(nameof(image));
             }
             SetData(DataFormats.Bitmap, true, image);
         }
@@ -499,13 +499,13 @@ namespace System.Windows.Forms
         {
             if (string.IsNullOrEmpty(textData))
             {
-                throw new ArgumentNullException("textData");
+                throw new ArgumentNullException(nameof(textData));
             }
 
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
             {
-                throw new InvalidEnumArgumentException("format", (int)format, typeof(TextDataFormat));
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
 
             SetData(ConvertToDataFormats(format), false, textData);

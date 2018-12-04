@@ -355,7 +355,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("LargeChange", string.Format(SR.TrackBarLargeChangeError, value));
+                    throw new ArgumentOutOfRangeException(nameof(LargeChange), string.Format(SR.TrackBarLargeChangeError, value));
                 }
 
                 if (largeChange != value) {
@@ -436,7 +436,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(Orientation));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Orientation));
                 }
 
                 if (orientation != value) {
@@ -564,7 +564,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("SmallChange", string.Format(SR.TrackBarSmallChangeError, value));
+                    throw new ArgumentOutOfRangeException(nameof(SmallChange), string.Format(SR.TrackBarSmallChangeError, value));
                 }
                 if (smallChange != value) {
                     smallChange = value;
@@ -623,7 +623,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TickStyle.None, (int)TickStyle.Both))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(TickStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TickStyle));
                 }
 
                 if (tickStyle != value) {
@@ -680,7 +680,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if (!initializing && ((value < minimum) || (value > maximum)))
-                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
+                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
                     this.value = value;
                     SetTrackBarPosition();
                     OnValueChanged(EventArgs.Empty);

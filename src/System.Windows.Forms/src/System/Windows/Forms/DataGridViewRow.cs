@@ -1185,7 +1185,7 @@ namespace System.Windows.Forms
         {
             if (dataGridView == null)
             {
-                throw new ArgumentNullException("dataGridView");
+                throw new ArgumentNullException(nameof(dataGridView));
             }
             if (this.DataGridView != null)
             {
@@ -1211,7 +1211,7 @@ namespace System.Windows.Forms
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
 
             /* Intentionally not being strict about this. We just take what we get.
@@ -1280,11 +1280,11 @@ namespace System.Windows.Forms
             }
             if (graphics == null)
             {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
             Color backColor;
             if (cellsPaintSelectionBackground && (rowState & DataGridViewElementStates.Selected) != 0)
@@ -1310,7 +1310,7 @@ namespace System.Windows.Forms
                 }
                 if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 if (this.DataGridView.VirtualMode || this.DataGridView.DataSource != null)
                 {
@@ -1340,7 +1340,7 @@ namespace System.Windows.Forms
                 }
                 if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 if (string.IsNullOrEmpty(errorText) &&
                     this.DataGridView.DataSource != null &&
@@ -1383,11 +1383,11 @@ namespace System.Windows.Forms
             // not using IsEnumValid here because this is a flags enum, using mask instead.
             if (((DataGridViewAutoSizeRowCriteriaInternal) autoSizeRowMode & invalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
             {
-                throw new InvalidEnumArgumentException("autoSizeRowMode", (int) autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
+                throw new InvalidEnumArgumentException(nameof(autoSizeRowMode), (int) autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
             }
             if (!(this.DataGridView == null || (rowIndex >= 0 && rowIndex < this.DataGridView.Rows.Count)))
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             if (this.DataGridView == null)
             {
@@ -1471,7 +1471,7 @@ namespace System.Windows.Forms
         {
             if (!(this.DataGridView == null || (rowIndex >= 0 && rowIndex < this.DataGridView.Rows.Count)))
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             if (this.DataGridView == null || this.DataGridView.Rows.SharedRow(rowIndex).Index != -1)
             {
@@ -1787,7 +1787,7 @@ namespace System.Windows.Forms
             // everything is valid between 0x0 and 0x7F.
             if ((int) paintParts < (int) DataGridViewPaintParts.None || (int) paintParts > (int) DataGridViewPaintParts.All)
             {
-                throw new InvalidEnumArgumentException("paintParts", (int)paintParts, typeof(DataGridViewPaintParts));
+                throw new InvalidEnumArgumentException(nameof(paintParts), (int)paintParts, typeof(DataGridViewPaintParts));
             }
             DataGridView dataGridView = this.DataGridView;
             if (dataGridView.RowHeadersVisible)
@@ -1848,7 +1848,7 @@ namespace System.Windows.Forms
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
 
             if (this.DataGridView != null)
@@ -2160,7 +2160,7 @@ namespace System.Windows.Forms
             {
                 if (index < 0)
                 {
-                    throw new ArgumentOutOfRangeException("index");
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
                 if (this.owner == null)
                 {

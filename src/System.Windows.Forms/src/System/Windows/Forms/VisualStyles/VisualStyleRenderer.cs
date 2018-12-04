@@ -90,7 +90,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public static bool IsElementDefined(VisualStyleElement element) {
             if (element == null) {
-                throw new ArgumentNullException("element");
+                throw new ArgumentNullException(nameof(element));
             }
 
             return IsCombinationDefined(element.ClassName, element.Part);
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
 
             if (className == null) {
-                throw new ArgumentNullException("className");
+                throw new ArgumentNullException(nameof(className));
             }
 
             IntPtr hTheme = GetHandle(className, false);
@@ -237,7 +237,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public void SetParameters(VisualStyleElement element) {
             if (element == null) {
-                throw new ArgumentNullException("element");
+                throw new ArgumentNullException(nameof(element));
             }
 
             SetParameters(element.ClassName, element.Part, element.State);
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.VisualStyles {
 
         internal void DrawBackground(IDeviceContext dc, Rectangle bounds, IntPtr hWnd) {
             if (dc == null) {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             if (bounds.Width < 0 || bounds.Height < 0) {
                 return;
@@ -304,7 +304,7 @@ namespace System.Windows.Forms.VisualStyles {
 
         internal void DrawBackground(IDeviceContext dc, Rectangle bounds, Rectangle clipRectangle, IntPtr hWnd) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             if (bounds.Width < 0 || bounds.Height < 0) {
                 return;
@@ -334,19 +334,19 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public Rectangle DrawEdge(IDeviceContext dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects) {
             if (dc == null) {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges,(UInt32)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal))) {
-                throw new InvalidEnumArgumentException("edges", (int)edges, typeof(Edges));
+                throw new InvalidEnumArgumentException(nameof(edges), (int)edges, typeof(Edges));
             }
 
             if (!ClientUtils.IsEnumValid_NotSequential(style, (int)style, (int)EdgeStyle.Raised,(int)EdgeStyle.Sunken,(int)EdgeStyle.Etched,(int)EdgeStyle.Bump )) {
-                throw new InvalidEnumArgumentException("style", (int)style, typeof(EdgeStyle));
+                throw new InvalidEnumArgumentException(nameof(style), (int)style, typeof(EdgeStyle));
             }
 
             if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (UInt32)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono))) {
-                throw new InvalidEnumArgumentException("effects", (int)effects, typeof(EdgeEffects));
+                throw new InvalidEnumArgumentException(nameof(effects), (int)effects, typeof(EdgeEffects));
             }
 
             NativeMethods.COMRECT rect = new NativeMethods.COMRECT();
@@ -368,11 +368,11 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public void DrawImage(Graphics g, Rectangle bounds, Image image) {
             if (g == null) {
-                throw new ArgumentNullException("g");
+                throw new ArgumentNullException(nameof(g));
             }
 
             if (image == null) {
-                throw new ArgumentNullException("image");
+                throw new ArgumentNullException(nameof(image));
             }
 
             if (bounds.Width < 0 || bounds.Height < 0) {
@@ -391,15 +391,15 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public void DrawImage(Graphics g, Rectangle bounds, ImageList imageList, int imageIndex) {
             if (g == null) {
-                throw new ArgumentNullException("g");
+                throw new ArgumentNullException(nameof(g));
             }
 
             if (imageList == null) {
-                throw new ArgumentNullException("imageList");
+                throw new ArgumentNullException(nameof(imageList));
             }
             
             if (imageIndex < 0 || imageIndex >= imageList.Images.Count) {
-                throw new ArgumentOutOfRangeException("imageIndex", string.Format(SR.InvalidArgument, "imageIndex", imageIndex.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(imageIndex), string.Format(SR.InvalidArgument, "imageIndex", imageIndex.ToString(CultureInfo.CurrentCulture)));
             }
 
             if (bounds.Width < 0 || bounds.Height < 0) {
@@ -430,11 +430,11 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl) {
             if (dc == null) {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             if (childControl == null) {
-                throw new ArgumentNullException("childControl");
+                throw new ArgumentNullException(nameof(childControl));
             }
 
             if (bounds.Width < 0 || bounds.Height < 0) {
@@ -477,7 +477,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw, bool drawDisabled, TextFormatFlags flags) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             if (bounds.Width < 0 || bounds.Height < 0) {
@@ -502,7 +502,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public Rectangle GetBackgroundContentRectangle(IDeviceContext dc, Rectangle bounds) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             if (bounds.Width < 0 || bounds.Height < 0) {
                 return Rectangle.Empty;
@@ -526,7 +526,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public Rectangle GetBackgroundExtent(IDeviceContext dc, Rectangle contentBounds) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             if (contentBounds.Width < 0 || contentBounds.Height < 0) {
                 return Rectangle.Empty;
@@ -554,7 +554,7 @@ namespace System.Windows.Forms.VisualStyles {
          SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         public Region GetBackgroundRegion(IDeviceContext dc, Rectangle bounds) {
             if (dc == null) {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             if (bounds.Width < 0 || bounds.Height < 0) {
                 return null;
@@ -590,7 +590,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public bool GetBoolean(BooleanProperty prop) {
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)BooleanProperty.Transparent, (int)BooleanProperty.SourceShrink)){
-                throw new InvalidEnumArgumentException("prop", (int)prop, typeof(BooleanProperty));
+                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(BooleanProperty));
             }
 
             bool val = false;
@@ -608,7 +608,7 @@ namespace System.Windows.Forms.VisualStyles {
             //valid values are 0xed9 to 0xeef
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)ColorProperty.BorderColor, (int)ColorProperty.AccentColorHint))
             {
-                throw new InvalidEnumArgumentException("prop", (int)prop, typeof(ColorProperty));
+                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(ColorProperty));
             }
 
             int color = 0;
@@ -626,7 +626,7 @@ namespace System.Windows.Forms.VisualStyles {
             //valid values are 0xfa1 to 0xfaf
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)EnumProperty.BackgroundType, (int)EnumProperty.TrueSizeScalingType))
             {
-                throw new InvalidEnumArgumentException("prop", (int)prop, typeof(EnumProperty));
+                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(EnumProperty));
             }
 
             int val = 0;
@@ -644,7 +644,7 @@ namespace System.Windows.Forms.VisualStyles {
             //valid values are 0xbb9 to 0xbc0
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)FilenameProperty.ImageFile, (int)FilenameProperty.GlyphImageFile))
             {
-                throw new InvalidEnumArgumentException("prop", (int)prop, typeof(FilenameProperty));
+                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FilenameProperty));
             }
 
             StringBuilder filename = new StringBuilder(512);
@@ -663,13 +663,13 @@ namespace System.Windows.Forms.VisualStyles {
         public Font GetFont(IDeviceContext dc, FontProperty prop)
         {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             
             //valid values are 0xa29 to 0xa29
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)FontProperty.GlyphFont, (int)FontProperty.GlyphFont))
             {
-                throw new InvalidEnumArgumentException("prop", (int)prop, typeof(FontProperty));
+                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FontProperty));
             }
 
             NativeMethods.LOGFONT logfont = new NativeMethods.LOGFONT();
@@ -715,7 +715,7 @@ namespace System.Windows.Forms.VisualStyles {
             //valid values are 0x961 to 0x978
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)IntegerProperty.ImageCount, (int)IntegerProperty.MinDpi5))
             {
-                throw new InvalidEnumArgumentException("prop", (int)prop, typeof(IntegerProperty));
+                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(IntegerProperty));
             }
 
             int val = 0;
@@ -735,12 +735,12 @@ namespace System.Windows.Forms.VisualStyles {
 
         internal Size GetPartSize(IDeviceContext dc, ThemeSizeType type, IntPtr hWnd) {
             if (dc == null) {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             
             // valid values are 0x0 to 0x2
             if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw)) {
-                throw new InvalidEnumArgumentException("type", (int)type, typeof(ThemeSizeType));
+                throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
             }
 
             NativeMethods.SIZE size = new NativeMethods.SIZE();
@@ -768,13 +768,13 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public Size GetPartSize(IDeviceContext dc, Rectangle bounds, ThemeSizeType type) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             
             //valid values are 0x0 to 0x2
             if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw))
             {
-                throw new InvalidEnumArgumentException("type", (int)type, typeof(ThemeSizeType));
+                throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
             }
 
             NativeMethods.SIZE size = new NativeMethods.SIZE();
@@ -797,7 +797,7 @@ namespace System.Windows.Forms.VisualStyles {
             //valid values are 0xd49 to 0xd50
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)PointProperty.Offset, (int)PointProperty.MinSize5))
             {
-                throw new InvalidEnumArgumentException("prop", (int)prop, typeof(PointProperty));
+                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(PointProperty));
             }
 
             NativeMethods.POINT point = new NativeMethods.POINT();
@@ -813,13 +813,13 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public Padding GetMargins(IDeviceContext dc, MarginProperty prop) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             
             //valid values are 0xe11 to 0xe13
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)MarginProperty.SizingMargins, (int)MarginProperty.CaptionMargins))
             {
-                throw new InvalidEnumArgumentException("prop", (int)prop, typeof(MarginProperty));
+                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(MarginProperty));
             }
 
             NativeMethods.MARGINS margins = new NativeMethods.MARGINS();
@@ -843,7 +843,7 @@ namespace System.Windows.Forms.VisualStyles {
             //valid values are 0xc81 to 0xc81
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)StringProperty.Text, (int)StringProperty.Text))
             {
-                throw new InvalidEnumArgumentException("prop", (int)prop, typeof(StringProperty));
+                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(StringProperty));
             }
 
             StringBuilder aString = new StringBuilder(512);
@@ -859,11 +859,11 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public Rectangle GetTextExtent(IDeviceContext dc, string textToDraw, TextFormatFlags flags) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             if (String.IsNullOrEmpty(textToDraw)) {
-                throw new ArgumentNullException("textToDraw");
+                throw new ArgumentNullException(nameof(textToDraw));
             }
 
             NativeMethods.COMRECT rect = new NativeMethods.COMRECT();
@@ -884,11 +884,11 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public Rectangle GetTextExtent(IDeviceContext dc, Rectangle bounds, string textToDraw, TextFormatFlags flags) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             
             if (String.IsNullOrEmpty(textToDraw)) {
-                throw new ArgumentNullException("textToDraw");
+                throw new ArgumentNullException(nameof(textToDraw));
             }
 
             NativeMethods.COMRECT rect = new NativeMethods.COMRECT();
@@ -909,7 +909,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public TextMetrics GetTextMetrics(IDeviceContext dc) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             
             TextMetrics tm = new TextMetrics();
@@ -932,7 +932,7 @@ namespace System.Windows.Forms.VisualStyles {
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, Point pt, HitTestOptions options) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             
             int htCode = 0;
@@ -956,7 +956,7 @@ namespace System.Windows.Forms.VisualStyles {
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public HitTestCode HitTestBackground(Graphics g, Rectangle backgroundRectangle, Region region, Point pt, HitTestOptions options) {
             if (g == null) {
-                throw new ArgumentNullException("g");
+                throw new ArgumentNullException(nameof(g));
             }
 
             IntPtr hRgn = region.GetHrgn(g);
@@ -975,7 +975,7 @@ namespace System.Windows.Forms.VisualStyles {
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, IntPtr hRgn, Point pt, HitTestOptions options) {
             if( dc == null ){
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             
             int htCode = 0;

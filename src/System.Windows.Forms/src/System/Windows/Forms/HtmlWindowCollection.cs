@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
         public HtmlWindow this[int index] {
             get {
                 if (index < 0 || index >= this.Count) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidBoundArgument, "index", index, 0, this.Count - 1));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidBoundArgument, "index", index, 0, this.Count - 1));
                 }
 
                 object oIndex = (object)index;

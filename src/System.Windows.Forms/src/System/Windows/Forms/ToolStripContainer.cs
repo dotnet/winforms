@@ -451,7 +451,7 @@ namespace System.Windows.Forms {
 
             public override void Add(Control value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 if (IsReadOnly) {
                     throw new NotSupportedException(SR.ToolStripContainerUseContentPanel);

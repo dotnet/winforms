@@ -62,7 +62,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet ||
                     value == this.banned1 ||
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
                  // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {

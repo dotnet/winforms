@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         {
             if (dataGridViewCell == null)
             {
-                throw new ArgumentNullException("dataGridViewCell");
+                throw new ArgumentNullException(nameof(dataGridViewCell));
             }
             this.dataGridViewCell = dataGridViewCell;
             this.stateChanged = stateChanged;

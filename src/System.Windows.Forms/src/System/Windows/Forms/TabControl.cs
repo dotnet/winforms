@@ -143,7 +143,7 @@ namespace System.Windows.Forms {
                 if (this.alignment != value) {
                     //valid values are 0x0 to 0x3
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAlignment.Top, (int)TabAlignment.Right)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(TabAlignment));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAlignment));
                     }
 
                     this.alignment = value;
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
                 if (this.appearance != value) {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAppearance.Normal, (int)TabAppearance.FlatButtons)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(TabAppearance));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAppearance));
                     }
 
                     this.appearance = value;
@@ -459,7 +459,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabDrawMode.Normal, (int)TabDrawMode.OwnerDrawFixed)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(TabDrawMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabDrawMode));
                 }
 
                 if (drawMode != value) {
@@ -568,7 +568,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.Width < 0 || value.Height < 0) {
-                    throw new ArgumentOutOfRangeException("ItemSize", string.Format(SR.InvalidArgument, "ItemSize", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(ItemSize), string.Format(SR.InvalidArgument, "ItemSize", value.ToString()));
                 }
                 itemSize = value;
                 ApplyItemSize();
@@ -638,7 +638,7 @@ namespace System.Windows.Forms {
                 //do some validation checking here, against min & max GridSize
                 //
                 if ( value.X < 0 || value.Y < 0 )
-                    throw new ArgumentOutOfRangeException("Padding", string.Format(SR.InvalidArgument, "Padding", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(Padding), string.Format(SR.InvalidArgument, "Padding", value.ToString()));
 
                 if (padding != value) {
                     padding = value;
@@ -727,7 +727,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("SelectedIndex", string.Format(SR.InvalidLowBoundArgumentEx, "SelectedIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(SelectedIndex), string.Format(SR.InvalidLowBoundArgumentEx, "SelectedIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (SelectedIndex != value) {
@@ -832,7 +832,7 @@ namespace System.Windows.Forms {
 
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabSizeMode.Normal, (int)TabSizeMode.Fixed)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(TabSizeMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabSizeMode));
                 }
 
                 sizeMode = value;
@@ -1137,7 +1137,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void DeselectTab(TabPage tabPage) {
             if (tabPage == null) {
-                throw new ArgumentNullException("tabPage");
+                throw new ArgumentNullException(nameof(tabPage));
 
             }
             int index = FindTabPage(tabPage);
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void DeselectTab(string tabPageName) {
             if (tabPageName == null) {
-                throw new ArgumentNullException("tabPageName");
+                throw new ArgumentNullException(nameof(tabPageName));
 
             }
             TabPage tabPage = TabPages[tabPageName];
@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms {
         internal TabPage GetTabPage(int index) {
 
             if (index < 0 || index >= tabPageCount) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             }
             return tabPages[index];
         }
@@ -1234,7 +1234,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public Rectangle GetTabRect(int index) {
             if (index < 0 || (index >= tabPageCount && !tabControlState[TABCONTROLSTATE_getTabRectfromItemSize])) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             }
             tabControlState[TABCONTROLSTATE_getTabRectfromItemSize] = false ;
             NativeMethods.RECT rect = new NativeMethods.RECT();
@@ -1294,9 +1294,9 @@ namespace System.Windows.Forms {
         private void InsertItem(int index, TabPage tabPage) {
 
             if (index < 0 || ((tabPages != null) && index > tabPageCount))
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             if (tabPage == null)
-                throw new ArgumentNullException("tabPage");
+                throw new ArgumentNullException(nameof(tabPage));
 
 
             int retIndex;
@@ -1696,7 +1696,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         internal void RemoveTabPage(int index) {
             if (index < 0 || index >= tabPageCount)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             tabPageCount--;
             if (index < tabPageCount) {
                 Array.Copy(tabPages, index + 1, tabPages, index, tabPageCount - index);
@@ -1742,7 +1742,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem) {
             if (index < 0 || index >= tabPageCount)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             if (IsHandleCreated)
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETITEM, index, tcitem);
             // Make the Updated tab page the currently selected tab page
@@ -1770,7 +1770,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void SelectTab(TabPage tabPage) {
             if (tabPage == null) {
-                throw new ArgumentNullException("tabPage");
+                throw new ArgumentNullException(nameof(tabPage));
 
             }
             int index = FindTabPage(tabPage);
@@ -1783,7 +1783,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void SelectTab(string tabPageName) {
             if (tabPageName == null) {
-                throw new ArgumentNullException("tabPageName");
+                throw new ArgumentNullException(nameof(tabPageName));
 
             }
             TabPage tabPage = TabPages[tabPageName];
@@ -2230,7 +2230,7 @@ namespace System.Windows.Forms {
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public TabPageCollection( TabControl owner ) {
                 if (owner == null) {
-                    throw new ArgumentNullException("owner");
+                    throw new ArgumentNullException(nameof(owner));
                 }
                 this.owner = owner;
             }
@@ -2264,7 +2264,7 @@ namespace System.Windows.Forms {
                         this[index] = (TabPage)value;
                     }
                     else {
-                        throw new ArgumentException("value");
+                        throw new ArgumentException(nameof(value));
                     }
                 }
             }
@@ -2346,7 +2346,7 @@ namespace System.Windows.Forms {
             public void Add(TabPage value) {
 
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 owner.Controls.Add(value);
@@ -2366,7 +2366,7 @@ namespace System.Windows.Forms {
                     return IndexOf((TabPage)value);
                 }
                 else {
-                    throw new ArgumentException("value");
+                    throw new ArgumentException(nameof(value));
                 }
             }
 
@@ -2426,7 +2426,7 @@ namespace System.Windows.Forms {
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public void AddRange(TabPage[] pages) {
                 if (pages == null) {
-                    throw new ArgumentNullException("pages");
+                    throw new ArgumentNullException(nameof(pages));
                 }
                 foreach(TabPage page in pages) {
                     Add(page);
@@ -2442,7 +2442,7 @@ namespace System.Windows.Forms {
 
                 //check for the page not to be null
                 if (page == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(page));
                 //end check
 
                 return IndexOf(page) != -1;
@@ -2477,7 +2477,7 @@ namespace System.Windows.Forms {
 
                 //check for the page not to be null
                 if (page == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(page));
                 //end check
 
                 for(int index=0; index < Count; ++index) {
@@ -2559,7 +2559,7 @@ namespace System.Windows.Forms {
                     Insert(index, (TabPage)tabPage);
                 }
                 else {
-                    throw new ArgumentException("tabPage");
+                    throw new ArgumentException(nameof(tabPage));
                 }
             }
 
@@ -2664,7 +2664,7 @@ namespace System.Windows.Forms {
 
                 //check for the value not to be null
                 if (value == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 //end check
                 owner.Controls.Remove(value);
             }

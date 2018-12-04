@@ -161,7 +161,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarAppearance.Normal, (int)ToolBarAppearance.Flat)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolBarAppearance));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarAppearance));
                 }
 
                 if (value != appearance) {
@@ -325,7 +325,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
 
@@ -394,7 +394,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value.Width < 0 || value.Height < 0)
-                    throw new ArgumentOutOfRangeException("ButtonSize", string.Format(SR.InvalidArgument, "ButtonSize", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(ButtonSize), string.Format(SR.InvalidArgument, "ButtonSize", value.ToString()));
 
                 if (buttonSize != value) {
                     buttonSize = value;
@@ -520,7 +520,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x5
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DockStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DockStyle));
                 }
 
                 if (Dock != value) {
@@ -928,7 +928,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarTextAlign.Underneath, (int)ToolBarTextAlign.Right)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolBarTextAlign));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarTextAlign));
                 }
 
                 if (textAlign == value) return;
@@ -1184,9 +1184,9 @@ namespace System.Windows.Forms {
         private void InsertButton(int index, ToolBarButton value) {
 
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             if (index < 0 || ((buttons != null) && (index > buttonCount)))
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
             // insert the button into our local array, and then into the
             // real windows ToolBar control
@@ -1206,7 +1206,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private int InternalAddButton(ToolBarButton button) {
             if (button == null)
-                throw new ArgumentNullException("button");
+                throw new ArgumentNullException(nameof(button));
             int index = buttonCount;
             Insert(index, button);
             return index;
@@ -1799,7 +1799,7 @@ namespace System.Windows.Forms {
             public virtual ToolBarButton this[int index] {
                 get {
                     if (index < 0 || ((owner.buttons != null) && (index >= owner.buttonCount)))
-                         throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                         throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                    return owner.buttons[index];
                 }
                 set {
@@ -1807,10 +1807,10 @@ namespace System.Windows.Forms {
                     // Sanity check parameters
                     //
                     if (index < 0 || ((owner.buttons != null) && index >= owner.buttonCount)) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value == null) {
-                        throw new ArgumentNullException("value");
+                        throw new ArgumentNullException(nameof(value));
                     }
 
                     owner.InternalSetButton(index, value, true, true);
@@ -1941,7 +1941,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void AddRange(ToolBarButton[] buttons) {
                 if (buttons == null) {
-                    throw new ArgumentNullException("buttons");
+                    throw new ArgumentNullException(nameof(buttons));
                 }
                 try {
                     suspendUpdate = true;
@@ -2110,7 +2110,7 @@ namespace System.Windows.Forms {
                 int count = (owner.buttons == null) ? 0 : owner.buttonCount;
 
                 if (index < 0 || index >= count)
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                 if (owner.IsHandleCreated) {
                     owner.SendMessage(NativeMethods.TB_DELETEBUTTON, index, 0);

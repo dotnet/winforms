@@ -23,11 +23,11 @@ namespace System.Windows.Forms
         {
             if (columnIndex < 0)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
             if (rowIndex < 0)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             this.rowIndex = rowIndex;
             this.columnIndex = columnIndex;

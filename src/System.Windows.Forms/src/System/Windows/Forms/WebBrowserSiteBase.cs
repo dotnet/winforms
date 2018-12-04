@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
         //
         internal WebBrowserSiteBase(WebBrowserBase h) {
             if (h == null) {
-                throw new ArgumentNullException("h");
+                throw new ArgumentNullException(nameof(h));
             }
             this.host = h;
         }

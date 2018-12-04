@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms
             // Header Cell classes override this implementation - this implementation is only for inner cells
             if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             // Assuming (like in other places in this class) that the formatted value is independent of the style colors.
@@ -1993,7 +1993,7 @@ namespace System.Windows.Forms
             {
                 if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 if (this.ColumnIndex < 0)
                 {
@@ -2062,7 +2062,7 @@ namespace System.Windows.Forms
             // Header Cell classes override this implementation - this implementation is only for inner cells
             if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             Debug.Assert(this.owningColumn != null);
@@ -2136,7 +2136,7 @@ namespace System.Windows.Forms
             }
             if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             if (this.ColumnIndex < 0)
             {
@@ -2646,7 +2646,7 @@ namespace System.Windows.Forms
             {
                 if (rowIndex < 0 || rowIndex >= dataGridView.Rows.Count)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 if (this.ColumnIndex < 0)
                 {
@@ -2803,22 +2803,22 @@ namespace System.Windows.Forms
         {
             if (graphics == null)
             {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             if (font == null)
             {
-                throw new ArgumentNullException("font");
+                throw new ArgumentNullException(nameof(font));
             }
 
             if (maxWidth <= 0)
             {
-                throw new ArgumentOutOfRangeException("maxWidth", string.Format(SR.InvalidLowBoundArgument, "maxWidth", (maxWidth).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(maxWidth), string.Format(SR.InvalidLowBoundArgument, "maxWidth", (maxWidth).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
             {
-                throw new InvalidEnumArgumentException("flags", (int) flags, typeof(TextFormatFlags));
+                throw new InvalidEnumArgumentException(nameof(flags), (int) flags, typeof(TextFormatFlags));
             }
 
             flags &= textFormatSupportedFlags;
@@ -2836,22 +2836,22 @@ namespace System.Windows.Forms
         {
             if (graphics == null)
             {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             if (font == null)
             {
-                throw new ArgumentNullException("font");
+                throw new ArgumentNullException(nameof(font));
             }
 
             if (maxRatio <= 0.0F)
             {
-                throw new ArgumentOutOfRangeException("maxRatio", string.Format(SR.InvalidLowBoundArgument, "maxRatio", (maxRatio).ToString(CultureInfo.CurrentCulture), "0.0"));
+                throw new ArgumentOutOfRangeException(nameof(maxRatio), string.Format(SR.InvalidLowBoundArgument, "maxRatio", (maxRatio).ToString(CultureInfo.CurrentCulture), "0.0"));
             }
 
             if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
             {
-                throw new InvalidEnumArgumentException("flags", (int) flags, typeof(TextFormatFlags));
+                throw new InvalidEnumArgumentException(nameof(flags), (int) flags, typeof(TextFormatFlags));
             }
 
             if (string.IsNullOrEmpty(text))
@@ -2891,17 +2891,17 @@ namespace System.Windows.Forms
         {
             if (graphics == null)
             {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             if (font == null)
             {
-                throw new ArgumentNullException("font");
+                throw new ArgumentNullException(nameof(font));
             }
 
             if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
             {
-                throw new InvalidEnumArgumentException("flags", (int) flags, typeof(TextFormatFlags));
+                throw new InvalidEnumArgumentException(nameof(flags), (int) flags, typeof(TextFormatFlags));
             }
 
             flags &= textFormatSupportedFlags;
@@ -2917,7 +2917,7 @@ namespace System.Windows.Forms
         {
             if (maxHeight <= 0)
             {
-                throw new ArgumentOutOfRangeException("maxHeight", string.Format(SR.InvalidLowBoundArgument, "maxHeight", (maxHeight).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(maxHeight), string.Format(SR.InvalidLowBoundArgument, "maxHeight", (maxHeight).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             Size oneLineSize = DataGridViewCell.MeasureTextSize(graphics, text, font, flags);
@@ -3502,12 +3502,12 @@ namespace System.Windows.Forms
         {
             if (graphics == null)
             {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             if (this.DataGridView == null)
@@ -4413,7 +4413,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
             if (this.FormattedValueType == null)
             {

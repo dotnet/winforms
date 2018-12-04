@@ -762,7 +762,7 @@ example usage
             set {
                 //valid values are -1 to 0x40
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AccessibleRole.Default, (int)AccessibleRole.OutlineButton)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AccessibleRole));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AccessibleRole));
                 }
                 Properties.SetInteger(PropAccessibleRole, (int)value);
             }
@@ -1198,7 +1198,7 @@ example usage
                 if (BackgroundImageLayout != value) {
                     //valid values are 0x0 to 0x4
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)ImageLayout.None, (int)ImageLayout.Zoom)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(ImageLayout));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImageLayout));
                     }
                     // Check if the value is either center, strech or zoom;
                     if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch) {                    
@@ -3756,7 +3756,7 @@ example usage
             set {
                 //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
-                    throw new InvalidEnumArgumentException("RightToLeft", (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
                 }
 
                 RightToLeft oldValue = RightToLeft;
@@ -3924,7 +3924,7 @@ example usage
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("TabIndex", string.Format(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(TabIndex), string.Format(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (tabIndex != value) {
@@ -5316,7 +5316,7 @@ example usage
         protected static void ActiveXRegister(Type type) {
 
             if (type == null) {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             // If the user is not registering an AX control, then
@@ -5395,7 +5395,7 @@ example usage
         protected static void ActiveXUnregister(Type type) {
 
             if (type == null) {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             // If the user is not unregistering an AX control, then
@@ -6131,12 +6131,12 @@ example usage
         public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds) {
 
             if (bitmap == null) {
-                throw new ArgumentNullException("bitmap");
+                throw new ArgumentNullException(nameof(bitmap));
             }
 
             if (targetBounds.Width <= 0 || targetBounds.Height <= 0
                 || targetBounds.X < 0 || targetBounds.Y < 0) {
-                throw new ArgumentException("targetBounds");
+                throw new ArgumentException(nameof(targetBounds));
             }
 
             if (!IsHandleCreated) {
@@ -6179,7 +6179,7 @@ example usage
             using (new MultithreadSafeCallScope())
             {
                 if (asyncResult == null) {
-                    throw new ArgumentNullException("asyncResult");
+                    throw new ArgumentNullException(nameof(asyncResult));
                 }
 
                 ThreadMethodEntry entry = asyncResult as ThreadMethodEntry;
@@ -6459,7 +6459,7 @@ example usage
             // Since this is a Flags Enumeration... the only way to validate skipValue is by checking if its within the range.
             if(value < 0 || value > 7)
             {
-                throw new InvalidEnumArgumentException("skipValue", value, typeof(GetChildAtPointSkip));
+                throw new InvalidEnumArgumentException(nameof(skipValue), value, typeof(GetChildAtPointSkip));
             }
 
             IntPtr hwnd = UnsafeNativeMethods.ChildWindowFromPointEx(new HandleRef(null, Handle), pt.X, pt.Y, value);
@@ -8474,7 +8474,7 @@ example usage
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPrint(PaintEventArgs e) {
             if (e == null) {
-                throw new ArgumentNullException("e");
+                throw new ArgumentNullException(nameof(e));
             }
             Contract.EndContractBlock();
 
@@ -14782,7 +14782,7 @@ example usage
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual void AddRange(Control[] controls) {
                 if (controls == null) {
-                    throw new ArgumentNullException("controls");
+                    throw new ArgumentNullException(nameof(controls));
                 }
                 if (controls.Length > 0) {
 #if DEBUG
@@ -14832,7 +14832,7 @@ example usage
             /// </devdoc>
             public Control[] Find(string key, bool searchAllChildren) {
                 if (String.IsNullOrEmpty(key)) {
-                   throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
+                   throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
                 ArrayList foundControls =  FindInternal(key, searchAllChildren, this, new ArrayList());
@@ -15024,7 +15024,7 @@ example usage
                 get {
                     //do some bounds checking here...
                     if (index < 0 || index >= Count) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
                     }
 
                     Control control = (Control) InnerList[index];
@@ -15117,7 +15117,7 @@ example usage
                 // Sanity check parameters
                 //
                 if (child == null) {
-                    throw new ArgumentNullException("child");
+                    throw new ArgumentNullException(nameof(child));
                 }
 
                 int currentIndex = GetChildIndex(child);
@@ -19173,7 +19173,7 @@ example usage
 
                 // Security fix: make sure the size has non-negative width and height.
                 if (size.Width < 0 || size.Height < 0) {
-                    throw new ArgumentException("size", SR.ControlMetaFileDCWrapperSizeInvalid);
+                    throw new ArgumentException(nameof(size), SR.ControlMetaFileDCWrapperSizeInvalid);
                 }
 
                 hMetafileDC = hOriginalDC;
@@ -19355,7 +19355,7 @@ example usage
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
                 if (ownerControl == null) {
-                    throw new ArgumentNullException("ownerControl");
+                    throw new ArgumentNullException(nameof(ownerControl));
                 }
 
                 this.ownerControl = ownerControl;
@@ -19384,7 +19384,7 @@ example usage
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
                 if (ownerControl == null) {
-                    throw new ArgumentNullException("ownerControl");
+                    throw new ArgumentNullException(nameof(ownerControl));
                 }
 
                 this.AccessibleObjectId = accObjId; // ...must set this *before* setting the Handle property

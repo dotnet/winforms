@@ -297,7 +297,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(SelectionMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SelectionMode));
                 }
                 if (value != SelectionMode.One
                     && value != SelectionMode.None) {
@@ -523,7 +523,7 @@ namespace System.Windows.Forms {
         public CheckState GetItemCheckState(int index) {
 
             if (index < 0 || index >= Items.Count)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             return CheckedItems.GetCheckedState(index);
         }
 
@@ -986,11 +986,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void SetItemCheckState(int index, CheckState value) {
             if (index < 0 || index >= Items.Count) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             // valid values are 0-2 inclusive.
             if (!ClientUtils.IsEnumValid(value,(int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate)){
-                throw new InvalidEnumArgumentException("value", (int)value, typeof(CheckState));
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
             }
             CheckState currentValue = CheckedItems.GetCheckedState(index);
 
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms {
                 //
                 // Valid values are 0-2 inclusive.
                 if (!ClientUtils.IsEnumValid(check, (int)check, (int)CheckState.Unchecked, (int)CheckState.Indeterminate)){
-                    throw new InvalidEnumArgumentException("value", (int)check, typeof(CheckState));
+                    throw new InvalidEnumArgumentException(nameof(check), (int)check, typeof(CheckState));
                 }
 
                 int index = base.Add(item);

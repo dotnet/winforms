@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
             }
             set { 
                 if (value < 0) {                    
-                     throw new ArgumentOutOfRangeException("ColumnCount", value, string.Format (SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                     throw new ArgumentOutOfRangeException(nameof(ColumnCount), value, string.Format (SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);         
                 containerInfo.MaxColumns = value;
@@ -135,7 +135,7 @@ namespace System.Windows.Forms {
             }
             set { 
                 if (value < 0) {                    
-                     throw new ArgumentOutOfRangeException("RowCount", value, string.Format (SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                     throw new ArgumentOutOfRangeException(nameof(RowCount), value, string.Format (SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 containerInfo.MaxRows = value;
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
         #region Extended Properties   
         public int GetColumnSpan(object control) {
             if (control == null) {
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
             }
             if (IsStub) {
                 return _stub.GetColumnSpan(control);
@@ -244,7 +244,7 @@ namespace System.Windows.Forms {
 
         public void SetColumnSpan(object control, int value) {
             if(value < 1) {
-                throw new ArgumentOutOfRangeException("ColumnSpan", string.Format(SR.InvalidArgument, "ColumnSpan", (value).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "ColumnSpan", (value).ToString(CultureInfo.CurrentCulture)));
             }
             if (IsStub) {
                 _stub.SetColumnSpan(control, value);
@@ -274,10 +274,10 @@ namespace System.Windows.Forms {
         
         public void SetRowSpan(object control, int value) {
             if(value < 1) {
-                throw new ArgumentOutOfRangeException("RowSpan", string.Format(SR.InvalidArgument, "RowSpan", (value).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "RowSpan", (value).ToString(CultureInfo.CurrentCulture)));
             }
             if (control == null) {
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
             }
 
             if (IsStub) {
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
         [DefaultValue(-1)]
         public int GetRow(object control) {
             if (control == null) {
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
             }
             if (IsStub) {
                 return _stub.GetRow(control);
@@ -320,10 +320,10 @@ namespace System.Windows.Forms {
         //absolutely positioned to non-absolutely positioned
         public void SetRow(object control, int row) {
             if (control == null) {
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
             }
             if (row < -1) {
-                throw new ArgumentOutOfRangeException("Row", string.Format(SR.InvalidArgument, "Row", (row).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.InvalidArgument, "Row", (row).ToString(CultureInfo.CurrentCulture)));
             }   
             SetCellPosition(control, row, -1,  /*rowSpecified=*/true, /*colSpecified=*/false);
         
@@ -335,7 +335,7 @@ namespace System.Windows.Forms {
         [DefaultValue(-1)]
         public TableLayoutPanelCellPosition GetCellPosition(object control) {
             if (control == null) {
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
             }
             return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
         }
@@ -346,7 +346,7 @@ namespace System.Windows.Forms {
         [DefaultValue(-1)]
         public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition) {
            if (control == null) {
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
            }
            SetCellPosition(control, cellPosition.Row, cellPosition.Column,  /*rowSpecified=*/true, /*colSpecified=*/true);
            
@@ -358,7 +358,7 @@ namespace System.Windows.Forms {
         [DefaultValue(-1)]
         public int GetColumn(object control) {
            if (control == null) {
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
             }
             if (IsStub) {
                 return _stub.GetColumn(control);
@@ -676,7 +676,7 @@ namespace System.Windows.Forms {
             
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == null) {
-                    throw new ArgumentNullException("destinationType");
+                    throw new ArgumentNullException(nameof(destinationType));
                 }
         
                 if (destinationType == typeof(InstanceDescriptor) && value is TableLayoutStyle) {

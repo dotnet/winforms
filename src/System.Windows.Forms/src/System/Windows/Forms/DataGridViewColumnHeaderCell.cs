@@ -79,7 +79,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)SortOrder.None, (int)SortOrder.Descending))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(SortOrder)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SortOrder)); 
                 }
                 if (this.OwningColumn == null || this.DataGridView == null)
                 {
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             if (this.DataGridView == null)
@@ -228,12 +228,12 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             
             if (this.DataGridView == null || this.OwningColumn == null)
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             ContextMenuStrip contextMenuStrip = GetContextMenuStrip(-1);
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             Debug.Assert(this.DataGridView != null);
@@ -513,7 +513,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             if (this.DataGridView == null)
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
 
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
@@ -713,7 +713,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             if (this.ContainsLocalValue)
             {
@@ -747,7 +747,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             PaintPrivate(graphics, 
@@ -1198,7 +1198,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             object originalValue = GetValue(rowIndex);

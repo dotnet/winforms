@@ -38,15 +38,15 @@ namespace System.Windows.Forms
         {
             if (dataGridView == null)
             {
-                throw new ArgumentNullException("dataGridView");
+                throw new ArgumentNullException(nameof(dataGridView));
             }
             if (graphics == null)
             {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             if (inheritedRowStyle == null)
             {
-                throw new ArgumentNullException("inheritedRowStyle");
+                throw new ArgumentNullException(nameof(inheritedRowStyle));
             }
             this.dataGridView = dataGridView;
             this.graphics = graphics;
