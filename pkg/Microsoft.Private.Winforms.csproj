@@ -48,8 +48,23 @@
   <!-- Any projects referenced here will have their outputs automatically put into the package -->
   <!-- If you add a new csproj, and you want the outputs in the package, you must add it here -->
   <ItemGroup>
+    <!-- Facade for System.Design include -->
+    <ProjectReference Include="..\src\System.Design\src\System.Design.Facade.csproj" />
+
+    <!-- Facade for System.Drawing.Design include -->
+    <ProjectReference Include="..\src\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
+
+    <!-- Reference and Source System.Windows.Forms includes -->
     <ProjectReference Include="..\src\System.Windows.Forms\ref\System.Windows.Forms.Ref.csproj" />
     <ProjectReference Include="..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+
+    <!-- Reference and Source System.Windows.Forms.Design includes -->
+    <ProjectReference Include="..\src\System.Windows.Forms.Design\ref\System.Windows.Forms.Design.Ref.csproj" />
+    <ProjectReference Include="..\src\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
+    
+    <!-- Reference and Source System.Windows.Forms.Design.Editors includes -->
+    <ProjectReference Include="..\src\System.Windows.Forms.Design.Editors\ref\System.Windows.Forms.Design.Editors.Ref.csproj" />
+    <ProjectReference Include="..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
   </ItemGroup>
 
   <!-- Force the output item type for all project references to "TfmSpecificPackageFile", which makes them get packed -->
@@ -72,8 +87,10 @@
       <TfmSpecificPackageFile>
         <!-- Put everything under lib by default -->
         <PackagePath>lib/$(TargetFramework)</PackagePath>
-        <!-- If the reference ends with Ref.csproj, it's a reference binary, so put it under ref -->
+        <!-- If the reference ends with Ref.csproj, it's a reference binary, so put it under ref instead -->
         <PackagePath Condition="$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj'))">ref/$(TargetFramework)</PackagePath>
+        <!-- If the reference ends with Facade.csproj, it's a facade binary, so put it under both lib and ref  -->
+        <PackagePath Condition="$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Facade.csproj'))">lib/$(TargetFramework);ref/$(TargetFramework)</PackagePath>
       </TfmSpecificPackageFile>
     </ItemGroup>
   </Target>
@@ -89,13 +106,14 @@
       <_baseFileName>%(TfmSpecificPackageFile.FileName)</_baseFileName>
       <_packagePath>%(TfmSpecificPackageFile.PackagePath)</_packagePath>
       <_isReferenceAssembly>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj'))</_isReferenceAssembly>
+      <_isFacadeAssembly>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Facade.csproj'))</_isFacadeAssembly>
     </PropertyGroup>
     
     <ItemGroup>
 
-      <!-- Get pdbs, but not for reference binaries -->
+      <!-- Get pdbs, but not for neither reference binaries nor facade binaries -->
       <TfmSpecificPackageFile Include="$(_baseDirectory)$(_baseFileName).pdb" 
-                              Condition="Exists('$(_baseDirectory)$(_baseFileName).pdb') And !$(_isReferenceAssembly)">
+                              Condition="Exists('$(_baseDirectory)$(_baseFileName).pdb') And !$(_isReferenceAssembly) And !$(_isFacadeAssembly)">
         <PackagePath>$(_packagePath)</PackagePath>
       </TfmSpecificPackageFile>
 
