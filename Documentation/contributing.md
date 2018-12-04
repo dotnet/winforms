@@ -4,12 +4,12 @@ The primary focus of .NET Core 3.0 release for Windows Forms is to achieve parit
 
 We need the most help with the following types of changes:
 
-* Test fixes, test improvements and new tests increasing code coverage.
+* Test fixes, test improvements, and new tests increasing code coverage.
 * Bug fixes that specifically target parity between .NET Core and .NET Framework.
 
 Please [file an issue](https://github.com/dotnet/winforms/issues) for any larger change you would like to propose.
 
-See [Developer Guide](developer-guide.md) to learn how to develop changes for this repo.
+See [Developer Guide](developer-guide.md) to learn how to develop changes for this repository.
 
 This project follows the general [.NET Core Contribution Guidelines](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md). Please read it before submitting PRs.
 

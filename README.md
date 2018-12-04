@@ -1,17 +1,18 @@
 # Windows Forms
+
 [![Build Status](https://dnceng.visualstudio.com/public/_apis/build/status/dotnet/winforms/dotnet-winforms%20CI)](https://dnceng.visualstudio.com/public/_build/latest?definitionId=267&branch=master)
 
 Windows Forms (WinForms) is a UI framework for building Windows desktop applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms.
 
-WinForms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
+Windows Forms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
 > Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See issue #147](https://github.com/dotnet/winforms/issues/147).
 
-See the [Windows Forms Roadmap](roadmap.md) to learn about project priorities, status and ship dates.
+To learn about project priorities as well as status and ship dates see the [Windows Forms Roadmap](roadmap.md) .
 
-This repo contains WinForms for .NET Core. It does not contain the .NET Framework variant of WinForms.
+This repository contains WinForms for .NET Core. It does not contain the .NET Framework variant of WinForms.
 
-[WPF](https://github.com/dotnet/wpf) is another UI framework for building Windows desktop applications that is supported on .NET Core. WPF and WinForms applications only run on Windows. They are part of the `Microsoft.NET.Sdk.WindowsDesktop` SDK. You are recommended to use Visual Studio 2019 Preview 1 to use WPF and WinForms with .NET Core.
+[Windows Presentation Foundation](https://github.com/dotnet/wpf) (WPF) is another UI framework used to build Windows desktop applications which is supported on .NET Core. WPF and Windows Forms applications  run only on Windows operating systems. They are part of the `Microsoft.NET.Sdk.WindowsDesktop` SDK. You are recommended to use Visual Studio 2019 Preview 1 to use WPF and Windows Forms with .NET Core.
 
 ## Getting started
 
@@ -46,7 +47,7 @@ Some of the best ways to contribute are to try things out, file bugs, join in de
 
 ### .NET Framework issues
 
-Issues with .NET Framework, including WinForms, should be filed on [VS developer community](https://developercommunity.visualstudio.com/spaces/61/index.html), or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support). They should not be filed on this repo.
+Issues with .NET Framework, including WinForms, should be filed on [VS developer community](https://developercommunity.visualstudio.com/spaces/61/index.html), or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support). They should not be filed on this repository.
 
 ### Reporting security issues
 
@@ -64,10 +65,10 @@ This project uses the [.NET Foundation Code of Conduct](https://dotnetfoundation
 
 ## License
 
-.NET Core (including the WinForms repo) is licensed under the [MIT license](LICENSE.TXT).
+.NET Core (including the Windows Forms repository) is licensed under the [MIT license](LICENSE.TXT).
 
 ## .NET Foundation
 
 .NET Core WinForms is a [.NET Foundation](https://www.dotnetfoundation.org/projects) project.
 
-See the [.NET home repo](https://github.com/Microsoft/dotnet) to find other .NET-related projects.
+See the [.NET home repository](https://github.com/Microsoft/dotnet) to find other .NET-related projects.

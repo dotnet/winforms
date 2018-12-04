@@ -5,8 +5,8 @@ This roadmap communicates priorities for evolving and extending the scope of Win
 At present, our primary focus is enabling the following for .NET Core 3.0:
 
 * Achieve WinForms functional and performance parity compared to .NET Framework
-* Publish remaining WinForms components to the repo
-* Publish (and write) more WinForms tests to the repo
+* Publish remaining WinForms components to the repository
+* Publish (and write) more WinForms tests to the repository
 
 > Note: There are some specific .NET Framework features will not be supported, such as hosting WinForms controls in Internet Explorer.
 
@@ -29,7 +29,7 @@ Guide](Documentation/contributing.md).
 
 ## Shorter-Term Feature Backlog
 
-* Port existing functional tests and test infrastructure to this repo
+* Port existing functional tests and test infrastructure to this repository
 * Add Application property for DPI Awareness setting
 
 ## Longer-Term Feature Backlog
