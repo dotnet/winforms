@@ -301,7 +301,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.CurrentAutoScaleDimensions"]/*' />
         /// <devdoc>
         ///     CurrentAutoScaleDimensions represent the actual DPI or Font settings
-        ///     of the display at runtime. If the AutoScaleMode is set to ‘None’ then
+        ///     of the display at runtime. If the AutoScaleMode is set to ï¿½Noneï¿½ then
         ///     the CurrentAutoScaleDimensions is equal to the ActualScaleDimensions
         /// </devdoc>
         [Browsable(false)]
@@ -1101,7 +1101,7 @@ namespace System.Windows.Forms {
 
                         bool scaleUs = (requestingControl != this || state[stateParentChanged]);
 
-                        // Hack for design time support:  we may be parented within another form
+                        // For design time support:  we may be parented within another form
                         // that is not part of the designer.
                         if (!scaleUs) {
                             bool dt = false;

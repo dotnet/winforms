@@ -75,7 +75,7 @@ namespace System.Windows.Forms.ButtonInternal {
             // Now overlay the background image or backcolor (the former overrides the latter), leaving a 
             // margin. We hardcode this margin for now since GetThemeMargins returns 0 all the
             // time. 
-            //HACK We need to see what's best here.  changing this to HACK because GetThemeMargins simply does not
+            // Changing this because GetThemeMargins simply does not
             // work in some cases.
             bounds.Inflate(-buttonBorderSize, -buttonBorderSize);
 
