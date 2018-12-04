@@ -301,7 +301,7 @@ namespace System.Resources {
 
                 if (textWriter != null) {
                     textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                    writeHeaderHeaderRequired = true;
+                    writeHeaderRequired = true;
 
                     xmlTextWriter = new XmlTextWriter(textWriter);
                 }
@@ -315,7 +315,7 @@ namespace System.Resources {
                 xmlTextWriter.Formatting = Formatting.Indented;
                 xmlTextWriter.Indentation = 2;
 
-                if (!writeHeaderHeaderRequired) {
+                if (!writeHeaderRequired) {
                     xmlTextWriter.WriteStartDocument(); // writes <?xml version="1.0" encoding="utf-8"?>
                 }
             }
