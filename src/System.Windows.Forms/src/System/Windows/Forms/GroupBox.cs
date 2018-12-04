@@ -30,8 +30,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("Enter"),
-    DefaultProperty("Text"),
+    DefaultEvent(nameof(Enter)),
+    DefaultProperty(nameof(Text)),
     Designer("System.Windows.Forms.Design.GroupBoxDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionGroupBox))
     ]
@@ -510,10 +510,11 @@ namespace System.Windows.Forms {
         protected override void OnPaint(PaintEventArgs e) {
             
         
-            // BACKCOMPAT HACK:
+            // BACKCOMPAT requirement:
             // Why the Height/Width >= 10 check? This is because uxtheme doesn't seem to handle those cases
             // similar to what we do for the non-themed case, so if someone is using the groupbox as a
             // separator, their app will look weird in Whidbey. We render the old way in these cases.
+            
             if (Application.RenderWithVisualStyles && Width >= 10 && Height >= 10) {
                 GroupBoxState gbState = Enabled ? GroupBoxState.Normal : GroupBoxState.Disabled;
                 TextFormatFlags textFlags = TextFormatFlags.Default | TextFormatFlags.TextBoxControl | TextFormatFlags.WordBreak | TextFormatFlags.PreserveGraphicsTranslateTransform | TextFormatFlags.PreserveGraphicsClipping;

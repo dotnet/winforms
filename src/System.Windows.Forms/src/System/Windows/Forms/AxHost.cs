@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
     ClassInterface(ClassInterfaceType.AutoDispatch),
     ToolboxItem(false),
     DesignTimeVisible(false),
-    DefaultEvent("Enter"),
+    DefaultEvent(nameof(Enter)),
     Designer("System.Windows.Forms.Design.AxHostDesigner, " + AssemblyRef.SystemDesign),
     PermissionSet(SecurityAction.LinkDemand, Name="FullTrust"),
     PermissionSet(SecurityAction.InheritanceDemand, Name="FullTrust")

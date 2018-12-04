@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox"]/*' />
     /// <devdoc/>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
-    [DefaultProperty("Items")]
+    [DefaultProperty(nameof(Items))]
     public class ToolStripComboBox : ToolStripControlHost {
 
 

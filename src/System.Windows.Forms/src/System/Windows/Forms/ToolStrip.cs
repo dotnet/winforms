@@ -34,9 +34,9 @@ namespace System.Windows.Forms {
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DesignerSerializer("System.Windows.Forms.Design.ToolStripCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     [Designer("System.Windows.Forms.Design.ToolStripDesigner, " + AssemblyRef.SystemDesign)]
-    [DefaultProperty("Items")]
+    [DefaultProperty(nameof(Items))]
     [SRDescription(nameof(SR.DescriptionToolStrip))]
-    [DefaultEvent("ItemClicked")]
+    [DefaultEvent(nameof(ItemClicked))]
     
 
     public class ToolStrip : System.Windows.Forms.ScrollableControl, 

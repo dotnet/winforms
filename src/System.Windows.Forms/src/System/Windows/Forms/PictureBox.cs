@@ -29,8 +29,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Image"),
-    DefaultBindingProperty("Image"),
+    DefaultProperty(nameof(Image)),
+    DefaultBindingProperty(nameof(Image)),
     Docking(DockingBehavior.Ask),
     Designer("System.Windows.Forms.Design.PictureBoxDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionPictureBox))

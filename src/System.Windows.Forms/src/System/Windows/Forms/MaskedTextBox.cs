@@ -27,9 +27,9 @@ namespace System.Windows.Forms
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("MaskInputRejected"),
-    DefaultBindingProperty("Text"),
-    DefaultProperty("Mask"),
+    DefaultEvent(nameof(MaskInputRejected)),
+    DefaultBindingProperty(nameof(Text)),
+    DefaultProperty(nameof(Mask)),
     Designer("System.Windows.Forms.Design.MaskedTextBoxDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionMaskedTextBox))
     ]

@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     ///    <para> Allows users to select a printer and choose which
     ///       portions of the document to print.</para>
     /// </devdoc>
-    [DefaultProperty("Document")]
+    [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintDialog))]
     [Designer("System.Windows.Forms.Design.PrintDialogDesigner, " + AssemblyRef.SystemDesign)]
     // The only event this dialog has is HelpRequested, which isn't very useful

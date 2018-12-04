@@ -36,8 +36,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Nodes"),
-    DefaultEvent("AfterSelect"),
+    DefaultProperty(nameof(Nodes)),
+    DefaultEvent(nameof(AfterSelect)),
     Docking(DockingBehavior.Ask),
     Designer("System.Windows.Forms.Design.TreeViewDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionTreeView))

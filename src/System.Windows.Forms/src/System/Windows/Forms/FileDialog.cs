@@ -33,8 +33,8 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     [
-    DefaultEvent("FileOk"),
-    DefaultProperty("FileName")
+    DefaultEvent(nameof(FileOk)),
+    DefaultProperty(nameof(FileName))
     ]
     public abstract partial class FileDialog : CommonDialog {
 

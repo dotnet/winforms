@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
     ClassInterface(ClassInterfaceType.AutoDispatch),
     PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust"),
     PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust"),
-    DefaultProperty("Url"), DefaultEvent("DocumentCompleted"),
+    DefaultProperty(nameof(Url)), DefaultEvent(nameof(DocumentCompleted)),
     Docking(DockingBehavior.AutoDock),
     SRDescription(nameof(SR.DescriptionWebBrowser)),
     Designer("System.Windows.Forms.Design.WebBrowserDesigner, " + AssemblyRef.SystemDesign)]

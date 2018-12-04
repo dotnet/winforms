@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AnchorEditorAccName" xml:space="preserve">
+    <value>Anchor Editor</value>
+  </data>
+  <data name="AnchorEditorBottomAccName" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="AnchorEditorLeftAccName" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="AnchorEditorRightAccName" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="AnchorEditorTopAccName" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="bitmapFileDescription" xml:space="preserve">
+    <value>Bitmap files</value>
+  </data>
+  <data name="ColorEditorAccName" xml:space="preserve">
+    <value>Color Picker</value>
+  </data>
+  <data name="ColorEditorPaletteTab" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="ColorEditorStandardTab" xml:space="preserve">
+    <value>Web</value>
+  </data>
+  <data name="ColorEditorSystemTab" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="DockEditorAccName" xml:space="preserve">
+    <value>Dock Picker</value>
+  </data>
+  <data name="DockEditorBottomAccName" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="DockEditorFillAccName" xml:space="preserve">
+    <value>Fill</value>
+  </data>
+  <data name="DockEditorLeftAccName" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="DockEditorNoneAccName" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="DockEditorRightAccName" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="DockEditorTopAccName" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="GenericFileFilter" xml:space="preserve">
+    <value>All Files(*.*)|*.*</value>
+  </data>
+  <data name="GenericOpenFile" xml:space="preserve">
+    <value>Open File</value>
+  </data>
+  <data name="imageFileDescription" xml:space="preserve">
+    <value>All image files</value>
+  </data>
+  <data name="metafileFileDescription" xml:space="preserve">
+    <value>Metafiles</value>
+  </data>
+  <data name="PlatformNotSupported_WinformsDesigner" xml:space="preserve">
+    <value>Winforms Designer is not supported on this platform.</value>
+  </data>
+  <data name="ShortcutKeys_InvalidKey" xml:space="preserve">
+    <value>(Unknown)</value>
+  </data>
+</root>

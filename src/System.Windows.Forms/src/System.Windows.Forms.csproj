@@ -3,22 +3,24 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Windows.Forms</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>    
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CLSCompliant>false</CLSCompliant>
     <NoWarn>$(NoWarn);618;649</NoWarn>
     <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;WINFORMS_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
+    <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="$(AccessibilityPackage)" Version="$(AccessibilityPackageVersion)" />
-    <PackageReference Include="$(MicrosoftWin32RegistryPackage)" Version="$(MicrosoftWin32RegistryPackageVersion)" />
-    <PackageReference Include="$(MicrosoftWin32SystemEventsPackage)" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
-    <PackageReference Include="$(SystemConfigurationConfigurationManagerPackage)" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
-    <PackageReference Include="$(SystemDrawingCommonPackage)" Version="$(SystemDrawingCommonPackageVersion)" />
-    <PackageReference Include="$(SystemDrawingDesignPrimitivesPackage)" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
-    <PackageReference Include="$(SystemDrawingPrimitivesPackage)" Version="$(SystemDrawingPrimitivesPackageVersion)" />
-    <PackageReference Include="$(SystemMediaSoundPlayerPackage)" Version="$(SystemMediaSoundPlayerPackageVersion)" />
-    <PackageReference Include="$(SystemSecurityCryptographyCngPackage)" Version="$(SystemSecurityCryptographyCngPackageVersion)" />
-    <PackageReference Include="$(SystemSecurityPermissionsPackage)" Version="$(SystemSecurityPermissionsPackageVersion)" />
+    <PackageReference Include="Accessibility" Version="$(AccessibilityPackageVersion)" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryPackageVersion)" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
+    <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
+    <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
+    <PackageReference Include="System.Drawing.Primitives" Version="$(SystemDrawingPrimitivesPackageVersion)" />
+    <PackageReference Include="System.Media.SoundPlayer" Version="$(SystemMediaSoundPlayerPackageVersion)" />
+    <PackageReference Include="System.Security.Cryptography.Cng" Version="$(SystemSecurityCryptographyCngPackageVersion)" />
+    <PackageReference Include="System.Security.Permissions" Version="$(SystemSecurityPermissionsPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

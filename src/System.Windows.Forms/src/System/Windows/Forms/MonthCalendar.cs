@@ -66,9 +66,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("SelectionRange"),
-    DefaultEvent("DateChanged"),
-    DefaultBindingProperty("SelectionRange"),
+    DefaultProperty(nameof(SelectionRange)),
+    DefaultEvent(nameof(DateChanged)),
+    DefaultBindingProperty(nameof(SelectionRange)),
     Designer("System.Windows.Forms.Design.MonthCalendarDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionMonthCalendar))
     ]

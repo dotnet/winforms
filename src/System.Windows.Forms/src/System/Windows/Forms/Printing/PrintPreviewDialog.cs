@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
     ClassInterface(ClassInterfaceType.AutoDispatch),
     Designer("System.ComponentModel.Design.ComponentDesigner, " + AssemblyRef.SystemDesign),
     DesignTimeVisible(true),
-    DefaultProperty("Document"),
+    DefaultProperty(nameof(Document)),
     ToolboxItemFilter("System.Windows.Forms.Control.TopLevel"),
     ToolboxItem(true),
     SRDescription(nameof(SR.DescriptionPrintPreviewDialog))

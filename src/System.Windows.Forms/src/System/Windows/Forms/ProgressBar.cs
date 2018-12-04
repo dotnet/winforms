@@ -29,8 +29,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Value"),
-    DefaultBindingProperty("Value"),
+    DefaultProperty(nameof(Value)),
+    DefaultBindingProperty(nameof(Value)),
     SRDescription(nameof(SR.DescriptionProgressBar))
     ]
     public class ProgressBar : Control {

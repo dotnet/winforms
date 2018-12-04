@@ -697,8 +697,8 @@ namespace System.Windows.Forms.Layout {
             // dock and anchoring, and we are actually constrained in at least one direction,
             // then we should honor the constraint.
 
-            // The Int16.MaxValue check will tell us whether we are actually constrained or not. It's a bit of a hack,
-            // but it should be okay. 
+            // The Int16.MaxValue check will tell us whether we are actually constrained or not. This is not ideal.
+
             if (dontHonorConstraint && (proposedConstraints.Width < Int16.MaxValue)) {
                 TableLayoutPanel tlp = containerInfo.Container as TableLayoutPanel;
                 if (tlp != null && tlp.ParentInternal != null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance) {
@@ -807,8 +807,8 @@ namespace System.Windows.Forms.Layout {
             // dock and anchoring, and we are actually constrained in at least one direction,
             // then we should honor the constraint.
 
-            // The Int16.MaxValue check will tell us whether we are actually constrained or not. It's a bit of a hack,
-            // but it should be okay. 
+            // The Int16.MaxValue check will tell us whether we are actually constrained or not. This is not ideal.
+            
             if (dontHonorConstraint && (proposedConstraints.Height < Int16.MaxValue)) {
                 TableLayoutPanel tlp = containerInfo.Container as TableLayoutPanel;
                 if (tlp != null && tlp.ParentInternal != null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance) {

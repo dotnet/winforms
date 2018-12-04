@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     /// <para>Manages the collection of System.Windows.Forms.BindingManagerBase
     /// objects for a Win Form.</para>
     /// </devdoc>
-    [DefaultEvent("CollectionChanged")]
+    [DefaultEvent(nameof(CollectionChanged))]
     public class BindingContext : ICollection {
 
         private Hashtable listManagers;

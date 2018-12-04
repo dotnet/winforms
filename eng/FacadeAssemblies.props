@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <IsFacadeAssembly Condition="'$(IsFacadeAssembly)'=='' AND ($(MSBuildProjectName.EndsWith('.Facade')))">true</IsFacadeAssembly>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(IsFacadeAssembly)'=='true'"> 
+    <IsPartialFacadeAssembly>true</IsPartialFacadeAssembly>
+    <GenFacadesIgnoreMissingTypes>true</GenFacadesIgnoreMissingTypes>
+
+    <!-- allow desktop references -->
+    <AssetTargetFallback>net472</AssetTargetFallback>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+    <MicrosoftTargetingPackNETFrameworkv472Package>Microsoft.TargetingPack.NETFramework.v4.7.2</MicrosoftTargetingPackNETFrameworkv472Package>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsFacadeAssembly)'=='true'">
+    
+    <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" />
+    <PackageReference Include="$(MicrosoftTargetingPackNETFrameworkv472Package)" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" />
+  </ItemGroup>
+  
+  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" AfterTargets="ResolvePackageDependenciesForBuild">
+    <ItemGroup>
+      <_desktopReference Include="@(Reference)" Condition="'%(Reference.NuGetPackageId)' == '$(MicrosoftTargetingPackNETFrameworkv472Package)'" />
+      <Reference Remove="@(_desktopReference)" />
+      <ResolvedMatchingContract Include="@(_desktopReference)" Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'" />
+
+      <!-- in case we're regenerating a facade that is already referenced -->
+      <Reference Remove="@(Reference)"  Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'"/>
+    </ItemGroup>
+  </Target>
+
+  <!-- https://github.com/dotnet/arcade/issues/1374 -->
+  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="EnsureBuildToolsRuntime" />
+
+</Project>

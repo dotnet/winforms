@@ -100,5 +100,11 @@ namespace WinformsControlsTest
         {
             (new DateTimePicker()).Show();
         }
+
+        private void folderBrowserDialogButton_Click(object sender, EventArgs e)
+        {
+            var dialog = new FolderBrowserDialog();
+            dialog.ShowDialog();
+        }
     }
 }

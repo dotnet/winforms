@@ -25,8 +25,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("BorderStyle"),
-    DefaultEvent("Paint"),
+    DefaultProperty(nameof(BorderStyle)),
+    DefaultEvent(nameof(Paint)),
     Docking(DockingBehavior.Ask),
     Designer("System.Windows.Forms.Design.PanelDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionPanel))

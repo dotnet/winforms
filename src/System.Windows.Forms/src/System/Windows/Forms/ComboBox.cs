@@ -41,9 +41,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("SelectedIndexChanged"),
-    DefaultProperty("Items"),
-    DefaultBindingProperty("Text"),
+    DefaultEvent(nameof(SelectedIndexChanged)),
+    DefaultProperty(nameof(Items)),
+    DefaultBindingProperty(nameof(Text)),
     Designer("System.Windows.Forms.Design.ComboBoxDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionComboBox))
     ]
@@ -1280,7 +1280,7 @@ namespace System.Windows.Forms {
 
                         int index = FindStringIgnoreCase(value);
 
-                        //we cannot set the index to -1 unless we want to do a hack and save/restore text
+                        //we cannot set the index to -1 unless we want to do something unusual and save/restore text
                         //because the native control will erase the text when we change the index to -1
                         if (index != -1) {
                             SelectedIndex = index;
@@ -3521,8 +3521,6 @@ namespace System.Windows.Forms {
                         // when we are a Flat DropDownList, we need to force a repaint. The easiest way to do this is to send a 
                         // WM_MOUSELEAVE to ourselves, since that also sets up the right state. Or... at least the state is the same
                         // as with Theming on.
-
-                        // This is such a @#$(*&#@$ hack.
                         
                         if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && this.DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)) {
                             UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.WM_MOUSELEAVE, 0, 0);                            

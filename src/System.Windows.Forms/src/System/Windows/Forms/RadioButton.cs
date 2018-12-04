@@ -33,9 +33,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Checked"),
-    DefaultEvent("CheckedChanged"),
-    DefaultBindingProperty("Checked"),
+    DefaultProperty(nameof(Checked)),
+    DefaultEvent(nameof(CheckedChanged)),
+    DefaultBindingProperty(nameof(Checked)),
     ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
     Designer("System.Windows.Forms.Design.RadioButtonDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionRadioButton))

@@ -26,7 +26,7 @@ namespace System.Windows.Forms {
     ///       controls that allow the user to define custom colors.
     ///    </para>
     /// </devdoc>
-    [DefaultProperty("Color")]
+    [DefaultProperty(nameof(Color))]
     [SRDescription(nameof(SR.DescriptionColorDialog))]
     // The only event this dialog has is HelpRequest, which isn't very useful
     public class ColorDialog : CommonDialog {

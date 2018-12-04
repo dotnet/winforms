@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     ///    <para> Represents
     ///       a dialog box that allows users to manipulate page settings, including margins and paper orientation.</para>
     /// </devdoc>
-    [DefaultProperty("Document")]
+    [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPageSetupDialog))]
     // The only event this dialog has is HelpRequested, which isn't very useful
     public sealed class PageSetupDialog : CommonDialog {

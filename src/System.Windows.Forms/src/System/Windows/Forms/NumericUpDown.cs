@@ -23,9 +23,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Value"),
-    DefaultEvent("ValueChanged"),
-    DefaultBindingProperty("Value"),
+    DefaultProperty(nameof(Value)),
+    DefaultEvent(nameof(ValueChanged)),
+    DefaultBindingProperty(nameof(Value)),
     SRDescription(nameof(SR.DescriptionNumericUpDown))
     ]
     public class NumericUpDown : UpDownBase, ISupportInitialize {

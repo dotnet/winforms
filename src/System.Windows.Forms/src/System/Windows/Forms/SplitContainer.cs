@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("SplitterMoved"),
+    DefaultEvent(nameof(SplitterMoved)),
     Docking(DockingBehavior.AutoDock),
     Designer("System.Windows.Forms.Design.SplitContainerDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionSplitContainer))

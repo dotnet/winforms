@@ -58,8 +58,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Text"),
-    DefaultEvent("Click"),
+    DefaultProperty(nameof(Text)),
+    DefaultEvent(nameof(Click)),
     Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign),
     DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
     ToolboxItemFilter("System.Windows.Forms")
@@ -196,7 +196,7 @@ namespace System.Windows.Forms {
         internal const int STATE_PARENTRECREATING       = 0x20000000;
         internal const int STATE_MIRRORED               = 0x40000000;        
 
-        // HACK HACK HACK - when we change RightToLeft, we need to change the scrollbar thumb.
+        // When we change RightToLeft, we need to change the scrollbar thumb.
         // We can't do that until after the control has been created, and all the items added
         // back. This is because the system control won't know the nMin and nMax of the scroll
         // bar until the items are added. So in RightToLeftChanged, we set a flag that indicates

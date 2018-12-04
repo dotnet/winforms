@@ -5092,11 +5092,6 @@
         <target state="new">Application does not support Windows Forms just-in-time (JIT)\r\ndebugging. Contact the application author for more\r\ninformation.\r\n</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgFooterSwitchable">
-        <source>To enable just-in-time (JIT) debugging, the .config file for this\r\napplication or computer (machine.config) must have the\r\njitDebugging value set in the system.windows.forms section.\r\nThe application must also be compiled with debugging\r\nenabled.\r\n\r\nFor example:\r\n\r\n\r\n    \r\n\r\n\r\nWhen JIT debugging is enabled, any unhandled exception\r\nwill be sent to the JIT debugger registered on the computer\r\nrather than be handled by this dialog box.\r\n</source>
-        <target state="new">To enable just-in-time (JIT) debugging, the .config file for this\r\napplication or computer (machine.config) must have the\r\njitDebugging value set in the system.windows.forms section.\r\nThe application must also be compiled with debugging\r\nenabled.\r\n\r\nFor example:\r\n\r\n\r\n    \r\n\r\n\r\nWhen JIT debugging is enabled, any unhandled exception\r\nwill be sent to the JIT debugger registered on the computer\r\nrather than be handled by this dialog box.\r\n</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
         <source>Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</source>
         <target state="new">Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</target>
@@ -5420,6 +5415,11 @@
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
         <source>Include the New Folder button in the dialog box.</source>
         <target state="new">Include the New Folder button in the dialog box.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
+        <source>A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.</source>
+        <target state="new">A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormAcceptButtonDescr">

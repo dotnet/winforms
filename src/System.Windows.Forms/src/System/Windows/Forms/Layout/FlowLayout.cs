@@ -423,8 +423,7 @@ namespace System.Windows.Forms.Layout {
                         Point pt = new Point(newBounds.X, newBounds.Y);
 
                         if (IsVertical) {
-                            // TRICKY TRICKY TRICKY.... HACK HACK HACK...
-                            // 
+                            
                             // We need to treat Vertical a litte differently. It really helps if you draw this out.
                             // Remember that when we layout BottomUp, we first layout TopDown, then call this method.
                             // When we layout TopDown we layout in flipped rectangles. I.e. x becomes y, y becomes x, 
@@ -433,12 +432,7 @@ namespace System.Windows.Forms.Layout {
                             // become y. We need to adjust for scrolling - but only in the y direction - 
                             // and since x becomes y, we adjust x. But since AutoScrollPoisition has not been swapped, 
                             // we need to use its Y coordinate when offsetting.
-                            //
-                            // DRAW THIS OUT!!!
-                            //
-                            // Did I mention you should draw this out?
-                            //
-                            // Did I mention that everything is flipped?
+
                             pt.Offset(ptScroll.Y, 0);
                         } else {
                             pt.Offset(ptScroll.X, 0);

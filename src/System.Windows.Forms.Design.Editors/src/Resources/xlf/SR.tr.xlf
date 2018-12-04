@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="tr" original="../SR.resx">
+    <body>
+      <trans-unit id="AnchorEditorAccName">
+        <source>Anchor Editor</source>
+        <target state="new">Anchor Editor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AnchorEditorBottomAccName">
+        <source>Bottom</source>
+        <target state="new">Bottom</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AnchorEditorLeftAccName">
+        <source>Left</source>
+        <target state="new">Left</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AnchorEditorRightAccName">
+        <source>Right</source>
+        <target state="new">Right</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AnchorEditorTopAccName">
+        <source>Top</source>
+        <target state="new">Top</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ColorEditorAccName">
+        <source>Color Picker</source>
+        <target state="new">Color Picker</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ColorEditorPaletteTab">
+        <source>Custom</source>
+        <target state="new">Custom</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ColorEditorStandardTab">
+        <source>Web</source>
+        <target state="new">Web</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ColorEditorSystemTab">
+        <source>System</source>
+        <target state="new">System</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorAccName">
+        <source>Dock Picker</source>
+        <target state="new">Dock Picker</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorBottomAccName">
+        <source>Bottom</source>
+        <target state="new">Bottom</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorFillAccName">
+        <source>Fill</source>
+        <target state="new">Fill</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorLeftAccName">
+        <source>Left</source>
+        <target state="new">Left</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorNoneAccName">
+        <source>None</source>
+        <target state="new">None</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorRightAccName">
+        <source>Right</source>
+        <target state="new">Right</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorTopAccName">
+        <source>Top</source>
+        <target state="new">Top</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="GenericFileFilter">
+        <source>All Files(*.*)|*.*</source>
+        <target state="new">All Files(*.*)|*.*</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="GenericOpenFile">
+        <source>Open File</source>
+        <target state="new">Open File</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PlatformNotSupported_WinformsDesigner">
+        <source>Winforms Designer is not supported on this platform.</source>
+        <target state="new">Winforms Designer is not supported on this platform.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ShortcutKeys_InvalidKey">
+        <source>(Unknown)</source>
+        <target state="new">(Unknown)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="bitmapFileDescription">
+        <source>Bitmap files</source>
+        <target state="new">Bitmap files</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="imageFileDescription">
+        <source>All image files</source>
+        <target state="new">All image files</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="metafileFileDescription">
+        <source>Metafiles</source>
+        <target state="new">Metafiles</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -6,8 +6,6 @@ It may be as simple as a small product or test bug or as large as the work track
 
 We will keep issues open even if the WinForms team internally has no plans to address them in an upcoming release, as long as we believe they are in line with our direction.
 
-
-
 ## How to file issues
 
 You can help us streamline our response time to your feedback and ideas by filing high-quality reports.
@@ -27,8 +25,6 @@ Ideally, assume that the reader has minimal knowledge and experience with writin
 
 For API suggestions, check [API review process](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/api-review-process.md), especially [example of good API proposals](https://github.com/dotnet/corefx/issues/271).
 
-
-
 ## Labels
 
 We use GitHub [labels](https://github.com/dotnet/winforms/labels) on our issues in order to classify them. We have the following categories per issue:
@@ -42,8 +38,6 @@ We use GitHub [labels](https://github.com/dotnet/winforms/labels) on our issues 
     * [needs-more-info](https://github.com/dotnet/winforms/labels/needs-more-info): Issues which need more information to be actionable. Usually this will be because we can't reproduce a reported bug. We'll close these issues after a little bit if we haven't gotten actionable information, but we welcome folks who have acquired more information to reopen the issue.
     * [tenet-compatibility](https://github.com/dotnet/winforms/labels/tenet-compatibility): Incompatibility between relesed versions or with WinForms for .NET Framework.
 
-
-
 ## Milestones
 
 We use [milestones](https://github.com/dotnet/winforms/milestones) to prioritize work for each upcoming release.
@@ -54,29 +48,16 @@ We use [milestones](https://github.com/dotnet/winforms/milestones) to prioritize
 * **Future** milestone tracks all potential future work (which may or may not happen). When we are done with 3.0 release, we will move some of these issues into the next immediate milestone.
     * Please do not start discussions about next post-3.0 milestone until we are close to final 3.0 release. If you want to express your opinion on prioritization, please [upvote first post of the issue](#upvotes-on-issues) instead.
 
-
-
 ## Assignee
 
 We assign each issue to assignee, when the assignee is ready to pick up the work and start working on it.
 If the issue is not assigned to anyone and you want to pick it up, please say so - we will assign the issue to you.
 If the issue is already assigned to someone, please coordinate with the assignee before you start working on it.
 
-
-
 ## Upvotes on issues
 
 Upvotes on first post of each issue are useful hint for our prioritization.
 We can [sort issues by number of upvotes](https://github.com/dotnet/winforms/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc) and we will review the top list on regular basis.
-
-
-
-## Escalations
-
-If you think some issue or PR is not getting the right attention, or if you notice some [Code of Conduct](https://dotnetfoundation.org/code-of-conduct) violation we might miss, 
-you can escalate to WinForms team by tagging some of us (e.g. [@merriemcgaw](https://github.com/merriemcgaw), [@karelz](https://github.com/karelz)). Please do not overuse it.
-
-
 
 ## Triage rules
 

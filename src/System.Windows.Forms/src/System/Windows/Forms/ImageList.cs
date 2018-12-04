@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
     [
     Designer("System.Windows.Forms.Design.ImageListDesigner, " + AssemblyRef.SystemDesign),
     ToolboxItemFilter("System.Windows.Forms"),
-    DefaultProperty("Images"),
+    DefaultProperty(nameof(Images)),
     TypeConverter(typeof(ImageListConverter)),
     DesignerSerializer("System.Windows.Forms.Design.ImageListCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionImageList))

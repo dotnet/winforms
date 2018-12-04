@@ -31,8 +31,8 @@ namespace System.Windows.Forms
         ClassInterface(ClassInterfaceType.AutoDispatch),
         Designer("System.Windows.Forms.Design.DataGridViewDesigner, " + AssemblyRef.SystemDesign),
         //DefaultProperty("DataSource"),
-        DefaultEvent("CellContentClick"),
-        ComplexBindingProperties("DataSource", "DataMember"),
+        DefaultEvent(nameof(CellContentClick)),
+        ComplexBindingProperties(nameof(DataSource), nameof(DataMember)),
         Docking(DockingBehavior.Ask),
         Editor("System.Windows.Forms.Design.DataGridViewComponentEditor, " + AssemblyRef.SystemDesign, typeof(ComponentEditor)),
         SRDescription(nameof(SR.DescriptionDataGridView))

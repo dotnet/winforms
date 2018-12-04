@@ -53,9 +53,9 @@ namespace System.Windows.Forms {
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     Designer("System.Windows.Forms.Design.ListBoxDesigner, " + AssemblyRef.SystemDesign),
-    DefaultEvent("SelectedIndexChanged"),
-    DefaultProperty("Items"),
-    DefaultBindingProperty("SelectedValue"),
+    DefaultEvent(nameof(SelectedIndexChanged)),
+    DefaultProperty(nameof(Items)),
+    DefaultBindingProperty(nameof(SelectedValue)),
     SRDescription(nameof(SR.DescriptionListBox))
     ]
     public class ListBox : ListControl {
