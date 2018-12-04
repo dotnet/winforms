@@ -21,8 +21,7 @@ namespace System.Windows.Forms{
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultProperty("GridEditName")
+    DesignTimeVisible(false)
     ]
     public class DataGridTextBox : TextBox {
 
