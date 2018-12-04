@@ -32,9 +32,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Checked"),
-    DefaultEvent("CheckedChanged"),
-    DefaultBindingProperty("CheckState"),
+    DefaultProperty(nameof(Checked)),
+    DefaultEvent(nameof(CheckedChanged)),
+    DefaultBindingProperty(nameof(CheckState)),
     ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionCheckBox))
     ]

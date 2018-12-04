@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ProvideProperty("FlowBreak", typeof(Control))]
-    [DefaultProperty("FlowDirection")]
+    [DefaultProperty(nameof(FlowDirection))]
     [Designer("System.Windows.Forms.Design.FlowLayoutPanelDesigner, " + AssemblyRef.SystemDesign)]
     [Docking(DockingBehavior.Ask)]
     [SRDescription(nameof(SR.DescriptionFlowLayoutPanel))]

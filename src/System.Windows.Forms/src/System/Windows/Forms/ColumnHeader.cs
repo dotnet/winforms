@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
-    DefaultProperty("Text"),
+    DefaultProperty(nameof(Text)),
     TypeConverterAttribute(typeof(ColumnHeaderConverter))
     ]
     public class ColumnHeader : Component, ICloneable {

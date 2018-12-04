@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
     TypeConverterAttribute(typeof(ListViewGroupConverter)),
     ToolboxItem(false),
     DesignTimeVisible(false),
-    DefaultProperty("Header"),
+    DefaultProperty(nameof(Header)),
     Serializable
     ]
     public sealed class ListViewGroup : ISerializable {

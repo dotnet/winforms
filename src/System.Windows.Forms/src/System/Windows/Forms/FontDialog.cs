@@ -27,8 +27,8 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     [
-    DefaultEvent("Apply"),
-    DefaultProperty("Font"),
+    DefaultEvent(nameof(Apply)),
+    DefaultProperty(nameof(Font)),
     SRDescription(nameof(SR.DescriptionFontDialog))
     ]
     public class FontDialog : CommonDialog {

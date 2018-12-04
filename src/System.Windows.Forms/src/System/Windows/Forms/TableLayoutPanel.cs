@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     [ProvideProperty("Row", typeof(Control))]
     [ProvideProperty("Column", typeof(Control))]
     [ProvideProperty("CellPosition", typeof(Control))]
-    [DefaultProperty("ColumnCount")]    
+    [DefaultProperty(nameof(ColumnCount))]    
     [DesignerSerializer("System.Windows.Forms.Design.TableLayoutPanelCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     [Docking(DockingBehavior.Never)]
     [Designer("System.Windows.Forms.Design.TableLayoutPanelDesigner, " + AssemblyRef.SystemDesign)]

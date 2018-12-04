@@ -16,9 +16,9 @@ namespace System.Windows.Forms {
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     Designer("System.Windows.Forms.Design.ToolStripContentPanelDesigner, " + AssemblyRef.SystemDesign),
-    DefaultEvent("Load"),
+    DefaultEvent(nameof(Load)),
     Docking(DockingBehavior.Never),
-    InitializationEvent("Load"),
+    InitializationEvent(nameof(Load)),
     ToolboxItem(false)
     ]
     public class ToolStripContentPanel : Panel {

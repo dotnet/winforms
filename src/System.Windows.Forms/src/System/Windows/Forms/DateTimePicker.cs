@@ -28,9 +28,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Value"),
-    DefaultEvent("ValueChanged"),
-    DefaultBindingProperty("Value"),
+    DefaultProperty(nameof(Value)),
+    DefaultEvent(nameof(ValueChanged)),
+    DefaultBindingProperty(nameof(Value)),
     Designer("System.Windows.Forms.Design.DateTimePickerDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionDateTimePicker))
     ]

@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [
     TypeConverterAttribute(typeof(TreeNodeConverter)), Serializable,
-    DefaultProperty("Text"),    
+    DefaultProperty(nameof(Text)),    
     SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")
     ]
     public class TreeNode : MarshalByRefObject, ICloneable, ISerializable {

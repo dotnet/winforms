@@ -25,9 +25,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Items"),
-    DefaultEvent("SelectedItemChanged"),
-    DefaultBindingProperty("SelectedItem"),
+    DefaultProperty(nameof(Items)),
+    DefaultEvent(nameof(SelectedItemChanged)),
+    DefaultBindingProperty(nameof(SelectedItem)),
     SRDescription(nameof(SR.DescriptionDomainUpDown))
     ]
     public class DomainUpDown : UpDownBase {

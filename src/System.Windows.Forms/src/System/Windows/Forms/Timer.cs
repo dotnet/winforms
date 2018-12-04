@@ -20,8 +20,8 @@ namespace System.Windows.Forms {
     ///       applications and must be used in a window.</para>
     /// </devdoc>
     [
-    DefaultProperty("Interval"),
-    DefaultEvent("Tick"),
+    DefaultProperty(nameof(Interval)),
+    DefaultEvent(nameof(Tick)),
     ToolboxItemFilter("System.Windows.Forms"),
     SRDescription(nameof(SR.DescriptionTimer))
     ]

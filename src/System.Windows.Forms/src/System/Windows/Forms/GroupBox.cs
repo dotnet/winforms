@@ -30,8 +30,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("Enter"),
-    DefaultProperty("Text"),
+    DefaultEvent(nameof(Enter)),
+    DefaultProperty(nameof(Text)),
     Designer("System.Windows.Forms.Design.GroupBoxDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionGroupBox))
     ]

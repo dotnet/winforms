@@ -48,7 +48,7 @@ namespace System.Windows.Forms {
     ClassInterface(ClassInterfaceType.AutoDispatch),
     PermissionSetAttribute(SecurityAction.LinkDemand, Name="FullTrust"),
     PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust"),
-    DefaultProperty("Name"), DefaultEvent("Enter"),
+    DefaultProperty(nameof(Name)), DefaultEvent(nameof(Enter)),
     Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
     public class WebBrowserBase : Control {
         //

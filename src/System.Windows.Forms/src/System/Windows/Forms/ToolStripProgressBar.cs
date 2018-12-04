@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.Security.Permissions;
 
     /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar"]/*' />
-    [DefaultProperty("Value")]
+    [DefaultProperty(nameof(Value))]
     public class ToolStripProgressBar : ToolStripControlHost {
 
         internal static readonly object EventRightToLeftLayoutChanged = new object();

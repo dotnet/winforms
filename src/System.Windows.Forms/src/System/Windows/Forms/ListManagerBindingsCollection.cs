@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     /// BindingsCollection is a collection of bindings for a Control.  It has Add/Remove capabilities,
     /// as well as an All array property, enumeration, etc.
     /// </devdoc>
-    [DefaultEvent("CollectionChanged")]
+    [DefaultEvent(nameof(CollectionChanged))]
     internal class ListManagerBindingsCollection : BindingsCollection {
 
         private BindingManagerBase bindingManagerBase;

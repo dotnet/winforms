@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     /// <devdoc>
     ///    <para>Represents a collection of data bindings on a control.</para>
     /// </devdoc>
-    [DefaultEvent("CollectionChanged")]
+    [DefaultEvent(nameof(CollectionChanged))]
     public class BindingsCollection : System.Windows.Forms.BaseCollection {
 
         private ArrayList list;

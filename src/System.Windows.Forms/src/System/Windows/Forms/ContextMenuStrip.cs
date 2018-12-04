@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("Opening"),
+    DefaultEvent(nameof(Opening)),
     SRDescription(nameof(SR.DescriptionContextMenuStrip))
     ]
     public class ContextMenuStrip : ToolStripDropDownMenu {

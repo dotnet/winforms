@@ -31,9 +31,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Value"),
-    DefaultEvent("Scroll"),
-    DefaultBindingProperty("Value"),
+    DefaultProperty(nameof(Value)),
+    DefaultEvent(nameof(Scroll)),
+    DefaultBindingProperty(nameof(Value)),
     Designer("System.Windows.Forms.Design.TrackBarDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionTrackBar))
     ]

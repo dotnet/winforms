@@ -27,8 +27,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("PanelClick"),
-    DefaultProperty("Text"),
+    DefaultEvent(nameof(PanelClick)),
+    DefaultProperty(nameof(Text)),
     Designer("System.Windows.Forms.Design.StatusBarDesigner, " + AssemblyRef.SystemDesign),
     ]
     public class StatusBar : Control {

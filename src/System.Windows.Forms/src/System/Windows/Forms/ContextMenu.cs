@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     ///     but can be set for the ContextMenu property that most controls have.
     /// </devdoc>
     [
-    DefaultEvent("Popup"),
+    DefaultEvent(nameof(Popup)),
     ]
     public class ContextMenu : Menu {
 

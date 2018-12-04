@@ -25,8 +25,8 @@ namespace System.Windows.Forms
     ///    </para>
     /// </devdoc>
     [
-    DefaultEvent("HelpRequest"),
-    DefaultProperty("SelectedPath"),
+    DefaultEvent(nameof(HelpRequest)),
+    DefaultProperty(nameof(SelectedPath)),
     Designer("System.Windows.Forms.Design.FolderBrowserDialogDesigner, " + AssemblyRef.SystemDesign),    
     SRDescription(nameof(SR.DescriptionFolderBrowserDialog))
     ]

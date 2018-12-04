@@ -27,8 +27,8 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty("Value"),
-    DefaultEvent("Scroll"),
+    DefaultProperty(nameof(Value)),
+    DefaultEvent(nameof(Scroll)),
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors") // Shipped in Everett
     ]
     public abstract class ScrollBar : Control {

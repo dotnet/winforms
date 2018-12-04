@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
-    DefaultProperty("Text")
+    DefaultProperty(nameof(Text))
     ]
     public class StatusBarPanel : Component, ISupportInitialize {
 

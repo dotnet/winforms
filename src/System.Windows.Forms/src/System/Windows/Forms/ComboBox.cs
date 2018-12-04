@@ -41,9 +41,9 @@ namespace System.Windows.Forms {
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent("SelectedIndexChanged"),
-    DefaultProperty("Items"),
-    DefaultBindingProperty("Text"),
+    DefaultEvent(nameof(SelectedIndexChanged)),
+    DefaultProperty(nameof(Items)),
+    DefaultBindingProperty(nameof(Text)),
     Designer("System.Windows.Forms.Design.ComboBoxDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionComboBox))
     ]

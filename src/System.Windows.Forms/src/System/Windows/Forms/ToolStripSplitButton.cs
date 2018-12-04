@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     /// <devdoc/>
     [
     ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip),
-    DefaultEvent("ButtonClick")
+    DefaultEvent(nameof(ButtonClick))
     ]
     public class ToolStripSplitButton : ToolStripDropDownItem {
         
