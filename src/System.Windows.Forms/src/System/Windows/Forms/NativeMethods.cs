@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="System.Windows.Forms.NativeMethods+BITMAPINFO")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="System.Windows.Forms.NativeMethods+BITMAPINFO_ARRAY")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="System.Windows.Forms.NativeMethods+CommonHandles")]
@@ -127,7 +125,6 @@ namespace System.Windows.Forms {
         R2_MERGEPEN         = 15, /* DPo      */
         R2_WHITE            = 16 /*  1       */;
 
-        
         public const int
         /* SetGraphicsMode(hdc, iMode ) */
         GM_COMPATIBLE       = 1,
@@ -135,12 +132,12 @@ namespace System.Windows.Forms {
         MWT_IDENTITY        = 1;
 
         public const int 
-        PAGE_READONLY = 0x02, 
-        PAGE_READWRITE = 0x04, 
+        PAGE_READONLY = 0x02,
+        PAGE_READWRITE = 0x04,
         PAGE_WRITECOPY = 0x08,
-		FILE_MAP_COPY = 0x0001,
-		FILE_MAP_WRITE = 0x0002,
-		FILE_MAP_READ = 0x0004;
+        FILE_MAP_COPY = 0x0001,
+        FILE_MAP_WRITE = 0x0002,
+        FILE_MAP_READ = 0x0004;
 
         public const int SHGFI_ICON = 0x000000100  ,   // get icon
         SHGFI_DISPLAYNAME       = 0x000000200,     // get display name
@@ -182,8 +179,8 @@ namespace System.Windows.Forms {
         ADVF_NODATA = 1,
         ADVF_ONLYONCE = 4,
         ADVF_PRIMEFIRST = 2; 
-		// Note: ADVF_ONLYONCE and ADVF_PRIMEFIRST values now conform with objidl.dll but are backwards from
-		// Platform SDK documentation as of 07/21/2003.
+        // Note: ADVF_ONLYONCE and ADVF_PRIMEFIRST values now conform with objidl.dll but are backwards from
+        // Platform SDK documentation as of 07/21/2003.
         // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/com/htm/oen_a2z_8jxi.asp.
 
         public const int BCM_GETIDEALSIZE = 0x1601,
@@ -205,8 +202,7 @@ namespace System.Windows.Forms {
         BF_MIDDLE = 0x0800,
         BFFM_INITIALIZED = 1,
         BFFM_SELCHANGED = 2,
-        BFFM_SETSELECTIONA = 0x400 + 102,
-        BFFM_SETSELECTIONW = 0x400 + 103,
+        BFFM_SETSELECTION = 0x400 + 103,
         BFFM_ENABLEOK = 0x400 + 101,
         BS_PUSHBUTTON = 0x00000000,
         BS_DEFPUSHBUTTON = 0x00000001,
@@ -357,14 +353,10 @@ namespace System.Windows.Forms {
         CCS_NORESIZE = 0x00000004,
         CCS_NOPARENTALIGN = 0x00000008,
         CCS_NODIVIDER = 0x00000040,
-        CBEM_INSERTITEMA = (0x0400+1),
-        CBEM_GETITEMA = (0x0400+4),
-        CBEM_SETITEMA = (0x0400+5),
-        CBEM_INSERTITEMW = (0x0400+11),
-        CBEM_SETITEMW = (0x0400+12),
-        CBEM_GETITEMW = (0x0400+13),
-        CBEN_ENDEDITA = ((0-800)-5),
-        CBEN_ENDEDITW = ((0-800)-6),
+        CBEM_INSERTITEM = (0x0400+11),
+        CBEM_SETITEM = (0x0400+12),
+        CBEM_GETITEM = (0x0400+13),
+        CBEN_ENDEDIT = ((0-800)-6),
         CONNECT_E_NOCONNECTION = unchecked((int)0x80040200),
         CONNECT_E_CANNOTCONNECT = unchecked((int)0x80040202),
         CTRLINFO_EATS_RETURN    = 1,
@@ -444,8 +436,7 @@ namespace System.Windows.Forms {
         DTM_GETSYSTEMTIME = (0x1000+1),
         DTM_SETSYSTEMTIME = (0x1000+2),
         DTM_SETRANGE = (0x1000+4),
-        DTM_SETFORMATA = (0x1000+5),
-        DTM_SETFORMATW = (0x1000+50),
+        DTM_SETFORMAT = (0x1000+50),
         DTM_SETMCCOLOR = (0x1000+6),
         DTM_GETMONTHCAL = (0x1000+8),
         DTM_SETMCFONT = (0x1000+9),
@@ -455,14 +446,10 @@ namespace System.Windows.Forms {
         DTS_TIMEFORMAT = 0x0009,
         DTS_RIGHTALIGN = 0x0020,
         DTN_DATETIMECHANGE = ((0-760)+1),
-        DTN_USERSTRINGA = ((0-760)+2),
-        DTN_USERSTRINGW = ((0-760)+15),
-        DTN_WMKEYDOWNA = ((0-760)+3),
-        DTN_WMKEYDOWNW = ((0-760)+16),
-        DTN_FORMATA = ((0-760)+4),
-        DTN_FORMATW = ((0-760)+17),
-        DTN_FORMATQUERYA = ((0-760)+5),
-        DTN_FORMATQUERYW = ((0-760)+18),
+        DTN_USERSTRING = ((0-760)+15),
+        DTN_WMKEYDOWN = ((0-760)+16),
+        DTN_FORMAT = ((0-760)+17),
+        DTN_FORMATQUERY = ((0-760)+18),
         DTN_DROPDOWN = ((0-760)+6),
         DTN_CLOSEUP = ((0-760)+7),
         DVASPECT_CONTENT   = 1,
@@ -480,8 +467,7 @@ namespace System.Windows.Forms {
         INET_E_DEFAULT_ACTION = unchecked((int)0x800C0011),
         ETO_OPAQUE = 0x0002,
         ETO_CLIPPED = 0x0004,
-        EMR_POLYTEXTOUTA = 96,
-        EMR_POLYTEXTOUTW = 97,
+        EMR_POLYTEXTOUT = 97,
         EDGE_RAISED = (0x0001|0x0004),
         EDGE_SUNKEN = (0x0002|0x0008),
         EDGE_ETCHED = (0x0002|0x0004),
@@ -621,33 +607,21 @@ namespace System.Windows.Forms {
         HDI_ORDER = 0x0080,
         HDI_WIDTH = 0x0001,
         HDM_GETITEMCOUNT = (0x1200+0),
-        HDM_INSERTITEMA = (0x1200+1),
         HDM_INSERTITEMW = (0x1200+10),
-        HDM_GETITEMA = (0x1200+3),
         HDM_GETITEMW = (0x1200+11),
         HDM_LAYOUT = (0x1200+5),
-        HDM_SETITEMA = (0x1200+4),
         HDM_SETITEMW = (0x1200+12),
-        HDN_ITEMCHANGINGA = ((0-300)-0),
-        HDN_ITEMCHANGINGW = ((0-300)-20),
-        HDN_ITEMCHANGEDA = ((0-300)-1),
-        HDN_ITEMCHANGEDW = ((0-300)-21),
-        HDN_ITEMCLICKA = ((0-300)-2),
-        HDN_ITEMCLICKW = ((0-300)-22),
-        HDN_ITEMDBLCLICKA = ((0-300)-3),
-        HDN_ITEMDBLCLICKW = ((0-300)-23),
-        HDN_DIVIDERDBLCLICKA = ((0-300)-5),
-        HDN_DIVIDERDBLCLICKW = ((0-300)-25),
+        HDN_ITEMCHANGING = ((0-300)-20),
+        HDN_ITEMCHANGED = ((0-300)-21),
+        HDN_ITEMCLICK = ((0-300)-22),
+        HDN_ITEMDBLCLICK = ((0-300)-23),
+        HDN_DIVIDERDBLCLICK = ((0-300)-25),
         HDN_BEGINTDRAG = ((0-300)-10),
-        HDN_BEGINTRACKA = ((0-300)-6),
-        HDN_BEGINTRACKW = ((0-300)-26),
+        HDN_BEGINTRACK = ((0-300)-26),
         HDN_ENDDRAG = ((0-300)-11),
-        HDN_ENDTRACKA = ((0-300)-7),
-        HDN_ENDTRACKW = ((0-300)-27),
-        HDN_TRACKA = ((0-300)-8),
-        HDN_TRACKW = ((0-300)-28),
-        HDN_GETDISPINFOA = ((0-300)-9),
-        HDN_GETDISPINFOW = ((0-300)-29);
+        HDN_ENDTRACK = ((0-300)-27),
+        HDN_TRACK = ((0-300)-28),
+        HDN_GETDISPINFO = ((0-300)-29);
         // HOVER_DEFAULT = Do not use this value ever! It crashes entire servers.
 
         public const int HDS_FULLDRAG = 0x0080;
@@ -789,7 +763,7 @@ namespace System.Windows.Forms {
         LB_FINDSTRINGEXACT = 0x01A2,
         LB_ITEMFROMPOINT = 0x01A9,
         LB_SETLOCALE = 0x01A5;
-        
+
         public const int LBS_NOTIFY = 0x0001,
         LBS_MULTIPLESEL = 0x0008,
         LBS_OWNERDRAWFIXED = 0x0010,
@@ -833,8 +807,7 @@ namespace System.Windows.Forms {
         LVM_REDRAWITEMS = (0x1000+21),
         LVM_SCROLL=(0x1000+20),
         LVM_SETBKCOLOR = (0x1000+1),
-        LVM_SETBKIMAGEA = (0x1000+68),
-        LVM_SETBKIMAGEW = (0x1000+138),
+        LVM_SETBKIMAGE = (0x1000+138),
         LVM_SETCALLBACKMASK = (0x1000+11),
         LVM_GETCALLBACKMASK = (0x1000+10),
         LVM_GETCOLUMNORDERARRAY = (0x1000+59),
@@ -860,13 +833,10 @@ namespace System.Windows.Forms {
         LVIS_DROPHILITED = 0x0008,
         LVIS_OVERLAYMASK = 0x0F00,
         LVIS_STATEIMAGEMASK = 0xF000,
-        LVM_GETITEMA = (0x1000+5),
-        LVM_GETITEMW = (0x1000+75),
-        LVM_SETITEMA = (0x1000+6),
-        LVM_SETITEMW = (0x1000+76),
+        LVM_GETITEM = (0x1000+75),
+        LVM_SETITEM = (0x1000+76),
         LVM_SETITEMPOSITION32 = (0x01000 + 49),
-        LVM_INSERTITEMA = (0x1000+7),
-        LVM_INSERTITEMW = (0x1000+77),
+        LVM_INSERTITEM = (0x1000+77),
         LVM_DELETEITEM = (0x1000+8),
         LVM_DELETECOLUMN = (0x1000+28),
         LVM_DELETEALLITEMS = (0x1000+9),
@@ -878,8 +848,7 @@ namespace System.Windows.Forms {
         LVFI_NEARESTXY = 0x0040,
         LVFI_PARTIAL = 0x0008,
         LVFI_STRING = 0x0002,
-        LVM_FINDITEMA = (0x1000+13),
-        LVM_FINDITEMW = (0x1000+83),
+        LVM_FINDITEM = (0x1000+83),
         LVIR_BOUNDS = 0,
         LVIR_ICON = 1,
         LVIR_LABEL = 2,
@@ -887,8 +856,7 @@ namespace System.Windows.Forms {
         LVM_GETITEMPOSITION = (0x1000+16),
         LVM_GETITEMRECT = (0x1000+14),
         LVM_GETSUBITEMRECT = (0x1000+56),
-        LVM_GETSTRINGWIDTHA = (0x1000+17),
-        LVM_GETSTRINGWIDTHW = (0x1000+87),
+        LVM_GETSTRINGWIDTH = (0x1000+87),
         LVHT_NOWHERE = 0x0001,
         LVHT_ONITEMICON = 0x0002,
         LVHT_ONITEMLABEL = 0x0004,
@@ -906,8 +874,7 @@ namespace System.Windows.Forms {
         LVA_ALIGNTOP = 0x0002,
         LVA_SNAPTOGRID = 0x0005,
         LVM_ARRANGE = (0x1000+22),
-        LVM_EDITLABELA = (0x1000+23),
-        LVM_EDITLABELW = (0x1000+118),
+        LVM_EDITLABEL = (0x1000+118),
         LVCDI_ITEM = 0x0000,
         LVCDI_GROUP = 0x00000001,
         LVCF_FMT = 0x0001,
@@ -915,35 +882,32 @@ namespace System.Windows.Forms {
         LVCF_TEXT = 0x0004,
         LVCF_SUBITEM = 0x0008,
         LVCF_IMAGE = 0x0010,
-        LVCF_ORDER = 0x0020,        
+        LVCF_ORDER = 0x0020,
         LVCFMT_IMAGE = 0x0800,
-        LVGA_HEADER_LEFT  =  0x00000001,
-        LVGA_HEADER_CENTER = 0x00000002,
-        LVGA_HEADER_RIGHT  = 0x00000004,
-        LVGA_FOOTER_LEFT   = 0x00000008,
-        LVGA_FOOTER_CENTER = 0x00000010,
-        LVGA_FOOTER_RIGHT  = 0x00000020,
-        LVGF_NONE    =       0x00000000,
-        LVGF_HEADER   =      0x00000001,
-        LVGF_FOOTER    =     0x00000002,
-        LVGF_STATE      =    0x00000004,
-        LVGF_ALIGN       =   0x00000008,
-        LVGF_GROUPID    =    0x00000010,
-        LVGS_NORMAL    = 0x00000000,
-        LVGS_COLLAPSED  =    0x00000001,
-        LVGS_HIDDEN    =     0x00000002,
+        LVGA_HEADER_LEFT    = 0x00000001,
+        LVGA_HEADER_CENTER  = 0x00000002,
+        LVGA_HEADER_RIGHT   = 0x00000004,
+        LVGA_FOOTER_LEFT    = 0x00000008,
+        LVGA_FOOTER_CENTER  = 0x00000010,
+        LVGA_FOOTER_RIGHT   = 0x00000020,
+        LVGF_NONE           = 0x00000000,
+        LVGF_HEADER         = 0x00000001,
+        LVGF_FOOTER         = 0x00000002,
+        LVGF_STATE          = 0x00000004,
+        LVGF_ALIGN          = 0x00000008,
+        LVGF_GROUPID        = 0x00000010,
+        LVGS_NORMAL         = 0x00000000,
+        LVGS_COLLAPSED      = 0x00000001,
+        LVGS_HIDDEN         = 0x00000002,
         LVIM_AFTER = 0x00000001,
         LVTVIF_FIXEDSIZE = 0x00000003,
         LVTVIM_TILESIZE = 0x00000001,
         LVTVIM_COLUMNS = 0x00000002,
         LVM_ENABLEGROUPVIEW = (0x1000 + 157),
-        LVM_MOVEITEMTOGROUP     =       (0x1000 + 154),
-        LVM_GETCOLUMNA = (0x1000+25),
-        LVM_GETCOLUMNW = (0x1000+95),
-        LVM_SETCOLUMNA = (0x1000+26),
-        LVM_SETCOLUMNW = (0x1000+96),
-        LVM_INSERTCOLUMNA = (0x1000+27),
-        LVM_INSERTCOLUMNW = (0x1000+97),
+        LVM_MOVEITEMTOGROUP = (0x1000 + 154),
+        LVM_GETCOLUMN = (0x1000+95),
+        LVM_SETCOLUMN = (0x1000+96),
+        LVM_INSERTCOLUMN = (0x1000+97),
         LVM_INSERTGROUP = (0x1000 + 145),
         LVM_REMOVEGROUP = (0x1000 + 150),
         LVM_INSERTMARKHITTEST = (0x1000 + 168),
@@ -958,27 +922,24 @@ namespace System.Windows.Forms {
         LVM_SETITEMPOSITION = (0x1000+15),
         LVM_SETITEMSTATE = (0x1000+43),
         LVM_GETITEMSTATE = (0x1000+44),
-        LVM_GETITEMTEXTA = (0x1000+45),
-        LVM_GETITEMTEXTW = (0x1000+115),
+        LVM_GETITEMTEXT = (0x1000+115),
         LVM_GETHOTITEM = (0x1000+61),
-        LVM_SETITEMTEXTA = (0x1000+46),
-        LVM_SETITEMTEXTW = (0x1000+116),
+        LVM_SETITEMTEXT = (0x1000+116),
         LVM_SETITEMCOUNT = (0x1000+47),
-        LVM_SORTITEMS = (0x1000+48),
-        LVM_GETSELECTEDCOUNT = (0x1000+50),
-        LVM_GETISEARCHSTRINGA = (0x1000+52),
-        LVM_GETISEARCHSTRINGW = (0x1000+117),
-        LVM_SETEXTENDEDLISTVIEWSTYLE = (0x1000+54),
+        LVM_SORTITEMS = (0x1000 + 48),
+        LVM_GETSELECTEDCOUNT = (0x1000 + 50),
+        LVM_GETISEARCHSTRING = (0x1000 + 117),
+        LVM_SETEXTENDEDLISTVIEWSTYLE = (0x1000 + 54),
         LVM_SETVIEW = (0x1000 + 142),
-        LVM_GETGROUPINFO      =   (0x1000 + 149),
-        LVM_SETGROUPINFO  =       (0x1000 + 147),
+        LVM_GETGROUPINFO = (0x1000 + 149),
+        LVM_SETGROUPINFO = (0x1000 + 147),
         LVM_HASGROUP = (0x1000 + 161),
         LVM_SETTILEVIEWINFO = (0x1000 + 162),
-        LVM_GETTILEVIEWINFO = (0x1000 + 163),        
+        LVM_GETTILEVIEWINFO = (0x1000 + 163),
         LVM_GETINSERTMARK = (0x1000 + 167),
         LVM_GETINSERTMARKRECT = (0x1000 + 169),
         LVM_SETINSERTMARKCOLOR = (0x1000 + 170),
-        LVM_GETINSERTMARKCOLOR = (0x1000 + 171),        
+        LVM_GETINSERTMARKCOLOR = (0x1000 + 171),
         LVM_ISGROUPVIEWENABLED = (0x1000 + 175),
         LVS_EX_GRIDLINES = 0x00000001,
         LVS_EX_CHECKBOXES = 0x00000004,
@@ -992,24 +953,18 @@ namespace System.Windows.Forms {
         LVS_EX_DOUBLEBUFFER = 0x00010000,
         LVN_ITEMCHANGING = ((0-100)-0),
         LVN_ITEMCHANGED = ((0-100)-1),
-        LVN_BEGINLABELEDITA = ((0-100)-5),
-        LVN_BEGINLABELEDITW = ((0-100)-75),
-        LVN_ENDLABELEDITA = ((0-100)-6),
-        LVN_ENDLABELEDITW = ((0-100)-76),
+        LVN_BEGINLABELEDIT = ((0-100)-75),
+        LVN_ENDLABELEDIT = ((0-100)-76),
         LVN_COLUMNCLICK = ((0-100)-8),
         LVN_BEGINDRAG = ((0-100)-9),
         LVN_BEGINRDRAG = ((0-100)-11),
-        LVN_ODFINDITEMA = ((0-100)-52),
-        LVN_ODFINDITEMW = ((0-100)-79),
+        LVN_ODFINDITEM = ((0-100)-79),
         LVN_ITEMACTIVATE = ((0-100)-14),
-        LVN_GETDISPINFOA = ((0-100)-50),
-        LVN_GETDISPINFOW = ((0-100)-77),
+        LVN_GETDISPINFO = ((0-100)-77),
         LVN_ODCACHEHINT = ((0-100) - 13),
         LVN_ODSTATECHANGED = ((0-100) - 15),
-        LVN_SETDISPINFOA = ((0-100)-51),
-        LVN_SETDISPINFOW = ((0-100)-78),
-        LVN_GETINFOTIPA  = ((0-100)-57),
-        LVN_GETINFOTIPW  = ((0-100)- 58),
+        LVN_SETDISPINFO = ((0-100)-78),
+        LVN_GETINFOTIP  = ((0-100)- 58),
         LVN_KEYDOWN = ((0-100)-55),
         
         LWA_COLORKEY            = 0x00000001,
@@ -1451,13 +1406,12 @@ namespace System.Windows.Forms {
         SM_CMONITORS = 80,
         SM_SAMEDISPLAYFORMAT = 81,
         SM_REMOTESESSION = 0x1000;
-        
-                       
+
         public const int HLP_FILE = 1,
         HLP_KEYWORD = 2,
         HLP_NAVIGATOR = 3,
         HLP_OBJECT = 4;
-                
+
         public const int SW_SCROLLCHILDREN = 0x0001,
         SW_INVALIDATE = 0x0002,
         SW_ERASE = 0x0004,
@@ -1529,20 +1483,15 @@ namespace System.Windows.Forms {
         SPI_GETSNAPTODEFBUTTON = 95,
         SPI_GETWHEELSCROLLLINES = 104,
         SBARS_SIZEGRIP = 0x0100,
-        SB_SETTEXTA = (0x0400+1),
-        SB_SETTEXTW = (0x0400+11),
-        SB_GETTEXTA = (0x0400+2),
-        SB_GETTEXTW = (0x0400+13),
-        SB_GETTEXTLENGTHA = (0x0400+3),
-        SB_GETTEXTLENGTHW = (0x0400+12),
+        SB_SETTEXT = (0x0400+11),
+        SB_GETTEXT = (0x0400+13),
+        SB_GETTEXTLENGTH = (0x0400+12),
         SB_SETPARTS = (0x0400+4),
         SB_SIMPLE = (0x0400+9),
         SB_GETRECT = (0x0400+10),
         SB_SETICON = (0x0400+15),
-        SB_SETTIPTEXTA = (0x0400+16),
-        SB_SETTIPTEXTW = (0x0400+17),
-        SB_GETTIPTEXTA = (0x0400+18),
-        SB_GETTIPTEXTW = (0x0400+19),
+        SB_SETTIPTEXT = (0x0400+17),
+        SB_GETTIPTEXT = (0x0400+19),
         SBT_OWNERDRAW = 0x1000,
         SBT_NOBORDERS = 0x0100,
         SBT_POPOUT = 0x0200,
@@ -1598,32 +1547,24 @@ namespace System.Windows.Forms {
         TB_ENABLEBUTTON = (0x0400 + 1),
         TB_ISBUTTONCHECKED = (0x0400 + 10),
         TB_ISBUTTONINDETERMINATE = (0x0400 + 13),
-        TB_ADDBUTTONSA = (0x0400 + 20),
-        TB_ADDBUTTONSW = (0x0400 + 68),
-        TB_INSERTBUTTONA = (0x0400 + 21),
-        TB_INSERTBUTTONW = (0x0400 + 67),
+        TB_ADDBUTTONS = (0x0400 + 68),
+        TB_INSERTBUTTON = (0x0400 + 67),
         TB_DELETEBUTTON = (0x0400 + 22),
         TB_GETBUTTON = (0x0400 + 23),
-        TB_SAVERESTOREA = (0x0400 + 26),
-        TB_SAVERESTOREW = (0x0400 + 76),
-        TB_ADDSTRINGA = (0x0400 + 28),
-        TB_ADDSTRINGW = (0x0400 + 77),
+        TB_SAVERESTORE = (0x0400 + 76),
+        TB_ADDSTRING = (0x0400 + 77),
         TB_BUTTONSTRUCTSIZE = (0x0400 + 30),
         TB_SETBUTTONSIZE = (0x0400 + 31),
         TB_AUTOSIZE = (0x0400 + 33),
         TB_GETROWS = (0x0400 + 40),
-        TB_GETBUTTONTEXTA = (0x0400 + 45),
-        TB_GETBUTTONTEXTW = (0x0400 + 75),
+        TB_GETBUTTONTEXT = (0x0400 + 75),
         TB_SETIMAGELIST = (0x0400 + 48),
         TB_GETRECT = (0x0400 + 51),
         TB_GETBUTTONSIZE = (0x0400 + 58),
-        TB_GETBUTTONINFOW = (0x0400 + 63),
-        TB_SETBUTTONINFOW = (0x0400 + 64),
-        TB_GETBUTTONINFOA = (0x0400 + 65),
-        TB_SETBUTTONINFOA = (0x0400 + 66),
-        TB_MAPACCELERATORA = (0x0400 + 78),
+        TB_GETBUTTONINFO = (0x0400 + 63),
+        TB_SETBUTTONINFO = (0x0400 + 64),
         TB_SETEXTENDEDSTYLE = (0x0400 + 84),
-        TB_MAPACCELERATORW = (0x0400 + 90),
+        TB_MAPACCELERATOR = (0x0400 + 90),
         TB_GETTOOLTIPS = (0x0400 + 35),
         TB_SETTOOLTIPS = (0x0400 + 36),
         TBIF_IMAGE = 0x00000001,
@@ -1632,25 +1573,22 @@ namespace System.Windows.Forms {
         TBIF_STYLE = 0x00000008,
         TBIF_COMMAND = 0x00000020,
         TBIF_SIZE = 0x00000040,
-        TBN_GETBUTTONINFOA = ((0 - 700) - 0),
-        TBN_GETBUTTONINFOW = ((0 - 700) - 20),
+        TBN_GETBUTTONINFO = ((0 - 700) - 20),
         TBN_QUERYINSERT = ((0 - 700) - 6),
         TBN_DROPDOWN = ((0 - 700) - 10),
         TBN_HOTITEMCHANGE = ((0 - 700) - 13),
-        TBN_GETDISPINFOA = ((0 - 700) - 16),
-        TBN_GETDISPINFOW = ((0 - 700) - 17),
-        TBN_GETINFOTIPA = ((0 - 700) - 18),
-        TBN_GETINFOTIPW = ((0 - 700) - 19),
+        TBN_GETDISPINFO = ((0 - 700) - 17),
+        TBN_GETINFOTIP = ((0 - 700) - 19),
         TTS_ALWAYSTIP = 0x01,
         TTS_NOPREFIX = 0x02,
         TTS_NOANIMATE = 0x10,
         TTS_NOFADE = 0x20,
         TTS_BALLOON = 0x40,
-            //TTI_NONE                =0,
-            //TTI_INFO                =1,
-            TTI_WARNING = 2,
-            //TTI_ERROR               =3,
-            TTF_IDISHWND = 0x0001,
+        //TTI_NONE                =0,
+        //TTI_INFO                =1,
+        TTI_WARNING = 2,
+        //TTI_ERROR               =3,
+        TTF_IDISHWND = 0x0001,
         TTF_RTLREADING = 0x0004,
         TTF_TRACK = 0x0020,
         TTF_CENTERTIP = 0x0002,
@@ -1667,44 +1605,31 @@ namespace System.Windows.Forms {
         TTM_POP = (0x0400 + 28),
         TTM_ADJUSTRECT = (0x400 + 31),
         TTM_SETDELAYTIME = (0x0400 + 3),
-        TTM_SETTITLEA = (WM_USER + 32),  // wParam = TTI_*, lParam = char* szTitle
-            TTM_SETTITLEW = (WM_USER + 33), // wParam = TTI_*, lParam = wchar* szTitle
-            TTM_ADDTOOLA = (0x0400 + 4),
-        TTM_ADDTOOLW = (0x0400 + 50),
-        TTM_DELTOOLA = (0x0400 + 5),
-        TTM_DELTOOLW = (0x0400 + 51),
-        TTM_NEWTOOLRECTA = (0x0400 + 6),
-        TTM_NEWTOOLRECTW = (0x0400 + 52),
+        TTM_SETTITLE = (WM_USER + 33), // wParam = TTI_*, lParam = wchar* szTitle
+        TTM_ADDTOOL = (0x0400 + 50),
+        TTM_DELTOOL = (0x0400 + 51),
+        TTM_NEWTOOLRECT = (0x0400 + 52),
         TTM_RELAYEVENT = (0x0400 + 7),
         TTM_GETTIPBKCOLOR = (0x0400 + 22),
         TTM_SETTIPBKCOLOR = (0x0400 + 19),
         TTM_SETTIPTEXTCOLOR = (0x0400 + 20),
         TTM_GETTIPTEXTCOLOR = (0x0400 + 23),
-        TTM_GETTOOLINFOA = (0x0400 + 8),
-        TTM_GETTOOLINFOW = (0x0400 + 53),
-        TTM_SETTOOLINFOA = (0x0400 + 9),
-        TTM_SETTOOLINFOW = (0x0400 + 54),
-        TTM_HITTESTA = (0x0400 + 10),
-        TTM_HITTESTW = (0x0400 + 55),
-        TTM_GETTEXTA = (0x0400 + 11),
-        TTM_GETTEXTW = (0x0400 + 56),
+        TTM_GETTOOLINFO = (0x0400 + 53),
+        TTM_SETTOOLINFO = (0x0400 + 54),
+        TTM_HITTEST = (0x0400 + 55),
+        TTM_GETTEXT = (0x0400 + 56),
         TTM_UPDATE = (0x0400 + 29),
-        TTM_UPDATETIPTEXTA = (0x0400 + 12),
-        TTM_UPDATETIPTEXTW = (0x0400 + 57),
-        TTM_ENUMTOOLSA = (0x0400 + 14),
-        TTM_ENUMTOOLSW = (0x0400 + 58),
-        TTM_GETCURRENTTOOLA = (0x0400 + 15),
-        TTM_GETCURRENTTOOLW = (0x0400 + 59),
+        TTM_UPDATETIPTEXT = (0x0400 + 57),
+        TTM_ENUMTOOLS = (0x0400 + 58),
+        TTM_GETCURRENTTOOL = (0x0400 + 59),
         TTM_WINDOWFROMPOINT = (0x0400 + 16),
         TTM_GETDELAYTIME = (0x0400 + 21),
         TTM_SETMAXTIPWIDTH = (0x0400 + 24),
         TTM_GETBUBBLESIZE = (0x0400 + 30),
-        TTN_GETDISPINFOA = ((0 - 520) - 0),
-        TTN_GETDISPINFOW = ((0 - 520) - 10),
+        TTN_GETDISPINFO = ((0 - 520) - 10),
         TTN_SHOW = ((0 - 520) - 1),
         TTN_POP = ((0 - 520) - 2),
-        TTN_NEEDTEXTA = ((0 - 520) - 0),
-        TTN_NEEDTEXTW = ((0 - 520) - 10),
+        TTN_NEEDTEXT = ((0 - 520) - 10),
         TBS_AUTOTICKS = 0x0001,
         TBS_VERT = 0x0002,
         TBS_TOP = 0x0004,
@@ -1753,8 +1678,7 @@ namespace System.Windows.Forms {
         TVIS_STATEIMAGEMASK = 0xF000,
         TVI_ROOT = (unchecked((int)0xFFFF0000)),
         TVI_FIRST = (unchecked((int)0xFFFF0001)),
-        TVM_INSERTITEMA = (0x1100 + 0),
-        TVM_INSERTITEMW = (0x1100 + 50),
+        TVM_INSERTITEM = (0x1100 + 50),
         TVM_DELETEITEM = (0x1100 + 1),
         TVM_EXPAND = (0x1100 + 2),
         TVE_COLLAPSE = 0x0001,
@@ -1773,46 +1697,31 @@ namespace System.Windows.Forms {
         TVGN_DROPHILITE= 0x0008,
         TVGN_CARET = 0x0009,
         TVM_SELECTITEM = (0x1100 + 11),
-        TVM_GETITEMA = (0x1100 + 12),
-        TVM_GETITEMW = (0x1100 + 62),
-        TVM_SETITEMA = (0x1100 + 13),
-        TVM_SETITEMW = (0x1100 + 63),
-        TVM_EDITLABELA = (0x1100 + 14),
-        TVM_EDITLABELW = (0x1100 + 65),
+        TVM_GETITEM = (0x1100 + 62),
+        TVM_SETITEM = (0x1100 + 63),
+        TVM_EDITLABEL = (0x1100 + 65),
         TVM_GETEDITCONTROL = (0x1100 + 15),
         TVM_GETVISIBLECOUNT = (0x1100 + 16),
         TVM_HITTEST = (0x1100 + 17),
         TVM_ENSUREVISIBLE = (0x1100 + 20),
         TVM_ENDEDITLABELNOW = (0x1100 + 22),
-        TVM_GETISEARCHSTRINGA = (0x1100 + 23),
-        TVM_GETISEARCHSTRINGW = (0x1100 + 64),
+        TVM_GETISEARCHSTRING = (0x1100 + 64),
         TVM_SETITEMHEIGHT = (0x1100 + 27),
         TVM_GETITEMHEIGHT = (0x1100 + 28),
-        TVN_SELCHANGINGA = ((0 - 400) - 1),
-        TVN_SELCHANGINGW = ((0 - 400) - 50),
-        TVN_GETINFOTIPA = ((0 - 400) - 13),
-        TVN_GETINFOTIPW = ((0 - 400) - 14),
-        TVN_SELCHANGEDA = ((0 - 400) - 2),
-        TVN_SELCHANGEDW = ((0 - 400) - 51),
+        TVN_SELCHANGING = ((0 - 400) - 50),
+        TVN_GETINFOTIP = ((0 - 400) - 14),
+        TVN_SELCHANGED = ((0 - 400) - 51),
         TVC_UNKNOWN = 0x0000,
         TVC_BYMOUSE = 0x0001,
         TVC_BYKEYBOARD = 0x0002,
-        TVN_GETDISPINFOA = ((0 - 400) - 3),
-        TVN_GETDISPINFOW = ((0 - 400) - 52),
-        TVN_SETDISPINFOA = ((0 - 400) - 4),
-        TVN_SETDISPINFOW = ((0 - 400) - 53),
-        TVN_ITEMEXPANDINGA = ((0 - 400) - 5),
-        TVN_ITEMEXPANDINGW = ((0 - 400) - 54),
-        TVN_ITEMEXPANDEDA = ((0 - 400) - 6),
-        TVN_ITEMEXPANDEDW = ((0 - 400) - 55),
-        TVN_BEGINDRAGA = ((0 - 400) - 7),
-        TVN_BEGINDRAGW = ((0 - 400) - 56),
-        TVN_BEGINRDRAGA = ((0 - 400) - 8),
-        TVN_BEGINRDRAGW = ((0 - 400) - 57),
-        TVN_BEGINLABELEDITA = ((0 - 400) - 10),
-        TVN_BEGINLABELEDITW = ((0 - 400) - 59),
-        TVN_ENDLABELEDITA = ((0 - 400) - 11),
-        TVN_ENDLABELEDITW = ((0 - 400) - 60),
+        TVN_GETDISPINFO = ((0 - 400) - 52),
+        TVN_SETDISPINFO = ((0 - 400) - 53),
+        TVN_ITEMEXPANDING = ((0 - 400) - 54),
+        TVN_ITEMEXPANDED = ((0 - 400) - 55),
+        TVN_BEGINDRAG = ((0 - 400) - 56),
+        TVN_BEGINRDRAG = ((0 - 400) - 57),
+        TVN_BEGINLABELEDIT = ((0 - 400) - 59),
+        TVN_ENDLABELEDIT = ((0 - 400) - 60),
         TCS_BOTTOM = 0x0002,
         TCS_RIGHT = 0x0002,
         TCS_FLATBUTTONS = 0x0008,
@@ -1829,12 +1738,9 @@ namespace System.Windows.Forms {
         TCM_SETIMAGELIST = (0x1300 + 3),
         TCIF_TEXT = 0x0001,
         TCIF_IMAGE = 0x0002,
-        TCM_GETITEMA = (0x1300 + 5),
-        TCM_GETITEMW = (0x1300 + 60),
-        TCM_SETITEMA = (0x1300 + 6),
-        TCM_SETITEMW = (0x1300 + 61),
-        TCM_INSERTITEMA = (0x1300 + 7),
-        TCM_INSERTITEMW = (0x1300 + 62),
+        TCM_GETITEM = (0x1300 + 60),
+        TCM_SETITEM = (0x1300 + 61),
+        TCM_INSERTITEM = (0x1300 + 62),
         TCM_DELETEITEM = (0x1300 + 8),
         TCM_DELETEALLITEMS = (0x1300 + 9),
         TCM_GETITEMRECT = (0x1300 + 10),
@@ -1878,11 +1784,10 @@ namespace System.Windows.Forms {
         UISF_HIDEFOCUS = 0x1,
         UISF_HIDEACCEL = 0x2,
         USERCLASSTYPE_FULL = 1,
-        USERCLASSTYPE_SHORT = 2,                 
+        USERCLASSTYPE_SHORT = 2,
         USERCLASSTYPE_APPNAME = 3,
         UOI_FLAGS = 1;
 
-        
         public const int VIEW_E_DRAW = unchecked((int)0x80040140),
         VK_PRIOR = 0x21,
         VK_NEXT = 0x22,
@@ -2055,9 +1960,7 @@ namespace System.Windows.Forms {
         WM_XBUTTONDBLCLK               = 0x020D,
         WM_MOUSEWHEEL = 0x020A,
         WM_MOUSELAST = 0x020A;
-        
 
-        
         public const int WHEEL_DELTA = 120,
         WM_PARENTNOTIFY = 0x0210,
         WM_ENTERMENULOOP = 0x0211,
@@ -2214,199 +2117,8 @@ namespace System.Windows.Forms {
         public const int XBUTTON1    =  0x0001;
         public const int XBUTTON2    =  0x0002;
 
-
-        // These are initialized in a static constructor for speed.  That way we don't have to
-        // evaluate the char size each time.
-        //
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int BFFM_SETSELECTION;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int CBEM_GETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int CBEM_SETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int CBEN_ENDEDIT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int CBEM_INSERTITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_GETITEMTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_SETITEMTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int ACM_OPEN;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int DTM_SETFORMAT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int DTN_USERSTRING;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int DTN_WMKEYDOWN;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int DTN_FORMAT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int DTN_FORMATQUERY;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int EMR_POLYTEXTOUT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDM_INSERTITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDM_GETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDM_SETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDN_ITEMCHANGING;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDN_ITEMCHANGED;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDN_ITEMCLICK;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDN_ITEMDBLCLICK;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDN_DIVIDERDBLCLICK;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDN_BEGINTRACK;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDN_ENDTRACK;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDN_TRACK;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int HDN_GETDISPINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_GETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_SETBKIMAGE;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_SETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_INSERTITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_FINDITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_GETSTRINGWIDTH;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_EDITLABEL;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_GETCOLUMN;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_SETCOLUMN;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_GETISEARCHSTRING;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVM_INSERTCOLUMN;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVN_BEGINLABELEDIT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVN_ENDLABELEDIT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVN_ODFINDITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVN_GETDISPINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVN_GETINFOTIP;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int LVN_SETDISPINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int PSM_SETTITLE;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int PSM_SETFINISHTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int RB_INSERTBAND;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int SB_SETTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int SB_GETTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int SB_GETTEXTLENGTH;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int SB_SETTIPTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int SB_GETTIPTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TB_SAVERESTORE;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TB_ADDSTRING;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TB_GETBUTTONTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TB_MAPACCELERATOR;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TB_GETBUTTONINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TB_SETBUTTONINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TB_INSERTBUTTON;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TB_ADDBUTTONS;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TBN_GETBUTTONINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TBN_GETINFOTIP;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TBN_GETDISPINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_ADDTOOL;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_SETTITLE;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_DELTOOL;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_NEWTOOLRECT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_GETTOOLINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_SETTOOLINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_HITTEST;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_GETTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_UPDATETIPTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_ENUMTOOLS;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTM_GETCURRENTTOOL;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTN_GETDISPINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TTN_NEEDTEXT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVM_INSERTITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVM_GETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVM_SETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVM_EDITLABEL;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVM_GETISEARCHSTRING;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_SELCHANGING;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_SELCHANGED;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_GETDISPINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_SETDISPINFO;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_ITEMEXPANDING;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_ITEMEXPANDED;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_BEGINDRAG;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_BEGINRDRAG;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_BEGINLABELEDIT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TVN_ENDLABELEDIT;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TCM_GETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TCM_SETITEM;
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly int TCM_INSERTITEM;
-
         public const string TOOLTIPS_CLASS = "tooltips_class32";
-        
+
         public const string WC_DATETIMEPICK = "SysDateTimePick32",
         WC_LISTVIEW = "SysListView32",
         WC_MONTHCAL = "SysMonthCal32",
@@ -2433,110 +2145,9 @@ namespace System.Windows.Forms {
         public const string uuid_IAccessible  = "{618736E0-3C3D-11CF-810C-00AA00389B71}";
         public const string uuid_IEnumVariant = "{00020404-0000-0000-C000-000000000046}";
 
-        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline"),
-            SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        static NativeMethods()
-        {
-            BFFM_SETSELECTION = NativeMethods.BFFM_SETSELECTIONW;
-            CBEM_GETITEM = NativeMethods.CBEM_GETITEMW;
-            CBEM_SETITEM = NativeMethods.CBEM_SETITEMW;
-            CBEN_ENDEDIT = NativeMethods.CBEN_ENDEDITW;
-            CBEM_INSERTITEM = NativeMethods.CBEM_INSERTITEMW;
-            LVM_GETITEMTEXT = NativeMethods.LVM_GETITEMTEXTW;
-            LVM_SETITEMTEXT = NativeMethods.LVM_SETITEMTEXTW;
-            ACM_OPEN = NativeMethods.ACM_OPENW;
-            DTM_SETFORMAT = NativeMethods.DTM_SETFORMATW;
-            DTN_USERSTRING = NativeMethods.DTN_USERSTRINGW;
-            DTN_WMKEYDOWN = NativeMethods.DTN_WMKEYDOWNW;
-            DTN_FORMAT = NativeMethods.DTN_FORMATW;
-            DTN_FORMATQUERY = NativeMethods.DTN_FORMATQUERYW;
-            EMR_POLYTEXTOUT = NativeMethods.EMR_POLYTEXTOUTW;
-            HDM_INSERTITEM = NativeMethods.HDM_INSERTITEMW;
-            HDM_GETITEM = NativeMethods.HDM_GETITEMW;
-            HDM_SETITEM = NativeMethods.HDM_SETITEMW;
-            HDN_ITEMCHANGING = NativeMethods.HDN_ITEMCHANGINGW;
-            HDN_ITEMCHANGED = NativeMethods.HDN_ITEMCHANGEDW;
-            HDN_ITEMCLICK = NativeMethods.HDN_ITEMCLICKW;
-            HDN_ITEMDBLCLICK = NativeMethods.HDN_ITEMDBLCLICKW;
-            HDN_DIVIDERDBLCLICK = NativeMethods.HDN_DIVIDERDBLCLICKW;
-            HDN_BEGINTRACK = NativeMethods.HDN_BEGINTRACKW;
-            HDN_ENDTRACK = NativeMethods.HDN_ENDTRACKW;
-            HDN_TRACK = NativeMethods.HDN_TRACKW;
-            HDN_GETDISPINFO = NativeMethods.HDN_GETDISPINFOW;
-            LVM_SETBKIMAGE = NativeMethods.LVM_SETBKIMAGEW;
-            LVM_GETITEM = NativeMethods.LVM_GETITEMW;
-            LVM_SETITEM = NativeMethods.LVM_SETITEMW;
-            LVM_INSERTITEM = NativeMethods.LVM_INSERTITEMW;
-            LVM_FINDITEM = NativeMethods.LVM_FINDITEMW;
-            LVM_GETSTRINGWIDTH = NativeMethods.LVM_GETSTRINGWIDTHW;
-            LVM_EDITLABEL = NativeMethods.LVM_EDITLABELW;
-            LVM_GETCOLUMN = NativeMethods.LVM_GETCOLUMNW;
-            LVM_SETCOLUMN = NativeMethods.LVM_SETCOLUMNW;
-            LVM_GETISEARCHSTRING = NativeMethods.LVM_GETISEARCHSTRINGW;
-            LVM_INSERTCOLUMN = NativeMethods.LVM_INSERTCOLUMNW;
-            LVN_BEGINLABELEDIT = NativeMethods.LVN_BEGINLABELEDITW;
-            LVN_ENDLABELEDIT = NativeMethods.LVN_ENDLABELEDITW;
-            LVN_ODFINDITEM = NativeMethods.LVN_ODFINDITEMW;
-            LVN_GETDISPINFO = NativeMethods.LVN_GETDISPINFOW;
-            LVN_GETINFOTIP = NativeMethods.LVN_GETINFOTIPW;
-            LVN_SETDISPINFO = NativeMethods.LVN_SETDISPINFOW;
-            PSM_SETTITLE = NativeMethods.PSM_SETTITLEW;
-            PSM_SETFINISHTEXT = NativeMethods.PSM_SETFINISHTEXTW;
-            RB_INSERTBAND = NativeMethods.RB_INSERTBANDW;
-            SB_SETTEXT = NativeMethods.SB_SETTEXTW;
-            SB_GETTEXT = NativeMethods.SB_GETTEXTW;
-            SB_GETTEXTLENGTH = NativeMethods.SB_GETTEXTLENGTHW;
-            SB_SETTIPTEXT = NativeMethods.SB_SETTIPTEXTW;
-            SB_GETTIPTEXT = NativeMethods.SB_GETTIPTEXTW;
-            TB_SAVERESTORE = NativeMethods.TB_SAVERESTOREW;
-            TB_ADDSTRING = NativeMethods.TB_ADDSTRINGW;
-            TB_GETBUTTONTEXT = NativeMethods.TB_GETBUTTONTEXTW;
-            TB_MAPACCELERATOR = NativeMethods.TB_MAPACCELERATORW;
-            TB_GETBUTTONINFO = NativeMethods.TB_GETBUTTONINFOW;
-            TB_SETBUTTONINFO = NativeMethods.TB_SETBUTTONINFOW;
-            TB_INSERTBUTTON = NativeMethods.TB_INSERTBUTTONW;
-            TB_ADDBUTTONS = NativeMethods.TB_ADDBUTTONSW;
-            TBN_GETBUTTONINFO = NativeMethods.TBN_GETBUTTONINFOW;
-            TBN_GETINFOTIP = NativeMethods.TBN_GETINFOTIPW;
-            TBN_GETDISPINFO = NativeMethods.TBN_GETDISPINFOW;
-            TTM_ADDTOOL = NativeMethods.TTM_ADDTOOLW;
-            TTM_SETTITLE = NativeMethods.TTM_SETTITLEW;
-            TTM_DELTOOL = NativeMethods.TTM_DELTOOLW;
-            TTM_NEWTOOLRECT = NativeMethods.TTM_NEWTOOLRECTW;
-            TTM_GETTOOLINFO = NativeMethods.TTM_GETTOOLINFOW;
-            TTM_SETTOOLINFO = NativeMethods.TTM_SETTOOLINFOW;
-            TTM_HITTEST = NativeMethods.TTM_HITTESTW;
-            TTM_GETTEXT = NativeMethods.TTM_GETTEXTW;
-            TTM_UPDATETIPTEXT = NativeMethods.TTM_UPDATETIPTEXTW;
-            TTM_ENUMTOOLS = NativeMethods.TTM_ENUMTOOLSW;
-            TTM_GETCURRENTTOOL = NativeMethods.TTM_GETCURRENTTOOLW;
-            TTN_GETDISPINFO = NativeMethods.TTN_GETDISPINFOW;
-            TTN_NEEDTEXT = NativeMethods.TTN_NEEDTEXTW;
-            TVM_INSERTITEM = NativeMethods.TVM_INSERTITEMW;
-            TVM_GETITEM = NativeMethods.TVM_GETITEMW;
-            TVM_SETITEM = NativeMethods.TVM_SETITEMW;
-            TVM_EDITLABEL = NativeMethods.TVM_EDITLABELW;
-            TVM_GETISEARCHSTRING = NativeMethods.TVM_GETISEARCHSTRINGW;
-            TVN_SELCHANGING = NativeMethods.TVN_SELCHANGINGW;
-            TVN_SELCHANGED = NativeMethods.TVN_SELCHANGEDW;
-            TVN_GETDISPINFO = NativeMethods.TVN_GETDISPINFOW;
-            TVN_SETDISPINFO = NativeMethods.TVN_SETDISPINFOW;
-            TVN_ITEMEXPANDING = NativeMethods.TVN_ITEMEXPANDINGW;
-            TVN_ITEMEXPANDED = NativeMethods.TVN_ITEMEXPANDEDW;
-            TVN_BEGINDRAG = NativeMethods.TVN_BEGINDRAGW;
-            TVN_BEGINRDRAG = NativeMethods.TVN_BEGINRDRAGW;
-            TVN_BEGINLABELEDIT = NativeMethods.TVN_BEGINLABELEDITW;
-            TVN_ENDLABELEDIT = NativeMethods.TVN_ENDLABELEDITW;
-            TCM_GETITEM = NativeMethods.TCM_GETITEMW;
-            TCM_SETITEM = NativeMethods.TCM_SETITEMW;
-            TCM_INSERTITEM = NativeMethods.TCM_INSERTITEMW;
-        }
-
         /*
         * MISCELLANEOUS
         */
-
-
 
         [StructLayout(LayoutKind.Sequential), CLSCompliant(false)]
         public class OLECMD {
@@ -2546,7 +2157,6 @@ namespace System.Windows.Forms {
             public   int cmdf = 0;
 
         }
-
 
         [ComVisible(true), ComImport(), Guid("B722BCCB-4E68-101B-A2BC-00AA00404770"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown), CLSCompliantAttribute(false)]
@@ -2575,20 +2185,6 @@ namespace System.Windows.Forms {
                 int pvaOut);
         }
 
-        /* Unused
-        public static int SignedHIWORD(int n) {
-            int i = (int)(short)((n >> 16) & 0xffff);
-
-            return i;
-        }
-
-        public static int SignedLOWORD(int n) {
-            int i = (int)(short)(n & 0xFFFF);
-            
-            return i;
-        }
-        */
-
         /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.FONTDESC"]/*' />
         /// <devdoc>
         /// </devdoc>
@@ -2603,8 +2199,6 @@ namespace System.Windows.Forms {
             public bool     fUnderline;
             public bool     fStrikethrough;
         }
-
-
 
         /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.PICTDESCbmp"]/*' />
         /// <devdoc>
@@ -2681,13 +2275,13 @@ namespace System.Windows.Forms {
             public short wSecond2;
             public short wMilliseconds2;
         }
-        
+
         public delegate bool EnumChildrenCallback(IntPtr hwnd, IntPtr lParam);
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class HH_AKLINK {
             internal int        cbStruct=Marshal.SizeOf(typeof(HH_AKLINK));
-            internal bool      fReserved = false;            
+            internal bool      fReserved = false;
             internal string    pszKeywords = null;
             internal string    pszUrl = null;
             internal string    pszMsgText = null;
@@ -2700,7 +2294,7 @@ namespace System.Windows.Forms {
         public class HH_POPUP {
             internal int       cbStruct=Marshal.SizeOf(typeof(HH_POPUP));
             internal IntPtr    hinst = IntPtr.Zero;
-            internal int       idString = 0;            
+            internal int       idString = 0;
             internal IntPtr    pszText;
             internal POINT     pt;
             internal int       clrForeground = -1;
@@ -2743,7 +2337,7 @@ namespace System.Windows.Forms {
             internal RECT    rcWork = new RECT();
             internal int     dwFlags = 0;
         }
-        
+
         public delegate int EditStreamCallback(IntPtr dwCookie, IntPtr buf, int cb, out int transferred);
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2760,44 +2354,44 @@ namespace System.Windows.Forms {
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-    	public struct DEVMODE
-    	{
-    		private const int CCHDEVICENAME = 32;
-    		private const int CCHFORMNAME = 32;
+        public struct DEVMODE
+        {
+            private const int CCHDEVICENAME = 32;
+            private const int CCHFORMNAME = 32;
 
-    		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHDEVICENAME)]
-    		public string dmDeviceName;
-    		public short dmSpecVersion;
-    		public short dmDriverVersion;
-    		public short dmSize;
-    		public short dmDriverExtra;
-    		public int dmFields;
-    		public int dmPositionX;
-    		public int dmPositionY;
-    		public ScreenOrientation dmDisplayOrientation;
-    		public int dmDisplayFixedOutput;
-    		public short dmColor;
-    		public short dmDuplex;
-    		public short dmYResolution;
-    		public short dmTTOption;
-    		public short dmCollate;
-    		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHFORMNAME)]
-    		public string dmFormName;
-    		public short dmLogPixels;
-    		public int dmBitsPerPel;
-    		public int dmPelsWidth;
-    		public int dmPelsHeight;
-    		public int dmDisplayFlags;
-    		public int dmDisplayFrequency;
-    		public int dmICMMethod;
-    		public int dmICMIntent;
-    		public int dmMediaType;
-    		public int dmDitherType;
-    		public int dmReserved1;
-    		public int dmReserved2;
-    		public int dmPanningWidth;
-    		public int dmPanningHeight;
-    	}
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHDEVICENAME)]
+            public string dmDeviceName;
+            public short dmSpecVersion;
+            public short dmDriverVersion;
+            public short dmSize;
+            public short dmDriverExtra;
+            public int dmFields;
+            public int dmPositionX;
+            public int dmPositionY;
+            public ScreenOrientation dmDisplayOrientation;
+            public int dmDisplayFixedOutput;
+            public short dmColor;
+            public short dmDuplex;
+            public short dmYResolution;
+            public short dmTTOption;
+            public short dmCollate;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHFORMNAME)]
+            public string dmFormName;
+            public short dmLogPixels;
+            public int dmBitsPerPel;
+            public int dmPelsWidth;
+            public int dmPelsHeight;
+            public int dmDisplayFlags;
+            public int dmDisplayFrequency;
+            public int dmICMMethod;
+            public int dmICMIntent;
+            public int dmMediaType;
+            public int dmDitherType;
+            public int dmReserved1;
+            public int dmReserved2;
+            public int dmPanningWidth;
+            public int dmPanningHeight;
+        }
 
         [ComImport(), Guid("0FF510A3-5FA5-49F1-8CCC-190D71083F3E"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IVsPerPropertyBrowsing {
@@ -2852,20 +2446,19 @@ namespace System.Windows.Forms {
             // given property.  If the return value is S_OK, the property's value will then be refreshed to the new default
             // values.
             [PreserveSig]
-            int ResetPropertyValue(int dispid);                               
+            int ResetPropertyValue(int dispid);
        }
-       
+
         [ComImport(), Guid("7494683C-37A0-11d2-A273-00C04F8EF4FF"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IManagedPerPropertyBrowsing {
-    
-            
+
             [PreserveSig]
             int GetPropertyAttributes(int dispid, 
                                       ref int  pcAttributes,
                                       ref IntPtr pbstrAttrNames,
                                       ref IntPtr pvariantInitValues);
         }
-        
+
         [ComImport(), Guid("33C0C1D8-33CF-11d3-BFF2-00C04F990235"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IProvidePropertyBuilder {
     
@@ -2919,7 +2512,7 @@ namespace System.Windows.Forms {
             public int      dwRop = 0;
             public int      fState = 0;
             public int      Frame = 0;
-            public int      crEffect = 0;            
+            public int      crEffect = 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2942,7 +2535,7 @@ namespace System.Windows.Forms {
                 public IntPtr   hwndTrack;
                 public int      dwHoverTime = 100; // Never set this to field ZERO, or to HOVER_DEFAULT, ever!
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class POINT {
             public int x;
@@ -2976,8 +2569,6 @@ namespace System.Windows.Forms {
         }
 
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
-
 
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT {
@@ -3017,12 +2608,11 @@ namespace System.Windows.Forms {
             public int cxRightWidth;
             public int cyTopHeight;
             public int cyBottomHeight;
-        } 
+        }
 
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
-
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class WNDCLASS_I {
@@ -3061,17 +2651,7 @@ namespace System.Windows.Forms {
             [MarshalAs(UnmanagedType.Struct)]
             public LOGFONT  lfMessageFont = null; 
         }
-/*
-        [StructLayout(LayoutKind.Sequential)]
-        public class ICONMETRICS {
-            public int      cbSize = Marshal.SizeOf(typeof(ICONMETRICS));
-            public int      iHorzSpacing;
-            public int      iVertSpacing;
-            public int      iTitleWrap;
-            [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT  lfFont; 
-        }
-*/
+
         [StructLayout(LayoutKind.Sequential)]
         [Serializable]
         public struct MSG {
@@ -3095,7 +2675,7 @@ namespace System.Windows.Forms {
             public int      rcPaint_right;
             public int      rcPaint_bottom;
             public bool     fRestore;
-            public bool     fIncUpdate;    
+            public bool     fIncUpdate;
             public int      reserved1;
             public int      reserved2;
             public int      reserved3;
@@ -3115,16 +2695,8 @@ namespace System.Windows.Forms {
             public int nPage;
             public int nPos;
             public int nTrackPos;
-            
-            public SCROLLINFO() {
-            }
 
-            public SCROLLINFO(int mask, int min, int max, int page, int pos) {
-                fMask = mask;
-                nMin = min;
-                nMax = max;
-                nPage = page;
-                nPos = pos;
+            public SCROLLINFO() {
             }
         }
 
@@ -3137,7 +2709,7 @@ namespace System.Windows.Forms {
             public int  rcExclude_right;
             public int  rcExclude_bottom;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class SIZE {
             public int cx;
@@ -3150,12 +2722,6 @@ namespace System.Windows.Forms {
                 this.cx = cx;
                 this.cy = cy;
             }
-
-            /* Unused
-            public System.Drawing.Size ToSize() {
-                return new System.Drawing.Size(cx, cy);
-            }
-            */
         }
         
         [StructLayout(LayoutKind.Sequential)]
@@ -3176,8 +2742,6 @@ namespace System.Windows.Forms {
             public int  rcNormalPosition_bottom;
         }
 
-        
-        
         [StructLayout(LayoutKind.Sequential,CharSet=CharSet.Auto)]
         public class STARTUPINFO_I {
             public int      cb = 0;
@@ -3199,7 +2763,7 @@ namespace System.Windows.Forms {
             public IntPtr   hStdOutput = IntPtr.Zero;
             public IntPtr   hStdError = IntPtr.Zero;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class PAGESETUPDLG {
             public int      lStructSize; 
@@ -3423,10 +2987,8 @@ namespace System.Windows.Forms {
         public class PRINTPAGERANGE {
             public int nFromPage = 0;
             public int nToPage = 0;
-        } 
+        }
 
-
-        
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESC
         {
@@ -3452,37 +3014,6 @@ namespace System.Windows.Forms {
                 pictdesc.picType = Ole.PICTYPE_ICON;
                 pictdesc.union1 = hicon;
                 return pictdesc;
-            }
-
-            /* Unused
-            public static PICTDESC CreateEnhMetafilePICTDESC(IntPtr hEMF) {
-                PICTDESC pictdesc = new PICTDESC();
-                pictdesc.cbSizeOfStruct = 12;
-                pictdesc.picType = Ole.PICTYPE_ENHMETAFILE;
-                pictdesc.union1 = hEMF;
-                return pictdesc;
-            }
-
-            public static PICTDESC CreateWinMetafilePICTDESC(IntPtr hmetafile, int x, int y) {
-                PICTDESC pictdesc = new PICTDESC();
-                pictdesc.cbSizeOfStruct = 20;
-                pictdesc.picType = Ole.PICTYPE_METAFILE;
-                pictdesc.union1 = hmetafile;
-                pictdesc.union2 = x;
-                pictdesc.union3 = y;
-                return pictdesc;
-            }
-            */
-
-            public virtual IntPtr GetHandle() {
-                return union1;
-            }
-
-            public virtual IntPtr GetHPal() {
-                if (picType == Ole.PICTYPE_BITMAP)
-                    return (IntPtr)((uint)union2 | (((long)union3) << 32));
-                else
-                    return IntPtr.Zero;
             }
         }
 
@@ -3524,9 +3055,9 @@ namespace System.Windows.Forms {
             public WndProc  lpfnHook;
             public string   lpTemplateName = null;
         }
-        
+
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
-        
+
         [StructLayout(LayoutKind.Sequential)]
         // This is not our convention for managed resources.
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]        
@@ -3541,6 +3072,7 @@ namespace System.Windows.Forms {
             [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
             public IntPtr bmBits = IntPtr.Zero;
         }
+
         [StructLayout(LayoutKind.Sequential)]
         public class ICONINFO {
                 public int fIcon = 0;
@@ -3558,14 +3090,14 @@ namespace System.Windows.Forms {
             public int  lopnWidth_y = 0;
             public int  lopnColor = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class LOGBRUSH {
                 public int lbStyle;
                 public int lbColor;
                 public IntPtr lbHatch;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class LOGFONT {
             public LOGFONT() {
@@ -3606,56 +3138,31 @@ namespace System.Windows.Forms {
             public string   lfFaceName;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
-        public struct TEXTMETRIC 
-        { 
-            public int  tmHeight; 
-            public int  tmAscent; 
-            public int  tmDescent; 
-            public int  tmInternalLeading; 
-            public int  tmExternalLeading; 
-            public int  tmAveCharWidth; 
-            public int  tmMaxCharWidth; 
-            public int  tmWeight; 
-            public int  tmOverhang; 
-            public int  tmDigitizedAspectX; 
-            public int  tmDigitizedAspectY; 
-            public char tmFirstChar; 
-            public char tmLastChar; 
-            public char tmDefaultChar; 
-            public char tmBreakChar; 
-            public byte tmItalic; 
-            public byte tmUnderlined; 
-            public byte tmStruckOut; 
-            public byte tmPitchAndFamily; 
-            public byte tmCharSet; 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct TEXTMETRIC
+        {
+            public int tmHeight;
+            public int tmAscent;
+            public int tmDescent;
+            public int tmInternalLeading;
+            public int tmExternalLeading;
+            public int tmAveCharWidth;
+            public int tmMaxCharWidth;
+            public int tmWeight;
+            public int tmOverhang;
+            public int tmDigitizedAspectX;
+            public int tmDigitizedAspectY;
+            public char tmFirstChar;
+            public char tmLastChar;
+            public char tmDefaultChar;
+            public char tmBreakChar;
+            public byte tmItalic;
+            public byte tmUnderlined;
+            public byte tmStruckOut;
+            public byte tmPitchAndFamily;
+            public byte tmCharSet;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
-        public struct TEXTMETRICA 
-        { 
-            public int  tmHeight; 
-            public int  tmAscent; 
-            public int  tmDescent; 
-            public int  tmInternalLeading; 
-            public int  tmExternalLeading; 
-            public int  tmAveCharWidth; 
-            public int  tmMaxCharWidth; 
-            public int  tmWeight; 
-            public int  tmOverhang; 
-            public int  tmDigitizedAspectX; 
-            public int  tmDigitizedAspectY; 
-            public byte tmFirstChar; 
-            public byte tmLastChar; 
-            public byte tmDefaultChar; 
-            public byte tmBreakChar; 
-            public byte tmItalic; 
-            public byte tmUnderlined; 
-            public byte tmStruckOut; 
-            public byte tmPitchAndFamily; 
-            public byte tmCharSet; 
-        }
-        
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class NOTIFYICONDATA {
             public int      cbSize = Marshal.SizeOf(typeof(NOTIFYICONDATA));
@@ -3712,8 +3219,6 @@ namespace System.Windows.Forms {
             public IntPtr   hbmpItem = IntPtr.Zero;  // requires WINVER > 5
         }
 
-
-
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
         public struct MSAAMENUINFO
         {
@@ -3729,7 +3234,7 @@ namespace System.Windows.Forms {
         }
 
         public delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class OPENFILENAME_I
         {
@@ -3757,7 +3262,7 @@ namespace System.Windows.Forms {
             public int      dwReserved = 0;
             public int      FlagsEx;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto), CLSCompliantAttribute(false)]
         public class CHOOSEFONT {
             public int      lStructSize = Marshal.SizeOf(typeof(CHOOSEFONT));   // ndirect.DllLib.sizeOf(this);
@@ -3778,7 +3283,6 @@ namespace System.Windows.Forms {
             public int      nSizeMax;
         }
 
-        
         [StructLayout(LayoutKind.Sequential)]
         public class BITMAPINFO {
             // bmiHeader was a by-value BITMAPINFOHEADER structure
@@ -3805,7 +3309,7 @@ namespace System.Windows.Forms {
                 //Added to make FxCop happy: doesn't really matter since it's internal...
             }
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class BITMAPINFOHEADER {
             public int      biSize = 40;    // ndirect.DllLib.sizeOf( this );
@@ -3820,7 +3324,7 @@ namespace System.Windows.Forms {
             public int      biClrUsed = 0;
             public int      biClrImportant = 0;
         }
-        
+
         public class Ole {
             public const int PICTYPE_UNINITIALIZED = -1;
             public const int PICTYPE_NONE          =  0;
@@ -3831,7 +3335,7 @@ namespace System.Windows.Forms {
             public const int STATFLAG_DEFAULT = 0;
             public const int STATFLAG_NONAME = 1;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class STATSTG {
 
@@ -3885,9 +3389,6 @@ namespace System.Windows.Forms {
             public uint dwHighDateTime = 0;
         }
 
-
-        
-        
         [StructLayout(LayoutKind.Sequential)]
         public class SYSTEMTIME {
             public short wYear;
@@ -3906,7 +3407,7 @@ namespace System.Windows.Forms {
                 + "]";
             }
         }
-        
+
         [
         StructLayout(LayoutKind.Sequential),
         CLSCompliantAttribute(false)
@@ -3917,14 +3418,13 @@ namespace System.Windows.Forms {
 
         }
 
-        
         [StructLayout(LayoutKind.Sequential)]
         public sealed class tagSIZE {
             public   int cx = 0;
             public   int cy = 0;
 
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class COMRECT {
             public int left;
@@ -3942,19 +3442,12 @@ namespace System.Windows.Forms {
                 this.bottom = r.Bottom;
             }
 
-            
             public COMRECT(int left, int top, int right, int bottom) {
                 this.left = left;
                 this.top = top;
                 this.right = right;
                 this.bottom = bottom;
             }
-
-            /* Unused
-            public RECT ToRECT() {
-                return new RECT(left, top, right, bottom);
-            }
-            */
 
             public static COMRECT FromXYWH(int x, int y, int width, int height) {
                 return new COMRECT(x, y, x + width, y + height);
@@ -3965,13 +3458,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagOleMenuGroupWidths {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst=6)/*leftover(offset=0, widths)*/]
             public int[] widths = new int[6];
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         [Serializable]
         public class MSOCRINFOSTRUCT {
@@ -4021,7 +3513,7 @@ namespace System.Windows.Forms {
           public int cAccelEntries;
 
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct NMLVFINDITEM
         {
@@ -4029,7 +3521,7 @@ namespace System.Windows.Forms {
             public int iStart;
             public LVFINDINFO lvfi;
         }
-    
+
         [StructLayout(LayoutKind.Sequential)]
         public struct NMHDR
         {
@@ -4037,7 +3529,7 @@ namespace System.Windows.Forms {
             public IntPtr idFrom; //This is declared as UINT_PTR in winuser.h
             public int code;
         }
-        
+
         [ComVisible(true),Guid("626FC520-A41E-11CF-A731-00A0C9082637"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLDocument {
 
@@ -4076,7 +3568,7 @@ namespace System.Windows.Forms {
                 [Out]
                 VARIANT pVarOut);
         }
-        
+
         [ComImport(), Guid("4D07FC10-F931-11CE-B001-00AA006884E5"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface ICategorizeProperties {
             
@@ -4093,16 +3585,13 @@ namespace System.Windows.Forms {
                 out string categoryName);
         }
 
-      
-        
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagSIZEL
         {
             public int cx;
             public int cy;
         }
-       
-        
+
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagOLEVERB
         {
@@ -4118,8 +3607,6 @@ namespace System.Windows.Forms {
             public int grfAttribs;
         }
 
-        
-        
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagLOGPALETTE
         {
@@ -4130,7 +3617,6 @@ namespace System.Windows.Forms {
             public short palNumEntries = 0;
         }
 
-        
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagCONTROLINFO
         {
@@ -4163,11 +3649,10 @@ namespace System.Windows.Forms {
             public short reserved2 = 0;
             [MarshalAs(UnmanagedType.I2)]
             public short reserved3 = 0;
-            
-            public IntPtr data1;
-            
-            public IntPtr data2;
 
+            public IntPtr data1;
+
+            public IntPtr data2;
 
             public bool Byref{
                 get{
@@ -4192,94 +3677,6 @@ namespace System.Windows.Forms {
                 Clear();
             }
 
-            public static VARIANT FromObject(Object var) {
-                VARIANT v = new VARIANT();
-
-                if (var == null) {
-                    v.vt = (int)tagVT.VT_EMPTY;
-                }
-                else if (Convert.IsDBNull(var)) {
-                }
-                else {
-                    Type t = var.GetType();
-
-                    if (t == typeof(bool)) {
-                        v.vt = (int)tagVT.VT_BOOL;
-                    }
-                    else if (t == typeof(byte)) {
-                        v.vt = (int)tagVT.VT_UI1;
-                        v.data1 = (IntPtr)Convert.ToByte(var, CultureInfo.InvariantCulture);
-                    }
-                    else if (t == typeof(char)) {
-                        v.vt = (int)tagVT.VT_UI2;
-                        v.data1 = (IntPtr)Convert.ToChar(var, CultureInfo.InvariantCulture);
-                    }
-                    else if (t == typeof(string)) {
-                        v.vt = (int)tagVT.VT_BSTR;
-                        v.data1 = SysAllocString(Convert.ToString(var, CultureInfo.InvariantCulture));
-                    }
-                    else if (t == typeof(short)) {
-                        v.vt = (int)tagVT.VT_I2;
-                        v.data1 = (IntPtr)Convert.ToInt16(var, CultureInfo.InvariantCulture);
-                    }
-                    else if (t == typeof(int)) {
-                        v.vt = (int)tagVT.VT_I4;
-                        v.data1 = (IntPtr)Convert.ToInt32(var, CultureInfo.InvariantCulture);
-                    }
-                    else if (t == typeof(long)) {
-                        v.vt = (int)tagVT.VT_I8;
-                        v.SetLong(Convert.ToInt64(var, CultureInfo.InvariantCulture));
-                    }
-                    else if (t == typeof(Decimal)) {
-                        v.vt = (int)tagVT.VT_CY;
-                        Decimal c = (Decimal)var;
-                        // Microsoft, it's bizzare that we need to call this as a static!
-                        v.SetLong(Decimal.ToInt64(c));
-                    }
-                    else if (t == typeof(decimal)) {
-                        v.vt = (int)tagVT.VT_DECIMAL;
-                        Decimal d = Convert.ToDecimal(var, CultureInfo.InvariantCulture);
-                        v.SetLong(Decimal.ToInt64(d));
-                    }
-                    else if (t == typeof(double)) {
-                        v.vt = (int)tagVT.VT_R8;
-                        // how do we handle double?
-                    }
-                    else if (t == typeof(float) || t == typeof(Single)) {
-                        v.vt = (int)tagVT.VT_R4;
-                        // how do we handle float?
-                    }
-                    else if (t == typeof(DateTime)) {
-                        v.vt = (int)tagVT.VT_DATE;
-                        v.SetLong(Convert.ToDateTime(var, CultureInfo.InvariantCulture).ToFileTime());
-                    }
-                    else if (t == typeof(SByte)) {
-                        v.vt = (int)tagVT.VT_I1;
-                        v.data1 = (IntPtr)Convert.ToSByte(var, CultureInfo.InvariantCulture);
-                    }
-                    else if (t == typeof(UInt16)) {
-                        v.vt = (int)tagVT.VT_UI2;
-                        v.data1 = (IntPtr)Convert.ToUInt16(var, CultureInfo.InvariantCulture);
-                    }
-                    else if (t == typeof(UInt32)) {
-                        v.vt = (int)tagVT.VT_UI4;
-                        v.data1 = (IntPtr)Convert.ToUInt32(var, CultureInfo.InvariantCulture);
-                    }
-                    else if (t == typeof(UInt64)) {
-                        v.vt = (int)tagVT.VT_UI8;
-                        v.SetLong((long)Convert.ToUInt64(var, CultureInfo.InvariantCulture));
-                    }
-                    else if (t == typeof(object) || t == typeof(UnsafeNativeMethods.IDispatch) || t.IsCOMObject) {
-                        v.vt = (t == typeof(UnsafeNativeMethods.IDispatch) ? (short)tagVT.VT_DISPATCH : (short)tagVT.VT_UNKNOWN);
-                        v.data1 = Marshal.GetIUnknownForObject(var);
-                    }
-                    else {
-                        throw new ArgumentException(string.Format(SR.ConnPointUnhandledType, t.Name));
-                    }
-                }
-                return v;
-            }
-
             [DllImport(ExternDll.Oleaut32,CharSet=CharSet.Auto)]
             [ResourceExposure(ResourceScope.None)]
             private static extern IntPtr SysAllocString([In, MarshalAs(UnmanagedType.LPWStr)]string s);
@@ -4291,17 +3688,6 @@ namespace System.Windows.Forms {
             public void SetLong(long lVal) {
                 data1 = (IntPtr)(lVal & 0xFFFFFFFF);
                 data2 = (IntPtr)((lVal >> 32) & 0xFFFFFFFF);
-            }
-
-            public IntPtr ToCoTaskMemPtr() {
-                IntPtr mem = Marshal.AllocCoTaskMem(16);
-                Marshal.WriteInt16(mem, vt);
-                Marshal.WriteInt16(mem, 2, reserved1);
-                Marshal.WriteInt16(mem, 4, reserved2);
-                Marshal.WriteInt16(mem, 6, reserved3);
-                Marshal.WriteInt32(mem, 8, (int) data1);
-                Marshal.WriteInt32(mem, 12, (int) data2);
-                return mem;
             }
 
             public object ToObject() {
@@ -4459,7 +3845,7 @@ namespace System.Windows.Forms {
                 return Marshal.ReadIntPtr(value);
             }
         }
-        
+
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagLICINFO
         {
@@ -4469,7 +3855,7 @@ namespace System.Windows.Forms {
           public int fRuntimeAvailable = 0;
           public int fLicVerified = 0;
         }
-        
+
         public enum  tagVT {
             VT_EMPTY = 0,
             VT_NULL = 1,
@@ -4521,8 +3907,7 @@ namespace System.Windows.Forms {
             VT_ILLEGALMASKED = 4095,
             VT_TYPEMASK = 4095
         }
-        
-    
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class WNDCLASS_D {
             public int      style;
@@ -4536,7 +3921,7 @@ namespace System.Windows.Forms {
             public string   lpszMenuName = null;
             public string   lpszClassName = null;
         }
-    
+
         public class MSOCM {
             // MSO Component registration flags
             public const int msocrfNeedIdleTime         = 1;
@@ -4657,7 +4042,7 @@ namespace System.Windows.Forms {
             public const int msocWindowComponent = 2;
             public const int msocWindowDlgOwner = 3;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class TOOLINFO_T
         {
@@ -4671,7 +4056,6 @@ namespace System.Windows.Forms {
             public IntPtr   lParam = IntPtr.Zero;
         }
 
-
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class TOOLINFO_TOOLTIP
         {
@@ -4684,7 +4068,6 @@ namespace System.Windows.Forms {
             public IntPtr   lpszText;
             public IntPtr   lParam = IntPtr.Zero;
         }
-
 
         [StructLayout(LayoutKind.Sequential)]
         public sealed class tagDVTARGETDEVICE {
@@ -4700,8 +4083,6 @@ namespace System.Windows.Forms {
             public   short tdExtDevmodeOffset = 0;
         }
 
-
-        
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public struct TV_ITEM {
             public int      mask;
@@ -4715,15 +4096,6 @@ namespace System.Windows.Forms {
             public int      cChildren;
             public IntPtr   lParam;
         }
-
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-        public struct TVSORTCB {
-            public IntPtr                                         hParent;
-            public NativeMethods.TreeViewCompareCallback          lpfnCompare;
-            public IntPtr                                         lParam;
-        }
-        
-
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public struct TV_INSERTSTRUCT {
@@ -4766,25 +4138,18 @@ namespace System.Windows.Forms {
             public IntPtr   lParam;
 
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class NMTVDISPINFO
         {
             public NMHDR    hdr;
             public TV_ITEM  item;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public sealed class POINTL {
             public   int x;
             public   int y;
-        }
-    
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-        public struct HIGHCONTRAST {
-            public int cbSize;
-            public int dwFlags;
-            public string lpszDefaultScheme;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
@@ -4814,7 +4179,7 @@ namespace System.Windows.Forms {
             public int      iImage;
             public IntPtr   lParam;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagDISPPARAMS
         {
@@ -4825,14 +4190,14 @@ namespace System.Windows.Forms {
           [MarshalAs(UnmanagedType.U4)/*leftover(offset=12, cNamedArgs)*/]
           public int cNamedArgs;
         }
-        
+
         public enum  tagINVOKEKIND {
             INVOKE_FUNC = 1,
             INVOKE_PROPERTYGET = 2,
             INVOKE_PROPERTYPUT = 4,
             INVOKE_PROPERTYPUTREF = 8
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class tagEXCEPINFO {
             [MarshalAs(UnmanagedType.U2)]
@@ -4863,7 +4228,7 @@ namespace System.Windows.Forms {
             DESCKIND_IMPLICITAPPOBJ = 4,
             DESCKIND_MAX = 5
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public sealed class tagFUNCDESC {
             public   int memid = 0;
@@ -4908,13 +4273,13 @@ namespace System.Windows.Forms {
             public   short wVarFlags = 0;
             public    /*NativeMethods.tagVARKIND*/ int varkind = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct  value_tagELEMDESC {
             public    NativeMethods.tagTYPEDESC tdesc;
             public    NativeMethods.tagPARAMDESC paramdesc;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct WINDOWPOS {
             public IntPtr hwnd;
@@ -4931,7 +4296,7 @@ namespace System.Windows.Forms {
             public IntPtr       prc;        // pointer to a RECT
             public IntPtr       pwpos;      // pointer to a WINDOWPOS
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class DRAWITEMSTRUCT {
             public int CtlType = 0;
@@ -4944,7 +4309,7 @@ namespace System.Windows.Forms {
             public RECT   rcItem;
             public IntPtr itemData = IntPtr.Zero;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class MEASUREITEMSTRUCT {
             public int CtlType = 0;
@@ -4954,7 +4319,7 @@ namespace System.Windows.Forms {
             public int itemHeight = 0;
             public IntPtr itemData = IntPtr.Zero;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class HELPINFO {
             public int      cbSize = Marshal.SizeOf(typeof(HELPINFO));
@@ -4964,14 +4329,14 @@ namespace System.Windows.Forms {
             public IntPtr   dwContextId = IntPtr.Zero;
             public POINT    MousePos = null;
         }
-    
+
         [StructLayout(LayoutKind.Sequential)]
         public class ACCEL {
             public byte fVirt;
             public short key;
             public short cmd;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class MINMAXINFO {
             public POINT    ptReserved = null;
@@ -4981,8 +4346,6 @@ namespace System.Windows.Forms {
             public POINT    ptMaxTrackSize = null;
         }
 
-
-    
         [ComImport(), Guid("B196B28B-BAB4-101A-B69C-00AA00341D07"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface ISpecifyPropertyPages {
              void GetPages(
@@ -4990,7 +4353,7 @@ namespace System.Windows.Forms {
                 NativeMethods.tagCAUUID pPages);
 
         }
-        
+
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagCAUUID
         {
@@ -5033,20 +4396,7 @@ namespace System.Windows.Forms {
             public IntPtr hinst;
             public int    uFlags;
         }
-        
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
-        public class TOOLTIPTEXTA
-        {
-            public NMHDR  hdr;
-            public string lpszText;
-            
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst=80)]
-            public string szText = null;
-            
-            public IntPtr hinst;
-            public int    uFlags;
-        }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct NMTBHOTITEM
         {
@@ -5066,26 +4416,6 @@ namespace System.Windows.Forms {
         public const int HICF_RESELECT          = 0x00000040;          // hot item reselected
         public const int HICF_LMOUSE            = 0x00000080;          // left mouse button selected
         public const int HICF_TOGGLEDROPDOWN    = 0x00000100;          // Toggle button's dropdown state
-
-
-    /*
-    Microsoft: dead code. Keep it in case we need an HDITEM class where the pszText is actually set.
-    [StructLayout(LayoutKind.Sequential,CharSet=CharSet.Auto)]
-    public class HDITEM
-    {
-        public int      mask = 0;
-        public int      cxy = 0;
-        public string   pszText = null;
-        public IntPtr   hbm = IntPtr.Zero;
-        public int      cchTextMax = 0;
-        public int      fmt = 0;
-        public IntPtr   lParam = IntPtr.Zero;
-        public int      iImage = 0;
-        public int      iOrder = 0;
-        public int      type = 0;
-        public IntPtr   pvFilter = IntPtr.Zero;
-    }
-    */
 
     // HDN_ITEMCHANGING will send us an HDITEM w/ pszText set to some random pointer.
     // Marshal.PtrToStructure chokes when it has to convert a random pointer to a string.

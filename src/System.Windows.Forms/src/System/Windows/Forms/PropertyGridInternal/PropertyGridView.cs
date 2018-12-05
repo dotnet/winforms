@@ -3714,7 +3714,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                                 maxWidth = Math.Max((int) textSize.cx, maxWidth);
                             }
                         }
-                        SafeNativeMethods.GetTextMetrics(new HandleRef(DropDownListBox, hdc), ref tm);
+                        SafeNativeMethods.GetTextMetricsW(new HandleRef(DropDownListBox, hdc), ref tm);
                         
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;

@@ -1589,28 +1589,6 @@ namespace System.Windows.Forms {
             Marshal.StructureToPtr(ttt, m.LParam, false);
         }
 
-        private void WmNotifyNeedTextA(ref Message m) {
-
-            NativeMethods.TOOLTIPTEXTA ttt = (NativeMethods.TOOLTIPTEXTA) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXTA));
-            int commandID = (int)ttt.hdr.idFrom;
-            ToolBarButton tbb = (ToolBarButton) buttons[commandID];
-
-            if (tbb != null && tbb.ToolTipText != null)
-                ttt.lpszText = tbb.ToolTipText;
-            else
-                ttt.lpszText = null;
-
-            ttt.hinst = IntPtr.Zero;
-
-            // RightToLeft reading order
-            //
-            if (RightToLeft == RightToLeft.Yes) {
-                ttt.uFlags |= NativeMethods.TTF_RTLREADING;
-            }
-
-            Marshal.StructureToPtr(ttt, m.LParam, false);
-        }
-
         // Track the currently hot item since the user might be using the tab and
         // arrow keys to navigate the toolbar and if that's the case, we'll need to know where to re-
         // position the tooltip window when the underlying toolbar control attempts to display it.
@@ -1672,16 +1650,7 @@ namespace System.Windows.Forms {
                 case NativeMethods.WM_NOTIFY + NativeMethods.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code) {
-                        case NativeMethods.TTN_NEEDTEXTA:
-                            // MSDN:
-                            // Setting the max width has the added benefit of enabling multiline
-                            // tool tips!
-
-                            WmNotifyNeedTextA(ref m);
-                            m.Result = (IntPtr)1;
-                            return;
-
-                        case NativeMethods.TTN_NEEDTEXTW:
+                        case NativeMethods.TTN_NEEDTEXT:
                             // MSDN:
                             // Setting the max width has the added benefit of enabling multiline
                             // tool tips!

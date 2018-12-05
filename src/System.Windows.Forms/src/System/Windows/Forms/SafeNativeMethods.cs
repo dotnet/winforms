@@ -354,17 +354,8 @@ namespace System.Windows.Forms {
         [ResourceExposure(ResourceScope.None)]
         public static extern int GetPaletteEntries(HandleRef hpal, int iStartIndex, int nEntries, int[] lppe);
 
-        [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
-        [ResourceExposure(ResourceScope.None)]
-        public static extern int GetTextMetricsW(HandleRef hDC, [In, Out] ref NativeMethods.TEXTMETRIC lptm);
-        [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
-        [ResourceExposure(ResourceScope.None)]
-        public static extern int GetTextMetricsA(HandleRef hDC, [In, Out] ref NativeMethods.TEXTMETRICA lptm);
-
-        public static int GetTextMetrics(HandleRef hDC, ref NativeMethods.TEXTMETRIC lptm) {
-            // Unicode
-            return SafeNativeMethods.GetTextMetricsW(hDC, ref lptm);
-        }
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        public static extern int GetTextMetricsW(HandleRef hDC, ref NativeMethods.TEXTMETRIC lptm);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="CreateDIBSection", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         [ResourceExposure(ResourceScope.Machine)]

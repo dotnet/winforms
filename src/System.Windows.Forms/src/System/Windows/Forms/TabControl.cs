@@ -2191,8 +2191,7 @@ namespace System.Windows.Forms {
                                 tabControlState[TABCONTROLSTATE_UISelection] = true;
                             }
                             break;
-                        case NativeMethods.TTN_GETDISPINFOA:
-                        case NativeMethods.TTN_GETDISPINFOW:
+                        case NativeMethods.TTN_GETDISPINFO:
                             // MSDN:
                             // Setting the max width has the added benefit of enabling Multiline
                             // tool tips!
