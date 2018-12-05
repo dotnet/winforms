@@ -15,10 +15,10 @@
     <MicrosoftTargetingPackNETFrameworkv472Package>Microsoft.TargetingPack.NETFramework.v4.7.2</MicrosoftTargetingPackNETFrameworkv472Package>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(IsFacadeAssembly)'=='true'">
-    
-    <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" />
-    <PackageReference Include="$(MicrosoftTargetingPackNETFrameworkv472Package)" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" />
+  <ItemGroup Condition="'$(IsFacadeAssembly)'=='true'">  
+    <!-- Not supported in .NET Core 3.0; don't flow package references to callers -->
+    <PackageReference Include="$(MicrosoftTargetingPackNETFrameworkv472Package)" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" PrivateAssets="All" />
   </ItemGroup>
   
   <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" AfterTargets="ResolvePackageDependenciesForBuild">
@@ -28,7 +28,7 @@
       <ResolvedMatchingContract Include="@(_desktopReference)" Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'" />
 
       <!-- in case we're regenerating a facade that is already referenced -->
-      <Reference Remove="@(Reference)"  Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'"/>
+      <Reference Remove="@(Reference)"  Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'" />
     </ItemGroup>
   </Target>
 
