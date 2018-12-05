@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
                     int lastWin32Error = Marshal.GetLastWin32Error();
 
                     // This code has been here since the inception of the project, 
-                    // we can�t determine why we have to compare w/ 32 here.
+                    // we can't determine why we have to compare w/ 32 here.
                     // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space) (see Dev10 
                     if ((ulong)moduleHandle < (ulong)32) {
                         throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
