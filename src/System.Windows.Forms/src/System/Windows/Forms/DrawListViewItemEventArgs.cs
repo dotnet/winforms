@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Windows.Forms.VisualStyles;
 
-    /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs"]/*' />
     /// <devdoc>
     ///     This class contains the information a user needs to paint ListView items.
     /// </devdoc>
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
         private readonly ListViewItemStates state;
         private bool drawDefault;
 
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.DrawListViewItemEventArgs"]/*' />
         /// <devdoc>
         ///     Creates a new DrawListViewItemEventArgs with the given parameters.
         /// </devdoc>
@@ -41,7 +39,6 @@ namespace System.Windows.Forms {
             this.drawDefault = false;
         }
 
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.DrawDefault"]/*' />
         /// <devdoc>
         ///     Causes the item do be drawn by the system instead of owner drawn.
         /// </devdoc>        
@@ -54,7 +51,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.Graphics"]/*' />
         /// <devdoc>
         ///     Graphics object with which painting should be done.
         /// </devdoc>
@@ -66,7 +62,6 @@ namespace System.Windows.Forms {
             }
         }
 	
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.Item"]/*' />
         /// <devdoc>
         ///     The item to be painted. 
         /// </devdoc>
@@ -78,7 +73,6 @@ namespace System.Windows.Forms {
             }
         }
 	
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.Bounds"]/*' />
         /// <devdoc>
         ///     The rectangle outlining the area in which the painting should be done.
         /// </devdoc>
@@ -91,7 +85,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.ItemIndex"]/*' />
         /// <devdoc>
         ///     The index of the item that should be painted.
         /// </devdoc>
@@ -103,7 +96,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.State"]/*' />
         /// <devdoc>
         ///     Miscellaneous state information.
         /// </devdoc>
@@ -115,7 +107,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.DrawBackground"]/*' />
         /// <devdoc>
         ///     Draws the item's background.
         /// </devdoc>
@@ -126,7 +117,6 @@ namespace System.Windows.Forms {
             backBrush.Dispose();
         }
 
-		/// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.DrawFocusRectangle"]/*' />
         /// <devdoc>
         ///     Draws a focus rectangle in the given bounds, if the item is focused. In Details View, if FullRowSelect is
         ///     true, the rectangle is drawn around the whole item, else around the first sub-item's text area.
@@ -140,7 +130,6 @@ namespace System.Windows.Forms {
             }
         }                
 
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.DrawText"]/*' />
         /// <devdoc>
         ///     Draws the item's text (overloaded) - useful only when View != View.Details
         /// </devdoc>
@@ -149,7 +138,6 @@ namespace System.Windows.Forms {
             DrawText(TextFormatFlags.Left);
         }
 	
-        /// <include file='doc\DrawListViewItemEventArgs.uex' path='docs/doc[@for="DrawListViewItemEventArgs.DrawText1"]/*' />
         /// <devdoc>
         ///     Draws the item's text (overloaded) - useful only when View != View.Details - takes a TextFormatFlags argument.
         /// </devdoc>

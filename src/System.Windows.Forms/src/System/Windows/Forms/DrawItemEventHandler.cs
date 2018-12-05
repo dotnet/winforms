@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\DrawItemEventHandler.uex' path='docs/doc[@for="DrawItemEventHandler"]/*' />
     /// <devdoc>
     /// </devdoc>
     public delegate void DrawItemEventHandler(object sender, DrawItemEventArgs e);

@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewRowErrorTextNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowErrorTextNeededEventArgs"]/*' />
     public class DataGridViewRowErrorTextNeededEventArgs : EventArgs
     {
         private int rowIndex;
@@ -20,7 +19,6 @@ namespace System.Windows.Forms
             this.errorText = errorText;
         }
 
-        /// <include file='doc\DataGridViewRowErrorTextNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowErrorTextNeededEventArgs.ErrorText"]/*' />
         public string ErrorText
         {
             get
@@ -33,7 +31,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowErrorTextNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowErrorTextNeededEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get

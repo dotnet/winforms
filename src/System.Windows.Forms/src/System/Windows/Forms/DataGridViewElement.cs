@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     
-    /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement"]/*' />
     /// <devdoc>
     ///    <para>Identifies an element in the dataGridView (base class for TCell, TBand, TRow, TColumn.</para>
     /// </devdoc>
@@ -19,7 +18,6 @@ namespace System.Windows.Forms
         private DataGridViewElementStates state; // enabled frozen readOnly resizable selected visible
         private DataGridView dataGridView;
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.DataGridViewElement"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewElement'/> class.
@@ -36,7 +34,6 @@ namespace System.Windows.Forms
             this.state = dgveTemplate.State & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible);
         }
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.State"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -67,7 +64,6 @@ namespace System.Windows.Forms
             return (this.State & elementState) == 0;
         }
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.DataGridView"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -92,12 +88,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.OnDataGridViewChanged"]/*' />
         protected virtual void OnDataGridViewChanged()
         {
         }
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.RaiseCellClick"]/*' />
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellClick(DataGridViewCellEventArgs e)
         {
@@ -107,7 +101,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.RaiseCellContentClick"]/*' />
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellContentClick(DataGridViewCellEventArgs e)
         {
@@ -117,7 +110,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.RaiseCellContentDoubleClick"]/*' />
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellContentDoubleClick(DataGridViewCellEventArgs e)
         {
@@ -127,7 +119,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.RaiseCellValueChanged"]/*' />
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseCellValueChanged(DataGridViewCellEventArgs e)
         {
@@ -137,7 +128,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.RaiseDataError"]/*' />
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseDataError(DataGridViewDataErrorEventArgs e)
         {
@@ -147,7 +137,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewElement.uex' path='docs/doc[@for="DataGridViewElement.RaiseMouseWheel"]/*' />
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")] // Method raises an event for the grid control
         protected void RaiseMouseWheel(MouseEventArgs e)
         {

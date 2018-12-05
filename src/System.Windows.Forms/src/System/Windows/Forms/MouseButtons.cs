@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\MouseButtons.uex' path='docs/doc[@for="MouseButtons"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies constants that define which mouse button was pressed.
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum MouseButtons {
 
-        /// <include file='doc\MouseButtons.uex' path='docs/doc[@for="MouseButtons.Left"]/*' />
         /// <devdoc>
         ///    <para>
         ///       
@@ -33,7 +31,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Left = 0x00100000,
 
-        /// <include file='doc\MouseButtons.uex' path='docs/doc[@for="MouseButtons.None"]/*' />
         /// <devdoc>
         ///    <para>
         ///       
@@ -43,7 +40,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0x00000000,
 
-        /// <include file='doc\MouseButtons.uex' path='docs/doc[@for="MouseButtons.Right"]/*' />
         /// <devdoc>
         ///    <para>
         ///       
@@ -53,7 +49,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Right = 0x00200000,
 
-        /// <include file='doc\MouseButtons.uex' path='docs/doc[@for="MouseButtons.Middle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       
@@ -63,13 +58,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Middle = 0x00400000,        
         
-        /// <include file='doc\MouseButtons.uex' path='docs/doc[@for="MouseButtons.XButton1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         XButton1 = 0x00800000,        
         
-        /// <include file='doc\MouseButtons.uex' path='docs/doc[@for="MouseButtons.XButton2"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

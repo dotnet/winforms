@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Security.Permissions;
     using System.Windows.Forms.Layout;
     
-    /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem"]/*' />
     /// <devdoc>
     /// Base class for ToolStripItems that display DropDown windows.
     /// </devdoc>
@@ -27,7 +26,6 @@ namespace System.Windows.Forms {
         private static readonly object EventDropDownClosed               = new object();
         private static readonly object EventDropDownItemClicked               = new object();
         
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ToolStripDropDownItem"]/*' />
         /// <devdoc>
         /// Protected ctor so you can't create one of these without deriving from it.
         /// </devdoc>
@@ -48,7 +46,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDown"]/*' />
         /// <devdoc>
         /// The ToolStripDropDown that will be displayed when this item is clicked.
         /// </devdoc>
@@ -167,7 +164,6 @@ namespace System.Windows.Forms {
         }
 
     
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownClosed"]/*' />
         /// <devdoc>
         /// Occurs when the dropdown is closed
         /// </devdoc>
@@ -184,7 +180,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownLocation"]/*' />
         internal protected virtual Point DropDownLocation 
         {
             get { 
@@ -197,7 +192,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpening"]/*' />
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))
@@ -210,7 +204,6 @@ namespace System.Windows.Forms {
                 Events.RemoveHandler(EventDropDownShow, value);
             }
         }   
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpened"]/*' />
         /// <devdoc>
         /// Occurs when the dropdown is opened
         /// </devdoc>
@@ -227,7 +220,6 @@ namespace System.Windows.Forms {
             }
         }   
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownItems"]/*' />
         /// <devdoc>
         /// Returns the DropDown's items collection.
         /// </devdoc>
@@ -242,7 +234,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownItemClicked"]/*' />
         /// <devdoc>
         /// Occurs when the dropdown is opened
         /// </devdoc>
@@ -256,7 +247,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HasDropDownItems"]/*' />
         [Browsable(false)]
         public virtual bool HasDropDownItems {
             get {
@@ -265,13 +255,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HasDropDown"]/*' />
         [Browsable(false)]
         public bool HasDropDown {
             get { return dropDown != null; }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.Pressed"]/*' />
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool Pressed {
             get {
@@ -294,12 +282,10 @@ namespace System.Windows.Forms {
             HideDropDown();
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new ToolStripDropDownItemAccessibleObject(this);
         }
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.CreateDefaultDropDown"]/*' />
         protected virtual ToolStripDropDown CreateDefaultDropDown() {
             // AutoGenerate a Winbar DropDown - set the property so we hook events
              return new ToolStripDropDown(this, true);
@@ -354,7 +340,6 @@ namespace System.Windows.Forms {
         private void DropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
             OnDropDownItemClicked(e);
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.Dispose"]/*' />
         /// <devdoc>
         /// Make sure we unhook dropdown events.
         /// </devdoc>
@@ -405,7 +390,6 @@ namespace System.Windows.Forms {
         
 
         
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HideDropDown"]/*' />
         /// <devdoc>
         /// Hides the DropDown, if it is visible.  
         /// </devdoc>
@@ -430,7 +414,6 @@ namespace System.Windows.Forms {
         }
 
 
-         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnBoundsChanged"]/*' />
         protected override void OnBoundsChanged() {
             base.OnBoundsChanged();
             //Reset the Bounds...
@@ -461,7 +444,6 @@ namespace System.Windows.Forms {
                 DropDown.DoLayoutIfHandleCreated(new ToolStripItemEventArgs(this));
             }
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownHide"]/*' />
         /// <devdoc>
         /// Called as a response to HideDropDown
         /// </devdoc>
@@ -471,7 +453,6 @@ namespace System.Windows.Forms {
             EventHandler handler = (EventHandler)Events[EventDropDownHide];
             if (handler != null) handler(this, e);
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownShow"]/*' />
         /// <devdoc>
         /// Last chance to stick in the DropDown before it is shown.
         /// </devdoc>
@@ -482,7 +463,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownOpened"]/*' />
         /// <devdoc>
         /// called when the default item is clicked
         /// </devdoc>
@@ -495,7 +475,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownClosed"]/*' />
         /// <devdoc>
         /// called when the default item is clicked
         /// </devdoc>
@@ -516,7 +495,6 @@ namespace System.Windows.Forms {
 
        
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownItemClicked"]/*' />
         /// <devdoc>
         /// called when the default item is clicked
         /// </devdoc>
@@ -538,7 +516,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ProcessDialogKey"]/*' />
         [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessDialogKey(Keys keyData) {
             Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -651,7 +628,6 @@ namespace System.Windows.Forms {
     
         }
         
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ShowDropDown"]/*' />
         /// <devdoc>
         /// Shows the DropDown, if one is set.
         /// </devdoc>
@@ -727,14 +703,11 @@ namespace System.Windows.Forms {
     }
         
 
-    /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject"]/*' />
     public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject {
         private ToolStripDropDownItem owner;
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject.ToolStripDropDownItemAccessibleObject"]/*' />
         public ToolStripDropDownItemAccessibleObject(ToolStripDropDownItem item) : base(item) {
             owner = item;
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject.Role"]/*' />
         public override AccessibleRole Role {
             get {
                 AccessibleRole role = Owner.AccessibleRole;
@@ -745,7 +718,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public override void DoDefaultAction() {
             ToolStripDropDownItem item = Owner as ToolStripDropDownItem;

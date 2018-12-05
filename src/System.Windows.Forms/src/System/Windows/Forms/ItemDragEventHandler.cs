@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\ItemDragEventHandler.uex' path='docs/doc[@for="ItemDragEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the <see cref='System.Windows.Forms.ListView.OnItemDrag'/>

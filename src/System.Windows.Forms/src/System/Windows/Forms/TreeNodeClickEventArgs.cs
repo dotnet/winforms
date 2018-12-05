@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TreeNodeMouseClickEventArgs.uex' path='docs/doc[@for="TreeNodeMouseClickEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.TreeView.TreeNodeMouseClickEventArgs'/>
@@ -24,7 +23,6 @@ namespace System.Windows.Forms {
         private TreeNode node;
         
 
-        /// <include file='doc\TreeNodeClickEventArgs.uex' path='docs/doc[@for="TreeNodeClickEventArgs.TreeNodeClickEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -33,7 +31,6 @@ namespace System.Windows.Forms {
             this.node = node;
         }
 
-        /// <include file='doc\NodeLabelEditEvent.uex' path='docs/doc[@for="NodeLabelEditEventArgs.Node"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

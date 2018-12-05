@@ -22,7 +22,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation"]/*' />
     /// <devdoc>
     ///    <para>Provides information about the operating system.</para>
     /// </devdoc>
@@ -54,7 +53,6 @@ namespace System.Windows.Forms {
         // SystemParametersInfo
         //
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DragFullWindows"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the user has enabled full window drag.
@@ -68,7 +66,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HighContrast"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the user has selected to run in high contrast
@@ -102,7 +99,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseWheelScrollLines"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the number of lines to scroll when the mouse wheel is rotated.
@@ -149,7 +145,6 @@ namespace System.Windows.Forms {
         // SystemMetrics
         //
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PrimaryMonitorSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the dimensions of the primary display monitor in pixels.
@@ -162,7 +157,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the width of the vertical scroll bar in pixels.
@@ -174,7 +168,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the width of the vertical scroll bar in pixels.
@@ -189,7 +182,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarHeight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the height of the horizontal scroll bar in pixels.
@@ -201,7 +193,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarHeight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the height of the horizontal scroll bar in pixels.
@@ -216,7 +207,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaptionHeight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the height of the normal caption area of a window in pixels.
@@ -228,7 +218,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.BorderSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the width and
@@ -242,7 +231,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.GetBorderSizeForDpi"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the width and
@@ -259,7 +247,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FixedFrameBorderSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the thickness in pixels, of the border for a window that has a caption
@@ -273,7 +260,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarThumbHeight"]/*' />
         /// <devdoc>
         ///    <para>Gets the height of the scroll box in a vertical scroll bar in pixels.</para>
         /// </devdoc>
@@ -283,7 +269,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarThumbWidth"]/*' />
         /// <devdoc>
         ///    <para>Gets the width of the scroll box in a horizontal scroll bar in pixels.</para>
         /// </devdoc>
@@ -293,7 +278,6 @@ namespace System.Windows.Forms {
             }
         }
 /*
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconFont"]/*' />
         public static Font IconFont {
             get {
                 Font iconFont = IconFontInternal;
@@ -324,7 +308,6 @@ namespace System.Windows.Forms {
         }
 */
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the default dimensions of an icon in pixels.
@@ -337,7 +320,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CursorSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the dimensions of a cursor in pixels.
@@ -350,7 +332,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuFont"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the system's font for menus.
@@ -364,7 +345,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.GetMenuFontForDpi"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the system's font for menus, scaled accordingly to an arbitrary DPI you provide.
@@ -406,7 +386,6 @@ namespace System.Windows.Forms {
             return menuFont;
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuHeight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the height of a one line of a menu in pixels.
@@ -419,7 +398,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PowerStatus"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Returns the current system power status.        
@@ -437,7 +415,6 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.WorkingArea"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the size of the working area in pixels.
@@ -451,7 +428,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.KanjiWindowHeight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -465,7 +441,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MousePresent"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the system has a mouse installed.
@@ -478,7 +453,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarArrowHeight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the height in pixels, of the arrow bitmap on the vertical scroll bar.
@@ -498,7 +472,6 @@ namespace System.Windows.Forms {
         public static int VerticalScrollBarArrowHeightForDpi(int dpi) {
                 return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CXHSCROLL, (uint)dpi);
         }
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarArrowWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the width, in pixels, of the arrow bitmap on the horizontal scrollbar.
@@ -510,7 +483,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the width of the horizontal scroll bar arrow bitmap in pixels.
@@ -525,7 +497,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DebugOS"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether this is a debug version of the operating
@@ -540,7 +511,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseButtonsSwapped"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the functions of the left and right mouse
@@ -553,7 +523,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MinimumWindowSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the minimum allowable dimensions of a window in pixels.
@@ -566,7 +535,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaptionButtonSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the dimensions in pixels, of a caption bar or title bar
@@ -580,7 +548,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FrameBorderSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the thickness in pixels, of the border for a window that can be resized.
@@ -593,7 +560,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MinWindowTrackSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the system's default
@@ -607,7 +573,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DoubleClickSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the dimensions in pixels, of the area that the user must click within
@@ -622,7 +587,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DoubleClickTime"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the maximum number of milliseconds allowed between mouse clicks for a
@@ -635,7 +599,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconSpacingSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -650,7 +613,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.RightAlignedMenus"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether drop down menus should be right-aligned with
@@ -663,7 +625,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PenWindows"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the Microsoft Windows for Pen computing
@@ -676,7 +637,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DbcsEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the operating system is capable of handling
@@ -689,7 +649,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseButtons"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the number of buttons on mouse.
@@ -701,7 +660,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.Secure"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether security is present on this operating system.
@@ -715,7 +673,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.Border3DSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the dimensions in pixels, of a 3-D
@@ -729,7 +686,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MinimizedWindowSpacingSize"]/*' />
         /// <devdoc>
         ///    <para>Gets the dimensions
         ///       in pixels, of
@@ -742,7 +698,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.SmallIconSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -756,7 +711,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ToolWindowCaptionHeight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the height of
@@ -769,7 +723,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ToolWindowCaptionButtonSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the
@@ -783,7 +736,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuButtonSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -797,7 +749,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ArrangeStartingPosition"]/*' />
         /// <devdoc>
         ///    <para>Gets flags specifying how the system arranges minimized windows.</para>
         /// </devdoc>
@@ -809,7 +760,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ArrangeDirection"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets flags specifying how the system arranges minimized windows.
@@ -823,7 +773,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MinimizedWindowSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the dimensions in pixels, of a normal minimized window.
@@ -836,7 +785,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MaxWindowTrackSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the default maximum dimensions in pixels, of a
@@ -850,7 +798,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PrimaryMonitorMaximizedWindowSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the default dimensions, in pixels, of a maximized top-left window on the
@@ -864,7 +811,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.Network"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether this computer is connected to a network.
@@ -876,7 +822,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.TerminalServerSession"]/*' />
         /// <devdoc>
         ///    <para>
         ///       To be supplied.
@@ -890,7 +835,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.BootMode"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value that specifies how the system was started.
@@ -904,7 +848,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DragSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the dimensions in pixels, of the rectangle that a drag operation
@@ -919,7 +862,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ShowSounds"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the user requires an application to present
@@ -933,7 +875,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuCheckSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the
@@ -947,7 +888,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MidEastEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value
@@ -970,7 +910,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.NativeMouseWheelSupport"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the system natively supports the mouse wheel
@@ -988,7 +927,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseWheelPresent"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether there is a mouse with a mouse wheel
@@ -1021,7 +959,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VirtualScreen"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the
@@ -1044,7 +981,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MonitorCount"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the number of display monitors on the desktop.
@@ -1062,7 +998,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MonitorsSameDisplayFormat"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether all the display monitors have the
@@ -1085,7 +1020,6 @@ namespace System.Windows.Forms {
         //
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ComputerName"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the computer name of the current system.
@@ -1103,7 +1037,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UserDomainName"]/*' />
         /// <devdoc>
         ///    Gets the user's domain name.
         /// </devdoc>
@@ -1113,7 +1046,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UserInteractive"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the current process is running in user
@@ -1147,7 +1079,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UserName"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the user name for the current thread, that is, the name of the
@@ -1180,7 +1111,6 @@ namespace System.Windows.Forms {
         // NEW ADDITIONS FOR WHIDBEY                                                                            //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsDropShadowEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the drop shadow effect in enabled. Defaults to false 
@@ -1198,7 +1128,6 @@ namespace System.Windows.Forms {
            }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsFlatMenuEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the native user menus have a flat menu appearance. Defaults to false 
@@ -1216,7 +1145,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsFontSmoothingEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the Font Smoothing OSFeature.Feature is enabled. 
@@ -1230,7 +1158,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FontSmoothingContrast"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Returns a contrast value that is ClearType smoothing.
@@ -1249,7 +1176,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FontSmoothingType"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Returns a type of Font smoothing.
@@ -1268,7 +1194,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconHorizontalSpacing"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the width in pixels of an icon cell.
@@ -1282,7 +1207,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconVerticalSpacing"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the height in pixels of an icon cell.
@@ -1296,7 +1220,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsIconTitleWrappingEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Gets a value indicating whether the Icon title wrapping is enabled.
@@ -1310,7 +1233,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuAccessKeysUnderlined"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Gets a value indicating whether the menu access keys are always underlined.
@@ -1324,7 +1246,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.KeyboardDelay"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the Keyboard repeat delay setting, which is a value in the 
@@ -1340,7 +1261,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsKeyboardPreferred"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Gets a value indicating whether the user relies on Keyboard instead of mouse and wants 
@@ -1355,7 +1275,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.KeyboardSpeed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the Keyboard repeat speed setting, which is a value in the 
@@ -1371,7 +1290,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseHoverSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the Size in pixels of the rectangle within which the mouse pointer has to stay.
@@ -1387,7 +1305,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseHoverTime"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the time, in milliseconds, that the mouse pointer has to stay in the hover rectangle.
@@ -1402,7 +1319,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseSpeed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the current mouse speed.
@@ -1418,7 +1334,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsSnapToDefaultEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Determines whether the snap-to-default-button feature is enabled.
@@ -1433,7 +1348,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PopupMenuAlignment"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Determines whether the Popup Menus are left Aligned or Right Aligned.
@@ -1453,7 +1367,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsMenuFadeEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Determines whether the maenu fade animation feature is enabled. Defaults to false 
@@ -1471,7 +1384,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuShowDelay"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates the time, in milliseconds, that the system waits before displaying a shortcut menu.
@@ -1486,7 +1398,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsComboBoxAnimationEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether the slide open effect for combo boxes is enabled.
@@ -1500,7 +1411,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsTitleBarGradientEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether the gradient effect for windows title bars is enabled.
@@ -1515,7 +1425,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsHotTrackingEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether the hot tracking of user interface elements is enabled.
@@ -1529,7 +1438,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsListBoxSmoothScrollingEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether the smooth scrolling effect for listbox is enabled.
@@ -1543,7 +1451,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsMenuAnimationEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether the menu animation feature is enabled.
@@ -1557,7 +1464,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsSelectionFadeEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether the selection fade effect is enabled. Defaults to false 
@@ -1575,7 +1481,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsToolTipAnimationEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether the tool tip animation is enabled. Defaults to false 
@@ -1594,7 +1499,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UIEffectsEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether all the UI Effects are enabled. Defaults to false 
@@ -1613,7 +1517,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsActiveWindowTrackingEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
@@ -1627,7 +1530,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ActiveWindowTrackingDelay"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the active window tracking delay, in milliseconds.
@@ -1643,7 +1545,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsMinimizeRestoreAnimationEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
@@ -1657,7 +1558,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.BorderMultiplierFactor"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the border multiplier factor that determines the width of a windo's sizing border.
@@ -1672,7 +1572,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaretBlinkTime"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates the caret blink time.
@@ -1685,7 +1584,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaretWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates the caret width in edit controls.
@@ -1705,7 +1603,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseWheelScrollDelta"]/*' />
         /// <devdoc>
         ///    <para>
         ///       None.
@@ -1719,7 +1616,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalFocusThickness"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The width of the left and right edges of the focus rectangle.
@@ -1737,7 +1633,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalFocusThickness"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The width of the top and bottom edges of the focus rectangle.
@@ -1755,7 +1650,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalResizeBorderThickness"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The height of the vertical sizing border around the perimeter of the window that can be resized.
@@ -1768,7 +1662,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalResizeBorderThickness"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The width of the horizontal sizing border around the perimeter of the window that can be resized.
@@ -1781,7 +1674,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ScreenOrientation"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The orientation of the screen in degrees.
@@ -1807,7 +1699,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.SizingBorderWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Specifies the thikness, in pixels, of the Sizing Border.
@@ -1829,7 +1720,6 @@ namespace System.Windows.Forms {
         }
 
         /*
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Specified the width, in pixels, of a standard vertical scrollbar.
@@ -1853,7 +1743,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Specified the height, in pixels, of a standard horizontal scrollbar.
@@ -1876,7 +1765,6 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaptionButtonSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Specified the Size, in pixels, of the caption buttons.
@@ -1901,7 +1789,6 @@ namespace System.Windows.Forms {
         }
         */
         
-         /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.SmallCaptionButtonSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Specified the Size, in pixels, of the small caption buttons.
@@ -1925,7 +1812,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuBarButtonSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Specified the Size, in pixels, of the menu bar buttons.

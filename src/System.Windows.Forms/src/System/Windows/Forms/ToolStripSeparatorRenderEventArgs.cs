@@ -5,7 +5,6 @@
 namespace System.Windows.Forms {
 
     using System.Drawing;
-    /// <include file='doc\ToolStripSeparatorRenderEventArgs.uex' path='docs/doc[@for="ToolStripSeparatorRenderEventArgs"]/*' />
     /// <devdoc>
     /// This class represents all the information to render the winbar
     /// </devdoc>
@@ -13,7 +12,6 @@ namespace System.Windows.Forms {
 
         private bool vertical = false;
 
-        /// <include file='doc\ToolStripSeparatorRenderEventArgs.uex' path='docs/doc[@for="ToolStripSeparatorRenderEventArgs.ToolStripSeparatorRenderEventArgs"]/*' />
         /// <devdoc>
         /// This class represents all the information to render the winbar
         /// </devdoc>
@@ -21,7 +19,6 @@ namespace System.Windows.Forms {
             this.vertical = vertical;
         }
 
-        /// <include file='doc\ToolStripSeparatorRenderEventArgs.uex' path='docs/doc[@for="ToolStripSeparatorRenderEventArgs.Vertical"]/*' />
         /// <devdoc>
         /// the graphics object to draw with
         /// </devdoc>

@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Windows.Forms.VisualStyles;
 
-    /// <include file='doc\DrawTreeNodeEventArgs.uex' path='docs/doc[@for="DrawTreeNodeEventArgs"]/*' />
     /// <devdoc>
     ///     This class contains the information a user needs to paint TreeView nodes.
     /// </devdoc>
@@ -25,7 +24,6 @@ namespace System.Windows.Forms
         private readonly TreeNodeStates state;
         private bool drawDefault;
 
-        /// <include file='doc\DrawTreeNodeEventArgs.uex' path='docs/doc[@for="DrawTreeNodeEventArgs.DrawTreeNodeEventArgs"]/*' />
         /// <devdoc>
         ///     Creates a new DrawTreeNodeEventArgs with the given parameters.
         /// </devdoc>
@@ -39,7 +37,6 @@ namespace System.Windows.Forms
             this.drawDefault = false;
         }
 
-        /// <include file='doc\DrawTreeNodeEventArgs.uex' path='docs/doc[@for="DrawTreeNodeEventArgs.DrawDefault"]/*' />
         /// <devdoc>
         ///     Causes the item do be drawn by the system instead of owner drawn.
         ///     NOTE: In OwnerDrawText mode, setting this to true is same as calling DrawText.
@@ -53,7 +50,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DrawTreeNodeEventArgs.uex' path='docs/doc[@for="DrawTreeNodeEventArgs.Graphics"]/*' />
         /// <devdoc>
         ///     Graphics object with which painting should be done.
         /// </devdoc>
@@ -65,7 +61,6 @@ namespace System.Windows.Forms
             }
         }
 	
-        /// <include file='doc\DrawTreeNodeEventArgs.uex' path='docs/doc[@for="DrawTreeNodeEventArgs.Node"]/*' />
         /// <devdoc>
         ///     The node to be painted. 
         /// </devdoc>
@@ -77,7 +72,6 @@ namespace System.Windows.Forms
             }
         }
 	
-        /// <include file='doc\DrawTreeNodeEventArgs.uex' path='docs/doc[@for="DrawTreeNodeEventArgs.Bounds"]/*' />
         /// <devdoc>
         ///     The rectangle outlining the area in which the painting should be done.
         /// </devdoc>
@@ -90,7 +84,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DrawTreeNodeEventArgs.uex' path='docs/doc[@for="DrawTreeNodeEventArgs.State"]/*' />
         /// <devdoc>
         ///     Miscellaneous state information.
         /// </devdoc>

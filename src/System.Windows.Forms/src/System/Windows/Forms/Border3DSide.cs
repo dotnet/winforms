@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\Border3DSide.uex' path='docs/doc[@for="Border3DSide"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true), Flags]
     public enum Border3DSide {
 
-        /// <include file='doc\Border3DSide.uex' path='docs/doc[@for="Border3DSide.Left"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A three-dimensional border on
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Left = NativeMethods.BF_LEFT,
 
-        /// <include file='doc\Border3DSide.uex' path='docs/doc[@for="Border3DSide.Top"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A three-dimensional border on
@@ -42,7 +39,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Top = NativeMethods.BF_TOP,
 
-        /// <include file='doc\Border3DSide.uex' path='docs/doc[@for="Border3DSide.Right"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A three-dimensional border on
@@ -52,7 +48,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Right = NativeMethods.BF_RIGHT,
 
-        /// <include file='doc\Border3DSide.uex' path='docs/doc[@for="Border3DSide.Bottom"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A three-dimensional border on
@@ -62,7 +57,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Bottom = NativeMethods.BF_BOTTOM,
 
-        /// <include file='doc\Border3DSide.uex' path='docs/doc[@for="Border3DSide.Middle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The interior of the rectangle is filled with the
@@ -73,7 +67,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Middle = NativeMethods.BF_MIDDLE,
 
-        /// <include file='doc\Border3DSide.uex' path='docs/doc[@for="Border3DSide.All"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A three-dimensional border on all four

@@ -8,7 +8,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewCellCancelEventArgs.uex' path='docs/doc[@for="DataGridViewCellCancelEventArgs"]/*' />
     public class DataGridViewCellCancelEventArgs : CancelEventArgs
     {
         private int columnIndex;
@@ -18,7 +17,6 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <include file='doc\DataGridViewCellCancelEventArgs.uex' path='docs/doc[@for="DataGridViewCellCancelEventArgs.DataGridViewCellCancelEventArgs"]/*' />
         public DataGridViewCellCancelEventArgs(int columnIndex, int rowIndex)
         {
             if (columnIndex < -1)
@@ -33,7 +31,6 @@ namespace System.Windows.Forms
             this.rowIndex = rowIndex;
         }
 
-        /// <include file='doc\DataGridViewCellCancelEventArgs.uex' path='docs/doc[@for="DataGridViewCellCancelEventArgs.ColumnIndex"]/*' />
         public int ColumnIndex
         {
             get
@@ -42,7 +39,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellCancelEventArgs.uex' path='docs/doc[@for="DataGridViewCellCancelEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get

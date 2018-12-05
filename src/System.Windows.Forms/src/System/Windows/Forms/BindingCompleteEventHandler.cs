@@ -6,7 +6,6 @@ namespace System.Windows.Forms {
 
     using System;
 
-    /// <include file='doc\BindingCompleteEventHandler.uex' path='docs/doc[@for="BindingCompleteEventHandler"]/*' />
     /// <devdoc>
     ///     Represents a method that will handle the Binding Complete event.
     /// </devdoc>

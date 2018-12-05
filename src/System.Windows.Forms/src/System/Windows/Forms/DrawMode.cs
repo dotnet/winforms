@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\DrawMode.uex' path='docs/doc[@for="DrawMode"]/*' />
     /// <devdoc>
     ///    <para>
     ///
@@ -21,7 +20,6 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     public enum DrawMode {
-        /// <include file='doc\DrawMode.uex' path='docs/doc[@for="DrawMode.Normal"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Normal = 0,
 
-        /// <include file='doc\DrawMode.uex' path='docs/doc[@for="DrawMode.OwnerDrawFixed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The
@@ -43,7 +40,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         OwnerDrawFixed = 1,
 
-        /// <include file='doc\DrawMode.uex' path='docs/doc[@for="DrawMode.OwnerDrawVariable"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The programmer explicitly paints the items in the control manually, and they

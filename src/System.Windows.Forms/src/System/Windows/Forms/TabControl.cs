@@ -25,7 +25,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Globalization;
 
-    /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl"]/*' />
     /// <devdoc>
     ///     The TabControl.  This control has a lot of the functionality of a TabStrip
     ///     but manages a list of TabPages which are the 'pages' that appear on each tab.
@@ -87,7 +86,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.tabBaseReLayoutMessage"]/*' />
         /// <devdoc>
         ///     This message is posted by the control to itself after a TabPage is
         ///     added to it.  On certain occasions, after items are added to a
@@ -106,7 +104,6 @@ namespace System.Windows.Forms {
         private bool             rightToLeftLayout = false;
         private bool             skipUpdateSize;
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabControl"]/*' />
         /// <devdoc>
         ///     Constructs a TabBase object, usually as the base class for a TabStrip or TabControl.
         /// </devdoc>
@@ -119,7 +116,6 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.UserPaint, false);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Alignment"]/*' />
         /// <devdoc>
         ///     Returns on what area of the control the tabs reside on (A TabAlignment value).
         ///     The possibilities are Top (the default), Bottom, Left, and Right.  When alignment
@@ -154,7 +150,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Appearance"]/*' />
         /// <devdoc>
         ///     Indicates whether the tabs in the tabstrip look like regular tabs, or if they look
         ///     like buttons as seen in the Windows 95 taskbar.
@@ -194,7 +189,6 @@ namespace System.Windows.Forms {
         }
        
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -210,7 +204,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
@@ -222,7 +215,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -236,7 +228,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -248,7 +239,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImageLayout"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -262,7 +252,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -274,7 +263,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -285,7 +273,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DoubleBuffered"]/*' />
         /// <devdoc>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
@@ -300,7 +287,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -314,7 +300,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ForeColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
@@ -326,7 +311,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.CreateParams"]/*' />
         /// <devdoc>
         ///     Returns the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
@@ -391,7 +375,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DisplayRectangle"]/*' />
         /// <devdoc>
         ///     The rectangle that represents the Area of the tab strip not
         ///     taken up by the tabs, borders, or anything else owned by the Tab.  This
@@ -442,7 +425,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DrawMode"]/*' />
         /// <devdoc>
         ///     The drawing mode of the tabs in the tab strip.  This will indicate
         /// </devdoc>
@@ -469,7 +451,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.HotTrack"]/*' />
         /// <devdoc>
         ///     Indicates whether the tabs visually change when the mouse passes over them.
         /// </devdoc>
@@ -493,7 +474,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ImageList"]/*' />
         /// <devdoc>
         ///     Returns the imageList the control points at.  This is where tabs that have imageIndex
         ///     set will get there images from.
@@ -537,7 +517,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ItemSize"]/*' />
         /// <devdoc>
         ///     By default, tabs will automatically size themselves to fit their icon, if any, and their label.
         ///     However, the tab size can be explicity set by setting this property.
@@ -593,7 +572,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Multiline"]/*' />
         /// <devdoc>
         ///     Indicates if there can be more than one row of tabs.  By default [when
         ///     this property is false], if there are more tabs than available display
@@ -620,7 +598,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Padding"]/*' />
         /// <devdoc>
         ///     The amount of padding around the items in the individual tabs.
         ///     You can specify both horizontal and vertical padding.
@@ -649,7 +626,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.RightToLeftLayout"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -680,7 +656,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.RowCount"]/*' />
         /// <devdoc>
         ///     The number of rows currently being displayed in
         ///     the tab strip.  This is most commonly used when the Multline property
@@ -701,7 +676,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectedIndex"]/*' />
         /// <devdoc>
         ///     The index of the currently selected tab in the strip, if there
         ///     is one.  If the value is -1, there is currently no selection.  If the
@@ -771,7 +745,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectedTab"]/*' />
         /// <devdoc>
         ///      The selection to the given tab, provided it .equals a tab in the
         ///      list.  The return value is the index of the tab that was selected,
@@ -809,7 +782,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SizeMode"]/*' />
         /// <devdoc>
         ///     By default, tabs are big enough to display their text, and any space
         ///     on the right of the strip is left as such.  However, you can also
@@ -840,7 +812,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ShowToolTips"]/*' />
         /// <devdoc>
         ///     Indicates whether tooltips are being shown for tabs that have tooltips set on
         ///     them.
@@ -863,7 +834,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabCount"]/*' />
         /// <devdoc>
         ///     Returns the number of tabs in the strip
         /// </devdoc>
@@ -877,7 +847,6 @@ namespace System.Windows.Forms {
             get { return tabPageCount;}
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPages"]/*' />
         /// <devdoc>
         ///     Returns the Collection of TabPages.
         /// </devdoc>
@@ -893,7 +862,6 @@ namespace System.Windows.Forms {
                 return tabCollection;
             }
         }
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Text"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -907,7 +875,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TextChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
@@ -919,7 +886,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DrawItem"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -933,7 +899,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -948,7 +913,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectedIndexChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -962,7 +926,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Selecting"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs before a tabpage is selected as the top tabPage.
@@ -979,7 +942,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Selected"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs after a tabpage is selected as the top tabPage.
@@ -996,7 +958,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Deselecting"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs before the visible property of the top tabpage is set to false.
@@ -1013,7 +974,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Deselected"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs after the visible property of the top tabpage is set to false.
@@ -1030,7 +990,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnPaint"]/*' />
         /// <devdoc>
         ///     TabControl Onpaint.
         /// </devdoc>
@@ -1045,7 +1004,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.AddItem"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1064,7 +1022,6 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ApplySize"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1075,7 +1032,6 @@ namespace System.Windows.Forms {
             cachedDisplayRect = Rectangle.Empty;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BeginUpdate"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1083,7 +1039,6 @@ namespace System.Windows.Forms {
             BeginUpdateInternal();
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.CreateControlsInstance"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1091,7 +1046,6 @@ namespace System.Windows.Forms {
             return new ControlCollection(this);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1115,7 +1069,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DeselectTab"]/*' />
         /// <devdoc>
         ///     Allows the user to specify the index in Tabcontrol.TabPageCollection of the tabpage to be hidden.
         /// </devdoc>
@@ -1131,7 +1084,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DeselectTab1"]/*' />
         /// <devdoc>
         ///     Allows the user to specify the tabpage in Tabcontrol.TabPageCollection  to be hidden.
         /// </devdoc>
@@ -1144,7 +1096,6 @@ namespace System.Windows.Forms {
             DeselectTab(index);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DeselectTab2"]/*' />
         /// <devdoc>
         ///     Allows the user to specify the name of the tabpage in Tabcontrol.TabPageCollection to be hidden.
         /// </devdoc>
@@ -1157,7 +1108,6 @@ namespace System.Windows.Forms {
             DeselectTab(tabPage);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (imageList != null) {
@@ -1186,7 +1136,6 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetControl"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1202,7 +1151,6 @@ namespace System.Windows.Forms {
             return tabPages[index];
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetItems"]/*' />
         /// <devdoc>
         ///     This has package scope so that TabStrip and TabControl can call it.
         /// </devdoc>
@@ -1213,7 +1161,6 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetItems1"]/*' />
         /// <devdoc>
         ///     This has package scope so that TabStrip and TabControl can call it.
         /// </devdoc>
@@ -1228,7 +1175,6 @@ namespace System.Windows.Forms {
             return (TabPage[])GetItems();
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetTabRect"]/*' />
         /// <devdoc>
         ///     Retrieves the bounding rectangle for the given tab in the tab strip.
         /// </devdoc>
@@ -1248,7 +1194,6 @@ namespace System.Windows.Forms {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetToolTipText"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1261,7 +1206,6 @@ namespace System.Windows.Forms {
                 SendMessage(NativeMethods.TCM_SETIMAGELIST, 0, ImageList.Handle);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Insert"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1286,7 +1230,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.InsertItem"]/*' />
         /// <devdoc>
         ///     This function is used by the Insert Logic to insert a tabPage in the current TabPage in the TabPageCollection.
         /// </devdoc>
@@ -1308,7 +1251,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.IsInputKey"]/*' />
         /// <devdoc>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
         /// </devdoc>
@@ -1324,7 +1266,6 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnHandleCreated"]/*' />
         /// <devdoc>
         ///     This is a notification that the handle has been created.
         ///     We do some work here to configure the handle.
@@ -1386,7 +1327,6 @@ namespace System.Windows.Forms {
             UpdateTabSelection(false);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnHandleDestroyed"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1406,7 +1346,6 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnDrawItem"]/*' />
         /// <devdoc>
         ///     Actually goes and fires the OnDrawItem event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -1418,7 +1357,6 @@ namespace System.Windows.Forms {
             if (onDrawItem != null) onDrawItem(this, e);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnEnter"]/*' />
         /// <devdoc>
         ///     Actually goes and fires the OnLeave event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -1441,7 +1379,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnLeave"]/*' />
         /// <devdoc>
         ///     Actually goes and fires the OnLeave event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -1463,7 +1400,6 @@ namespace System.Windows.Forms {
             base.OnLeave(e);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnKeyDown"]/*' />
         /// <devdoc>
         ///     We override this to get tabbing functionality.
         ///     If overriding this, remember to call base.onKeyDown.
@@ -1497,7 +1433,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnResize"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1507,7 +1442,6 @@ namespace System.Windows.Forms {
             UpdateTabSelection(false);
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1527,7 +1461,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnSelectedIndexChanged"]/*' />
         /// <devdoc>
         ///     Actually goes and fires the onSelectedIndexChanged event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -1545,7 +1478,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnSelecting"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnSelecting'/> event.
@@ -1556,7 +1488,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnSelected"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnSelected'/> event.
@@ -1573,7 +1504,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnDeselecting"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnDeselecting'/> event.
@@ -1586,7 +1516,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnDeselected"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnDeselected'/> event.
@@ -1602,7 +1531,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ProcessKeyPreview"]/*' />
         /// <devdoc>
         ///     We override this to get the Ctrl and Ctrl-Shift Tab functionality.
         /// </devdoc>
@@ -1615,7 +1543,6 @@ namespace System.Windows.Forms {
             return base.ProcessKeyPreview(ref m);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.UpdateSize"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1634,7 +1561,6 @@ namespace System.Windows.Forms {
             EndUpdate();
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnFontChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1678,7 +1604,6 @@ namespace System.Windows.Forms {
             UpdateSize();
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.RemoveAll"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1690,7 +1615,6 @@ namespace System.Windows.Forms {
             tabPageCount = 0;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.RemoveItem"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1725,7 +1649,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SetToolTip"]/*' />
         /// <devdoc>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </devdoc>
@@ -1736,7 +1659,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SetItem"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1752,7 +1674,6 @@ namespace System.Windows.Forms {
             tabPages[index] = tabPage;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectTab"]/*' />
         /// <devdoc>
         ///     Allows the user to specify the index in Tabcontrol.TabPageCollection of the tabpage to be shown.
         /// </devdoc>
@@ -1764,7 +1685,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectTab1"]/*' />
         /// <devdoc>
         ///     Allows the user to specify the tabpage in Tabcontrol.TabPageCollection  to be shown.
         /// </devdoc>
@@ -1777,7 +1697,6 @@ namespace System.Windows.Forms {
             SelectTab(index);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectTab2"]/*' />
         /// <devdoc>
         ///     Allows the user to specify the name of the tabpage in Tabcontrol.TabPageCollection to be shown.
         /// </devdoc>
@@ -1790,7 +1709,6 @@ namespace System.Windows.Forms {
             SelectTab(tabPage);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectNextTab"]/*' />
         /// <devdoc>
         ///     This is called by TabControl in response to the KeyDown event to override the selection of tabpages
         ///     for different key combinations.
@@ -1867,7 +1785,6 @@ namespace System.Windows.Forms {
             return !padding.Equals(DEFAULT_PADDING);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
@@ -1890,7 +1807,6 @@ namespace System.Windows.Forms {
             currentlyScaling = false;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.UpdateTabSelection"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1985,7 +1901,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnStyleChanged"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1997,7 +1912,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.UpdateTab"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -2013,7 +1927,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmNeedText"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -2041,7 +1954,6 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmReflectDrawItem"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -2058,7 +1970,6 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmSelChange"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -2077,7 +1988,6 @@ namespace System.Windows.Forms {
             return tcc.Cancel;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmSelChanging"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -2114,7 +2024,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmTabBaseReLayout"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -2136,7 +2045,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WndProc"]/*' />
         /// <devdoc>
         ///     The tab's window procedure.  Inheritng classes can override this
         ///     to add extra functionality, but should not forget to call
@@ -2212,7 +2120,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -2223,7 +2130,6 @@ namespace System.Windows.Forms {
             /// issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.TabPageCollection"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>            
@@ -2235,7 +2141,6 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.this"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2248,7 +2153,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.this"]/*' />
             /// <internalonly/>
             object IList.this[int index] {
                 get {
@@ -2268,7 +2172,6 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.this"]/*' />
             /// <devdoc>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
@@ -2292,7 +2195,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Count"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2303,7 +2205,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.ICollection.SyncRoot"]/*' />
             /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
@@ -2311,7 +2212,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.ICollection.IsSynchronized"]/*' />
             /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
@@ -2319,7 +2219,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.IsFixedSize"]/*' />
             /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
@@ -2327,7 +2226,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.IsReadOnly"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2337,7 +2235,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2352,7 +2249,6 @@ namespace System.Windows.Forms {
                 owner.Controls.Add(value);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.Add"]/*' />
             /// <internalonly/>
             [
                 SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // value is the name of the param passed in.
@@ -2372,7 +2268,6 @@ namespace System.Windows.Forms {
 
             // <-- NEW ADD OVERLOADS FOR WHIDBEY
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add1"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2382,7 +2277,6 @@ namespace System.Windows.Forms {
                 Add(page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add2"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2393,7 +2287,6 @@ namespace System.Windows.Forms {
                 Add(page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add3"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2405,7 +2298,6 @@ namespace System.Windows.Forms {
                 Add(page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add4"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2419,7 +2311,6 @@ namespace System.Windows.Forms {
 
             // END - NEW ADD OVERLOADS FOR WHIDBEY -->
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.AddRange"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>            
@@ -2433,7 +2324,6 @@ namespace System.Windows.Forms {
                 }
              }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Contains"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>            
@@ -2448,7 +2338,6 @@ namespace System.Windows.Forms {
                 return IndexOf(page) != -1;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object page) {
                 if (page is TabPage) {
@@ -2459,7 +2348,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-           /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.ContainsKey"]/*' />
            /// <devdoc>
            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
            /// </devdoc>
@@ -2468,7 +2356,6 @@ namespace System.Windows.Forms {
            }
 
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.IndexOf"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>            
@@ -2488,7 +2375,6 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object page) {
                 if (page is TabPage) {
@@ -2498,7 +2384,6 @@ namespace System.Windows.Forms {
                     return -1;
                 }
             }
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.this"]/*' />
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
@@ -2530,7 +2415,6 @@ namespace System.Windows.Forms {
            }
 
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="ToolBar.TabPageCollection.Insert"]/*' />
             /// <devdoc>
             ///    <para>Inserts the supplied Tabpage at the given index.</para>
             /// </devdoc>
@@ -2547,7 +2431,6 @@ namespace System.Windows.Forms {
                 owner.Controls.SetChildIndex(tabPage, index);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.Insert"]/*' />
             /// <internalonly/>            
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             [
@@ -2565,7 +2448,6 @@ namespace System.Windows.Forms {
 
             // <-- NEW INSERT OVERLOADS FOR WHIDBEY
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert1"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2575,7 +2457,6 @@ namespace System.Windows.Forms {
                 Insert(index, page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert2"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2586,7 +2467,6 @@ namespace System.Windows.Forms {
                 Insert(index, page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert3"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2599,7 +2479,6 @@ namespace System.Windows.Forms {
         		page.ImageIndex = imageIndex;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert4"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2615,7 +2494,6 @@ namespace System.Windows.Forms {
             // END - NEW INSERT OVERLOADS FOR WHIDBEY -->
 
 
-           /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.IsValidIndex"]/*' />
            /// <devdoc>
            ///     <para>Determines if the index is valid for the collection.</para>
            /// </devdoc>
@@ -2624,7 +2502,6 @@ namespace System.Windows.Forms {
               return ((index >= 0) && (index < this.Count));
            }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Clear"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2632,7 +2509,6 @@ namespace System.Windows.Forms {
                 owner.RemoveAll();
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.ICollection.CopyTo"]/*' />
             /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 if (Count > 0) {
@@ -2640,7 +2516,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.GetEnumerator"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2654,7 +2529,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Remove"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2669,7 +2543,6 @@ namespace System.Windows.Forms {
                 owner.Controls.Remove(value);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.Remove"]/*' />
             /// <internalonly/>
             void IList.Remove(object value) {
                 if (value is TabPage) {
@@ -2677,7 +2550,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.RemoveAt"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2686,7 +2558,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.RemoveByKey"]/*' />
             /// <devdoc>
             ///     <para>Removes the child control with the specified key.</para>
             /// </devdoc>
@@ -2700,7 +2571,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection"]/*' />
         /// <devdoc>
         ///     Collection of controls...
         /// </devdoc>
@@ -2712,7 +2582,6 @@ namespace System.Windows.Forms {
             /*C#r: protected*/
 
             /// <internalonly/>
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection.ControlCollection"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2721,7 +2590,6 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection.Add"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2770,7 +2638,6 @@ namespace System.Windows.Forms {
 
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection.Remove"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>

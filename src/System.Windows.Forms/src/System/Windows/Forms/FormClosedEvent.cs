@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\FormClosedEvent.uex' path='docs/doc[@for="FormClosedEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///    Provides data for the <see cref='System.Windows.Forms.Form.OnClosed'/>,
@@ -26,12 +25,10 @@ namespace System.Windows.Forms {
     public class FormClosedEventArgs : EventArgs {
         private CloseReason closeReason;
         
-        /// <include file='doc\FormClosedEvent.uex' path='docs/doc[@for="FormClosedEvent.FormClosedEventArgs"]/*' />
         public FormClosedEventArgs(CloseReason closeReason) {
             this.closeReason = closeReason;                                           
         }
 
-        /// <include file='doc\FormClosedEvent.uex' path='docs/doc[@for="FormClosedEvent.CloseReason"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Provides the reason for the Form Close.

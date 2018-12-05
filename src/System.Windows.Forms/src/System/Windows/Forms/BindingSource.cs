@@ -35,7 +35,6 @@ namespace System.Windows.Forms {
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), // ICollection: We don't want class name to have to end in 'Collection'
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1039:ListsAreStronglyTyped"), // IList.Add: Its just a wrapper class, it doesn't have a specific member type
     ]
-    /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource"]/* />
     public class BindingSource : Component,
                                  IBindingListView,
                                  ITypedList,
@@ -103,11 +102,9 @@ namespace System.Windows.Forms {
         //
         ///////////////////////////////////////////////////////////////////////////////
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.BindingSource"]/* />
         public BindingSource() : this(null, String.Empty) {
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.BindingSource1"]/* />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")] // Indirect call to OnListChanged virtual. Unavoidable but quite acceptible.
         public BindingSource(object dataSource, string dataMember) : base() {
             // Set data source and data member
@@ -131,7 +128,6 @@ namespace System.Windows.Forms {
             WireDataSource();
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.BindingSource1"]/* />
         public BindingSource(System.ComponentModel.IContainer container) : this() {
             if (container == null) {
                 throw new ArgumentNullException(nameof(container));
@@ -169,14 +165,12 @@ namespace System.Windows.Forms {
         }
 
         [Browsable(false)]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.CurrencyManager"]/* />
         public virtual CurrencyManager CurrencyManager {
             get {
                 return (this as ICurrencyManagerProvider).GetRelatedCurrencyManager(null);
             }
         }
         
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.GetRelatedCurrencyManager"]/* />
         public virtual CurrencyManager GetRelatedCurrencyManager(string dataMember) {
             // Make sure inner list has been set up! We do this here so that
             // the list is set up as early as possible after initialization.
@@ -220,7 +214,6 @@ namespace System.Windows.Forms {
             return bs;
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Current"]/*' />
         [Browsable(false)]
         public object Current {
             get {
@@ -235,7 +228,6 @@ namespace System.Windows.Forms {
         Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
         SRDescription(nameof(SR.BindingSourceDataMemberDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataMember"]/* />
         public string DataMember {
             get {
                 return dataMember;
@@ -261,7 +253,6 @@ namespace System.Windows.Forms {
         AttributeProvider(typeof(IListSource)),
         SRDescription(nameof(SR.BindingSourceDataSourceDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataSource"]/* />
         public object DataSource {
             get {
                 return dataSource;
@@ -384,7 +375,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.IsBindingSuspended"]/*' />
         [Browsable(false)]
         public bool IsBindingSuspended {
             get {
@@ -393,7 +383,6 @@ namespace System.Windows.Forms {
         }
 
         [Browsable(false)]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.List"]/* />
         public IList List {
             get {
                 // Make sure inner list has been set up!
@@ -407,7 +396,6 @@ namespace System.Windows.Forms {
         DefaultValue(-1),
         Browsable(false)
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Position"]/* />
         public int Position {
             get {
                 return currencyManager.Position;
@@ -428,7 +416,6 @@ namespace System.Windows.Forms {
         DefaultValue(true),
         Browsable(false)
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.RaiseListChangedEvents"]/* />
         public bool RaiseListChangedEvents {
             get {
                 return this.raiseListChangedEvents;
@@ -446,7 +433,6 @@ namespace System.Windows.Forms {
         DefaultValue(null),
         SRDescription(nameof(SR.BindingSourceSortDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Sort"]/*' />
         public string Sort {
             get {
                 return this.sort;
@@ -468,7 +454,6 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingSourceAddingNewEventHandlerDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.AddingNew"]/*' />
         public event AddingNewEventHandler AddingNew {
             add {
                 Events.AddHandler(EVENT_ADDINGNEW, value);
@@ -478,7 +463,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.BindingComplete"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingSourceBindingCompleteEventHandlerDescr))
@@ -496,7 +480,6 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingSourceDataErrorEventHandlerDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataError"]/*' />
         public event BindingManagerDataErrorEventHandler DataError {
             add {
                 Events.AddHandler(EVENT_DATAERROR, value);
@@ -510,7 +493,6 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingSourceDataSourceChangedEventHandlerDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataSourceChanged"]/*' />
         public event EventHandler DataSourceChanged {
             add {
                 Events.AddHandler(EVENT_DATASOURCECHANGED, value);
@@ -524,7 +506,6 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingSourceDataMemberChangedEventHandlerDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.DataMemberChanged"]/*' />
         public event EventHandler DataMemberChanged {
             add {
                 Events.AddHandler(EVENT_DATAMEMBERCHANGED, value);
@@ -538,7 +519,6 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingSourceCurrentChangedEventHandlerDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.CurrentChanged"]/*' />
         public event EventHandler CurrentChanged {
             add {
                 Events.AddHandler(EVENT_CURRENTCHANGED, value);
@@ -552,7 +532,6 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingSourceCurrentItemChangedEventHandlerDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.CurrentItemChanged"]/*' />
         public event EventHandler CurrentItemChanged {
             add {
                 Events.AddHandler(EVENT_CURRENTITEMCHANGED, value);
@@ -566,7 +545,6 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingSourceListChangedEventHandlerDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.ListChanged"]/*' />
         public event ListChangedEventHandler ListChanged {
             add {
                 Events.AddHandler(EVENT_LISTCHANGED, value);
@@ -580,7 +558,6 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.BindingSourcePositionChangedEventHandlerDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.PositionChanged"]/*' />
         public event EventHandler PositionChanged {
             add {
                 Events.AddHandler(EVENT_POSITIONCHANGED, value);
@@ -654,7 +631,6 @@ namespace System.Windows.Forms {
                 return sb.ToString();
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.CancelEdit"]/*' />
         public void CancelEdit() {
             currencyManager.CancelCurrentEdit();
         }
@@ -760,7 +736,6 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.EndEdit"]/*' />
         public void EndEdit() {
             if (endingEdit) {
                 return;
@@ -910,22 +885,18 @@ namespace System.Windows.Forms {
             OnListChanged(new ListChangedEventArgs(ListChangedType.ItemChanged, index));
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.MoveFirst"]/*' />
         public void MoveFirst() {
             Position = 0;
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.MoveLast"]/*' />
         public void MoveLast() {
             Position = Count - 1;
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.MoveNext"]/*' />
         public void MoveNext() {
             ++Position;
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.MovePrevious"]/*' />
         public void MovePrevious() {
             --Position;
         }
@@ -939,21 +910,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.OnAddingNew"]/*' />
         protected virtual void OnAddingNew(AddingNewEventArgs e) {
             AddingNewEventHandler eh = (AddingNewEventHandler) Events[EVENT_ADDINGNEW];
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.OnBindingComplete"]/*' />
         protected virtual void OnBindingComplete(BindingCompleteEventArgs e) {
             BindingCompleteEventHandler eh = (BindingCompleteEventHandler) Events[EVENT_BINDINGCOMPLETE];
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.OnCurrentChanged"]/*' />
         protected virtual void OnCurrentChanged(EventArgs e) {
             // Unhook change events for old current item (recorded by currentItemHookedForItemChange)
             UnhookItemChangedEventsForOldCurrent();
@@ -966,35 +934,30 @@ namespace System.Windows.Forms {
                 eh(this, e);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.OnCurrentItemChanged"]/*' />
         protected virtual void OnCurrentItemChanged(EventArgs e) {
             EventHandler eh = (EventHandler) Events[EVENT_CURRENTITEMCHANGED];
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.OnDataError"]/*' />
         protected virtual void OnDataError(BindingManagerDataErrorEventArgs e) {
             BindingManagerDataErrorEventHandler eh = Events[EVENT_DATAERROR] as BindingManagerDataErrorEventHandler;
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.OnDataMemberContextChanged"]/*' />
         protected virtual void OnDataMemberChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_DATAMEMBERCHANGED] as EventHandler;
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.OnDataSourceContextChanged"]/*' />
         protected virtual void OnDataSourceChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_DATASOURCECHANGED] as EventHandler;
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.OnListChanged"]/*' />
         protected virtual void OnListChanged(ListChangedEventArgs e) {
             // Sometimes we are required to suppress ListChanged events
             if (!this.raiseListChangedEvents || this.initializing) {
@@ -1006,7 +969,6 @@ namespace System.Windows.Forms {
                 eh(this, e);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.OnPositionChanged"]/*' />
         protected virtual void OnPositionChanged(EventArgs e) {
             EventHandler eh = (EventHandler) Events[EVENT_POSITIONCHANGED];
             if (eh != null)
@@ -1160,7 +1122,6 @@ namespace System.Windows.Forms {
             return new ListSortDescriptionCollection(result);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.RemoveCurrent"]/*' />
         public void RemoveCurrent() {
             if (!(this as IBindingList).AllowRemove) {
                 throw new InvalidOperationException(SR.BindingSourceRemoveCurrentNotAllowed);
@@ -1173,14 +1134,12 @@ namespace System.Windows.Forms {
             RemoveAt(Position);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.ResetAllowNew"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual void ResetAllowNew() {
             this.allowNewIsSet = false;
             this.allowNewSetValue = true;
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.ResetBindings"]/* />
         public void ResetBindings(bool metadataChanged) {
             if (metadataChanged) {
                 OnListChanged(new ListChangedEventArgs(ListChangedType.PropertyDescriptorChanged, null));
@@ -1189,22 +1148,18 @@ namespace System.Windows.Forms {
             OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.ResetCurrentItem"]/* />
         public void ResetCurrentItem() {
             this.OnListChanged(new ListChangedEventArgs(ListChangedType.ItemChanged, this.Position));
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.ResetItem"]/* />
         public void ResetItem(int itemIndex) {
             this.OnListChanged(new ListChangedEventArgs(ListChangedType.ItemChanged, itemIndex));
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.ResumeBinding"]/*' />
         public void ResumeBinding() {
             currencyManager.ResumeBinding();
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.SuspendBinding"]/*' />
         public void SuspendBinding() {
             currencyManager.SuspendBinding();
         }
@@ -1372,7 +1327,6 @@ namespace System.Windows.Forms {
             return list;
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.ShouldSerializeAllowNew"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeAllowNew() {
             return this.allowNewIsSet;
@@ -1632,7 +1586,6 @@ namespace System.Windows.Forms {
         //
         ///////////////////////////////////////////////////////////////////////////////
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Add"]/* />
         public virtual int Add(object value) {
             int ret = -1;
 
@@ -1657,30 +1610,25 @@ namespace System.Windows.Forms {
             return ret;
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Clear"]/* />
         public virtual void Clear() {
             UnhookItemChangedEventsForOldCurrent();
             List.Clear();
             OnSimpleListChanged(ListChangedType.Reset, -1);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Contains"]/* />
         public virtual bool Contains(object value) {
             return List.Contains(value);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.IndexOf"]/* />
         public virtual int IndexOf(object value) {
             return List.IndexOf(value);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Insert"]/* />
         public virtual void Insert(int index, object value) {
             List.Insert(index, value);
             OnSimpleListChanged(ListChangedType.ItemAdded, index);
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Remove"]/* />
         public virtual void Remove(object value) {
             int index = ((IList) this).IndexOf(value);
             List.Remove(value);
@@ -1689,7 +1637,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.RemoveAt"]/* />
         public virtual void RemoveAt(int index) {
             object value = ((IList) this)[index];
             List.RemoveAt(index);
@@ -1697,7 +1644,6 @@ namespace System.Windows.Forms {
         }
 
         [Browsable(false)]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Item"]/* />
         public virtual object this[int index] {
             get {
                 return List[index];
@@ -1712,7 +1658,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.IsFixedSize"]/* />
         [Browsable(false)]
         public virtual bool IsFixedSize {
             get {
@@ -1720,7 +1665,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.IsReadOnly"]/* />
         [Browsable(false)]
         public virtual bool IsReadOnly {
             get {
@@ -1759,7 +1703,6 @@ namespace System.Windows.Forms {
         //
         ///////////////////////////////////////////////////////////////////////////////
 
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.AddNew"]/*' />
         public virtual object AddNew() {
             // Throw if adding new items has been disabled
             if (!AllowNewInternal(false)) {
@@ -1845,7 +1788,6 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.BindingSourceAllowNewDescr)),
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.AllowNew"]/*' />
         public virtual bool AllowNew {
             get {
                 //we check to ensure we have a valid default constructor (if we get that far).
@@ -2035,7 +1977,6 @@ namespace System.Windows.Forms {
         DefaultValue(null),
         SRDescription(nameof(SR.BindingSourceFilterDescr))
         ]
-        /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.Filter"]/* />
         public virtual string Filter
         {
             get

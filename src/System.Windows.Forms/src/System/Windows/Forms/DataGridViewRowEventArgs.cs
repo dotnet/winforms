@@ -7,12 +7,10 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewRowEventArgs.uex' path='docs/doc[@for="DataGridViewRowEventArgs"]/*' />
     public class DataGridViewRowEventArgs : EventArgs
     {
         private DataGridViewRow dataGridViewRow;
 
-        /// <include file='doc\DataGridViewRowEventArgs.uex' path='docs/doc[@for="DataGridViewRowEventArgs.DataGridViewRowEventArgs"]/*' />
         public DataGridViewRowEventArgs(DataGridViewRow dataGridViewRow)
         {
             if (dataGridViewRow == null)
@@ -23,7 +21,6 @@ namespace System.Windows.Forms
             this.dataGridViewRow = dataGridViewRow;
         }
 
-        /// <include file='doc\DataGridViewRowEventArgs.uex' path='docs/doc[@for="DataGridViewRowEventArgs.Row"]/*' />
         public DataGridViewRow Row
         {
             get

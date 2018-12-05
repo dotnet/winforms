@@ -7,20 +7,17 @@ namespace System.Windows.Forms
     using System.Windows.Forms;
     using System;
 
-    /// <include file='doc\DataGridViewEditingControlShowingEventArgs.uex' path='docs/doc[@for="DataGridViewEditingControlShowingEventArgs"]/*' />
     public class DataGridViewEditingControlShowingEventArgs : EventArgs
     {
         Control control = null;
         DataGridViewCellStyle cellStyle;
 
-        /// <include file='doc\DataGridViewEditingControlShowingEventArgs.uex' path='docs/doc[@for="DataGridViewEditingControlShowingEventArgs.DataGridViewEditingControlShowingEventArgs"]/*' />
         public DataGridViewEditingControlShowingEventArgs(Control control, DataGridViewCellStyle cellStyle)
         {
             this.control = control;
             this.cellStyle = cellStyle;
         }
 
-        /// <include file='doc\DataGridViewEditingControlShowingEventArgs.uex' path='docs/doc[@for="DataGridViewEditingControlShowingEventArgs.CellStyle"]/*' />
         public DataGridViewCellStyle CellStyle
         {
             get
@@ -37,7 +34,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewEditingControlShowingEventArgs.uex' path='docs/doc[@for="DataGridViewEditingControlShowingEventArgs.Control"]/*' />
         public Control Control
         {
             get

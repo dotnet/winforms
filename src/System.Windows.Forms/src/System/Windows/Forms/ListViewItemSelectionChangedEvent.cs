@@ -7,7 +7,6 @@ namespace System.Windows.Forms
 {
     using System.ComponentModel;
 
-    /// <include file='doc\ListViewItemSelectionChangedEvent.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventArgs"]/*' />
     /// <devdoc>
     /// The event class that is created when the selection state of a ListViewItem is changed.
     /// </devdoc>
@@ -17,7 +16,6 @@ namespace System.Windows.Forms
         private int itemIndex;
         private bool isSelected;
         
-        /// <include file='doc\ListViewItemSelectionChangedEvent.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventArgs.ListViewItemSelectionChangedEventArgs"]/*' />
         /// <devdoc>
         /// Constructs a ListViewItemSelectionChangedEventArgs object.
         /// </devdoc>
@@ -28,7 +26,6 @@ namespace System.Windows.Forms
             this.isSelected = isSelected;
         }
 
-        /// <include file='doc\ListViewItemSelectionChangedEvent.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventArgs.IsSelected"]/*' />
         /// <devdoc>
         /// Return true if the item is selected
         /// </devdoc>
@@ -40,7 +37,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ListViewItemSelectionChangedEvent.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventArgs.Item"]/*' />
         /// <devdoc>
         /// The list view item whose selection changed
         /// </devdoc>
@@ -52,7 +48,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ListViewItemSelectionChangedEvent.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventArgs.ItemIndex"]/*' />
         /// <devdoc>
         /// The list view item's index
         /// </devdoc>

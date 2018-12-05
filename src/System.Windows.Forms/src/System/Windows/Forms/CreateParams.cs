@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.Text;
     using System;
 
-    /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -25,7 +24,6 @@ namespace System.Windows.Forms {
         IntPtr parent;
         object param;
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.ClassName"]/*' />
         /// <devdoc>
         ///     Name of the window class to subclass. The default value for this field
         ///     is null, indicating that the window is not a subclass of an existing
@@ -38,7 +36,6 @@ namespace System.Windows.Forms {
             set { className = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.Caption"]/*' />
         /// <devdoc>
         ///     The initial caption your control will have.
         /// </devdoc>
@@ -47,7 +44,6 @@ namespace System.Windows.Forms {
             set { caption = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.Style"]/*' />
         /// <devdoc>
         ///     Window style bits. This must be a combination of WS_XXX style flags and
         ///     other control-specific style flags.
@@ -57,7 +53,6 @@ namespace System.Windows.Forms {
             set { style = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.ExStyle"]/*' />
         /// <devdoc>
         ///     Extended window style bits. This must be a combination of WS_EX_XXX
         ///     style flags.
@@ -67,7 +62,6 @@ namespace System.Windows.Forms {
             set { exStyle = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.ClassStyle"]/*' />
         /// <devdoc>
         ///     Class style bits. This must be a combination of CS_XXX style flags. This
         ///     field is ignored if the className field is not null.
@@ -77,7 +71,6 @@ namespace System.Windows.Forms {
             set { classStyle = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.X"]/*' />
         /// <devdoc>
         ///     The left portion of the initial proposed location.
         /// </devdoc>
@@ -86,7 +79,6 @@ namespace System.Windows.Forms {
             set { x = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.Y"]/*' />
         /// <devdoc>
         ///     The top portion of the initial proposed location.
         /// </devdoc>
@@ -95,7 +87,6 @@ namespace System.Windows.Forms {
             set { y = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.Width"]/*' />
         /// <devdoc>
         ///     The initially proposed width.
         /// </devdoc>
@@ -104,7 +95,6 @@ namespace System.Windows.Forms {
             set { width = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.Height"]/*' />
         /// <devdoc>
         ///     The initially proposed height.
         /// </devdoc>
@@ -113,7 +103,6 @@ namespace System.Windows.Forms {
             set { height = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.Parent"]/*' />
         /// <devdoc>
         ///     The controls parent.
         /// </devdoc>
@@ -122,7 +111,6 @@ namespace System.Windows.Forms {
             set { parent = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.Param"]/*' />
         /// <devdoc>
         ///     Any extra information that the underlying handle might want.
         /// </devdoc>
@@ -131,7 +119,6 @@ namespace System.Windows.Forms {
             set { param = value; }
         }
 
-        /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.ToString"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs"]/*' />
     /// <devdoc>
     ///     This event is fired by owner draw Controls, such as ListBoxes and
     ///     ComboBoxes. It contains all the information needed for the user to
@@ -20,44 +19,37 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class DrawItemEventArgs : EventArgs {
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.backColor"]/*' />
         /// <devdoc>
         ///     The backColor to paint each menu item with.
         /// </devdoc>
         private Color backColor;
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.foreColor"]/*' />
         /// <devdoc>
         ///     The foreColor to paint each menu item with.
         /// </devdoc>
         private Color foreColor;
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.font"]/*' />
         /// <devdoc>
         ///     The font used to draw the item's string.
         /// </devdoc>
         private Font font;
         
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.graphics"]/*' />
         /// <devdoc>
         ///     The graphics object with which the drawing should be done.
         /// </devdoc>
         private readonly System.Drawing.Graphics graphics;
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.index"]/*' />
         /// <devdoc>
         ///     The index of the item that should be painted.
         /// </devdoc>
         private readonly int index;
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.rect"]/*' />
         /// <devdoc>
         ///     The rectangle outlining the area in which the painting should be
         ///     done.
         /// </devdoc>
         private readonly Rectangle rect;
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.state"]/*' />
         /// <devdoc>
         ///     Miscellaneous state information, such as whether the item is
         ///     "selected", "focused", or some other such information.  ComboBoxes
@@ -66,7 +58,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private readonly DrawItemState state;
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.DrawItemEventArgs"]/*' />
         /// <devdoc>
         ///     Creates a new DrawItemEventArgs with the given parameters.
         /// </devdoc>
@@ -81,7 +72,6 @@ namespace System.Windows.Forms {
             this.backColor = SystemColors.Window;
         }
         
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.DrawItemEventArgs2"]/*' />
         /// <devdoc>
         ///     Creates a new DrawItemEventArgs with the given parameters, including the foreColor and backColor of the control.
         /// </devdoc>
@@ -96,7 +86,6 @@ namespace System.Windows.Forms {
             this.backColor = backColor;
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.BackColor"]/*' />
         public Color BackColor {
             get {
                 if ((state & DrawItemState.Selected) == DrawItemState.Selected) {
@@ -108,7 +97,6 @@ namespace System.Windows.Forms {
         
         
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Bounds"]/*' />
         /// <devdoc>
         ///     The rectangle outlining the area in which the painting should be
         ///     done.
@@ -119,7 +107,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Font"]/*' />
         /// <devdoc>
         ///     A suggested font, usually the parent control's Font property.
         /// </devdoc>
@@ -129,7 +116,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.ForeColor"]/*' />
         /// <devdoc>
         ///     A suggested color drawing: either SystemColors.WindowText or SystemColors.HighlightText,
         ///     depending on whether this item is selected.
@@ -143,7 +129,6 @@ namespace System.Windows.Forms {
             }
         }              
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Graphics"]/*' />
         /// <devdoc>
         ///     Graphics object with which painting should be done.
         /// </devdoc>
@@ -153,7 +138,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Index"]/*' />
         /// <devdoc>
         ///     The index of the item that should be painted.
         /// </devdoc>
@@ -163,7 +147,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.State"]/*' />
         /// <devdoc>
         ///     Miscellaneous state information, such as whether the item is
         ///     "selected", "focused", or some other such information.  ComboBoxes
@@ -176,7 +159,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.DrawBackground"]/*' />
         /// <devdoc>
         ///     Draws the background of the given rectangle with the color returned from the BackColor property.
         /// </devdoc>
@@ -186,7 +168,6 @@ namespace System.Windows.Forms {
             backBrush.Dispose();
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.DrawFocusRectangle"]/*' />
         /// <devdoc>
         ///     Draws a handy focus rect in the given rectangle.
         /// </devdoc>

@@ -12,12 +12,10 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <include file='doc\DataGridDefaultColumnWidthTypeConverter.uex' path='docs/doc[@for="DataGridPreferredColumnWidthTypeConverter"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
     public class DataGridPreferredColumnWidthTypeConverter : TypeConverter {
-        /// <include file='doc\DataGridDefaultColumnWidthTypeConverter.uex' path='docs/doc[@for="DataGridPreferredColumnWidthTypeConverter.CanConvertFrom"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -29,7 +27,6 @@ namespace System.Windows.Forms {
                 return false;
         }
 
-        /// <include file='doc\DataGridDefaultColumnWidthTypeConverter.uex' path='docs/doc[@for="DataGridPreferredColumnWidthTypeConverter.ConvertTo"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -54,7 +51,6 @@ namespace System.Windows.Forms {
                 return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        /// <include file='doc\DataGridDefaultColumnWidthTypeConverter.uex' path='docs/doc[@for="DataGridPreferredColumnWidthTypeConverter.ConvertFrom"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

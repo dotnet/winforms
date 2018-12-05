@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\ItemCheckedEventHandler.uex' path='docs/doc[@for="ItemCheckedEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will

@@ -32,7 +32,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Design;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost"]/*' />
     /// <devdoc>
     ///    <para>
     ///
@@ -264,7 +263,6 @@ namespace System.Windows.Forms {
         }
 #endif 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxHost1"]/*' />
         /// <devdoc>
         ///     Creates a new instance of a control which wraps an activeX control given by the
         ///     clsid parameter and flags of 0.
@@ -272,7 +270,6 @@ namespace System.Windows.Forms {
         protected AxHost(string clsid) : this(clsid, 0) {
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxHost2"]/*' />
         /// <devdoc>
         ///    <para>Creates a new instance of a control which wraps an activeX control given by the
         ///       clsid and flags parameters.</para>
@@ -302,7 +299,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CreateParams"]/*' />
         /// <devdoc>
         ///     Returns the CreateParams used to create the handle for this control.
         /// </devdoc>
@@ -324,7 +320,6 @@ namespace System.Windows.Forms {
             this.axState[mask] = value;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AttachInterfaces"]/*' />
         /// <devdoc>
         ///     AxHost will call this when it is ready to create the underlying ActiveX object.
         ///     Wrappers will override this and cast the pointer obtained by calling getOcx() to
@@ -346,7 +341,6 @@ namespace System.Windows.Forms {
 
         // Control overrides:
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -361,7 +355,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -377,7 +370,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageLayout"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -410,7 +402,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseClick"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -423,7 +414,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseDoubleClick"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -436,7 +426,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Cursor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -451,7 +440,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContextMenu"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -466,7 +454,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -477,7 +464,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Enabled"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -492,7 +478,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Font"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -507,7 +492,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -522,7 +506,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RightToLeft"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -543,7 +526,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Text"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -567,13 +549,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.PropsValid"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected bool PropsValid() {
             return CanAccessProperties;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BeginInit"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -581,7 +561,6 @@ namespace System.Windows.Forms {
         public void BeginInit() {
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.EndInit"]/*' />
         /// <devdoc>
         ///     Signals the object that loading of all peer components and property
         ///     sets are complete.
@@ -617,7 +596,6 @@ namespace System.Windows.Forms {
         }
 
         //
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.EditMode"]/*' />
         /// <devdoc>
         ///      Determines if the control is in edit mode.
         /// </devdoc>
@@ -630,7 +608,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HasAboutBox"]/*' />
         /// <devdoc>
         ///      Determines if this control has an about box.
         /// </devdoc>
@@ -654,7 +631,6 @@ namespace System.Windows.Forms {
         }
 
         //
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShowAboutBox"]/*' />
         /// <devdoc>
         ///      Shows the about box for this control.
         /// </devdoc>
@@ -680,7 +656,6 @@ namespace System.Windows.Forms {
         }
 #endif
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -693,7 +668,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -706,7 +680,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageLayoutChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -719,7 +692,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BindingContextChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -732,7 +704,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContextMenuChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -745,7 +716,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CursorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -758,7 +728,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.EnabledChanged"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is enabled.</para>
         /// </devdoc>
@@ -771,7 +740,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.FontChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -784,7 +752,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ForeColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -797,7 +764,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RightToLeftChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -810,7 +776,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.TextChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -823,7 +788,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Click"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is clicked.</para>
         /// </devdoc>
@@ -836,7 +800,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragDrop"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -850,7 +813,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragEnter"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -863,7 +825,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragOver"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -877,7 +838,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragLeave"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -890,7 +850,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GiveFeedback"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -903,7 +862,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HelpRequested"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -916,7 +874,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Paint"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -929,7 +886,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.QueryContinueDrag"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -942,7 +898,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.QueryAccessibilityHelp"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -955,7 +910,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DoubleClick"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is double clicked.</para>
         /// </devdoc>
@@ -968,7 +922,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ImeModeChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -982,7 +935,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.KeyDown"]/*' />
         /// <devdoc>
         ///    <para>Occurs when a key is pressed down while the control has focus.</para>
         /// </devdoc>
@@ -996,7 +948,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.KeyPress"]/*' />
         /// <devdoc>
         ///    <para> Occurs when a key is pressed while the control has focus.</para>
         /// </devdoc>
@@ -1010,7 +961,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.KeyUp"]/*' />
         /// <devdoc>
         ///    <para> Occurs when a key is released while the control has focus.</para>
         /// </devdoc>
@@ -1024,7 +974,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Layout"]/*' />
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -1036,7 +985,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseDown"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is 
         ///       pressed.</para>
@@ -1050,7 +998,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseEnter"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer enters the AxHost.</para>
         /// </devdoc>
@@ -1063,7 +1010,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseLeave"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer leaves the AxHost.</para>
         /// </devdoc>
@@ -1076,7 +1022,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseHover"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer hovers over the contro.</para>
         /// </devdoc>
@@ -1089,7 +1034,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseMove"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer is moved over the AxHost.</para>
         /// </devdoc>
@@ -1102,7 +1046,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseUp"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is released.</para>
         /// </devdoc>
@@ -1115,7 +1058,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseWheel"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse wheel moves while the control has focus.</para>
         /// </devdoc>
@@ -1128,7 +1070,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ChangeUICues"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1141,7 +1082,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StyleChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1154,7 +1094,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnFontChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1163,7 +1102,6 @@ namespace System.Windows.Forms {
             AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnForeColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1172,7 +1110,6 @@ namespace System.Windows.Forms {
             AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnBackColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1275,7 +1212,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Site"]/*' />
         /// <devdoc>
         ///     Sets the site of this component. A non-null value indicates that the
         ///     component has been added to a container, and a null value indicates that
@@ -1325,7 +1261,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnLostFocus"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.LostFocus'/> event.</para>
         /// </devdoc>
@@ -1397,7 +1332,6 @@ namespace System.Windows.Forms {
             base.DrawToBitmap(bitmap, targetBounds);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CreateHandle"]/*' />
         /// <devdoc>
         ///     Creates a handle for this control. This method is called by the .NET framework, this should
         ///     not be called.
@@ -1529,7 +1463,6 @@ namespace System.Windows.Forms {
             return new Size(sz.cx, sz.cy);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="AxHost.GetScaledBounds"]/*' />
         /// <devdoc>
         ///     ActiveX controls scale themselves, so GetScaledBounds simply returns their
         ///     original unscaled bounds.
@@ -1544,7 +1477,6 @@ namespace System.Windows.Forms {
             GetInPlaceObject().SetObjectRects(FillInRect(new NativeMethods.COMRECT(), bounds), GetClipRect(new NativeMethods.COMRECT()));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.SetBoundsCore"]/*' />
         /// <devdoc>
         ///     Performs the work of setting the bounds of this control.
         ///     User code should usually not call this function.
@@ -1625,7 +1557,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DestroyHandle"]/*' />
         /// <devdoc>
         ///     Destroys the handle associated with this control.
         ///     User code should in general not call this function.
@@ -1798,7 +1729,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnInPlaceActive"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1876,7 +1806,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.SetVisibleCore"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1966,7 +1895,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.IsInputChar"]/*' />
         /// <devdoc>
         ///     Determines if charCode is an input character that the control
         ///     wants. This method is called during window message pre-processing to
@@ -1983,7 +1911,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessDialogKey"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1994,7 +1921,6 @@ namespace System.Windows.Forms {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.PreProcessMessage"]/*' />
         /// <devdoc>
         ///     This method is called by the application's message loop to pre-process
         ///     input messages before they are dispatched. Possible values for the
@@ -2085,7 +2011,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessMnemonic"]/*' />
         /// <devdoc>
         ///     Process a mnemonic character.
         ///     This is done by manufacturing a WM_SYSKEYDOWN message and passing it
@@ -2133,7 +2058,6 @@ namespace System.Windows.Forms {
 
         // misc methods:
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.SetAboutBoxDelegate"]/*' />
         /// <devdoc>
         ///     Sets the delegate which will be called when the user selects the "About..."
         ///     entry on the context menu.
@@ -2142,7 +2066,6 @@ namespace System.Windows.Forms {
             aboutBoxDelegate += d;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OcxState"]/*' />
         /// <devdoc>
         ///     Sets the persisted state of the control.
         ///     This should either be null, obtained from getOcxState, or
@@ -2252,7 +2175,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContainerControl"]/*' />
         /// <devdoc>
         ///     Returns this control's logicaly containing form.
         ///     At design time this is always the form being designed.
@@ -2289,7 +2211,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShouldSerializeText"]/*' />
         /// <devdoc>
         /// <para>Determines if the Text property needs to be persisted.</para>
         /// </devdoc>
@@ -2456,7 +2377,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DoVerb"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -2670,7 +2590,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.InvokeEditMode"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -2705,7 +2624,6 @@ namespace System.Windows.Forms {
         // ICustomTypeDescriptor implementation.
         //
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetAttributes"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>[To be supplied.]</para>
@@ -2719,7 +2637,6 @@ namespace System.Windows.Forms {
             return TypeDescriptor.GetAttributes(this, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetClassName"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Retrieves the class name for this object.  If null is returned,
@@ -2730,7 +2647,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetComponentName"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Retrieves the name for this object.  If null is returned,
@@ -2741,7 +2657,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetConverter"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Retrieves the type converter for this object.
@@ -2751,7 +2666,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultEvent"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>[To be supplied.]</para>
@@ -2761,7 +2675,6 @@ namespace System.Windows.Forms {
             return TypeDescriptor.GetDefaultEvent(this, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultProperty"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>[To be supplied.]</para>
@@ -2771,7 +2684,6 @@ namespace System.Windows.Forms {
             return TypeDescriptor.GetDefaultProperty(this, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetEditor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Retrieves the an editor for this object.
@@ -2790,7 +2702,6 @@ namespace System.Windows.Forms {
             return editor;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetEvents"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>[To be supplied.]</para>
@@ -2800,7 +2711,6 @@ namespace System.Windows.Forms {
             return TypeDescriptor.GetEvents(this, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetEvents(Attribute"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>[To be supplied.]</para>
@@ -2969,7 +2879,6 @@ namespace System.Windows.Forms {
             return propsStash;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>[To be supplied.]</para>
@@ -2979,7 +2888,6 @@ namespace System.Windows.Forms {
             return FillProperties(null);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties1"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>[To be supplied.]</para>
@@ -2989,7 +2897,6 @@ namespace System.Windows.Forms {
             return FillProperties(attributes);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetPropertyOwner"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>[To be supplied.]</para>
@@ -3198,7 +3105,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetOcx"]/*' />
         /// <devdoc>
         ///     Returns the IUnknown pointer to the enclosed ActiveX control.
         /// </devdoc>
@@ -3246,7 +3152,6 @@ namespace System.Windows.Forms {
             oleSite.StopEvents();
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CreateSink"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3256,7 +3161,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DetachSink"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3272,7 +3176,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HasPropertyPages"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3313,7 +3216,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MakeDirty"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3332,7 +3234,6 @@ namespace System.Windows.Forms {
             ccs.OnComponentChanged(this, null, null, null);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShowPropertyPages"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3342,7 +3243,6 @@ namespace System.Windows.Forms {
             ShowPropertyPages(ParentInternal);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShowPropertyPages1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3404,7 +3304,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.WndProc"]/*' />
         /// <devdoc>
         ///     AxHost wndProc. All messages are sent to wndProc after getting filtered
         ///     through the preProcessMessage function.
@@ -3621,7 +3520,6 @@ namespace System.Windows.Forms {
             InformOfNewHandle();
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnHandleCreated"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to find out when the
         ///     handle has been created.
@@ -3641,17 +3539,14 @@ namespace System.Windows.Forms {
             RaiseCreateHandleEvent(e);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ClsidAttribute"]/*' />
         [AttributeUsage(AttributeTargets.Class, Inherited = false)] 
         public sealed class ClsidAttribute : Attribute {
             private String val;
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ClsidAttribute.ClsidAttribute"]/*' />
             public ClsidAttribute(String clsid) {
                 val = clsid;
             }
             
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ClsidAttribute.Value"]/*' />
             public String Value {
                 get {
                     return val;
@@ -3659,17 +3554,14 @@ namespace System.Windows.Forms {
             }
         }       
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="TypeLibraryTimeStampAttribute"]/*' />
         [AttributeUsage(AttributeTargets.Assembly, Inherited = false)] 
         public sealed class TypeLibraryTimeStampAttribute : Attribute {
             private DateTime val;
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxImporter.TypeLibraryTimeStampAttribute.TypeLibraryTimeStampAttribute"]/*' />
             public TypeLibraryTimeStampAttribute(string timestamp) {
                 val = DateTime.Parse(timestamp, CultureInfo.InvariantCulture);
             }
             
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxImporter.TypeLibraryTimeStampAttribute.Value"]/*' />
             public DateTime Value {
                 get {
                     return val;
@@ -3677,7 +3569,6 @@ namespace System.Windows.Forms {
             }   
         }       
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3690,7 +3581,6 @@ namespace System.Windows.Forms {
 #if DEBUG
             private string callStack;
 #endif
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie.ConnectionPointCookie"]/*' />
             /// <devdoc>
             /// Creates a connection point to of the given interface type.
             /// which will call on a managed code sink that implements that interface.
@@ -3765,7 +3655,6 @@ namespace System.Windows.Forms {
 #endif
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie.Disconnect"]/*' />
             /// <devdoc>
             /// Disconnect the current connection point.  If the object is not connected,
             /// this method will do nothing.
@@ -3798,7 +3687,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie.Finalize"]/*' />
             /// <internalonly/>
             ~ConnectionPointCookie(){
                 if (connectionPoint != null && cookie != 0) {
@@ -3830,34 +3718,26 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="ActiveXInvokeKind"]/*' />
         public enum ActiveXInvokeKind {
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="ActiveXInvokeKind.MethodInvoke"]/*' />
             MethodInvoke,
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="ActiveXInvokeKind.PropertyGet"]/*' />
             PropertyGet,
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="ActiveXInvokeKind.PropertySet"]/*' />
             PropertySet
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="InvalidActiveXStateException"]/*' />
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class InvalidActiveXStateException : Exception {
             private string name;
             private ActiveXInvokeKind kind;
             
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="InvalidActiveXStateException.InvalidActiveXStateException"]/*' />
             public InvalidActiveXStateException(string name, ActiveXInvokeKind kind) {
                 this.name = name;
                 this.kind = kind;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="InvalidActiveXStateException.InvalidActiveXStateException2"]/*' />
             public InvalidActiveXStateException() {
             }
             
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="InvalidActiveXStateException.ToString"]/*' />
             public override string ToString() {
                 switch (kind) {
                     case ActiveXInvokeKind.MethodInvoke:
@@ -4211,7 +4091,6 @@ namespace System.Windows.Forms {
 
             // IOleInPlaceSite methods:
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OleInterfaces.GetWindow"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4496,7 +4375,6 @@ namespace System.Windows.Forms {
             return base.CanSelectCore();
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Dispose"]/*' />
         /// <devdoc>
         ///     Frees all resources assocaited with this control. This method may not be
         ///     called at runtime. Any resources used by the control should be setup to
@@ -4749,7 +4627,6 @@ namespace System.Windows.Forms {
             throw new ArgumentException(SR.AXUnknownImage, "image");
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIPictureFromPicture"]/*' />
         /// <devdoc>
         ///     Maps from a System.Drawing.Image to an OLE IPicture
         /// </devdoc>
@@ -4762,7 +4639,6 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.OleCreateIPictureIndirect(pictdesc, ref ipicture_Guid, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIPictureFromCursor"]/*' />
         /// <devdoc>
         ///     Maps from a System.Drawing.Cursor to an OLE IPicture
         /// </devdoc>
@@ -4775,7 +4651,6 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.OleCreateIPictureIndirect(pictdesc, ref ipicture_Guid, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIPictureDispFromPicture"]/*' />
         /// <devdoc>
         ///     Maps from a System.Drawing.Image to an OLE IPictureDisp
         /// </devdoc>
@@ -4788,7 +4663,6 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.OleCreateIPictureDispIndirect(pictdesc, ref ipictureDisp_Guid, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetPictureFromIPicture"]/*' />
         /// <devdoc>
         ///     Maps from an OLE IPicture to a System.Drawing.Image
         /// </devdoc>
@@ -4810,7 +4684,6 @@ namespace System.Windows.Forms {
             return GetPictureFromParams(pict, pict.GetHandle(), type, hPal, pict.GetWidth(), pict.GetHeight());
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetPictureFromIPictureDisp"]/*' />
         /// <devdoc>
         ///     Maps from an OLE IPictureDisp to a System.Drawing.Image
         /// </devdoc>
@@ -4886,7 +4759,6 @@ namespace System.Windows.Forms {
             return fdesc;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetColorFromOleColor"]/*' />
         /// <devdoc>
         ///     Maps from an OLE COLOR to a System.Drawing.Color
         /// </devdoc>
@@ -4896,7 +4768,6 @@ namespace System.Windows.Forms {
             return ColorTranslator.FromOle((int)color);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetOleColorFromColor"]/*' />
         /// <devdoc>
         ///     Maps from an System.Drawing.Color to an OLE COLOR
         /// </devdoc>
@@ -4906,7 +4777,6 @@ namespace System.Windows.Forms {
             return (uint)ColorTranslator.ToOle(color);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIFontFromFont"]/*' />
         /// <devdoc>
         ///     Maps from a System.Drawing.Font object to an OLE IFont
         /// </devdoc>
@@ -4927,7 +4797,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetFontFromIFont"]/*' />
         /// <devdoc>
         ///     Maps from an OLE IFont to a System.Drawing.Font object
         /// </devdoc>
@@ -4951,7 +4820,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIFontDispFromFont"]/*' />
         /// <devdoc>
         ///     Maps from a System.Drawing.Font object to an OLE IFontDisp
         /// </devdoc>
@@ -4966,7 +4834,6 @@ namespace System.Windows.Forms {
             return rval;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetFontFromIFontDisp"]/*' />
         /// <devdoc>
         ///     Maps from an IFontDisp to a System.Drawing.Font object
         /// </devdoc>
@@ -5013,7 +4880,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetOADateFromTime"]/*' />
         /// <devdoc>
         ///     Maps from a DateTime object to an OLE DATE (expressed as a double)
         /// </devdoc>
@@ -5022,7 +4888,6 @@ namespace System.Windows.Forms {
             return time.ToOADate();
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetTimeFromOADate"]/*' />
         /// <devdoc>
         ///     Maps from an OLE DATE (expressed as a double) to a DateTime object
         /// </devdoc>
@@ -5053,7 +4918,6 @@ namespace System.Windows.Forms {
             return Convert.ToInt16(o, CultureInfo.InvariantCulture);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -5062,7 +4926,6 @@ namespace System.Windows.Forms {
             RaiseOnMouseMove(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove1"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -5071,7 +4934,6 @@ namespace System.Windows.Forms {
             RaiseOnMouseMove(button, shift, Twip2Pixel((int) x, true), Twip2Pixel((int) y, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove2"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -5080,7 +4942,6 @@ namespace System.Windows.Forms {
             base.OnMouseMove(new MouseEventArgs( (MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -5089,7 +4950,6 @@ namespace System.Windows.Forms {
             RaiseOnMouseUp(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp1"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -5098,7 +4958,6 @@ namespace System.Windows.Forms {
             RaiseOnMouseUp(button, shift, Twip2Pixel((int) x, true), Twip2Pixel((int) y, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp2"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -5107,7 +4966,6 @@ namespace System.Windows.Forms {
             base.OnMouseUp(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -5116,7 +4974,6 @@ namespace System.Windows.Forms {
             RaiseOnMouseDown(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown1"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -5125,7 +4982,6 @@ namespace System.Windows.Forms {
             RaiseOnMouseDown(button, shift, Twip2Pixel((int) x,true), Twip2Pixel((int) y, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown2"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -5906,7 +5762,6 @@ namespace System.Windows.Forms {
 
             // IOleContainer methods:
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.ParseDisplayName"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -5918,7 +5773,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.EnumObjects"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -5940,7 +5794,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.LockContainer"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -5961,7 +5814,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.GetBorder"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -5970,7 +5822,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.RequestBorderSpace"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -5979,7 +5830,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetBorderSpace"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -5997,7 +5847,6 @@ namespace System.Windows.Forms {
                 ctlInEditMode = null;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetActiveObject"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -6054,7 +5903,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.InsertMenus"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -6063,7 +5911,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetMenu"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -6072,7 +5919,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.RemoveMenus"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -6081,7 +5927,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetStatusText"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -6090,7 +5935,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.EnableModeless"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -6098,7 +5942,6 @@ namespace System.Windows.Forms {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnableModeless");
                 return NativeMethods.E_NOTIMPL;
             }
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.TranslateAccelerator"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -6460,7 +6303,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="StateConverter"]/*' />
         /// <devdoc>
         ///      StateConverter is a class that can be used to convert
         ///      State from one data type to another.  Access this
@@ -6471,7 +6313,6 @@ namespace System.Windows.Forms {
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class StateConverter : TypeConverter {
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.CanConvertFrom"]/*' />
             /// <devdoc>
             ///    <para>Gets a value indicating whether this converter can
             ///       convert an object in the given source type to the native type of the converter
@@ -6486,7 +6327,6 @@ namespace System.Windows.Forms {
                 return base.CanConvertFrom(context, sourceType);
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.CanConvertTo"]/*' />
             /// <devdoc>
             ///    <para>Gets a value indicating whether this converter can
             ///       convert an object to the given destination type using the context.</para>
@@ -6500,7 +6340,6 @@ namespace System.Windows.Forms {
                 return base.CanConvertTo(context, destinationType);
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.ConvertFrom"]/*' />
             /// <devdoc>
             ///    <para>Converts the given object to the converter's native type.</para>
             /// </devdoc>
@@ -6514,7 +6353,6 @@ namespace System.Windows.Forms {
                 return base.ConvertFrom(context, culture, value);
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.ConvertTo"]/*' />
             /// <devdoc>
             ///      Converts the given object to another type.  The most common types to convert
             ///      are to and from a string object.  The default implementation will make a call
@@ -6544,7 +6382,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.State"]/*' />
         /// <devdoc>
         ///    <para>The class which encapsulates the persisted state of the underlying activeX control
         ///       An instance of this class my be obtained either by calling getOcxState on an
@@ -6604,7 +6441,6 @@ namespace System.Windows.Forms {
                 type = STG_STORAGE;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.State.State2"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -6833,7 +6669,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="State.ISerializable.GetObjectData"]/*' />
             /// <devdoc>
             /// ISerializable private implementation
             /// </devdoc>
@@ -6906,10 +6741,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AboutBoxDelegate"]/*' />
         protected delegate void AboutBoxDelegate();
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxComponentEditor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -6917,7 +6750,6 @@ namespace System.Windows.Forms {
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         [ComVisible(false)]
         public class AxComponentEditor : WindowsFormsComponentEditor {
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxComponentEditor.EditComponent"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -7308,7 +7140,6 @@ namespace System.Windows.Forms {
                 this.guid = guid;
             }
 
-            /// <include file='doc\AxPropertyTypeEditor.uex' path='docs/doc[@for="AxPropertyTypeEditor.EditValue"]/*' />
             /// <devdoc>
             ///     Takes the value returned from valueAccess.getValue() and modifies or replaces
             ///     the value, passing the result into valueAccess.setValue().  This is where
@@ -7383,7 +7214,6 @@ namespace System.Windows.Forms {
                 this.arraysFetched = false;
             }
         
-            /// <include file='doc\AxPerPropertyBrowsingEnum.uex' path='docs/doc[@for="AxHost.AxPerPropertyBrowsingEnum.Values"]/*' />
             /// <devdoc>
             /// Retrieve a copy of the value array
             /// </devdoc>

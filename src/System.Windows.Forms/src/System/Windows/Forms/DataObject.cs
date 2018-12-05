@@ -23,7 +23,6 @@ namespace System.Windows.Forms
     using System.Text;
     using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
-    /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject"]/*' />
     /// <devdoc>
     ///    <para>Implements a basic data transfer mechanism.</para>
     /// </devdoc>
@@ -62,7 +61,6 @@ namespace System.Windows.Forms
         //
         private static readonly byte[] serializedObjectID = new Guid("FD9EA796-3B13-4370-A679-56106BB288FB").ToByteArray();
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.DataObject"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, with the specified <see cref='System.Windows.Forms.IDataObject'/>.</para>
         /// </devdoc>
@@ -73,7 +71,6 @@ namespace System.Windows.Forms
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.DataObject1"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, with the specified <see langword='IComDataObject'/>.</para>
         /// </devdoc>
@@ -91,7 +88,6 @@ namespace System.Windows.Forms
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.DataObject2"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/>
@@ -105,7 +101,6 @@ namespace System.Windows.Forms
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.DataObject3"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, containing the specified data.</para>
         /// </devdoc>
@@ -128,7 +123,6 @@ namespace System.Windows.Forms
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.DataObject4"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, containing the specified data and its 
         ///    associated format.</para>
@@ -180,7 +174,6 @@ namespace System.Windows.Forms
             return hBitmapNew;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetData"]/*' />
         /// <devdoc>
         ///    <para>Retrieves the data associated with the specified data 
         ///       format, using an automated conversion parameter to determine whether to convert
@@ -193,7 +186,6 @@ namespace System.Windows.Forms
             return innerData.GetData(format, autoConvert);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetData1"]/*' />
         /// <devdoc>
         ///    <para>Retrieves the data associated with the specified data 
         ///       format.</para>
@@ -204,7 +196,6 @@ namespace System.Windows.Forms
             return GetData(format, true);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetData2"]/*' />
         /// <devdoc>
         ///    <para>Retrieves the data associated with the specified class 
         ///       type format.</para>
@@ -220,7 +211,6 @@ namespace System.Windows.Forms
             return GetData(format.FullName);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetDataPresent"]/*' />
         /// <devdoc>
         ///    <para>Determines whether data stored in this instance is 
         ///       associated with, or can be converted to, the specified
@@ -239,7 +229,6 @@ namespace System.Windows.Forms
             return b;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetDataPresent1"]/*' />
         /// <devdoc>
         ///    <para>Determines whether data stored in this instance is 
         ///       associated with the specified format, using an automatic conversion
@@ -254,7 +243,6 @@ namespace System.Windows.Forms
             return b;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetDataPresent2"]/*' />
         /// <devdoc>
         ///    <para>Determines whether data stored in this instance is 
         ///       associated with, or can be converted to, the specified
@@ -269,7 +257,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetFormats"]/*' />
         /// <devdoc>
         ///    <para>Gets a list of all formats that data stored in this 
         ///       instance is associated with or can be converted to, using an automatic
@@ -284,7 +271,6 @@ namespace System.Windows.Forms
             return innerData.GetFormats(autoConvert);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetFormats1"]/*' />
         /// <devdoc>
         ///    <para>Gets a list of all formats that data stored in this instance is associated
         ///       with or can be converted to.</para>
@@ -297,7 +283,6 @@ namespace System.Windows.Forms
 
         // <-- WHIDBEY ADDITIONS 
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsAudio"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -306,7 +291,6 @@ namespace System.Windows.Forms
             return GetDataPresent(DataFormats.WaveAudio, false);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsFileDropList"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -315,7 +299,6 @@ namespace System.Windows.Forms
             return GetDataPresent(DataFormats.FileDrop, true);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -324,7 +307,6 @@ namespace System.Windows.Forms
             return GetDataPresent(DataFormats.Bitmap, true);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsText"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -333,7 +315,6 @@ namespace System.Windows.Forms
             return ContainsText(TextDataFormat.UnicodeText);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsText1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -348,7 +329,6 @@ namespace System.Windows.Forms
             return GetDataPresent(ConvertToDataFormats(format), false);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetAudioStream"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -357,7 +337,6 @@ namespace System.Windows.Forms
             return GetData(DataFormats.WaveAudio, false) as Stream;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetFileDropList"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -372,7 +351,6 @@ namespace System.Windows.Forms
             return retVal;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -381,7 +359,6 @@ namespace System.Windows.Forms
             return GetData(DataFormats.Bitmap, true) as Image;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetText"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -390,7 +367,6 @@ namespace System.Windows.Forms
             return GetText(TextDataFormat.UnicodeText);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetText1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -411,7 +387,6 @@ namespace System.Windows.Forms
             return string.Empty;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetAudio"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -424,7 +399,6 @@ namespace System.Windows.Forms
             SetAudio(new MemoryStream(audioBytes));
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetAudio1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -437,7 +411,6 @@ namespace System.Windows.Forms
             SetData(DataFormats.WaveAudio, false, audioStream);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetFileDropList"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -452,7 +425,6 @@ namespace System.Windows.Forms
             SetData(DataFormats.FileDrop, true, strings);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -465,7 +437,6 @@ namespace System.Windows.Forms
             SetData(DataFormats.Bitmap, true, image);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetText"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -474,7 +445,6 @@ namespace System.Windows.Forms
             SetText(textData, TextDataFormat.UnicodeText);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetText1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -516,7 +486,6 @@ namespace System.Windows.Forms
 
         // END - WHIDBEY ADDITIONS -->
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetDistinctStrings"]/*' />
         /// <devdoc>
         ///     Retrieves a list of distinct strings from the array.
         /// </devdoc>
@@ -537,7 +506,6 @@ namespace System.Windows.Forms
             return temp;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetMappedFormats"]/*' />
         /// <devdoc>
         ///     Returns all the "synonyms" for the specified format.
         /// </devdoc>
@@ -585,7 +553,6 @@ namespace System.Windows.Forms
             return new string[] { format };
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetTymedUseable"]/*' />
         /// <devdoc>
         ///     Returns true if the tymed is useable.
         /// </devdoc>
@@ -602,7 +569,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetDataIntoOleStructs"]/*' />
         /// <devdoc>
         ///     Populates Ole datastructes from a WinForms dataObject. This is the core
         ///     of WinForms to OLE conversion.
@@ -674,7 +640,6 @@ namespace System.Windows.Forms
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
         // <internalonly/>
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DAdvise"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
@@ -692,7 +657,6 @@ namespace System.Windows.Forms
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
         // <internalonly/>
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DUnadvise"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.DUnadvise(int dwConnection)
@@ -710,7 +674,6 @@ namespace System.Windows.Forms
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
         // <internalonly/>
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumDAdvise"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise)
@@ -728,7 +691,6 @@ namespace System.Windows.Forms
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
         // <internalonly/>
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumFormatEtc"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
@@ -752,7 +714,6 @@ namespace System.Windows.Forms
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
         // <internalonly/>
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetCanonicalFormatEtc"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
@@ -770,7 +731,6 @@ namespace System.Windows.Forms
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
         // <internalonly/>
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetData"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
@@ -825,7 +785,6 @@ namespace System.Windows.Forms
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
         // <internalonly/>
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetDataHere"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
@@ -845,7 +804,6 @@ namespace System.Windows.Forms
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
         // <internalonly/>
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.QueryGetData"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.QueryGetData(ref FORMATETC formatetc)
@@ -893,7 +851,6 @@ namespace System.Windows.Forms
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
         // <internalonly/>
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.SetData"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
@@ -1010,7 +967,6 @@ namespace System.Windows.Forms
             formatter.Serialize(stream, data);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SaveStreamToHandle"]/*' />
         /// <devdoc>
         ///     Saves stream out to handle.
         /// </devdoc>
@@ -1046,7 +1002,6 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SaveFileListToHandle"]/*' />
         /// <devdoc>
         ///     Saves a list of files out to the handle in HDROP format.
         /// </devdoc>
@@ -1157,7 +1112,6 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SaveStringToHandle"]/*' />
         /// <devdoc>
         ///     Save string to handle. If unicode is set to true
         ///     then the string is saved as Unicode, else it is saves as DBCS.
@@ -1263,7 +1217,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetData"]/*' />
         /// <devdoc>
         ///    <para>Stores the specified data and its associated format in 
         ///       this instance, using the automatic conversion parameter
@@ -1277,7 +1230,6 @@ namespace System.Windows.Forms
             innerData.SetData(format, autoConvert, data);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetData1"]/*' />
         /// <devdoc>
         ///    <para>Stores the specified data and its associated format in this
         ///       instance.</para>
@@ -1289,7 +1241,6 @@ namespace System.Windows.Forms
             innerData.SetData(format, data);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetData2"]/*' />
         /// <devdoc>
         ///    <para>Stores the specified data and
         ///       its
@@ -1302,7 +1253,6 @@ namespace System.Windows.Forms
             innerData.SetData(format, data);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetData3"]/*' />
         /// <devdoc>
         ///    <para>Stores the specified data in
         ///       this instance, using the class of the data for the format.</para>
@@ -1314,7 +1264,6 @@ namespace System.Windows.Forms
             innerData.SetData(data);
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.FormatEnumerator"]/*' />
         /// <devdoc>
         ///     Part of IComDataObject, used to interop with OLE.
         /// </devdoc>
@@ -1481,7 +1430,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter"]/*' />
         /// <devdoc>
         ///     OLE Converter.  This class embodies the nastiness required to convert from our
         ///     managed types to standard OLE clipboard formats.
@@ -1496,7 +1444,6 @@ namespace System.Windows.Forms
                 innerData = data;
             }
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.OleDataObject"]/*' />
             /// <devdoc>
             ///     Returns the data Object we are wrapping
             /// </devdoc>
@@ -1509,7 +1456,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.GetDataFromOleIStream"]/*' />
             /// <devdoc>
             ///     Uses IStream and retrieves the specified format from the bound IComDataObject.
             /// </devdoc>
@@ -1573,7 +1519,6 @@ namespace System.Windows.Forms
             }
 
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.GetDataFromHGLOBAL"]/*' />
             /// <devdoc>
             ///     Retrieves the specified form from the specified hglobal.
             /// </devdoc>
@@ -1627,7 +1572,6 @@ namespace System.Windows.Forms
                 return data;
             }
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.GetDataFromOleHGLOBAL"]/*' />
             /// <devdoc>
             ///     Uses HGLOBALs and retrieves the specified format from the bound IComDatabject.
             /// </devdoc>
@@ -1679,7 +1623,6 @@ namespace System.Windows.Forms
                 return data;
             }
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.GetDataFromOleOther"]/*' />
             /// <devdoc>
             ///     Retrieves the specified format data from the bound IComDataObject, from
             ///     other sources that IStream and HGLOBAL... this is really just a place
@@ -1779,7 +1722,6 @@ namespace System.Windows.Forms
                 return data;
             }
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.GetDataFromBoundOleDataObject"]/*' />
             /// <devdoc>
             ///     Extracts a managed Object from the innerData of the specified
             ///     format. This is the base of the OLE to managed conversion.
@@ -1808,7 +1750,6 @@ namespace System.Windows.Forms
                 return data;
             }
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.ReadByteStreamFromHandle"]/*' />
             /// <devdoc>
             ///     Creates an Stream from the data stored in handle.
             /// </devdoc>
@@ -1864,7 +1805,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.ReadObjectFromHandle"]/*' />
             /// <devdoc>
             ///     Creates a new instance of the Object that has been persisted into the
             ///     handle.
@@ -1900,7 +1840,6 @@ namespace System.Windows.Forms
                 return formatter.Deserialize(stream);
             }
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.ReadFileListFromHandle"]/*' />
             /// <devdoc>
             ///     Parses the HDROP format and returns a list of strings using
             ///     the DragQueryFile function.
@@ -1934,7 +1873,6 @@ namespace System.Windows.Forms
                 return files;
             }
 
-            /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.OleConverter.ReadStringFromHandle"]/*' />
             /// <devdoc>
             ///     Creates a string from the data stored in handle. If
             ///     unicode is set to true, then the string is assume to be Unicode,
@@ -2211,7 +2149,6 @@ namespace System.Windows.Forms
         // Data Store
         //--------------------------------------------------------------------------
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.DataStore"]/*' />
         /// <devdoc>
         /// </devdoc>
         private class DataStore : IDataObject

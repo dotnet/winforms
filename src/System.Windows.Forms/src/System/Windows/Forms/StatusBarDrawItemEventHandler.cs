@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\StatusBarDrawItemEventHandler.uex' path='docs/doc[@for="StatusBarDrawItemEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the <see cref='System.Windows.Forms.StatusBar.OnDrawItem'/>

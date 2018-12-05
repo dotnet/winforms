@@ -12,7 +12,6 @@ namespace System.Experimental.Gdi
 {
     using System;
 
-    /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags"]/*' />
     [Flags]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
@@ -21,55 +20,30 @@ namespace System.Experimental.Gdi
 #endif
     enum IntTextFormatFlags
     {
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.Bottom"]/*' />
         Bottom = IntNativeMethods.DT_BOTTOM,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.CalculateRectangle"]/*' />
         CalculateRectangle = IntNativeMethods.DT_CALCRECT,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.EndEllipsis"]/*' />
         EndEllipsis = IntNativeMethods.DT_END_ELLIPSIS,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.ExpandTabs"]/*' />
         ExpandTabs = IntNativeMethods.DT_EXPANDTABS,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.ExternalLeading"]/*' />
         ExternalLeading = IntNativeMethods.DT_EXTERNALLEADING,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.Left"]/*' />
         Default = Top | Left,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.HidePrefix"]/*' />
         HidePrefix = IntNativeMethods.DT_HIDEPREFIX,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.HorizontalCenter"]/*' />
         HorizontalCenter = IntNativeMethods.DT_CENTER,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.Internal"]/*' />
         Internal = IntNativeMethods.DT_INTERNAL,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.Left"]/*' />
         Left = IntNativeMethods.DT_LEFT, // default.
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.ModifyString"]/*' />
         ModifyString = IntNativeMethods.DT_MODIFYSTRING,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.NoClipping"]/*' />
         NoClipping = IntNativeMethods.DT_NOCLIP,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.NoPrefix"]/*' />
         NoPrefix = IntNativeMethods.DT_NOPREFIX,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.NoFullWidthCharacterBreak"]/*' />
         NoFullWidthCharacterBreak = IntNativeMethods.DT_NOFULLWIDTHCHARBREAK,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.PathEllipsis"]/*' />
         PathEllipsis = IntNativeMethods.DT_PATH_ELLIPSIS,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.PrefixOnly"]/*' />
         PrefixOnly = IntNativeMethods.DT_PREFIXONLY,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.Right"]/*' />
         Right = IntNativeMethods.DT_RIGHT,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.RightToLeft"]/*' />
         RightToLeft = IntNativeMethods.DT_RTLREADING,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.SingleLine"]/*' />
         SingleLine = IntNativeMethods.DT_SINGLELINE,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.TabStop"]/*' />
         TabStop = IntNativeMethods.DT_TABSTOP,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.TextBoxControl"]/*' />
         TextBoxControl = IntNativeMethods.DT_EDITCONTROL,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.Top"]/*' />
         Top = IntNativeMethods.DT_TOP, // default.
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.VerticalCenter"]/*' />
         VerticalCenter = IntNativeMethods.DT_VCENTER,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.WordBreak"]/*' />
         WordBreak = IntNativeMethods.DT_WORDBREAK,
-        /// <include file='doc\TextFormatFlags.uex' path='docs/doc[@for="TextFormatFlags.WordEllipsis"]/*' />
         WordEllipsis = IntNativeMethods.DT_WORD_ELLIPSIS,
         //		#define DT_TOP                      0x00000000
         //		#define DT_LEFT                     0x00000000

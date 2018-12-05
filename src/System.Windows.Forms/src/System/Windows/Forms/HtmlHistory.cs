@@ -17,7 +17,6 @@ using System.Net;
 using System.Globalization;
 
 namespace System.Windows.Forms {
-    /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -43,14 +42,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Dispose"]/*' />
         public void Dispose() {
             this.htmlHistory = null;
             this.disposed = true;
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Length"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -60,7 +57,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Back"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -74,7 +70,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Forward"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -88,7 +83,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Go1"]/*' />
         /// <devdoc>
         ///    <para>Go to a specific Uri in the history</para>
         /// </devdoc>
@@ -98,7 +92,6 @@ namespace System.Windows.Forms {
             Go(url.ToString());
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Go1"]/*' />
         /// <devdoc>
         ///    <para>Go to a specific url(string) in the history</para>
         /// </devdoc>
@@ -113,7 +106,6 @@ namespace System.Windows.Forms {
             this.NativeOmHistory.Go(ref loc);
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Go2"]/*' />
         /// <devdoc>
         ///    <para>Go to the specified position in the history list</para>
         /// </devdoc>
@@ -122,7 +114,6 @@ namespace System.Windows.Forms {
             this.NativeOmHistory.Go(ref loc);
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.DomHistory"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

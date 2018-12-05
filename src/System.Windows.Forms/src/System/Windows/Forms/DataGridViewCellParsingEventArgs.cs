@@ -8,14 +8,12 @@ namespace System.Windows.Forms
     using System.Drawing;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewCellParsingEventArgs.uex' path='docs/doc[@for="DataGridViewCellParsingEventArgs"]/*' />
     public class DataGridViewCellParsingEventArgs : ConvertEventArgs
     {
         private int rowIndex, columnIndex;
         private DataGridViewCellStyle inheritedCellStyle;
         private bool parsingApplied;
     
-        /// <include file='doc\DataGridViewCellParsingEventArgs.uex' path='docs/doc[@for="DataGridViewCellParsingEventArgs.DataGridViewCellParsingEventArgs"]/*' />
         public DataGridViewCellParsingEventArgs(int rowIndex,
                                          int columnIndex,
                                          object value,
@@ -27,7 +25,6 @@ namespace System.Windows.Forms
             this.inheritedCellStyle = inheritedCellStyle;
         }
 
-        /// <include file='doc\DataGridViewCellParsingEventArgs.uex' path='docs/doc[@for="DataGridViewCellParsingEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get
@@ -36,7 +33,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellParsingEventArgs.uex' path='docs/doc[@for="DataGridViewCellParsingEventArgs.ColumnIndex"]/*' />
         public int ColumnIndex
         {
             get
@@ -45,7 +41,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellParsingEventArgs.uex' path='docs/doc[@for="DataGridViewCellParsingEventArgs.InheritedCellStyle"]/*' />
         public DataGridViewCellStyle InheritedCellStyle
         {
             get
@@ -58,7 +53,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellParsingEventArgs.uex' path='docs/doc[@for="DataGridViewCellParsingEventArgs.ParsingApplied"]/*' />
         public bool ParsingApplied
         {
             get

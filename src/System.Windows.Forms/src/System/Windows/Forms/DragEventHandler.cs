@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Drawing;
 
-    /// <include file='doc\DragEventHandler.uex' path='docs/doc[@for="DragEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle

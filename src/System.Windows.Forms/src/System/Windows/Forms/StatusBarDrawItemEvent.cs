@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\StatusBarDrawItemEvent.uex' path='docs/doc[@for="StatusBarDrawItemEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.StatusBar.OnDrawItem'/>
@@ -20,7 +19,6 @@ namespace System.Windows.Forms {
     public class StatusBarDrawItemEventArgs : DrawItemEventArgs {
         readonly StatusBarPanel panel;
 
-        /// <include file='doc\StatusBarDrawItemEvent.uex' path='docs/doc[@for="StatusBarDrawItemEventArgs.StatusBarDrawItemEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
             this.panel = panel;
         }
 
-        /// <include file='doc\StatusBarDrawItemEvent.uex' path='docs/doc[@for="StatusBarDrawItemEventArgs.StatusBarDrawItemEventArgs1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
@@ -44,7 +41,6 @@ namespace System.Windows.Forms {
             this.panel = panel;
         }
 
-        /// <include file='doc\StatusBarDrawItemEvent.uex' path='docs/doc[@for="StatusBarDrawItemEventArgs.Panel"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies the <see cref='System.Windows.Forms.StatusBarPanel'/>

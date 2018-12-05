@@ -16,7 +16,6 @@ namespace System.Windows.Forms
     using System.Security;
     using System.Security.Permissions;
 
-    /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject"]/*' />
     /// <devdoc>
     ///    <para>Provides an implementation for an object that can be inspected by an 
     ///       accessibility application.</para>    
@@ -45,13 +44,11 @@ namespace System.Windows.Forms
 
         // Member variables
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.systemIAccessible"]/*' />
         /// <devdoc>
         /// <para>Specifies the <see langword='IAccessible '/>interface used by this <see cref='System.Windows.Forms.AccessibleObject'/>.</para>
         /// </devdoc>
         private IAccessible systemIAccessible = null;
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.systemIEnumVariant"]/*' />
         /// <devdoc>
         ///    <para>Specifies the 
         ///    <see langword='NativeMethods.IEnumVariant '/>used by this <see cref='System.Windows.Forms.AccessibleObject'/> .</para>
@@ -74,7 +71,6 @@ namespace System.Windows.Forms
 
         protected const int RuntimeIDFirstItem = 0x2a;
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.AccessibleObject"]/*' />
         public AccessibleObject() {
         }
         
@@ -87,7 +83,6 @@ namespace System.Windows.Forms
         
         // Properties
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.Bounds"]/*' />
         /// <devdoc>
         ///    <para> Gets the bounds of the accessible object, in screen coordinates.</para>
         /// </devdoc>
@@ -113,7 +108,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.DefaultAction"]/*' />
         /// <devdoc>
         ///    <para>Gets a description of the default action for an object.</para>
         /// </devdoc>
@@ -135,7 +129,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.Description"]/*' />
         /// <devdoc>
         ///    <para>Gets a description
         ///       of the object's visual appearance to the user.</para>
@@ -165,7 +158,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.Help"]/*' />
         /// <devdoc>
         ///    <para>Gets a description of what the object does or how the object is used.</para>
         /// </devdoc>
@@ -185,7 +177,6 @@ namespace System.Windows.Forms
             }
         } 
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.KeyboardShortcut"]/*' />
         /// <devdoc>
         ///    <para>Gets the object shortcut key or access key
         ///       for an accessible object.</para>
@@ -206,7 +197,6 @@ namespace System.Windows.Forms
             }
         } 
          
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.Name"]/*' />
         /// <devdoc>
         ///    <para>Gets
         ///       or sets the object name.</para>
@@ -242,7 +232,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.Parent"]/*' />
         /// <devdoc>
         ///    <para>When overridden in a derived class, gets or sets the parent of an accessible object.</para>
         /// </devdoc>
@@ -258,7 +247,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.Role"]/*' />
         /// <devdoc>
         ///    <para>Gets the role of this accessible object.</para>
         /// </devdoc>
@@ -273,7 +261,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.State"]/*' />
         /// <devdoc>
         ///    <para>Gets
         ///       the state of this accessible object.</para>
@@ -289,7 +276,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.Value"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the value of an accessible object.</para>
         /// </devdoc>
@@ -327,7 +313,6 @@ namespace System.Windows.Forms
 
         // Methods
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.GetChild"]/*' />
         /// <devdoc>
         ///    <para>When overridden in a derived class, gets the accessible child corresponding to the specified 
         ///       index.</para>
@@ -336,7 +321,6 @@ namespace System.Windows.Forms
             return null;
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.GetChildCount"]/*' />
         /// <devdoc>
         ///    <para> When overridden in a derived class, gets the number of children
         ///       belonging to an accessible object.</para>
@@ -375,7 +359,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.GetFocused"]/*' />
         /// <devdoc>
         ///    <para> When overridden in a derived class,
         ///       gets the object that has the keyboard focus.</para>
@@ -413,7 +396,6 @@ namespace System.Windows.Forms
             return null;
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.GetHelpTopic"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Gets an identifier for a Help topic and the path to the Help file associated
@@ -438,7 +420,6 @@ namespace System.Windows.Forms
             return -1;
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.GetSelected"]/*' />
         /// <devdoc>
         ///    <para> When overridden in
         ///       a derived class, gets the currently selected child.</para>
@@ -475,7 +456,6 @@ namespace System.Windows.Forms
             return null;
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.HitTest"]/*' />
         /// <devdoc>
         ///    <para>Return the child object at the given screen coordinates.</para>
         /// </devdoc>
@@ -1168,7 +1148,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.accDoDefaultAction"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1213,7 +1192,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.accHitTest"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1248,7 +1226,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.accLocation"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1325,7 +1302,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.accNavigate"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1377,7 +1353,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.accSelect"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1422,7 +1397,6 @@ namespace System.Windows.Forms
 
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.DoDefaultAction"]/*' />
         /// <devdoc>
         ///      Performs the default action associated with this accessible object.
         /// </devdoc>
@@ -1445,7 +1419,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accChild"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1487,7 +1460,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.accChildCount"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the number of children
@@ -1515,7 +1487,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accDefaultAction"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1555,7 +1526,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accDescription"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1593,7 +1563,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.GetAccessibleChild"]/*' />
         /// <devdoc>
         ///      Returns the appropriate child from the Accessible Child Collection, if available
         /// </devdoc>
@@ -1607,7 +1576,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.accFocus"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the object or child focus
@@ -1640,7 +1608,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accHelp"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1677,7 +1644,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accHelpTopic"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1715,7 +1681,6 @@ namespace System.Windows.Forms
             return -1;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accKeyboardShortcut"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1756,7 +1721,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accName"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1804,7 +1768,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.accParent"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the parent object
@@ -1828,7 +1791,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accRole"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1860,7 +1822,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.accSelection"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the object or child selection
@@ -1893,7 +1854,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accState"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1927,7 +1887,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.get_accValue"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -1967,7 +1926,6 @@ namespace System.Windows.Forms
             return null;
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.set_accName"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -2002,7 +1960,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IAccessible.set_accValue"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -2046,7 +2003,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UnsafeNativeMethods.IOleWindow.GetWindow"]/*' />
         /// <devdoc>
         ///     Now that AccessibleObject is used to wrap all system-provided (OLEACC.DLL) accessible
         ///     objects, it needs to implement IOleWindow and pass this down to the inner object. This is
@@ -2081,7 +2037,6 @@ namespace System.Windows.Forms
             return NativeMethods.E_FAIL;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp"]/*' />
         /// <devdoc>
         ///     See GetWindow() above for details.
         /// </devdoc>
@@ -2104,7 +2059,6 @@ namespace System.Windows.Forms
             // Or do nothing if there is no parent
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UnsafeNativeMethods.IEnumVariant.Clone"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Clone this accessible object.
@@ -2114,7 +2068,6 @@ namespace System.Windows.Forms
             EnumVariant.Clone(v);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UnsafeNativeMethods.IEnumVariant.Next"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Obtain the next n children of this accessible object.
@@ -2124,7 +2077,6 @@ namespace System.Windows.Forms
             return EnumVariant.Next(n, rgvar, ns);
         }
                   
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UnsafeNativeMethods.IEnumVariant.Reset"]/*' />
         /// <devdoc>
         ///      Resets the child accessible object enumerator.
         /// </devdoc>
@@ -2132,7 +2084,6 @@ namespace System.Windows.Forms
             EnumVariant.Reset();
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UnsafeNativeMethods.IEnumVariant.Skip"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Skip the next n child accessible objects
@@ -2142,7 +2093,6 @@ namespace System.Windows.Forms
             EnumVariant.Skip(n);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.Navigate"]/*' />
         /// <devdoc>
         ///    <para>When overridden in a derived class,
         ///       navigates to another object.</para>
@@ -2191,7 +2141,6 @@ namespace System.Windows.Forms
             return null;
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.Select"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Selects this accessible object.
@@ -2231,7 +2180,6 @@ namespace System.Windows.Forms
             return obj;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.AccessibleObjectId"]/*' />
         /// <devdoc>
         ///     Indicates what kind of 'inner' system accessible object we are using as our fall-back
         ///     implementation of IAccessible (when the systemIAccessible member is not null). The inner
@@ -2257,7 +2205,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IsClientObject"]/*' />
         /// <devdoc>
         ///    Indicates whether this accessible object represents the client area of the window.
         /// </devdoc>
@@ -2268,7 +2215,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.IsNonClientObject"]/*' />
         /// <devdoc>
         ///    Indicates whether this accessible object represents the non-client area of the window.
         /// </devdoc>
@@ -2287,7 +2233,6 @@ namespace System.Windows.Forms
             return this.systemIAccessible;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UseStdAccessibleObjects"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -2297,7 +2242,6 @@ namespace System.Windows.Forms
             UseStdAccessibleObjects(handle, AccessibleObjectId);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UseStdAccessibleObjects1"]/*' />
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected void UseStdAccessibleObjects(IntPtr handle, int objid) {
@@ -2355,7 +2299,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.ValidateChildID"]/*' />
         /// <devdoc>
         ///      Make sure that the childID is valid.
         /// </devdoc>
@@ -2391,7 +2334,6 @@ namespace System.Windows.Forms
             return new AccessibleObject(accessible);
         }                             
 
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetMethod"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the requested method if it is implemented by the Reflection object.  The
@@ -2402,7 +2344,6 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetMethod(name, bindingAttr, binder, types, modifiers);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetMethod1"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the requested method if it is implemented by the Reflection object.  The
@@ -2413,13 +2354,11 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetMethod(name, bindingAttr);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetMethods"]/*' />
         /// <internalonly/>
         MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr) {
             return typeof(IAccessible).GetMethods(bindingAttr);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetField"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the requestion field if it is implemented by the Reflection object.  The
@@ -2430,13 +2369,11 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetField(name, bindingAttr);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetFields"]/*' />
         /// <internalonly/>
         FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr) {
             return typeof(IAccessible).GetFields(bindingAttr);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetProperty"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the property based upon name.  If more than one property has the given
@@ -2447,7 +2384,6 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetProperty(name, bindingAttr);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetProperty1"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the property based upon the name and Descriptor info describing the property
@@ -2457,7 +2393,6 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetProperties"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Returns an array of PropertyInfos for all the properties defined on 
@@ -2467,7 +2402,6 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetProperties(bindingAttr);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetMember"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return an array of members which match the passed in name.
@@ -2476,7 +2410,6 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetMember(name, bindingAttr);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.GetMembers"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return an array of all of the members defined for this object.
@@ -2485,7 +2418,6 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetMembers(bindingAttr);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.InvokeMember"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Description of the Binding Process.
@@ -2536,7 +2468,6 @@ namespace System.Windows.Forms
             return typeof(IAccessible).InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
         }
         
-        /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="IReflect.UnderlyingSystemType"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Return the underlying Type that represents the IReflect Object.  For expando object,
@@ -2665,7 +2596,6 @@ namespace System.Windows.Forms
                 v[0] = new EnumVariantObject(owner, currentChild);
             }
 
-            /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.EnumVariantObject.UnsafeNativeMethods.IEnumVariant.Reset"]/*' />
             /// <devdoc>
             ///     Resets the child accessible object enumerator.
             /// </devdoc>
@@ -2685,7 +2615,6 @@ namespace System.Windows.Forms
                 }
             }
             
-            /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.EnumVariantObject.UnsafeNativeMethods.IEnumVariant.Skip"]/*' />
             /// <devdoc>
             ///     Skips the next n child accessible objects.
             /// </devdoc>
@@ -2705,7 +2634,6 @@ namespace System.Windows.Forms
                 }
             }    
 
-            /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.EnumVariantObject.UnsafeNativeMethods.IEnumVariant.Next"]/*' />
             /// <devdoc>
             ///     Gets the next n child accessible objects.
             /// </devdoc>

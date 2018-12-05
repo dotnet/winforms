@@ -17,7 +17,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents
@@ -31,7 +30,6 @@ namespace System.Windows.Forms {
     ]
     public sealed class SaveFileDialog : FileDialog {
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.CreatePrompt"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box prompts the user for
@@ -54,7 +52,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.OverwritePrompt"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the Save As dialog box displays a warning if the user specifies
@@ -77,7 +74,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.OpenFile"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Opens the file with read/write permission selected by the user.
@@ -116,7 +112,6 @@ namespace System.Windows.Forms {
             return s;
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.PromptFileCreate"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/>
@@ -132,7 +127,6 @@ namespace System.Windows.Forms {
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.PromptFileOverwrite"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Prompts the user when a file is about to be overwritten. This method is
@@ -171,7 +165,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Resets all dialog box options to their default
@@ -189,7 +182,6 @@ namespace System.Windows.Forms {
             IntSecurity.FileDialogSaveFile.Demand();
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.RunFileDialog"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>

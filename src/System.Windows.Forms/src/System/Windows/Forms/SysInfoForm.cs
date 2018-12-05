@@ -39,14 +39,12 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
     
-    /// <include file='doc\SysInfoForm.uex' path='docs/doc[@for="SysInfoForm"]/*' />
     /// <devdoc>
     ///    Summary description for SysInfoForm.
     /// </devdoc>
     internal class SysInfoForm : Form {
         static Switch[] switches;
 
-        /// <include file='doc\SysInfoForm.uex' path='docs/doc[@for="SysInfoForm.components"]/*' />
         /// <devdoc> 
         ///    Required by the Win Forms designer 
         /// </devdoc>
@@ -149,7 +147,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SysInfoForm.uex' path='docs/doc[@for="SysInfoForm.Dispose"]/*' />
         /// <devdoc>
         ///    Clean up any resources being used
         /// </devdoc>
@@ -333,7 +330,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SysInfoForm.uex' path='docs/doc[@for="SysInfoForm.InitializeComponent"]/*' />
         /// <devdoc>
         ///    Required method for Designer support - do not modify
         ///    the contents of this method with an editor

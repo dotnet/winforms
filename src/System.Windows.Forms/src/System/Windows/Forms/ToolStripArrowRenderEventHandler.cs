@@ -7,6 +7,5 @@ namespace System.Windows.Forms {
     using System;
   
 
-    /// <include file='doc\ToolStripArrowRenderEventHandler.uex' path='docs/doc[@for="ToolStripArrowRenderEventHandler"]/*' />
     public delegate void ToolStripArrowRenderEventHandler(object sender, ToolStripArrowRenderEventArgs e);
 }

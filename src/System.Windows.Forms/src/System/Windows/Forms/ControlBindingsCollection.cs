@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Globalization;
     
-    /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection"]/*' />
     /// <devdoc>
     ///    <para> 
     ///       Represents the collection of data bindings for a control.</para>
@@ -26,13 +25,11 @@ namespace System.Windows.Forms {
 
         private DataSourceUpdateMode defaultDataSourceUpdateMode = DataSourceUpdateMode.OnValidation;
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.ControlBindingsCollection"]/*' />
         public ControlBindingsCollection(IBindableComponent control) : base() {
             Debug.Assert(control != null, "How could a controlbindingscollection not have a control associated with it!");
             this.control = control;
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.BindableComponent"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -42,7 +39,6 @@ namespace System.Windows.Forms {
             }
         }
                 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Control"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -52,7 +48,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.this"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -68,7 +63,6 @@ namespace System.Windows.Forms {
             }
         }
                 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add"]/*' />
         /// <devdoc>
         /// Adds the binding to the collection.  An ArgumentNullException is thrown if this binding
         /// is null.  An exception is thrown if a binding to the same target and Property as an existing binding or
@@ -79,7 +73,6 @@ namespace System.Windows.Forms {
             base.Add(binding);
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add1"]/*' />
         /// <devdoc>
         /// Creates the binding and adds it to the collection.  An InvalidBindingException is thrown
         /// if this binding can't be constructed.  An exception is thrown if a binding to the same target and Property as an existing binding or
@@ -90,27 +83,22 @@ namespace System.Windows.Forms {
             return Add(propertyName, dataSource, dataMember, false, this.DefaultDataSourceUpdateMode, null, String.Empty, null);
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add6"]/*' />
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled) {
             return Add(propertyName, dataSource, dataMember, formattingEnabled, this.DefaultDataSourceUpdateMode, null, String.Empty, null);
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add2"]/*' />
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode) {
             return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, null, String.Empty, null);
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add3"]/*' />
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue) {
             return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, String.Empty, null);
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add5"]/*' />
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue, string formatString) {
             return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, null);
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add4"]/*' />
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue, string formatString, IFormatProvider formatInfo) {
             if (dataSource == null)
                 throw new ArgumentNullException(nameof(dataSource));
@@ -119,7 +107,6 @@ namespace System.Windows.Forms {
             return binding;
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.AddCore"]/*' />
         /// <devdoc>
         /// Creates the binding and adds it to the collection.  An InvalidBindingException is thrown
         /// if this binding can't be constructed.  An exception is thrown if a binding to the same target and Property as an existing binding or
@@ -153,7 +140,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Clear"]/*' />
         /// <devdoc>
         /// Clears the collection of any bindings.
         /// Fires the CollectionChangedEvent.
@@ -163,7 +149,6 @@ namespace System.Windows.Forms {
         }
 
         // internalonly
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.ClearCore"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -176,7 +161,6 @@ namespace System.Windows.Forms {
             base.ClearCore();
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.DefaultDataSourceUpdateMode"]/*' />
         /// <devdoc>
         /// </devdoc>
         public DataSourceUpdateMode DefaultDataSourceUpdateMode {
@@ -189,7 +173,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Remove"]/*' />
         /// <devdoc>
         /// Removes the given binding from the collection.
         /// An ArgumentNullException is thrown if this binding is null.  An ArgumentException is thrown
@@ -200,7 +183,6 @@ namespace System.Windows.Forms {
             base.Remove(binding);
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.RemoveAt"]/*' />
         /// <devdoc>
         /// Removes the given binding from the collection.
         /// It throws an IndexOutOfRangeException if this doesn't have
@@ -211,7 +193,6 @@ namespace System.Windows.Forms {
             base.RemoveAt(index);
         }
 
-        /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.RemoveCore"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

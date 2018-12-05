@@ -12,7 +12,6 @@ namespace System.Windows.Forms{
     using Microsoft.Win32;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox"]/*' />
     /// <devdoc>
     /// <para>Represents a <see cref='System.Windows.Forms.TextBox'/> control that is hosted in a 
     /// <see cref='System.Windows.Forms.DataGridTextBoxColumn'/> .</para>
@@ -31,11 +30,9 @@ namespace System.Windows.Forms{
         // takes place
         private DataGrid dataGrid;
 
-        /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.DataGridTextBox"]/*' />
         public DataGridTextBox() : base () { 
             TabStop = false;
         }
-        /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.SetDataGrid"]/*' />
         /// <devdoc>
         /// <para>Sets the <see cref='System.Windows.Forms.DataGrid'/> to which this <see cref='System.Windows.Forms.TextBox'/> control belongs.</para>
         /// </devdoc>
@@ -44,7 +41,6 @@ namespace System.Windows.Forms{
             dataGrid = parentGrid;
         }
 
-        /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.WndProc"]/*' />
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             // but what if we get a CtrlV?
@@ -58,12 +54,10 @@ namespace System.Windows.Forms{
 
         }
 
-        /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.OnMouseWheel"]/*' />
         protected override void OnMouseWheel(MouseEventArgs e) {
             dataGrid.TextBoxOnMouseWheel(e);
         }
 
-        /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.OnKeyPress"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -90,7 +84,6 @@ namespace System.Windows.Forms{
             dataGrid.ColumnStartedEditing(Bounds);
         }
 
-        /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.ProcessKeyMessage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -243,7 +236,6 @@ namespace System.Windows.Forms{
             }
         }
 
-        /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.IsInEditOrNavigateMode"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

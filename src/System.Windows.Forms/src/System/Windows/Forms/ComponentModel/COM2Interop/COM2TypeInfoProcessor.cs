@@ -20,7 +20,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Globalization;
    
 
-    /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor"]/*' />
     /// <devdoc>
     /// This is the main worker class of Com2 property interop. It takes an IDispatch Object
     /// and translates it's ITypeInfo into Com2PropertyDescriptor objects that are understandable
@@ -58,7 +57,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private static Hashtable processedLibraries;
         
          
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.FindTypeInfo"]/*' />
         /// <devdoc>
         /// Given an Object, this attempts to locate its type ifo
         /// </devdoc>
@@ -104,7 +102,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.FindTypeInfos"]/*' />
         /// <devdoc>
         /// Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
         /// all available type infos will be returned, otherwise the primary one will be alled.
@@ -144,7 +141,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return typeInfos;
         }
         
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.GetNameDispId"]/*' />
         /// <devdoc>
         /// Retrieve the dispid of the property that we are to use as the name
         /// member.  In this case, the grid will put parens around the name.
@@ -190,7 +186,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.GetProperties"]/*' />
         /// <devdoc>
         /// Gets the properties for a given Com2 Object.  The returned Com2Properties
         /// Object contains the properties and relevant data about them.
@@ -312,7 +307,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.GetValueTypeFromTypeDesc"]/*' />
         /// <devdoc>
         /// Resolves a value type for a property from a TYPEDESC.  Value types can be
         /// user defined, which and may be aliased into other type infos.  This function
@@ -705,7 +699,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.ProcessTypeInfoEnum"]/*' />
         /// <devdoc>
         /// This converts a type info that describes a IDL defined enum
         /// into one we can use
@@ -1069,7 +1062,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
         
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.StructCache"]/*' />
         /// <devdoc>
         /// This class manages a cache of structures that we can use
         /// for passing into native so we don't have to create them every time.
@@ -1209,7 +1201,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     
     
     // just so we can recognize a variant properly...
-    /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2Variant"]/*' />
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class Com2Variant {

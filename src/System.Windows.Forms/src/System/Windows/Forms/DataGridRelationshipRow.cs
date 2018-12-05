@@ -18,7 +18,6 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Globalization;
 
-    /// <include file='doc\DataGridRelationshipRow.uex' path='docs/doc[@for="DataGridRelationshipRow"]/*' />
     /// <devdoc>
     ///      This class fully encapsulates the painting logic for a row
     ///      appearing in a DataGrid.
@@ -200,7 +199,6 @@ namespace System.Windows.Forms {
             return cellBounds;
         }
 
-        /// <include file='doc\DataGridRelationshipRow.uex' path='docs/doc[@for="DataGridRelationshipRow.GetOutlineRect"]/*' />
         /// <devdoc>
         ///      Given an origin, this procedure returns
         ///      a rectangle that describes the location of an outline box.
@@ -274,7 +272,6 @@ namespace System.Windows.Forms {
             return relRect;
         }
 
-        /// <include file='doc\DataGridRelationshipRow.uex' path='docs/doc[@for="DataGridRelationshipRow.OnMouseDown"]/*' />
         /// <devdoc>
         ///      Called by the DataGrid when a click occurs in the row's client
         ///      area.  The coordinates are normalized to the rectangle's top
@@ -375,7 +372,6 @@ namespace System.Windows.Forms {
             base.OnMouseLeft();
         }
 
-        /// <include file='doc\DataGridRelationshipRow.uex' path='docs/doc[@for="DataGridRelationshipRow.OnKeyPress"]/*' />
         /// <devdoc>
         ///      Called by the DataGrid when a keypress occurs on a row with "focus."
         /// </devdoc>
@@ -508,7 +504,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridRelationshipRow.uex' path='docs/doc[@for="DataGridRelationshipRow.Paint"]/*' />
         /// <devdoc>
         ///      Paints the row.
         /// </devdoc>
@@ -628,7 +623,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\DataGridRelationshipRow.uex' path='docs/doc[@for="DataGridRelationshipRow.PaintRelations"]/*' />
         /// <devdoc>
         ///      Paints the relationships below the data area.
         /// </devdoc>
@@ -740,7 +734,6 @@ namespace System.Windows.Forms {
             return cy;
         }
 
-        /// <include file='doc\DataGridRelationshipRow.uex' path='docs/doc[@for="DataGridRelationshipRow.PaintPlusMinusGlyph"]/*' />
         /// <internalonly/>
         private void PaintPlusMinusGlyph(Graphics g, Rectangle bounds, Brush backBr, bool alignToRight) {
             if (CompModSwitches.DGRelationShpRowPaint.TraceVerbose) Debug.WriteLine("PlusMinusGlyph painting in bounds    -> " + bounds.ToString());
@@ -1002,7 +995,6 @@ namespace System.Windows.Forms {
                 ((DataGrid.DataGridAccessibleObject) DataGrid.AccessibilityObject).NotifyClients(AccessibleEvents.Selection, DataGrid.CurrentCellAccIndex);
             }
 
-            /// <include file='doc\DataGridRelationshipRow.uex' path='docs/doc[@for="DataGridRelationshipRow.DataGridRelationshipAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>

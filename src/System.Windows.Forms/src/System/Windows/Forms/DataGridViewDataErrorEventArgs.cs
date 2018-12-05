@@ -9,14 +9,12 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs"]/*' />
     public class DataGridViewDataErrorEventArgs : DataGridViewCellCancelEventArgs
     {
         private Exception exception;
         private bool throwException;
         private DataGridViewDataErrorContexts context;
     
-        /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs.DataGridViewDataErrorEventArgs"]/*' />
         public DataGridViewDataErrorEventArgs(Exception exception,
             int columnIndex,
             int rowIndex,
@@ -27,7 +25,6 @@ namespace System.Windows.Forms
             this.context = context;
         }
 
-        /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs.Context"]/*' />
         public DataGridViewDataErrorContexts Context
         {
             get
@@ -36,7 +33,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs.Exception"]/*' />
         public Exception Exception
         {
             get
@@ -45,7 +41,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs.ThrowException"]/*' />
         public bool ThrowException
         {
             get

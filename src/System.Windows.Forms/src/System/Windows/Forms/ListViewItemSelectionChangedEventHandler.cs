@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\ListViewItemSelectionChangedEventHandler.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will

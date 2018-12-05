@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using Microsoft.Win32;
 
-    /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.Control.DragDrop'/>, <see cref='System.Windows.Forms.Control.DragEnter'/>, or <see cref='System.Windows.Forms.Control.DragOver'/> event.
@@ -21,32 +20,26 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [System.Runtime.InteropServices.ComVisible(true)]
     public class DragEventArgs : EventArgs {
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.data"]/*' />
         /// <devdoc>
         ///     The data associated with this event.
         /// </devdoc>
         private readonly IDataObject data;
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.keyState"]/*' />
         /// <devdoc>
         ///     The current state of the shift, ctrl, and alt keys.
         /// </devdoc>
         private readonly int keyState;
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.x"]/*' />
         /// <devdoc>
         ///     The mouse x location.
         /// </devdoc>
         private readonly int x;
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.y"]/*' />
         /// <devdoc>
         ///     The mouse y location.
         /// </devdoc>
         private readonly int y;
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.allowedEffect"]/*' />
         /// <devdoc>
         ///     The effect that should be applied to the mouse cursor.
         /// </devdoc>
         private readonly DragDropEffects allowedEffect;
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.effect"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DragEventArgs'/>
@@ -56,7 +49,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private DragDropEffects effect;
 
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.DragEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DragEventArgs'/> class.
@@ -71,7 +63,6 @@ namespace System.Windows.Forms {
             this.effect = effect;
         }
 
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.Data"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The <see cref='System.Windows.Forms.IDataObject'/>
@@ -83,7 +74,6 @@ namespace System.Windows.Forms {
                 return data;
             }
         }
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.KeyState"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -96,7 +86,6 @@ namespace System.Windows.Forms {
                 return keyState;
             }
         }
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.X"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the
@@ -109,7 +98,6 @@ namespace System.Windows.Forms {
                 return x;
             }
         }
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.Y"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -122,7 +110,6 @@ namespace System.Windows.Forms {
                 return y;
             }
         }
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.AllowedEffect"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets which drag-and-drop operations are allowed by the
@@ -134,7 +121,6 @@ namespace System.Windows.Forms {
                 return allowedEffect;
             }
         }
-        /// <include file='doc\DragEvent.uex' path='docs/doc[@for="DragEventArgs.Effect"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets which drag-and-drop operations are allowed by the target of the drag event.

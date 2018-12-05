@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.CheckedListBox.ItemCheck'/>
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
         CheckState newValue;
         readonly CheckState currentValue;
 
-        /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs.ItemCheckEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -35,7 +33,6 @@ namespace System.Windows.Forms {
             this.newValue = newCheckValue;
             this.currentValue = currentValue;
         }
-        /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs.Index"]/*' />
         /// <devdoc>
         ///     The index of the item that is about to change.
         /// </devdoc>
@@ -43,7 +40,6 @@ namespace System.Windows.Forms {
             get { return index; }
         }
 
-        /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs.NewValue"]/*' />
         /// <devdoc>
         ///     The proposed new value of the CheckBox.
         /// </devdoc>
@@ -52,7 +48,6 @@ namespace System.Windows.Forms {
             set { newValue = value; }
         }
 
-        /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs.CurrentValue"]/*' />
         /// <devdoc>
         ///     The current state of the CheckBox.
         /// </devdoc>

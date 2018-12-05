@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\PopupEventArgs.uex' path='docs/doc[@for="PopupEventArgs"]/*' />
     /// <devdoc>
     ///     This class contains the information a user needs to paint the ToolTip.
     /// </devdoc>
@@ -24,7 +23,6 @@ namespace System.Windows.Forms
         private bool isBalloon;
 
 	        
-        /// <include file='doc\PopupEventArgs.uex' path='docs/doc[@for="PopupEventArgs.PopupEventArgs"]/*' />
         /// <devdoc>
         ///     Creates a new PopupEventArgs with the given parameters.
         /// </devdoc>
@@ -37,7 +35,6 @@ namespace System.Windows.Forms
             
         }
         
-        /// <include file='doc\PopupEventArgs.uex' path='docs/doc[@for="PopupEventArgs.AssociatedWindow"]/*' />
         /// <devdoc>
         ///     The Associated Window for which the tooltip is being painted. 
         /// </devdoc>
@@ -47,7 +44,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\PopupEventArgs.uex' path='docs/doc[@for="PopupEventArgs.AssociatedControl"]/*' />
         /// <devdoc>
         ///     The control for which the tooltip is being painted. 
         /// </devdoc>
@@ -58,7 +54,6 @@ namespace System.Windows.Forms
             
         }
 
-        /// <include file='doc\PopupEventArgs.uex' path='docs/doc[@for="PopupEventArgs.IsBalloon"]/*' />
         /// <devdoc>
         ///     Whether the tooltip is Ballooned. 
         /// </devdoc>
@@ -69,7 +64,6 @@ namespace System.Windows.Forms
             
         }
 	
-        /// <include file='doc\PopupEventArgs.uex' path='docs/doc[@for="PopupEventArgs.Bounds"]/*' />
         /// <devdoc>
         ///     The rectangle outlining the area in which the painting should be done.
         /// </devdoc>

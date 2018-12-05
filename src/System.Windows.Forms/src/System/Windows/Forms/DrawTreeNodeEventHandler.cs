@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\DrawTreeNodeEventHandler.uex' path='docs/doc[@for="DrawTreeNodeEventHandler"]/*' />
     /// <devdoc>
     /// Handler for the DrawTreeNode event of the TreeView control.
     /// </devdoc>

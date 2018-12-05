@@ -20,7 +20,6 @@ namespace System.Windows.Forms {
     using System.Security.Permissions;
     using System.Collections;
     
-    /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard"]/*' />
     /// <devdoc>
     ///    <para>Provides methods to place data on and retrieve data from the system clipboard. This class cannot be inherited.</para>
     /// </devdoc>
@@ -81,7 +80,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetDataObject"]/*' />
         /// <devdoc>
         /// <para>Places nonpersistent data on the system <see cref='System.Windows.Forms.Clipboard'/>.</para>
         /// </devdoc>
@@ -89,7 +87,6 @@ namespace System.Windows.Forms {
             SetDataObject(data, false);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetDataObject2"]/*' />
         /// <devdoc>
         /// <para>Overload that uses default values for retryTimes and retryDelay.</para>
         /// </devdoc>
@@ -97,7 +94,6 @@ namespace System.Windows.Forms {
             SetDataObject(data, copy, 10 /*retryTimes*/, 100 /*retryDelay*/);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetDataObject1"]/*' />
         /// <devdoc>
         /// <para>Places data on the system <see cref='System.Windows.Forms.Clipboard'/> and uses copy to specify whether the data 
         ///    should remain on the <see cref='System.Windows.Forms.Clipboard'/>
@@ -203,7 +199,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetDataObject"]/*' />
         /// <devdoc>
         ///    <para>Retrieves the data that is currently on the system
         ///    <see cref='System.Windows.Forms.Clipboard'/>.</para>
@@ -263,7 +258,6 @@ namespace System.Windows.Forms {
 
         // <-- WHIDBEY ADDITIONS 
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.Clear"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -271,7 +265,6 @@ namespace System.Windows.Forms {
             Clipboard.SetDataObject(new DataObject());
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsAudio"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -284,7 +277,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsData"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -297,7 +289,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsFileDropList"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -310,7 +301,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -323,7 +313,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsText"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -338,7 +327,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsText1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -356,7 +344,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetAudioStream"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -369,7 +356,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetData"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -382,7 +368,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetFileDropList"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -400,7 +385,6 @@ namespace System.Windows.Forms {
             return retVal;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -413,7 +397,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetText"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -429,7 +412,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetText1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -451,7 +433,6 @@ namespace System.Windows.Forms {
             return String.Empty;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetAudio"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -462,7 +443,6 @@ namespace System.Windows.Forms {
             SetAudio(new MemoryStream(audioBytes));
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetAudio1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -475,7 +455,6 @@ namespace System.Windows.Forms {
             Clipboard.SetDataObject(dataObject, true);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetData"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -486,7 +465,6 @@ namespace System.Windows.Forms {
             Clipboard.SetDataObject(dataObject, true);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetFileDropList"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -523,7 +501,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -536,7 +513,6 @@ namespace System.Windows.Forms {
             Clipboard.SetDataObject(dataObject, true);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetText"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -552,7 +528,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetText1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\QuestionEventHandler.uex' path='docs/doc[@for="QuestionEventHandler"]/*' />
     /// <devdoc>
     ///      Describes a delegate for an event that has a QuestionEventArgs as
     ///      a parameter.

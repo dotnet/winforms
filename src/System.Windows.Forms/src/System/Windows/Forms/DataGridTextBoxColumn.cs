@@ -18,7 +18,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn"]/*' />
     /// <devdoc>
     /// <para>Hosts a System.Windows.Forms.TextBox control in a cell of a System.Windows.Forms.DataGridColumnStyle for editing strings.</para>
     /// </devdoc>
@@ -40,7 +39,6 @@ namespace System.Windows.Forms {
         private string oldValue = null;
         private int editRow = -1;
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the System.Windows.Forms.DataGridTextBoxColumn
         /// class.</para>
@@ -52,7 +50,6 @@ namespace System.Windows.Forms {
         public DataGridTextBoxColumn() : this(null, null) {
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn1"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn with
         ///    a specified System.Data.DataColumn.</para>
@@ -65,7 +62,6 @@ namespace System.Windows.Forms {
         : this(prop, null, false) {
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn2"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn. with
         ///    the specified System.Data.DataColumn and System.Windows.Forms.ComponentModel.Format.</para>
@@ -76,7 +72,6 @@ namespace System.Windows.Forms {
         ]
         public DataGridTextBoxColumn(PropertyDescriptor prop, string format) : this(prop, format, false){}
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn3"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -93,7 +88,6 @@ namespace System.Windows.Forms {
             this.Format = format;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn4"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -108,7 +102,6 @@ namespace System.Windows.Forms {
         // =        Properties
         // =------------------------------------------------------------------
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.TextBox"]/*' />
         /// <devdoc>
         /// <para>Gets the hosted System.Windows.Forms.TextBox control.</para>
         /// </devdoc>
@@ -119,7 +112,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.KeyPress"]/*' />
         internal override bool KeyPress(int rowNum, Keys keyData) {
             if (edit.IsInEditOrNavigateMode)
                 return base.KeyPress(rowNum, keyData);
@@ -130,7 +122,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.SetDataGridInColumn"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Adds a System.Windows.Forms.TextBox control to the System.Windows.Forms.DataGrid control's System.Windows.Forms.Control.ControlCollection
@@ -163,7 +154,6 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.PropertyDescriptor"]/*' />
         /// <devdoc>
         /// <para>Gets or sets the System.Windows.Forms.ComponentModel.Format for the System.Windows.Forms.DataGridTextBoxColumn
         /// .</para>
@@ -186,7 +176,6 @@ namespace System.Windows.Forms {
 
         // add the corresponding value Editor: rip one from the valueEditor for the DisplayMember in the 
         // format object
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Format"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -214,7 +203,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.FormatInfo"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -229,7 +217,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.ReadOnly"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -257,7 +244,6 @@ namespace System.Windows.Forms {
         }
 
         // will hide the edit control
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.ConcedeFocus"]/*' />
         /// <devdoc>
         ///    <para>Informs the column the focus is being conceded.</para>
         /// </devdoc>
@@ -267,7 +253,6 @@ namespace System.Windows.Forms {
             // HideEditBox();
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.HideEditBox"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Hides the System.Windows.Forms.TextBox
@@ -299,7 +284,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.UpdateUI"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -311,7 +295,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.EndEdit"]/*' />
         /// <devdoc>
         /// <para>Ends an edit operation on the System.Windows.Forms.DataGridColumnStyle
         /// .</para>
@@ -322,7 +305,6 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.GetPreferredSize"]/*' />
         /// <devdoc>
         ///    <para>Returns the optimum width and
         ///       height of the cell in a specified row relative
@@ -335,7 +317,6 @@ namespace System.Windows.Forms {
             return extents;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.GetMinimumHeight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the height of a cell in a System.Windows.Forms.DataGridColumnStyle
@@ -347,7 +328,6 @@ namespace System.Windows.Forms {
             return FontHeight + yMargin + 3;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.GetPreferredHeight"]/*' />
         /// <devdoc>
         ///    <para>Gets the height to be used in for automatically resizing columns.</para>
         /// </devdoc>
@@ -364,7 +344,6 @@ namespace System.Windows.Forms {
             return FontHeight * newLines + yMargin;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Abort"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initiates a request to interrupt an edit procedure.
@@ -377,7 +356,6 @@ namespace System.Windows.Forms {
         }
 
         // used for Alt0 functionality
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.EnterNullValue"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Enters a <see langword='null '/>in the column.
@@ -405,7 +383,6 @@ namespace System.Windows.Forms {
                 this.DataGridTableStyle.DataGrid.ColumnStartedEditing(edit.Bounds);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Commit"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Inititates a request to complete an editing procedure.
@@ -454,7 +431,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Edit"]/*' />
         /// <devdoc>
         ///    <para>Prepares a cell for editing.</para>
         /// </devdoc>
@@ -542,7 +518,6 @@ namespace System.Windows.Forms {
             return(value != null ? value.ToString() : "");
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Paint"]/*' />
         /// <devdoc>
         /// <para>Paints the a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
         /// System.Drawing.Rectangle, DataView.Rectangle, and row number. </para>
@@ -551,7 +526,6 @@ namespace System.Windows.Forms {
             Paint(g, bounds, source, rowNum, false);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Paint1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics, System.Drawing.Rectangle, DataView, row number, and alignment.
@@ -562,7 +536,6 @@ namespace System.Windows.Forms {
             PaintText(g, bounds, text, alignToRight);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Paint2"]/*' />
         /// <devdoc>
         /// <para>Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
         /// System.Drawing.Rectangle, DataView.Rectangle, row number, background color, 
@@ -574,7 +547,6 @@ namespace System.Windows.Forms {
             PaintText(g, bounds, text, backBrush, foreBrush, alignToRight);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.PaintText"]/*' />
         /// <devdoc>
         ///    <para>Draws the text and
         ///       rectangle at the given location with the specified alignment.</para>
@@ -583,7 +555,6 @@ namespace System.Windows.Forms {
             PaintText(g, bounds, text, this.DataGridTableStyle.BackBrush, this.DataGridTableStyle.ForeBrush, alignToRight);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.PaintText1"]/*' />
         /// <devdoc>
         ///    <para>Draws the text and rectangle at the specified location with the
         ///       specified colors and alignment.</para>
@@ -621,7 +592,6 @@ namespace System.Windows.Forms {
             edit.Text = oldValue;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.ReleaseHostedControl"]/*' />
         protected internal override void ReleaseHostedControl() {
             if (edit.ParentInternal != null) {
                 edit.ParentInternal.Controls.Remove(edit);

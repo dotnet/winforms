@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using Microsoft.Win32;
 
-    /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see langword='MouseUp'/>,
@@ -22,26 +21,22 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public class MouseEventArgs : EventArgs {
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.button"]/*' />
         /// <devdoc>
         ///     Which button generated this event [if applicable]
         /// </devdoc>
         private readonly MouseButtons button;
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.clicks"]/*' />
         /// <devdoc>
         ///     If the user has clicked the mouse more than once, this contains the
         ///     count of clicks so far.
         /// </devdoc>
         private readonly int clicks;
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.x"]/*' />
         /// <devdoc>
         ///     The x portion of the coordinate where this event occurred.
         /// </devdoc>
         private readonly int x;
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.y"]/*' />
         /// <devdoc>
         ///     The y portion of the coordinate where this event occurred.
         /// </devdoc>
@@ -49,7 +44,6 @@ namespace System.Windows.Forms {
 
         private readonly int delta;
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.MouseEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.MouseEventArgs'/> class.
@@ -66,7 +60,6 @@ namespace System.Windows.Forms {
             this.delta = delta;
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Button"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets which mouse button was pressed.
@@ -78,7 +71,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Clicks"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the
@@ -92,7 +84,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.X"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the x-coordinate
@@ -105,7 +96,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Y"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the y-coordinate of a mouse click.
@@ -117,7 +107,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Delta"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -130,7 +119,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Location"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the location of the mouse during MouseEvent.

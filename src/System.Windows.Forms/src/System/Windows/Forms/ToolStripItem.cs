@@ -26,7 +26,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
     using Collections.Generic;
 
-    /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem"]/*' />
     /// <devdoc/>
     [System.ComponentModel.DesignTimeVisible(false)]
     [Designer("System.Windows.Forms.Design.ToolStripItemDesigner, " + AssemblyRef.SystemDesign)]
@@ -175,7 +174,6 @@ namespace System.Windows.Forms {
         
         private long lastClickTime = 0;
      
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ToolStripItem"]/*' />
         /// <devdoc>
         /// Constructor
         /// </devdoc>
@@ -211,7 +209,6 @@ namespace System.Windows.Forms {
             this.Name = name;
         }
           
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AccessibilityObject"]/*' />
         /// <devdoc>
         /// The Accessibility Object for this Control
         /// </devdoc>
@@ -233,7 +230,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AccessibleDefaultActionDescription"]/*' />
         /// <devdoc>
         /// The default action description of the control
         /// </devdoc>
@@ -252,7 +248,6 @@ namespace System.Windows.Forms {
                 OnAccessibleDefaultActionDescriptionChanged(EventArgs.Empty);
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AccessibleDescription"]/*' />
         /// <devdoc>
         /// The accessible description of the control
         /// </devdoc>
@@ -272,7 +267,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AccessibleName"]/*' />
         /// <devdoc>
         /// The accessible name of the control
         /// </devdoc>
@@ -293,7 +287,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AccessibleRole"]/*' />
         /// <devdoc>
         /// The accessible role of the control
         /// </devdoc>
@@ -328,7 +321,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Alignment"]/*' />
         /// <devdoc>
         /// Determines if the item aligns towards the beginning or end of the winbar.
         /// </devdoc>
@@ -358,7 +350,6 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AllowDrop"]/*' />
         /// <devdoc>
         /// Determines if this item can be dragged.
         /// This is EXACTLY like Control.AllowDrop - setting this to true WILL call 
@@ -385,7 +376,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AutoSize"]/*' />
         /// <devdoc>
         /// Determines whether we set the ToolStripItem to its preferred size
         /// </devdoc>
@@ -408,7 +398,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AutoToolTip"]/*' />
         /// <devdoc> 
         ///   !!!!This property ONLY works when toolStrip.ShowItemToolTips = true!!!!
         ///   if AutoToolTip is set to true we use the Text, if false, we use ToolTipText.
@@ -462,7 +451,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Image"]/*' />
         /// <devdoc>
         /// <para>
         /// Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
@@ -487,7 +475,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackgroundImageLayout"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ImageLayout.Tile),
@@ -517,7 +504,6 @@ namespace System.Windows.Forms {
           }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackColor"]/*' />
         /// <devdoc>
         /// The BackColor of the item
         /// </devdoc>
@@ -549,7 +535,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackColorChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -563,7 +548,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Bounds"]/*' />
         /// <devdoc>
         /// The bounds of the item
         /// </devdoc>
@@ -583,7 +567,6 @@ namespace System.Windows.Forms {
                 return client;
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ContentRectangle"]/*' />
         [Browsable(false)]
         public Rectangle ContentRectangle {
             get {
@@ -593,7 +576,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.CanSelect"]/*' />
         /// <devdoc>
         /// Determines whether or not the item can be selected.
         /// </devdoc>
@@ -611,7 +593,6 @@ namespace System.Windows.Forms {
              }
          }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Click"]/*' />
         /// <devdoc>
         /// <para>Occurs when the control is clicked.</para>
         /// </devdoc>
@@ -684,7 +665,6 @@ namespace System.Windows.Forms {
                 return false; 
             } 
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DefaultMargin"]/*' />
         /// <devdoc>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
@@ -699,7 +679,6 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DefaultPadding"]/*' />
         /// <devdoc>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
@@ -709,7 +688,6 @@ namespace System.Windows.Forms {
                 return Padding.Empty;
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DefaultSize"]/*' />
         /// <devdoc>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
@@ -726,7 +704,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DismissWhenClicked"]/*' />
         /// <devdoc>
         /// specifies the default behavior of these items on ToolStripDropDowns when clicked.
         /// </devdoc>
@@ -736,7 +713,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DisplayStyle"]/*' />
         /// <devdoc>
         /// DisplayStyle specifies whether the image and text are rendered.  This is not on the base
         /// item class because different derived things will have different enumeration needs.
@@ -766,7 +742,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DisplayStyleChanged"]/*' />
         /// <devdoc>
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
@@ -787,7 +762,6 @@ namespace System.Windows.Forms {
                   return RightToLeft.Inherit;
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DoubleClick"]/*' />
         /// <devdoc>
         /// <para>Occurs when the control is double clicked.</para>
         /// </devdoc>
@@ -814,7 +788,6 @@ namespace System.Windows.Forms {
                 state[stateDoubleClickEnabled] = value;
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragDrop"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -833,7 +806,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragEnter"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -852,7 +824,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragOver"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -871,7 +842,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragLeave"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -909,7 +879,6 @@ namespace System.Windows.Forms {
             }     
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Enabled"]/*' />
         /// <devdoc>
         /// <para>Occurs when the control is clicked.</para>
         /// </devdoc>
@@ -953,7 +922,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.EnabledChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -985,7 +953,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ForeColor"]/*' />
         /// <devdoc>
         /// Retrieves the current font for this item. This will be the font used
         /// by default for painting and text in the control.
@@ -1019,7 +986,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ForeColorChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1033,7 +999,6 @@ namespace System.Windows.Forms {
             }
         }
    
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Font"]/*' />
         /// <devdoc>
         /// Retrieves the current font for this control. This will be the font used
         /// by default for painting and text in the control.
@@ -1066,7 +1031,6 @@ namespace System.Windows.Forms {
                 }       
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.GiveFeedback"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1085,7 +1049,6 @@ namespace System.Windows.Forms {
             }
         }   
   
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Height"]/*' />
         /// <devdoc>
         /// The height of this control
         /// </devdoc>
@@ -1104,7 +1067,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IArrangedElement.Children"]/*' />
         /// <devdoc>
         /// ToolStripItems do not have children.  For perf reasons always return a static empty collection.
         /// Consider creating readonly collection.
@@ -1115,7 +1077,6 @@ namespace System.Windows.Forms {
                 return ToolStripItem.EmptyChildCollection;   
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IArrangedElement.Container"]/*' />
         /// <devdoc>
         /// Should not be exposed as this returns an unexposed type.
         /// </devdoc>
@@ -1128,7 +1089,6 @@ namespace System.Windows.Forms {
                 return this.ParentInternal;
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IArrangedElement.DisplayRectangle"]/*' />
 
         Rectangle IArrangedElement.DisplayRectangle {
             get {
@@ -1136,7 +1096,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IArrangedElement.ParticipatesInLayout"]/*' />
 
         bool IArrangedElement.ParticipatesInLayout {
             get {
@@ -1147,7 +1106,6 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IArrangedElement.Properties"]/*' />
         /// <internalonly/>
         PropertyStore IArrangedElement.Properties { 
             get {
@@ -1157,7 +1115,6 @@ namespace System.Windows.Forms {
 
          
         // Sets the bounds for an element.
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IArrangedElement.SetBounds"]/*' />
         /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             // in this case the parent is telling us to refresh our bounds - dont 
@@ -1165,13 +1122,11 @@ namespace System.Windows.Forms {
             SetBounds(bounds);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IArrangedElement.PerformLayout"]/*' />
 
         void IArrangedElement.PerformLayout(IArrangedElement container, string propertyName) {
             return;
         }
     
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ImageAlign"]/*' />
         /// <devdoc>
         /// <para>
         /// Gets or sets the alignment of the image on the label control.
@@ -1199,7 +1154,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Image"]/*' />
         /// <devdoc>
         /// <para>
         /// Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
@@ -1252,7 +1206,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\WinBarItem.uex' path='docs/doc[@for="ToolStripItem.ImageTransparentColor"]/*' />
         [
         Localizable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -1277,7 +1230,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ImageIndex"]/*' />
         /// <devdoc>
         /// Returns the ToolStripItem's currently set image index     
         /// Here for compat only - this is NOT to be visible at DT.
@@ -1324,7 +1276,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ImageKey"]/*' />
         /// <devdoc>
         /// Returns the ToolStripItem's currently set image index     
         /// Here for compat only - this is NOT to be visible at DT.
@@ -1353,7 +1304,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ImageScaling"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ToolStripItemImageScaling.SizeToFit),
@@ -1422,7 +1372,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IsDisposed"]/*' />
         [Browsable(false)]
         public bool IsDisposed {
             get {
@@ -1431,7 +1380,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IsOnDropDown"]/*' />
         [Browsable(false)]
         public bool IsOnDropDown {
             get {
@@ -1466,7 +1414,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.LocationChanged"]/*' />
         /// <devdoc>
         /// Occurs when the location of the ToolStripItem has been updated -- usually by layout by its
         /// owner of ToolStrips
@@ -1481,7 +1428,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Margin"]/*' />
         /// <devdoc>
         /// Specifies the external spacing between this item and any other item or the ToolStrip.
         /// </devdoc>
@@ -1500,7 +1446,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MergeAction"]/*' />
         /// <devdoc>
         /// Specifies the merge action when merging two ToolStrip.
         /// </devdoc>
@@ -1532,7 +1477,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MergeIndex"]/*' />
         /// <devdoc>
         /// Specifies the merge action when merging two ToolStrip.
         /// </devdoc>
@@ -1565,7 +1509,6 @@ namespace System.Windows.Forms {
             set { state[stateMouseDownAndUpMustBeInSameItem] = value; }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MouseDown"]/*' />
         /// <devdoc>
         /// <para>Occurs when the mouse pointer is over the control and a mouse button is 
         /// pressed.</para>
@@ -1584,7 +1527,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MouseEnter"]/*' />
         /// <devdoc>
         /// <para> Occurs when the mouse pointer enters the control.</para>
         /// </devdoc>
@@ -1601,7 +1543,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MouseLeave"]/*' />
         /// <devdoc>
         /// <para> Occurs when the mouse pointer leaves the control.</para>
         /// </devdoc>
@@ -1619,7 +1560,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MouseHover"]/*' />
         /// <devdoc>
         /// <para> Occurs when the mouse pointer hovers over the contro.</para>
         /// </devdoc>
@@ -1636,7 +1576,6 @@ namespace System.Windows.Forms {
             }
         }   
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MouseMove"]/*' />
         /// <devdoc>
         /// <para> Occurs when the mouse pointer is moved over the control.</para>
         /// </devdoc>
@@ -1653,7 +1592,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MouseUp"]/*' />
         /// <devdoc>
         /// <para>Occurs when the mouse pointer is over the control and a mouse button is released.</para>
         /// </devdoc>
@@ -1670,7 +1608,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Name"]/*' />
         /// <devdoc>
         /// Name of this control. The designer will set this to the same
         /// as the programatic Id "(name)" of the control.  The name can be
@@ -1693,7 +1630,6 @@ namespace System.Windows.Forms {
             }
         }           
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Owner"]/*' />
         /// <devdoc>
         /// The owner of this ToolStripItem.  The owner is essentially a backpointer to 
         /// the ToolStrip who contains this item in it's item collection.  Handy for getting
@@ -1745,7 +1681,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Paint"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1762,7 +1697,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Paint"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1778,7 +1712,6 @@ namespace System.Windows.Forms {
                 Events.RemoveHandler(EventPaint, value);
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Parent"]/*' />
         /// <devdoc>
         /// The parent of this ToolStripItem.  This can be distinct from the owner because
         /// the item can fall onto another window (overflow).  In this case the overflow 
@@ -1803,7 +1736,6 @@ namespace System.Windows.Forms {
         }
 
       
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Overflow"]/*' />
         /// <devdoc>
         /// <para>Specifies whether or not the item is glued to the winbar or overflow or
         /// can float between the two.</para>
@@ -1832,7 +1764,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Padding"]/*' />
         /// <devdoc>
         /// Specifies the internal spacing between the contents and the edges of the item
         /// </devdoc>
@@ -1866,7 +1797,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Placement"]/*' />
         /// <devdoc>
         /// Where the item actually ended up.
         /// </devdoc>
@@ -1923,7 +1853,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Pressed"]/*' />
         /// <devdoc>
         /// Returns true if the state of the item is pushed
         /// </devdoc>
@@ -1935,7 +1864,6 @@ namespace System.Windows.Forms {
             }
          }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.QueryContinueDrag"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1954,7 +1882,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.QueryAccessibilityHelp"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1986,7 +1913,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.RightToLeft"]/*' />
         /// <devdoc>
         /// This is used for international applications where the language
         /// is written from RightToLeft. When this property is true,
@@ -2085,7 +2011,6 @@ namespace System.Windows.Forms {
                 return Properties.GetObject(PropMirroredImage) as Image;
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.RightToLeftChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -2098,7 +2023,6 @@ namespace System.Windows.Forms {
                 Events.RemoveHandler(EventRightToLeft, value);
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Selected"]/*' />
         /// <devdoc>
         ///  if the item is selected we return true. 
         ///
@@ -2137,7 +2061,6 @@ namespace System.Windows.Forms {
         }
 #endif
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ShowKeyboardCues"]/*' />
         /// <devdoc/>
         internal protected virtual bool ShowKeyboardCues {
             get {
@@ -2149,7 +2072,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Size"]/*' />
         /// <devdoc>The size of the item</devdoc>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -2204,7 +2126,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Tag"]/*' />
         /// <devdoc>Summary for Tag</devdoc>
         [DefaultValue(null),
         SRCategory(nameof(SR.CatData)),
@@ -2226,7 +2147,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Text"]/*' />
         /// <devdoc>The text of the item</devdoc>
         [
         DefaultValue(""),
@@ -2252,7 +2172,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextAlign"]/*' />
         /// <devdoc>
         /// <para>
         /// Gets or sets the alignment of the text on the label control.
@@ -2279,7 +2198,6 @@ namespace System.Windows.Forms {
             }
         }
        
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -2292,7 +2210,6 @@ namespace System.Windows.Forms {
                 Events.RemoveHandler(EventText, value);
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextDirection"]/*' />
         [
         SRDescription(nameof(SR.ToolStripTextDirectionDescr)),
         SRCategory(nameof(SR.CatAppearance))
@@ -2327,7 +2244,6 @@ namespace System.Windows.Forms {
              }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextImageRelation"]/*' />
         [DefaultValue(TextImageRelation.ImageBeforeText),
         Localizable(true),
         SRDescription(nameof(SR.ToolStripItemTextImageRelationDescr)),
@@ -2348,7 +2264,6 @@ namespace System.Windows.Forms {
         }
 
       
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ToolTipText"]/*' />
         /// <devdoc>
         ///   !!!!This property ONLY works when toolStrip.ShowItemToolTips = true!!!!
         ///   if AutoToolTip is set to true we return the Text as the ToolTipText.
@@ -2374,7 +2289,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Visible"]/*' />
         /// <devdoc>Whether or not the item is visible</devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -2392,7 +2306,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.VisibleChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -2406,7 +2319,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Width"]/*' />
         /// <devdoc>
         /// The width of this ToolStripItem.
         /// </devdoc>
@@ -2477,7 +2389,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.CreateAccessibilityInstance"]/*' />
         /// <devdoc>
         /// constructs the new instance of the accessibility object for this ToolStripItem. Subclasses
         /// should not call base.CreateAccessibilityObject.
@@ -2495,7 +2406,6 @@ namespace System.Windows.Forms {
         internal virtual ToolStripItemInternalLayout CreateInternalLayout() {
             return new ToolStripItemInternalLayout(this);
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Dispose"]/*' />
         /// <devdoc>
         /// Disposes this winbar item...
         /// </devdoc>
@@ -2530,7 +2440,6 @@ namespace System.Windows.Forms {
             get { return SystemInformation.DoubleClickTime * 10000; }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DoDragDrop"]/*' />
         /// <devdoc>
         /// Begins a drag operation. The allowedEffects determine which
         /// drag operations can occur. If the drag operation needs to interop
@@ -2682,7 +2591,6 @@ namespace System.Windows.Forms {
                 return Owner as ToolStripDropDown;
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.GetPreferredSize"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
         public virtual Size GetPreferredSize(Size constrainingSize) {
         
@@ -2702,7 +2610,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Invalidate"]/*' />
         /// <devdoc>
         /// Invalidates the ToolStripItem
         /// </devdoc>
@@ -2713,7 +2620,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Invalidate1"]/*' />
         /// <devdoc>
         /// invalidates a rectangle within the ToolStripItem's bounds
         /// </devdoc>
@@ -2757,12 +2663,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IsInputKey"]/*' />
         protected internal virtual bool IsInputKey(Keys keyData) {
             return false;
         }
           
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IsInputChar"]/*' />
         protected internal virtual bool IsInputChar(char charCode) {
             return false;
         }
@@ -2966,7 +2870,6 @@ namespace System.Windows.Forms {
         internal virtual void OnAccessibleRoleChanged(EventArgs e) {
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnBackColorChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -2976,7 +2879,6 @@ namespace System.Windows.Forms {
            RaiseEvent(EventBackColorChanged, e);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnBoundsChanged"]/*' />
         protected virtual void OnBoundsChanged() {
             LayoutTransaction.DoLayout(this.ParentInternal, this, PropertyNames.Bounds);
             InternalLayout.PerformLayout();
@@ -2984,34 +2886,28 @@ namespace System.Windows.Forms {
 
        
     
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnClick"]/*' />
         protected virtual void OnClick(System.EventArgs e) {    
             RaiseEvent(EventClick, e);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnLayout"]/*' />
         protected internal virtual void OnLayout(LayoutEventArgs e) {    
         }
 
         ///
         /// Explicit support of DropTarget 
         ///
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IDropTarget.OnDragEnter"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragEnter(DragEventArgs dragEvent) {
             OnDragEnter(dragEvent);
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IDropTarget.OnDragOver"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragOver(DragEventArgs dragEvent) {
             OnDragOver(dragEvent);
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IDropTarget.OnDragLeave"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragLeave(EventArgs e) {
             OnDragLeave(e);
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IDropTarget.OnDragDrop"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragDrop(DragEventArgs dragEvent) {
             OnDragDrop(dragEvent);
@@ -3019,12 +2915,10 @@ namespace System.Windows.Forms {
         ///
         /// Explicit support of DropSource 
         ///
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ISupportOleDropSource.OnGiveFeedback"]/*' />
         /// <internalonly/>
         void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)  {
             OnGiveFeedback(giveFeedbackEventArgs);
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ISupportOleDropSource.OnQueryContinueDrag"]/*' />
         /// <internalonly/>
         void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) {
             OnQueryContinueDrag(queryContinueDragEventArgs);
@@ -3052,7 +2946,6 @@ namespace System.Windows.Forms {
             RaiseEvent(EventAvailableChanged, e);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnDragEnter"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripItem.Enter'/> event.</para>
         /// <para>Inheriting classes should override this method to handle this event.
@@ -3067,7 +2960,6 @@ namespace System.Windows.Forms {
             RaiseDragEvent(EventDragEnter, dragEvent);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnDragOver"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onDragOver to send this event to any registered event listeners.
@@ -3076,7 +2968,6 @@ namespace System.Windows.Forms {
         protected virtual void OnDragOver(DragEventArgs dragEvent) {
             RaiseDragEvent(EventDragOver, dragEvent);   
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnDragLeave"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onDragLeave to send this event to any registered event listeners.
@@ -3086,7 +2977,6 @@ namespace System.Windows.Forms {
             RaiseEvent(EventDragLeave, e);
         }
         
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnDragDrop"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onDragDrop to send this event to any registered event listeners.
@@ -3096,7 +2986,6 @@ namespace System.Windows.Forms {
             RaiseDragEvent(EventDragDrop, dragEvent);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnDisplayStyleChanged"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -3105,7 +2994,6 @@ namespace System.Windows.Forms {
             RaiseEvent(EventDisplayStyleChanged, e);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnGiveFeedback"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onGiveFeedback to send this event to any registered event listeners.
@@ -3119,7 +3007,6 @@ namespace System.Windows.Forms {
 
         internal virtual void OnImageScalingSizeChanged(EventArgs e) {            
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnQueryContinueDrag"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onQueryContinueDrag to send this event to any registered event listeners.
@@ -3130,7 +3017,6 @@ namespace System.Windows.Forms {
             RaiseQueryContinueDragEvent(EventQueryContinueDrag, queryContinueDragEvent);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnDoubleClick"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -3138,7 +3024,6 @@ namespace System.Windows.Forms {
             RaiseEvent(EventDoubleClick, e);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnEnabledChanged"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -3151,7 +3036,6 @@ namespace System.Windows.Forms {
              RaiseEvent(EventInternalEnabledChanged, e);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnForeColorChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3161,7 +3045,6 @@ namespace System.Windows.Forms {
            RaiseEvent(EventForeColorChanged, e);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnFontChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3178,24 +3061,20 @@ namespace System.Windows.Forms {
            RaiseEvent(EventFontChanged, e);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnLocationChanged"]/*' />
         protected virtual void OnLocationChanged (System.EventArgs e) {
             RaiseEvent(EventLocationChanged, e);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnMouseEnter"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseEnter(EventArgs e) {      
         }    
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnMouseMove"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseMove(System.Windows.Forms.MouseEventArgs mea) {
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnMouseHover"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -3204,7 +3083,6 @@ namespace System.Windows.Forms {
               ParentInternal.UpdateToolTip(this);
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnMouseLeave"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -3213,27 +3091,23 @@ namespace System.Windows.Forms {
                 ParentInternal.UpdateToolTip(null);
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnMouseDown"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseDown(MouseEventArgs e) {  
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnMouseUp"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseUp(MouseEventArgs e) {
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnPaint"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnPaint(System.Windows.Forms.PaintEventArgs e) {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3244,7 +3118,6 @@ namespace System.Windows.Forms {
                 OnBackColorChanged(e);
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnParentChanged"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -3259,7 +3132,6 @@ namespace System.Windows.Forms {
             Animate();
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnParentEnabledChanged"]/*' />
         /// <devdoc>
         /// Occurs when this.Parent.Enabled changes.
         /// </devdoc>
@@ -3267,7 +3139,6 @@ namespace System.Windows.Forms {
             OnEnabledChanged(EventArgs.Empty);
         }                 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnParentFontChanged"]/*' />
         /// <devdoc>
         /// <para>Occurs when the font property has changed on the parent - used to notify inheritors of the font property that 
         /// the font has changed
@@ -3280,7 +3151,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnParentForeColorChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3292,7 +3162,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnParentRightToLeftChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3304,7 +3173,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnOwnerChanged"]/*' />
         /// <devdoc>
         /// Occurs when the owner of an item changes. 
         /// </devdoc>
@@ -3336,7 +3204,6 @@ namespace System.Windows.Forms {
             }
         }
             
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnRightToLeftChanged"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -3350,7 +3217,6 @@ namespace System.Windows.Forms {
             RaiseEvent(EventSelectedChanged, e);  
         }
 #endif
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnTextChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3362,7 +3228,6 @@ namespace System.Windows.Forms {
            RaiseEvent(EventText, e);  
         }
         
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnVisibleChanged"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -3396,7 +3261,6 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ProcessDialogKey"]/*' />
         /// <devdoc>
         /// See Control.ProcessDialogKey for more info.
         /// </devdoc>
@@ -3413,7 +3277,6 @@ namespace System.Windows.Forms {
             }
             return false;
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ProcessCmdKey"]/*' />
         /// <devdoc>
         /// See Control.ProcessCmdKey for more info.
         /// </devdoc>
@@ -3425,7 +3288,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ProcessMnemonic"]/*' />
         
         [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
@@ -3477,7 +3339,6 @@ namespace System.Windows.Forms {
         }
         
        
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Select"]/*' />
         /// <devdoc>
         /// Selects the item
         /// </devdoc>
@@ -3562,7 +3423,6 @@ namespace System.Windows.Forms {
             }
         }
       
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.SetBounds"]/*' />
         /// <devdoc>
         /// Sets the bounds of the item
         /// </devdoc>
@@ -3710,7 +3570,6 @@ namespace System.Windows.Forms {
         }
 
      
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ResetBackColor"]/*' />
         /// <devdoc>
         /// Resets the back color to be based on the parent's back color.
         /// </devdoc>
@@ -3724,7 +3583,6 @@ namespace System.Windows.Forms {
             DisplayStyle = DefaultDisplayStyle;
         }
         
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ResetForeColor"]/*' />
         /// <devdoc>
         /// Resets the fore color to be based on the parent's fore color.
         /// </devdoc>
@@ -3734,7 +3592,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ResetFont"]/*' />
         /// <devdoc>
         /// Resets the Font to be based on the parent's Font.
         /// </devdoc>
@@ -3743,7 +3600,6 @@ namespace System.Windows.Forms {
             Font = null;
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ResetImage"]/*' />
         /// <devdoc>
         /// Resets the back color to be based on the parent's back color.
         /// </devdoc>
@@ -3768,7 +3624,6 @@ namespace System.Windows.Forms {
         public void ResetPadding() {
             CommonProperties.ResetPadding(this);
         }
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ResetRightToLeft"]/*' />
         /// <devdoc>
         /// Resets the RightToLeft to be the default.
         /// </devdoc>
@@ -3777,7 +3632,6 @@ namespace System.Windows.Forms {
             RightToLeft = RightToLeft.Inherit;
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ResetTextDirection"]/*' />
         /// <devdoc>
         /// Resets the TextDirection to be the default.
         /// </devdoc>
@@ -3861,7 +3715,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ToString"]/*' />
         /// <devdoc>
         /// ToString support
         /// </devdoc>
@@ -3992,7 +3845,6 @@ namespace System.Windows.Forms {
             return ToolStrip.AreCommonNavigationalKeysDown();
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject"]/*' />
         /// <devdoc>
         /// An implementation of AccessibleChild for use with ToolStripItems        
         /// </devdoc>
@@ -4008,7 +3860,6 @@ namespace System.Windows.Forms {
             private int[] runtimeId = null; // Used by UIAutomation
             // constructors
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.ToolStripItemAccessibleObject"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4022,7 +3873,6 @@ namespace System.Windows.Forms {
                 this.ownerItem = ownerItem;
             }
             
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction {
                 get {
                     string defaultAction = ownerItem.AccessibleDefaultActionDescription;
@@ -4035,7 +3885,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Description"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4051,7 +3900,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Help"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4139,7 +3987,6 @@ namespace System.Windows.Forms {
                 return base.GetPropertyValue(propertyID);
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Name"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4163,7 +4010,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Owner"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4173,7 +4019,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Role"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4233,14 +4078,12 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 if (Owner != null) {
                     ((ToolStripItem)Owner).PerformClick();
                 }
             }
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.GetHelpTopic"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4271,7 +4114,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Navigate"]/*' />
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection) {
                 ToolStripItem nextItem = null;
@@ -4327,7 +4169,6 @@ namespace System.Windows.Forms {
                 }
             }
            
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.ToString"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4341,7 +4182,6 @@ namespace System.Windows.Forms {
      
             }
           
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Bounds"]/*' />
             /// <devdoc>
             /// <para> Gets the bounds of the accessible object, in screen coordinates.</para>
             /// </devdoc>
@@ -4356,7 +4196,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Parent"]/*' />
             /// <devdoc>
             /// <para>When overridden in a derived class, gets or sets the parent of an accessible object.</para>
             /// </devdoc>

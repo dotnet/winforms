@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\DateRangeEventHandler.uex' path='docs/doc[@for="DateRangeEventHandler"]/*' />
     /// <devdoc>
     /// </devdoc>
     public delegate void DateRangeEventHandler(object sender, DateRangeEventArgs e);

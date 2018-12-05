@@ -7,13 +7,11 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewAutoSizeColumnModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeColumnModeEventArgs"]/*' />
     public class DataGridViewAutoSizeColumnModeEventArgs : EventArgs
     {
         private DataGridViewAutoSizeColumnMode previousMode;
         private DataGridViewColumn dataGridViewColumn;
 
-        /// <include file='doc\DataGridViewAutoSizeColumnModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeColumnModeEventArgs.DataGridViewAutoSizeColumnModeEventArgs"]/*' />
         public DataGridViewAutoSizeColumnModeEventArgs(DataGridViewColumn dataGridViewColumn, DataGridViewAutoSizeColumnMode previousMode)
         {
             Debug.Assert(dataGridViewColumn != null);
@@ -21,7 +19,6 @@ namespace System.Windows.Forms
             this.previousMode = previousMode;
         }
 
-        /// <include file='doc\DataGridViewAutoSizeColumnModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeColumnModeEventArgs.Column"]/*' />
         public DataGridViewColumn Column
         {
             get
@@ -30,7 +27,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewAutoSizeColumnModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeColumnModeEventArgs.PreviousMode"]/*' />
         public DataGridViewAutoSizeColumnMode PreviousMode
         {
             get

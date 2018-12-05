@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Drawing;
 
-    /// <include file='doc\GiveFeedbackEventHandler.uex' path='docs/doc[@for="GiveFeedbackEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that handles the <see cref='System.Windows.Forms.Control.GiveFeedback'/> event

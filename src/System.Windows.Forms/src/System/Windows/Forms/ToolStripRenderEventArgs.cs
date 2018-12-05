@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
 
     
-    /// <include file='doc\ToolStripRenderEventArgs.uex' path='docs/doc[@for="ToolStripRenderEventArgs"]/*' />
     /// <devdoc>
     ///   ToolStripRenderEventArgs
     /// </devdoc>
@@ -18,7 +17,6 @@ namespace System.Windows.Forms {
         private Rectangle   affectedBounds = Rectangle.Empty;
         private Color       backColor      = Color.Empty;
         
-        /// <include file='doc\ToolStripRenderEventArgs.uex' path='docs/doc[@for="ToolStripRenderEventArgs.ToolStripRenderEventArgs"]/*' />
         /// <devdoc>
         ///  This class represents all the information to render the toolStrip
         /// </devdoc>        
@@ -30,7 +28,6 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <include file='doc\ToolStripRenderEventArgs.uex' path='docs/doc[@for="ToolStripRenderEventArgs.ToolStripRenderEventArgs"]/*' />
         /// <devdoc>
         ///  This class represents all the information to render the toolStrip
         /// </devdoc>        
@@ -41,7 +38,6 @@ namespace System.Windows.Forms {
             this.backColor = backColor;
         }
 
-        /// <include file='doc\ToolStripRenderEventArgs.uex' path='docs/doc[@for="ToolStripRenderEventArgs.AffectedBounds"]/*' />
         /// <devdoc>
         ///  the bounds to draw in
         /// </devdoc>
@@ -51,7 +47,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripRenderEventArgs.uex' path='docs/doc[@for="ToolStripRenderEventArgs.BackColor"]/*' />
         /// <devdoc>
         ///  the back color to draw with.
         /// </devdoc>
@@ -75,7 +70,6 @@ namespace System.Windows.Forms {
                 return backColor;
             }
         }
-        /// <include file='doc\ToolStripRenderEventArgs.uex' path='docs/doc[@for="ToolStripRenderEventArgs.Graphics"]/*' />
         /// <devdoc>
         ///  the graphics object to draw with
         /// </devdoc>
@@ -85,7 +79,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripRenderEventArgs.uex' path='docs/doc[@for="ToolStripRenderEventArgs.ToolStrip"]/*' />    
         /// <devdoc>
         ///  Represents which toolStrip was affected by the click
         /// </devdoc>
@@ -95,7 +88,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarRenderEventArgs.uex' path='docs/doc[@for="ToolStripRenderEventArgs.ConnectedArea"]/*' />
         public Rectangle ConnectedArea {
             get {
                 ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;

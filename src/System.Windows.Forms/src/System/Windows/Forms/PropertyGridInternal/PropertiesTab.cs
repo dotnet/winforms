@@ -15,7 +15,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Collections;
     using Microsoft.Win32;
 
-    /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -24,7 +23,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
     public class PropertiesTab : PropertyTab {
 
 
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.TabName"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -34,7 +32,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
         
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.HelpKeyword"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -44,7 +41,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.GetDefaultProperty"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -65,7 +61,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                return def;
         }
 
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.GetProperties"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -73,7 +68,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                return GetProperties(null, component, attributes);
         }
         
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.GetProperties1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

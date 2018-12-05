@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\LinkClickEventHandler.uex' path='docs/doc[@for="LinkClickedEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle 

@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\BorderStyle.uex' path='docs/doc[@for="BorderStyle"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies the
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum BorderStyle {
 
-        /// <include file='doc\BorderStyle.uex' path='docs/doc[@for="BorderStyle.None"]/*' />
         /// <devdoc>
         ///    <para>
         ///       No border.
@@ -30,7 +28,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\BorderStyle.uex' path='docs/doc[@for="BorderStyle.FixedSingle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A single-line border.
@@ -38,7 +35,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         FixedSingle = 1,
 
-        /// <include file='doc\BorderStyle.uex' path='docs/doc[@for="BorderStyle.Fixed3D"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A three-dimensional border.

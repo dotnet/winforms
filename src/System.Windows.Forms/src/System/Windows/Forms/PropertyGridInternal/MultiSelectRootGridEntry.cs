@@ -262,7 +262,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return entries;
             }
 
-            /// <include file='doc\MultiSelectRootGridEntry.uex' path='docs/doc[@for="MultiSelectRootGridEntry.UnsortedMerge"]/*' />
             /// <devdoc>
             /// merges an unsorted array of grid entries with a sorted array of grid entries that
             /// have already been merged.  The resulting array is the intersection of entries between the two,

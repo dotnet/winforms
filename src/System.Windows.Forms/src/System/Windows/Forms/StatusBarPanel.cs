@@ -17,7 +17,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Stores the <see cref='System.Windows.Forms.StatusBar'/>
@@ -58,7 +57,6 @@ namespace System.Windows.Forms {
 
         private object userData;
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.StatusBarPanel"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new default instance of the <see cref='System.Windows.Forms.StatusBarPanel'/> class.
@@ -67,7 +65,6 @@ namespace System.Windows.Forms {
         public StatusBarPanel() {
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Alignment"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Alignment'/>
@@ -98,7 +95,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.AutoSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.AutoSize'/>
@@ -130,7 +126,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.BorderStyle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.BorderStyle'/>
@@ -164,7 +159,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Created"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -174,7 +168,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Icon"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Icon'/>
@@ -217,7 +210,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Index"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Expose index internally
@@ -234,7 +226,6 @@ namespace System.Windows.Forms {
                 index = value;
             }
         }
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.MinWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the minimum width the <see cref='System.Windows.Forms.StatusBarPanel'/> can be within the <see cref='System.Windows.Forms.StatusBar'/>
@@ -269,7 +260,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Name"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the name of the panel.
@@ -292,7 +282,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Parent"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Represents the <see cref='System.Windows.Forms.StatusBar'/>
@@ -308,7 +297,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.ParentInternal"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Expose a direct setter for parent internally
@@ -322,7 +310,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Right"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Expose right internally
@@ -340,7 +327,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Style"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the style of the panel.
@@ -369,7 +355,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -387,7 +372,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Text"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the text of the panel.
@@ -427,7 +411,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.ToolTipText"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -470,7 +453,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Width"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the width of the <see cref='System.Windows.Forms.StatusBarPanel'/> within the <see cref='System.Windows.Forms.StatusBar'/>
@@ -497,7 +479,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.BeginInit"]/*' />
         /// <devdoc>
         ///      Handles tasks required when the control is being initialized.
         /// </devdoc>
@@ -505,7 +486,6 @@ namespace System.Windows.Forms {
             initializing = true;
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Dispose"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -521,7 +501,6 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.EndInit"]/*' />
         /// <devdoc>
         ///      Called when initialization of the control is complete.
         /// </devdoc>
@@ -533,7 +512,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.GetContentsWidth"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///     Gets the width of the contents of the panel
@@ -560,7 +538,6 @@ namespace System.Windows.Forms {
             return Math.Max(width, minWidth);
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.GetIndex"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///     Returns the index of the panel by making the parent control search
@@ -570,7 +547,6 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Realize"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///     Sets all the properties for this panel.
@@ -686,7 +662,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.ToString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves a string that contains information about the

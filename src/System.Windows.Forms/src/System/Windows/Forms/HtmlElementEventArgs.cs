@@ -14,7 +14,6 @@ using System.Net;
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -35,7 +34,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.MouseButtonsPressed"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -56,7 +54,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.ClientMousePosition"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -66,7 +63,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.OffsetMousePosition"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -76,7 +72,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.MousePosition"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -86,7 +81,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.BubbleEvent"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -99,7 +93,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.KeyPressedCode"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -109,7 +102,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.AltKeyPressed"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the Alt key was pressed, if this information is 
         ///     provided to the IHtmlEventObj </para>
@@ -122,7 +114,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.CtrlKeyPressed"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the Ctrl key was pressed, if this information is 
         ///     provided to the IHtmlEventObj </para>
@@ -135,7 +126,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.ShiftKeyPressed"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the Shift key was pressed, if this information is 
         ///     provided to the IHtmlEventObj </para>
@@ -148,7 +138,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.EventType"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -158,7 +147,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.ReturnValue"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -173,7 +161,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.FromElement"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -185,7 +172,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.ToElement"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

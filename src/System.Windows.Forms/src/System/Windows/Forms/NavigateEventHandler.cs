@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System;
         
-    /// <include file='doc\NavigateEventHandler.uex' path='docs/doc[@for="NavigateEventHandler"]/*' />
     /// <devdoc>
     ///      
     /// </devdoc>

@@ -518,7 +518,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.ContextMenuDefaultLocation"]/*' />
         /// <devdoc>
         /// Returns a default location for showing the context menu.  This
         /// location is the center of the active property label in the grid, and
@@ -589,7 +588,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         */
 
         /*
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.SelectedPropertyName"]/*' />
         /// <devdoc>
         /// Returns the currently selected property name.
         /// If no property or a category name is selected, "" is returned.
@@ -663,7 +661,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         */
         
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.ServiceProvider"]/*' />
         /// <devdoc>
         /// Returns or sets the IServiceProvider the PropertyGridView will use to obtain
         /// services.  This may be null.
@@ -862,7 +859,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             tipInfo = -1;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.CloseDropDown"]/*' />
         /// <devdoc>
         ///      Closes a previously opened drop down.  This should be called by the
         ///      drop down when the user does something that should close it.
@@ -1032,7 +1028,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return cProps;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.CreateAccessibilityInstance"]/*' />
         /// <devdoc>
         ///     Constructs the new instance of the accessibility object for this control. Subclasses
         ///     should not call base.CreateAccessibilityObject.
@@ -1548,7 +1543,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return(int)(InternalLabelWidth * (labelRatio - 1));
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.DropDownControl"]/*' />
         /// <devdoc>
         ///      Displays the provided control in a drop down.  When possible, the
         ///      current dimensions of the control will be respected.  If this is not possible
@@ -1885,7 +1879,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return pos;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GetGridEntryHierarchy"]/*' />
         /// <devdoc>
         /// returns an array of IPE specifying the current heirarchy of ipes from the given
         /// gridEntry through its parents to the root.
@@ -2040,7 +2033,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return !ScrollBar.Visible;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GetTestingInfo"]/*' />
         /// <devdoc>
         /// Returns a string containing test info about a given GridEntry. Requires an offset into the top-level
         /// entry collection (ie. nested entries are not accessible). Or specify -1 to get info for the current
@@ -2113,7 +2105,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
      
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.IsInputKey"]/*' />
         /// <devdoc>
         ///     Overridden to handle TAB key.
         /// </devdoc>
@@ -4756,7 +4747,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return sbChange;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.ShowDialog"]/*' />
         /// <devdoc>
         ///      Shows the given dialog, and returns its dialog result.  You should always
         ///      use this method rather than showing the dialog directly, as this will
@@ -6092,7 +6082,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
     
     
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GridViewEdit.IsInputKey"]/*' />
             /// <devdoc>
             ///     Overridden to handle TAB key.
             /// </devdoc>
@@ -6111,7 +6100,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return base.IsInputKey(keyData);
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GridViewEdit.IsInputChar"]/*' />
             /// <devdoc>
             ///     Overridden to handle TAB key.
             /// </devdoc>
@@ -6229,7 +6217,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GridViewEdit.ProcessDialogKey"]/*' />
             /// <devdoc>
             ///      Overrides Control.ProcessDialogKey to handle the Escape and Return
             ///      keys.
@@ -6494,7 +6481,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }  
                     
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.MouseHook.HookMouse"]/*' />
             /// <devdoc>
             ///     Sets up the needed windows hooks to catch messages.
             /// </devdoc>
@@ -6526,7 +6512,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
             
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.MouseHook.MouseHookProc"]/*' />
             /// <devdoc>
             ///     HookProc used for catch mouse messages.
             /// </devdoc>
@@ -6556,7 +6541,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, mouseHookHandle), nCode, wparam, lparam);
             }
             
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.MouseHook.UnhookMouse"]/*' />
             /// <devdoc>
             ///     Removes the windowshook that was installed.
             /// </devdoc>
@@ -6643,7 +6627,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return false;
             }
             
-              /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.MouseHook.MouseHookObject"]/*' />
               /// <devdoc>
             ///     Forwards messageHook calls to ToolTip.messageHookProc
             /// </devdoc>
@@ -6671,7 +6654,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject"]/*' />
         /// <devdoc>
         ///     The accessible object class for a PropertyGridView. The child accessible objects
         ///     are accessible objects corresponding to the property grid entries.        
@@ -6679,7 +6661,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         [System.Runtime.InteropServices.ComVisible(true)]        
         internal class PropertyGridViewAccessibleObject : ControlAccessibleObject {
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.PropertyGridViewAccessibleObject"]/*' />
             /// <devdoc>
             ///     Construct a PropertyGridViewAccessibleObject
             /// </devdoc>
@@ -6728,7 +6709,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.GetChild"]/*' />
             /// <devdoc>
             ///      Get the accessible child at the given index.
             ///      The accessible children of a PropertyGridView are accessible objects
@@ -6745,7 +6725,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.GetChildCount"]/*' />
             /// <devdoc>
             ///      Get the number of accessible children.
             ///      The accessible children of a PropertyGridView are accessible objects
@@ -6762,7 +6741,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.GetFocused"]/*' />
             /// <devdoc>
             ///      Get the accessible object for the currently focused grid entry.
             /// </devdoc>
@@ -6775,7 +6753,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.GetSelected"]/*' />
             /// <devdoc>
             ///      Get the accessible object for the currently selected grid entry.
             /// </devdoc>
@@ -6789,7 +6766,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
 
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.HitTest"]/*' />
             /// <devdoc>
             ///      Get the accessible child at the given screen location.
             ///      The accessible children of a PropertyGridView are accessible objects
@@ -6820,7 +6796,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to another object.
             /// </devdoc>

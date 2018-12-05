@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms.Internal;
     using System.Security.Permissions;
 
-    /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell"]/*' />
     /// <devdoc>
     ///    <para></para>
     /// </devdoc>
@@ -24,18 +23,15 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginRight = 2;
         private const byte DATAGRIDVIEWTOPLEFTHEADERCELL_verticalTextMargin = 1;
 
-        /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCell"]/*' />
         public DataGridViewTopLeftHeaderCell()
         {
         }
 
-        /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewTopLeftHeaderCellAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell.GetContentBounds"]/*' />
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -100,7 +96,6 @@ namespace System.Windows.Forms
             return contentBounds;
         }
 
-        /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell.GetErrorIconBounds"]/*' />
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (rowIndex != -1)
@@ -160,7 +155,6 @@ namespace System.Windows.Forms
             return errorBounds;
         }
 
-        /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell.GetPreferredSize"]/*' />
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
             if (rowIndex != -1)
@@ -200,7 +194,6 @@ namespace System.Windows.Forms
                                                                    flags);
         }
 
-        /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell.Paint"]/*' />
         protected override void Paint(Graphics graphics,
             Rectangle clipBounds,
             Rectangle cellBounds,
@@ -384,7 +377,6 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell.PaintBorder"]/*' />
         protected override void PaintBorder(Graphics graphics,
             Rectangle clipBounds,
             Rectangle bounds,
@@ -425,7 +417,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell.ToString"]/*' />
         /// <devdoc>
         ///    <para></para>
         /// </devdoc>
@@ -462,15 +453,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject"]/*' />
         protected class DataGridViewTopLeftHeaderCellAccessibleObject : DataGridViewColumnHeaderCellAccessibleObject
         {
-            /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.DataGridViewTopLeftHeaderCellAccessibleObject"]/*' />
             public DataGridViewTopLeftHeaderCellAccessibleObject(DataGridViewTopLeftHeaderCell owner) : base (owner)
             {
             }
 
-            /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.Bounds"]/*' />
             public override Rectangle Bounds
             {
                 get
@@ -480,7 +468,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction
             {
                 get
@@ -497,7 +484,6 @@ namespace System.Windows.Forms
             }
 
 
-            /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.Name"]/*' />
             public override string Name
             {
                 get
@@ -536,7 +522,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.Value"]/*' />
             public override AccessibleStates State
             {
                 get
@@ -560,7 +545,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.Value"]/*' />
             public override string Value
             {
                 [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
@@ -572,14 +556,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.DoDefaultAction"]/*' />
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 this.Owner.DataGridView.SelectAll();
             }
 
-            /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.Navigate"]/*' />
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
@@ -624,7 +606,6 @@ namespace System.Windows.Forms
                 return this.Owner.DataGridView.AccessibilityObject.GetChild(0).GetChild(1);
             }
 
-            /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.Select"]/*' />
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags)
             {

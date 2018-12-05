@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
   
 
 
-    /// <include file='doc\ToolStripRenderEventHandler.uex' path='docs/doc[@for="ToolStripRenderEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///      Called when the background of the winbar is being rendered

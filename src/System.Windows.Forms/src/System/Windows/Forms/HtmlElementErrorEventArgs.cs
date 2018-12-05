@@ -7,7 +7,6 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs"]/*' />
     /// <devdoc>
     ///    <para>EventArgs for onerror event of HtmlElement</para>
     /// </devdoc>
@@ -25,7 +24,6 @@ namespace System.Windows.Forms {
             this.lineNumber = lineNumber;
         }
 
-        /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs.Description"]/*' />
         /// <devdoc>
         ///    <para>Description of error</para>
         /// </devdoc>
@@ -37,7 +35,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs.Handled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the <see cref='System.Windows.Forms.HtmlWindow.Error'/>
@@ -53,7 +50,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs.LineNumber"]/*' />
         /// <devdoc>
         ///    <para>Line number where error occurred</para>
         /// </devdoc>
@@ -65,7 +61,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs.Url"]/*' />
         /// <devdoc>
         ///    <para>Url where error occurred</para>
         /// </devdoc>

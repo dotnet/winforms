@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\LinkLabelLinkClickedEvent.uex' path='docs/doc[@for="LinkLabelLinkClickedEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.LinkLabel.OnLinkClicked'/> event.
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
     public class LinkLabelLinkClickedEventArgs : EventArgs {
         private readonly LinkLabel.Link link;
         private readonly MouseButtons button;
-        /// <include file='doc\LinkLabelLinkClickedEvent.uex' path='docs/doc[@for="LinkLabelLinkClickedEventArgs.LinkLabelLinkClickedEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.LinkLabelLinkClickedEventArgs'/> class, given the link.
@@ -48,7 +46,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\LinkLabelLinkClickedEvent.uex' path='docs/doc[@for="LinkLabelLinkClickedEventArgs.Link"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the <see cref='System.Windows.Forms.LinkLabel.Link'/> that was clicked.

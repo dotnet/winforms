@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\LabelEditEvent.uex' path='docs/doc[@for="LabelEditEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.ListView.LabelEdit'/> event.
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
         private readonly int item;
         private bool cancelEdit = false;
 
-        /// <include file='doc\LabelEditEvent.uex' path='docs/doc[@for="LabelEditEventArgs.LabelEditEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance
@@ -36,7 +34,6 @@ namespace System.Windows.Forms {
             this.label = null;
         }
 
-        /// <include file='doc\LabelEditEvent.uex' path='docs/doc[@for="LabelEditEventArgs.LabelEditEventArgs1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance
@@ -49,7 +46,6 @@ namespace System.Windows.Forms {
             this.label = label;
         }
 
-        /// <include file='doc\LabelEditEvent.uex' path='docs/doc[@for="LabelEditEventArgs.Label"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the new text assigned to the label of the <see cref='System.Windows.Forms.ListViewItem'/>.
@@ -61,7 +57,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LabelEditEvent.uex' path='docs/doc[@for="LabelEditEventArgs.Item"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the zero-based index of the <see cref='System.Windows.Forms.ListViewItem'/> containing the label to
@@ -74,7 +69,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LabelEditEvent.uex' path='docs/doc[@for="LabelEditEventArgs.CancelEdit"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether changes made to the label of

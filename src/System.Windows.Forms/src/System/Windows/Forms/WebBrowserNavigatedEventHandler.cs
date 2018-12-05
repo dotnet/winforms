@@ -6,7 +6,6 @@ using System.Net;
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\WebBrowserNavigatedEventHandler.uex' path='docs/doc[@for="WebBrowserNavigatedEventHandler"]/*' />
     /// <devdoc>
     ///     <para>
     /// Delegate to the WebBrowser Navigated event.
@@ -14,7 +13,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public delegate void WebBrowserNavigatedEventHandler(object sender, WebBrowserNavigatedEventArgs e);
 
-    /// <include file='doc\WebBrowserNavigatedEventHandler.uex' path='docs/doc[@for="WebBrowserNavigatedEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnNavigated'/> event.
@@ -23,7 +21,6 @@ namespace System.Windows.Forms {
     public class WebBrowserNavigatedEventArgs : EventArgs {
         private Uri url;
 
-        /// <include file='doc\WebBrowserNavigatedEventHandler.uex' path='docs/doc[@for="WebBrowserNavigatedEventArgs.WebBrowserNavigatedEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserNavigatedEventArgs'/> class.
@@ -33,7 +30,6 @@ namespace System.Windows.Forms {
             this.url = url;
         }
         
-        /// <include file='doc\WebBrowserNavigatedEventHandler.uex' path='docs/doc[@for="WebBrowserNavigatedEventArgs.Url"]/*' />
         /// <devdoc>
         ///    <para>
         /// Url the browser navigated to.

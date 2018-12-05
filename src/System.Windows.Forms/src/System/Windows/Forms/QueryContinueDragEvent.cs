@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using Microsoft.Win32;
 
-    /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.Control.QueryContinueDrag'/>
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
         private readonly bool escapePressed;
         private DragAction action;
 
-        /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs.QueryContinueDragEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.QueryContinueDragEventArgs'/> class.
@@ -38,7 +36,6 @@ namespace System.Windows.Forms {
             this.action = action;
         }
 
-        /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs.KeyState"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating
@@ -51,7 +48,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs.EscapePressed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the user pressed the ESC key.
@@ -63,7 +59,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs.Action"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets

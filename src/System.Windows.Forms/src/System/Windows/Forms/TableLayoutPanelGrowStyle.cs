@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TableLayoutPanelGrowStyle.uex' path='docs/doc[@for="TableLayoutPanelGrowStyle"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum TableLayoutPanelGrowStyle {
 
-        /// <include file='doc\TableLayoutGrowStyle.uex' path='docs/doc[@for="TableLayoutPanelGrowStyle.FixedSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The TableLayoutPanel will not allow additional rows or columns once it is full.
@@ -30,7 +28,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         FixedSize       = 0,
 
-        /// <include file='doc\TableLayoutPanelGrowStyle.uex' path='docs/doc[@for="TableLayoutPanelGrowStyle.AddRows"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The TableLayoutPanel will gain additional rows once it becomes full.
@@ -38,7 +35,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         AddRows         = 1,
 
-        /// <include file='doc\TableLayoutPanelGrowStyle.uex' path='docs/doc[@for="TableLayoutPanelGrowStyle.AddColumns"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The TableLayoutPanel will gain additional columns once it becomes full.

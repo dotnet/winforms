@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\ColumnClickEventHandler.uex' path='docs/doc[@for="ColumnClickEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the

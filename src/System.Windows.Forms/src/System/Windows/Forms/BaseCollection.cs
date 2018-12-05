@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Collections;
     using ArrayList = System.Collections.ArrayList;
 
-    /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection"]/*' />
     /// <devdoc>
     ///    <para>Provides the base functionality for creating collections.</para>
     /// </devdoc>
@@ -19,7 +18,6 @@ namespace System.Windows.Forms {
         //==================================================
         // the ICollection methods
         //==================================================
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.Count"]/*' />
         /// <devdoc>
         ///    <para>Gets the total number of elements in a collection.</para>
         /// </devdoc>
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.CopyTo"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -40,7 +37,6 @@ namespace System.Windows.Forms {
             List.CopyTo(ar, index);
         }
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.GetEnumerator"]/*' />
         /// <devdoc>
         ///    <para>Gets an IEnumerator for the collection.</para>
         /// </devdoc>
@@ -48,7 +44,6 @@ namespace System.Windows.Forms {
             return List.GetEnumerator();
         }
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.IsReadOnly"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -61,7 +56,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.IsSynchronized"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -73,7 +67,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.SyncRoot"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -84,7 +77,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.List"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

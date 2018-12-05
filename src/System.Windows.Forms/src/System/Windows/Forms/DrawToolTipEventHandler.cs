@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\DrawToolTipEventHandler.uex' path='docs/doc[@for="DrawToolTipEventHandler"]/*' />
     /// <devdoc>
     /// Handler for the Draw event of the ToolTip control.
     /// </devdoc>

@@ -29,7 +29,6 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Displays an editing field and a list, allowing the user to select from the
@@ -121,21 +120,18 @@ namespace System.Windows.Forms {
 
         private bool selectedValueChangedFired;
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.autoCompleteMode"]/*' />
         /// <devdoc>
         ///     This stores the value for the autocomplete mode which can be either
         ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         /// </devdoc>
         private AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.autoCompleteSource"]/*' />
         /// <devdoc>
         ///     This stores the value for the autoCompleteSource mode which can be one of the values
         ///     from AutoCompleteSource enum.
         /// </devdoc>
         private AutoCompleteSource autoCompleteSource = AutoCompleteSource.None;
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.autoCompleteCustomSource"]/*' />
         /// <devdoc>
         ///     This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
         /// </devdoc>
@@ -146,7 +142,6 @@ namespace System.Windows.Forms {
         private ComboBoxChildEditUiaProvider childEditAccessibleObject;
         private ComboBoxChildTextUiaProvider childTextAccessibleObject;
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ComboBox"]/*' />
         /// <devdoc>
         ///     Creates a new ComboBox control.  The default style for the combo is
         ///     a regular DropDown Combo.
@@ -162,7 +157,6 @@ namespace System.Windows.Forms {
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.AutoCompleteMode"]/*' />
         /// <devdoc>
         ///     This is the AutoCompleteMode which can be either
         ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
@@ -199,7 +193,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.AutoCompleteSource"]/*' />
         /// <devdoc>
         ///     This is the AutoCompleteSource which can be one of the
         ///     values from AutoCompleteSource enumeration.
@@ -253,7 +246,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.AutoCompleteCustomSource"]/*' />
         /// <devdoc>
         ///     This is the AutoCompleteCustomSource which is custom StringCollection used when the
         ///     AutoCompleteSource is CustomSource.
@@ -290,7 +282,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackColor"]/*' />
         /// <devdoc>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
@@ -309,7 +300,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -323,7 +313,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImageLayout"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -337,7 +326,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -349,7 +337,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -381,7 +368,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.CreateParams"]/*' />
         /// <devdoc>
         ///     Returns the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
@@ -427,7 +413,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -438,7 +423,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DataSource"]/*' />
         /// <devdoc>
         ///     The ListSource to consume as this ListBox's source of data.
         ///     When set, a user can not modify the Items collection.
@@ -460,7 +444,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawMode"]/*' />
         /// <devdoc>
         ///     Retrieves the value of the DrawMode property.  The DrawMode property
         ///     controls whether the control is drawn by Windows or by the user.
@@ -494,7 +477,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownWidth"]/*' />
         /// <devdoc>
         ///     Returns the width of the drop down box in a combo box.
         /// </devdoc>
@@ -529,7 +511,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownHeight"]/*' />
         /// <devdoc>
         ///     Sets the Height of the drop down box in a combo box.
         /// </devdoc>
@@ -564,7 +545,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DroppedDown"]/*' />
         /// <devdoc>
         ///     Indicates whether the DropDown of the combo is  currently dropped down.
         /// </devdoc>
@@ -592,7 +572,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.FlatStyle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -620,7 +599,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Focused"]/*' />
         /// <devdoc>
         ///     Returns true if this control has focus.
         /// </devdoc>
@@ -632,7 +610,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ForeColor"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the foreground color of the control.
@@ -652,7 +629,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.IntegralHeight"]/*' />
         /// <devdoc>
         ///     Indicates if the combo should avoid showing partial Items.  If so,
         ///     then only full items will be displayed, and the list portion will be resized
@@ -678,7 +654,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ItemHeight"]/*' />
         /// <devdoc>
         ///     Returns the height of an item in the combo box. When drawMode is Normal
         ///     or OwnerDrawFixed, all items have the same height. When drawMode is
@@ -735,7 +710,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Items"]/*' />
         /// <devdoc>
         ///     Collection of the items contained in this ComboBox.
         /// </devdoc>
@@ -770,7 +744,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.MaxDropDownItems"]/*' />
         /// <devdoc>
         ///     The maximum number of items to be shown in the dropdown portion
         ///     of the ComboBox.  This number can be between 1 and 100.
@@ -807,7 +780,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.MaxLength"]/*' />
         /// <devdoc>
         ///     The maximum length of the text the user may type into the edit control
         ///     of a combo box.
@@ -831,7 +803,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.MouseIsOver"]/*' />
         /// <devdoc>
         ///     If the mouse is over the combobox, draw selection rect.
         /// </devdoc>
@@ -851,7 +822,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Padding"]/*' />
         /// <devdoc>
         ///    <para>
         ///    <para>[To be supplied.]</para>
@@ -877,7 +847,6 @@ namespace System.Windows.Forms {
         }
             
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.PreferredHeight"]/*' />
         /// <devdoc>
         ///     ApplySizeConstraints calls into this method when DropDownStyles is DropDown and DropDownList.
         ///     This causes PreferredSize to be bounded by PreferredHeight in these two cases only.
@@ -994,7 +963,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedIndex"]/*' />
         /// <devdoc>
         ///     The [zero based] index of the currently selected item in the combos list.
         ///     Note If the value of index is -1, then the ComboBox is
@@ -1046,7 +1014,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedItem"]/*' />
         /// <devdoc>
         ///     The handle to the object that is currently selected in the
         ///     combos list.
@@ -1079,7 +1046,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedText"]/*' />
         /// <devdoc>
         ///     The selected text in the edit component of the ComboBox. If the
         ///     ComboBox has ComboBoxStyle.DROPDOWNLIST, the return is an empty
@@ -1111,7 +1077,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectionLength"]/*' />
         /// <devdoc>
         ///     The length, in characters, of the selection in the editbox.
         /// </devdoc>
@@ -1133,7 +1098,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectionStart"]/*' />
         /// <devdoc>
         ///     The [zero-based] index of the first character in the current text selection.
         /// </devdoc>
@@ -1156,7 +1120,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Sorted"]/*' />
         /// <devdoc>
         ///     Indicates if the Combos list is sorted or not.
         /// </devdoc>
@@ -1182,7 +1145,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownStyle"]/*' />
         /// <devdoc>
         ///     The type of combo that we are right now.  The value would come
         ///     from the System.Windows.Forms.ComboBoxStyle enumeration.
@@ -1233,7 +1195,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Text"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1359,7 +1320,6 @@ namespace System.Windows.Forms {
         }
 
         // Prevent this event from being displayed in the Property Grid.
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DoubleClick"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
@@ -1371,7 +1331,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawItem"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1385,7 +1344,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDown"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1400,7 +1358,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.MeasureItem"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1417,7 +1374,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedIndexChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1431,7 +1387,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectionChangeCommitted"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1445,7 +1400,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownStyleChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1459,7 +1413,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnPaint"]/*' />
         /// <devdoc>
         ///     ComboBox Onpaint.
         /// </devdoc>
@@ -1474,12 +1427,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.TextUpdate"]/*' />
         /// <devdoc>
         ///    <para>This will fire the TextUpdate Event on the ComboBox. This events fires when the Combobox gets the
         ///          CBN_EDITUPDATE notification.
         //     </para>
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.TextUpdate"]/*' />
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
         public event EventHandler TextUpdate {
@@ -1492,12 +1443,10 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownClosed"]/*' />
         /// <devdoc>
         ///     <para>This will fire the DropDownClosed Event on the ComboBox. This events fires when the Combobox gets the
         ///          CBN_CLOSEUP notification. This happens when the DropDown closes.
         //      </para>
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownClosed"]/*' />
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
         public event EventHandler DropDownClosed {
@@ -1509,7 +1458,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.AddItemsCore"]/*' />
         /// <devdoc>
         ///     Performs the work of adding the specified items to the combobox
         /// </devdoc>
@@ -1529,7 +1477,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BeginUpdate"]/*' />
         /// <devdoc>
         ///     Disables redrawing of the combo box. A call to beginUpdate() must be
         ///     balanced by a following call to endUpdate(). Following a call to
@@ -1976,7 +1923,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (autoCompleteCustomSource != null) {
@@ -1994,7 +1940,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.EndUpdate"]/*' />
         /// <devdoc>
         ///     Reenables redrawing of the combo box. A call to beginUpdate() must be
         ///     balanced by a following call to endUpdate(). Following a call to
@@ -2017,7 +1962,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString"]/*' />
         /// <devdoc>
         ///     Finds the first item in the combo box that starts with the given string.
         ///     The search is not case sensitive.
@@ -2026,7 +1970,6 @@ namespace System.Windows.Forms {
             return FindString(s, -1);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString1"]/*' />
         /// <devdoc>
         ///     Finds the first item after the given index which starts with the given
         ///     string. The search is not case sensitive.
@@ -2051,7 +1994,6 @@ namespace System.Windows.Forms {
             return FindStringInternal(s, Items, startIndex, false);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact"]/*' />
         /// <devdoc>
         ///     Finds the first item in the combo box that matches the given string.
         ///     The strings must match exactly, except for differences in casing.
@@ -2060,7 +2002,6 @@ namespace System.Windows.Forms {
             return FindStringExact(s, -1, true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
         /// <devdoc>
         ///     Finds the first item after the given index that matches the given
         ///     string. The strings must match exactly, except for differences in
@@ -2070,7 +2011,6 @@ namespace System.Windows.Forms {
             return FindStringExact(s, startIndex, true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
         /// <devdoc>
         ///     Finds the first item after the given index that matches the given
         ///     string. The strings must match exactly, except for differences in
@@ -2117,7 +2057,6 @@ namespace System.Windows.Forms {
             base.ScaleControl(factor, specified);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.GetItemHeight"]/*' />
         /// <devdoc>
         ///     Returns the height of the given item in an OwnerDrawVariable style
         ///     combo box. This method should not be used for Normal or OwnerDrawFixed
@@ -2247,7 +2186,6 @@ namespace System.Windows.Forms {
                                            NativeMethods.RDW_ALLCHILDREN);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.IsInputKey"]/*' />
         /// <devdoc>
         ///     Determines if keyData is in input key that the control wants.
         ///     Overridden to return true for RETURN and ESCAPE when the combo box is
@@ -2349,7 +2287,6 @@ namespace System.Windows.Forms {
                 WindowText = oldText;   //restore the window text
             }
         }
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.CreateHandle"]/*' />
         /// <devdoc>
         ///     Overridden to avoid multiple layouts during handle creation due to combobox size change
         /// </devdoc>
@@ -2363,7 +2300,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnHandleCreated"]/*' />
         /// <devdoc>
         ///     Overridden to make sure all the items and styles get set up correctly.
         ///     Inheriting classes should not forget to call
@@ -2459,7 +2395,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnHandleDestroyed"]/*' />
         /// <devdoc>
         ///     We need to un-subclasses everything here.  Inheriting classes should
         ///     not forget to call base.OnHandleDestroyed()
@@ -2482,7 +2417,6 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDrawItem"]/*' />
         /// <devdoc>
         ///     This is the code that actually fires the drawItem event.  Don't
         ///     forget to call base.onDrawItem() to ensure that drawItem events
@@ -2493,7 +2427,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDropDown"]/*' />
         /// <devdoc>
         ///     This is the code that actually fires the dropDown event.  Don't
         ///     forget to call base.onDropDown() to ensure that dropDown events
@@ -2504,7 +2437,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnKeyDown"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.ComboBox.KeyDown'/> event.</para>
         /// </devdoc>
@@ -2527,7 +2459,6 @@ namespace System.Windows.Forms {
             base.OnKeyDown(e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnKeyPress"]/*' />
         /// <devdoc>
         ///     Key press event handler. Overridden to close up the combo box when the
         ///     user presses RETURN or ESCAPE.
@@ -2554,7 +2485,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnMeasureItem"]/*' />
         /// <devdoc>
         ///     This is the code that actually fires the measuereItem event.  Don't
         ///     forget to call base.onMeasureItem() to ensure that measureItem
@@ -2565,7 +2495,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnMeasureItem"]/*' />
         /// <devdoc>
         ///  If we have the style set to popup show mouse over
         /// </devdoc>
@@ -2573,7 +2502,6 @@ namespace System.Windows.Forms {
             base.OnMouseEnter(e);
             MouseIsOver = true;
         }
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnMeasureItem"]/*' />
         /// <devdoc>
         ///  If we have the style set to popup show mouse over
         /// </devdoc>
@@ -2599,7 +2527,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnSelectionChangeCommitted"]/*' />
         /// <devdoc>
         ///     This is the code that actually fires the SelectionChangeCommitted event.
         ///     Don't forget to call base.OnSelectionChangeCommitted() to ensure
@@ -2610,7 +2537,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnSelectedIndexChanged"]/*' />
         /// <devdoc>
         ///     This is the code that actually fires the selectedIndexChanged event.
         ///     Don't forget to call base.onSelectedIndexChanged() to ensure
@@ -2636,13 +2562,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnSelectedValueChanged"]/*' />
         protected override void OnSelectedValueChanged(EventArgs e) {
             base.OnSelectedValueChanged(e);
             selectedValueChangedFired = true;
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnSelectedItemChanged"]/*' />
         /// <devdoc>
         ///     This is the code that actually fires the selectedItemChanged event.
         ///     Don't forget to call base.onSelectedItemChanged() to ensure
@@ -2653,7 +2577,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDropDownStyleChanged"]/*' />
         /// <devdoc>
         ///     This is the code that actually fires the DropDownStyleChanged event.
         /// </devdoc>
@@ -2662,7 +2585,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnParentBackColorChanged"]/*' />
         /// <devdoc>
         ///     This method is called by the parent control when any property
         ///     changes on the parent. This can be overriden by inheriting
@@ -2673,7 +2595,6 @@ namespace System.Windows.Forms {
             if (DropDownStyle == ComboBoxStyle.Simple) Invalidate();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnFontChanged"]/*' />
         /// <devdoc>
         ///     Indicates that a critical property, such as color or font has
         ///     changed.
@@ -2709,7 +2630,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnBackColorChanged"]/*' />
         /// <devdoc>
         ///     Indicates that a critical property, such as color or font has
         ///     changed.
@@ -2720,7 +2640,6 @@ namespace System.Windows.Forms {
             UpdateControl(false);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnForeColorChanged"]/*' />
         /// <devdoc>
         ///     Indicates that a critical property, such as color or font has
         ///     changed.
@@ -2731,7 +2650,6 @@ namespace System.Windows.Forms {
             UpdateControl(false);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnGotFocus"]/*' />
         /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnGotFocus(EventArgs e) {
@@ -2741,7 +2659,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnLostFocus"]/*' />
         /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLostFocus(EventArgs e) {
@@ -2756,7 +2673,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnTextChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -2780,7 +2696,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnValidating"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.ComboBox.Validating'/>
         /// event.</para>
@@ -2814,7 +2729,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnResize"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Resize'/> event.</para>
         /// </devdoc>
@@ -2826,7 +2740,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDataSourceChanged"]/*' />
         protected override void OnDataSourceChanged(EventArgs e) {
             if (Sorted) {
                 if (DataSource != null && Created) {
@@ -2847,7 +2760,6 @@ namespace System.Windows.Forms {
             RefreshItems();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDisplayMemberChanged"]/*' />
         protected override void OnDisplayMemberChanged(EventArgs e) {
             base.OnDisplayMemberChanged(e);
 
@@ -2857,7 +2769,6 @@ namespace System.Windows.Forms {
             RefreshItems();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDropDownClosed"]/*' />
         /// <devdoc>
         ///     This event is fired when the dropdown portion of the combobox is hidden.
         /// </devdoc>
@@ -2867,7 +2778,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnTextUpdate"]/*' />
         /// <devdoc>
         ///     This event is fired when the edit portion of a combobox is about to display altered text.
         ///     This event is NOT fired if the TEXT property is programatically changed.
@@ -2877,7 +2787,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ProcessKeyEventArgs"]/*' />
         [
             SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
         ]
@@ -2896,7 +2805,6 @@ namespace System.Windows.Forms {
         private void ResetHeightCache() {
             prefHeightCache = -1;
         }
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.RefreshItems"]/*' />
         /// <devdoc>
         /// Reparses the objects, getting new text strings for them.
         /// </devdoc>
@@ -2957,7 +2865,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.RefreshItem"]/*' />
         /// <devdoc>
         /// Reparses the object at the given index, getting new text string for it.
         /// </devdoc>
@@ -3001,7 +2908,6 @@ namespace System.Windows.Forms {
             base.ResetText();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetAutoComplete"]/*' />
         /// <devdoc>
         ///     Enables the AutoComplete feature for combobox depending on the properties set.
         ///     These properties are namely AutoCompleteMode, AutoCompleteSource and AutoCompleteCustomSource.
@@ -3105,7 +3011,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Select"]/*' />
         /// <devdoc>
         ///     Selects the text in the editable portion of the ComboBox at the
         ///     from the given start index to the given end index.
@@ -3125,7 +3030,6 @@ namespace System.Windows.Forms {
             SendMessage(NativeMethods.CB_SETEDITSEL, 0, NativeMethods.Util.MAKELPARAM(start, end));
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectAll"]/*' />
         /// <devdoc>
         ///     Selects all the text in the editable portion of the ComboBox.
         /// </devdoc>
@@ -3133,7 +3037,6 @@ namespace System.Windows.Forms {
             Select(0, Int32.MaxValue);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetBoundsCore"]/*' />
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             // If we are changing height, store the requested height.
             // Requested height is used if the style is changed to simple.
@@ -3145,7 +3048,6 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetItemsCore"]/*' />
         /// <devdoc>
         ///     Performs the work of setting the specified items to the combobox
         /// </devdoc>
@@ -3180,7 +3082,6 @@ namespace System.Windows.Forms {
             EndUpdate();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetItemCore"]/*' />
         protected override void SetItemCore(int index, object value) {
             Items.SetItemInternal(index, value);
         }
@@ -3200,7 +3101,6 @@ namespace System.Windows.Forms {
             return (Properties.ContainsInteger(PropItemHeight));
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ShouldSerializeText"]/*' />
         /// <devdoc>
         ///     Determines if the Text property needs to be persisted.
         /// </devdoc>
@@ -3208,7 +3108,6 @@ namespace System.Windows.Forms {
             return SelectedIndex == -1 && base.ShouldSerializeText();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ToString"]/*' />
         /// <devdoc>
         ///     Provides some interesting info about this control in String form.
         /// </devdoc>
@@ -3485,7 +3384,6 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.WndProc"]/*' />
         /// <devdoc>
         ///     The comboboxs window procedure.  Inheritng classes can override this
         ///     to add extra functionality, but should not forget to call
@@ -3832,7 +3730,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3843,7 +3740,6 @@ namespace System.Windows.Forms {
             private ArrayList innerList;
             private IComparer comparer;
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.ObjectCollection"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3869,7 +3765,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Count"]/*' />
             /// <devdoc>
             ///     Retrieves the number of items.
             /// </devdoc>
@@ -3879,7 +3774,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.ICollection.SyncRoot"]/*' />
             /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
@@ -3887,7 +3781,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.ICollection.IsSynchronized"]/*' />
             /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
@@ -3895,7 +3788,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.IList.IsFixedSize"]/*' />
             /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
@@ -3903,7 +3795,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.IsReadOnly"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3913,7 +3804,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Add"]/*' />
             /// <devdoc>
             ///     Adds an item to the combo box. For an unsorted combo box, the item is
             ///     added to the end of the existing list of items. For a sorted combo box,
@@ -3982,13 +3872,11 @@ namespace System.Windows.Forms {
                 return index;
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object item) {
                 return Add(item);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.AddRange"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4023,7 +3911,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.this"]/*' />
             /// <devdoc>
             ///     Retrieves the item with the specified index.
             /// </devdoc>
@@ -4042,7 +3929,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Clear"]/*' />
             /// <devdoc>
             ///     Removes all items from the ComboBox.
             /// </devdoc>
@@ -4065,7 +3951,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Contains"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4073,7 +3958,6 @@ namespace System.Windows.Forms {
                 return IndexOf(value) != -1;
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.CopyTo"]/*' />
             /// <devdoc>
             ///     Copies the ComboBox Items collection to a destination array.
             /// </devdoc>
@@ -4081,13 +3965,11 @@ namespace System.Windows.Forms {
                 InnerList.CopyTo(destination, arrayIndex);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.ICollection.CopyTo"]/*' />
             /// <internalonly/>
             void ICollection.CopyTo(Array destination, int index) {
                 InnerList.CopyTo(destination, index);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.GetEnumerator"]/*' />
             /// <devdoc>
             ///     Returns an enumerator for the ComboBox Items collection.
             /// </devdoc>
@@ -4095,7 +3977,6 @@ namespace System.Windows.Forms {
                 return InnerList.GetEnumerator();
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.IndexOf"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -4107,7 +3988,6 @@ namespace System.Windows.Forms {
                 return InnerList.IndexOf(value);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Insert"]/*' />
             /// <devdoc>
             ///     Adds an item to the combo box. For an unsorted combo box, the item is
             ///     added to the end of the existing list of items. For a sorted combo box,
@@ -4159,7 +4039,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.RemoveAt"]/*' />
             /// <devdoc>
             ///     Removes an item from the ComboBox at the given index.
             /// </devdoc>
@@ -4184,7 +4063,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Remove"]/*' />
             /// <devdoc>
             ///     Removes the given item from the ComboBox, provided that it is
             ///     actually in the list.
@@ -4239,14 +4117,12 @@ namespace System.Windows.Forms {
 
         } // end ObjectCollection
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ChildAccessibleObject"]/*' />
         /// <internalonly/>
         [ComVisible(true)]
         public class ChildAccessibleObject : AccessibleObject {
 
             ComboBox owner;
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ChildAccessibleObject.ChildAccessibleObject"]/*' />
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public ChildAccessibleObject(ComboBox owner, IntPtr handle) {
                 Debug.Assert(owner != null && owner.Handle != IntPtr.Zero, "ComboBox's handle hasn't been created");
@@ -4255,7 +4131,6 @@ namespace System.Windows.Forms {
                 UseStdAccessibleObjects(handle);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ChildAccessibleObject.Name"]/*' />
             public override string Name {
                 get {
                     return owner.AccessibilityObject.Name;
@@ -5191,7 +5066,6 @@ namespace System.Windows.Forms {
                 return (combo.ClientRectangle == clientRect && combo.RightToLeft == origRightToLeft);                       
              }
 
-             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawFlatCombo"]/*' />
              /// <devdoc>
              ///     Paints over the edges of the combo box to make it appear flat.
              /// </devdoc>
@@ -5281,7 +5155,6 @@ namespace System.Windows.Forms {
            
              }
              
-             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawFlatComboDropDown"]/*' />
              /// <devdoc>
              ///     Paints over the edges of the combo box to make it appear flat.
              /// </devdoc>

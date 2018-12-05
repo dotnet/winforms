@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.ListView.OnItemDrag'/> event.
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
         readonly MouseButtons button;
         readonly object item;
 
-        /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.ItemDragEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
             this.item = null;
         }
         
-        /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.ItemDragEventArgs1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -41,7 +38,6 @@ namespace System.Windows.Forms {
             this.item = item;
         }
         
-        /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.Button"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -49,7 +45,6 @@ namespace System.Windows.Forms {
             get { return button; }
         }
 
-        /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.Item"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

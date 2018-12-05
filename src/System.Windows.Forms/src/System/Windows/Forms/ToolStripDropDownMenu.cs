@@ -20,7 +20,6 @@ namespace System.Windows.Forms {
     using System.Collections.Specialized;
     using System.Diagnostics.CodeAnalysis;
     
-    /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu"]/*' />
     [Designer("System.Windows.Forms.Design.ToolStripDropDownDesigner, " + AssemblyRef.SystemDesign)]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -70,7 +69,6 @@ namespace System.Windows.Forms {
             private Padding scaledArrowPadding                 = ArrowPadding;
             private int scaledArrowSize                        = ArrowSize;
 
-            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.ToolStripDropDownMenu"]/*' />
             /// <devdoc>
             /// Summary of ToolStripDropDown.
             /// </devdoc>
@@ -114,7 +112,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.DefaultPadding"]/*' />
             protected override Padding DefaultPadding {
                 get { 
                     RightToLeft rightToLeft = RightToLeft;
@@ -130,7 +127,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.DisplayRectangle"]/*' />
             public override Rectangle DisplayRectangle {
                 get {
                     Rectangle rect = base.DisplayRectangle;
@@ -187,7 +183,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.LayoutEngine"]/*' />
             public override LayoutEngine LayoutEngine {
                 get { 
                      return ToolStripDropDownLayoutEngine.LayoutInstance;
@@ -202,7 +197,6 @@ namespace System.Windows.Forms {
                 set { base.LayoutStyle = value; }
             }
 
-            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.MaxItemSize"]/*' />
             protected internal override Size MaxItemSize {
                 get {
                     if (!state[stateMaxItemSizeValid]) {
@@ -212,7 +206,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\WinBarDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.ShowImageMargin"]/*' />
             [
             DefaultValue(true),
             SRDescription(nameof(SR.ToolStripDropDownMenuShowImageMarginDescr)),
@@ -230,7 +223,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\WinBarDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.ShowCheckMargin"]/*' />
             [
             DefaultValue(false),
             SRDescription(nameof(SR.ToolStripDropDownMenuShowCheckMarginDescr)),
@@ -574,7 +566,6 @@ namespace System.Windows.Forms {
                 settings.FlowDirection = FlowDirection.TopDown;
                 state[stateShowImageMargin] = true;
             }
-            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.OnLayout"]/*' />
             protected override void OnLayout(LayoutEventArgs e) {
                 if (!this.IsDisposed)
                 {
@@ -594,7 +585,6 @@ namespace System.Windows.Forms {
                 base.OnFontChanged(e);
                 
             }
-            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.OnPaintBackground"]/*' />
             protected override void OnPaintBackground(PaintEventArgs e) {
                 base.OnPaintBackground(e);
                 if (ShowCheckMargin || ShowImageMargin) {
@@ -741,7 +731,6 @@ namespace System.Windows.Forms {
                 UpdateScrollButtonLocations();
             }
 
-            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.SetDisplayedItems"]/*' />
             protected override void SetDisplayedItems() {
 
                 base.SetDisplayedItems();

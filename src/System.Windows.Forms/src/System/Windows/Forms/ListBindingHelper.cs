@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Collections.Generic;
     using System.Reflection;
 
-    /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper"]/*' />
     /// <devdoc>
     /// </devdoc>
     public static class ListBindingHelper {
@@ -28,7 +27,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetList"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -41,7 +39,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetList2"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -89,7 +86,6 @@ namespace System.Windows.Forms {
             return (currentItem == null) ? null : dmProp.GetValue(currentItem);
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListName"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -128,7 +124,6 @@ namespace System.Windows.Forms {
             return name;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -157,7 +152,6 @@ namespace System.Windows.Forms {
             return pdc;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -189,7 +183,6 @@ namespace System.Windows.Forms {
             return pdc;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties2"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -221,7 +214,6 @@ namespace System.Windows.Forms {
             return GetListItemProperties(dataSource, listAccessors);
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemType"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -286,7 +278,6 @@ namespace System.Windows.Forms {
             return instancedObject;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemType2"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

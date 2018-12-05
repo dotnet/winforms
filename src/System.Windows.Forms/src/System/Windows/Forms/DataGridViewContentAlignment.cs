@@ -7,23 +7,19 @@ namespace System.Windows.Forms
     using System;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.DataGridViewContentAlignment"]/*' />
     /// <devdoc>
     /// <para></para>
     /// </devdoc>
     public enum DataGridViewContentAlignment
     {
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.NotSet"]/*' />
         NotSet = 0x000,
 
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.TopLeft"]/*' />
         /// <devdoc>
         ///    Content is vertically aligned at the top, and horizontally
         ///    aligned on the left.
         /// </devdoc>
         TopLeft = 0x001,
         
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.TopCenter"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Content is vertically aligned at the top, and
@@ -32,7 +28,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         TopCenter = 0x002,
         
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.TopRight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Content is vertically aligned at the top, and
@@ -41,7 +36,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         TopRight = 0x004,
         
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.MiddleLeft"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Content is vertically aligned in the middle, and
@@ -50,7 +44,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         MiddleLeft = 0x010,
         
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.MiddleCenter"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Content is vertically aligned in the middle, and
@@ -59,7 +52,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         MiddleCenter = 0x020,
         
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.MiddleRight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Content is vertically aligned in the middle, and horizontally aligned on the
@@ -68,7 +60,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         MiddleRight = 0x040,
         
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.BottomLeft"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Content is vertically aligned at the bottom, and horizontally aligned on the
@@ -77,7 +68,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         BottomLeft = 0x100,
         
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.BottomCenter"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Content is vertically aligned at the bottom, and horizontally aligned at the
@@ -86,7 +76,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         BottomCenter = 0x200,
 
-        /// <include file='doc\DataGridViewContentAlignment.uex' path='docs/doc[@for="DataGridViewContentAlignment.BottomRight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Content is vertically aligned at the bottom, and horizontally aligned on the

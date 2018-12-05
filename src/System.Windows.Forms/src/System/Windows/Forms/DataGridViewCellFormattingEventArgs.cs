@@ -8,14 +8,12 @@ namespace System.Windows.Forms
     using System.Drawing;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewCellFormattingEventArgs.uex' path='docs/doc[@for="DataGridViewCellFormattingEventArgs"]/*' />
     public class DataGridViewCellFormattingEventArgs : ConvertEventArgs
     {
         private int columnIndex, rowIndex;
         private DataGridViewCellStyle cellStyle;
         private bool formattingApplied;
     
-        /// <include file='doc\DataGridViewCellFormattingEventArgs.uex' path='docs/doc[@for="DataGridViewCellFormattingEventArgs.DataGridViewCellFormattingEventArgs"]/*' />
         public DataGridViewCellFormattingEventArgs(int columnIndex,
                                                    int rowIndex,
                                                    object value,
@@ -35,7 +33,6 @@ namespace System.Windows.Forms
             this.cellStyle = cellStyle;
         }
 
-        /// <include file='doc\DataGridViewCellFormattingEventArgs.uex' path='docs/doc[@for="DataGridViewCellFormattingEventArgs.CellStyle"]/*' />
         public DataGridViewCellStyle CellStyle
         {
             get
@@ -48,7 +45,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellFormattingEventArgs.uex' path='docs/doc[@for="DataGridViewCellFormattingEventArgs.ColumnIndex"]/*' />
         public int ColumnIndex
         {
             get
@@ -57,7 +53,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellFormattingEventArgs.uex' path='docs/doc[@for="DataGridViewCellFormattingEventArgs.FormattingApplied"]/*' />
         public bool FormattingApplied
         {
             get
@@ -70,7 +65,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellFormattingEventArgs.uex' path='docs/doc[@for="DataGridViewCellFormattingEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get

@@ -6,7 +6,6 @@ using System;
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\HtmlElementErrorEventHandler.uex' path='docs/doc[@for="HtmlElementErrorEventHandler"]/*' />
     /// <devdoc>
     ///    <para>EventHandler for HtmlElementErrorEventArgs</para>
     /// </devdoc>

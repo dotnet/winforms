@@ -12,14 +12,12 @@ namespace System.Windows.Forms {
 	using System.Security;
 	using System.Security.Permissions;
 
-    /// <include file='doc\IMessageFilter.uex' path='docs/doc[@for="IMessageFilter"]/*' />
     /// <devdoc>
     ///    <para> 
     ///       Defines a message filter interface.</para>
     /// </devdoc>
     public interface IMessageFilter {
     
-        /// <include file='doc\IMessageFilter.uex' path='docs/doc[@for="IMessageFilter.PreFilterMessage"]/*' />
         /// <devdoc>
         ///    <para>Filters out a message before it is dispatched. </para>
         /// </devdoc>

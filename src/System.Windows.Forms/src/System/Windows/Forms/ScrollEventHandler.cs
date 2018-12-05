@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\ScrollEventHandler.uex' path='docs/doc[@for="ScrollEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that handles the

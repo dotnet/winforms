@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\DateBoldEventHandler.uex' path='docs/doc[@for="DateBoldEventHandler"]/*' />
     /// <internalonly/>
     /// <devdoc>
     /// </devdoc>

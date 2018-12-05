@@ -6,14 +6,12 @@ namespace System.Windows.Forms {
 
     using System.Drawing;
 
-    /// <include file='doc\ToolStripItemRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemRenderEventArgs"]/*' />
     /// <devdoc/>
     public class ToolStripItemRenderEventArgs : EventArgs {
 
         private ToolStripItem             item             = null;
         private Graphics               graphics         = null;
 
-        /// <include file='doc\ToolStripItemRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemRenderEventArgs.ToolStripItemRenderEventArgs"]/*' />
         /// <devdoc>
         /// This class represents all the information to render the winbar
         /// </devdoc>
@@ -23,7 +21,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItemRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemRenderEventArgs.Graphics"]/*' />
         /// <devdoc>
         /// the graphics object to draw with
         /// </devdoc>
@@ -33,7 +30,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItemRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemRenderEventArgs.Item"]/*' />
         /// <devdoc>
         /// the item to draw
         /// </devdoc>
@@ -43,7 +39,6 @@ namespace System.Windows.Forms {
             }
         }
         
-	    /// <include file='doc\ToolStripItemRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemRenderEventArgs.ToolStrip"]/*' />
 	    /// <devdoc>
 	    /// The toolstrip the item is currently parented to
 	    /// </devdoc>

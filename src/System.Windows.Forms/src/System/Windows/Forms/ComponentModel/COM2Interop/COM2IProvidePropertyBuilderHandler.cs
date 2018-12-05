@@ -57,7 +57,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\COM2IProvidePropertyBuilderHandler.uex' path='docs/doc[@for="Com2IProvidePropertyBuilderHandler.OnGetAttributes"]/*' />
         /// <devdoc>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.

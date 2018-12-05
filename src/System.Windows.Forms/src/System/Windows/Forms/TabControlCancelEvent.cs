@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TabControlCancelEvent.uex' path='docs/doc[@for="TabControlCancelEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///    Provides data for the <see cref='System.Windows.Forms.TabControl.OnDeselecting'/>,
@@ -29,7 +28,6 @@ namespace System.Windows.Forms {
         private TabControlAction action;
 
 
-        /// <include file='doc\TabControlCancelEvent.uex' path='docs/doc[@for="TabControlCancelEventArgs.TabControlCancelEventArgs"]/*' />
         public TabControlCancelEventArgs(TabPage tabPage, int tabPageIndex, bool cancel, TabControlAction action)
         : base(cancel) {
             this.tabPage = tabPage;                                           
@@ -37,7 +35,6 @@ namespace System.Windows.Forms {
             this.action = action;
         }
 
-        /// <include file='doc\TabControlCancelEvent.uex' path='docs/doc[@for="TabControlCancelEventArgs.TabPage"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Stores the referemce to the tabpage that is undergoing the TabControl event.
@@ -50,7 +47,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControlCancelEvent.uex' path='docs/doc[@for="TabControlCancelEventArgs.TabPageIndex"]/*' />
         /// <devdoc>
         ///    <para>
         ///        Stores the index to the tabpage that is undergoing the TabControl event.
@@ -63,7 +59,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControlCancelEvent.uex' path='docs/doc[@for="TabControlCancelEventArgs.Action"]/*' />
         /// <devdoc>
         ///    <para>
         ///        Stores the TabControl action which instigated the TabControl event.

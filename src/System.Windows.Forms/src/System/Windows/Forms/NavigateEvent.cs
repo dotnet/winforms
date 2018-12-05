@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System;
     using System.ComponentModel;
 
-    /// <include file='doc\NavigateEvent.uex' path='docs/doc[@for="NavigateEventArgs"]/*' />
     /// <devdoc>
     ///
     /// </devdoc>
@@ -16,7 +15,6 @@ namespace System.Windows.Forms {
     public class NavigateEventArgs : EventArgs {
         private bool isForward = true;
 
-        /// <include file='doc\NavigateEvent.uex' path='docs/doc[@for="NavigateEventArgs.Forward"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -26,7 +24,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NavigateEvent.uex' path='docs/doc[@for="NavigateEventArgs.NavigateEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

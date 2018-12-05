@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewCellErrorTextNeededEventArgs.uex' path='docs/doc[@for="DataGridViewCellErrorTextNeededEventArgs"]/*' />
     public class DataGridViewCellErrorTextNeededEventArgs : DataGridViewCellEventArgs
     {
         private string errorText;
@@ -20,7 +19,6 @@ namespace System.Windows.Forms
             this.errorText = errorText;
         }
 
-        /// <include file='doc\DataGridViewCellErrorTextNeededEventArgs.uex' path='docs/doc[@for="DataGridViewCellErrorTextNeededEventArgs.ErrorText"]/*' />
         public string ErrorText
         {
             get

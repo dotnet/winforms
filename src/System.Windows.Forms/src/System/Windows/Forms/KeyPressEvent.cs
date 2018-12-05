@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using Microsoft.Win32;
 
-    /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.Control.KeyPress'/>
@@ -22,13 +21,11 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public class KeyPressEventArgs : EventArgs {
 
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.keyChar"]/*' />
         /// <devdoc>
         ///     Contains the character of the current KeyPress event.
         /// </devdoc>
         private char keyChar;
 
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.handled"]/*' />
         /// <devdoc>
         ///     Determines if this event has been handled by a handler.  If handled, the
         ///     key event will not be sent along to Windows.  If not handled, the event
@@ -36,7 +33,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private bool handled;
 
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.KeyPressEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new
@@ -48,7 +44,6 @@ namespace System.Windows.Forms {
             this.keyChar = keyChar;
         }
 
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.KeyChar"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the character corresponding to the key
@@ -64,7 +59,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.Handled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the <see cref='System.Windows.Forms.Control.KeyPress'/>

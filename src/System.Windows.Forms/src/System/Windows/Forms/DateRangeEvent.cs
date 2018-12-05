@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\DateRangeEvent.uex' path='docs/doc[@for="DateRangeEventArgs"]/*' />
     /// <devdoc>
     ///     The SelectEvent is fired when the user makes an explicit date
     ///     selection within a month calendar control.
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
         readonly DateTime start; // The date for the first day in the user's selection range.
         readonly DateTime end;   // The date for the last day in the user's selection range.
 
-        /// <include file='doc\DateRangeEvent.uex' path='docs/doc[@for="DateRangeEventArgs.DateRangeEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -31,14 +29,12 @@ namespace System.Windows.Forms {
             this.end = end;
         }
 
-        /// <include file='doc\DateRangeEvent.uex' path='docs/doc[@for="DateRangeEventArgs.Start"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public DateTime Start {
             get { return start; }
         }
-        /// <include file='doc\DateRangeEvent.uex' path='docs/doc[@for="DateRangeEventArgs.End"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

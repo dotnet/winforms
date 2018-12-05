@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Drawing;
 
-    /// <include file='doc\ListControlConvertEventHandler.uex' path='docs/doc[@for="ListControlConvertEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the ListControlConvert event of a ListView.

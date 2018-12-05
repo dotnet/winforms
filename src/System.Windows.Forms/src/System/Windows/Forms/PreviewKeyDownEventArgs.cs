@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System;
 
-    /// <include file='doc\PreviewKeyDownEvent.uex' path='docs/doc[@for="PreviewKeyDownEventArgs"]/*' />
     /// <internalonly/>
     /// <devdoc>
     ///    <para>
@@ -20,7 +19,6 @@ namespace System.Windows.Forms {
         private readonly Keys _keyData;
         private bool _isInputKey;
 
-        /// <include file='doc\PreviewKeyDownEvent.uex' path='docs/doc[@for="PreviewKeyDownEventArgs.PreviewKeyDownEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -28,7 +26,6 @@ namespace System.Windows.Forms {
             _keyData = keyData;
         }
 
-       /// <include file='doc\KeyEvent.uex' path='docs/doc[@for="KeyEventArgs.Alt"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the ALT key was pressed.
@@ -40,7 +37,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\KeyEvent.uex' path='docs/doc[@for="KeyEventArgs.Control"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the CTRL key was pressed.
@@ -52,7 +48,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\KeyEvent.uex' path='docs/doc[@for="KeyEventArgs.KeyCode"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the keyboard code for a <see cref='System.Windows.Forms.Control.KeyDown'/> or <see cref='System.Windows.Forms.Control.KeyUp'/>
@@ -76,7 +71,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\KeyEvent.uex' path='docs/doc[@for="KeyEventArgs.KeyValue"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the keyboard value for a <see cref='System.Windows.Forms.Control.KeyDown'/> or <see cref='System.Windows.Forms.Control.KeyUp'/>
@@ -90,7 +84,6 @@ namespace System.Windows.Forms {
             }
         }
        
-        /// <include file='doc\KeyEvent.uex' path='docs/doc[@for="KeyEventArgs.KeyData"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the key data for a <see cref='System.Windows.Forms.Control.KeyDown'/> or <see cref='System.Windows.Forms.Control.KeyUp'/>
@@ -103,7 +96,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\KeyEvent.uex' path='docs/doc[@for="KeyEventArgs.Modifiers"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the modifier flags for a <see cref='System.Windows.Forms.Control.KeyDown'/> or <see cref='System.Windows.Forms.Control.KeyUp'/> event.
@@ -116,7 +108,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\KeyEvent.uex' path='docs/doc[@for="KeyEventArgs.Shift"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets

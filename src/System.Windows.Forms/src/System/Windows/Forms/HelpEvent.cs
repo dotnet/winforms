@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\HelpEvent.uex' path='docs/doc[@for="HelpEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the Control.HelpRequest event.
@@ -24,7 +23,6 @@ namespace System.Windows.Forms {
         private readonly Point mousePos;
         private bool           handled = false;
 
-        /// <include file='doc\HelpEvent.uex' path='docs/doc[@for="HelpEventArgs.HelpEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.HelpEventArgs'/>class.
@@ -34,7 +32,6 @@ namespace System.Windows.Forms {
             this.mousePos = mousePos;
         }
 
-        /// <include file='doc\HelpEvent.uex' path='docs/doc[@for="HelpEventArgs.MousePos"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the screen coordinates of the mouse pointer.
@@ -46,7 +43,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HelpEvent.uex' path='docs/doc[@for="HelpEventArgs.Handled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets

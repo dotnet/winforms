@@ -7,13 +7,11 @@ namespace System.Windows.Forms
     using System;
     using System.Collections;
 
-    /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection"]/*' />
     /// <devdoc>
     ///  A read-only collection of GridItem objects
     /// </devdoc>
     public class GridItemCollection : ICollection {
     
-        /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.Empty"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -30,7 +28,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.Count"]/*' />
         /// <devdoc>
         ///     Retrieves the number of member attributes.
         /// </devdoc>
@@ -40,7 +37,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.ICollection.SyncRoot"]/*' />
         /// <internalonly/>
         object ICollection.SyncRoot {
             get {
@@ -48,7 +44,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.ICollection.IsSynchronized"]/*' />
         /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
@@ -56,7 +51,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.this"]/*' />
         /// <devdoc>
         ///     Retrieves the member attribute with the specified index.
         /// </devdoc>
@@ -66,7 +60,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.this1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -81,14 +74,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.ICollection.CopyTo"]/*' />
         /// <internalonly/>
         void ICollection.CopyTo(Array dest, int index) {
             if (entries.Length > 0) {
                 System.Array.Copy(entries, 0, dest, index, entries.Length);
             }
         }
-        /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.GetEnumerator"]/*' />
         /// <devdoc>
         ///      Creates and retrieves a new enumerator for this collection.
         /// </devdoc>

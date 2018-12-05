@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs"]/*' />
     /// <devdoc>
     /// <para>Provides data for the <see cref='System.Windows.Forms.ScrollBar.Scroll'/>
     /// event.</para>
@@ -24,7 +23,6 @@ namespace System.Windows.Forms {
         private ScrollOrientation scrollOrientation;
         int oldValue = -1;
         
-        /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs.ScrollEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ScrollEventArgs'/>class.
@@ -36,7 +34,6 @@ namespace System.Windows.Forms {
             this.newValue = newValue;
         }
 
-        /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs.ScrollEventArgs1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ScrollEventArgs'/>class.
@@ -49,7 +46,6 @@ namespace System.Windows.Forms {
             this.scrollOrientation = scroll;
         }
 
-        /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs.ScrollEventArgs2"]/*' />
         public ScrollEventArgs(ScrollEventType type, int oldValue, int newValue) {
             this.type = type;
             this.newValue = newValue;
@@ -58,7 +54,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs.ScrollEventArgs3"]/*' />
         public ScrollEventArgs(ScrollEventType type, int oldValue,  int newValue, ScrollOrientation scroll) {
             this.type = type;
             this.newValue = newValue;
@@ -66,7 +61,6 @@ namespace System.Windows.Forms {
             this.oldValue = oldValue;
         }
 
-        /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs.Scroll"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies the type of scroll event that occurred.
@@ -79,7 +73,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs.Type"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies the type of scroll event that occurred.
@@ -92,7 +85,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs.NewValue"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies the new location of the scroll box
@@ -110,7 +102,6 @@ namespace System.Windows.Forms {
             }
         }
 
-       /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs.OldValue"]/*' />
        /// <devdoc>
        /// <para>
        /// Specifies the last position 

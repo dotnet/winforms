@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\ControlEventHandler.uex' path='docs/doc[@for="ControlEventHandler"]/*' />
     /// <devdoc>
     ///      Describes a delegate for an event that has a ControlEventArgs as
     ///      a parameter.

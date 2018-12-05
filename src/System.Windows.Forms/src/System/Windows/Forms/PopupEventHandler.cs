@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\PopupEventHandler.uex' path='docs/doc[@for="PopupEventHandler"]/*' />
     /// <devdoc>
     /// Handler for the Popup event of the ToolTip control.
     /// </devdoc>

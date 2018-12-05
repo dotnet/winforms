@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
 
     using System.Drawing;
 
-    /// <include file='doc\RightToLeft.uex' path='docs/doc[@for="RightToLeft"]/*' />
     /// <devdoc>
     ///    <para>Specifies a value indicating whether the text appears
     ///       from right to
@@ -17,7 +16,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum RightToLeft {
 
-        /// <include file='doc\RightToLeft.uex' path='docs/doc[@for="RightToLeft.No"]/*' />
         /// <devdoc>
         ///    <para>
         ///       
@@ -31,7 +29,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         No = 0,
 
-        /// <include file='doc\RightToLeft.uex' path='docs/doc[@for="RightToLeft.Yes"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The text reads from
@@ -41,7 +38,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Yes = 1,
 
-        /// <include file='doc\RightToLeft.uex' path='docs/doc[@for="RightToLeft.Inherit"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The direction the

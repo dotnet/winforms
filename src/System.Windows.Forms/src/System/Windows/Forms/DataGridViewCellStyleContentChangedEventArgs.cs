@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\DataGridViewCellStyleContentChangedEventArgs.uex' path='docs/doc[@for="DataGridViewCellStyleContentChangedEventArgs"]/*' />
     public class DataGridViewCellStyleContentChangedEventArgs : EventArgs
     {
         private DataGridViewCellStyle dataGridViewCellStyle;
@@ -16,7 +15,6 @@ namespace System.Windows.Forms
             this.changeAffectsPreferredSize = changeAffectsPreferredSize;
         }
 
-        /// <include file='doc\DataGridViewCellStyleContentChangedEventArgs.uex' path='docs/doc[@for="DataGridViewCellStyleContentChangedEventArgs.CellStyle"]/*' />
         public DataGridViewCellStyle CellStyle
         {
             get
@@ -25,7 +23,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyleContentChangedEventArgs.uex' path='docs/doc[@for="DataGridViewCellStyleContentChangedEventArgs.CellStyleScope"]/*' />
         public DataGridViewCellStyleScopes CellStyleScope
         {
             get

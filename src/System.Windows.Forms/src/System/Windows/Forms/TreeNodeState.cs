@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates"]/*' />
     /// <devdoc>
     ///    <para>
     ///
@@ -15,7 +14,6 @@ namespace System.Windows.Forms {
 
     [Flags]
     public enum TreeNodeStates {
-        /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates.Checked"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -23,7 +21,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Checked = NativeMethods.CDIS_CHECKED,
 
-        /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates.Default"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -31,7 +28,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Default = NativeMethods.CDIS_DEFAULT,
 
-        /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates.Focused"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -39,7 +35,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Focused = NativeMethods.CDIS_FOCUS,
 
-        /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates.Grayed"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -47,7 +42,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Grayed = NativeMethods.CDIS_GRAYED,
 
-        /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates.Hot"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -55,7 +49,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Hot = NativeMethods.CDIS_HOT,
 
-        /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates.Indeterminate"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -63,7 +56,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Indeterminate = NativeMethods.CDIS_INDETERMINATE,
 
-        /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates.Marked"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -71,7 +63,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Marked = NativeMethods.CDIS_MARKED,
 
-        /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates.Selected"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -79,7 +70,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Selected = NativeMethods.CDIS_SELECTED,
 
-        /// <include file='doc\TreeNodeStates.uex' path='docs/doc[@for="TreeNodeStates.ShowKeyboardCues"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 

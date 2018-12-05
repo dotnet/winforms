@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\LinkLabelLinkClickedEventHandler.uex' path='docs/doc[@for="LinkLabelLinkClickedEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the <see cref='System.Windows.Forms.LinkLabel.LinkClicked'/> event of a <see cref='System.Windows.Forms.LinkLabel'/>.

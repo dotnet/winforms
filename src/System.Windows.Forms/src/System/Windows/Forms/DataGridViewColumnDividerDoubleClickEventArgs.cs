@@ -4,12 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\DataGridViewColumnDividerDoubleClickEventArgs.uex' path='docs/doc[@for="DataGridViewColumnDividerDoubleClickEventArgs"]/*' />
     public class DataGridViewColumnDividerDoubleClickEventArgs : HandledMouseEventArgs
     {
         private int columnIndex;
 
-        /// <include file='doc\DataGridViewColumnDividerDoubleClickEventArgs.uex' path='docs/doc[@for="DataGridViewColumnDividerDoubleClickEventArgs.DataGridViewColumnDividerDoubleClickEventArgs"]/*' />
         public DataGridViewColumnDividerDoubleClickEventArgs(int columnIndex, HandledMouseEventArgs e) : base(e.Button, e.Clicks, e.X, e.Y, e.Delta, e.Handled)
         {
             if (columnIndex < -1)
@@ -19,7 +17,6 @@ namespace System.Windows.Forms
             this.columnIndex = columnIndex;
         }
 
-        /// <include file='doc\DataGridViewColumnDividerDoubleClickEventArgs.uex' path='docs/doc[@for="DataGridViewColumnDividerDoubleClickEventArgs.ColumnIndex"]/*' />
         public int ColumnIndex
         {
             get

@@ -6,7 +6,6 @@ namespace System.Windows.Forms {
 
     using System;
   
-    /// <include file='doc\ToolStripGripRenderEventHandler.uex' path='docs/doc[@for="ToolStripGripRenderEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///         Called when the background of a winbar item is being rendered

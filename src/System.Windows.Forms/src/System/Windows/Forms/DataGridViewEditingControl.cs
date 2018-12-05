@@ -9,17 +9,14 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Security.Permissions;
 
-    /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl"]/*' />
     public interface IDataGridViewEditingControl
     {
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.EditingControlDataGridView"]/*' />
         DataGridView EditingControlDataGridView
         {
             get;
             set;
         }
 
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.EditingControlFormattedValue"]/*' />
         [SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
         object EditingControlFormattedValue
         {
@@ -27,47 +24,38 @@ namespace System.Windows.Forms
             set;
         }
 
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.EditingControlRowIndex"]/*' />
         int EditingControlRowIndex
         {
             get;
             set;
         }
 
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.EditingControlValueChanged"]/*' />
         bool EditingControlValueChanged
         {
             get;
             set;
         }
 
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.EditingPanelCursor"]/*' />
         Cursor EditingPanelCursor
         {
             get;
         }
 
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.RepositionEditingControlOnValueChange"]/*' />
         bool RepositionEditingControlOnValueChange
         {
             get;
         }
 
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.ApplyCellStyleToEditingControl"]/*' />
         void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle);
 
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.EditingControlWantsInputKey"]/*' />
         bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey);
 
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.GetEditingControlFormattedValue"]/*' />
         [SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
         object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context);
 
-        /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="IDataGridViewEditingControl.PrepareEditingControlForEdit"]/*' />
         void PrepareEditingControlForEdit(bool selectAll);
     }
 
-    /// <include file='doc\DataGridViewEditingControl.uex' path='docs/doc[@for="DataGridViewEditingControlAccessibleObject"]/*' />
     /// <devdoc>
     ///    Implements a custom AccessibleObject that fixes editing control's accessibility ancestor chain.
     /// </devdoc>

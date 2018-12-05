@@ -16,7 +16,6 @@ using System.Net;
 using System.Collections;
 
 namespace System.Windows.Forms {
-    /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -38,7 +37,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.this]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -55,7 +53,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.this1]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -74,7 +71,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.Count"]/*' />
         /// <devdoc>
         ///     Returns the total number of elements in the collection.
         /// </devdoc>
@@ -84,7 +80,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.IsSynchronized"]/*' />
         /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
@@ -92,7 +87,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.SyncRoot"]/*' />
         /// <internalonly/>
         object ICollection.SyncRoot {
             get {
@@ -100,7 +94,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.CopyTo"]/*' />
         /// <internalonly/>
         void ICollection.CopyTo(Array dest, int index) {
             int count = this.Count;
@@ -109,7 +102,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.GetEnumerator"]/*' />
         /// <internalonly/>
         public IEnumerator GetEnumerator() {
             HtmlWindow[] htmlWindows = new HtmlWindow[this.Count];

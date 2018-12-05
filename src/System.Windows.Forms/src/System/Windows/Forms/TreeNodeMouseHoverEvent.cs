@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnNodeMouseHover'/> event.
@@ -21,7 +20,6 @@ namespace System.Windows.Forms {
     public class TreeNodeMouseHoverEventArgs : EventArgs {
         readonly TreeNode node;
 
-        /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs.TreeNodeMouseHoverEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -29,7 +27,6 @@ namespace System.Windows.Forms {
             this.node = node;
         }
         
-        /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs.Node"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

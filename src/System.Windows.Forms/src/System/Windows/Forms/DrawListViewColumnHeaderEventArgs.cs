@@ -14,7 +14,6 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Windows.Forms.VisualStyles;
 
-    /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs"]/*' />
     /// <devdoc>
     ///     This class contains the information a user needs to paint ListView column header (Details view only).
     /// </devdoc>
@@ -31,7 +30,6 @@ namespace System.Windows.Forms
         private readonly Font font;
         private bool     drawDefault;
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.DrawListViewColumnHeaderEventArgs"]/*' />
         /// <devdoc>
         ///     Creates a new DrawListViewColumnHeaderEventArgs with the given parameters.
         /// </devdoc>
@@ -49,7 +47,6 @@ namespace System.Windows.Forms
         }
 
         
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.DrawDefault"]/*' />
         /// <devdoc>
         ///     Causes the item do be drawn by the system instead of owner drawn.
         /// </devdoc>        
@@ -62,7 +59,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.Graphics"]/*' />
         /// <devdoc>
         ///     Graphics object with which painting should be done.
         /// </devdoc>
@@ -73,7 +69,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.Bounds"]/*' />
         /// <devdoc>
         ///     The rectangle outlining the area in which the painting should be done.
         /// </devdoc>
@@ -83,7 +78,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.ColumnIndex"]/*' />
         /// <devdoc>
         ///     The index of this column. 
         /// </devdoc>
@@ -93,7 +87,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.Header"]/*' />
         /// <devdoc>
         ///    The header object.
         /// </devdoc>
@@ -103,7 +96,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.State"]/*' />
         /// <devdoc>
         ///     State information pertaining to the header.
         /// </devdoc>
@@ -113,7 +105,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.ForeColor"]/*' />
         /// <devdoc>
         ///     Color used to draw the header's text.
         /// </devdoc>
@@ -123,7 +114,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.BackColor"]/*' />
         /// <devdoc>
         ///     Color used to draw the header's background.
         /// </devdoc>
@@ -133,7 +123,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.Font"]/*' />
         /// <devdoc>
         ///     Font used to render the header's text.
         /// </devdoc>
@@ -143,7 +132,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.DrawBackground"]/*' />
         /// <devdoc>
         ///     Draws the header's background.
         /// </devdoc>
@@ -183,7 +171,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.DrawText"]/*' />
         /// <devdoc>
         ///     Draws the header's text (overloaded) 
         /// </devdoc>
@@ -197,7 +184,6 @@ namespace System.Windows.Forms
             DrawText(flags);
         }
 
-        /// <include file='doc\DrawListViewColumnHeaderEventArgs.uex' path='docs/doc[@for="DrawListViewColumnHeaderEventArgs.DrawText1"]/*' />
         /// <devdoc>
         ///     Draws the header's text (overloaded) - takes a TextFormatFlags argument.
         /// </devdoc>

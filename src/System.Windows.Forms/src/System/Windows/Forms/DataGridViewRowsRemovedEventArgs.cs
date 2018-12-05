@@ -8,12 +8,10 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Globalization;
 
-    /// <include file='doc\DataGridViewRowsRemovedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsRemovedEventArgs"]/*' />
     public class DataGridViewRowsRemovedEventArgs : EventArgs
     {
         private int rowIndex, rowCount;
 
-        /// <include file='doc\DataGridViewRowsRemovedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsRemovedEventArgs.DataGridViewRowsRemovedEventArgs"]/*' />
         public DataGridViewRowsRemovedEventArgs(int rowIndex, int rowCount)
         {
             if (rowIndex < 0)
@@ -28,7 +26,6 @@ namespace System.Windows.Forms
             this.rowCount = rowCount;
         }
 
-        /// <include file='doc\DataGridViewRowsRemovedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsRemovedEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get
@@ -37,7 +34,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowsRemovedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsRemovedEventArgs.RowCount"]/*' />
         public int RowCount
         {
             get

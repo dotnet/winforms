@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\HandledMouseEvent.uex' path='docs/doc[@for="HandledMouseEventArgs"]/*' />
     public class HandledMouseEventArgs : MouseEventArgs
     {
         /// <devdoc>
@@ -13,18 +12,15 @@ namespace System.Windows.Forms
         /// </devdoc>
         private bool handled;
 
-        /// <include file='doc\HandledMouseEvent.uex' path='docs/doc[@for="HandledMouseEventArgs.HandledMouseEventArgs"]/*' />
         public HandledMouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta) : this(button, clicks, x, y, delta, false)
         {
         }
 
-        /// <include file='doc\HandledMouseEvent.uex' path='docs/doc[@for="HandledMouseEventArgs.HandledMouseEventArgs1"]/*' />
         public HandledMouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta, bool defaultHandledValue) : base(button, clicks, x, y, delta)
         {
             this.handled = defaultHandledValue;
         }
 
-        /// <include file='doc\HandledMouseEvent.uex' path='docs/doc[@for="HandledMouseEventArgs.Handled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value

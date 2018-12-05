@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms.Internal;
     using System.Globalization;
 
-    /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell"]/*' />
     /// <devdoc>
     ///    <para>Identifies a cell in the dataGridView.</para>
     /// </devdoc>
@@ -40,7 +39,6 @@ namespace System.Windows.Forms
         private static Type defaultValueType = typeof(System.Object);
         private static Type cellType = typeof(DataGridViewTextBoxCell);
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.DataGridViewTextBoxCell"]/*' />
         public DataGridViewTextBoxCell()
         {
         }
@@ -79,7 +77,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.FormattedValueType"]/*' />
         public override Type FormattedValueType
         {
             get
@@ -89,7 +86,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.MaxInputLength"]/*' />
         [DefaultValue(DATAGRIDVIEWTEXTBOXCELL_maxInputLength)]
         public virtual int MaxInputLength
         {
@@ -121,7 +117,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.ValueType"]/*' />
         public override Type ValueType
         {
             get
@@ -141,7 +136,6 @@ namespace System.Windows.Forms
             this.EditingTextBox = this.DataGridView.EditingControl as DataGridViewTextBoxEditingControl;
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewTextBoxCell dataGridViewCell;
@@ -161,7 +155,6 @@ namespace System.Windows.Forms
             return dataGridViewCell;
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.DetachEditingControl"]/*' />
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -301,7 +294,6 @@ namespace System.Windows.Forms
             return editingControlBounds;
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.GetContentBounds"]/*' />
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -357,7 +349,6 @@ namespace System.Windows.Forms
             return textBounds;
         }
 
-        /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCell.GetErrorIconBounds"]/*' />
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -417,7 +408,6 @@ namespace System.Windows.Forms
             return errorBounds;
         }
 
-        /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCell.GetPreferredSize"]/*' />
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
             if (this.DataGridView == null)
@@ -523,7 +513,6 @@ namespace System.Windows.Forms
             return preferredSize;
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.InitializeEditingControl"]/*' />
         public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
         {
             Debug.Assert(this.DataGridView != null &&
@@ -551,7 +540,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.KeyEntersEditMode"]/*' />
         public override bool KeyEntersEditMode(KeyEventArgs e)
         {
             if (((char.IsLetterOrDigit((char)e.KeyCode) && !(e.KeyCode >= Keys.F1 && e.KeyCode <= Keys.F24)) ||
@@ -566,7 +554,6 @@ namespace System.Windows.Forms
             return base.KeyEntersEditMode(e);
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.OnEnter"]/*' />
         protected override void OnEnter(int rowIndex, bool throughMouseClick)
         {
             if (this.DataGridView == null)
@@ -579,7 +566,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.OnLeave"]/*' />
         protected override void OnLeave(int rowIndex, bool throughMouseClick)
         {
             if (this.DataGridView == null)
@@ -589,7 +575,6 @@ namespace System.Windows.Forms
             this.flagsState = (byte)(this.flagsState & ~DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick);
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.OnMouseClick"]/*' />
         protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -616,7 +601,6 @@ namespace System.Windows.Forms
             return rowIndex != -1 && this.EditingTextBox != null && rowIndex == ((IDataGridViewEditingControl)this.EditingTextBox).EditingControlRowIndex;
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.Paint"]/*' />
         protected override void Paint(Graphics graphics, 
             Rectangle clipBounds,
             Rectangle cellBounds, 
@@ -799,7 +783,6 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.PositionEditingControl"]/*' />
         public override void PositionEditingControl(bool setLocation, 
                                                     bool setSize, 
                                                     Rectangle cellBounds, 
@@ -822,7 +805,6 @@ namespace System.Windows.Forms
             this.DataGridView.EditingControl.Size = new Size(editingControlBounds.Width, editingControlBounds.Height);
         }
 
-        /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.ToString"]/*' />
         public override string ToString()
         {
             return "DataGridViewTextBoxCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";

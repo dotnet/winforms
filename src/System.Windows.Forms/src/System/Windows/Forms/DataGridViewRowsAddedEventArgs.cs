@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewRowsAddedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsAddedEventArgs"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -15,7 +14,6 @@ namespace System.Windows.Forms
     {
         private int rowIndex, rowCount;
     
-        /// <include file='doc\DataGridViewRowsAddedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsAddedEventArgs.DataGridViewRowsAddedEventArgs"]/*' />
         public DataGridViewRowsAddedEventArgs(int rowIndex, int rowCount)
         {
             Debug.Assert(rowIndex >= 0);
@@ -24,7 +22,6 @@ namespace System.Windows.Forms
             this.rowCount = rowCount;
         }
 
-        /// <include file='doc\DataGridViewRowsAddedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsAddedEventArgs.RowIndex"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -36,7 +33,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowsAddedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsAddedEventArgs.RowCount"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\TabControlEvent.uex' path='docs/doc[@for="TabControlEventArgs"]/*' />
     /// <devdoc>
     /// <para>Provides data for the <see cref='System.Windows.Forms.TabControl.Selecting'/>,<see cref='System.Windows.Forms.TabControl.Selected'/>
     /// event.</para>
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
         private int tabPageIndex;
         private TabControlAction action;
 
-        /// <include file='doc\TabControlEvent.uex' path='docs/doc[@for="TabControlEventArgs.TabControlEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.TabControlEventArgs'/>class.
@@ -35,7 +33,6 @@ namespace System.Windows.Forms {
             this.action = action;
         }
 
-        /// <include file='doc\TabControlEvent.uex' path='docs/doc[@for="TabControlEventArgs.TabPage"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Stores the referemce to the tabpage that is undergoing the TabControl event.
@@ -48,7 +45,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControlEvent.uex' path='docs/doc[@for="TabControlEventArgs.TabPageIndex"]/*' />
         /// <devdoc>
         ///    <para>
         ///        Stores the index to the tabpage that is undergoing the TabControl event.
@@ -61,7 +57,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControlEvent.uex' path='docs/doc[@for="TabControlEvent.Action"]/*' />
         /// <devdoc>
         ///    <para>
         ///        Stores the TabControl action which instigated the TabControl event.

@@ -424,7 +424,6 @@
         #endregion
 
         #region ICollection Members
-            /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.Count"]/*' />
             public int Count { get { return InnerList.Count; } }
             object ICollection.SyncRoot { get { return InnerList.SyncRoot; } }
             public bool IsReadOnly { get { return InnerList.IsReadOnly; } }

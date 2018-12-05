@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\GiveFeedbackEvent.uex' path='docs/doc[@for="GiveFeedbackEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.Control.GiveFeedback'/>
@@ -28,7 +27,6 @@ namespace System.Windows.Forms {
         private readonly DragDropEffects effect;
         private bool useDefaultCursors;
 
-        /// <include file='doc\GiveFeedbackEvent.uex' path='docs/doc[@for="GiveFeedbackEventArgs.GiveFeedbackEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.GiveFeedbackEventArgs'/> class.
@@ -39,7 +37,6 @@ namespace System.Windows.Forms {
             this.useDefaultCursors = useDefaultCursors;
         }
 
-        /// <include file='doc\GiveFeedbackEvent.uex' path='docs/doc[@for="GiveFeedbackEventArgs.Effect"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the type of drag-and-drop operation.
@@ -51,7 +48,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GiveFeedbackEvent.uex' path='docs/doc[@for="GiveFeedbackEventArgs.UseDefaultCursors"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a

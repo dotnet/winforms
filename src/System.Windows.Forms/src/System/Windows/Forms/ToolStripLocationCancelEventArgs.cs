@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Drawing;
 
-    /// <include file='doc\ToolStripLocationCancelEventArgs.uex' path='docs/doc[@for="ToolStripLocationCancelEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       ToolStripLocationCancelEventArgs provides Arguments for the Cancelable LocationChanging Event.
@@ -20,7 +19,6 @@ namespace System.Windows.Forms {
         private Point newLocation;
         
         
-        /// <include file='doc\ToolStripLocationCancelEventArgs.uex' path='docs/doc[@for="ToolStripLocationCancelEventArgs.ToolStripLocationCancelEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the ToolStripLocationCancelEventArgs with cancel value.
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStripLocationCancelEventArgs.uex' path='docs/doc[@for="ToolStripLocationCancelEventArgs.NewLocation"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Returns the New Location of the ToolStrip.

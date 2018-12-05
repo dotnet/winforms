@@ -12,7 +12,6 @@ namespace System.Resources {
     using System.Runtime.Serialization;
     using System;
     using System.Reflection;
-    /// <include file='doc\IAliasResolver.uex' path='docs/doc[@for="IAliasResolver"]/*' />
     /// <devdoc>
     /// Summary of IAliasResolver.
     /// </devdoc>

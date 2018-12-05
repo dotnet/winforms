@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates"]/*' />
     /// <devdoc>
     ///    <para>
     ///
@@ -15,7 +14,6 @@ namespace System.Windows.Forms {
 
     [Flags]
     public enum ListViewItemStates {
-        /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates.Checked"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -23,7 +21,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Checked = NativeMethods.CDIS_CHECKED,
 
-        /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates.Default"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -31,7 +28,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Default = NativeMethods.CDIS_DEFAULT,
 
-        /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates.Focused"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -39,7 +35,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Focused = NativeMethods.CDIS_FOCUS,
 
-	    /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates.Grayed"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -47,7 +42,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Grayed = NativeMethods.CDIS_GRAYED,
 
-	    /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates.Hot"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -55,7 +49,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Hot = NativeMethods.CDIS_HOT,
 
-	    /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates.Indeterminate"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -63,7 +56,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Indeterminate = NativeMethods.CDIS_INDETERMINATE,
 
-	    /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates.Marked"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -71,7 +63,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Marked = NativeMethods.CDIS_MARKED,
 
-	    /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates.Selected"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 
@@ -79,7 +70,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Selected = NativeMethods.CDIS_SELECTED,
 
-	    /// <include file='doc\ListViewItemStates.uex' path='docs/doc[@for="ListViewItemStates.ShowKeyboardCues"]/*' />
         /// <devdoc>
         ///    <para>
         /// [To be supplied.] 

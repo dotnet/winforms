@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\DragAction.uex' path='docs/doc[@for="DragAction"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies how and if a drag-and-drop operation should continue.
@@ -20,21 +19,18 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum DragAction {
-        /// <include file='doc\DragAction.uex' path='docs/doc[@for="DragAction.Continue"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The operation will continue.
         ///    </para>
         /// </devdoc>
         Continue = 0,
-        /// <include file='doc\DragAction.uex' path='docs/doc[@for="DragAction.Drop"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The operation will stop with a drop.
         ///    </para>
         /// </devdoc>
         Drop = 1,
-        /// <include file='doc\DragAction.uex' path='docs/doc[@for="DragAction.Cancel"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The operation is canceled with no

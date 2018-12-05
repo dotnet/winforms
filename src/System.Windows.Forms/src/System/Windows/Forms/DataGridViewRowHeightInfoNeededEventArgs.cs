@@ -8,7 +8,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Globalization;
 
-    /// <include file='doc\DataGridViewRowHeightInfoNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowHeightInfoNeededEventArgs"]/*' />
     public class DataGridViewRowHeightInfoNeededEventArgs : EventArgs
     {
         private int rowIndex;
@@ -22,7 +21,6 @@ namespace System.Windows.Forms
             this.minimumHeight = -1;
         }
 
-        /// <include file='doc\DataGridViewRowHeightInfoNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowHeightInfoNeededEventArgs.Height"]/*' />
         public int Height
         {
             get
@@ -43,7 +41,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowHeightInfoNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowHeightInfoNeededEventArgs.MinimumHeight"]/*' />
         public int MinimumHeight
         {
             get
@@ -64,7 +61,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowHeightInfoNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowHeightInfoNeededEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get

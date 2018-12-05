@@ -20,7 +20,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Drawing2D;
     using System.Globalization;
 
-    /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer"]/*' />
     /// <devdoc>
     ///    A SplitContainer is a ContainerControl with 2 panels separated with a splitter
     ///    in the middle. This is a composite control. The user can drag and drop this control from Toolbox.
@@ -140,7 +139,6 @@ namespace System.Windows.Forms {
         //
         // Constructor
         //
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitContainer"]/*' />
         public SplitContainer()
         {
             // either the left or top panel - LTR
@@ -169,7 +167,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.AutoScroll"]/*' />
         /// <devdoc>
         ///     This property is overridden to allow the AutoScroll to be set on all the panels when
         ///     The autoScroll on SplitContainer is shown.
@@ -207,7 +204,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.AutoScrollMinSize"]/*' />
         /// <devdoc>
         ///    Override AutoScrollMinSize to make it hidden from the user in the designer
         /// </devdoc>
@@ -226,7 +222,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.AutoScrollMargin"]/*' />
         /// <devdoc>
         ///    Override AutoScrollMargin to make it hidden from the user in the designer
         /// </devdoc>
@@ -278,7 +273,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
             add {
@@ -290,7 +284,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -304,7 +297,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImageLayout"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -319,7 +311,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BindingContext"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -340,7 +331,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BorderStyle"]/*' />
         /// <devdoc>
         ///     Indicates what type of border the Splitter control has.  This value
         ///     comes from the System.Windows.Forms.BorderStyle enumeration.
@@ -389,7 +379,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Controls"]/*' />
         /// <devdoc>
         ///     Controls Collection...
         ///     This is overriden so that the Controls.Add ( ) is not Code Gened...
@@ -402,7 +391,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="SplitContainer.ControlAdded"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlAdded {
             add {
@@ -412,7 +400,6 @@ namespace System.Windows.Forms {
                 base.ControlAdded -= value;
             }
         }
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="SplitContainer.ControlRemoved"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved {
              add {
@@ -422,7 +409,6 @@ namespace System.Windows.Forms {
                  base.ControlRemoved -= value;
              }
         }
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Dock"]/*' />
         /// <devdoc>
         ///     The dock property. The dock property controls to which edge
         ///     of the container this control is docked to. For example, when docked to
@@ -445,7 +431,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -456,7 +441,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.FixedPanel"]/*' />
         /// <devdoc>
         ///     Indicates what type of border the Splitter control has.  This value
         ///     comes from the System.Windows.Forms.BorderStyle enumeration.
@@ -497,7 +481,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.IsSplitterFixed"]/*' />
         /// <devdoc>
         /// This property determines whether the the splitter can move.
         /// </devdoc>
@@ -539,7 +522,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Orientation"]/*' />
         /// <devdoc>
         /// This Property sets or gets if the splitter is vertical or horizontal.
         /// </devdoc>
@@ -566,7 +548,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OverrideCursor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -600,7 +581,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Panel1"]/*' />
         /// <devdoc>
         /// The Left or Top panel in the SplitContainer.
         /// </devdoc>
@@ -632,7 +612,6 @@ namespace System.Windows.Forms {
             UpdateSplitter();
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Padding"]/*' />
         /// <devdoc>
         ///    <para>
         ///    <para>[To be supplied.]</para>
@@ -657,7 +636,6 @@ namespace System.Windows.Forms {
             remove { base.PaddingChanged -= value; }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Panel1"]/*' />
         /// <devdoc>
         /// Collapses or restores panel1
         /// </devdoc>
@@ -681,7 +659,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Panel1"]/*' />
         /// <devdoc>
         /// Collapses or restores panel2
         /// </devdoc>
@@ -704,7 +681,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Panel1MinSize"]/*' />
         /// <devdoc>
         /// This property determines the minimum distance of pixels of the splitter from the left or the top edge of Panel1.
         /// </devdoc>
@@ -727,7 +703,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Panel2"]/*' />
         /// <devdoc>
         /// This is the Right or Bottom panel in the SplitContainer.
         /// </devdoc>
@@ -743,7 +718,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Panel2MinSize"]/*' />
         /// <devdoc>
         /// This property determines the minimum distance of pixels of the splitter from the right or the bottom edge of Panel2
         /// </devdoc>
@@ -766,7 +740,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterDistance"]/*' />
         /// <devdoc>
         /// This property determines pixel distance of the splitter from the left or top edge.
         /// </devdoc>
@@ -867,7 +840,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterIncrement"]/*' />
         /// <devdoc>
         /// This determines the number of pixels the splitter moves in increments.This is defaulted to 1.
         /// </devdoc>
@@ -892,7 +864,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterRectangle"]/*' />
         /// <devdoc>
         /// This property determines the rectangle bounds of the splitter.
         /// </devdoc>
@@ -910,7 +881,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterWidth"]/*' />
         /// <devdoc>
         /// This property determines the thickness of the splitter.
         /// </devdoc>
@@ -943,7 +913,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.TabStop"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the user can give the focus to this control using the TAB
         ///       key. This property is read-only.</para>
@@ -966,7 +935,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Text"]/*' />
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
@@ -992,7 +960,6 @@ namespace System.Windows.Forms {
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BeginInit"]/*' />
         /// <devdoc>
         ///     ISupportInitialize support. Disables splitter panel min size and splitter width
         ///     validation during initialization.
@@ -1001,7 +968,6 @@ namespace System.Windows.Forms {
             initializing = true;
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.EndInit"]/*' />
         /// <devdoc>
         ///     ISupportInitialize support. Enables splitter panel min size and splitter width
         ///     validation after initialization.
@@ -1034,7 +1000,6 @@ namespace System.Windows.Forms {
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler BackgroundImageChanged {
@@ -1046,7 +1011,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -1058,7 +1022,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoving"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1072,7 +1035,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoved"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1086,7 +1048,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.TextChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
@@ -1112,7 +1073,6 @@ namespace System.Windows.Forms {
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnGotFocus"]/*' />
         /// <devdoc>
         ///     Overides the Control.OnGotFocus to Invalidate...
         /// </devdoc>
@@ -1122,7 +1082,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnKeyDown"]/*' />
         /// <devdoc>
         ///     Overrides the Control.OnKeydown for implementing splitter movements.
         /// </devdoc>
@@ -1186,7 +1145,6 @@ namespace System.Windows.Forms {
             } //End SplitterFixed Check...
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnKeyUp"]/*' />
         /// <devdoc>
         ///     Overrides the Control.OnKeydown for implementing splitter movements.
         /// </devdoc>
@@ -1219,7 +1177,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnLayout"]/*' />
         /// <devdoc>
         ///     Overrides the Control.OnLayout.
         /// </devdoc>
@@ -1232,7 +1189,6 @@ namespace System.Windows.Forms {
             base.OnLayout(e);
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnLostFocus"]/*' />
         /// <devdoc>
         ///     Overrides the Control.OnLostFocus to Invalidate.
         /// </devdoc>
@@ -1241,7 +1197,6 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnMouseMove"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.MouseMove'/> event.</para>
         /// </devdoc>
@@ -1290,7 +1245,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnMouseLeave"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.OnMouseLeave'/> event.</para>
         /// </devdoc>
@@ -1302,7 +1256,6 @@ namespace System.Windows.Forms {
             OverrideCursor = null;
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnMouseDown"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.OnMouseDown'/> event.</para>
         /// </devdoc>
@@ -1335,7 +1288,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnMouseUp"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.OnMouseUp'/> event.</para>
         /// </devdoc>
@@ -1371,7 +1323,6 @@ namespace System.Windows.Forms {
 	}
 		
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnPaint"]/*' />
         /// <devdoc>
         ///     Overrides the Control.OnPaint() to focus the Splitter.
         /// </devdoc>
@@ -1382,7 +1333,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnSplitterMoving"]/*' />
         /// <devdoc>
         ///     Inherriting classes should override this method to respond to the
         ///     splitterMoving event. This event occurs while the splitter is
@@ -1394,7 +1344,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnSplitterMoved"]/*' />
         /// <devdoc>
         ///     Inherriting classes should override this method to respond to the
         ///     splitterMoved event. This event occurs when the user finishes
@@ -1411,7 +1360,6 @@ namespace System.Windows.Forms {
         //                                                                                            //
         ////////////////////////////////////////////////////////////////////////////////////////////////
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnRightToLeftChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1503,7 +1451,6 @@ namespace System.Windows.Forms {
             UpdateSplitter();
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.ApplySplitPosition"]/*' />
         /// <devdoc>
         ///     Sets the split position to be the current split size. This is called
         ///     by splitEdit
@@ -1535,7 +1482,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.CalcSplitLine"]/*' />
         /// <devdoc>
         ///     Calculates the bounding rect of the split line. minWeight refers
         ///     to the minimum height or width of the splitline.
@@ -1573,7 +1519,6 @@ namespace System.Windows.Forms {
             return r;
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.DrawSplitBar"]/*' />
         /// <devdoc>
         ///     Draws the splitter bar at the current location. Will automatically
         ///     cleanup anyplace the splitter was drawn previously.
@@ -1620,7 +1565,6 @@ namespace System.Windows.Forms {
             ControlPaint.DrawFocusRectangle(g, r, this.ForeColor, this.BackColor);
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.DrawSplitHelper"]/*' />
         /// <devdoc>
         ///     Draws the splitter line at the requested location. Should only be called
         ///     by drawSpltBar.
@@ -1639,7 +1583,6 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.ReleaseDC(new HandleRef(this, parentHandle), new HandleRef(null, dc));
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.GetSplitSize"]/*' />
         /// <devdoc>
         ///     Calculates the split size based on the mouse position (x, y).
         /// </devdoc>
@@ -1692,7 +1635,6 @@ namespace System.Windows.Forms {
             return group.SelectNextControl(ActiveControl, forward, false, false, true);
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.RepaintSplitterRect"]/*' />
         /// <devdoc>
         ///     Re paint SplitterRect for SplitContainer
         /// </devdoc>
@@ -1734,7 +1676,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.ResizeSplitContainer"]/*' />
         /// <devdoc>
         ///     Reize SplitContainer
         /// </devdoc>
@@ -1898,7 +1839,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Select"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1930,7 +1870,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SelectNextControl"]/*' />
         /// <devdoc>
         ///     Selects the next control following ctl.
         /// </devdoc>
@@ -2014,7 +1953,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SelectNextControl"]/*' />
         /// <devdoc>
         ///     Selects the next control following ctl.
         /// </devdoc>
@@ -2095,7 +2033,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SetInnerMostBorder"]/*' />
         /// <devdoc>
         ///     Selects the innermost PANEL.
         /// </devdoc>
@@ -2124,7 +2061,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SetBoundsCore"]/*' />
         /// <devdoc>
         ///     This protected override allows us to check is an unvalid value is set for Width and Height.
         ///     The SplitContainer would not throw on invalid Size (i.e Width and Height) settings, but would correct the error like Form
@@ -2154,7 +2090,6 @@ namespace System.Windows.Forms {
             SetSplitterRect(this.Orientation == Orientation.Vertical);
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitBegin"]/*' />
         /// <devdoc>
         ///     Begins the splitter moving.
         /// </devdoc>
@@ -2187,7 +2122,6 @@ namespace System.Windows.Forms {
             DrawSplitBar(DRAW_START);
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitMove"]/*' />
         /// <devdoc>
         ///     The split movement.
         /// </devdoc>
@@ -2215,7 +2149,6 @@ namespace System.Windows.Forms {
             DrawSplitBar(DRAW_MOVE);
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitEnd"]/*' />
         /// <devdoc>
         ///     Finishes the split movement.
         /// </devdoc>
@@ -2240,7 +2173,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.UpdateSplitter"]/*' />
         /// <devdoc>
         ///     Update Splitter
         /// </devdoc>
@@ -2334,7 +2266,6 @@ namespace System.Windows.Forms {
             panel2.ResumeLayout(); 
          }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.WmSetCursor"]/*' />
         /// <devdoc>
         ///     Handles the WM_SETCURSOR message
         /// </devdoc>
@@ -2389,7 +2320,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.ProcessDialogKey"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    Processes a dialog key. Overrides Control.processDialogKey(). This
@@ -2428,7 +2358,6 @@ namespace System.Windows.Forms {
             return base.ProcessDialogKey(keyData);
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.ProcessDialogKey"]/*' />
         /// /// <devdoc>
         ///   This will process the TabKey for the SplitContainer. The Focus needs to Shift from controls to the Left of the Splitter
         ///   to the splitter and then to the controls on the right of the splitter. This override implements this Logic.
@@ -2483,7 +2412,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.WndProc"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -2509,7 +2437,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.CreateControlsInstance"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -2535,7 +2462,6 @@ namespace System.Windows.Forms {
                 this.owner = splitContainer;
             }
             
-            /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.PreFilterMessage"]/*' />
             /// <devdoc>
             /// </devdoc>
             /// <internalonly/>

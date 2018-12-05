@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Design;
 
 
-    /// <include file='doc\ToolStripOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton"]/*' />
     /// <devdoc>
     /// ToolStripOverflowButton
     /// </devdoc>
@@ -27,7 +26,6 @@ namespace System.Windows.Forms {
         private static int maxWidth = MAX_WIDTH;
         private static int maxHeight = MAX_HEIGHT;
         
-        /// <include file='doc\ToolStripOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton.ToolStripOverflowButton"]/*' />
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         internal ToolStripOverflowButton(ToolStrip parentToolStrip) {
             if (!isScalingInitialized)
@@ -53,14 +51,12 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\WinBarOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton.DefaultMargin"]/*' />
         protected internal override Padding DefaultMargin {
             get {
                 return Padding.Empty;
             }
         }
 
-        /// <include file='doc\ToolStripOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton.HasDropDownItems"]/*' />
         public override bool HasDropDownItems {
             get {
                 return this.ParentInternal.OverflowItems.Count > 0;
@@ -94,13 +90,11 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton.CreateDefaultDropDown"]/*' />
         protected override ToolStripDropDown CreateDefaultDropDown() {
             // AutoGenerate a Winbar DropDown - set the property so we hook events
              return new ToolStripOverflow(this);
         }
        
-        /// <include file='doc\ToolStripOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton.GetPreferredSize"]/*' />
         public override Size GetPreferredSize(Size constrainingSize) {
             Size preferredSize = constrainingSize;
             if (this.ParentInternal != null)  {
@@ -130,7 +124,6 @@ namespace System.Windows.Forms {
             base.SetBounds(bounds);
         }
 
-        /// <include file='doc\ToolStripOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton.OnPaint"]/*' />
         protected override void OnPaint(PaintEventArgs e) {
             if (this.ParentInternal != null) {
                 ToolStripRenderer renderer = this.ParentInternal.Renderer;            

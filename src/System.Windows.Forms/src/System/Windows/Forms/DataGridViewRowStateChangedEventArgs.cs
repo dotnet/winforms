@@ -6,20 +6,17 @@ namespace System.Windows.Forms
 {
     using System;
 
-    /// <include file='doc\DataGridViewRowStateChangedEventArgs.uex' path='docs/doc[@for="DataGridViewRowStateChangedEventArgs"]/*' />
     public class DataGridViewRowStateChangedEventArgs : EventArgs
     {
         private DataGridViewRow dataGridViewRow;
         private DataGridViewElementStates stateChanged;
     
-        /// <include file='doc\DataGridViewRowStateChangedEventArgs.uex' path='docs/doc[@for="DataGridViewRowStateChangedEventArgs.DataGridViewRowStateChangedEventArgs"]/*' />
         public DataGridViewRowStateChangedEventArgs(DataGridViewRow dataGridViewRow, DataGridViewElementStates stateChanged)
         {
             this.dataGridViewRow = dataGridViewRow;
             this.stateChanged = stateChanged;
         }
 
-        /// <include file='doc\DataGridViewRowStateChangedEventArgs.uex' path='docs/doc[@for="DataGridViewRowStateChangedEventArgs.Row"]/*' />
         public DataGridViewRow Row
         {
             get
@@ -28,7 +25,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowStateChangedEventArgs.uex' path='docs/doc[@for="DataGridViewRowStateChangedEventArgs.StateChanged"]/*' />
         public DataGridViewElementStates StateChanged
         {
             get

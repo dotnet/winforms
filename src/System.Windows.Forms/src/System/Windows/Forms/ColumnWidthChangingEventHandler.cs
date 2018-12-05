@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
 using System;
-    /// <include file='doc\ColumnWidthChangingEventHandler.uex' path='docs/doc[@for="ColumnWidthChangingEventHandler"]/*' />
     public delegate void ColumnWidthChangingEventHandler(object sender, ColumnWidthChangingEventArgs e);
 }
 

@@ -18,7 +18,6 @@ namespace System.Windows.Forms {
     using System.Security;
     using System.Security.Permissions;
 
-    /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager"]/*' />
     public sealed class ToolStripManager {
 
         // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
@@ -113,7 +112,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.FindToolStrip"]/*' />
         /// <devdoc> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </devdoc>        
@@ -130,7 +128,6 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.FindToolStrip"]/*' />
         /// <devdoc> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </devdoc>        
@@ -423,7 +420,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.Renderer"]/*' />
         /// <devdoc> the default renderer for the thread.  When ToolStrip.RenderMode is set to manager - this
         /// is the property used.
         /// </devdoc>
@@ -472,7 +468,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.RenderMode"]/*' />
         /// <devdoc> returns the default toolstrip RenderMode for the thread </devdoc>
         public static ToolStripManagerRenderMode RenderMode {
             get {
@@ -511,7 +506,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.VisualStylesEnabled"]/*' />
         /// <devdoc> an additional layering of control.  this lets you pick whether your toolbars
         /// should use visual style information (theming) to render itself.
         /// potentially you could want a themed app but an unthemed toolstrip. (e.g. Whidbey VS).
@@ -1823,7 +1817,6 @@ namespace System.Windows.Forms {
             return (toolStrip is MdiControlStrip || toolStrip is MdiWindowListStrip);
         }
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.Merge"]/*' />
         /// <devdoc> 
         /// merge two toolstrips
         /// </devdoc>
@@ -1991,7 +1984,6 @@ namespace System.Windows.Forms {
             Debug.Unindent();
         }
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.Merge2"]/*' />
         /// <devdoc> 
         /// merge two toolstrips
         /// </devdoc>
@@ -2104,7 +2096,6 @@ namespace System.Windows.Forms {
             //ToolStripMergeNode.SynchronizeFromToolStripMergeNode(targetToolStrip.Items, targetToolStrip.MergeItems);
         }
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.RevertMerge"]/*' />
         /// <devdoc> 
         /// unmerge two toolstrips
         /// </devdoc>
@@ -2112,7 +2103,6 @@ namespace System.Windows.Forms {
             return RevertMergeInternal(targetToolStrip, null, /*revertMDIControls*/false);
         }
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.RevertMerge"]/*' />
         /// <devdoc> 
         /// unmerge two toolstrips
         /// </devdoc>
@@ -2123,7 +2113,6 @@ namespace System.Windows.Forms {
             return RevertMergeInternal(targetToolStrip, sourceToolStrip, /*revertMDIControls*/false);
         }
 
-        /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager.RevertMerge2"]/*' />
         /// <devdoc> 
         /// unmerge two toolstrips
         /// </devdoc>

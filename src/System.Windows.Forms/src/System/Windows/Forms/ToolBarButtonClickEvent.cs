@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using Microsoft.Win32;
 
-    /// <include file='doc\ToolBarButtonClickEvent.uex' path='docs/doc[@for="ToolBarButtonClickEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.ToolBar.ButtonClick'/>
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
 
         private ToolBarButton button;
 
-        /// <include file='doc\ToolBarButtonClickEvent.uex' path='docs/doc[@for="ToolBarButtonClickEventArgs.ToolBarButtonClickEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ToolBarButtonClickEventArgs'/>
@@ -34,7 +32,6 @@ namespace System.Windows.Forms {
             this.button = button;
         }
 
-        /// <include file='doc\ToolBarButtonClickEvent.uex' path='docs/doc[@for="ToolBarButtonClickEventArgs.Button"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies the <see cref='System.Windows.Forms.ToolBarButton'/>

@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System;
 
-    /// <include file='doc\UpDownEvent.uex' path='docs/doc[@for="UpDownEventArgs"]/*' />
     /// <internalonly/>
     /// <devdoc>
     ///    <para>
@@ -18,7 +17,6 @@ namespace System.Windows.Forms {
 
         int buttonID;
 
-        /// <include file='doc\UpDownEvent.uex' path='docs/doc[@for="UpDownEventArgs.UpDownEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -26,7 +24,6 @@ namespace System.Windows.Forms {
             buttonID = buttonPushed;
         }
 
-        /// <include file='doc\UpDownEvent.uex' path='docs/doc[@for="UpDownEventArgs.ButtonID"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

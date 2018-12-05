@@ -7,7 +7,6 @@ namespace System.Windows.Forms
 {
     using System.ComponentModel;
 
-    /// <include file='doc\ListViewVirtualItemsSelectionRangeChangedEvent.uex' path='docs/doc[@for="ListViewVirtualItemsSelectionRangeChangedEventArgs"]/*' />
     /// <devdoc>
     /// The event class that is created when the selection state of a ListViewItem is changed.
     /// </devdoc>
@@ -17,7 +16,6 @@ namespace System.Windows.Forms
         private int endIndex;
         private bool isSelected;
         
-        /// <include file='doc\ListViewVirtualItemsSelectionRangeChangedEvent.uex' path='docs/doc[@for="ListViewVirtualItemsSelectionRangeChangedEventArgs.ListViewVirtualItemsSelectionRangeChangedEventArgs"]/*' />
         /// <devdoc>
         /// Constructs a ListViewVirtualItemsSelectionRangeChangedEventArgs object.
         /// </devdoc>
@@ -32,7 +30,6 @@ namespace System.Windows.Forms
             this.isSelected = isSelected;
         }
 
-        /// <include file='doc\ListViewVirtualItemsSelectionRangeChangedEvent.uex' path='docs/doc[@for="ListViewVirtualItemsSelectionRangeChangedEventArgs.EndIndex"]/*' />
         /// <devdoc>
         /// Returns the end of the range where the selection changed
         /// </devdoc>
@@ -44,7 +41,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ListViewVirtualItemsSelectionRangeChangedEvent.uex' path='docs/doc[@for="ListViewVirtualItemsSelectionRangeChangedEventArgs.IsSelected"]/*' />
         /// <devdoc>
         /// Return true if the items are selected
         /// </devdoc>
@@ -56,7 +52,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ListViewVirtualItemsSelectionRangeChangedEvent.uex' path='docs/doc[@for="ListViewVirtualItemsSelectionRangeChangedEventArgs.StartIndex"]/*' />
         /// <devdoc>
         /// Returns the begining of the range where the selection changed
         /// </devdoc>

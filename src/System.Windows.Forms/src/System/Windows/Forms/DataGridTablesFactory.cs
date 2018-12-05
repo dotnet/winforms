@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using Microsoft.Win32;
 
-    /// <include file='doc\DataGridTablesFactory.uex' path='docs/doc[@for="GridTablesFactory"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -27,7 +26,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\DataGridTablesFactory.uex' path='docs/doc[@for="GridTablesFactory.CreateGridTables"]/*' />
         /// <devdoc>
         ///      Takes a DataView and creates an intelligent mapping of
         ///      DataView storage types into available DataColumn types.

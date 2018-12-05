@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewCellToolTipTextNeededEventArgs.uex' path='docs/doc[@for="DataGridViewCellToolTipTextNeededEventArgs"]/*' />
     public class DataGridViewCellToolTipTextNeededEventArgs : DataGridViewCellEventArgs
     {
         private string toolTipText;
@@ -20,7 +19,6 @@ namespace System.Windows.Forms
             this.toolTipText = toolTipText;
         }
 
-        /// <include file='doc\DataGridViewCellToolTipTextNeededEventArgs.uex' path='docs/doc[@for="DataGridViewCellToolTipTextNeededEventArgs.ToolTipText"]/*' />
         public string ToolTipText
         {
             get

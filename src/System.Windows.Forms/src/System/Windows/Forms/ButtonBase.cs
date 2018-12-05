@@ -19,7 +19,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Implements the basic functionality required by a button control.
@@ -59,7 +58,6 @@ namespace System.Windows.Forms {
 
         private bool isEnableVisualStyleBackgroundSet = false;
         
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ButtonBase"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ButtonBase'/> class.
@@ -133,7 +131,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.AutoSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
@@ -149,7 +146,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.BackColor"]/*' />
         /// <devdoc>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
@@ -180,7 +176,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -191,7 +186,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.CreateParams"]/*' />
         protected override CreateParams CreateParams {
             [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
@@ -231,14 +225,12 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.DefaultImeMode"]/*' />
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.IsDefault"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -261,7 +253,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.FlatStyle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -290,7 +281,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.FlatAppearance"]/*' />
         /// <devdoc>
         /// </devdoc>
         [
@@ -309,7 +299,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.Image"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the image
@@ -361,7 +350,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ImageAlign"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the alignment of the image on the button control.
@@ -389,7 +377,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ImageIndex"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the image list index value of the image
@@ -429,7 +416,6 @@ namespace System.Windows.Forms {
             }
         }
 
-         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ImageKey"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the image list index key of the image
@@ -464,7 +450,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ImageList"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.ImageList'/> that contains the <see cref='System.Drawing.Image'/> displayed on a button control.
@@ -514,7 +499,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -525,7 +509,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ImeModeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
@@ -642,7 +625,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.TextAlign"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the alignment of the text on the button control.
@@ -675,7 +657,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.TextImageRelation"]/*' />
         [DefaultValue(TextImageRelation.Overlay),
         Localizable(true),
         SRDescription(nameof(SR.ButtonTextImageRelationDescr)),
@@ -742,7 +723,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new ButtonBaseAccessibleObject(this);
         }
@@ -751,7 +731,6 @@ namespace System.Windows.Forms {
             ImageList = null;
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.Dispose"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -780,7 +759,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnGotFocus"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -792,7 +770,6 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnLostFocus"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -809,7 +786,6 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseEnter"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -835,7 +811,6 @@ namespace System.Windows.Forms {
             base.OnMouseEnter(eventargs);
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseLeave"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -860,7 +835,6 @@ namespace System.Windows.Forms {
             base.OnMouseLeave(eventargs);
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseMove"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -889,7 +863,6 @@ namespace System.Windows.Forms {
             base.OnMouseMove(mevent);
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseDown"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -908,7 +881,6 @@ namespace System.Windows.Forms {
             base.OnMouseDown(mevent);
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseUp"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -920,7 +892,6 @@ namespace System.Windows.Forms {
             base.OnMouseUp(mevent);
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ResetFlagsandPaint"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1032,7 +1003,6 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnEnabledChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1047,7 +1017,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnTextChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1058,7 +1027,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnKeyDown"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1087,7 +1055,6 @@ namespace System.Windows.Forms {
             base.OnKeyDown(kevent);
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnKeyUp"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1118,7 +1085,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnPaint"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1144,7 +1110,6 @@ namespace System.Windows.Forms {
             base.OnPaint(pevent);
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnParentChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1153,7 +1118,6 @@ namespace System.Windows.Forms {
             Animate();
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnVisibleChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1220,7 +1184,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.UseVisualStyleBackColor"]/*' />
         /// <internalonly/>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1256,7 +1219,6 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.WndProc"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1330,22 +1292,18 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBaseAccessibleObject"]/*' />
         /// <internalonly/>
         [System.Runtime.InteropServices.ComVisible(true)]        
         public class ButtonBaseAccessibleObject : ControlAccessibleObject {
             
-            /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBaseAccessibleObject.ButtonBaseAccessibleObject"]/*' />
             public ButtonBaseAccessibleObject(Control owner) : base(owner) {
             }
 
-            /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBaseAccessibleObject.DoDefaultAction"]/*' />
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 ((ButtonBase)Owner).OnClick(EventArgs.Empty);
             }
             
-            /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBaseAccessibleObject.State"]/*' />
             public override AccessibleStates State {
                 get {
                     AccessibleStates state = base.State;

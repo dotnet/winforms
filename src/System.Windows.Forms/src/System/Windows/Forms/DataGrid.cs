@@ -23,7 +23,6 @@ namespace System.Windows.Forms {
         using System.Diagnostics.CodeAnalysis;
         using System.Globalization;
     
-        /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid"]/*' />
         /// <devdoc>
         ///    <para>Displays ADO.NET data in a scrollable
         ///       grid.</para>
@@ -318,7 +317,6 @@ namespace System.Windows.Forms {
             // =-----------------------------------------------------------------
     
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.DataGrid"]/*' />
             /// <devdoc>
             /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGrid'/>
             /// class.</para>
@@ -378,7 +376,6 @@ namespace System.Windows.Forms {
             // =        Properties
             // =------------------------------------------------------------------
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.AllowSorting"]/*' />
             /// <devdoc>
             ///    <para>Gets or sets a value indicating whether the grid can be resorted by clicking on
             ///       a column header.</para>
@@ -404,7 +401,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.AlternatingBackColor"]/*' />
             [
              SRCategory(nameof(SR.CatColors)),
              SRDescription(nameof(SR.DataGridAlternatingBackColorDescr))
@@ -427,7 +423,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetAlternatingBackColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -438,7 +433,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeAlternatingBackColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -455,7 +449,6 @@ namespace System.Windows.Forms {
     
             // overrode those properties just to move the BackColor and the ForeColor 
             // from the Appearance group onto the Color Group
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackColor"]/*' />
             /// <devdoc>
             ///    <para>Gets or sets the background color of the grid.</para>
             /// </devdoc>
@@ -476,7 +469,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetBackColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -486,7 +478,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ForeColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -502,7 +493,6 @@ namespace System.Windows.Forms {
                     base.ForeColor = value;
                 }
             }
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetForeColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -531,7 +521,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BorderStyle"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or
@@ -564,7 +553,6 @@ namespace System.Windows.Forms {
     
             private static readonly object EVENT_BORDERSTYLECHANGED = new object();
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BorderStyleChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -592,7 +580,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.DefaultSize"]/*' />
             protected override Size DefaultSize {
                 get {
                     return new Size(130, 80);
@@ -706,7 +693,6 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CaptionBackColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets the background color of the caption area.
@@ -731,7 +717,6 @@ namespace System.Windows.Forms {
                 Caption.ResetBackColor();
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeCaptionBackColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets a value
@@ -744,7 +729,6 @@ namespace System.Windows.Forms {
                 return Caption.ShouldSerializeBackColor();
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CaptionForeColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets
@@ -769,7 +753,6 @@ namespace System.Windows.Forms {
                 Caption.ResetForeColor();
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeCaptionForeColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets a value
@@ -782,7 +765,6 @@ namespace System.Windows.Forms {
                 return Caption.ShouldSerializeForeColor();
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CaptionFont"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets the font of the grid's caption.
@@ -817,7 +799,6 @@ namespace System.Windows.Forms {
                 Caption.ResetFont();
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CaptionText"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets the text of the grid's caption.
@@ -838,7 +819,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CaptionVisible"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets a value that indicates
@@ -866,7 +846,6 @@ namespace System.Windows.Forms {
     
             private static readonly object EVENT_CAPTIONVISIBLECHANGED = new object();
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CaptionVisibleChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -880,7 +859,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CurrentCell"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets which cell has the focus. Not available at design time.
@@ -1145,7 +1123,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CurrentCellChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1177,7 +1154,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.SelectionBackColor"]/*' />
             [
              SRCategory(nameof(SR.CatColors)),
              SRDescription(nameof(SR.DataGridSelectionBackColorDescr))
@@ -1211,7 +1187,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeSelectionBackColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1220,7 +1195,6 @@ namespace System.Windows.Forms {
                 return !DefaultSelectionBackBrush.Equals(selectionBackBrush);
             }
             
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetSelectionBackColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1229,7 +1203,6 @@ namespace System.Windows.Forms {
                     SelectionBackColor = DefaultSelectionBackBrush.Color;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.SelectionForeColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1252,7 +1225,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeSelectionForeColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1261,7 +1233,6 @@ namespace System.Windows.Forms {
                 return !SelectionForeBrush.Equals(DefaultSelectionForeBrush);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetSelectionForeColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1423,7 +1394,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.DataSource"]/*' />
             /// <devdoc>
             ///    <para>Gets or sets the data source that the grid is displaying data for.</para>
             /// </devdoc>
@@ -1472,7 +1442,6 @@ namespace System.Windows.Forms {
 
             private static readonly object EVENT_DATASOURCECHANGED = new object();
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.DataSourceChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1486,7 +1455,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.DataMember"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets the specific table in a DataSource for the control.
@@ -1514,7 +1482,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.SetDataBinding"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1527,7 +1494,6 @@ namespace System.Windows.Forms {
                 Set_ListManager(dataSource, dataMember, false);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ListManager"]/*' />
             [
              Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
              SRDescription(nameof(SR.DataGridListManagerDescr))
@@ -1707,7 +1673,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CurrentRowIndex"]/*' />
             /// <devdoc>
             ///    <para>Gets or sets index of the selected row.</para>
             /// </devdoc>
@@ -1753,7 +1718,6 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.TableStyles"]/*' />
             /// <devdoc>
             ///    <para>Gets the collection of tables for the grid.</para>
             /// </devdoc>
@@ -1787,7 +1751,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.GridLineColor"]/*' />
             /// <devdoc>
              ///    <para>Gets or sets the color of the grid lines.</para>
              /// </devdoc>
@@ -1810,7 +1773,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeGridLineColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1819,7 +1781,6 @@ namespace System.Windows.Forms {
                 return !GridLineBrush.Equals(DefaultGridLineBrush);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetGridLineColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1835,7 +1796,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.GridLineStyle"]/*' />
              /// <devdoc>
              ///    <para>
              ///       Gets or sets the line style of the grid.
@@ -1871,7 +1831,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsLabelStyle"]/*' />
              /// <devdoc>
              ///    <para>
              ///       Gets or
@@ -1907,7 +1866,6 @@ namespace System.Windows.Forms {
     
             private static readonly object EVENT_PARENTROWSLABELSTYLECHANGED = new object();
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsLabelStyleChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1927,7 +1885,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.FirstVisibleColumn"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets the index of the first visible column in a grid.
@@ -1943,7 +1900,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.FlatMode"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets a value indicating whether the grid displays in flat mode.
@@ -1969,7 +1925,6 @@ namespace System.Windows.Forms {
     
             private static readonly object EVENT_FLATMODECHANGED = new object();
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.FlatModeChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1983,7 +1938,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HeaderBackColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or
@@ -2021,7 +1975,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeHeaderBackColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2030,7 +1983,6 @@ namespace System.Windows.Forms {
                 return !HeaderBackBrush.Equals(DefaultHeaderBackBrush);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetHeaderBackColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2053,7 +2005,6 @@ namespace System.Windows.Forms {
 		 	backgroundBrush = DefaultBackgroundBrush;
 	     }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeBackgroundColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2064,7 +2015,6 @@ namespace System.Windows.Forms {
     
     
             // using this property, the user can set the backGround color 
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundColor"]/*' />
             /// <devdoc>
             ///    <para>Gets or sets the background color of the grid.</para>
             /// </devdoc>
@@ -2095,7 +2045,6 @@ namespace System.Windows.Forms {
     
             private static readonly object EVENT_BACKGROUNDCOLORCHANGED = new object();
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundColorChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2109,7 +2058,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HeaderFont"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Indicates whether the <see cref='System.Windows.Forms.DataGrid.HeaderFont'/> property should be persisted.
@@ -2135,7 +2083,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeHeaderFont"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2143,7 +2090,6 @@ namespace System.Windows.Forms {
                 return(headerFont != null);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetHeaderFont"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2156,7 +2102,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HeaderForeColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Resets the <see cref='System.Windows.Forms.DataGrid.HeaderFont'/> property to its default value.
@@ -2191,7 +2136,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeHeaderForeColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2200,7 +2144,6 @@ namespace System.Windows.Forms {
                 return !HeaderForePen.Equals(DefaultHeaderForePen);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetHeaderForeColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2302,7 +2245,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HorizScrollBar"]/*' />
             /// <devdoc>
             /// </devdoc>
             [
@@ -2335,7 +2277,6 @@ namespace System.Windows.Forms {
                 */
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.LinkColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Indicates whether the <see cref='System.Windows.Forms.DataGrid.LinkColor'/> property should be persisted.
@@ -2367,7 +2308,6 @@ namespace System.Windows.Forms {
                 return !LinkBrush.Equals(DefaultLinkBrush);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetLinkColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2382,7 +2322,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.LinkHoverColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets
@@ -2405,7 +2344,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeLinkHoverColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2415,7 +2353,6 @@ namespace System.Windows.Forms {
                 // return !LinkHoverBrush.Equals(defaultLinkHoverBrush);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetLinkHoverColor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2444,7 +2381,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.AllowNavigation"]/*' />
             /// <devdoc>
             ///    <para>Gets or sets a value
             ///       that specifies which links are shown and in what context.</para>
@@ -2473,7 +2409,6 @@ namespace System.Windows.Forms {
     
             private static readonly object EVENT_ALLOWNAVIGATIONCHANGED = new object();
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.AllowNavigationChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2487,7 +2422,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Cursor"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2505,7 +2439,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CursorChanged"]/*' />
             /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler CursorChanged {
@@ -2517,7 +2450,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImage"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2535,7 +2467,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImageLayout"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2555,7 +2486,6 @@ namespace System.Windows.Forms {
     
     
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImageChanged"]/*' />
             /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler BackgroundImageChanged {
@@ -2567,7 +2497,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImageLayoutChanged"]/*' />
             /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler BackgroundImageLayoutChanged {
@@ -2579,7 +2508,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsBackColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets the background color of parent rows.
@@ -2606,7 +2534,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeParentRowsBackColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Indicates whether the <see cref='System.Windows.Forms.DataGrid.ParentRowsBackColor'/> property should be
@@ -2623,7 +2550,6 @@ namespace System.Windows.Forms {
                     parentRows.BackBrush = DefaultParentRowsBackBrush;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsForeColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets the foreground color of parent rows.
@@ -2648,7 +2574,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeParentRowsForeColor"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Indicates whether the <see cref='System.Windows.Forms.DataGrid.ParentRowsForeColor'/> property should be
@@ -2666,7 +2591,6 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.PreferredColumnWidth"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets
@@ -2693,7 +2617,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.PreferredRowHeight"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets the preferred row height for the <see cref='System.Windows.Forms.DataGrid'/> control.
@@ -2718,7 +2641,6 @@ namespace System.Windows.Forms {
 		 	prefferedRowHeight  = defaultFontHeight + 3;
     	     }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializePreferredRowHeight"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2727,7 +2649,6 @@ namespace System.Windows.Forms {
                 return prefferedRowHeight != defaultFontHeight + 3;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ReadOnly"]/*' />
             /// <devdoc>
             ///    <para>Gets or sets a value indicating whether the grid
             ///       is in read-only mode.</para>
@@ -2779,7 +2700,6 @@ namespace System.Windows.Forms {
     
             private static readonly object EVENT_READONLYCHANGED = new object();
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ReadOnlyChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2793,7 +2713,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ColumnHeadersVisible"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets
@@ -2819,7 +2738,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsVisible"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets a value indicating whether the parent rows of a table are
@@ -2850,7 +2768,6 @@ namespace System.Windows.Forms {
     
             private static readonly object EVENT_PARENTROWSVISIBLECHANGED = new object();
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsVisibleChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2868,7 +2785,6 @@ namespace System.Windows.Forms {
                 return parentRows.IsEmpty();
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.RowHeadersVisible"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets a value indicating whether the data grid's row headers are
@@ -2893,7 +2809,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.RowHeaderWidth"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2920,7 +2835,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Text"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets the width of headers.
@@ -2941,7 +2855,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.TextChanged"]/*' />
             /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler TextChanged {
@@ -2953,7 +2866,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.VertScrollBar"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets the vertical scroll bar of the control.
@@ -2969,7 +2881,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.VisibleColumnCount"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets the number of visible columns.
@@ -2985,7 +2896,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.VisibleRowCount"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets the number of rows visible.
@@ -3002,7 +2912,6 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.this"]/*' />
             /// <devdoc>
             ///    <para>Gets or sets the value of the cell at
             ///       the specified the row and column.</para>
@@ -3039,7 +2948,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.this1"]/*' />
             /// <devdoc>
             /// <para>Gets or sets the value of a specified <see cref='System.Windows.Forms.DataGridCell'/>.</para>
             /// </devdoc>
@@ -3356,7 +3264,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnBorderStyleChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3367,7 +3274,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnCaptionVisibleChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3378,7 +3284,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnCurrentCellChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3411,7 +3316,6 @@ namespace System.Windows.Forms {
             }
             */
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnFlatModeChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3422,7 +3326,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnBackgroundColorChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3433,7 +3336,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnAllowNavigationChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3444,7 +3346,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnParentRowsVisibleChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3455,7 +3356,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnParentRowsLabelStyleChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3466,7 +3366,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnReadOnlyChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3477,7 +3376,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnNavigate"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.DataGrid.Navigate'/>
@@ -3490,7 +3388,6 @@ namespace System.Windows.Forms {
             }
     
             /*
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnNodeClick"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.DataGrid.ColumnResize'/> event.
@@ -3527,7 +3424,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnRowHeaderClick"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.DataGrid.RowHeaderClick'/> event.</para>
             /// </devdoc>
@@ -3536,7 +3432,6 @@ namespace System.Windows.Forms {
                     onRowHeaderClick(this, e);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnScroll"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.DataGrid.Scroll'/> event.
@@ -3553,7 +3448,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.GridHScrolled"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Listens
@@ -3637,7 +3531,6 @@ namespace System.Windows.Forms {
                 this.gridState[GRIDSTATE_isScrolling] = false;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.GridVScrolled"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Listens
@@ -3703,7 +3596,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnBackButtonClicked"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Listens
@@ -3717,7 +3609,6 @@ namespace System.Windows.Forms {
                 if (handler != null) handler(this,e);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnBackColorChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3728,7 +3619,6 @@ namespace System.Windows.Forms {
                 base.OnBackColorChanged(e);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnBindingContextChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3757,7 +3647,6 @@ namespace System.Windows.Forms {
                 base.OnBindingContextChanged(e);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnDataSourceChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3768,7 +3657,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnShowParentDetailsButtonClicked"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Listens for
@@ -3785,7 +3673,6 @@ namespace System.Windows.Forms {
                 if (handler != null) handler(this,e);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnForeColorChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3796,7 +3683,6 @@ namespace System.Windows.Forms {
                 base.OnForeColorChanged(e);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnFontChanged"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -3835,7 +3721,6 @@ namespace System.Windows.Forms {
                 base.OnFontChanged(e);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnPaintBackground"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.PaintBackground'/>
@@ -3846,7 +3731,6 @@ namespace System.Windows.Forms {
                 // null body
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnLayout"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.Layout'/> event which
@@ -3883,7 +3767,6 @@ namespace System.Windows.Forms {
     
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnHandleCreated"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.CreateHandle'/>
@@ -3901,7 +3784,6 @@ namespace System.Windows.Forms {
                 PerformLayout();
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnHandleDestroyed"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.DestroyHandle'/>
@@ -3920,7 +3802,6 @@ namespace System.Windows.Forms {
                 toolTipId = 0;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnEnter"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.Enter'/>
             /// event.</para>
@@ -3935,7 +3816,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnLeave"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.Leave'/>
             /// event.</para>
@@ -3972,7 +3852,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnKeyDown"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.KeyDown'/>
@@ -3985,7 +3864,6 @@ namespace System.Windows.Forms {
                 ProcessGridKey(ke);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnKeyPress"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyPress'/> event.</para>
             /// </devdoc>
@@ -4002,7 +3880,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnMouseDown"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseDown'/> event.</para>
             /// </devdoc>
@@ -4177,7 +4054,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnMouseLeave"]/*' />
             /// <devdoc>
             /// <para>Creates the <see cref='System.Windows.Forms.Control.MouseLeave'/>
             /// event.</para>
@@ -4199,7 +4075,6 @@ namespace System.Windows.Forms {
                 this.OnMouseWheel(e);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnMouseMove"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseMove'/>
             /// event.</para>
@@ -4307,7 +4182,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnMouseUp"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseUp'/> event.</para>
             /// </devdoc>
@@ -4344,7 +4218,6 @@ namespace System.Windows.Forms {
                 trackColumnHeader = null;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnMouseWheel"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseWheel'/> event.</para>
             /// </devdoc>
@@ -4392,7 +4265,6 @@ namespace System.Windows.Forms {
                 gridState[GRIDSTATE_isScrolling] = false;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnPaint"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.Paint'/>
             /// event.</para>
@@ -4455,7 +4327,6 @@ namespace System.Windows.Forms {
     
             // Since Win32 only invalidates the area that gets uncovered,
             // we have to manually invalidate the old border area
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnResize"]/*' />
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.Resize'/> event.</para>
             /// </devdoc>
@@ -4566,7 +4437,6 @@ namespace System.Windows.Forms {
                 editColumn = null;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Navigate"]/*' />
             /// <devdoc>
             ///    <para>Occurs when the user navigates to a new table.</para>
             /// </devdoc>
@@ -4580,7 +4450,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.RowHeaderClick"]/*' />
             /// <devdoc>
             ///    <para>Occurs when a row header is clicked.</para>
             /// </devdoc>
@@ -4609,7 +4478,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Scroll"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Occurs when the user scrolls the <see cref='System.Windows.Forms.DataGrid'/> control.
@@ -4625,7 +4493,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Site"]/*' />
             public override ISite Site {
                 get {
                     return base.Site;
@@ -4661,7 +4528,6 @@ namespace System.Windows.Forms {
                 gridState[GRIDSTATE_inListAddNew] = false;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BeginEdit"]/*' />
             /// <devdoc>
             ///    <para>Attempts to
             ///       put the grid into a state where editing is
@@ -4685,7 +4551,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BeginInit"]/*' />
             /// <devdoc>
             ///    <para>Specifies the beginning of the initialization code.</para>
             /// </devdoc>
@@ -4866,7 +4731,6 @@ namespace System.Windows.Forms {
                 // OnColumnResize(EventArgs.Empty);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Collapse"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Collapses child relations, if any exist for all rows, or for a
@@ -5679,7 +5543,6 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CreateAccessibilityInstance"]/*' />
             /// <devdoc>
             ///     Constructs the new instance of the accessibility object for this control. Subclasses
             ///     should not call base.CreateAccessibilityObject.
@@ -5795,7 +5658,6 @@ namespace System.Windows.Forms {
                 return cachedScrollableRegion;
              }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Dispose"]/*' />
             /// <devdoc>
             ///    Disposes of the resources (other than memory) used
             ///    by the <see cref='System.Windows.Forms.DataGrid'/>.
@@ -5948,7 +5810,6 @@ namespace System.Windows.Forms {
                 gridState[GRIDSTATE_editControlChanging] = false;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.EndEdit"]/*' />
             /// <devdoc>
             ///    <para>Requests an end to an edit operation taking place on the
             ///    <see cref='System.Windows.Forms.DataGrid'/>
@@ -6022,7 +5883,6 @@ namespace System.Windows.Forms {
             //
             // also, tell the current row to lose child focus
             //
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ColumnStartedEditing"]/*' />
             internal protected virtual void ColumnStartedEditing(Rectangle bounds) {
                 Debug.Assert( currentRow >= firstVisibleRow && currentRow <= firstVisibleRow +  numVisibleRows, "how can one edit a row which is invisible?");
                 DataGridRow[] localGridRows = DataGridRows;
@@ -6070,12 +5930,10 @@ namespace System.Windows.Forms {
                 localGridRows[currentRow].LoseChildFocus(layout.RowHeaders, isRightToLeft());
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ColumnStartedEditing1"]/*' />
             internal protected virtual void ColumnStartedEditing(Control editingControl) {
                 this.ColumnStartedEditing(editingControl.Bounds);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Expand"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Displays child relations, if any exist, for all rows or a
@@ -6086,7 +5944,6 @@ namespace System.Windows.Forms {
                 SetRowExpansionState(row, true);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CreateGridColumn"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Creates a <see cref='System.Windows.Forms.DataGridColumnStyle'/> using the specified <see cref='System.ComponentModel.PropertyDescriptor'/>.
@@ -6097,7 +5954,6 @@ namespace System.Windows.Forms {
                 return myGridTable == null ? null : myGridTable.CreateGridColumn(prop, isDefault);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CreateGridColumn1"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -6169,7 +6025,6 @@ namespace System.Windows.Forms {
     
     #endif
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.EndInit"]/*' />
             /// <devdoc>
             ///    <para>Specifies the end of the initialization code.</para>
             /// </devdoc>
@@ -6407,7 +6262,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.GetCurrentCellBounds"]/*' />
             /// <devdoc>
             /// <para>Gets a <see cref='T:System.Drawing.Rectangle'/>
             /// that specifies the four corners of the selected cell.</para>
@@ -6417,7 +6271,6 @@ namespace System.Windows.Forms {
                 return GetCellBounds(current.RowNumber, current.ColumnNumber);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.GetCellBounds"]/*' />
             /// <devdoc>
             /// <para>Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by row and column number.</para>
             /// </devdoc>
@@ -6430,7 +6283,6 @@ namespace System.Windows.Forms {
                 return cellBounds;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.GetCellBounds1"]/*' />
             /// <devdoc>
             /// <para>Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by <see cref='System.Windows.Forms.DataGridCell'/>.</para>
             /// </devdoc>
@@ -6450,7 +6302,6 @@ namespace System.Windows.Forms {
                 return rowBounds;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTest"]/*' />
             /// <devdoc>
             ///    <para>Gets information, such as row and column number of a
             ///       clicked point on
@@ -6518,7 +6369,6 @@ namespace System.Windows.Forms {
                 return ci;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTest1"]/*' />
             /// <devdoc>
             ///    <para>Gets information, such as row and column number of a
             ///       clicked point on the grid, about the
@@ -6670,7 +6520,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.IsExpanded"]/*' />
             /// <devdoc>
             ///    <para>Gets a value that indicates whether a specified row's node is expanded or collapsed.</para>
             /// </devdoc>
@@ -6691,7 +6540,6 @@ namespace System.Windows.Forms {
                     return false;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.IsSelected"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets a value indicating whether a
@@ -6852,7 +6700,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.NavigateBack"]/*' />
             /// <devdoc>
             ///    <para>Navigates back to the table previously displayed in the grid.</para>
             /// </devdoc>
@@ -6956,7 +6803,6 @@ namespace System.Windows.Forms {
                 OnNavigate(new NavigateEventArgs(false));
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.NavigateTo"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Navigates to the table specified by row and relation
@@ -7458,7 +7304,6 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ProcessDialogKey"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets or sets a value that indicates whether a key should be processed
@@ -7640,7 +7485,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ProcessGridKey"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Processes keys for grid navigation.
@@ -8195,7 +8039,6 @@ namespace System.Windows.Forms {
                 return true;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ProcessKeyPreview"]/*' />
             /// <devdoc>
             ///    <para>Previews a keyboard message and returns a value indicating if the key was
             ///       consumed.</para>
@@ -8239,7 +8082,6 @@ namespace System.Windows.Forms {
                 return base.ProcessKeyPreview(ref m);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ProcessTabKey"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Gets a value indicating whether the Tab key should be processed.
@@ -8479,7 +8321,6 @@ namespace System.Windows.Forms {
                 return true;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CancelEditing"]/*' />
             virtual protected void CancelEditing() {
                 CancelCursorUpdate();
                 // yield the escape key if there is no editing
@@ -8511,7 +8352,6 @@ namespace System.Windows.Forms {
     
             // the BackButtonClicked event:
             //
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackButtonClick"]/*' />
             /// <devdoc>
             ///    <para>Occurs when the BackButton is clicked.</para>
             /// </devdoc>
@@ -8530,7 +8370,6 @@ namespace System.Windows.Forms {
     
             // the DownButtonClick event
             //
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShowParentDetailsButtonClick"]/*' />
             /// <devdoc>
             ///    Occurs when the Down button is clicked.
             /// </devdoc>
@@ -8552,7 +8391,6 @@ namespace System.Windows.Forms {
                 gridState[GRIDSTATE_overCaption] = true;
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetSelection"]/*' />
             /// <devdoc>
             ///      Turns off selection for all rows that are selected.
             /// </devdoc>
@@ -8687,7 +8525,6 @@ namespace System.Windows.Forms {
                     ScrollRight(dCols);
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Select"]/*' />
             /// <devdoc>
             ///      Selects a given row
             /// </devdoc>
@@ -8956,7 +8793,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.SubObjectsSiteChange"]/*' />
             /// <internalonly/>
             public void SubObjectsSiteChange(bool site) {
                 DataGrid dgrid = this;
@@ -8990,7 +8826,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.UnSelect"]/*' />
             /// <devdoc>
             ///      Unselects a given row
             /// </devdoc>
@@ -9019,7 +8854,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.GetOutputTextDelimiter"]/*' />
             /// <internalonly/>
             /// <devdoc>
             ///    Will return the string that will be used as a delimiter between columns
@@ -9316,7 +9150,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestInfo"]/*' />
             /// <devdoc>
             ///    <para>Contains information
             ///       about the part of the <see cref='System.Windows.Forms.DataGrid'/> control the user
@@ -9328,7 +9161,6 @@ namespace System.Windows.Forms {
                 internal int row;
                 internal int col;
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestInfo.Nowhere"]/*' />
                 /// <devdoc>
                 /// <para>Allows the <see cref='System.Windows.Forms.DataGrid.HitTestInfo'/> object to inform you the 
                 ///    extent of the grid.</para>
@@ -9349,7 +9181,6 @@ namespace System.Windows.Forms {
                     row = col = -1;
                 }
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestInfo.Column"]/*' />
                 /// <devdoc>
                 ///    <para>Gets the number of the clicked column.</para>
                 /// </devdoc>
@@ -9359,7 +9190,6 @@ namespace System.Windows.Forms {
                     }
                 }
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestInfo.Row"]/*' />
                 /// <devdoc>
                 ///    <para>Gets the
                 ///       number of the clicked row.</para>
@@ -9370,7 +9200,6 @@ namespace System.Windows.Forms {
                     }
                 }
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestInfo.Type"]/*' />
                 /// <devdoc>
                 /// <para>Gets the part of the <see cref='System.Windows.Forms.DataGrid'/> control, other than the row or column, that was 
                 ///    clicked.</para>
@@ -9381,7 +9210,6 @@ namespace System.Windows.Forms {
                     }
                 }
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestInfo.Equals"]/*' />
                 /// <devdoc>
                 ///    <para>Indicates whether two objects are identical.</para>
                 /// </devdoc>
@@ -9395,7 +9223,6 @@ namespace System.Windows.Forms {
                     return false;
                 }
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestInfo.GetHashCode"]/*' />
                 /// <devdoc>
                 /// <para>Gets the hash code for the <see cref='System.Windows.Forms.DataGrid.HitTestInfo'/> instance.</para>
                 /// </devdoc>
@@ -9403,7 +9230,6 @@ namespace System.Windows.Forms {
                     return(int)type +(row << 8) +(col << 16);
                 }
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestInfo.ToString"]/*' />
                 /// <devdoc>
                 ///    <para>Gets the type, row number, and column number.</para>
                 /// </devdoc>
@@ -9412,34 +9238,25 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType"]/*' />
             /// <devdoc>
             /// <para>Specifies the part of the <see cref='System.Windows.Forms.DataGrid'/> control the user has clicked.</para>
             /// </devdoc>
             [Flags]
             public enum HitTestType {
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.None"]/*' />
                 None         = 0x00000000,
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.Cell"]/*' />
                 Cell         = 0x00000001,
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.ColumnHeader"]/*' />
                 ColumnHeader = 0x00000002,
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.RowHeader"]/*' />
                 RowHeader    = 0x00000004,
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.ColumnResize"]/*' />
                 ColumnResize = 0x00000008,
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.RowResize"]/*' />
                 RowResize    = 0x00000010,
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.Caption"]/*' />
                 Caption      = 0x00000020,
     
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.ParentRows"]/*' />
                 ParentRows   = 0x00000040
             }
     

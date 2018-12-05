@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System;
     using System.ComponentModel;
 
-    /// <include file='doc\DpiChangedEventArgs.uex' path='docs/doc[@for="DpiChangedEventArgs"]/*' />
     /// <devdoc>
     ///     Provides information about a DpiChanged event.
     /// </devdoc>
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }
 
-        /// <include file='doc\DpiChangedEventArgs.uex' path='docs/doc[@for="DpiChangedEventArgs.DeviceDpiXOld"]/*' />
         /// <devdoc>
         /// </devdoc>
         public int DeviceDpiOld {
@@ -30,7 +28,6 @@ namespace System.Windows.Forms {
             private set;
         }
 
-        /// <include file='doc\DpiChangedEventArgs.uex' path='docs/doc[@for="DpiChangedEventArgs.DeviceDpiXNew"]/*' />
         /// <devdoc>
         /// </devdoc>
         public int DeviceDpiNew {
@@ -38,7 +35,6 @@ namespace System.Windows.Forms {
             private set;
         }
 
-        /// <include file='doc\DpiChangedEventArgs.uex' path='docs/doc[@for="DpiChangedEventArgs.SuggestedRectangle"]/*' />
         /// <devdoc>
         /// </devdoc>
         public Rectangle SuggestedRectangle {

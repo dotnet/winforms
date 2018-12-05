@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\MeasureItemEventHandler.uex' path='docs/doc[@for="MeasureItemEventHandler"]/*' />
     /// <devdoc>
     /// </devdoc>
     public delegate void MeasureItemEventHandler(object sender, MeasureItemEventArgs e);

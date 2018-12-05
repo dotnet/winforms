@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Security;
     using System.Security.Permissions;
 
-    /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu"]/*' />
     /// <devdoc>
     ///     This class is used to put context menus on your form and show them for
     ///     controls at runtime.  It basically acts like a regular Menu control,
@@ -31,7 +30,6 @@ namespace System.Windows.Forms {
         
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
     
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.ContextMenu"]/*' />
         /// <devdoc>
         ///     Creates a new ContextMenu object with no items in it by default.
         /// </devdoc>
@@ -39,7 +37,6 @@ namespace System.Windows.Forms {
             : base(null) {
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.ContextMenu1"]/*' />
         /// <devdoc>
         ///     Creates a ContextMenu object with the given MenuItems.
         /// </devdoc>
@@ -47,7 +44,6 @@ namespace System.Windows.Forms {
             : base(menuItems) {
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.SourceControl"]/*' />
         /// <devdoc>
         ///     The last control that was acted upon that resulted in this context
         ///     menu being displayed.
@@ -64,7 +60,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Popup"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -78,7 +73,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Collapse"]/*' />
         /// <devdoc>
         ///    Fires when the context menu collapses.
         /// </devdoc>
@@ -92,7 +86,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.RightToLeft"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -138,7 +131,6 @@ namespace System.Windows.Forms {
                 return (rightToLeft == System.Windows.Forms.RightToLeft.Yes);
             }
         }
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.OnPopup"]/*' />
         /// <devdoc>
         ///     Fires the popup event
         /// </devdoc>
@@ -148,7 +140,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.OnCollapse"]/*' />
         /// <devdoc>
         ///     Fires the collapse event
         /// </devdoc>
@@ -158,7 +149,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="ContextMenu.ProcessCmdKey"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -175,7 +165,6 @@ namespace System.Windows.Forms {
         	RightToLeft = RightToLeft.No;	
         }
         
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.ShouldSerializeRightToLeft"]/*' />
         /// <devdoc>
         ///     Returns true if the RightToLeft should be persisted in code gen.
         /// </devdoc>
@@ -186,7 +175,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Show"]/*' />
         /// <devdoc>
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.
@@ -195,7 +183,6 @@ namespace System.Windows.Forms {
             Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON);
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Show2"]/*' />
         /// <devdoc>
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.

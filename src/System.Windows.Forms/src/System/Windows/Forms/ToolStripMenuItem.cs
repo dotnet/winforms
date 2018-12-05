@@ -22,7 +22,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;    
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem"]/*' />
     /// <devdoc>
     /// ToolStripMenuItem
     /// </devdoc>
@@ -69,7 +68,6 @@ namespace System.Windows.Forms {
         private static readonly object EventCheckedChanged = new object();
         private static readonly object EventCheckStateChanged = new object();
             
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ToolStripMenuItem"]/*' />
         public ToolStripMenuItem() : base() {
             Initialize(); // all additional work should be done in Initialize
         }
@@ -159,7 +157,6 @@ namespace System.Windows.Forms {
             cachedShortcutText = null;
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CreateDefaultDropDown"]/*' />
         protected override ToolStripDropDown CreateDefaultDropDown() {
             // AutoGenerate a Winbar DropDown - set the property so we hook events
              return new ToolStripDropDownMenu(this, true);
@@ -186,7 +183,6 @@ namespace System.Windows.Forms {
             this.SupportsDisabledHotTracking = true;
         }
     
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultSize"]/*' />
         /// <devdoc>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
@@ -198,13 +194,11 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultMargin"]/*' />
         protected internal override Padding DefaultMargin {
             get {
                  return Padding.Empty;
             }
         }
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultPadding"]/*' />
         protected override Padding DefaultPadding {
             get {
                 if (IsOnDropDown) {
@@ -236,7 +230,6 @@ namespace System.Windows.Forms {
            }
         }
       
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.Checked"]/*' />
         /// <devdoc>
         /// <para>
         /// Gets or sets a value indicating whether the item is checked.
@@ -355,7 +348,6 @@ namespace System.Windows.Forms {
             return b;
         }
 
-         /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckOnClick"]/*' />
          [
          DefaultValue(false),
          SRCategory(nameof(SR.CatBehavior)),
@@ -370,7 +362,6 @@ namespace System.Windows.Forms {
              }
          }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckState"]/*' />
         /// <devdoc>
         /// <para>Gets
         /// or sets a value indicating whether the check box is checked.</para>
@@ -404,7 +395,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckedChanged"]/*' />
         /// <devdoc>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
@@ -419,7 +409,6 @@ namespace System.Windows.Forms {
                 Events.RemoveHandler(EventCheckedChanged, value);
             }
         }   
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckStateChanged"]/*' />
         /// <devdoc>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
@@ -436,7 +425,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.Overflow"]/*' />
         /// <devdoc>
         /// <para>Specifies whether or not the item is glued to the winbar or overflow or
         /// can float between the two.</para>
@@ -455,7 +443,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ShortcutKeys"]/*' />
         /// <devdoc>
         /// <para>
         /// Gets or sets the shortcut keys associated with the menu
@@ -534,7 +521,6 @@ namespace System.Windows.Forms {
             }
         }
                     
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ShowShortcutKeys"]/*' />
         /// <devdoc>
         /// <para>
         /// Gets or sets a value that indicates whether the shortcut
@@ -841,7 +827,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnClick"]/*' />
         protected override void OnClick(EventArgs e) {
             if (checkOnClick) {
                 this.Checked = !this.Checked;
@@ -868,7 +853,6 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnCheckedChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckedChanged'/>
         /// event.</para>
@@ -878,7 +862,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnCheckStateChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckStateChanged'/> event.</para>
         /// </devdoc>
@@ -888,7 +871,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnDropDownHide"]/*' />
         protected override void OnDropDownHide(EventArgs e) {
         
             Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnDropDownHide] MenuTimer.Cancel called");
@@ -917,7 +899,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnMouseDown"]/*' />
         /// <devdoc/>
         protected override void OnMouseDown(MouseEventArgs e) {
 
@@ -978,7 +959,6 @@ namespace System.Windows.Forms {
 
             
        
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnMouseEnter"]/*' />
         /// <devdoc/>
         protected override void OnMouseEnter(EventArgs e) {
            
@@ -998,7 +978,6 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnMouseLeave"]/*' />
         /// <devdoc/>
         protected override void OnMouseLeave(EventArgs e) {
               Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
@@ -1029,7 +1008,6 @@ namespace System.Windows.Forms {
             base.OnOwnerChanged(e);
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnPaint"]/*' />
         /// <devdoc/>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {    
 
@@ -1120,7 +1098,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ProcessCmdKey"]/*' />
         /// <devdoc>
         /// handle shortcut keys here.
         /// </devdoc>
@@ -1139,7 +1116,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ProcessMnemonic"]/*' />
         [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
@@ -1159,7 +1135,6 @@ namespace System.Windows.Forms {
              return base.ProcessMnemonic(charCode);
         }
 
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.SetBounds"]/*' />
         /// <devdoc> overridden here so we scooch over when we're in the ToolStripDropDownMenu</devdoc>
         internal protected override void SetBounds(Rectangle rect) {
 

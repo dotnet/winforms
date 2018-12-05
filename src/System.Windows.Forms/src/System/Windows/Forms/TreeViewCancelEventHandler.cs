@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\TreeViewCancelEventHandler.uex' path='docs/doc[@for="TreeViewCancelEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will

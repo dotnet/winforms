@@ -28,7 +28,6 @@ using System.Drawing.Design;
 using System.Security;
 
 namespace System.Windows.Forms {
-    /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase"]/*' />
     /// <devdoc>
     ///     <para>
     /// Wraps ActiveX controls and exposes them as fully featured windows forms controls
@@ -95,7 +94,6 @@ namespace System.Windows.Forms {
         // SECURITY NOTE: This must be internal, because by specifying a
         // clsid here, someone will be able to create a native com object.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.WebBrowserBase"]/*' />
         /// <devdoc>
         ///     <para>
         /// Creates a new instance of a WinForms control which wraps an ActiveX control
@@ -120,7 +118,6 @@ namespace System.Windows.Forms {
         // Public properties:
         //
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ActiveXInstance"]/*' />
         /// <devdoc>
         ///     <para>
         /// Returns the native webbrowser object that this control wraps. Needs FullTrust to access.
@@ -156,7 +153,6 @@ namespace System.Windows.Forms {
         // site is strictly an advanced feature for which one needs UnmanagedCode
         // permissions.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.CreateWebBrowserSiteBase"]/*' />
         /// <devdoc>
         ///     <para>
         /// Returns an object that will be set as the site for the native ActiveX control.
@@ -167,7 +163,6 @@ namespace System.Windows.Forms {
             return new WebBrowserSiteBase(this);
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.AttachInterfaces"]/*' />
         /// <devdoc>
         ///     <para>
         /// This will be called when the native ActiveX control has just been created.
@@ -180,7 +175,6 @@ namespace System.Windows.Forms {
         protected virtual void AttachInterfaces(object nativeActiveXObject) {
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DetachInterfaces"]/*' />
         /// <devdoc>
         ///     <para>
         /// See AttachInterfaces for a description of when to override DetachInterfaces.
@@ -189,7 +183,6 @@ namespace System.Windows.Forms {
         protected virtual void DetachInterfaces() {
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.CreateSink"]/*' />
         /// <devdoc>
         ///     <para>
         /// This will be called when we are ready to start listening to events.
@@ -199,7 +192,6 @@ namespace System.Windows.Forms {
         protected virtual void CreateSink() {
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DetachSink"]/*' />
         /// <devdoc>
         ///     <para>
         /// This will be called when it is time to stop listening to events.
@@ -227,7 +219,6 @@ namespace System.Windows.Forms {
         // component has been added to a container, and a null value indicates that
         // this component is being removed from a container.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Site"]/*' />
         public override ISite Site {
             set {
                 bool hadSelectionHandler = this.RemoveSelectionHandler();
@@ -243,7 +234,6 @@ namespace System.Windows.Forms {
         //
         // We have to resize the ActiveX control when our size changes.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.OnBoundsUpdate"]/*' />
         internal override void OnBoundsUpdate(int x, int y, int width, int height)
         {
             //
@@ -283,7 +273,6 @@ namespace System.Windows.Forms {
         // set a flag and call back into this method. In this method, we first check
         // if this flag is set. If so, we call base.PreProcessMessage.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.PreProcessMessage"]/*' />
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]
         public override bool PreProcessMessage(ref Message msg)
         {
@@ -371,7 +360,6 @@ namespace System.Windows.Forms {
         // We can't decide just by ourselves whether we can process the
         // mnemonic. We have to ask the ActiveX control for it.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ProcessMnemonic"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
@@ -417,7 +405,6 @@ namespace System.Windows.Forms {
         // Certain messages are forwarder directly to the ActiveX control,
         // others are first processed by the wndproc of Control
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.WndProc"]/*' />
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
          PermissionSetAttribute(SecurityAction.LinkDemand, Name="FullTrust"),
          PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust")]
@@ -521,7 +508,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.OnParentChanged"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnParentChanged(EventArgs e) {
             Control parent = ParentInternal;
@@ -531,7 +517,6 @@ namespace System.Windows.Forms {
             base.OnParentChanged(e);
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.OnVisibleChanged"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnVisibleChanged(EventArgs e) {
             if (Visible && !Disposing && !IsDisposed) {
@@ -540,7 +525,6 @@ namespace System.Windows.Forms {
             base.OnVisibleChanged(e);
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.OnGotFocus"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnGotFocus(EventArgs e) {
             if (this.ActiveXState < WebBrowserHelper.AXState.UIActive) {
@@ -549,7 +533,6 @@ namespace System.Windows.Forms {
             base.OnGotFocus(e);
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.OnLostFocus"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnLostFocus(EventArgs e) {
             base.OnLostFocus(e);
@@ -582,7 +565,6 @@ namespace System.Windows.Forms {
         // We have to inform the ActiveX control that an ambient property
         // has changed.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.OnFontChanged"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
@@ -593,7 +575,6 @@ namespace System.Windows.Forms {
         // We have to inform the ActiveX control that an ambient property
         // has changed.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.OnForeColorChanged"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnForeColorChanged(EventArgs e) {
             base.OnForeColorChanged(e);
@@ -604,7 +585,6 @@ namespace System.Windows.Forms {
         // We have to inform the ActiveX control that an ambient property
         // has changed.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.OnBackColorChanged"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
@@ -621,7 +601,6 @@ namespace System.Windows.Forms {
         //
         // TransitionDownTo Passive when we are being disposed.
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 TransitionDownTo(WebBrowserHelper.AXState.Passive);
@@ -1325,7 +1304,6 @@ namespace System.Windows.Forms {
         // Overridden properties:
         //
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DefaultSize"]/*' />
         protected override Size DefaultSize {
             get {
                 return new Size(75, 23);
@@ -1337,12 +1315,10 @@ namespace System.Windows.Forms {
         // Overridden methods:
         //
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.IsInputChar"]/*' />
         protected override bool IsInputChar(char charCode) {
             return true;
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.OnHandleCreated"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to find out when the
         ///     handle has been created. Call base.OnHandleCreated first.
@@ -1377,7 +1353,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BackColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Color BackColor {
@@ -1389,7 +1364,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Font"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Font Font {
@@ -1401,7 +1375,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Color ForeColor {
@@ -1433,7 +1406,6 @@ namespace System.Windows.Forms {
         //
         // Properties blocked at design time and run time:
         //
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.AllowDrop"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AllowDrop {
@@ -1445,7 +1417,6 @@ namespace System.Windows.Forms {
             }
         }
 
-       /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage {
@@ -1457,7 +1428,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout {
@@ -1469,7 +1439,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Cursor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Cursor Cursor {
@@ -1481,7 +1450,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Enabled"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public bool Enabled
@@ -1496,7 +1464,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.RightToLeft"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Localizable(false)]
         public override RightToLeft RightToLeft
         {
@@ -1510,7 +1477,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Text"]/*' />
         // Override this property so that the Bindable attribute can be set to false.
         [
             Browsable(false),
@@ -1527,7 +1493,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.UseWaitCursor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool UseWaitCursor {
@@ -1544,7 +1509,6 @@ namespace System.Windows.Forms {
         // Unavailable events
         //
         
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BackgroundImageLayoutChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add {
@@ -1554,7 +1518,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Enter"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Enter {
             add {
@@ -1564,7 +1527,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Leave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Leave {
             add {
@@ -1574,7 +1536,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseCaptureChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseCaptureChanged {
             add {
@@ -1584,7 +1545,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseClick {
             add {
@@ -1594,7 +1554,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseDoubleClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDoubleClick {
             add {
@@ -1604,7 +1563,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BackColorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
             add {
@@ -1614,7 +1572,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BackgroundImageChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add {
@@ -1624,7 +1581,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BindingContextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BindingContextChanged {
             add {
@@ -1634,7 +1590,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.CursorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged {
             add {
@@ -1644,7 +1599,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.EnabledChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
             add {
@@ -1654,7 +1608,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.FontChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
             add {
@@ -1664,7 +1617,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ForeColorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add {
@@ -1674,7 +1626,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.RightToLeftChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler RightToLeftChanged {
             add {
@@ -1684,7 +1635,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.TextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add {
@@ -1694,7 +1644,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Click"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Click {
             add { 
@@ -1704,7 +1653,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DragDrop"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragDrop {
             add {
@@ -1715,7 +1663,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DragEnter"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragEnter {
             add {
@@ -1725,7 +1672,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DragOver"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragOver {
             add {
@@ -1735,7 +1681,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DragLeave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DragLeave {
             add {
@@ -1745,7 +1690,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.GiveFeedback"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event GiveFeedbackEventHandler GiveFeedback {
             add {
@@ -1755,7 +1699,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.HelpRequested"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         [SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")] //Everett
         new public event HelpEventHandler HelpRequested
@@ -1767,7 +1710,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Paint"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event PaintEventHandler Paint {
             add {
@@ -1777,7 +1719,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.QueryContinueDrag"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryContinueDragEventHandler QueryContinueDrag {
             add {
@@ -1787,7 +1728,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.QueryAccessibilityHelp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
             add {
@@ -1797,7 +1737,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DoubleClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DoubleClick {
             add {
@@ -1807,7 +1746,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ImeModeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ImeModeChanged {
             add {
@@ -1817,7 +1755,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.KeyDown"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyDown {
             add {
@@ -1827,7 +1764,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.KeyPress"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyPressEventHandler KeyPress {
             add {
@@ -1837,7 +1773,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.KeyUp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyUp {
             add {
@@ -1847,7 +1782,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Layout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event LayoutEventHandler Layout {
             add {
@@ -1857,7 +1791,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseDown"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDown {
             add {
@@ -1867,7 +1800,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseEnter"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseEnter {
             add {
@@ -1877,7 +1809,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseLeave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseLeave {
             add {
@@ -1887,7 +1818,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseHover"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseHover {
             add {
@@ -1897,7 +1827,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseMove"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseMove {
             add {
@@ -1907,7 +1836,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseUp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseUp {
             add {
@@ -1917,7 +1845,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseWheel"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseWheel {
             add {
@@ -1927,7 +1854,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ChangeUICues"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event UICuesEventHandler ChangeUICues {
             add {
@@ -1937,7 +1863,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.StyleChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler StyleChanged {
             add {
@@ -1947,7 +1872,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.WebBrowserBaseNativeWindow"]/*' />
         /// <devdoc>
         ///     Defines a window that the ActiveX window is attached to so that we can override it's wndproc.
         /// </devdoc>
@@ -1959,7 +1883,6 @@ namespace System.Windows.Forms {
                 this.WebBrowserBase = ax;
             }
             
-            /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.WebBrowserBaseNativeWindow.WndProc"]/*' />
             /// <devdoc>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
             /// </devdoc>

@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using Microsoft.Win32;
 
-    /// <include file='doc\InputLangChangeRequestEvent.uex' path='docs/doc[@for="InputLanguageChangingEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.Form.InputLanguageChanging'/>
@@ -22,18 +21,15 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class InputLanguageChangingEventArgs : CancelEventArgs {
 
-        /// <include file='doc\InputLangChangeRequestEvent.uex' path='docs/doc[@for="InputLanguageChangingEventArgs.inputLanguage"]/*' />
         /// <devdoc>
         ///     The requested input language.
         /// </devdoc>
         private readonly InputLanguage inputLanguage;
 
-        /// <include file='doc\InputLangChangeRequestEvent.uex' path='docs/doc[@for="InputLanguageChangingEventArgs.culture"]/*' />
         /// <devdoc>
         ///     The locale of the requested input langugage.
         /// </devdoc>
         private readonly CultureInfo culture;
-        /// <include file='doc\InputLangChangeRequestEvent.uex' path='docs/doc[@for="InputLanguageChangingEventArgs.sysCharSet"]/*' />
         /// <devdoc>
         ///     Set to true if the system default font supports the character
         ///     set required for the requested input language.
@@ -43,7 +39,6 @@ namespace System.Windows.Forms {
         /**
          * @deprecated Should use the new constructor instead.
          */
-        /// <include file='doc\InputLangChangeRequestEvent.uex' path='docs/doc[@for="InputLanguageChangingEventArgs.InputLanguageChangingEventArgs"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -58,7 +53,6 @@ namespace System.Windows.Forms {
             this.sysCharSet = sysCharSet;
         }
 
-        /// <include file='doc\InputLangChangeRequestEvent.uex' path='docs/doc[@for="InputLanguageChangingEventArgs.InputLanguageChangingEventArgs1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangingEventArgs'/> class with the
@@ -76,7 +70,6 @@ namespace System.Windows.Forms {
             this.sysCharSet = sysCharSet;
         }
 
-        /// <include file='doc\InputLangChangeRequestEvent.uex' path='docs/doc[@for="InputLanguageChangingEventArgs.InputLanguage"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the requested input language.
@@ -88,7 +81,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\InputLangChangeRequestEvent.uex' path='docs/doc[@for="InputLanguageChangingEventArgs.Culture"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the locale of the requested input language.
@@ -100,7 +92,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\InputLangChangeRequestEvent.uex' path='docs/doc[@for="InputLanguageChangingEventArgs.SysCharSet"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the system default font supports the character

@@ -15,7 +15,6 @@ namespace System.Windows.Forms.Layout {
     using System.Diagnostics.CodeAnalysis;
     using System.Security.Permissions;
 
-    /// <include file='doc\LayoutEngine.uex' path='docs/doc[@for="LayoutEngine"]/*' />
     public abstract class LayoutEngine {        
         internal IArrangedElement CastToArrangedElement(object obj) {
             IArrangedElement element = obj as IArrangedElement;
@@ -27,7 +26,6 @@ namespace System.Windows.Forms.Layout {
 
         internal virtual Size GetPreferredSize(IArrangedElement container, Size proposedConstraints) { return Size.Empty; }
     
-        /// <include file='doc\LayoutEngine.uex' path='docs/doc[@for="LayoutEngine.InitLayout"]/*' />
         public virtual void InitLayout(object child, BoundsSpecified specified) {
             InitLayoutCore(CastToArrangedElement(child), specified);
         }
@@ -39,7 +37,6 @@ namespace System.Windows.Forms.Layout {
 #if LAYOUT_PERFWATCH
 private static int LayoutWatch = 100;
 #endif
-        /// <include file='doc\LayoutEngine.uex' path='docs/doc[@for="LayoutEngine.Layout"]/*' />        
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs) {
 

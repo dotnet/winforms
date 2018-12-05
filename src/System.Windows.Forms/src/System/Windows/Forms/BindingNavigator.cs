@@ -20,7 +20,6 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.BindingNavigatorDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionBindingNavigator))
     ]
-    /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator"]/* />
     public class BindingNavigator : ToolStrip, ISupportInitialize {
 
         private BindingSource bindingSource;
@@ -43,7 +42,6 @@ namespace System.Windows.Forms {
         private bool addNewItemUserEnabled = true;
         private bool deleteItemUserEnabled = true;
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.BindingNavigator"]/*' />
         /// <devdoc>
         ///      Creates an empty BindingNavigator tool strip.
         ///      Call AddStandardItems() to add standard tool strip items.
@@ -52,7 +50,6 @@ namespace System.Windows.Forms {
         public BindingNavigator() : this(false) {
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.BindingNavigator1"]/*' />
         /// <devdoc>
         ///      Creates a BindingNavigator strip containing standard items, bound to the specified BindingSource.
         /// </devdoc>
@@ -60,7 +57,6 @@ namespace System.Windows.Forms {
             BindingSource = bindingSource;
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.BindingNavigator3"]/*' />
         /// <devdoc>
         ///      Creates an empty BindingNavigator tool strip, and adds the strip to the specified container.
         ///      Call AddStandardItems() to add standard tool strip items.
@@ -74,7 +70,6 @@ namespace System.Windows.Forms {
             container.Add(this);
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.BindingNavigator4"]/*' />
         /// <devdoc>
         ///      Creates a BindingNavigator strip, optionally containing a set of standard tool strip items.
         /// </devdoc>
@@ -84,7 +79,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.BeginInit"]/*' />
         /// <devdoc>
         ///     ISupportInitialize support. Disables updates to tool strip items during initialization.
         /// </devdoc>
@@ -92,7 +86,6 @@ namespace System.Windows.Forms {
             initializing = true;
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.EndInit"]/*' />
         /// <devdoc>
         ///     ISupportInitialize support. Enables updates to tool strip items after initialization.
         /// </devdoc>
@@ -112,7 +105,6 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.AddStandardItems"]/*' />
         /// <devdoc>
         ///      Adds standard set of tool strip items to a BindingNavigator tool strip, for basic
         ///      navigation operations such as Move First, Move Next, Add New, etc.
@@ -246,7 +238,6 @@ namespace System.Windows.Forms {
                                 });
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.BindingSource"]/*' />
         /// <devdoc>
         ///      The BindingSource who's list we are currently navigating, or null.
         /// </devdoc>
@@ -267,7 +258,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.MoveFirstItem"]/*' />
         /// <devdoc>
         ///     The ToolStripItem that triggers the 'Move first' action, or null.
         /// </devdoc>
@@ -289,7 +279,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.MovePreviousItem"]/*' />
         /// <devdoc>
         ///     The ToolStripItem that triggers the 'Move previous' action, or null.
         /// </devdoc>
@@ -313,7 +302,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.MoveNextItem"]/*' />
         /// <devdoc>
         ///     The ToolStripItem that triggers the 'Move next' action, or null.
         /// </devdoc>
@@ -335,7 +323,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.MoveLastItem"]/*' />
         /// <devdoc>
         ///     The ToolStripItem that triggers the 'Move last' action, or null.
         /// </devdoc>
@@ -357,7 +344,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.AddNewItem"]/*' />
         /// <devdoc>
         ///     The ToolStripItem that triggers the 'Add new' action, or null.
         /// </devdoc>
@@ -383,7 +369,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.DeleteItem"]/*' />
         /// <devdoc>
         ///     The ToolStripItem that triggers the 'Delete' action, or null.
         /// </devdoc>
@@ -410,7 +395,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.PositionItem"]/*' />
         /// <devdoc>
         ///     The ToolStripItem that displays the current position, or null.
         /// </devdoc>
@@ -432,7 +416,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.CountItem"]/*' />
         /// <devdoc>
         ///     The ToolStripItem that displays the total number of items, or null.
         /// </devdoc>
@@ -454,7 +437,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.CountItemFormat"]/*' />
         /// <devdoc>
         ///     Formatting to apply to count displayed in the CountItem tool strip item.
         /// </devdoc>
@@ -475,7 +457,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.RefreshItems"]/*' />
         /// <devdoc>
         ///     Event raised when the state of the tool strip items needs to be
         ///     refreshed to reflect the current state of the data.
@@ -493,7 +474,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.RefreshItemsCore"]/*' />
         /// <devdoc>
         ///     Refreshes the state of the standard items to reflect the current state of the data.
         /// </devdoc>
@@ -552,7 +532,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.OnRefreshItems"]/*' />
         /// <devdoc>
         ///     Called when the state of the tool strip items needs to be refreshed to reflect the current state of the data.
         ///     Calls <see cref='RefreshItemsCore'> to refresh the state of the standard items, then raises the RefreshItems event.
@@ -567,7 +546,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.Validate"]/*' />
         /// <devdoc>
         ///     Triggers form validation. Used by the BindingNavigator's standard items when clicked. If a validation error occurs
         ///     on the form, focus remains on the active control and the standard item does not perform its standard click action.

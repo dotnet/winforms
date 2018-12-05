@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\LinkClickEvent.uex' path='docs/doc[@for="LinkClickedEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.RichTextBox.LinkClicked'/> event.
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
     public class LinkClickedEventArgs : EventArgs {
         private string linkText;
 
-        /// <include file='doc\LinkClickEvent.uex' path='docs/doc[@for="LinkClickedEventArgs.LinkText"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the text of the link being clicked.
@@ -34,7 +32,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkClickEvent.uex' path='docs/doc[@for="LinkClickedEventArgs.LinkClickedEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.LinkClickedEventArgs'/> class.

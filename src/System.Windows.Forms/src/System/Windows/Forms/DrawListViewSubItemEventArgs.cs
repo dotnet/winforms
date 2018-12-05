@@ -14,7 +14,6 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Windows.Forms.VisualStyles;
 
-    /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs"]/*' />
     /// <devdoc>
     ///     This class contains the information a user needs to paint ListView sub-items (Details view only).
     /// </devdoc>
@@ -31,7 +30,6 @@ namespace System.Windows.Forms
         private readonly ListViewItemStates itemState;
         private bool     drawDefault;
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.DrawListViewSubItemEventArgs"]/*' />
         /// <devdoc>
         ///     Creates a new DrawListViewSubItemEventArgs with the given parameters.
         /// </devdoc>
@@ -50,7 +48,6 @@ namespace System.Windows.Forms
         }
 
         
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.DrawDefault"]/*' />
         /// <devdoc>
         ///     Causes the item do be drawn by the system instead of owner drawn.
         /// </devdoc>        
@@ -63,7 +60,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.Graphics"]/*' />
         /// <devdoc>
         ///     Graphics object with which painting should be done.
         /// </devdoc>
@@ -76,7 +72,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.Bounds"]/*' />
         /// <devdoc>
         ///     The rectangle outlining the area in which the painting should be done.
         /// </devdoc>
@@ -88,7 +83,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.Item"]/*' />
         /// <devdoc>
         ///     The parent item. 
         /// </devdoc>
@@ -100,7 +94,6 @@ namespace System.Windows.Forms
             }
         }	
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.SubItem"]/*' />
         /// <devdoc>
         ///     The parent item. 
         /// </devdoc>
@@ -112,7 +105,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.ItemIndex"]/*' />
         /// <devdoc>
         ///     The index in the ListView of the parent item.
         /// </devdoc>
@@ -124,7 +116,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.ColumnIndex"]/*' />
         /// <devdoc>
         ///     The column index of this sub-item. 
         /// </devdoc>
@@ -136,7 +127,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.Header"]/*' />
         /// <devdoc>
         ///    The header of this sub-item's column 
         /// </devdoc>
@@ -148,7 +138,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.ItemState"]/*' />
         /// <devdoc>
         ///     Miscellaneous state information pertaining to the parent item.
         /// </devdoc>
@@ -160,7 +149,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.DrawBackground"]/*' />
         /// <devdoc>
         ///     Draws the sub-item's background.
         /// </devdoc>
@@ -172,7 +160,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.DrawFocusRectangle"]/*' />
         /// <devdoc>
         ///     Draws a focus rectangle in the given bounds, if the item has focus.
         /// </devdoc>
@@ -184,7 +171,6 @@ namespace System.Windows.Forms
             }                
         }
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.DrawText"]/*' />
         /// <devdoc>
         ///     Draws the sub-item's text (overloaded) 
         /// </devdoc>
@@ -200,7 +186,6 @@ namespace System.Windows.Forms
             DrawText(flags);
         }
 
-        /// <include file='doc\DrawListViewSubItemEventArgs.uex' path='docs/doc[@for="DrawListViewSubItemEventArgs.DrawText1"]/*' />
         /// <devdoc>
         ///     Draws the sub-item's text (overloaded) - takes a TextFormatFlags argument.
         /// </devdoc>

@@ -12,7 +12,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Globalization;
 
 
-    /// <include file='doc\BaseCAMarshaler.uex' path='docs/doc[@for="BaseCAMarshaler"]/*' />
     /// <devdoc>
     ///   This class performs basic operation for marshaling data passed
     ///   in from native in one of the CA*** structs (CADWORD, CAUUID, etc),
@@ -28,7 +27,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private int count;
         private object[] itemArray;
 
-        /// <include file='doc\BaseCAMarshaler.uex' path='docs/doc[@for="BaseCAMarshaler.BaseCAMarshaler"]/*' />
         /// <devdoc>
         ///     Base ctor
         /// </devdoc>
@@ -56,7 +54,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         protected abstract Array CreateArray();
 
-        /// <include file='doc\BaseCAMarshaler.uex' path='docs/doc[@for="BaseCAMarshaler.ItemType"]/*' />
         /// <devdoc>
         ///     Returns the type of item this marshaler will
         ///     return in the items array.
@@ -66,7 +63,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\BaseCAMarshaler.uex' path='docs/doc[@for="BaseCAMarshaler.Count"]/*' />
         /// <devdoc>
         ///     Returns the count of items that will be or have been
         ///     marshaled.
@@ -79,7 +75,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
 
 
-        /// <include file='doc\BaseCAMarshaler.uex' path='docs/doc[@for="BaseCAMarshaler.Items"]/*' />
         /// <devdoc>
         ///     The marshaled items.
         /// </devdoc>
@@ -103,7 +98,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\BaseCAMarshaler.uex' path='docs/doc[@for="BaseCAMarshaler.GetItemFromAddress"]/*' />
         /// <devdoc>
         ///     Override this member to perform marshalling of a single item
         ///     given it's native address.

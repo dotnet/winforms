@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for splitter events.
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
         private int splitX;
         private int splitY;
 
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.SplitterEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes an instance of the <see cref='System.Windows.Forms.SplitterEventArgs'/> class with the specified coordinates
@@ -40,7 +38,6 @@ namespace System.Windows.Forms {
             this.splitY = splitY;
         }
 
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.X"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the x-coordinate of the
@@ -53,7 +50,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.Y"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the y-coordinate of the mouse pointer (in
@@ -66,7 +62,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.SplitX"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the x-coordinate of the
@@ -82,7 +77,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.SplitY"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the y-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).

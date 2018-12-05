@@ -8,7 +8,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewRowCancelEventArgs.uex' path='docs/doc[@for="DataGridViewRowCancelEventArgs"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -16,7 +15,6 @@ namespace System.Windows.Forms
     {
         private DataGridViewRow dataGridViewRow;
     
-        /// <include file='doc\DataGridViewRowCancelEventArgs.uex' path='docs/doc[@for="DataGridViewRowCancelEventArgs.DataGridViewRowCancelEventArgs"]/*' />
         public DataGridViewRowCancelEventArgs(DataGridViewRow dataGridViewRow)
         {
             Debug.Assert(dataGridViewRow != null);
@@ -24,7 +22,6 @@ namespace System.Windows.Forms
             this.dataGridViewRow = dataGridViewRow;
         }
 
-        /// <include file='doc\DataGridViewRowCancelEventArgs.uex' path='docs/doc[@for="DataGridViewRowCancelEventArgs.Row"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

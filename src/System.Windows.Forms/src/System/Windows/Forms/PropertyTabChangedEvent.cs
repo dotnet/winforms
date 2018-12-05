@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Windows.Forms.Design;
 
-    /// <include file='doc\PropertyTabChangedEvent.uex' path='docs/doc[@for="PropertyTabChangedEventArgs"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -21,7 +20,6 @@ namespace System.Windows.Forms {
         private PropertyTab oldTab;
         private PropertyTab newTab;
 
-        /// <include file='doc\PropertyTabChangedEvent.uex' path='docs/doc[@for="PropertyTabChangedEventArgs.PropertyTabChangedEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -30,7 +28,6 @@ namespace System.Windows.Forms {
             this.newTab = newTab;
         }
         
-        /// <include file='doc\PropertyTabChangedEvent.uex' path='docs/doc[@for="PropertyTabChangedEventArgs.OldTab"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -40,7 +37,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyTabChangedEvent.uex' path='docs/doc[@for="PropertyTabChangedEventArgs.NewTab"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

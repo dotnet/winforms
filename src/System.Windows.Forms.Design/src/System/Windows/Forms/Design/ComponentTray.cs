@@ -318,7 +318,6 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-        /// <internalonly />
         /// <summary>
         ///     Forces the layout of any docked or anchored child controls.
         /// </summary>

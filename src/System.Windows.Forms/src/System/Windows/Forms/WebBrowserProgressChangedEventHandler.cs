@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\WebBrowserProgressChangedEventHandler.uex' path='docs/doc[@for="WebBrowserProgressChangedEventHandler"]/*' />
     /// <devdoc>
     ///     <para>
     /// Delegate to the WebBrowser ProgressChanged event.
@@ -12,7 +11,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public delegate void WebBrowserProgressChangedEventHandler(object sender, WebBrowserProgressChangedEventArgs e);
 
-    /// <include file='doc\WebBrowserProgressChangedEventHandler.uex' path='docs/doc[@for="WebBrowserProgressChangedEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnProgressChanged'/> event.
@@ -22,7 +20,6 @@ namespace System.Windows.Forms {
         private long currentProgress;
         private long maximumProgress;
         
-        /// <include file='doc\WebBrowserProgressChangedEventHandler.uex' path='docs/doc[@for="WebBrowserProgressChangedEventArgs.WebBrowserProgressChangedEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserProgressChangedEventArgs'/> class.
@@ -33,7 +30,6 @@ namespace System.Windows.Forms {
             this.maximumProgress = maximumProgress;
         }
         
-        /// <include file='doc\WebBrowserProgressChangedEventHandler.uex' path='docs/doc[@for="WebBrowserProgressChangedEventArgs.CurrentProgress"]/*' />
         /// <devdoc>
         ///    <para>
         /// Specifies current number of bytes donwloaded. CurrentProgress/MaximumProgress*100 = progress percentage.
@@ -45,7 +41,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowserProgressChangedEventHandler.uex' path='docs/doc[@for="WebBrowserProgressChangedEventArgs.MaximumProgress"]/*' />
         /// <devdoc>
         ///    <para>
         /// Specifies total number of bytes of item being downloaded.

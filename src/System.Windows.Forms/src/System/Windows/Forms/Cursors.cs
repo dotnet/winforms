@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
 
 
-    /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors"]/*' />
     /// <devdoc>
     ///     Standard cursors
     /// </devdoc>
@@ -89,7 +88,6 @@ namespace System.Windows.Forms {
             //         help        = new Cursor(NativeMethods.IDC_HELP,0);
         }
         
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.AppStarting"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -101,7 +99,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Arrow"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -113,7 +110,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Cross"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -125,7 +121,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Default"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -137,7 +132,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.IBeam"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -149,7 +143,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.No"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -161,7 +154,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeAll"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -173,7 +165,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeNESW"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -185,7 +176,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeNS"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -197,7 +187,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeNWSE"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -209,7 +198,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeWE"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -221,7 +209,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.UpArrow"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -233,7 +220,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.WaitCursor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -245,7 +231,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Help"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -257,7 +242,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.HSplit"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -269,7 +253,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.VSplit"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -281,7 +264,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.NoMove2D"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -293,7 +275,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.NoMoveHoriz"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -305,7 +286,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.NoMoveVert"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -317,7 +297,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanEast"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -329,7 +308,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanNE"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -341,7 +319,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanNorth"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -353,7 +330,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanNW"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -365,7 +341,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanSE"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -377,7 +352,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanSouth"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -389,7 +363,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanSW"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -401,7 +374,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanWest"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -413,7 +385,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Hand"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

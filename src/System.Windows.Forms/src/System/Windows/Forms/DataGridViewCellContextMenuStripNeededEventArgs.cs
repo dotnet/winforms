@@ -7,12 +7,10 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewCellContextMenuStripNeededEventArgs.uex' path='docs/doc[@for="DataGridViewCellContextMenuStripNeededEventArgs"]/*' />
     public class DataGridViewCellContextMenuStripNeededEventArgs : DataGridViewCellEventArgs
     {
         private ContextMenuStrip contextMenuStrip;
 
-        /// <include file='doc\DataGridViewCellContextMenuStripNeededEventArgs.uex' path='docs/doc[@for="DataGridViewCellContextMenuStripNeededEventArgs.DataGridViewContextMenuStripNeededEventArgs"]/*' />
         public DataGridViewCellContextMenuStripNeededEventArgs(int columnIndex, int rowIndex) : base(columnIndex, rowIndex)
         {
         }
@@ -25,7 +23,6 @@ namespace System.Windows.Forms
             this.contextMenuStrip = contextMenuStrip;
         }
 
-        /// <include file='doc\DataGridViewCellContextMenuStripNeededEventArgs.uex' path='docs/doc[@for="DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip"]/*' />
         public ContextMenuStrip ContextMenuStrip
         {
             get

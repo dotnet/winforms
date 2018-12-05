@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\TabControlCancelEventHandler.uex' path='docs/doc[@for="TabControlCancelEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that handles the

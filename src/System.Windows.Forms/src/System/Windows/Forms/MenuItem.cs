@@ -28,7 +28,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Threading;
 
-    /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents an individual item that is displayed within
@@ -71,7 +70,6 @@ namespace System.Windows.Forms {
         private IntPtr msaaMenuInfoPtr = IntPtr.Zero;
         private bool menuItemIsCreated = false;
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MenuItem"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a <see cref='System.Windows.Forms.MenuItem'/> with
@@ -81,7 +79,6 @@ namespace System.Windows.Forms {
         public MenuItem() : this(MenuMerge.Add, 0, 0, null, null, null, null, null) {
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MenuItem1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see
@@ -93,7 +90,6 @@ namespace System.Windows.Forms {
         public MenuItem(string text) : this(MenuMerge.Add, 0, 0, text, null, null, null, null) {
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MenuItem2"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the
@@ -105,7 +101,6 @@ namespace System.Windows.Forms {
         public MenuItem(string text, EventHandler onClick) : this(MenuMerge.Add, 0, 0, text, onClick, null, null, null) {
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MenuItem3"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the
@@ -117,7 +112,6 @@ namespace System.Windows.Forms {
         public MenuItem(string text, EventHandler onClick, Shortcut shortcut) : this(MenuMerge.Add, 0, shortcut, text, onClick, null, null, null) {
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MenuItem4"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the
@@ -138,7 +132,6 @@ namespace System.Windows.Forms {
             #endif 
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MenuItem5"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the class with a specified
@@ -171,7 +164,6 @@ namespace System.Windows.Forms {
         #endif
 
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.BarBreak"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the item is
@@ -196,7 +188,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Break"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the item is
@@ -220,7 +211,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Checked"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether a checkmark
@@ -246,7 +236,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.DefaultItem"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating
@@ -272,7 +261,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.OwnerDraw"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether code
@@ -295,7 +283,6 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Enabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the menu
@@ -317,7 +304,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Index"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the menu item's position in its parent menu.
@@ -353,7 +339,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.IsParent"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the menu item contains
@@ -391,7 +376,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MdiList"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets
@@ -426,7 +410,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MenuID"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the Windows identifier for this menu item.
@@ -436,7 +419,6 @@ namespace System.Windows.Forms {
             get { return data.GetMenuID();}
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Selected"]/*' />
         /// <devdoc>
         ///     Is this menu item currently selected (highlighted) by the user?
         /// </devdoc> 
@@ -455,7 +437,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MenuIndex"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the zero-based index of this menu
@@ -488,7 +469,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MergeType"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value that indicates the behavior of this
@@ -515,7 +495,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MergeOrder"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the relative position the menu item when its
@@ -536,7 +515,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Mnemonic"]/*' />
         /// <devdoc>
         ///     <para>
         ///     Retrieves the hotkey mnemonic that is associated with this menu item.
@@ -552,7 +530,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Parent"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the menu in which this menu item
@@ -564,7 +541,6 @@ namespace System.Windows.Forms {
             get {return menu;}
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.RadioCheck"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value that indicates whether the menu item,
@@ -593,7 +569,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Text"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the text of the menu item.
@@ -612,7 +587,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Shortcut"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the shortcut key associated with the menu
@@ -639,7 +613,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.ShowShortcut"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value that indicates whether the shortcut
@@ -666,7 +639,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Visible"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value that indicates
@@ -687,7 +659,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Click"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the menu item is clicked or selected using a
@@ -704,7 +675,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.DrawItem"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when when the property of a menu item is set
@@ -723,7 +693,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MeasureItem"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when when the menu needs to know the size of a
@@ -769,7 +738,6 @@ namespace System.Windows.Forms {
             }
         }  */
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Popup"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs before a menu item's list of menu items is
@@ -786,7 +754,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Select"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the user hovers their mouse over a menu
@@ -819,7 +786,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.CloneMenu"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Creates and returns an identical copy of this menu item.
@@ -831,7 +797,6 @@ namespace System.Windows.Forms {
             return newItem;
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.CloneMenu1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Creates a copy of the specified menu item.
@@ -958,7 +923,6 @@ namespace System.Windows.Forms {
             return info;
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Dispose"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Disposes the <see cref='System.Windows.Forms.MenuItem'/>.
@@ -1213,7 +1177,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MergeMenu"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Merges this menu item with another menu item and returns
@@ -1230,7 +1193,6 @@ namespace System.Windows.Forms {
             return newItem;
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MergeMenu1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Merges another menu item with this menu item.
@@ -1242,7 +1204,6 @@ namespace System.Windows.Forms {
             itemSrc.data.AddItem(this);
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.OnClick"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.MenuItem.Click'/>
@@ -1261,7 +1222,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.OnDrawItem"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.MenuItem.DrawItem'/>
@@ -1277,7 +1237,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.OnMeasureItem"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.MenuItem.MeasureItem'/>
@@ -1294,7 +1253,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.OnPopup"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.MenuItem.Popup'/>
@@ -1330,7 +1288,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.OnSelect"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.MenuItem.Select'/>
@@ -1346,7 +1303,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.OnInitMenuPopup"]/*' />
         /// <internalonly/>
         protected virtual void OnInitMenuPopup(EventArgs e) {
             OnPopup(e);
@@ -1357,7 +1313,6 @@ namespace System.Windows.Forms {
             OnInitMenuPopup( e );
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.PerformClick"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Generates a <see cref='System.Windows.Forms.Control.Click'/>
@@ -1369,7 +1324,6 @@ namespace System.Windows.Forms {
             OnClick(EventArgs.Empty);
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.PerformSelect"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.MenuItem.Select'/>
@@ -1394,7 +1348,6 @@ namespace System.Windows.Forms {
         }
 
     
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.ToString"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1479,7 +1432,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.WmDrawItem"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1508,7 +1460,6 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.WmMeasureItem"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1540,7 +1491,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.MenuItemData"]/*' />
         /// <devdoc>
         /// </devdoc>
         internal class MenuItemData : ICommandExecutor {

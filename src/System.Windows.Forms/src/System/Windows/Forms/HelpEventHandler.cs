@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Drawing;
 
-    /// <include file='doc\HelpEventHandler.uex' path='docs/doc[@for="HelpEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the Help event of a Control.

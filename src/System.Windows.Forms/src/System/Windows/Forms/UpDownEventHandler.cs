@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System;
 
-    /// <include file='doc\UpDownEventHandler.uex' path='docs/doc[@for="UpDownEventHandler"]/*' />
     /// <internalonly/>
     /// <devdoc>
     ///    <para>

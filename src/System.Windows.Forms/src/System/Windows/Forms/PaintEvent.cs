@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Drawing2D;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.Control.Paint'/>
@@ -59,7 +58,6 @@ namespace System.Windows.Forms {
         private string AllocationSite = PaintEventArgs.GetAllocationStack();
 #endif
 
-        /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.PaintEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.PaintEventArgs'/> class with the specified graphics and
@@ -84,12 +82,10 @@ namespace System.Windows.Forms {
             this.clipRect = clipRect;
         }
 
-        /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.Finalize"]/*' />
         ~PaintEventArgs() {
             Dispose(false);
         }
 
-        /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.ClipRectangle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the
@@ -117,7 +113,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.Graphics"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the <see cref='System.Drawing.Graphics'/>
@@ -140,7 +135,6 @@ namespace System.Windows.Forms {
         // We want a way to dispose the GDI+ Graphics, but we don't want to create one
         // simply to dispose it
         // cpr: should be internal
-        /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.Dispose"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Disposes
@@ -152,7 +146,6 @@ namespace System.Windows.Forms {
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.Dispose2"]/*' />
         protected virtual void Dispose(bool disposing) {
 #if DEBUG
             Debug.Assert(disposing, "PaintEvent object should be explicitly disposed. Potential GDI multithreading lock issue. Allocation stack:\r\n" + AllocationSite);

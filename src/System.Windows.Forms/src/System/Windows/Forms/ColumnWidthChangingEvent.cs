@@ -6,12 +6,10 @@ namespace System.Windows.Forms {
 using System;
 using System.ComponentModel;
 
-    /// <include file='doc\ColumnWidthChangingEvent.uex' path='docs/doc[@for="ColumnWidthChangingEventArgs"]/*' />
     public class ColumnWidthChangingEventArgs : CancelEventArgs {
         int columnIndex;
         int newWidth;
 
-        /// <include file='doc\ColumnWidthChangingEvent.uex' path='docs/doc[@for="ColumnWidthChanging.ColumnWidthChanging"]/*' />
         /// <devdoc>
         ///     Creates a new ColumnWidthChanging event
         /// </devdoc>
@@ -20,7 +18,6 @@ using System.ComponentModel;
             this.newWidth = newWidth;
         }
 
-        /// <include file='doc\ColumnWidthChangingEvent.uex' path='docs/doc[@for="ColumnWidthChanging.ColumnWidthChanging1"]/*' />
         /// <devdoc>
         ///     Creates a new ColumnWidthChanging event
         /// </devdoc>
@@ -29,7 +26,6 @@ using System.ComponentModel;
             this.newWidth = newWidth;
         }
 
-        /// <include file='doc\ColumnWidthChangingEvent.uex' path='docs/doc[@for="ColumnWidthChanging.ColumnIndex"]/*' />
         /// <devdoc>
         ///     Returns the index of the column header whose width is changing
         /// </devdoc>
@@ -39,7 +35,6 @@ using System.ComponentModel;
             }
         }
 
-        /// <include file='doc\ColumnWidthChangingEvent.uex' path='docs/doc[@for="ColumnWidthChanging.NewWidth"]/*' />
         /// <devdoc>
         ///     Returns the new width for the column header who is changing
         /// </devdoc>

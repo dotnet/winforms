@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Drawing;
 
-    /// <include file='doc\SearchForVirtualItemEventHandler.uex' path='docs/doc[@for="SearchForVirtualItemEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the SearchForVirtualItem event of a ListView.

@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
 
     using System;
 
-    /// <include file='doc\ConvertEvent.uex' path='docs/doc[@for="ConvertEventArgs"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -17,7 +16,6 @@ namespace System.Windows.Forms {
         private object value;
         private Type desiredType;
 
-        /// <include file='doc\ConvertEvent.uex' path='docs/doc[@for="ConvertEventArgs.ConvertEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -26,7 +24,6 @@ namespace System.Windows.Forms {
             this.desiredType = desiredType;
         }
 
-        /// <include file='doc\ConvertEvent.uex' path='docs/doc[@for="ConvertEventArgs.Value"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -39,7 +36,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ConvertEvent.uex' path='docs/doc[@for="ConvertEventArgs.DesiredType"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

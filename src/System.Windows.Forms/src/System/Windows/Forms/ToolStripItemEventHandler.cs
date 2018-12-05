@@ -6,6 +6,5 @@ namespace System.Windows.Forms {
 
     using System;
   
-    /// <include file='doc\ToolStripItemEventHandler.uex' path='docs/doc[@for="ToolStripItemEventHandler"]/*' />
     public delegate void ToolStripItemEventHandler(object sender, ToolStripItemEventArgs e);
 }

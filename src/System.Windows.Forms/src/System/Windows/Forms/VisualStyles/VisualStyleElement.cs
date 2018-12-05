@@ -21,7 +21,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles {
 
-    /// <include file='doc\VisualStyleElement.uex' path='docs/doc[@for="VisualStyleElement"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Encapsulates the class, part and state of the "element" you wish to draw using

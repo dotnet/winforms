@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\HScrollBar.uex' path='docs/doc[@for="HScrollBar"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
     ]
     public class HScrollBar : ScrollBar {
         
-        /// <include file='doc\HScrollBar.uex' path='docs/doc[@for="HScrollBar.CreateParams"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -45,7 +43,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\HScrollBar.uex' path='docs/doc[@for="HScrollBar.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.

@@ -19,7 +19,6 @@ namespace System.Windows.Forms {
     using System.Security.Permissions;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog"]/*' />
     /// <devdoc>
     ///    <para> Represents a
     ///       dialog box form that contains a <see cref='System.Windows.Forms.PrintPreviewControl'/>.</para>
@@ -60,7 +59,6 @@ namespace System.Windows.Forms {
         private System.Windows.Forms.ToolStripLabel pageToolStripLabel;
         ImageList imageList;
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.PrintPreviewDialog"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewDialog'/> class.</para>
         /// </devdoc>
@@ -87,7 +85,6 @@ namespace System.Windows.Forms {
 
         //subhag addition
         //-------------------------------------------------------------------------------------------------------------
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AcceptButton"]/*' />
         /// <devdoc>
         /// <para>Indicates the <see cref='System.Windows.Forms.Button'/> control on the form that is clicked when
         ///    the user presses the ENTER key.</para>
@@ -101,7 +98,6 @@ namespace System.Windows.Forms {
                 base.AcceptButton = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoScale"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the form will adjust its size
@@ -123,7 +119,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoScroll"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the form implements
@@ -141,7 +136,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Hide the property
@@ -157,7 +151,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
             add {
@@ -168,7 +161,6 @@ namespace System.Windows.Forms {
             }
         }                
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoValidate"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Hide the property
@@ -184,7 +176,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoValidateChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler AutoValidateChanged {
             add {
@@ -195,7 +186,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.BackColor"]/*' />
         /// <devdoc>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
@@ -209,7 +199,6 @@ namespace System.Windows.Forms {
                 base.BackColor = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.BackColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
@@ -220,7 +209,6 @@ namespace System.Windows.Forms {
                 base.BackColorChanged -= value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.CancelButton"]/*' />
         /// <devdoc>
         ///    <para>Gets
         ///       or
@@ -236,7 +224,6 @@ namespace System.Windows.Forms {
                 base.CancelButton = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ControlBox"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether a control box is displayed in the
         ///       caption bar of the form.</para>
@@ -251,7 +238,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ContextMenuStrip"]/*' />
         /// <devdoc>
         ///    Hide the property
         /// </devdoc>
@@ -265,7 +251,6 @@ namespace System.Windows.Forms {
              }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ContextMenuStripChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ContextMenuStripChanged {
             add {
@@ -276,7 +261,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.FormBorderStyle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the border style of the form.
@@ -291,7 +275,6 @@ namespace System.Windows.Forms {
                 base.FormBorderStyle = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.HelpButton"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether a
@@ -307,7 +290,6 @@ namespace System.Windows.Forms {
                 base.HelpButton = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Icon"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the icon for the form.
@@ -324,7 +306,6 @@ namespace System.Windows.Forms {
                 base.Icon = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.IsMdiContainer"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the form is a container for multiple document interface
@@ -340,7 +321,6 @@ namespace System.Windows.Forms {
                 base.IsMdiContainer = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.KeyPreview"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value
@@ -357,7 +337,6 @@ namespace System.Windows.Forms {
                 base.KeyPreview = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MaximumSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or Sets the maximum size the dialog can be resized to.
@@ -372,7 +351,6 @@ namespace System.Windows.Forms {
                 base.MaximumSize = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MaximumSizeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MaximumSizeChanged {
@@ -383,7 +361,6 @@ namespace System.Windows.Forms {
                 base.MaximumSizeChanged -= value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MaximizeBox"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether the maximize button is
         ///       displayed in the caption bar of the form.</para>
@@ -398,7 +375,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Margin"]/*' />
         /// <devdoc>
         ///    Hide the value
         /// </devdoc>
@@ -412,7 +388,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MarginChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MarginChanged {
             add {
@@ -423,7 +398,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Menu"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.MainMenu'/>
@@ -440,7 +414,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MinimumSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the minimum size the form can be resized to.
@@ -455,7 +428,6 @@ namespace System.Windows.Forms {
                 base.MinimumSize = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MinimumSizeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MinimumSizeChanged {
@@ -467,7 +439,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Padding"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Hide the value
@@ -483,7 +454,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.PaddingChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler PaddingChanged {
             add {
@@ -494,7 +464,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Size"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the size of the form.
@@ -509,7 +478,6 @@ namespace System.Windows.Forms {
                 base.Size = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.SizeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler SizeChanged {
@@ -520,7 +488,6 @@ namespace System.Windows.Forms {
                 base.SizeChanged -= value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.StartPosition"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the
@@ -536,7 +503,6 @@ namespace System.Windows.Forms {
                 base.StartPosition = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.TopMost"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether the form should be displayed as the top-most
         ///       form of your application.</para>
@@ -551,7 +517,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.TransparencyKey"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the color that will represent transparent areas of the form.</para>
         /// </devdoc>
@@ -565,7 +530,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.UseWaitCursor"]/*' />
         /// <devdoc>
         ///    <para>Hide the value</para>
         /// </devdoc>
@@ -579,7 +543,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.WindowState"]/*' />
         /// <devdoc>
         ///    <para> Gets or sets the form's window state.
         ///       </para>
@@ -593,7 +556,6 @@ namespace System.Windows.Forms {
                 base.WindowState = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AccessibleRole"]/*' />
         /// <devdoc>
         ///      The accessible role of the control
         /// </devdoc>
@@ -606,7 +568,6 @@ namespace System.Windows.Forms {
                 base.AccessibleRole = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AccessibleDescription"]/*' />
         /// <devdoc>
         ///      The accessible description of the control
         /// </devdoc>
@@ -619,7 +580,6 @@ namespace System.Windows.Forms {
                 base.AccessibleDescription = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AccessibleName"]/*' />
         /// <devdoc>
         ///      The accessible name of the control
         /// </devdoc>
@@ -632,7 +592,6 @@ namespace System.Windows.Forms {
                 base.AccessibleName = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.CausesValidation"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Indicates whether entering the control causes validation on the controls requiring validation.</para>
@@ -646,7 +605,6 @@ namespace System.Windows.Forms {
                 base.CausesValidation = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.CausesValidationChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged {
@@ -657,7 +615,6 @@ namespace System.Windows.Forms {
                 base.CausesValidationChanged -= value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.DataBindings"]/*' />
         /// <devdoc>
         ///     Retrieves the bindings for this control.
         /// </devdoc>
@@ -669,13 +626,11 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.DefaultMinimumSize"]/*' />
         protected override Size DefaultMinimumSize {
             get { return new Size(375, 250); }
         }
         
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Enabled"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control is currently enabled.</para>
         /// </devdoc>
@@ -688,7 +643,6 @@ namespace System.Windows.Forms {
                 base.Enabled = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.EnabledChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
@@ -699,7 +653,6 @@ namespace System.Windows.Forms {
                 base.EnabledChanged -= value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Location"]/*' />
         /// <devdoc>
         ///     The location of this control.
         /// </devdoc>
@@ -714,7 +667,6 @@ namespace System.Windows.Forms {
                 base.Location = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.LocationChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged {
@@ -725,7 +677,6 @@ namespace System.Windows.Forms {
                 base.LocationChanged -= value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Tag"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public object Tag {
             get {
@@ -735,7 +686,6 @@ namespace System.Windows.Forms {
                 base.Tag = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AllowDrop"]/*' />
         /// <devdoc>
         ///     The AllowDrop property. If AllowDrop is set to true then
         ///     this control will allow drag and drop operations and events to be used.
@@ -749,7 +699,6 @@ namespace System.Windows.Forms {
                 base.AllowDrop = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Cursor"]/*' />
         /// <devdoc>
         ///     Retrieves the cursor that will be displayed when the mouse is over this
         ///     control.
@@ -763,7 +712,6 @@ namespace System.Windows.Forms {
                 base.Cursor = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.CursorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged {
@@ -775,7 +723,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.BackgroundImage"]/*' />
         /// <devdoc>
         ///     The background image of the control.
         /// </devdoc>
@@ -788,7 +735,6 @@ namespace System.Windows.Forms {
                 base.BackgroundImage = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -800,7 +746,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.BackgroundImageLayout"]/*' />
         /// <devdoc>
         ///     The background image layout of the control.
         /// </devdoc>
@@ -813,7 +758,6 @@ namespace System.Windows.Forms {
                 base.BackgroundImageLayout = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -824,7 +768,6 @@ namespace System.Windows.Forms {
                 base.BackgroundImageLayoutChanged -= value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ImeMode"]/*' />
         /// <devdoc>
         ///     Specifies a value that determines the IME (Input Method Editor) status of the 
         ///     object when that object is selected.
@@ -838,7 +781,6 @@ namespace System.Windows.Forms {
                 base.ImeMode = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ImeModeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
@@ -850,7 +792,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoScrollMargin"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -867,7 +808,6 @@ namespace System.Windows.Forms {
                 base.AutoScrollMargin = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoScrollMinSize"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the mimimum size of the auto-scroll.</para>
         /// </devdoc>
@@ -880,7 +820,6 @@ namespace System.Windows.Forms {
                 base.AutoScrollMinSize = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Anchor"]/*' />
         /// <devdoc>
         ///     The current value of the anchor property. The anchor property
         ///     determines which edges of the control are anchored to the container's
@@ -895,7 +834,6 @@ namespace System.Windows.Forms {
                 base.Anchor = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Visible"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control is visible.</para>
         /// </devdoc>
@@ -908,7 +846,6 @@ namespace System.Windows.Forms {
                 base.Visible = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.VisibleChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler VisibleChanged {
@@ -919,7 +856,6 @@ namespace System.Windows.Forms {
                 base.VisibleChanged -= value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ForeColor"]/*' />
         /// <devdoc>
         ///     The foreground color of the control.
         /// </devdoc>
@@ -932,7 +868,6 @@ namespace System.Windows.Forms {
                 base.ForeColor = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ForeColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
@@ -944,7 +879,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.RightToLeft"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -960,7 +894,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.RightToLeftLayout"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -979,7 +912,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.RightToLeftChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {
@@ -991,7 +923,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.RightToLeftLayoutChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1006,7 +937,6 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.TabStop"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the user can give the focus to this control using the TAB 
         ///       key. This property is read-only.</para>
@@ -1020,7 +950,6 @@ namespace System.Windows.Forms {
                 base.TabStop = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.TabStopChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
@@ -1032,7 +961,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Text"]/*' />
         /// <devdoc>
         ///     The current text associated with this control.
         /// </devdoc>
@@ -1046,7 +974,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.TextChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
@@ -1058,7 +985,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Dock"]/*' />
         /// <devdoc>
         ///     The dock property. The dock property controls to which edge
         ///     of the container this control is docked to. For example, when docked to
@@ -1074,7 +1000,6 @@ namespace System.Windows.Forms {
                 base.Dock = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.DockChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DockChanged {
@@ -1086,7 +1011,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Font"]/*' />
         /// <devdoc>
         ///     Retrieves the current font for this control. This will be the font used
         ///     by default for painting and text in the control.
@@ -1100,7 +1024,6 @@ namespace System.Windows.Forms {
                 base.Font = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.FontChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
@@ -1112,7 +1035,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ContextMenu"]/*' />
         /// <devdoc>
         ///     The contextMenu associated with this control. The contextMenu
         ///     will be shown when the user right clicks the mouse on the control.
@@ -1126,7 +1048,6 @@ namespace System.Windows.Forms {
                 base.ContextMenu = value;
             }
         }
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ContextMenuChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ContextMenuChanged {
@@ -1139,7 +1060,6 @@ namespace System.Windows.Forms {
         }
 
         // DockPadding is not relevant to UpDownBase
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.DockPadding"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -1152,7 +1072,6 @@ namespace System.Windows.Forms {
         //-------------------------------------------------------------------------------------------------------------
         //end addition
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.UseAntiAlias"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -1167,7 +1086,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoScaleBaseSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       PrintPreviewDialog does not support AutoScaleBaseSize.
@@ -1191,7 +1109,6 @@ namespace System.Windows.Forms {
         #pragma warning restore 0809
         #pragma warning restore 618
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Document"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the document to preview.
@@ -1211,7 +1128,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MinimizeBox"]/*' />
         [Browsable(false), DefaultValue(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool MinimizeBox {
             get {
@@ -1222,7 +1138,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.PrintPreviewControl"]/*' />
         /// <devdoc>
         /// <para>Gets or sets a value indicating the <see cref='System.Windows.Forms.PrintPreviewControl'/> 
         /// contained in this form.</para>
@@ -1236,7 +1151,6 @@ namespace System.Windows.Forms {
             get { return previewControl;}
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Opacity"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1253,7 +1167,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ShowInTaskbar"]/*' />
         [Browsable(false), DefaultValue(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool ShowInTaskbar {
             get {
@@ -1264,7 +1177,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.SizeGripStyle"]/*' />
         [Browsable(false), DefaultValue(SizeGripStyle.Hide), EditorBrowsable(EditorBrowsableState.Never)]
         public new SizeGripStyle SizeGripStyle {
             get {
@@ -1577,7 +1489,6 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.OnClosing"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1589,7 +1500,6 @@ namespace System.Windows.Forms {
             previewControl.InvalidatePreview();
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.CreateHandle"]/*' />
         /// <devdoc>
         ///    <para>Creates the handle for the PrintPreviewDialog. If a
         ///       subclass overrides this function,
@@ -1636,7 +1546,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ShouldSerializeAutoScaleBaseSize"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1649,7 +1558,6 @@ namespace System.Windows.Forms {
             return false;
         }
                 
-        /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ShouldSerializeText"]/*' />
         internal override bool ShouldSerializeText() {
             return !Text.Equals(string.Format(SR.PrintPreviewDialog_PrintPreview));
         }

@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs"]/*' />
     public class DataGridViewCellPaintingEventArgs : HandledEventArgs
     {
         private DataGridView dataGridView;
@@ -25,7 +24,6 @@ namespace System.Windows.Forms
         private DataGridViewAdvancedBorderStyle advancedBorderStyle;
         private DataGridViewPaintParts paintParts;
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.DataGridViewCellPaintingEventArgs"]/*' />
         public DataGridViewCellPaintingEventArgs(DataGridView dataGridView,
                                                  Graphics graphics, 
                                                  Rectangle clipBounds,
@@ -76,7 +74,6 @@ namespace System.Windows.Forms
             this.dataGridView = dataGridView;
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.AdvancedBorderStyle"]/*' />
         public DataGridViewAdvancedBorderStyle AdvancedBorderStyle
         {
             get
@@ -85,7 +82,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.CellBounds"]/*' />
         public Rectangle CellBounds
         {
             get
@@ -94,7 +90,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.CellStyle"]/*' />
         public DataGridViewCellStyle CellStyle
         {
             get
@@ -103,7 +98,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.ClipBounds"]/*' />
         public Rectangle ClipBounds
         {
             get
@@ -112,7 +106,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.ColumnIndex"]/*' />
         public int ColumnIndex
         {
             get
@@ -121,7 +114,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.ErrorText"]/*' />
         public string ErrorText
         {
             get
@@ -130,7 +122,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.FormattedValue"]/*' />
         public object FormattedValue
         {
             get
@@ -139,7 +130,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.Graphics"]/*' />
         public Graphics Graphics
         {
             get
@@ -148,7 +138,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.PaintParts"]/*' />
         public DataGridViewPaintParts PaintParts
         {
             get
@@ -157,7 +146,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get
@@ -166,7 +154,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.State"]/*' />
         public DataGridViewElementStates State 
         {
             get 
@@ -175,7 +162,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.Value"]/*' />
         public object Value
         {
             get
@@ -184,7 +170,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.Paint"]/*' />
         public void Paint(Rectangle clipBounds, DataGridViewPaintParts paintParts)
         {
             if (this.rowIndex < -1 || this.rowIndex >= this.dataGridView.Rows.Count)
@@ -208,7 +193,6 @@ namespace System.Windows.Forms
                                                                                              paintParts);
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.PaintBackground"]/*' />
         public void PaintBackground(Rectangle clipBounds, bool cellsPaintSelectionBackground)
         {
             if (this.rowIndex < -1 || this.rowIndex >= this.dataGridView.Rows.Count)
@@ -237,7 +221,6 @@ namespace System.Windows.Forms
                                                                                              paintParts);
         }
 
-        /// <include file='doc\DataGridViewCellPaintingEventArgs.uex' path='docs/doc[@for="DataGridViewCellPaintingEventArgs.PaintContent"]/*' />
         public void PaintContent(Rectangle clipBounds)
         {
             if (this.rowIndex < -1 || this.rowIndex >= this.dataGridView.Rows.Count)

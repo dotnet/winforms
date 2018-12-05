@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
 
 
-    /// <include file='doc\KeyPressEventHandler.uex' path='docs/doc[@for="KeyPressEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents a method that will handle the <see cref='System.Windows.Forms.Control.KeyPress'/> event of a

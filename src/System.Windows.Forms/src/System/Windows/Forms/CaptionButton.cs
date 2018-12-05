@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\CaptionButton.uex' path='docs/doc[@for="CaptionButton"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies the type
@@ -21,7 +20,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum CaptionButton {
 
-        /// <include file='doc\CaptionButton.uex' path='docs/doc[@for="CaptionButton.Close"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A Close button.
@@ -30,7 +28,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Close = NativeMethods.DFCS_CAPTIONCLOSE,
 
-        /// <include file='doc\CaptionButton.uex' path='docs/doc[@for="CaptionButton.Help"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A Help button.
@@ -38,7 +35,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Help = NativeMethods.DFCS_CAPTIONHELP,
 
-        /// <include file='doc\CaptionButton.uex' path='docs/doc[@for="CaptionButton.Maximize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A Maximize button.
@@ -46,7 +42,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Maximize = NativeMethods.DFCS_CAPTIONMAX,
 
-        /// <include file='doc\CaptionButton.uex' path='docs/doc[@for="CaptionButton.Minimize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A Minimize button.
@@ -54,7 +49,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Minimize = NativeMethods.DFCS_CAPTIONMIN,
 
-        /// <include file='doc\CaptionButton.uex' path='docs/doc[@for="CaptionButton.Restore"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A Restore button.

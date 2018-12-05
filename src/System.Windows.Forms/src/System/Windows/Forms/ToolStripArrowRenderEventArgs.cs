@@ -6,7 +6,6 @@ namespace System.Windows.Forms {
 
     using System.Drawing;
 
-    /// <include file='doc\ToolStripArrowRenderEventArgs.uex' path='docs/doc[@for="ToolStripArrowRenderEventArgs"]/*' />
     public class ToolStripArrowRenderEventArgs : EventArgs {
 
         private Graphics graphics = null;
@@ -17,7 +16,6 @@ namespace System.Windows.Forms {
         private ToolStripItem item = null;
         private bool arrowColorChanged = false;
 
-        /// <include file='doc\ToolStripArrowRenderEventArgs.uex' path='docs/doc[@for="ToolStripArrowRenderEventArgs.ToolStripArrowRenderEventArgs"]/*' />
         public ToolStripArrowRenderEventArgs(Graphics g, ToolStripItem toolStripItem, Rectangle arrowRectangle, Color arrowColor, ArrowDirection arrowDirection) {
             this.item = toolStripItem;
             this.graphics = g;
@@ -27,7 +25,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripArrowRenderEventArgs.uex' path='docs/doc[@for="ToolStripArrowRenderEventArgs.ArrowRectangle"]/*' />
         public Rectangle ArrowRectangle {
             get {
                 return arrowRect;
@@ -37,7 +34,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripArrowRenderEventArgs.uex' path='docs/doc[@for="ToolStripArrowRenderEventArgs.ArrowColor"]/*' />
         public Color ArrowColor {
             get {
                 if (arrowColorChanged) {
@@ -60,7 +56,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripArrowRenderEventArgs.uex' path='docs/doc[@for="ToolStripArrowRenderEventArgs.Direction"]/*' />
         public ArrowDirection Direction {
             get {
                 return arrowDirection;
@@ -69,7 +64,6 @@ namespace System.Windows.Forms {
                 arrowDirection = value;
             }
         }
-        /// <include file='doc\ToolStripArrowRenderEventArgs.uex' path='docs/doc[@for="ToolStripArrowRenderEventArgs.Graphics"]/*' />
         public Graphics Graphics {
             get {
                 return graphics;
@@ -77,7 +71,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripArrowRenderEventArgs.uex' path='docs/doc[@for="ToolStripArrowRenderEventArgs.Item"]/*' />
         public ToolStripItem Item {
             get {
                 return item;

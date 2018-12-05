@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\FormClosedEventHandler.uex' path='docs/doc[@for="FormClosedEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents a method that will handle Form closed event.

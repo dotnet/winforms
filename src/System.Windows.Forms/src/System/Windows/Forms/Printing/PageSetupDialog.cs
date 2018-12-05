@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Globalization;
     
-    /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog"]/*' />
     /// <devdoc>
     ///    <para> Represents
     ///       a dialog box that allows users to manipulate page settings, including margins and paper orientation.</para>
@@ -38,7 +37,6 @@ namespace System.Windows.Forms {
         private bool showNetwork;
         private bool enableMetric;
         
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.PageSetupDialog"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PageSetupDialog'/> class.</para>
         /// </devdoc>
@@ -46,7 +44,6 @@ namespace System.Windows.Forms {
             Reset();
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.AllowMargins"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the margins section of the dialog box is enabled.
@@ -67,7 +64,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.AllowOrientation"]/*' />
         /// <devdoc>
         ///    <para> Gets or sets a value indicating whether the orientation section of the dialog box (landscape vs. portrait)
         ///       is enabled.
@@ -83,7 +79,6 @@ namespace System.Windows.Forms {
             set { allowOrientation = value;}
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.AllowPaper"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the paper section of the dialog box (paper size and paper source)
@@ -101,7 +96,6 @@ namespace System.Windows.Forms {
             set { allowPaper = value;}
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.AllowPrinter"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the Printer button is enabled.
@@ -118,7 +112,6 @@ namespace System.Windows.Forms {
             set { allowPrinter = value;}
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.Document"]/*' />
         /// <devdoc>
         /// <para>Gets or sets a value indicating the <see cref='System.Drawing.Printing.PrintDocument'/> 
         /// to get page settings from.
@@ -140,7 +133,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.EnableMetric"]/*' />
         /// <devdoc>
         ///    This allows the user to override the current behavior where the Metric is converted to ThousandOfInch even for METRIC MEASUREMENTSYSTEM
         ///    which returns a HUNDREDSOFMILLIMETER value.
@@ -155,7 +147,6 @@ namespace System.Windows.Forms {
             set { enableMetric = value;}
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.MinMargins"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating the minimum margins the
@@ -176,7 +167,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.PageSettings"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -201,7 +191,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.PrinterSettings"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -224,7 +213,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.ShowHelp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the Help button is visible.
@@ -240,7 +228,6 @@ namespace System.Windows.Forms {
             set { showHelp = value;}
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.ShowNetwork"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the Network button is visible.
@@ -274,7 +261,6 @@ namespace System.Windows.Forms {
             return flags;
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Resets all options to their default values.
@@ -297,7 +283,6 @@ namespace System.Windows.Forms {
             MinMargins = null;
         }
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.ShouldSerializeMinMargins"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.PageSetupDialog.MinMargins'/>
@@ -343,7 +328,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.RunDialog"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>

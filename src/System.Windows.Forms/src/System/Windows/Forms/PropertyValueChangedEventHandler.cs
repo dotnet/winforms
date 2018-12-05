@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     
     
 
-    /// <include file='doc\PropertyValueChangedEventHandler.uex' path='docs/doc[@for="PropertyValueChangedEventHandler"]/*' />
     /// <devdoc>
     /// The event handler class that is invoked when a property
     /// in the grid is modified by the user.

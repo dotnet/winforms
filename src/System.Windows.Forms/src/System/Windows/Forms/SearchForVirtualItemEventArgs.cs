@@ -6,7 +6,6 @@ using System;
 using System.Drawing;
 
 namespace System.Windows.Forms {
-    /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs"]/*' />
     public class SearchForVirtualItemEventArgs : EventArgs {
         private bool isTextSearch;
         private bool isPrefixSearch;
@@ -17,7 +16,6 @@ namespace System.Windows.Forms {
         private int startIndex;
         private int index = -1;
 
-        /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs.SearchForVirtualItemEventArgs"]/*' />
         public SearchForVirtualItemEventArgs(bool isTextSearch, bool isPrefixSearch, bool includeSubItemsInSearch, string text, Point startingPoint, SearchDirectionHint direction, int startIndex) {
             this.isTextSearch = isTextSearch;
             this.isPrefixSearch = isPrefixSearch;
@@ -28,21 +26,18 @@ namespace System.Windows.Forms {
             this.startIndex = startIndex;
         }
 
-        /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs.IsTextSearch"]/*' />
         public bool IsTextSearch {
             get  {
                 return isTextSearch;
             }
         }
 
-        /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs.IncludeSubItemsInSearch"]/*' />
         public bool IncludeSubItemsInSearch {
             get {
                 return includeSubItemsInSearch;
             }
         }
 
-        /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs.Index"]/*' />
         public int Index {
             get  {
                 return this.index;
@@ -53,35 +48,30 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs.IsPrefixSearch"]/*' />
         public bool IsPrefixSearch {
             get  {
                 return isPrefixSearch;
             }
         }
 
-        /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs.Text"]/*' />
         public string Text{
             get  {
                 return text;
             }
         }
 
-        /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs.StartingPoint"]/*' />
         public Point StartingPoint {
             get  {
                 return startingPoint;
             }
         }
 
-        /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs.Direction"]/*' />
         public SearchDirectionHint Direction {
             get  {
                 return direction;
             }
         }
 
-        /// <include file='doc\SearchForVirtualItemEventArgs.uex' path='docs/doc[@for="SearchForVirtualItemEventArgs.StartIndex"]/*' />
         public int StartIndex {
             get  {
                 return startIndex;

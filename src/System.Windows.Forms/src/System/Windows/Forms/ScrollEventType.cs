@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies the type of action used to raise the <see cref='System.Windows.Forms.ScrollBar.Scroll'/> event.
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum ScrollEventType {
 
-        /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType.SmallDecrement"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The
@@ -35,7 +33,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         SmallDecrement = NativeMethods.SB_LINELEFT,
 
-        /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType.SmallIncrement"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The
@@ -47,7 +44,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         SmallIncrement = NativeMethods.SB_LINERIGHT,
 
-        /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType.LargeDecrement"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The scroll box
@@ -58,7 +54,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         LargeDecrement = NativeMethods.SB_PAGELEFT,
 
-        /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType.LargeIncrement"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The scroll box moved a large distance. The user clicked the scroll bar to
@@ -68,7 +63,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         LargeIncrement = NativeMethods.SB_PAGERIGHT,
 
-        /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType.ThumbPosition"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The scroll box was moved.
@@ -77,7 +71,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ThumbPosition = NativeMethods.SB_THUMBPOSITION,
 
-        /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType.ThumbTrack"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The scroll box
@@ -87,7 +80,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ThumbTrack = NativeMethods.SB_THUMBTRACK,
 
-        /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType.First"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The
@@ -98,7 +90,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         First = NativeMethods.SB_LEFT,
 
-        /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType.Last"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The
@@ -109,7 +100,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Last = NativeMethods.SB_RIGHT,
 
-        /// <include file='doc\ScrollEventType.uex' path='docs/doc[@for="ScrollEventType.EndScroll"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The scroll box has stopped moving.

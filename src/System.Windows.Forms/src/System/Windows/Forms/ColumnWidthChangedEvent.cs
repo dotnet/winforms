@@ -12,13 +12,11 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ColumnWidthChangedEvent.uex' path='docs/doc[@for="ColumnWidthChangedEventArgs"]/*' />
     /// <devdoc>
     /// </devdoc>
     public class ColumnWidthChangedEventArgs : EventArgs {
         readonly int columnIndex;
 
-        /// <include file='doc\ColumnWidthChangedEvent.uex' path='docs/doc[@for="ColumnWidthEventArgs.ColumnWidthChangedEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -26,7 +24,6 @@ namespace System.Windows.Forms {
             this.columnIndex = columnIndex;
         }
 
-        /// <include file='doc\ColumnWidthChangedEvent.uex' path='docs/doc[@for="ColumnWidthChangedEventArgs.ColumnIndex"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

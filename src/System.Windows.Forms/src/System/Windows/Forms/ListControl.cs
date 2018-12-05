@@ -23,7 +23,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Text;
 
-    /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -59,7 +58,6 @@ namespace System.Windows.Forms {
         private bool isDataSourceInitEventHooked;
         private bool inSetDataConnection = false;
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.DataSource"]/*' />
         /// <devdoc>
         ///     The ListSource to consume as this ListBox's source of data.
         ///     When set, a user can not modify the Items collection.
@@ -98,7 +96,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.DataSourceChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -112,14 +109,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.DataManager"]/*' />
         protected CurrencyManager DataManager {
             get {
                 return this.dataManager;
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.DisplayMember"]/*' />
         /// <devdoc>
         ///     If the ListBox contains objects that support properties, this indicates
         ///     which property of the object to show.  If "", the object shows it's ToString().
@@ -145,7 +140,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.DisplayMemberChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -178,7 +172,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.Format"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlFormatDescr))]
         public event ListControlConvertEventHandler Format
         {
@@ -192,7 +185,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FormatInfo"]/*' />
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -211,7 +203,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FormatInfoChanged"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -233,7 +224,6 @@ namespace System.Windows.Forms {
             EditorAttribute("System.Windows.Forms.Design.FormatStringEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
             MergableProperty(false)
         ]
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FormatString"]/*' />
         public string FormatString {
             get {
                 return formatString;
@@ -249,7 +239,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FormatStringChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.ListControlFormatStringChangedDescr))
@@ -263,7 +252,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FormattingEnabled"]/*' />
         [
             DefaultValue(false), 
             SRDescription(nameof(SR.ListControlFormattingEnabledDescr))
@@ -281,7 +269,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FormattingEnabledChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.ListControlFormattingEnabledChangedDescr))
@@ -320,7 +307,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.ValueMember"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -358,7 +344,6 @@ namespace System.Windows.Forms {
             }
         }        
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.ValueMemberChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -372,7 +357,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.AllowSelection"]/*' />
         /// <devdoc>
         ///    Indicates whether list currently allows selection of list items.
         /// </devdoc>
@@ -382,7 +366,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SelectedIndex"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -391,7 +374,6 @@ namespace System.Windows.Forms {
             set;
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SelectedValue"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -427,7 +409,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SelectedValueChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -464,7 +445,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FilterItemOnProperty"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
@@ -473,7 +453,6 @@ namespace System.Windows.Forms {
             return FilterItemOnProperty(item, displayMember.BindingField);
         }
         
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FilterItemOnProperty1"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
@@ -548,7 +527,6 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.GetItemText"]/*' />
         public string GetItemText(object item)
         {
 
@@ -598,7 +576,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.IsInputKey"]/*' />
         /// <devdoc>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
         /// </devdoc>
@@ -614,7 +591,6 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
   
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnBindingContextChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -625,7 +601,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnDataSourceChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -636,7 +611,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnDisplayMemberChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -647,35 +621,30 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnFormat"]/*' />
         protected virtual void OnFormat(ListControlConvertEventArgs e) {
             ListControlConvertEventHandler eh = Events[EVENT_FORMAT] as ListControlConvertEventHandler;
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnFormatInfoChanged"]/*' />
         protected virtual void OnFormatInfoChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_FORMATINFOCHANGED] as EventHandler;
             if (eh != null)
                 eh(this,e);
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnFormatStringChanged"]/*' />
         protected virtual void OnFormatStringChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_FORMATSTRINGCHANGED] as EventHandler;
             if (eh != null)
                 eh(this,e);
         }
         
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnFormattingEnabledChanged"]/*' />
         protected virtual void OnFormattingEnabledChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_FORMATTINGENABLEDCHANGED] as EventHandler;
             if (eh != null)
                 eh(this,e);
         }
         
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnSelectedIndexChanged"]/*' />
         /// <devdoc>
         ///     Actually goes and fires the selectedIndexChanged event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -687,7 +656,6 @@ namespace System.Windows.Forms {
             OnSelectedValueChanged(EventArgs.Empty);
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnValueMemberChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -698,7 +666,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnSelectedValueChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -709,13 +676,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.RefreshItem"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         protected abstract void RefreshItem(int index);
         
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.RefreshItems"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -858,13 +823,11 @@ namespace System.Windows.Forms {
                 }
         }
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SetItemsCore"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         protected abstract void SetItemsCore(IList items);
 
-        /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SetItemCore"]/*' />
         protected virtual void SetItemCore(int index, object value) {}
     }
 }

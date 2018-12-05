@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
     
-    /// <include file='doc\ItemChangedEventHandler.uex' path='docs/doc[@for="ItemChangedEventHandler"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>

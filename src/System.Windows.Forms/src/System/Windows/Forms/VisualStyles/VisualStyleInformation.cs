@@ -15,7 +15,6 @@ namespace System.Windows.Forms.VisualStyles {
     using System.Diagnostics.CodeAnalysis;
     
 
-    /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation"]/*' />
     /// <devdoc>
     ///    <para> 
     ///         Provides information about the current visual style. 
@@ -32,7 +31,6 @@ namespace System.Windows.Forms.VisualStyles {
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.IsSupportedByOS"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Used to find whether visual styles are supported by the current OS. Same as 
@@ -45,7 +43,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.IsEnabledByUser"]/*' />
         /// <devdoc>
         ///    <para> 
         ///     Returns true if a visual style has currently been applied by the user, else false.
@@ -73,7 +70,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.ColorScheme"]/*' />
         /// <devdoc>
         ///    The current visual style's color scheme name.
         /// </devdoc>
@@ -89,7 +85,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.Size"]/*' />
         /// <devdoc>
         ///    The current visual style's size name.
         /// </devdoc>
@@ -105,7 +100,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.DisplayName"]/*' />
         /// <devdoc>
         ///    The current visual style's display name.
         /// </devdoc>
@@ -121,7 +115,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.Company"]/*' />
         /// <devdoc>
         ///    The current visual style's company.
         /// </devdoc>
@@ -137,7 +130,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.Author"]/*' />
         /// <devdoc>
         ///    The name of the current visual style's author.
         /// </devdoc>
@@ -153,7 +145,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
         
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.Copyright"]/*' />
         /// <devdoc>
         ///    The current visual style's copyright information.
         /// </devdoc>
@@ -169,7 +160,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.Url"]/*' />
         /// <devdoc>
         ///    The current visual style's url.
         /// </devdoc>
@@ -187,7 +177,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.Version"]/*' />
         /// <devdoc>
         ///    The current visual style's version.
         /// </devdoc>
@@ -203,7 +192,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.Description"]/*' />
         /// <devdoc>
         ///    The current visual style's description.
         /// </devdoc>
@@ -219,7 +207,6 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.SupportsFlatMenus"]/*' />
         /// <devdoc>
         ///    Returns true if the current theme supports flat menus, else false.
         /// </devdoc>
@@ -240,7 +227,6 @@ namespace System.Windows.Forms.VisualStyles {
             }            
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.MinimumColorDepth"]/*' />
         /// <devdoc>
         ///    The minimum color depth supported by the current visual style.
         /// </devdoc>
@@ -264,7 +250,6 @@ namespace System.Windows.Forms.VisualStyles {
             }            
         }
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.TextControlBorder"]/*' />
         /// <devdoc>
         ///    Border Color that Windows XP renders for controls like TextBox and ComboBox.
         /// </devdoc>
@@ -286,7 +271,6 @@ namespace System.Windows.Forms.VisualStyles {
         }
 
 
-        /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.TextControlBorder"]/*' />
         /// <devdoc>
         ///    This is the color buttons and tab pages are highlighted with when they are moused over on themed OS.
         /// </devdoc>

@@ -9,7 +9,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Globalization;
     using Microsoft.Win32;
 
-    /// <include file='doc\COM2IVsPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IVsPerPropertyBrowsingHandler"]/*' />
     /// <devdoc>
     /// This is the base class for handlers for Com2 extended browsing interface
     /// such as IPerPropertyBrowsing, etc.
@@ -24,7 +23,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     [System.Security.SuppressUnmanagedCodeSecurityAttribute()]
     internal class Com2IVsPerPropertyBrowsingHandler: Com2ExtendedBrowsingHandler {
 
-         /// <include file='doc\COM2IVsPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IVsPerPropertyBrowsingHandler.Interface"]/*' />
          /// <devdoc>
          /// The interface that this handler managers
          /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
@@ -44,7 +42,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return false;
          }
 
-         /// <include file='doc\COM2IVsPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IVsPerPropertyBrowsingHandler.SetupPropertyHandlers"]/*' />
          /// <devdoc>
          /// Called to setup the property handlers on a given properties
          /// In this method, the handler will add listeners to the events that
@@ -85,7 +82,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
          }
 
 
-         /// <include file='doc\COM2IVsPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IVsPerPropertyBrowsingHandler.OnGetAttributes"]/*' />
          /// <devdoc>
          /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
          /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
@@ -136,7 +132,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
          }
 
-         /// <include file='doc\COM2IVsPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IVsPerPropertyBrowsingHandler.OnGetDisplayName"]/*' />
          /// <devdoc>
          /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo (part 2)
          /// </devdoc>
@@ -154,7 +149,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
          }
 
-         /// <include file='doc\COM2IVsPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IVsPerPropertyBrowsingHandler.OnGetIsReadOnly"]/*' />
          /// <devdoc>
          /// Here is where we handle IVsPerPropertyBrowsing.IsPropertyReadOnly
          /// </devdoc>
@@ -172,7 +166,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                }
          }
          
-         /// <include file='doc\COM2IVsPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IVsPerPropertyBrowsingHandler.OnGetTypeConverterAndTypeEditor"]/*' />
          /// <devdoc>
          /// Here is where we handle IVsPerPropertyBrowsing.DisplayChildProperties
          /// </devdoc>

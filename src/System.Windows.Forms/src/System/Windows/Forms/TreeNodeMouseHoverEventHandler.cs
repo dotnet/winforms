@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\NodeMouseHoverEventHandler.uex' path='docs/doc[@for="NodeMouseHoverEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the <see cref='System.Windows.Forms.TreeView.NodeMouseHover'/>

@@ -25,7 +25,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip"]/*' />
     /// <devdoc>
     /// Summary of ToolStrip.
     /// </devdoc>
@@ -170,7 +169,6 @@ namespace System.Windows.Forms {
 
         private delegate void BooleanMethodInvoker(bool arg);
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ToolStrip"]/*' />
         /// <devdoc>
         /// Summary of ToolStrip.
         /// </devdoc>
@@ -266,7 +264,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.AutoSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
@@ -338,7 +335,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.AllowDrop"]/*' />
         /// <devdoc>
         /// Summary of AllowDrop.
         /// </devdoc>
@@ -365,7 +361,6 @@ namespace System.Windows.Forms {
 
             }
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.AllowItemReorder"]/*' />
         /// <devdoc>
         ///
         /// </devdoc>
@@ -404,7 +399,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.AllowItemReorder"]/*' />
         /// <devdoc>
         ///
         /// </devdoc>
@@ -436,7 +430,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.BackColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Just here so we can implement ShouldSerializeBackColor
@@ -464,7 +457,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="ToolStrip.BindingContext"]/*' />
         public override BindingContext BindingContext {
             get {
                 BindingContext bc = (BindingContext) this.Properties.GetObject(PropBindingContext);
@@ -493,7 +485,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.CanOverflow"]/*' />
         /// <devdoc>
         /// Summary of CanOverflow.
         /// </devdoc>
@@ -559,14 +550,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Controls"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Control.ControlCollection Controls {
             get { return base.Controls; }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ControlAdded"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlAdded {
             add {
@@ -596,7 +585,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ControlRemoved"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved {
              add {
@@ -617,7 +605,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Font"]/*' />
         public override Font Font {
             get {
                 if (this.IsFontSet()) {
@@ -636,7 +623,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DefaultSize"]/*' />
         /// <devdoc>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
@@ -743,7 +729,6 @@ namespace System.Windows.Forms {
                 toolStripDropDownDirection = value;
             }
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Dock"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Just here so we can add the default value attribute
@@ -808,7 +793,6 @@ namespace System.Windows.Forms {
             }
 
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DisplayedItems"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Just here so we can add the default value attribute
@@ -823,7 +807,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DisplayRectangle"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -857,7 +840,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ForeColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Forecolor really has no meaning for winbars - so lets hide it
@@ -872,7 +854,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ForeColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[ToolStrip ForeColorChanged event, overriden to turn browsing off.]</para>
         /// </devdoc>
@@ -914,7 +895,6 @@ namespace System.Windows.Forms {
                 return toolStripGrip;
             }
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GripStyle"]/*' />
         /// <devdoc>
         /// Summary of GripStyle.
         /// </devdoc>
@@ -941,7 +921,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GripDisplayStyle"]/*' />
         /// <devdoc>
         /// Summary of GripStyle.
         /// </devdoc>
@@ -955,7 +934,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GripMargin"]/*' />
         /// <devdoc>
         /// The external spacing between the grip and the padding of the winbar and the first item in the collection
         /// </devdoc>
@@ -972,7 +950,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GripRectangle"]/*' />
         /// <devdoc>
         /// The boundaries of the grip on the winbar.  If it is invisible - returns Rectangle.Empty.
         /// </devdoc>
@@ -1016,7 +993,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.HorizontalScroll"]/*' />
         /// <devdoc>
         ///    <para>Gets the Horizontal Scroll bar for this ScrollableControl.</para>
         /// </devdoc>
@@ -1061,7 +1037,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ImageList"]/*' />
         /// <devdoc>
         /// <para>
         /// Gets or sets the <see cref='System.Windows.Forms.ImageList'/> that contains the <see cref='System.Drawing.Image'/> displayed on a label control.
@@ -1142,7 +1117,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Items"]/*' />
         /// <devdoc>
         /// The items that belong to this ToolStrip.
         /// Note - depending on space and layout preferences, not all items
@@ -1168,7 +1142,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ItemAdded"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripItemAddedDescr))]
         public event ToolStripItemEventHandler ItemAdded {
           add {
@@ -1180,7 +1153,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.ItemClicked"]/*' />
         /// <devdoc>
         /// <para>Occurs when the control is clicked.</para>
         /// </devdoc>
@@ -1218,7 +1190,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ItemRemoved"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripItemRemovedDescr))]
         public event ToolStripItemEventHandler ItemRemoved {
           add {
@@ -1228,7 +1199,6 @@ namespace System.Windows.Forms {
               Events.RemoveHandler(EventItemRemoved, value);
           }
         }
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="ToolStrip.IsDropDown"]/*' />
         /// <devdoc> handy check for painting and sizing </devdoc>
         [Browsable(false)]
         public bool IsDropDown {
@@ -1308,7 +1278,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutStyle"]/*' />
         /// <devdoc>
         /// Specifies whether we're horizontal or vertical
         /// </devdoc>
@@ -1382,7 +1351,6 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutCompleted"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1405,7 +1373,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutStyleChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1419,7 +1386,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutEngine"]/*' />
         public override LayoutEngine LayoutEngine {
              get {
                  // 
@@ -1429,7 +1395,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LocationChanging"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1442,7 +1407,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.MaxItemSize"]/*' />
         protected internal virtual Size MaxItemSize {
             get {
               return this.DisplayRectangle.Size;
@@ -1491,7 +1455,6 @@ namespace System.Windows.Forms {
         }
 
                
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OverflowButton"]/*' />
         /// <devdoc>
         /// Summary of OverflowButton.
         /// </devdoc>
@@ -1529,7 +1492,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.PaintGrip"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1637,7 +1599,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Renderer"]/*' />
         /// <devdoc>
         /// The renderer is used to paint the hwndless winbar items.  If someone wanted to
         /// change the "Hot" look of all of their buttons to be a green triangle, they should
@@ -1694,7 +1655,6 @@ namespace System.Windows.Forms {
             }
         }
 
-         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DrawMode"]/*' />
          [
          SRDescription(nameof(SR.ToolStripRenderModeDescr)),
          SRCategory(nameof(SR.CatAppearance)),
@@ -1754,7 +1714,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ShowItemToolTips"]/*' />
         [DefaultValue(true)]
         [SRDescription(nameof(SR.ToolStripShowItemToolTipsDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -1788,7 +1747,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.TabStop"]/*' />
         /// <devdoc>
         /// <para>Indicates whether the user can give the focus to this control using the TAB
         /// key. This property is read-only.</para>
@@ -1826,7 +1784,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.TextDirection"]/*' />
         [
         DefaultValue(ToolStripTextDirection.Horizontal),
         SRDescription(nameof(SR.ToolStripTextDirectionDescr)),
@@ -1861,7 +1818,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.VerticalScroll"]/*' />
         /// <devdoc>
         ///    <para>Gets the Vertical Scroll bar for this ScrollableControl.</para>
         /// </devdoc>
@@ -2031,7 +1987,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Dispose"]/*' />
         /// <devdoc>
         /// Clean up any resources being used.
         /// </devdoc>
@@ -2182,7 +2137,6 @@ namespace System.Windows.Forms {
             return GetNextItem(start, direction);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GetNextItem"]/*' />
         /// <devdoc>
         /// Gets the next item from the given start item in the direction specified.
         ///   - This function wraps if at the end
@@ -2681,7 +2635,6 @@ namespace System.Windows.Forms {
               }
             }
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.IsInputKey"]/*' />
         /// <devdoc>
         /// Summary of IsInputKey.
         /// </devdoc>
@@ -2693,7 +2646,6 @@ namespace System.Windows.Forms {
             }
             return base.IsInputKey(keyData);
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.IsInputChar"]/*' />
         /// <devdoc>
         /// Summary of IsInputChar.
         /// </devdoc>
@@ -2803,7 +2755,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ProcessCmdKey"]/*' />
         /// <devdoc>
         /// Summary of ProcessCmdKey.
         /// </devdoc>
@@ -2861,7 +2812,6 @@ namespace System.Windows.Forms {
             return base.ProcessCmdKey(ref m, keyData);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ProcessDialogKey"]/*' />
         /// <devdoc>
         /// Processes a dialog key. Overrides Control.processDialogKey(). This
         /// method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
@@ -2947,7 +2897,6 @@ namespace System.Windows.Forms {
                 item.Select();
             }
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ProcessMnemonic"]/*' />
         /// <devdoc>
         /// 
         ///    Rules for parsing mnemonics
@@ -3092,7 +3041,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ProcessTabKey"]/*' />
         /// <devdoc>
         /// Summary of ProcessTabKey.
         /// </devdoc>
@@ -3119,7 +3067,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ProcessArrowKey"]/*' />
         /// <devdoc>
         /// Summary of ProcessArrowKey: this is more useful than overriding ProcessDialogKey because usually
         /// the difference between ToolStrip/ToolStripDropDown is arrow key handling.  ProcessDialogKey first gives
@@ -3223,7 +3170,6 @@ namespace System.Windows.Forms {
             base.OnDockChanged(e);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnDefaultRendererChanged"]/*' />
         protected virtual void OnRendererChanged(EventArgs e) {
            InitializeRenderer(Renderer);
 
@@ -3231,7 +3177,6 @@ namespace System.Windows.Forms {
            if (handler != null)  handler(this,e);
 
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnEnabledChanged"]/*' />
         /// <devdoc>
         /// Summary of OnEnabledChanged.
         /// </devdoc>
@@ -3284,7 +3229,6 @@ namespace System.Windows.Forms {
             }
 #endif
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnHandleCreated"]/*' />
         /// <devdoc>
         /// Summary of OnHandleCreated.
         /// </devdoc>
@@ -3298,7 +3242,6 @@ namespace System.Windows.Forms {
             base.OnHandleCreated(e);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnHandleDestroyed"]/*' />
         /// <devdoc>
         /// Summary of OnHandleDestroyed.
         /// </devdoc>
@@ -3310,7 +3253,6 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnItemAdded"]/*' />
         protected internal virtual void OnItemAdded(ToolStripItemEventArgs e) {
             DoLayoutIfHandleCreated(e);
 
@@ -3325,7 +3267,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.OnItemClicked"]/*' />
         /// <devdoc>
         /// Called when an item has been clicked on the winbar.
         /// </devdoc>
@@ -3335,7 +3276,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnItemRemoved"]/*' />
         protected internal virtual void OnItemRemoved(ToolStripItemEventArgs e) {
 
             // clear cached item states.
@@ -3362,7 +3302,6 @@ namespace System.Windows.Forms {
                 DoLayoutIfHandleCreated(e);
             }
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnLayout"]/*' />
         protected override void OnLayout(LayoutEventArgs e) {
             this.LayoutRequired = false;
 
@@ -3387,19 +3326,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnLayoutCompleted"]/*' />
         protected virtual void OnLayoutCompleted(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventLayoutCompleted];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnLayoutStyleChanged"]/*' />
         protected virtual void OnLayoutStyleChanged(EventArgs e) {
              EventHandler handler = (EventHandler)Events[EventLayoutStyleChanged];
              if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnLostFocus"]/*' />
         protected override void OnLostFocus(EventArgs e) {
             base.OnLostFocus(e);
             ClearAllSelections();
@@ -3415,13 +3351,11 @@ namespace System.Windows.Forms {
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(RestoreFocusFilter); 
             }
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnLayoutCompleted"]/*' />
         internal virtual void OnLocationChanging(ToolStripLocationCancelEventArgs e) {
             ToolStripLocationCancelEventHandler handler = (ToolStripLocationCancelEventHandler)Events[EventLocationChanging];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseDown"]/*' />
         /// <devdoc>
         /// Delegate mouse down to the winbar and its affected items
         /// </devdoc>
@@ -3456,7 +3390,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseMove"]/*' />
         /// <devdoc>
         /// Delegate mouse moves to the winbar and its affected items
         /// </devdoc>
@@ -3519,7 +3452,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseLeave"]/*' />
         /// <devdoc>
         /// Delegate mouse leave to the winbar and its affected items
         /// </devdoc>
@@ -3529,7 +3461,6 @@ namespace System.Windows.Forms {
         }
        
      
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseCaptureChanged"]/*' />
         protected override void OnMouseCaptureChanged(System.EventArgs e) {
             if (!GetToolStripState(STATE_SUSPENDCAPTURE)) {
                 // while we're showing a feedback rect, dont cancel moving the toolstrip.
@@ -3542,7 +3473,6 @@ namespace System.Windows.Forms {
             base.OnMouseCaptureChanged(e);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseUp"]/*' />
         /// <devdoc>
         /// Delegate mouse up to the winbar and its affected items
         /// </devdoc>
@@ -3717,7 +3647,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnRightToLeftChanged"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -3741,7 +3670,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnPaintBackground"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle the erase
         /// background request from windows. It is not necessary to call
@@ -3786,7 +3714,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnPaintGrip"]/*' />
         /// <devdoc>
         /// Summary of OnPaint.
         /// </devdoc>
@@ -3800,7 +3727,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnScroll"]/*' />
         protected override void OnScroll(ScrollEventArgs se) {
 
             if (se.Type != ScrollEventType.ThumbTrack && se.NewValue != se.OldValue) {
@@ -3907,7 +3833,6 @@ namespace System.Windows.Forms {
         internal override Control GetFirstChildControlInTabOrder(bool forward) {
            return null;
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GetItemAt"]/*' />
         /// <devdoc>
         /// Finds the ToolStripItem contained within a specified client coordinate point
         /// If item not found - returns null
@@ -3917,7 +3842,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GetItemAt1"]/*' />
         /// <devdoc>
         /// Finds the ToolStripItem contained within a specified client coordinate point
         /// If item not found - returns null
@@ -4032,7 +3956,6 @@ namespace System.Windows.Forms {
             RenderMode = ToolStripRenderMode.ManagerRenderMode;
         }
 
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="ToolStrip.ResetMinimumSize"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetMinimumSize() {
             CommonProperties.SetMinimumSize(this, new Size(-1,-1));
@@ -4064,7 +3987,6 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.SetItemLocation"]/*' />
         /// <devdoc>
         /// Summary of SetItemLocation
         /// </devdoc>
@@ -4079,7 +4001,6 @@ namespace System.Windows.Forms {
 
             item.SetBounds(new Rectangle(location, item.Size));
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.SetItemParent"]/*' />
         /// <devdoc>
         /// This is needed so that people doing custom layout engines can change the "Parent" property of the item.
         /// </devdoc>
@@ -4131,7 +4052,6 @@ namespace System.Windows.Forms {
 
             return false;
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Select"]/*' />
         /// <devdoc>
         /// Summary of Select.
         /// </devdoc>
@@ -4215,7 +4135,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.SetAutoScrollMargin"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Sets the size of the auto-scroll margins.
@@ -4239,7 +4158,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.SetDisplayedItems"]/*' />
         /// <devdoc>
         /// Afer we've performed a layout we need to reset the DisplayedItems and the OverflowItems collection.
         /// OverflowItems are not supported in layouts other than ToolStripSplitStack
@@ -4595,7 +4513,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.WndProc"]/*' />
         /// <devdoc>
         /// Summary of WndProc.
         /// </devdoc>
@@ -4666,30 +4583,25 @@ namespace System.Windows.Forms {
         }
 
         // Overriden to return Items instead of Controls.
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.IArrangedElement.Children"]/*' />
         /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get { return Items; }
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.IArrangedElement.SetBounds"]/*' />
         /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="Control.IArrangedElement.ParticipatesInLayout"]/*' />
         /// <internalonly/>
         bool IArrangedElement.ParticipatesInLayout {
             get { return GetState(STATE_VISIBLE);}
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new ToolStripAccessibleObject(this);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.CreateControlsInstance"]/*' />
         protected override Control.ControlCollection CreateControlsInstance() {
             return new WindowsFormsUtils.ReadOnlyControlCollection(this, /* isReadOnly = */ !DesignMode);
         }
@@ -4740,18 +4652,15 @@ namespace System.Windows.Forms {
             return base.AllowsChildrenToShowToolTips() && this.ShowItemToolTips;
         }
 
-      /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStripAccessibleObject"]/*' />
         [System.Runtime.InteropServices.ComVisible(true)]
         public class ToolStripAccessibleObject : ControlAccessibleObject {
 
             private ToolStrip owner;
 
-            /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStripAccessibleObject.ToolStripAccessibleObject"]/*' />
             public ToolStripAccessibleObject(ToolStrip owner) : base(owner) {
                 this.owner = owner;
             }
 
-            /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStripAccessibleObject.HitTest"]/*' />
             /// <devdoc>
             /// <para>Return the child object at the given screen coordinates.</para>
             /// </devdoc>
@@ -4765,7 +4674,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStripAccessibleObject.GetChild"]/*' />
             /// <devdoc>
             /// <para>When overridden in a derived class, gets the accessible child corresponding to the specified
             /// index.</para>
@@ -4828,7 +4736,6 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStripAccessibleObject.GetChildCount"]/*' />
             /// <devdoc>
             /// <para> When overridden in a derived class, gets the number of children
             /// belonging to an accessible object.</para>
@@ -4894,7 +4801,6 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStripAccessibleObject.Role"]/*' />
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;

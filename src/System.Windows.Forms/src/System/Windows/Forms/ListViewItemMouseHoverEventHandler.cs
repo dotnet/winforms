@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\ListViewItemMouseHoverEventHandler.uex' path='docs/doc[@for="ListViewItemMouseHoverEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the <see cref='System.Windows.Forms.ListView.ItemMouseHover'/>

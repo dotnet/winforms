@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\View.uex' path='docs/doc[@for="View"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies how list items are displayed in
@@ -21,13 +20,11 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum View {
 
-        /// <include file='doc\View.uex' path='docs/doc[@for="View.LargeIcon"]/*' />
         /// <devdoc>
         ///     Each item appears as a full-sized icon with a label below it.
         /// </devdoc>
         LargeIcon = NativeMethods.LVS_ICON,
 
-        /// <include file='doc\View.uex' path='docs/doc[@for="View.Details"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Each item appears on a seperate line with further
@@ -41,7 +38,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Details = NativeMethods.LVS_REPORT,
 
-        /// <include file='doc\View.uex' path='docs/doc[@for="View.SmallIcon"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Each item appears as a small icon with a label to its right.
@@ -49,7 +45,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         SmallIcon = NativeMethods.LVS_SMALLICON,
 
-        /// <include file='doc\View.uex' path='docs/doc[@for="View.List"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Each item
@@ -59,7 +54,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         List = NativeMethods.LVS_LIST,
 
-        /// <include file='doc\View.uex' path='docs/doc[@for="View.Tile"]/*' />
         /// <devdoc>
         ///    <para>
         ///         Tile view.

@@ -58,7 +58,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
     
-    /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods"]/*' />
     internal static class NativeMethods {
 
         public static IntPtr InvalidIntPtr = (IntPtr)(-1);
@@ -1027,7 +1026,6 @@ namespace System.Windows.Forms {
             return ((((ushort)(sub)) << 10) | (ushort)(primary));
         }
         
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.Lang.MAKELCID"]/*' />
         /// <devdoc>
         ///     Creates an LCID from a LangId
         /// </devdoc>
@@ -1035,7 +1033,6 @@ namespace System.Windows.Forms {
             return MAKELCID(lgid, SORT_DEFAULT);
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.Lang.MAKELCID1"]/*' />
         /// <devdoc>
         ///     Creates an LCID from a LangId
         /// </devdoc>
@@ -2686,7 +2683,6 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.FONTDESC"]/*' />
         /// <devdoc>
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
@@ -2703,7 +2699,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.PICTDESCbmp"]/*' />
         /// <devdoc>
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
@@ -2720,7 +2715,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.PICTDESCicon"]/*' />
         /// <devdoc>
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
@@ -2736,7 +2730,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.PICTDESCemf"]/*' />
         /// <devdoc>
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
@@ -6053,7 +6046,6 @@ namespace System.Windows.Forms {
                 return i;
             }
     
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.Util.GetPInvokeStringLength"]/*' />
             /// <devdoc>
             ///     Computes the string size that should be passed to a typical Win32 call.
             ///     This will be the character count under NT, and the ubyte count for Windows 95.
@@ -6139,68 +6131,57 @@ namespace System.Windows.Forms {
 #endif
             }
 
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Accelerator"]/*' />
             /// <devdoc>
             ///     Handle type for accelerator tables.
             /// </devdoc>
             public static readonly int Accelerator  = System.Internal.HandleCollector.RegisterType("Accelerator", 80, 50);
     
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Cursor"]/*' />
             /// <devdoc>
             ///     handle type for cursors.
             /// </devdoc>
             public static readonly int Cursor       = System.Internal.HandleCollector.RegisterType("Cursor", 20, 500);
     
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.EMF"]/*' />
             /// <devdoc>
             ///     Handle type for enhanced metafiles.
             /// </devdoc>
             public static readonly int EMF          = System.Internal.HandleCollector.RegisterType("EnhancedMetaFile", 20, 500);
     
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Find"]/*' />
             /// <devdoc>
             ///     Handle type for file find handles.
             /// </devdoc>
             public static readonly int Find         = System.Internal.HandleCollector.RegisterType("Find", 0, 1000);
     
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.GDI"]/*' />
             /// <devdoc>
             ///     Handle type for GDI objects.
             /// </devdoc>
             public static readonly int GDI          = System.Internal.HandleCollector.RegisterType("GDI", 50, 500);
     
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.HDC"]/*' />
             /// <devdoc>
             ///     Handle type for HDC's that count against the Win98 limit of five DC's.  HDC's
             ///     which are not scarce, such as HDC's for bitmaps, are counted as GDIHANDLE's.
             /// </devdoc>
             public static readonly int HDC          = System.Internal.HandleCollector.RegisterType("HDC", 100, 2); // wait for 2 dc's before collecting
 
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.HDC"]/*' />
             /// <devdoc>
             ///     Handle type for Compatible HDC's used for ToolStrips
             /// </devdoc>
             public static readonly int CompatibleHDC = System.Internal.HandleCollector.RegisterType("ComptibleHDC", 50, 50); // wait for 2 dc's before collecting
 
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Icon"]/*' />
             /// <devdoc>
             ///     Handle type for icons.
             /// </devdoc>
             public static readonly int Icon         = System.Internal.HandleCollector.RegisterType("Icon", 20, 500);
     
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Kernel"]/*' />
             /// <devdoc>
             ///     Handle type for kernel objects.
             /// </devdoc>
             public static readonly int Kernel       = System.Internal.HandleCollector.RegisterType("Kernel", 0, 1000);
     
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Menu"]/*' />
             /// <devdoc>
             ///     Handle type for files.
             /// </devdoc>
             public static readonly int Menu         = System.Internal.HandleCollector.RegisterType("Menu", 30, 1000);
     
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Window"]/*' />
             /// <devdoc>
             ///     Handle type for windows.
             /// </devdoc>

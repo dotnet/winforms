@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewCellValueEventArgs.uex' path='docs/doc[@for="DataGridViewCellValueEventArgs"]/*' />
     public class DataGridViewCellValueEventArgs : EventArgs
     {
         private int rowIndex, columnIndex;
@@ -18,7 +17,6 @@ namespace System.Windows.Forms
             this.columnIndex = this.rowIndex = -1;
         }
 
-        /// <include file='doc\DataGridViewCellValueEventArgs.uex' path='docs/doc[@for="DataGridViewCellValueEventArgs.DataGridViewCellValueEventArgs"]/*' />
         public DataGridViewCellValueEventArgs(int columnIndex, int rowIndex)
         {
             if (columnIndex < 0)
@@ -33,7 +31,6 @@ namespace System.Windows.Forms
             this.columnIndex = columnIndex;
         }
 
-        /// <include file='doc\DataGridViewCellValueEventArgs.uex' path='docs/doc[@for="DataGridViewCellValueEventArgs.ColumnIndex"]/*' />
         public int ColumnIndex
         {
             get
@@ -42,7 +39,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellValueEventArgs.uex' path='docs/doc[@for="DataGridViewCellValueEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get
@@ -51,7 +47,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellValueEventArgs.uex' path='docs/doc[@for="DataGridViewCellValueEventArgs.Value"]/*' />
         public object Value
         {
             get

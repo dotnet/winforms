@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\PreviewKeyDownEventHandler.uex' path='docs/doc[@for="PreviewKeyDownEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle PreviewKeyDown events.

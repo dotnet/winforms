@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnAfterCheck'/>, <see cref='System.Windows.Forms.TreeView.AfterCollapse'/>, <see cref='System.Windows.Forms.TreeView.AfterExpand'/>, or <see cref='System.Windows.Forms.TreeView.AfterSelect'/> event.
@@ -24,7 +23,6 @@ namespace System.Windows.Forms {
         TreeNode node;
         TreeViewAction action = TreeViewAction.Unknown;
         
-        /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.TreeViewEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
             this.node = node;
         }
         
-        /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.TreeViewEventArgs1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -41,7 +38,6 @@ namespace System.Windows.Forms {
             this.action = action;
         }
         
-        /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.Node"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -51,7 +47,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.Action"]/*' />
         /// <devdoc>
         ///      An event specific action-flag.
         /// </devdoc>

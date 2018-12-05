@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
   
 
 
-    /// <include file='doc\ToolStripItemClickedEventHandler.uex' path='docs/doc[@for="ToolStripItemClickedEventHandler"]/*' />
     /// <devdoc>
     /// <para>
     /// Represents the method that will handle the

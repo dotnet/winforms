@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Drawing;
 
-    /// <include file='doc\InputLangChangeEventHandler.uex' path='docs/doc[@for="InputLanguageChangedEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the <see cref='System.Windows.Forms.Form.InputLanguageChanged'/> event of a

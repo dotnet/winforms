@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System;
 
-    /// <include file='doc\IWin32window.uex' path='docs/doc[@for="IWin32Window"]/*' />
     /// <devdoc>
     ///    <para>Provides an interface to expose Win32 HWND handles.</para>
     /// </devdoc>
@@ -16,7 +15,6 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public interface IWin32Window {
     
-        /// <include file='doc\IWin32window.uex' path='docs/doc[@for="IWin32Window.Handle"]/*' />
         /// <devdoc>
         ///    <para>Gets the handle to the window represented by the implementor.</para>
         /// </devdoc>

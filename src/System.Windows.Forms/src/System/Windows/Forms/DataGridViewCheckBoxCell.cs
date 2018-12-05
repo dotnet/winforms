@@ -17,7 +17,6 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
 
-    /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell"]/*' />
     /// <devdoc>
     ///    <para>Identifies a checkbox cell in the DataGridView.</para>
     /// </devdoc>
@@ -50,12 +49,10 @@ namespace System.Windows.Forms
         private static Type defaultBooleanType = typeof(System.Boolean);
         private static Type cellType = typeof(DataGridViewCheckBoxCell);
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.DataGridViewCheckBoxCell"]/*' />
         public DataGridViewCheckBoxCell() : this(false /*threeState*/)
         {
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.DataGridViewCheckBoxCell2"]/*' />
         public DataGridViewCheckBoxCell(bool threeState)
         {
             if (threeState)
@@ -64,7 +61,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.IDataGridViewEditingCell.EditingCellFormattedValue"]/*' />
         public virtual object EditingCellFormattedValue
         {
             get
@@ -121,7 +117,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.IDataGridViewEditingCell.EditingCellValueChanged"]/*' />
         public virtual bool EditingCellValueChanged
         {
             get
@@ -141,7 +136,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.IDataGridViewEditingCell.GetEditingCellFormattedValue"]/*' />
         public virtual object GetEditingCellFormattedValue(DataGridViewDataErrorContexts context)
         {
             if (this.FormattedValueType == null)
@@ -190,7 +184,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.IDataGridViewEditingCell.PrepareEditingCellForEdit"]/*' />
         public virtual void PrepareEditingCellForEdit(bool selectAll)
         {
         }
@@ -219,7 +212,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.EditType"]/*' />
         public override Type EditType
         {
             get
@@ -230,7 +222,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.FalseValue"]/*' />
         [DefaultValue(null)]
         public object FalseValue
         {
@@ -269,7 +260,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.FlatStyle"]/*' />
         [DefaultValue(FlatStyle.Standard)]
         public FlatStyle FlatStyle
         {
@@ -310,7 +300,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.FormattedValueType"]/*' />
         public override Type FormattedValueType
         {
             get
@@ -326,7 +315,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.IndeterminateValue"]/*' />
         [DefaultValue(null)]
         public object IndeterminateValue
         {
@@ -365,7 +353,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.ThreeState"]/*' />
         [DefaultValue(false)]
         public bool ThreeState
         {
@@ -411,7 +398,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.TrueValue"]/*' />
         [DefaultValue(null)]
         public object TrueValue
         {
@@ -450,7 +436,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.ValueType"]/*' />
         public override Type ValueType
         {
             get
@@ -477,7 +462,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewCheckBoxCell dataGridViewCell;
@@ -509,25 +493,21 @@ namespace System.Windows.Forms
                    this.DataGridView.IsCurrentCellInEditMode;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.ContentClickUnsharesRow"]/*' />
         protected override bool ContentClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return CommonContentClickUnsharesRow(e);
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.ContentDoubleClickUnsharesRow"]/*' />
         protected override bool ContentDoubleClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return CommonContentClickUnsharesRow(e);
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewCheckBoxCellAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.GetContentBounds"]/*' />
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -581,7 +561,6 @@ namespace System.Windows.Forms
             return checkBoxBounds;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.GetErrorIconBounds"]/*' />
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -631,7 +610,6 @@ namespace System.Windows.Forms
             return errorIconBounds;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.GetFormattedValue"]/*' />
         protected override object GetFormattedValue(object value,
                                                     int rowIndex,
                                                     ref DataGridViewCellStyle cellStyle,
@@ -710,7 +688,6 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.GetPreferredSize"]/*' />
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
             if (this.DataGridView == null)
@@ -828,37 +805,31 @@ namespace System.Windows.Forms
             return preferredSize;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.KeyDownUnsharesRow"]/*' />
         protected override bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
         {
             return e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.KeyUpUnsharesRow"]/*' />
         protected override bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex)
         {
             return e.KeyCode == Keys.Space;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.MouseDownUnsharesRow"]/*' />
         protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return e.Button == MouseButtons.Left;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.MouseEnterUnsharesRow"]/*' />
         protected override bool MouseEnterUnsharesRow(int rowIndex)
         {
             return this.ColumnIndex == this.DataGridView.MouseDownCellAddress.X && rowIndex == this.DataGridView.MouseDownCellAddress.Y;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.MouseLeaveUnsharesRow"]/*' />
         protected override bool MouseLeaveUnsharesRow(int rowIndex)
         {
             return (this.ButtonState & ButtonState.Pushed) != 0;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.MouseUpUnsharesRow"]/*' />
         protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return e.Button == MouseButtons.Left;
@@ -888,19 +859,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.OnContentClick"]/*' />
         protected override void OnContentClick(DataGridViewCellEventArgs e)
         {
             OnCommonContentClick(e);
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.OnContentDoubleClick"]/*' />
         protected override void OnContentDoubleClick(DataGridViewCellEventArgs e)
         {
             OnCommonContentClick(e);
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.OnKeyDown"]/*' />
         protected override void OnKeyDown(KeyEventArgs e, int rowIndex)
         {
             if (this.DataGridView == null)
@@ -914,7 +882,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.OnKeyUp"]/*' />
         protected override void OnKeyUp(KeyEventArgs e, int rowIndex)
         {
             if (this.DataGridView == null)
@@ -939,7 +906,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.OnLeave"]/*' />
         protected override void OnLeave(int rowIndex, bool throughMouseClick)
         {
             if (this.DataGridView == null)
@@ -953,7 +919,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.OnMouseDown"]/*' />
         protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -967,7 +932,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.OnMouseLeave"]/*' />
         protected override void OnMouseLeave(int rowIndex)
         {
             if (this.DataGridView == null)
@@ -994,7 +958,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.OnMouseMove"]/*' />
         protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -1031,7 +994,6 @@ namespace System.Windows.Forms
             base.OnMouseMove(e);
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.OnMouseUp"]/*' />
         protected override void OnMouseUp(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -1065,7 +1027,6 @@ namespace System.Windows.Forms
             (this.DataGridView.AccessibilityObject as Control.ControlAccessibleObject).NotifyClients(AccessibleEvents.StateChange, objectID, childID);
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.Paint"]/*' />
         protected override void Paint(Graphics graphics, 
             Rectangle clipBounds,
             Rectangle cellBounds, 
@@ -1596,7 +1557,6 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.ParseFormattedValue"]/*' />
         public override object ParseFormattedValue(object formattedValue,
                                                    DataGridViewCellStyle cellStyle,
                                                    TypeConverter formattedValueTypeConverter,
@@ -1720,7 +1680,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.ToString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
@@ -1763,17 +1722,14 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCellAccessibleObject"]/*' />
         protected class DataGridViewCheckBoxCellAccessibleObject : DataGridViewCellAccessibleObject
         {
             private int[] runtimeId = null; // Used by UIAutomation
 
-            /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCellAccessibleObject.DataGridViewCheckBoxCellAccessibleObject"]/*' />
             public DataGridViewCheckBoxCellAccessibleObject(DataGridViewCell owner) : base (owner)
             {
             }
 
-            /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCellAccessibleObject.State"]/*' />
             public override AccessibleStates State
             {
                 get
@@ -1801,7 +1757,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCellAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction
             {
                 get
@@ -1838,7 +1793,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCellAccessibleObject.DoDefaultAction"]/*' />
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
@@ -1881,7 +1835,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCellAccessibleObject.GetChildCount"]/*' />
             public override int GetChildCount()
             {
                 return 0;

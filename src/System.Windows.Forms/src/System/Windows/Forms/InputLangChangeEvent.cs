@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using Microsoft.Win32;
 
-    /// <include file='doc\InputLangChangeEvent.uex' path='docs/doc[@for="InputLanguageChangedEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.Form.InputLanguageChanged'/>
@@ -24,18 +23,15 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class InputLanguageChangedEventArgs : EventArgs {
 
-        /// <include file='doc\InputLangChangeEvent.uex' path='docs/doc[@for="InputLanguageChangedEventArgs.inputLanguage"]/*' />
         /// <devdoc>
         ///     The input language.
         /// </devdoc>
         private readonly InputLanguage inputLanguage;
 
-        /// <include file='doc\InputLangChangeEvent.uex' path='docs/doc[@for="InputLanguageChangedEventArgs.culture"]/*' />
         /// <devdoc>
         ///     The culture of the input language.
         /// </devdoc>
         private readonly CultureInfo culture;
-        /// <include file='doc\InputLangChangeEvent.uex' path='docs/doc[@for="InputLanguageChangedEventArgs.charSet"]/*' />
         /// <devdoc>
         ///     The charSet associated with the new input language.
         /// </devdoc>
@@ -44,7 +40,6 @@ namespace System.Windows.Forms {
         /**
          * @deprecated.  Use the other constructor instead.
          */
-        /// <include file='doc\InputLangChangeEvent.uex' path='docs/doc[@for="InputLanguageChangedEventArgs.InputLanguageChangedEventArgs"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -58,7 +53,6 @@ namespace System.Windows.Forms {
             this.charSet = charSet;
         }
 
-        /// <include file='doc\InputLangChangeEvent.uex' path='docs/doc[@for="InputLanguageChangedEventArgs.InputLanguageChangedEventArgs1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangedEventArgs'/>class with the specified input language and
@@ -71,7 +65,6 @@ namespace System.Windows.Forms {
             this.charSet = charSet;
         }
 
-        /// <include file='doc\InputLangChangeEvent.uex' path='docs/doc[@for="InputLanguageChangedEventArgs.InputLanguage"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the input language.
@@ -83,7 +76,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\InputLangChangeEvent.uex' path='docs/doc[@for="InputLanguageChangedEventArgs.Culture"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the locale of the input language.
@@ -95,7 +87,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\InputLangChangeEvent.uex' path='docs/doc[@for="InputLanguageChangedEventArgs.CharSet"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the character set associated with the new input language.

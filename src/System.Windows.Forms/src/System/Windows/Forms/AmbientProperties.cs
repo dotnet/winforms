@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides ambient property values to top-level controls.
@@ -27,7 +26,6 @@ namespace System.Windows.Forms {
         private Cursor   cursor;
         private Font     font;
         
-        /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties.BackColor"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the ambient BackColor, or Color.Empty if there is none.
@@ -42,7 +40,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties.Cursor"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the ambient BackColor, or null if there is none.
@@ -57,7 +54,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties.Font"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the ambient Font, or null if there is none.
@@ -72,7 +68,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties.ForeColor"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the ambient ForeColor, or Color.Empty if there is none.

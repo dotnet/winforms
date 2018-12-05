@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
     using System.ComponentModel;
 
-    /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs"]/*' />
     /// <devdoc>
     /// The event class that is created when a property
     /// in the grid is modified by the user.
@@ -18,7 +17,6 @@ namespace System.Windows.Forms {
     public class PropertyValueChangedEventArgs : EventArgs {
         private readonly GridItem changedItem;
         private object oldValue;
-                /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs.PropertyValueChangedEventArgs"]/*' />
                 /// <devdoc>
         /// Constructor
         /// </devdoc>
@@ -27,7 +25,6 @@ namespace System.Windows.Forms {
             this.oldValue = oldValue;
         }
 
-        /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs.ChangedItem"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -37,7 +34,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs.OldValue"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

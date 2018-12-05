@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms {
-        /// <include file='doc\DataGridParentRowsLabel.uex' path='docs/doc[@for="DataGridParentRowsLabelStyle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies how parent row labels of a DataGrid
@@ -11,28 +10,24 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public enum DataGridParentRowsLabelStyle {
-            /// <include file='doc\DataGridParentRowsLabel.uex' path='docs/doc[@for="DataGridParentRowsLabelStyle.None"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Display no parent row labels.
             ///    </para>
             /// </devdoc>
             None              = 0,
-            /// <include file='doc\DataGridParentRowsLabel.uex' path='docs/doc[@for="DataGridParentRowsLabelStyle.TableName"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Displaya the parent table name.
             ///    </para>
             /// </devdoc>
             TableName            = 1,
-            /// <include file='doc\DataGridParentRowsLabel.uex' path='docs/doc[@for="DataGridParentRowsLabelStyle.ColumnName"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Displaya the parent column name.
             ///    </para>
             /// </devdoc>
             ColumnName           = 2,
-            /// <include file='doc\DataGridParentRowsLabel.uex' path='docs/doc[@for="DataGridParentRowsLabelStyle.Both"]/*' />
             /// <devdoc>
             ///    <para>
             ///       Displays

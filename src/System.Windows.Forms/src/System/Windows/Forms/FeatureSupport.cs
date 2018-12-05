@@ -13,14 +13,12 @@ namespace System.Windows.Forms {
     using System.Security.Permissions;
         
 
-    /// <include file='doc\FeatureSupport.uex' path='docs/doc[@for="FeatureSupport"]/*' />
     /// <devdoc>
     /// <para>Provides <see langword='static'/> methods for retrieving feature information from the
     ///    current system.</para>
     /// </devdoc>
     public abstract class FeatureSupport : IFeatureSupport {
 
-        /// <include file='doc\FeatureSupport.uex' path='docs/doc[@for="FeatureSupport.IsPresent"]/*' />
         /// <devdoc>
         ///    <para>Determines whether any version of the specified feature
         ///       is installed in the system. This method is <see langword='static'/>.</para>
@@ -29,7 +27,6 @@ namespace System.Windows.Forms {
             return IsPresent(featureClassName, featureConstName, new Version(0, 0, 0, 0));
         }
 
-        /// <include file='doc\FeatureSupport.uex' path='docs/doc[@for="FeatureSupport.IsPresent1"]/*' />
         /// <devdoc>
         ///    <para>Determines whether the specified or newer version of the specified feature is
         ///       installed in the system. This method is <see langword='static'/>.</para>
@@ -66,7 +63,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\FeatureSupport.uex' path='docs/doc[@for="FeatureSupport.GetVersionPresent"]/*' />
         /// <devdoc>
         ///    <para>Gets the version of the specified feature that is available on the system.</para>
         /// </devdoc>
@@ -101,7 +97,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\FeatureSupport.uex' path='docs/doc[@for="FeatureSupport.IsPresent2"]/*' />
         /// <devdoc>
         ///    <para>Determines whether any version of the specified feature
         ///       is installed in the system.</para>
@@ -110,7 +105,6 @@ namespace System.Windows.Forms {
             return IsPresent(feature, new Version(0, 0, 0, 0));
         }
 
-        /// <include file='doc\FeatureSupport.uex' path='docs/doc[@for="FeatureSupport.IsPresent3"]/*' />
         /// <devdoc>
         ///    <para>Determines whether the specified or newer version of the
         ///       specified feature is installed in the system.</para>
@@ -124,7 +118,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\FeatureSupport.uex' path='docs/doc[@for="FeatureSupport.GetVersionPresent1"]/*' />
         /// <devdoc>
         ///    <para>When overridden in a derived class, gets the version of the specified
         ///       feature that is available on the system.</para>

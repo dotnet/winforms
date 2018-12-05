@@ -20,7 +20,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
 
 
-    /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton"]/*' />
     /// <devdoc>
     ///    <para> 
     ///       Represents a Windows toolbar button.</para>
@@ -50,7 +49,6 @@ namespace System.Windows.Forms {
         // These variables below are used by the ToolBar control to help
         // it manage some information about us.
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.stringIndex"]/*' />
         /// <devdoc>
         ///     If this button has a string, what it's index is in the ToolBar's
         ///     internal list of strings.  Needs to be package protected.
@@ -58,28 +56,24 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         internal IntPtr stringIndex = (IntPtr)(-1);
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.parent"]/*' />
         /// <devdoc>
         ///     Our parent ToolBar control.
         /// </devdoc>
         /// <internalonly/>
         internal ToolBar parent;
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.dropDownMenu"]/*' />
         /// <devdoc>
         ///     For DropDown buttons, we can optionally show a
         ///     context menu when the button is dropped down.
         /// </devdoc>
         internal Menu dropDownMenu = null;
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToolBarButton"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ToolBarButton'/> class.</para>
         /// </devdoc>
         public ToolBarButton() {
         }
         
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToolBarButton1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -121,7 +115,6 @@ namespace System.Windows.Forms {
             }
         }
  
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.DropDownMenu"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Indicates the menu to be displayed in
@@ -147,7 +140,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Enabled"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the button is enabled or not.</para>
         /// </devdoc>
@@ -174,7 +166,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ImageIndex"]/*' />
         /// <devdoc>
         ///    <para> Indicates the index
         ///       value of the image assigned to the button.</para>
@@ -202,7 +193,6 @@ namespace System.Windows.Forms {
             }
         }
 
-                /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ImageIndex"]/*' />
         /// <devdoc>
         ///    <para> Indicates the index
         ///       value of the image assigned to the button.</para>
@@ -226,7 +216,6 @@ namespace System.Windows.Forms {
                 }
             }
         }
-	    /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Name"]/*' />
         /// <devdoc>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control - however this
@@ -251,7 +240,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Parent"]/*' />
         /// <devdoc>
         ///    <para>Indicates the toolbar control that the toolbar button is assigned to. This property is 
         ///       read-only.</para>
@@ -265,7 +253,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.PartialPush"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Indicates whether a toggle-style toolbar button
@@ -296,7 +283,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Pushed"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether a toggle-style toolbar button is currently in the pushed state.</para>
         /// </devdoc>
@@ -320,7 +306,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Rectangle"]/*' />
         /// <devdoc>
         ///    <para>Indicates the bounding rectangle for a toolbar button. This property is 
         ///       read-only.</para>
@@ -336,7 +321,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Style"]/*' />
         /// <devdoc>
         ///    <para> Indicates the style of the
         ///       toolbar button.</para>
@@ -361,7 +345,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -379,7 +362,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Text"]/*' />
         /// <devdoc>
         ///    <para> Indicates the text that is displayed on the toolbar button.</para>
         /// </devdoc>
@@ -408,7 +390,6 @@ namespace System.Windows.Forms {
 
          
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToolTipText"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Indicates
@@ -428,7 +409,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Visible"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Indicates whether the toolbar button
@@ -451,7 +431,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Width"]/*' />
         /// <devdoc>
         ///     This is somewhat nasty -- by default, the windows ToolBar isn't very
         ///     clever about setting the width of buttons, and has a very primitive
@@ -511,7 +490,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Dispose"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -527,7 +505,6 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.FindButtonIndex"]/*' />
         /// <devdoc>
         ///     Finds out index in the parent.
         /// </devdoc>
@@ -573,7 +550,6 @@ namespace System.Windows.Forms {
             return pushed;
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.GetTBBUTTON"]/*' />
         /// <devdoc>
         ///     Returns a TBBUTTON object that represents this ToolBarButton.
         /// </devdoc>
@@ -617,7 +593,6 @@ namespace System.Windows.Forms {
             return button;
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.GetTBBUTTONINFO"]/*' />
         /// <devdoc>
         ///     Returns a TBBUTTONINFO object that represents this ToolBarButton.
         /// </devdoc>
@@ -715,7 +690,6 @@ namespace System.Windows.Forms {
             value = newString.ToString();
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToString"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -723,7 +697,6 @@ namespace System.Windows.Forms {
             return "ToolBarButton: " + Text + ", Style: " + Style.ToString("G");
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.UpdateButton"]/*' />
         /// <devdoc>
         ///     When a button property changes and the parent control is created,
         ///     we need to make sure it gets the new button information.
@@ -733,7 +706,6 @@ namespace System.Windows.Forms {
             UpdateButton(recreate, false, true);        
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.UpdateButton1"]/*' />
         /// <devdoc>
         ///     When a button property changes and the parent control is created,
         ///     we need to make sure it gets the new button information.

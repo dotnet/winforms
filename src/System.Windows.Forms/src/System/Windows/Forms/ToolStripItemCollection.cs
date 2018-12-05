@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Security;
     using System.Security.Permissions;
     
-    /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection"]/*' />
     /// <summary>
     /// Summary description for ToolStripItemCollection.
     /// </summary>
@@ -48,7 +47,6 @@ namespace System.Windows.Forms {
             this.isReadOnly = isReadOnly;
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.ToolStripItemCollection"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -62,7 +60,6 @@ namespace System.Windows.Forms {
             AddRange(value);
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.this"]/*' />
         /// <devdoc>
         /// <para></para>
         /// </devdoc>
@@ -72,7 +69,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.this1"]/*' />
         /// <devdoc>
         /// <para>Retrieves the child control with the specified key.</para>
         /// </devdoc>
@@ -111,7 +107,6 @@ namespace System.Windows.Forms {
             return item;
         }
             
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Add"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -128,7 +123,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.AddRange"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -149,7 +143,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.AddRange1"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -172,7 +165,6 @@ namespace System.Windows.Forms {
           
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Contains"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -181,7 +173,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Clear"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -216,7 +207,6 @@ namespace System.Windows.Forms {
             }
         }
    
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.ContainsKey"]/*' />
         /// <devdoc>
         /// <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
         /// </devdoc>
@@ -252,7 +242,6 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Find"]/*' />
         /// <devdoc>
         /// <para>Searches for Items by their Name property, builds up an array 
         /// of all the controls that match. 
@@ -344,13 +333,11 @@ namespace System.Windows.Forms {
         int IList.IndexOf(object value) { return IndexOf(value as ToolStripItem); }
         void IList.Insert(int index, object value) { Insert(index, value as ToolStripItem);  }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.IList.this"]/*' />
         /// <internalonly/>
         object IList.this[int index] {
             get { return InnerList[index]; }            
             set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
         }
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Insert"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -372,14 +359,12 @@ namespace System.Windows.Forms {
 
         }
 			
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.IndexOf"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         public int IndexOf(ToolStripItem value) {
             return InnerList.IndexOf(value);
         }
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.IndexOfKey"]/*' />
         /// <devdoc>
         /// <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
         /// </devdoc>
@@ -446,7 +431,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Remove"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -458,7 +442,6 @@ namespace System.Windows.Forms {
             OnAfterRemove(value);
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.RemoveAt"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
@@ -474,7 +457,6 @@ namespace System.Windows.Forms {
             OnAfterRemove(item);
         }
       
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.RemoveByKey"]/*' />
         /// <devdoc>
         /// <para>Removes the child item with the specified key.</para>
         /// </devdoc>
@@ -488,7 +470,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.CopyTo"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>

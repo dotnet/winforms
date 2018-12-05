@@ -17,7 +17,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar"]/*' />
     /// <devdoc>
     ///    <para>Represents a Windows toolbar.</para>
     /// </devdoc>
@@ -32,18 +31,15 @@ namespace System.Windows.Forms {
 
         private ToolBarButtonCollection buttonsCollection;
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.buttonSize"]/*' />
         /// <devdoc>
         ///     The size of a button in the ToolBar
         /// </devdoc>
         internal Size buttonSize = System.Drawing.Size.Empty;
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.requestedSize"]/*' />
         /// <devdoc>
         ///     This is used by our autoSizing support.
         /// </devdoc>
         private int requestedSize;
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.DDARROW_WIDTH"]/*' />
         /// <devdoc>
         ///     This represents the width of the drop down arrow we have if the
         ///     DropDownArrows property is true.  this value is used by the ToolBarButton
@@ -51,51 +47,43 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal const int DDARROW_WIDTH = 15;
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.appearance"]/*' />
         /// <devdoc>
         ///     Indicates what our appearance will be.  This will either be normal
         ///     or flat.
         /// </devdoc>
         private ToolBarAppearance appearance = ToolBarAppearance.Normal;
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.borderStyle"]/*' />
         /// <devdoc>
         ///     Indicates whether or not we have a border
         /// </devdoc>
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.buttons"]/*' />
         /// <devdoc>
         ///     The array of buttons we're working with.
         /// </devdoc>
         private ToolBarButton [] buttons;
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.buttonCount"]/*' />
         /// <devdoc>
         ///     The number of buttons we're working with
         /// </devdoc>
         private int buttonCount = 0;
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.textAlign"]/*' />
         /// <devdoc>
         ///     Indicates if text captions should go underneath images in buttons or
         ///     to the right of them
         /// </devdoc>
         private ToolBarTextAlign textAlign = ToolBarTextAlign.Underneath;
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.imageList"]/*' />
         /// <devdoc>
         ///     The ImageList object that contains the main images for our control.
         /// </devdoc>
         private ImageList imageList = null;
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.maxWidth"]/*' />
         /// <devdoc>
         ///     The maximum width of buttons currently being displayed.  This is needed
         ///     by our autoSizing code.  If this value is -1, it needs to be recomputed.
         /// </devdoc>
         private int maxWidth = -1;
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.hotItem"]/*' />
         /// <devdoc>
         ///     To be supplied.
         /// </devdoc>
@@ -120,7 +108,6 @@ namespace System.Windows.Forms {
         private ToolBarButtonClickEventHandler onButtonDropDown = null;
 
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBar"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ToolBar'/> class.</para>
         /// </devdoc>
@@ -142,7 +129,6 @@ namespace System.Windows.Forms {
             buttonsCollection = new ToolBarButtonCollection(this);
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Appearance"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the appearance of the toolbar
         ///       control and its buttons.</para>
@@ -171,7 +157,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.AutoSize"]/*' />
         /// <devdoc>
         ///    <para> Indicates whether the toolbar
         ///       adjusts its size automatically based on the size of the buttons and the
@@ -212,7 +197,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.AutoSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
@@ -228,7 +212,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -242,7 +225,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
@@ -254,7 +236,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -268,7 +249,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -280,7 +260,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImageLayout"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -294,7 +273,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -306,7 +284,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BorderStyle"]/*' />
         /// <devdoc>
         ///    <para> Gets or sets
         ///       the border style of the toolbar control.</para>
@@ -338,7 +315,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Buttons"]/*' />
         /// <devdoc>
         /// <para> A collection of <see cref='System.Windows.Forms.ToolBarButton'/> controls assigned to the
         ///    toolbar control. The property is read-only.</para>
@@ -356,7 +332,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ButtonSize"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets
         ///       the size of the buttons on the toolbar control.</para>
@@ -405,7 +380,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.CreateParams"]/*' />
         /// <devdoc>
         ///     Returns the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
@@ -460,14 +434,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.DefaultImeMode"]/*' />
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -478,7 +450,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Divider"]/*' />
         /// <devdoc>
         ///    <para> Gets or sets a value indicating
         ///       whether the toolbar displays a divider.</para>
@@ -502,7 +473,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Dock"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -538,7 +508,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.DoubleBuffered"]/*' />
         /// <devdoc>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
@@ -553,7 +522,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.DropDownArrows"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether drop-down buttons on a
         ///       toolbar display down arrows.</para>
@@ -578,7 +546,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ForeColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -592,7 +559,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ForeColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
@@ -604,7 +570,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ImageList"]/*' />
         /// <devdoc>
         ///    <para> Gets or sets the collection of images available to the toolbar button
         ///       controls.</para>
@@ -641,7 +606,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ImageSize"]/*' />
         /// <devdoc>
         ///    <para>Gets the size of the images in the image list assigned to the
         ///       toolbar.</para>
@@ -663,7 +627,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -674,7 +637,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ImeModeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
@@ -686,7 +648,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.PreferredHeight"]/*' />
         /// <devdoc>
         ///     The preferred height for this ToolBar control.  This is
         ///     used by the AutoSizing code.
@@ -747,7 +708,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.PreferredWidth"]/*' />
         /// <devdoc>
         ///     The preferred width for this ToolBar control.  This is
         ///     used by AutoSizing code.
@@ -789,7 +749,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.RightToLeft"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -803,7 +762,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.RightToLeftChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {
@@ -815,7 +773,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ScaleCore"]/*' />
         /// <devdoc>
         /// We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
@@ -829,7 +786,6 @@ namespace System.Windows.Forms {
             UpdateButtons();
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ScaleControl"]/*' />
         /// <devdoc>
         /// We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
@@ -840,7 +796,6 @@ namespace System.Windows.Forms {
             base.ScaleControl(factor, specified);
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ShowToolTips"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the toolbar displays a
@@ -865,7 +820,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.TabStop"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -879,7 +833,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Text"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -897,7 +850,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.TextChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
@@ -909,7 +861,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.TextAlign"]/*' />
         /// <devdoc>
         ///    <para> Gets or sets the alignment of text in relation to each
         ///       image displayed on
@@ -937,7 +888,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Wrappable"]/*' />
         /// <devdoc>
         ///    <para> Gets
         ///       or sets a value
@@ -963,7 +913,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ButtonClick"]/*' />
         /// <devdoc>
         /// <para>Occurs when a <see cref='System.Windows.Forms.ToolBarButton'/> on the <see cref='System.Windows.Forms.ToolBar'/> is clicked.</para>
         /// </devdoc>
@@ -977,7 +926,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ButtonDropDown"]/*' />
         /// <devdoc>
         /// <para>Occurs when a drop-down style <see cref='System.Windows.Forms.ToolBarButton'/> or its down arrow is clicked.</para>
         /// </devdoc>
@@ -991,7 +939,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.OnPaint"]/*' />
         /// <devdoc>
         ///     ToolBar Onpaint.
         /// </devdoc>
@@ -1006,7 +953,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.AdjustSize"]/*' />
         /// <devdoc>
         ///     Adjusts the height or width of the ToolBar to make sure we have enough
         ///     room to show the buttons.
@@ -1029,7 +975,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BeginUpdate"]/*' />
         /// <devdoc>
         ///     This routine lets us change a bunch of things about the toolbar without
         ///     having each operation wait for the paint to complete.  This must be
@@ -1039,7 +984,6 @@ namespace System.Windows.Forms {
             BeginUpdateInternal();
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1058,7 +1002,6 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.DetachImageList"]/*' />
         /// <devdoc>
         ///     Resets the imageList to null.  We wire this method up to the imageList's
         ///     Dispose event, so that we don't hang onto an imageList that's gone away.
@@ -1067,7 +1010,6 @@ namespace System.Windows.Forms {
             ImageList = null;
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Dispose"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1106,7 +1048,6 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.EndUpdate"]/*' />
         /// <devdoc>
         ///     This routine lets us change a bunch of things about the toolbar without
         ///     having each operation wait for the paint to complete.  This must be
@@ -1116,7 +1057,6 @@ namespace System.Windows.Forms {
             EndUpdateInternal();
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ForceButtonWidths"]/*' />
         /// <devdoc>
         ///     Forces the button sizes based on various different things.  The default
         ///     ToolBar button sizing rules are pretty primitive and this tends to be
@@ -1153,7 +1093,6 @@ namespace System.Windows.Forms {
                 RecreateHandle();
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Insert"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -1177,7 +1116,6 @@ namespace System.Windows.Forms {
             buttonCount++;
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.InsertButton"]/*' />
         /// <devdoc>
         ///    <para>Inserts a button at a given location on the toolbar control.</para>
         /// </devdoc>
@@ -1199,7 +1137,6 @@ namespace System.Windows.Forms {
             UpdateButtons();
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.InternalAddButton"]/*' />
         /// <devdoc>
         ///     Adds a button to the ToolBar
         /// </devdoc>
@@ -1212,7 +1149,6 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.InternalSetButton"]/*' />
         /// <devdoc>
         ///     Changes the data for a button in the ToolBar, and then does the appropriate
         ///     work to update the ToolBar control.
@@ -1252,7 +1188,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.OnButtonClick"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolBar.ButtonClick'/>
         /// event.</para>
@@ -1261,7 +1196,6 @@ namespace System.Windows.Forms {
             if (onButtonClick != null) onButtonClick(this, e);
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.OnButtonDropDown"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolBar.ButtonDropDown'/>
         /// event.</para>
@@ -1270,7 +1204,6 @@ namespace System.Windows.Forms {
             if (onButtonDropDown != null) onButtonDropDown(this, e);
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.OnHandleCreated"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1312,7 +1245,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.OnResize"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1324,7 +1256,6 @@ namespace System.Windows.Forms {
             if (Wrappable) AdjustSize(Dock);
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.OnFontChanged"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1345,7 +1276,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.RealizeButtons"]/*' />
         /// <devdoc>
         ///     Sets all the button data into the ToolBar control
         /// </devdoc>
@@ -1407,7 +1337,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.RemoveAt"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -1422,7 +1351,6 @@ namespace System.Windows.Forms {
             buttons[buttonCount] = null;
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ResetButtonSize"]/*' />
         /// <devdoc>
         ///    <para> Resets the toolbar buttons to the minimum
         ///       size. </para>
@@ -1438,7 +1366,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.SetBoundsCore"]/*' />
         /// <devdoc>
         ///     Overrides Control.setBoundsCore to enforce AutoSize.
         /// </devdoc>
@@ -1474,7 +1401,6 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ShouldSerializeButtonSize"]/*' />
         /// <devdoc>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolBar.ButtonSize'/> property needs to be persisted.</para>
         /// </devdoc>
@@ -1482,7 +1408,6 @@ namespace System.Windows.Forms {
             return !buttonSize.IsEmpty;
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.SetToolTip"]/*' />
         /// <devdoc>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </devdoc>
@@ -1492,7 +1417,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
@@ -1506,7 +1430,6 @@ namespace System.Windows.Forms {
             return s;
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.UpdateButtons"]/*' />
         /// <devdoc>
         ///     Updates all the information in the ToolBar.  Tragically, the win32
         ///     control is pretty flakey, and the only real choice here is to recreate
@@ -1519,7 +1442,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.WmNotifyDropDown"]/*' />
         /// <devdoc>
         ///     The button clicked was a dropdown button.  If it has a menu specified,
         ///     show it now.  Otherwise, fire an onButtonDropDown event.
@@ -1638,7 +1560,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.WmReflectCommand"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1657,7 +1578,6 @@ namespace System.Windows.Forms {
             ResetMouseEventArgs();
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.WndProc"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1768,7 +1688,6 @@ namespace System.Windows.Forms {
             base.WndProc(ref m);
         }
 
-        /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection"]/*' />
         /// <devdoc>
         /// <para>Encapsulates a collection of <see cref='System.Windows.Forms.ToolBarButton'/> controls for use by the
         /// <see cref='System.Windows.Forms.ToolBar'/> class. </para>
@@ -1783,7 +1702,6 @@ namespace System.Windows.Forms {
             private int lastAccessedIndex = -1;
 
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.ToolBarButtonCollection"]/*' />
             /// <devdoc>
             /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ToolBar.ToolBarButtonCollection'/> class and assigns it to the specified toolbar.</para>
             /// </devdoc>
@@ -1791,7 +1709,6 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.this"]/*' />
             /// <devdoc>
             ///    <para>Gets or sets the toolbar button at the specified indexed location in the
             ///       toolbar button collection.</para>
@@ -1817,7 +1734,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.this"]/*' />
             /// <internalonly/>
             object IList.this[int index] {
                 get {
@@ -1832,7 +1748,6 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.this"]/*' />
             /// <devdoc>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
@@ -1854,7 +1769,6 @@ namespace System.Windows.Forms {
 
                 }
             }
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Count"]/*' />
             /// <devdoc>
             ///    <para> Gets the number of buttons in the toolbar button collection.</para>
             /// </devdoc>
@@ -1865,7 +1779,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.ICollection.SyncRoot"]/*' />
             /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
@@ -1873,7 +1786,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.ICollection.IsSynchronized"]/*' />
             /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
@@ -1881,7 +1793,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.IsFixedSize"]/*' />
             /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
@@ -1889,7 +1800,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.IsReadOnly"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1899,7 +1809,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Add"]/*' />
             /// <devdoc>
             ///    <para>Adds a new toolbar button to
             ///       the end of the toolbar button collection.</para>
@@ -1915,7 +1824,6 @@ namespace System.Windows.Forms {
                 return index;
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Add1"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1924,7 +1832,6 @@ namespace System.Windows.Forms {
                 return Add(button);
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object button) {
                 if (button is ToolBarButton) {
@@ -1935,7 +1842,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.AddRange"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1956,7 +1862,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Clear"]/*' />
             /// <devdoc>
             ///    <para>Removes
             ///       all buttons from the toolbar button collection.</para>
@@ -1981,7 +1886,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Contains"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1989,7 +1893,6 @@ namespace System.Windows.Forms {
                 return IndexOf(button) != -1;
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object button) {
                 if (button is ToolBarButton) {
@@ -2001,7 +1904,6 @@ namespace System.Windows.Forms {
             }
 
 
-           /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.ContainsKey"]/*' />
            /// <devdoc>
            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
            /// </devdoc>
@@ -2010,7 +1912,6 @@ namespace System.Windows.Forms {
            }
 
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.ICollection.CopyTo"]/*' />
             /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 if (owner.buttonCount > 0) {
@@ -2018,7 +1919,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.IndexOf"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2031,7 +1931,6 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object button) {
                 if (button is ToolBarButton) {
@@ -2042,7 +1941,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-           /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.this"]/*' />
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
@@ -2073,7 +1971,6 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Insert"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2081,7 +1978,6 @@ namespace System.Windows.Forms {
                 owner.InsertButton(index, button);
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.Insert"]/*' />
             /// <internalonly/>
             void IList.Insert(int index, object button) {
                 if (button is ToolBarButton) {
@@ -2093,7 +1989,6 @@ namespace System.Windows.Forms {
             }
 
 
-           /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.IsValidIndex"]/*' />
            /// <devdoc>
            ///     <para>Determines if the index is valid for the collection.</para>
            /// </devdoc>
@@ -2101,7 +1996,6 @@ namespace System.Windows.Forms {
            private bool IsValidIndex(int index) {
                return ((index >= 0) && (index < this.Count));
             }
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.RemoveAt"]/*' />
             /// <devdoc>
             ///    <para>Removes
             ///       a given button from the toolbar button collection.</para>
@@ -2123,7 +2017,6 @@ namespace System.Windows.Forms {
 
 
 
-           /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.RemoveByKey"]/*' />
            /// <devdoc>
            ///     <para>Removes the child control with the specified key.</para>
            /// </devdoc>
@@ -2134,7 +2027,6 @@ namespace System.Windows.Forms {
                  }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Remove"]/*' />
             /// <devdoc>
             ///    <para>[To be supplied.]</para>
             /// </devdoc>
@@ -2145,7 +2037,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.Remove"]/*' />
             /// <internalonly/>
             void IList.Remove(object button) {
                 if (button is ToolBarButton) {
@@ -2153,7 +2044,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.GetEnumerator"]/*' />
             /// <devdoc>
             ///    <para>Returns an enumerator that can be used to iterate
             ///       through the toolbar button collection.</para>

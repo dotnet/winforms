@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs"]/*' />
     public class DataGridViewRowPrePaintEventArgs : HandledEventArgs
     {
         private DataGridView dataGridView;
@@ -24,7 +23,6 @@ namespace System.Windows.Forms
         private bool isLastVisibleRow;
         private DataGridViewPaintParts paintParts;
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.DataGridViewRowPrePaintEventArgs"]/*' />
         public DataGridViewRowPrePaintEventArgs(DataGridView dataGridView,
                                                 Graphics graphics, 
                                                 Rectangle clipBounds, 
@@ -67,7 +65,6 @@ namespace System.Windows.Forms
             this.dataGridView = dataGridView;
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.ClipBounds"]/*' />
         public Rectangle ClipBounds
         {
             get
@@ -80,7 +77,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.ErrorText"]/*' />
         public string ErrorText
         {
             get
@@ -89,7 +85,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.Graphics"]/*' />
         public Graphics Graphics
         {
             get
@@ -98,7 +93,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.InheritedRowStyle"]/*' />
         public DataGridViewCellStyle InheritedRowStyle
         {
             get
@@ -107,7 +101,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.IsFirstDisplayedRow"]/*' />
         public bool IsFirstDisplayedRow
         {
             get
@@ -116,7 +109,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.IsLastVisibleRow"]/*' />
         public bool IsLastVisibleRow
         {
             get
@@ -125,7 +117,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.PaintParts"]/*' />
         public DataGridViewPaintParts PaintParts
         {
             get
@@ -142,7 +133,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.RowBounds"]/*' />
         public Rectangle RowBounds
         {
             get
@@ -151,7 +141,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get
@@ -160,7 +149,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.State"]/*' />
         public DataGridViewElementStates State
         {
             get
@@ -169,7 +157,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.DrawFocus"]/*' />
         public void DrawFocus(Rectangle bounds, bool cellsPaintSelectionBackground)
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)
@@ -185,7 +172,6 @@ namespace System.Windows.Forms
                                                                       cellsPaintSelectionBackground);
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.PaintCells"]/*' />
         public void PaintCells(Rectangle clipBounds, DataGridViewPaintParts paintParts)
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)
@@ -202,7 +188,6 @@ namespace System.Windows.Forms
                                                                        paintParts);
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.PaintCellsBackground"]/*' />
         public void PaintCellsBackground(Rectangle clipBounds, bool cellsPaintSelectionBackground)
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)
@@ -224,7 +209,6 @@ namespace System.Windows.Forms
                                                                        paintParts);
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.PaintCellsContent"]/*' />
         public void PaintCellsContent(Rectangle clipBounds)
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)
@@ -241,7 +225,6 @@ namespace System.Windows.Forms
                                                                        DataGridViewPaintParts.ContentBackground | DataGridViewPaintParts.ContentForeground | DataGridViewPaintParts.ErrorIcon);
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.PaintHeader1"]/*' />
         public void PaintHeader(bool paintSelectionBackground)
         {
             DataGridViewPaintParts paintParts = DataGridViewPaintParts.Background | DataGridViewPaintParts.Border | DataGridViewPaintParts.ContentBackground | DataGridViewPaintParts.ContentForeground | DataGridViewPaintParts.ErrorIcon;
@@ -252,7 +235,6 @@ namespace System.Windows.Forms
             PaintHeader(paintParts);
         }
 
-        /// <include file='doc\DataGridViewRowPrePaintEventArgs.uex' path='docs/doc[@for="DataGridViewRowPrePaintEventArgs.PaintHeader2"]/*' />
         public void PaintHeader(DataGridViewPaintParts paintParts)
         {
             if (this.rowIndex < 0 || this.rowIndex >= this.dataGridView.Rows.Count)

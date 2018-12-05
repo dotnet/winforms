@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics;
 
-    /// <include file='doc\DataGridViewAutoSizeModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeModeEventArgs"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -15,13 +14,11 @@ namespace System.Windows.Forms
     {
         private bool previousModeAutoSized;
     
-        /// <include file='doc\DataGridViewAutoSizeModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeModeEventArgs.DataGridViewAutoSizeModeEventArgs"]/*' />
         public DataGridViewAutoSizeModeEventArgs(bool previousModeAutoSized)
         {
             this.previousModeAutoSized = previousModeAutoSized;
         }
 
-        /// <include file='doc\DataGridViewAutoSizeModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeModeEventArgs.PreviousModeAutoSized"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

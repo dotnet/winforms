@@ -31,7 +31,6 @@ namespace System.Windows.Forms {
 #endif
     using System.Collections.Generic;
 
-    /// <include file='doc\Application.uex' path='docs/doc[@for="Application"]/*' />
     /// <devdoc>
     /// <para>Provides <see langword='static '/>
     /// methods and properties
@@ -40,7 +39,6 @@ namespace System.Windows.Forms {
     /// class cannot be inherited.</para>
     /// </devdoc>
     public sealed class Application {
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.eventHandlers"]/*' />
         /// <devdoc>
         ///     Hash table for our event list
         /// </devdoc>
@@ -64,13 +62,11 @@ namespace System.Windows.Forms {
         private static bool checkedThreadAffinity = false;
         private const string everettThreadAffinityValue = "EnableSystemEventsThreadAffinityCompatibility";
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.exiting"]/*' />
         /// <devdoc>
         ///     in case Application.exit gets called recursively
         /// </devdoc>
         private static bool exiting;
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.EVENT_APPLICATIONEXIT"]/*' />
         /// <devdoc>
         ///     Events the user can hook into
         /// </devdoc>
@@ -88,14 +84,12 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public delegate bool MessageLoopCallback();
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Application"]/*' />
         /// <devdoc>
         ///     This class is static, there is no need to ever create it.
         /// </devdoc>
         private Application() {
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.AllowQuit"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Determines if the caller should be allowed to quit the application.  This will return false,
@@ -163,7 +157,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.CommonAppDataRegistry"]/*' />
         /// <devdoc>
         ///    <para>Gets the registry
         ///       key for the application data that is shared among all users.</para>
@@ -217,7 +210,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.CommonAppDataPath"]/*' />
         /// <devdoc>
         ///    <para>Gets the path for the application data that is shared among all users.</para>
         /// </devdoc>
@@ -247,7 +239,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.CompanyName"]/*' />
         /// <devdoc>
         ///    <para>Gets the company name associated with the application.</para>
         /// </devdoc>
@@ -307,7 +298,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.CurrentCulture"]/*' />
         /// <devdoc>
         ///    <para>Gets
         ///       or sets the locale information for the current thread.</para>
@@ -322,7 +312,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.CurrentInputLanguage"]/*' />
         /// <devdoc>
         ///    <para>Gets or
         ///       sets the current input language for the current thread.</para>
@@ -344,7 +333,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ExecutablePath"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the
@@ -385,7 +373,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.LocalUserAppDataPath"]/*' />
         /// <devdoc>
         ///    <para>Gets the path for the application data specific to a local, non-roaming user.</para>
         /// </devdoc>
@@ -415,7 +402,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.MessageLoop"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Determines if a message loop exists on this thread.
@@ -427,7 +413,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Forms"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the forms collection associated with this application.
@@ -475,7 +460,6 @@ namespace System.Windows.Forms {
             OpenFormsInternal.Remove(form);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ProductName"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -539,7 +523,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ProductVersion"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -592,7 +575,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().RegisterMessageLoop(callback);
         }
         
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.RenderWithVisualStyles"]/*' />
         /// <devdoc>
         ///    Magic property that answers a simple question - are my controls currently going to render with
         //     visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
@@ -604,7 +586,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.SafeTopLevelCaptionFormat"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the format string to apply to top level window captions
         ///       when they are displayed with a warning banner.</para>
@@ -624,7 +605,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.StartupPath"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the
@@ -658,7 +638,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().RegisterMessageLoop(null);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.UseWaitCursor"]/*' />
         /// <devdoc>
         ///    <para>Gets
         ///       or sets whether the wait cursor is used for all open forms of the application.</para>
@@ -680,7 +659,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.UserAppDataPath"]/*' />
         /// <devdoc>
         ///    <para>Gets the path for the application data specific to the roaming user.</para>
         /// </devdoc>
@@ -710,7 +688,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.UserAppDataRegistry"]/*' />
         /// <devdoc>
         ///    <para>Gets the registry key of
         ///       the application data specific to the roaming user.</para>
@@ -745,7 +722,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.VisualStyleState"]/*' />
         /// <devdoc>
         ///    <para>
         ///     Use this property to determine how visual styles will be applied to this application.
@@ -822,7 +798,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ApplicationExit"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the application is about to shut down.</para>
         /// </devdoc>
@@ -852,7 +827,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.AddMessageFilter"]/*' />
         /// <devdoc>
         ///    <para>Adds a message filter to monitor Windows messages as they are routed to their
         ///       destinations.</para>
@@ -892,7 +866,6 @@ namespace System.Windows.Forms {
             return processed;
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Idle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the application has finished processing and is about to enter the
@@ -918,7 +891,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Idle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the application is about to enter a modal state
@@ -942,7 +914,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Idle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the application is about to leave a modal state
@@ -966,7 +937,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadException"]/*' />
         /// <devdoc>
         ///    <para>Occurs when an untrapped thread exception is thrown.</para>
         /// </devdoc>
@@ -988,7 +958,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadExit"]/*' />
         /// <devdoc>
         ///    <para>Occurs when a thread is about to shut down.  When
         ///     the main thread for an application is about to be shut down,
@@ -1004,7 +973,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.BeginModalMessageLoop"]/*' />
         /// <devdoc>
         ///     Called immediately before we begin pumping messages for a modal message loop.
         ///     Does not actually start a message pump; that's the caller's responsibility.
@@ -1014,7 +982,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().BeginModalMessageLoop(null);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.DoEvents"]/*' />
         /// <devdoc>
         ///    <para>Processes
         ///       all Windows messages currently in the message queue.</para>
@@ -1029,7 +996,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEventsModal, null);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.EnableVisualStyles"]/*' />
         /// <devdoc>
         ///    <para>
         ///    Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
@@ -1067,7 +1033,6 @@ namespace System.Windows.Forms {
             Debug.Assert(useVisualStyles, "Enable Visual Styles failed");
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.EndModalMessageLoop"]/*' />
         /// <devdoc>
         ///     Called immediately after we stop pumping messages for a modal message loop.
         ///     Does not actually end the message pump itself.
@@ -1077,7 +1042,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().EndModalMessageLoop(null);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Exit"]/*' />
         /// <devdoc>
         ///    <para>Overload of Exit that does not care about e.Cancel.</para>
         /// </devdoc>
@@ -1085,7 +1049,6 @@ namespace System.Windows.Forms {
 	        Exit(null);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Exit2"]/*' />
         /// <devdoc>
         ///    <para>Informs all message pumps that they are to terminate and
         ///       then closes all application windows after the messages have been processed.
@@ -1147,7 +1110,6 @@ namespace System.Windows.Forms {
             return cancelExit;
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ExitThread"]/*' />
         /// <devdoc>
         ///    <para>Exits the message loop on the
         ///       current thread and closes all windows on the thread.</para>
@@ -1179,7 +1141,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().FormActivated(activated);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.GetAppFileVersionInfo"]/*' />
         /// <devdoc>
         ///     Retrieves the FileVersionInfo associated with the main module for
         ///     the application.
@@ -1214,7 +1175,6 @@ namespace System.Windows.Forms {
             return(FileVersionInfo)appFileVersion;
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.GetAppMainType"]/*' />
         /// <devdoc>
         ///     Retrieves the Type that contains the "Main" method.
         /// </devdoc>
@@ -1248,7 +1208,6 @@ namespace System.Windows.Forms {
             return cxt;
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.GetDataPath"]/*' />
         /// <devdoc>
         ///     Returns a string that is the combination of the
         ///     basePath + CompanyName + ProducName + ProductVersion. This
@@ -1273,7 +1232,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.RaiseExit"]/*' />
         /// <devdoc>
         ///     Called by the last thread context before it shuts down.
         /// </devdoc>
@@ -1285,7 +1243,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.RaiseThreadExit"]/*' />
         /// <devdoc>
         ///     Called by the each thread context before it shuts down.
         /// </devdoc>
@@ -1299,7 +1256,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ParkHandle"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///     "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
@@ -1328,7 +1284,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.OleRequired"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes OLE on the current thread.
@@ -1338,7 +1293,6 @@ namespace System.Windows.Forms {
             return ThreadContext.FromCurrent().OleRequired();
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.OnThreadException"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Application.ThreadException'/> event.</para>
         /// </devdoc>
@@ -1346,7 +1300,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().OnThreadException(t);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.UnparkHandle"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///     "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
@@ -1359,7 +1312,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.RaiseIdle"]/*' />
         /// <devdoc>
         ///     Raises the Idle event.
         /// </devdoc>
@@ -1376,7 +1328,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.RemoveMessageFilter"]/*' />
         /// <devdoc>
         ///    <para>Removes a message
         ///       filter from the application's message pump.</para>
@@ -1385,7 +1336,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().RemoveMessageFilter(value);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Restart"]/*' />
         /// <devdoc>
         ///    <para>Restarts the application.</para>
         /// </devdoc>
@@ -1475,7 +1425,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Run"]/*' />
         /// <devdoc>
         ///    <para>Begins running a
         ///       standard
@@ -1486,7 +1435,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext());
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Run1"]/*' />
         /// <devdoc>
         ///    <para>Begins running a standard application message loop on the current
         ///       thread, and makes the specified form visible.</para>
@@ -1495,7 +1443,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext(mainForm));
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Run2"]/*' />
         /// <devdoc>
         ///    <para>Begins running a
         ///       standard
@@ -1506,7 +1453,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, context);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.RunDialog"]/*' />
         /// <devdoc>
         ///     Runs a modal dialog.  This starts a special type of message loop that runs until
         ///     the dialog has a valid DialogResult.  This is called internally by a form
@@ -1517,7 +1463,6 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopModalForm, new ModalApplicationContext(form));
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.SetCompatibleTextRenderingDefault"]/*' />
         /// <devdoc>
         ///     Sets the static UseCompatibleTextRenderingDefault field on Control to the value passed in. 
         ///     This switch determines the default text rendering engine to use by some controls that support 
@@ -1533,7 +1478,6 @@ namespace System.Windows.Forms {
             Control.UseCompatibleTextRenderingDefault = defaultValue;
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.SetSuspendState"]/*' />
         /// <devdoc>
         ///     Sets the suspend/hibernate state of the machine.
         ///     Returns true if the call succeeded, else false.
@@ -1659,7 +1603,6 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager"]/*' />
         /// <devdoc>
         ///      This is our implementation of the MSO ComponentManager.  The Componoent Manager is
         ///      an object that is responsible for handling all message loop activity in a process.
@@ -1698,7 +1641,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.QueryService"]/*' />
             /// <devdoc>
             ///      Return in *ppvObj an implementation of interface iid for service
             ///      guidService (same as IServiceProvider::QueryService).
@@ -1715,7 +1657,6 @@ namespace System.Windows.Forms {
 
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FDebugMessage"]/*' />
             /// <devdoc>
             ///      Standard FDebugMessage method.
             ///      Since IMsoComponentManager is a reference counted interface,
@@ -1731,7 +1672,6 @@ namespace System.Windows.Forms {
                 return true;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FRegisterComponent"]/*' />
             /// <devdoc>
             ///      Register component piComponent and its registration info pcrinfo with
             ///      this component manager.  Return in *pdwComponentID a cookie which will
@@ -1757,7 +1697,6 @@ namespace System.Windows.Forms {
                 return true;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FRevokeComponent"]/*' />
             /// <devdoc>
             ///      Undo the registration of the component identified by dwComponentID
             ///      (the cookie returned from the FRegisterComponent method).
@@ -1787,7 +1726,6 @@ namespace System.Windows.Forms {
 
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FUpdateComponentRegistration"]/*' />
             /// <devdoc>
             ///      Update the registration info of the component identified by
             ///      dwComponentID (the cookie returned from FRegisterComponent) with the
@@ -1813,7 +1751,6 @@ namespace System.Windows.Forms {
                 return true;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FOnComponentActivate"]/*' />
             /// <devdoc>
             ///      Notify component manager that component identified by dwComponentID
             ///      (cookie returned from FRegisterComponent) has been activated.
@@ -1842,7 +1779,6 @@ namespace System.Windows.Forms {
                 return true;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FSetTrackingComponent"]/*' />
             /// <devdoc>
             ///      Called to inform component manager that  component identified by
             ///      dwComponentID (cookie returned from FRegisterComponent) wishes
@@ -1882,7 +1818,6 @@ namespace System.Windows.Forms {
                 return true;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.OnComponentEnterState"]/*' />
             /// <devdoc>
             ///      Notify component manager that component identified by dwComponentID
             ///      (cookie returned from FRegisterComponent) is entering the state
@@ -1946,7 +1881,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FOnComponentExitState"]/*' />
             /// <devdoc>
             ///      Notify component manager that component identified by dwComponentID
             ///      (cookie returned from FRegisterComponent) is exiting the state
@@ -1998,7 +1932,6 @@ namespace System.Windows.Forms {
                 return false;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FInState"]/*' />
             /// <devdoc>
             ///      Return TRUE if the state identified by uStateID (a msocstateXXX value)
             ///      is in effect at the root of this component manager's state context,
@@ -2009,7 +1942,6 @@ namespace System.Windows.Forms {
                 return(currentState & uStateID) != 0;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FContinueIdle"]/*' />
             /// <devdoc>
             ///      Called periodically by a component during IMsoComponent::FDoIdle.
             ///      Return TRUE if component can continue its idle time processing,
@@ -2024,7 +1956,6 @@ namespace System.Windows.Forms {
                 return !UnsafeNativeMethods.PeekMessage(ref msg, NativeMethods.NullHandleRef, 0, 0, NativeMethods.PM_NOREMOVE);
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop"]/*' />
             /// <devdoc>
             ///      Component identified by dwComponentID (cookie returned from
             ///      FRegisterComponent) wishes to push a message loop for reason uReason.
@@ -2214,7 +2145,6 @@ namespace System.Windows.Forms {
                 return !continueLoop;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FCreateSubComponentManager"]/*' />
             /// <devdoc>
             ///      Cause the component manager to create a "sub" component manager, which
             ///      will be one of its children in the hierarchical tree of component
@@ -2240,7 +2170,6 @@ namespace System.Windows.Forms {
                 return false;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FGetParentComponentManager"]/*' />
             /// <devdoc>
             ///      Return in *ppicm an AddRef'ed ptr to this component manager's parent
             ///      in the hierarchical tree of component managers used to maintain state
@@ -2253,7 +2182,6 @@ namespace System.Windows.Forms {
                 return false;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ComponentManager.UnsafeNativeMethods.IMsoComponentManager.FGetActiveComponent"]/*' />
             /// <devdoc>
             ///      Return in *ppic an AddRef'ed ptr to the current active or tracking
             ///      component (as indicated by dwgac (a msogacXXX value)), and
@@ -2306,7 +2234,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext"]/*' />
         /// <devdoc>
         ///     This class is the embodiment of TLS for windows forms.  We do not expose this to end users because
         ///     TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
@@ -2383,7 +2310,6 @@ namespace System.Windows.Forms {
             // A private field on Application that stores the callback delegate
             private MessageLoopCallback messageLoopCallback = null;
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.ThreadContext"]/*' />
             /// <devdoc>
             ///     Creates a new thread context object.
             /// </devdoc>
@@ -2410,7 +2336,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.ComponentManager"]/*' />
             /// <devdoc>
             ///      Retrieves the component manager for this process.  If there is no component manager
             ///      currently installed, we install our own.
@@ -2575,7 +2500,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.ParkingWindow"]/*' />
             /// <devdoc>
             ///     Retrieves the actual parking form.  This will demand create the parking window
             ///     if it needs to.
@@ -2664,7 +2588,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.MarshalingControl"]/*' />
             /// <devdoc>
             ///     Retrieves the actual parking form.  This will demand create the MarshalingControl window
             ///     if it needs to.
@@ -2690,7 +2613,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.AddMessageFilter"]/*' />
             /// <devdoc>
             ///     Allows you to setup a message filter for the application's message pump.  This
             ///     installs the filter on the current thread.
@@ -2758,7 +2680,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.Dispose"]/*' />
             /// <devdoc>
             ///     Disposes this thread context object.  Note that this will marshal to the owning thread.
             /// </devdoc>
@@ -2838,7 +2759,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.DisposeParkingWindow"]/*' />
             /// <devdoc>
             ///     Disposes of this thread's parking form.
             /// </devdoc>
@@ -2871,7 +2791,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.DisposeThreadWindows"]/*' />
             /// <devdoc>
             ///     Gets rid of all windows in this thread context.  Nulls out
             ///     window objects that we hang on to.
@@ -2949,7 +2868,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.ExitApplication"]/*' />
             /// <devdoc>
             ///     Exits the program by disposing of all thread contexts and message loops.
             /// </devdoc>
@@ -2975,7 +2893,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.ExitDomain"]/*' />
             /// <devdoc>
             ///     Exits the program by disposing of all thread contexts and message loops.
             /// </devdoc>
@@ -2984,7 +2901,6 @@ namespace System.Windows.Forms {
                 ExitCommon(false /*disposing*/);
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.Finalize"]/*' />
             /// <devdoc>
             ///     Our finalization.  Minimal stuff... this shouldn't be called... We should always be disposed.
             /// </devdoc>
@@ -3028,7 +2944,6 @@ namespace System.Windows.Forms {
                     }                    
                 }
             }
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.FromCurrent"]/*' />
             /// <devdoc>
             ///     Retrieves a ThreadContext object for the current thread
             /// </devdoc>
@@ -3045,7 +2960,6 @@ namespace System.Windows.Forms {
                 return context;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.FromId"]/*' />
             /// <devdoc>
             ///     Retrieves a ThreadContext object for the given thread ID
             /// </devdoc>
@@ -3061,7 +2975,6 @@ namespace System.Windows.Forms {
                 return context;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.GetAllowQuit"]/*' />
             /// <devdoc>
             ///      Determines if it is OK to allow an application to quit and shutdown
             ///      the runtime.  We only allow this if we own the base message pump.
@@ -3070,7 +2983,6 @@ namespace System.Windows.Forms {
                 return totalMessageLoopCount > 0 && baseLoopReason == NativeMethods.MSOCM.msoloopMain;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.GetHandle"]/*' />
             /// <devdoc>
             ///     Retrieves the handle to this thread.
             /// </devdoc>
@@ -3079,7 +2991,6 @@ namespace System.Windows.Forms {
                 return handle;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.GetId"]/*' />
             /// <devdoc>
             ///     Retrieves the ID of this thread.
             /// </devdoc>
@@ -3088,7 +2999,6 @@ namespace System.Windows.Forms {
                 return id;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.GetCulture"]/*' />
             /// <devdoc>
             ///     Retrieves the culture for this thread.
             /// </devdoc>
@@ -3101,7 +3011,6 @@ namespace System.Windows.Forms {
                 return culture;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.GetMessageLoop"]/*' />
             /// <devdoc>
             ///     Determines if a message loop exists on this thread.
             /// </devdoc>
@@ -3109,7 +3018,6 @@ namespace System.Windows.Forms {
                 return GetMessageLoop(false);
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.GetMessageLoop"]/*' />
             /// <devdoc>
             ///     Determines if a message loop exists on this thread.
             /// </devdoc>
@@ -3214,7 +3122,6 @@ namespace System.Windows.Forms {
                 ExitDomain();
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.OnThreadException"]/*' />
             /// <devdoc>
             ///     Called when an untrapped exception occurs in a thread.  This allows the
             ///     programmer to trap these, and, if left untrapped, throws a standard error
@@ -3308,7 +3215,6 @@ namespace System.Windows.Forms {
                 messageLoopCallback = callback;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.RemoveMessageFilter"]/*' />
             /// <devdoc>
             ///     Removes a message filter previously installed with addMessageFilter.
             /// </devdoc>
@@ -3320,7 +3226,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.RunMessageLoop"]/*' />
             /// <devdoc>
             ///     Starts a message loop for the given reason.
             /// </devdoc>
@@ -3727,7 +3632,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.SetCulture"]/*' />
             /// <devdoc>
             ///     Sets the culture for this thread.
             /// </devdoc>
@@ -3769,7 +3673,6 @@ namespace System.Windows.Forms {
             // - When a dialog is up, VS is completely disabled, including moving and resizing VS.
             // - After doing all this, you can ctrl-shift-N start a new project and VS is enabled.
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.FDebugMessage"]/*' />
             /// <devdoc>
             ///      Standard FDebugMessage method.
             ///      Since IMsoComponentManager is a reference counted interface,
@@ -3782,7 +3685,6 @@ namespace System.Windows.Forms {
                 return false;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.FPreTranslateMessage"]/*' />
             /// <devdoc>
             ///      Give component a chance to process the message pMsg before it is
             ///      translated and dispatched. Component can do TranslateAccelerator
@@ -3793,7 +3695,6 @@ namespace System.Windows.Forms {
                 return PreTranslateMessage(ref msg);
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.OnEnterState"]/*' />
             /// <devdoc>
             ///      Notify component when app enters or exits (as indicated by fEnter)
             ///      the state identified by uStateID (a value from olecstate enumeration).
@@ -3830,7 +3731,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.OnAppActivate"]/*' />
             /// <devdoc>
             ///      Notify component when the host application gains or loses activation.
             ///      If fActive is TRUE, the host app is being activated and dwOtherThreadID
@@ -3844,7 +3744,6 @@ namespace System.Windows.Forms {
             void UnsafeNativeMethods.IMsoComponent.OnAppActivate(bool fActive, int dwOtherThreadID) {
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.OnLoseActivation"]/*' />
             /// <devdoc>
             ///      Notify the active component that it has lost its active status because
             ///      the host or another component has become active.
@@ -3853,7 +3752,6 @@ namespace System.Windows.Forms {
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Our component is losing activation.");
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.OnActivationChange"]/*' />
             /// <devdoc>
             ///      Notify component when a new object is being activated.
             ///      If pic is non-NULL, then it is the component that is being activated.
@@ -3896,7 +3794,6 @@ namespace System.Windows.Forms {
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : OnActivationChange");
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.FDoIdle"]/*' />
             /// <devdoc>
             ///      Give component a chance to do idle time tasks.  grfidlef is a group of
             ///      bit flags taken from the enumeration of oleidlef values (above),
@@ -3920,7 +3817,6 @@ namespace System.Windows.Forms {
                  return false;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.FContinueMessageLoop"]/*' />
             /// <devdoc>
             ///      Called during each iteration of a message loop that the component
             ///      pushed. uReason and pvLoopData are the reason and the component private
@@ -3987,7 +3883,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.FQueryTerminate"]/*' />
             /// <devdoc>
             ///      Called when component manager wishes to know if the component is in a
             ///      state in which it can terminate.  If fPromptUser is FALSE, component
@@ -4002,7 +3897,6 @@ namespace System.Windows.Forms {
                 return true;
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.Terminate"]/*' />
             /// <devdoc>
             ///      Called when component manager wishes to terminate the component's
             ///      registration.  Component should revoke its registration with component
@@ -4017,7 +3911,6 @@ namespace System.Windows.Forms {
                 Dispose(false);
             }
 
-            /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadContext.UnsafeNativeMethods.IMsoComponent.HwndGetWindow"]/*' />
             /// <devdoc>
             ///      Called to retrieve a window associated with the component, as specified
             ///      by dwWhich, a olecWindowXXX value (see olecWindow, above).
@@ -4068,7 +3961,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ParkingWindow"]/*' />
         /// <devdoc>
         ///     This class embodies our parking window, which we create when the
         ///     first message loop is pushed onto the thread.
@@ -4203,7 +4095,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ThreadWindows"]/*' />
         /// <devdoc>
         ///     This class enables or disables all windows in the current thread.  We use this to
         ///     disable other windows on the thread when a modal dialog is to be shown.  It can also

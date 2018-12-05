@@ -17,7 +17,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Globalization;
 
-    /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter"]/*' />
     /// <devdoc>
     ///     Provides user resizing of docked elements at run time. To use a Splitter you can
     ///     dock any control to an edge of a container, and then dock the splitter to the same
@@ -55,7 +54,6 @@ namespace System.Windows.Forms {
         // Cannot expose IMessageFilter.PreFilterMessage through this unsealed class
         private SplitterMessageFilter splitterMessageFilter = null;
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Splitter"]/*' />
         /// <devdoc>
         ///     Creates a new Splitter.
         /// </devdoc>
@@ -69,7 +67,6 @@ namespace System.Windows.Forms {
             Dock = DockStyle.Left;
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Anchor"]/*' />
         /// <devdoc>
         ///     The current value of the anchor property. The anchor property
         ///     determines which edges of the control are anchored to the container's
@@ -86,7 +83,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.AllowDrop"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -100,7 +96,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -111,7 +106,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.DefaultCursor"]/*' />
         protected override Cursor DefaultCursor {
             get {
                 switch (Dock) {
@@ -126,7 +120,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -140,7 +133,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ForeColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
@@ -152,7 +144,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImage"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -166,7 +157,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -178,7 +168,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImageLayout"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -192,7 +181,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -204,7 +192,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Font"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>        
@@ -218,7 +205,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.FontChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
@@ -230,7 +216,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BorderStyle"]/*' />
         /// <devdoc>
         ///     Indicates what type of border the Splitter control has.  This value
         ///     comes from the System.Windows.Forms.BorderStyle enumeration.
@@ -259,7 +244,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.CreateParams"]/*' />
         /// <devdoc>
         ///     Returns the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
@@ -285,14 +269,12 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.DefaultImeMode"]/*' />
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Dock"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -329,7 +311,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Horizontal"]/*' />
         /// <devdoc>
         ///     Determines if the splitter is horizontal.
         /// </devdoc>
@@ -341,7 +322,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -352,7 +332,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ImeModeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
@@ -364,7 +343,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.MinExtra"]/*' />
         /// <devdoc>
         ///     The minExtra is this minimum size (in pixels) of the remaining
         ///     area of the container. This area is center of the container that
@@ -387,7 +365,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.MinSize"]/*' />
         /// <devdoc>
         ///     The minSize is the minimum size (in pixels) of the target of the
         ///     splitter. The target of a splitter is always the control adjacent
@@ -409,7 +386,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitPosition"]/*' />
         /// <devdoc>
         ///     The position of the splitter. If the splitter is not bound
         ///     to a control, SplitPosition will be -1.
@@ -468,7 +444,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.TabStop"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -482,7 +457,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.TabStopChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
@@ -494,7 +468,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Text"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>        
@@ -512,7 +485,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.TextChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
@@ -524,7 +496,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Enter"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -538,7 +509,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.KeyUp"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -552,7 +522,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.KeyDown"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -566,7 +535,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.KeyPress"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -580,7 +548,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Leave"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -594,7 +561,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitterMoving"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -609,7 +575,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitterMoved"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -623,7 +588,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.DrawSplitBar"]/*' />
         /// <devdoc>
         ///     Draws the splitter bar at the current location. Will automatically
         ///     cleanup anyplace the splitter was drawn previously.
@@ -652,7 +616,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.CalcSplitLine"]/*' />
         /// <devdoc>
         ///     Calculates the bounding rect of the split line. minWeight refers
         ///     to the minimum height or width of the splitline.
@@ -681,7 +644,6 @@ namespace System.Windows.Forms {
             return r;
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.CalcSplitSize"]/*' />
         /// <devdoc>
         ///     Calculates the current size of the splitter-target.
         /// </devdoc>
@@ -702,7 +664,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.CalcSplitBounds"]/*' />
         /// <devdoc>
         ///     Calculates the bounding criteria for the splitter.
         /// </devdoc>
@@ -754,7 +715,6 @@ namespace System.Windows.Forms {
             return spd;
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.DrawSplitHelper"]/*' />
         /// <devdoc>
         ///     Draws the splitter line at the requested location. Should only be called
         ///     by drawSpltBar.
@@ -789,7 +749,6 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.FindTarget"]/*' />
         /// <devdoc>
         ///     Finds the target of the splitter. The target of the splitter is the
         ///     control that is "outside" or the splitter. For example, if the splitter
@@ -825,7 +784,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.GetSplitSize"]/*' />
         /// <devdoc>
         ///     Calculates the split size based on the mouse position (x, y).
         /// </devdoc>
@@ -856,7 +814,6 @@ namespace System.Windows.Forms {
             return Math.Max(Math.Min(size, maxSize), minSize);
         }
         
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnKeyDown"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -867,7 +824,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnMouseDown"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -878,7 +834,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnMouseMove"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -894,7 +849,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnMouseUp"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -910,7 +864,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnSplitterMoving"]/*' />
         /// <devdoc>
         ///     Inherriting classes should override this method to respond to the
         ///     splitterMoving event. This event occurs while the splitter is
@@ -924,7 +877,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnSplitterMoved"]/*' />
         /// <devdoc>
         ///     Inherriting classes should override this method to respond to the
         ///     splitterMoved event. This event occurs when the user finishes
@@ -940,7 +892,6 @@ namespace System.Windows.Forms {
 
         
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SetBoundsCore"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -960,7 +911,6 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitBegin"]/*' />
         /// <devdoc>
         ///     Begins the splitter moving.
         /// </devdoc>
@@ -992,7 +942,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitEnd"]/*' />
         /// <devdoc>
         ///     Finishes the split movement.
         /// </devdoc>
@@ -1016,7 +965,6 @@ namespace System.Windows.Forms {
             anchor = Point.Empty;
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ApplySplitPosition"]/*' />
         /// <devdoc>
         ///     Sets the split position to be the current split size. This is called
         ///     by splitEdit
@@ -1026,7 +974,6 @@ namespace System.Windows.Forms {
             SplitPosition = splitSize;
         }
         
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitMove"]/*' />
         /// <devdoc>
         ///     Moves the splitter line to the splitSize for the mouse position
         ///     (x, y).
@@ -1040,7 +987,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
@@ -1051,7 +997,6 @@ namespace System.Windows.Forms {
             return s + ", MinExtra: " + MinExtra.ToString(CultureInfo.CurrentCulture) + ", MinSize: " + MinSize.ToString(CultureInfo.CurrentCulture);
         }
 
-        /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitData"]/*' />
         /// <devdoc>
         ///     Return value holder...
         /// </devdoc>
@@ -1071,7 +1016,6 @@ namespace System.Windows.Forms {
                 this.owner = splitter;
             }
             
-            /// <include file='doc\SplitterMessageFilter.uex' path='docs/doc[@for="SplitterMessageFilter.PreFilterMessage"]/*' />
             /// <devdoc>
             /// </devdoc>
             /// <internalonly/>

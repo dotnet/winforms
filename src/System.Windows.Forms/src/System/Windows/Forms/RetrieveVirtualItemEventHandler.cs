@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
 
     using System;
 
-    /// <include file='doc\RetrieveVirtualItemEventHandler.uex' path='docs/doc[@for="RetrieveVirtualItemEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the RetrieveVirtualItem event of a ListView.

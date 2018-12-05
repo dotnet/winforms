@@ -14,7 +14,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms.Internal;
     using Microsoft.Win32;
 
-    /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs"]/*' />
     /// <devdoc>
     ///     This class contains the information a user needs to paint the ToolTip.
     /// </devdoc>
@@ -30,7 +29,6 @@ namespace System.Windows.Forms
         private readonly Color foreColor;
         private readonly Font font;
                 
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.DrawToolTipEventArgs"]/*' />
         /// <devdoc>
         ///     Creates a new DrawToolTipEventArgs with the given parameters.
         /// </devdoc>
@@ -47,7 +45,6 @@ namespace System.Windows.Forms
             this.font = font;
         }
         
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.Graphics"]/*' />
         /// <devdoc>
         ///     Graphics object with which painting should be done.
         /// </devdoc>
@@ -59,7 +56,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\PopupEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.AssociatedWindow"]/*' />
         /// <devdoc>
         ///     The window for which the tooltip is being painted. 
         /// </devdoc>
@@ -69,7 +65,6 @@ namespace System.Windows.Forms
             }
         }
 	
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.AssociatedControl"]/*' />
         /// <devdoc>
         ///     The control for which the tooltip is being painted. 
         /// </devdoc>
@@ -81,7 +76,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.Bounds"]/*' />
         /// <devdoc>
         ///     The rectangle outlining the area in which the painting should be done.
         /// </devdoc>
@@ -94,7 +88,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.ToolTipText"]/*' />
         /// <devdoc>
         ///     The text that should be drawn.
         /// </devdoc>
@@ -106,7 +99,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.Font"]/*' />
         /// <devdoc>
         ///     The font used to draw tooltip text.
         /// </devdoc>
@@ -118,7 +110,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.DrawBackground"]/*' />
         /// <devdoc>
         ///     Draws the background of the ToolTip.
         /// </devdoc>
@@ -129,7 +120,6 @@ namespace System.Windows.Forms
             backBrush.Dispose();
         }
 
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.DrawText"]/*' />
         /// <devdoc>
         ///     Draws the text (overloaded)
         /// </devdoc>
@@ -139,7 +129,6 @@ namespace System.Windows.Forms
             DrawText(TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.HidePrefix);
         }
 	
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.DrawText1"]/*' />
         /// <devdoc>
         ///     Draws the text (overloaded) - takes a TextFormatFlags argument.
         /// </devdoc>
@@ -148,7 +137,6 @@ namespace System.Windows.Forms
             TextRenderer.DrawText(graphics, toolTipText, font, bounds, foreColor, flags);
         }
 
-        /// <include file='doc\DrawToolTipEventArgs.uex' path='docs/doc[@for="DrawToolTipEventArgs.DrawBorder"]/*' />
         /// <devdoc>
         ///     Draws a border for the ToolTip similar to the default border.
         /// </devdoc>

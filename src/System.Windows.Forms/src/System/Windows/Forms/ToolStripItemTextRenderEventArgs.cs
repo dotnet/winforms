@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using System.Windows.Forms.ButtonInternal;
     
-    /// <include file='doc\ToolStripItemTextRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemTextRenderEventArgs"]/*' />
     /// <devdoc>
     /// This class represents all the information to render the winbar
     /// </devdoc>
@@ -24,7 +23,6 @@ namespace System.Windows.Forms {
         private Color                            defaultTextColor = SystemColors.ControlText;
         private bool                             textColorChanged = false;
         
-        /// <include file='doc\ToolStripItemTextRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemTextRenderEventArgs.ToolStripItemTextRenderEventArgs"]/*' />
         /// <devdoc>
         /// This class represents all the information to render the winbar
         /// </devdoc>
@@ -40,7 +38,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItemTextRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemTextRenderEventArgs.ToolStripItemTextRenderEventArgs"]/*' />
         /// <devdoc>
         /// This class represents all the information to render the winbar
         /// </devdoc>
@@ -57,7 +54,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItemTextRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemTextRenderEventArgs.Text"]/*' />
         /// <devdoc>
         /// the string to draw
         /// </devdoc>
@@ -70,7 +66,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItemTextRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemTextRenderEventArgs.TextColor"]/*' />
         /// <devdoc>
         /// the color to draw the text
         /// </devdoc>
@@ -99,7 +94,6 @@ namespace System.Windows.Forms {
            }
        }
 
-        /// <include file='doc\ToolStripItemTextRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemTextRenderEventArgs.TextFont"]/*' />
         /// <devdoc>
         /// the font to draw the text
         /// </devdoc>
@@ -112,7 +106,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItemTextRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemTextRenderEventArgs.TextRectangle"]/*' />
         /// <devdoc>
         /// the rectangle to draw the text in 
         /// </devdoc>
@@ -125,7 +118,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItemTextRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemTextRenderEventArgs.TextRectangle"]/*' />
         /// <devdoc>
         /// the rectangle to draw the text in 
         /// </devdoc>
@@ -139,7 +131,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItemTextRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemTextRenderEventArgs.TextDirection"]/*' />
         /// <devdoc>
         /// the angle at which the text should be drawn in tenths of degrees.
         /// </devdoc>

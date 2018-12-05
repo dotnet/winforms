@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewCellMouseEventArgs.uex' path='docs/doc[@for="DataGridViewCellMouseEventArgs"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -15,7 +14,6 @@ namespace System.Windows.Forms
     {
         private int rowIndex, columnIndex;
     
-        /// <include file='doc\DataGridViewCellMouseEventArgs.uex' path='docs/doc[@for="DataGridViewCellMouseEventArgs.DataGridViewCellMouseEventArgs"]/*' />
         public DataGridViewCellMouseEventArgs(int columnIndex, 
             int rowIndex, 
             int localX, 
@@ -34,7 +32,6 @@ namespace System.Windows.Forms
             this.rowIndex = rowIndex;
         }
 
-        /// <include file='doc\DataGridViewCellMouseEventArgs.uex' path='docs/doc[@for="DataGridViewCellMouseEventArgs.ColumnIndex"]/*' />
         public int ColumnIndex
         {
             get
@@ -43,7 +40,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellMouseEventArgs.uex' path='docs/doc[@for="DataGridViewCellMouseEventArgs.RowIndex"]/*' />
         public int RowIndex
         {
             get

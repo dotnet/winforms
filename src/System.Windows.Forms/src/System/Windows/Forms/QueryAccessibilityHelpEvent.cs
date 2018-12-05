@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using Microsoft.Win32;
 
-    /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs"]/*' />
     /// <devdoc>
     ///     The QueryAccessibilityHelpEventArgs is fired when AccessibleObject
     ///     is providing help to accessibility applications.    
@@ -26,14 +25,12 @@ namespace System.Windows.Forms {
         private string helpString;
         private string helpKeyword;
         
-        /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.QueryAccessibilityHelpEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public QueryAccessibilityHelpEventArgs() {
         }
         
-        /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.QueryAccessibilityHelpEventArgs1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -43,7 +40,6 @@ namespace System.Windows.Forms {
             this.helpKeyword = helpKeyword;
         }
 
-        /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.HelpNamespace"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -56,7 +52,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.HelpString"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -69,7 +64,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.HelpKeyword"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\MeasureItemEvent.uex' path='docs/doc[@for="MeasureItemEventArgs"]/*' />
     /// <devdoc>
     ///     This event is sent by controls such as the ListBox or ComboBox that need users
     ///     to tell them how large a given item is to be.
@@ -25,7 +24,6 @@ namespace System.Windows.Forms {
         private readonly System.Drawing.Graphics graphics;
 
 
-        /// <include file='doc\MeasureItemEvent.uex' path='docs/doc[@for="MeasureItemEventArgs.MeasureItemEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -36,7 +34,6 @@ namespace System.Windows.Forms {
             this.itemWidth = 0;
         }
 
-        /// <include file='doc\MeasureItemEvent.uex' path='docs/doc[@for="MeasureItemEventArgs.MeasureItemEventArgs1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -47,7 +44,6 @@ namespace System.Windows.Forms {
             this.itemWidth = 0;
         }
         
-        /// <include file='doc\MeasureItemEvent.uex' path='docs/doc[@for="MeasureItemEventArgs.Graphics"]/*' />
         /// <devdoc>
         ///     A Graphics object to measure relative to.
         /// </devdoc>
@@ -57,7 +53,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MeasureItemEvent.uex' path='docs/doc[@for="MeasureItemEventArgs.Index"]/*' />
         /// <devdoc>
         ///     The index of item for which the height/width is needed.
         /// </devdoc>
@@ -67,7 +62,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MeasureItemEvent.uex' path='docs/doc[@for="MeasureItemEventArgs.ItemHeight"]/*' />
         /// <devdoc>
         ///     Where the recipient of the event should put the height of the
         ///     item specified by the index.
@@ -81,7 +75,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MeasureItemEvent.uex' path='docs/doc[@for="MeasureItemEventArgs.ItemWidth"]/*' />
         /// <devdoc>
         ///     Where the recipient of the event should put the width of the
         ///     item specified by the index.

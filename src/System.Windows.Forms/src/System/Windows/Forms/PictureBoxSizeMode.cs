@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\PictureBoxSizeMode.uex' path='docs/doc[@for="PictureBoxSizeMode"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies how an image is positioned within a <see cref='System.Windows.Forms.PictureBox'/>.
@@ -21,7 +20,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum PictureBoxSizeMode {
 
-        /// <include file='doc\PictureBoxSizeMode.uex' path='docs/doc[@for="PictureBoxSizeMode.Normal"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The image is placed in the top-left corner of the
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Normal = 0,
 
-        /// <include file='doc\PictureBoxSizeMode.uex' path='docs/doc[@for="PictureBoxSizeMode.StretchImage"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The image within the <see cref='System.Windows.Forms.PictureBox'/> is stretched or shrunk to fit the
@@ -41,14 +38,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         StretchImage = 1,
 
-        /// <include file='doc\PictureBoxSizeMode.uex' path='docs/doc[@for="PictureBoxSizeMode.AutoSize"]/*' />
         /// <devdoc>
         ///    The <see cref='System.Windows.Forms.PictureBox'/> is sized to fit the
         ///    size of the image that is displayed.
         /// </devdoc>
         AutoSize = 2,
 
-        /// <include file='doc\PictureBoxSizeMode.uex' path='docs/doc[@for="PictureBoxSizeMode.CenterImage"]/*' />
         /// <devdoc>
         ///    The image is displayed in the center if the <see cref='System.Windows.Forms.PictureBox'/> is larger than the image. If the image
         ///    is larger than the <see cref='System.Windows.Forms.PictureBox'/>, the center of the picture is placed in the
@@ -56,7 +51,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         CenterImage = 3,
 
-        /// <include file='doc\PictureBoxSizeMode.uex' path='docs/doc[@for="PictureBoxSizeMode.Zoom"]/*' />
         /// <devdoc>
         ///    The size of image is increased or decresed maintaining the aspect ratio.
         /// </devdoc>

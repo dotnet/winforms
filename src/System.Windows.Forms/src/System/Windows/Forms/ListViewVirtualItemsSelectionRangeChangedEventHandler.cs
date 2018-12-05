@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\ListViewVirtualItemsSelectionRangeChangedEventHandler.uex' path='docs/doc[@for="ListViewVirtualItemsSelectionRangeChangedEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will

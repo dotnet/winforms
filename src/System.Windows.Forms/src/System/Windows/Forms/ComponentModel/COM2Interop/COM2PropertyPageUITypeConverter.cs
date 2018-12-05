@@ -14,7 +14,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Design;
 
-    /// <include file='doc\COM2PropertyPageUITypeConverter.uex' path='docs/doc[@for="Com2PropertyPageUITypeEditor"]/*' />
     /// <devdoc>
     /// </devdoc>
     internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService {
@@ -27,7 +26,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             this.guid = guid;
         }
 
-        /// <include file='doc\COM2PropertyPageUITypeConverter.uex' path='docs/doc[@for="Com2PropertyPageUITypeEditor.EditValue"]/*' />
         /// <devdoc>
         ///     Takes the value returned from valueAccess.getValue() and modifies or replaces
         ///     the value, passing the result into valueAccess.setValue().  This is where
@@ -71,7 +69,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return value;
         }
 
-        /// <include file='doc\COM2PropertyPageUITypeConverter.uex' path='docs/doc[@for="Com2PropertyPageUITypeEditor.GetEditStyle"]/*' />
         /// <devdoc>
         ///      Retrieves the editing style of the Edit method.  If the method
         ///      is not supported, this will return None.

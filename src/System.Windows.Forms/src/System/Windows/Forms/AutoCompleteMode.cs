@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System;
     
-    /// <include file='doc\AutoCompleteMode.uex' path='docs/doc[@for="AutoCompleteMode"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies the autocomplete mode for ComboBox and TextBox AutoComplete Feature.
@@ -15,7 +14,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum AutoCompleteMode {
 
-        /// <include file='doc\AutoCompleteMode.uex' path='docs/doc[@for="AutoCompleteMode.None"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Disables the AutoComplete Feature for ComboBox and TextBox.
@@ -23,7 +21,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\AutoCompleteMode.uex' path='docs/doc[@for="AutoCompleteMode.AutoSuggest"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays the auxiliary drop-down list associated with the edit control, this drop-down is populated 
@@ -32,7 +29,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Suggest = 0x1,
 
-        /// <include file='doc\AutoCompleteMode.uex' path='docs/doc[@for="AutoCompleteMode.AutoAppend"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Appends the remainder of the most likely candidate string to the existing characters,
@@ -41,7 +37,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Append = 0x2,
 
-        /// <include file='doc\AutoCompleteMode.uex' path='docs/doc[@for="AutoCompleteMode.AutoSuggestAppend"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The AutoSuggest and AutoAppend are applied in conjuction.

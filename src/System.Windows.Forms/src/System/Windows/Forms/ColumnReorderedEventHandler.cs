@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
 
     using System;
 
-    /// <include file='doc\ColumnReorderedEventHandler.uex' path='docs/doc[@for="ColumnReorderedEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///    </para>

@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Security.Permissions;
     using System.Security;
     using System.Windows.Forms.Design; 
-    /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton"]/*' />
     /// <devdoc>
     /// A ToolStripButton that can display a popup.
     /// </devdoc>
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
         private bool showDropDownArrow = true;
         private byte openMouseId = 0;
             
-        /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton.ToolStripDropDownButton"]/*' />
         /// <devdoc>
         /// Constructs a ToolStripButton that can display a popup.
         /// </devdoc>
@@ -78,7 +76,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton.ShowDropDownArrow"]/*' />
         [
         DefaultValue(true),
         SRDescription(nameof(SR.ToolStripDropDownButtonShowDropDownArrowDescr)),
@@ -116,7 +113,6 @@ namespace System.Windows.Forms {
             SupportsSpaceKey = true;            
         }
                 
-        /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton.OnMouseDown"]/*' />
         /// <devdoc>
         /// Overriden to invoke displaying the popup.
         /// </devdoc>
@@ -154,7 +150,6 @@ namespace System.Windows.Forms {
             openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
             base.OnMouseLeave(e);                    
         }
-        /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton.OnPaint"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -190,7 +185,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton.ProcessMnemonic"]/*' />
 
         [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs

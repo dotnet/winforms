@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -19,13 +18,11 @@ namespace System.Windows.Forms {
         private BindingsCollection bindings;
         private bool pullingData = false;
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.onCurrentChangedHandler"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         protected EventHandler onCurrentChangedHandler;
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.onPositionChangedHandler"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -40,7 +37,6 @@ namespace System.Windows.Forms {
         // Event handler for the DataError event
         internal BindingManagerDataErrorEventHandler onDataErrorHandler;
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.Bindings"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -58,7 +54,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.OnBindingComplete"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -68,19 +63,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.OnCurrentChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         internal protected abstract void OnCurrentChanged(EventArgs e);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.OnCurrentItemChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         internal protected abstract void OnCurrentItemChanged(EventArgs e);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.OnDataError"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -90,7 +82,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.Current"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -100,7 +91,6 @@ namespace System.Windows.Forms {
 
         internal abstract void SetDataSource(Object dataSource);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.BindingManagerBase"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -120,7 +110,6 @@ namespace System.Windows.Forms {
 
         internal abstract PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.GetItemProperties"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -128,7 +117,6 @@ namespace System.Windows.Forms {
             return GetItemProperties(null);
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.GetItemProperties1"]/*' />
         protected internal virtual PropertyDescriptorCollection GetItemProperties(ArrayList dataSources, ArrayList listAccessors) {
             IList list = null;
             if (this is CurrencyManager) {
@@ -146,7 +134,6 @@ namespace System.Windows.Forms {
         // offset is how far we are in the listAccessors
         // listAccessors is the list of accessors (duh)
         //
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.GetItemProperties2"]/*' />
         protected virtual PropertyDescriptorCollection GetItemProperties(Type listType, int offset, ArrayList dataSources, ArrayList listAccessors) {
             if (listAccessors.Count < offset)
                 return null;
@@ -212,7 +199,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.BindingComplete"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -225,7 +211,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.CurrentChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -238,7 +223,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.CurrentItemChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -251,7 +235,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.DataError"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -265,35 +248,29 @@ namespace System.Windows.Forms {
         }
 
         internal abstract String GetListName();
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.CancelCurrentEdit"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public abstract void CancelCurrentEdit();
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.EndCurrentEdit"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public abstract void EndCurrentEdit();
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.AddNew"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public abstract void AddNew();
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.RemoveAt"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public abstract void RemoveAt(int index);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.Position"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public abstract int Position{get; set;}
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PositionChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -305,25 +282,20 @@ namespace System.Windows.Forms {
                 this.onPositionChangedHandler -= value;
             }
         }
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.UpdateIsBinding"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         protected abstract void UpdateIsBinding();
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.GetListName"]/*' />
         /// <devdoc>
         /// <para>[To be supplied.]</para>
         /// </devdoc>
         protected internal abstract String GetListName(ArrayList listAccessors);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.SuspendBinding"]/*' />
         public abstract void SuspendBinding();
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.ResumeBinding"]/*' />
         public abstract void ResumeBinding();
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PullData"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -332,7 +304,6 @@ namespace System.Windows.Forms {
             PullData(out success);
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PullData1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -355,7 +326,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PushData"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -364,7 +334,6 @@ namespace System.Windows.Forms {
             PushData(out success);
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PushData1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -392,7 +361,6 @@ namespace System.Windows.Forms {
             get;
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.IsBindingSuspended"]/*' />
         /// <devdoc>
         /// <devdoc>
         public bool IsBindingSuspended {
@@ -401,7 +369,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.Count"]/*' />
         public abstract int Count {
             get;
         }

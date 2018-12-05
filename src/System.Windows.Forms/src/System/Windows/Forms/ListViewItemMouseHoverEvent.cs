@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ListViewMouseHoverEvent.uex' path='docs/doc[@for="ListViewMouseHoverEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.ListView.OnItemMouseHover'/> event.
@@ -21,7 +20,6 @@ namespace System.Windows.Forms {
     public class ListViewItemMouseHoverEventArgs : EventArgs {
         readonly ListViewItem item;
 
-        /// <include file='doc\ItemMouseHoverEvent.uex' path='docs/doc[@for="ListViewItemMouseHoverEventArgs.ItemMouseHoverEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -29,7 +27,6 @@ namespace System.Windows.Forms {
             this.item = item;
         }
         
-        /// <include file='doc\ItemMouseHoverEvent.uex' path='docs/doc[@for="ListViewItemMouseHoverEventArgs.Item"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

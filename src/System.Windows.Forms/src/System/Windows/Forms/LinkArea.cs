@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Collections;
 
-    /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
         int start;
         int length;
 
-        /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkArea"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
             this.length = length;
         }
 
-        /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.Start"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -45,7 +42,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.Length"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -58,14 +54,12 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.IsEmpty"]/*' />
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsEmpty {
             get {
                 return length == start && start == 0;
             }
         }
-        /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.Equals"]/*' />
         public override bool Equals(object o) {
             if (!(o is LinkArea)) {
                 return false;
@@ -87,12 +81,10 @@ namespace System.Windows.Forms {
             return !(linkArea1 == linkArea2);
         }
 
-        /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.GetHashCode"]/*' />
         public override int GetHashCode() {
             return start << 4 | length;
         }
 
-        /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter"]/*' />
         /// <devdoc>
         ///      LinkAreaConverter is a class that can be used to convert
         ///      LinkArea from one data type to another.  Access this
@@ -100,7 +92,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public class LinkAreaConverter : TypeConverter {
 
-            /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter.CanConvertFrom"]/*' />
             /// <devdoc>
             ///      Determines if this converter can convert an object in the given source
             ///      type to the native type of the converter.
@@ -112,7 +103,6 @@ namespace System.Windows.Forms {
                 return base.CanConvertFrom(context, sourceType);
             }
 
-            /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter.CanConvertTo"]/*' />
             /// <devdoc>
             ///    <para>Gets a value indicating whether this converter can
             ///       convert an object to the given destination type using the context.</para>
@@ -124,7 +114,6 @@ namespace System.Windows.Forms {
                 return base.CanConvertTo(context, destinationType);
             }
 
-            /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter.ConvertFrom"]/*' />
             /// <devdoc>
             ///      Converts the given object to the converter's native type.
             /// </devdoc>
@@ -166,7 +155,6 @@ namespace System.Windows.Forms {
                 return base.ConvertFrom(context, culture, value);
             }
 
-            /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter.ConvertTo"]/*' />
             /// <devdoc>
             ///      Converts the given object to another type.  The most common types to convert
             ///      are to and from a string object.  The default implementation will make a call
@@ -207,7 +195,6 @@ namespace System.Windows.Forms {
                 return base.ConvertTo(context, culture, value, destinationType);
             }
 
-            /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter.CreateInstance"]/*' />
             /// <devdoc>
             ///      Creates an instance of this type given a set of property values
             ///      for the object.  This is useful for objects that are immutable, but still
@@ -218,7 +205,6 @@ namespace System.Windows.Forms {
                                  (int)propertyValues["Length"]);
             }
 
-            /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter.GetCreateInstanceSupported"]/*' />
             /// <devdoc>
             ///      Determines if changing a value on this object should require a call to
             ///      CreateInstance to create a new value.
@@ -227,7 +213,6 @@ namespace System.Windows.Forms {
                 return true;
             }
 
-            /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter.GetProperties"]/*' />
             /// <devdoc>
             ///      Retrieves the set of properties for this type.  By default, a type has
             ///      does not return any properties.  An easy implementation of this method
@@ -239,7 +224,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter.GetPropertiesSupported"]/*' />
             /// <devdoc>
             ///      Determines if this object supports properties.  By default, this
             ///      is false.

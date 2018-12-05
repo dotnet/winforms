@@ -8,14 +8,12 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewSortCompareEventArgs.uex' path='docs/doc[@for="DataGridViewSortCompareEventArgs"]/*' />
     public class DataGridViewSortCompareEventArgs : HandledEventArgs
     {
         private DataGridViewColumn dataGridViewColumn;
         private object cellValue1, cellValue2;
         private int sortResult, rowIndex1, rowIndex2;
     
-        /// <include file='doc\DataGridViewSortCompareEventArgs.uex' path='docs/doc[@for="DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs"]/*' />
         public DataGridViewSortCompareEventArgs(DataGridViewColumn dataGridViewColumn,
             object cellValue1, 
             object cellValue2,
@@ -31,7 +29,6 @@ namespace System.Windows.Forms
             this.rowIndex2 = rowIndex2;
         }
 
-        /// <include file='doc\DataGridViewSortCompareEventArgs.uex' path='docs/doc[@for="DataGridViewSortCompareEventArgs.CellValue1"]/*' />
         public object CellValue1
         {
             get
@@ -40,7 +37,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewSortCompareEventArgs.uex' path='docs/doc[@for="DataGridViewSortCompareEventArgs.CellValue2"]/*' />
         public object CellValue2
         {
             get
@@ -49,7 +45,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewSortCompareEventArgs.uex' path='docs/doc[@for="DataGridViewSortCompareEventArgs.Column"]/*' />
         public DataGridViewColumn Column
         {
             get
@@ -58,7 +53,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewSortCompareEventArgs.uex' path='docs/doc[@for="DataGridViewSortCompareEventArgs.RowIndex1"]/*' />
         public int RowIndex1
         {
             get
@@ -67,7 +61,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewSortCompareEventArgs.uex' path='docs/doc[@for="DataGridViewSortCompareEventArgs.RowIndex2"]/*' />
         public int RowIndex2
         {
             get
@@ -76,7 +69,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewSortCompareEventArgs.uex' path='docs/doc[@for="DataGridViewSortCompareEventArgs.SortResult"]/*' />
         public int SortResult
         {
             get

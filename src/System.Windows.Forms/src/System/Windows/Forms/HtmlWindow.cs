@@ -16,7 +16,6 @@ using System.Security.Permissions;
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -74,7 +73,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Document"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -87,7 +85,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.DomWindow"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -99,7 +96,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Frames"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -112,7 +108,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.History"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -125,7 +120,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.IsClosed"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -137,7 +131,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Name"]/*' />
         /// <devdoc>
         ///    <para>Name of the NativeHtmlWindow</para>
         /// </devdoc>
@@ -153,7 +146,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Opener"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -166,7 +158,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Parent"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -179,7 +170,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Position"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -192,7 +182,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Size"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets size for the window</para>
         /// </devdoc>
@@ -209,7 +198,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.StatusBarText"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -225,7 +213,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Url"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -239,7 +226,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.WindowFrameElement"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -252,7 +238,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Alert"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -261,7 +246,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Alert(message);
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.AttachEventHandler"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -270,7 +254,6 @@ namespace System.Windows.Forms
             WindowShim.AttachEventHandler(eventName, eventHandler);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Close"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -279,7 +262,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Close();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Confirm"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -288,7 +270,6 @@ namespace System.Windows.Forms
             return this.NativeHtmlWindow.Confirm(message);
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.DetachEventHandler"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -297,7 +278,6 @@ namespace System.Windows.Forms
             WindowShim.DetachEventHandler(eventName, eventHandler);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Focus"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -306,7 +286,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Focus();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.MoveTo"]/*' />
         /// <devdoc>
         ///    <para>Moves the Window to the position requested</para>
         /// </devdoc>
@@ -315,7 +294,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.MoveTo(x, y);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.MoveTo2"]/*' />
         /// <devdoc>
         ///    <para>Moves the Window to the point requested</para>
         /// </devdoc>
@@ -324,7 +302,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.MoveTo(point.X, point.Y);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Navigate"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -333,7 +310,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Navigate(url.ToString());
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Navigate"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -347,7 +323,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Navigate(urlString);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Open"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -362,7 +337,6 @@ namespace System.Windows.Forms
             return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Open"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -372,7 +346,6 @@ namespace System.Windows.Forms
             return Open(url.ToString(), target, windowOptions, replaceEntry);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.OpenNew"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -387,7 +360,6 @@ namespace System.Windows.Forms
             return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.OpenNew"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -397,7 +369,6 @@ namespace System.Windows.Forms
             return OpenNew(url.ToString(), windowOptions);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Prompt"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -406,7 +377,6 @@ namespace System.Windows.Forms
             return this.NativeHtmlWindow.Prompt(message, defaultInputValue).ToString();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.RemoveFocus"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -415,7 +385,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Blur();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.ResizeTo"]/*' />
         /// <devdoc>
         ///    <para>Resize the window to the width/height requested</para>
         /// </devdoc>
@@ -432,7 +401,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.ResizeTo(size.Width, size.Height);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.ScrollTo"]/*' />
         /// <devdoc>
         ///    <para>Scroll the window to the position requested</para>
         /// </devdoc>
@@ -441,7 +409,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.ScrollTo(x, y);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.ScrollTo2"]/*' />
         /// <devdoc>
         ///    <para>Scroll the window to the point requested</para>
         /// </devdoc>
@@ -454,7 +421,6 @@ namespace System.Windows.Forms
         // Events
         //
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Error"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -470,7 +436,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.GotFocus"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -486,7 +451,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Load"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -502,7 +466,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.LostFocus"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -518,7 +481,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Resize"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -534,7 +496,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Scroll"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -550,7 +511,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Unload"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -763,7 +723,6 @@ namespace System.Windows.Forms
 
             #region operators
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlElement.operatorEQ"]/*' />
         [SuppressMessage("Microsoft.Design", "CA1046:DoNotOverrideOperatorEqualsOnReferenceTypes")]
         public static bool operator ==(HtmlWindow left, HtmlWindow right)
         {
@@ -801,19 +760,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.operatorNE"]/*' />
         public static bool operator !=(HtmlWindow left, HtmlWindow right)
         {
             return !(left == right);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.GetHashCode"]/*' />
         public override int GetHashCode()
         {
             return htmlWindow2 == null ? 0 : htmlWindow2.GetHashCode();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Equals"]/*' />
         public override bool Equals(object obj)
         {
             return (this == (HtmlWindow)obj);

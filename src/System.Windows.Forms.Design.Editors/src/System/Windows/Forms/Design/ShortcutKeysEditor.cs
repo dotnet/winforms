@@ -13,7 +13,6 @@ using System.Windows.Forms.Design.Editors.Resources;
 
 namespace System.Windows.Forms.Design
 {
-    /// <internalonly />
     /// <summary>
     ///     Provides an editor for picking shortcut keys.
     /// </summary>

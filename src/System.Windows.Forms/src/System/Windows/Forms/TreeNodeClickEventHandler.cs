@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\TreeNodeClickEventHandler.uex' path='docs/doc[@for="TreeNodeClickEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will

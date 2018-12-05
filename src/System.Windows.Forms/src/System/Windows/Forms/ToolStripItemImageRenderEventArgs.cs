@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Drawing.Imaging;
 
-    /// <include file='doc\ToolStripItemImageRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemImageRenderEventArgs"]/*' />
     /// <devdoc/>
     public class ToolStripItemImageRenderEventArgs : ToolStripItemRenderEventArgs {
 
@@ -21,7 +20,6 @@ namespace System.Windows.Forms {
             this.imageRectangle = imageRectangle;
 
         }
-        /// <include file='doc\ToolStripItemImageRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemImageRenderEventArgs.ToolStripItemImageRenderEventArgs"]/*' />
         /// <devdoc>
         /// This class represents all the information to render the winbar
         /// </devdoc>
@@ -31,7 +29,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripItemImageRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemImageRenderEventArgs.Image"]/*' />
         /// <devdoc>
         /// the string to draw
         /// </devdoc>
@@ -41,7 +38,6 @@ namespace System.Windows.Forms {
             }
         }
 
-	    /// <include file='doc\ToolStripItemImageRenderEventArgs.uex' path='docs/doc[@for="ToolStripItemImageRenderEventArgs.ImageRectangle"]/*' />
 	    /// <devdoc>
 	    /// the rectangle to draw the Image in 
 	    /// </devdoc>

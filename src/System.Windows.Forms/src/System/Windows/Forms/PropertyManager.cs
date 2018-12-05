@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Collections;
 
-    /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager"]/*' />
     /// <devdoc>
     ///    <para>[To be supplied.]</para>
     /// </devdoc>
@@ -25,7 +24,6 @@ namespace System.Windows.Forms {
         private bool bound;
 
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Current"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -56,7 +54,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.PropertyManager"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -91,7 +88,6 @@ namespace System.Windows.Forms {
             return TypeDescriptor.GetClassName(dataSource) + "." + propName;
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.SuspendBinding"]/*' />
         public override void SuspendBinding() {
             EndCurrentEdit();
             if (bound) {
@@ -106,7 +102,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.ResumeBinding"]/*' />
         public override void ResumeBinding() {
             OnCurrentChanged(new EventArgs());
             if (!bound) {
@@ -121,7 +116,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.GetListName"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -129,7 +123,6 @@ namespace System.Windows.Forms {
             return "";
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.CancelCurrentEdit"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -140,7 +133,6 @@ namespace System.Windows.Forms {
             PushData();
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.EndCurrentEdit"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -155,7 +147,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.UpdateIsBinding"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -164,7 +155,6 @@ namespace System.Windows.Forms {
                 this.Bindings[i].UpdateIsBinding();
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.OnCurrentChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -178,7 +168,6 @@ namespace System.Windows.Forms {
                 this.onCurrentItemChangedHandler(this, ea);
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.OnCurrentItemChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -202,7 +191,6 @@ namespace System.Windows.Forms {
         }
 
         // no op on the propertyManager
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Position"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -214,7 +202,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Count"]/*' />
         public override int Count {
             get {
                 return 1;
@@ -222,7 +209,6 @@ namespace System.Windows.Forms {
         }
 
         // no-op on the propertyManager
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.AddNew"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -231,7 +217,6 @@ namespace System.Windows.Forms {
         }
 
         // no-op on the propertyManager
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.RemoveAt"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

@@ -26,7 +26,6 @@ namespace System.Resources {
     using System.Security.Permissions;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode"]/*' />
     /// <devdoc>
     ///    
     /// </devdoc>
@@ -92,7 +91,6 @@ namespace System.Resources {
             return result;
         }
             
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.ResXDataNode"]/*' />
         /// <devdoc>
         ///    
         /// </devdoc>        
@@ -125,7 +123,6 @@ namespace System.Resources {
             this.value = value;
         }
         
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.ResXDataNode2"]/*' />
         /// <devdoc>
         ///    
         /// </devdoc>  
@@ -184,7 +181,6 @@ namespace System.Resources {
         }
 
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.Comment"]/*' />
         /// <devdoc>
         ///    
         /// </devdoc>
@@ -201,7 +197,6 @@ namespace System.Resources {
             }
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.Name"]/*' />
         /// <devdoc>
         ///    
         /// </devdoc>
@@ -250,7 +245,6 @@ namespace System.Resources {
         }
 #endif
         
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.FileRef"]/*' />
         /// <devdoc>
         ///    
         /// </devdoc>
@@ -561,7 +555,6 @@ namespace System.Resources {
             return nodeInfo;
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetNodePosition"]/*' />
         /// <devdoc>
         ///    Might return the position in the resx file of the current node, if known
         ///    otherwise, will return Point(0,0) since point is a struct 
@@ -574,7 +567,6 @@ namespace System.Resources {
             }
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetValueTypeName"]/*' />
         /// <devdoc>
         ///    Get the FQ type name for this datanode.
         ///    We return typeof(object) for ResXNullRef
@@ -638,7 +630,6 @@ namespace System.Resources {
             return result;
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetValueTypeName1"]/*' />
         /// <devdoc>
         ///    Get the FQ type name for this datanode
         /// </devdoc>
@@ -646,7 +637,6 @@ namespace System.Resources {
             return GetValueTypeName(new AssemblyNamesTypeResolutionService(names));
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetValue"]/*' />
         /// <devdoc>
         ///    Get the value contained in this datanode
         /// </devdoc>
@@ -685,7 +675,6 @@ namespace System.Resources {
             return result;
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetValue1"]/*' />
         /// <devdoc>
         ///    Get the value contained in this datanode
         /// </devdoc>
@@ -750,7 +739,6 @@ namespace System.Resources {
         }
                 
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetObjectData"]/*' />
         /// <devdoc>
         ///    Get the value contained in this datanode
         /// </devdoc>        

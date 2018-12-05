@@ -7,7 +7,6 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\WebBrowserNavigatingEventHandler.uex' path='docs/doc[@for="WebBrowserNavigatingEventHandler"]/*' />
     /// <devdoc>
     ///     <para>
     /// Delegate to the WebBrowser Navigating event.
@@ -15,7 +14,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public delegate void WebBrowserNavigatingEventHandler(object sender, WebBrowserNavigatingEventArgs e);
 
-    /// <include file='doc\WebBrowserNavigatingEventHandler.uex' path='docs/doc[@for="WebBrowserNavigatingEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnNavigating'/> event.
@@ -25,7 +23,6 @@ namespace System.Windows.Forms {
         private Uri url;
         private string targetFrameName;
         
-        /// <include file='doc\WebBrowserNavigatingEventHandler.uex' path='docs/doc[@for="WebBrowserNavigatingEventArgs.WebBrowserNavigatingEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserNavigatingEventArgs'/> class.
@@ -36,7 +33,6 @@ namespace System.Windows.Forms {
             this.targetFrameName = targetFrameName;
         }
         
-        /// <include file='doc\WebBrowserNavigatingEventHandler.uex' path='docs/doc[@for="WebBrowserNavigatingEventArgs.Url"]/*' />
         /// <devdoc>
         ///    <para>
         /// Url the browser is navigating to.
@@ -49,7 +45,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowserNavigatingEventHandler.uex' path='docs/doc[@for="WebBrowserNavigatingEventArgs.TargetFrameName"]/*' />
         /// <devdoc>
         ///    <para>
         /// In case an individual frame is about to be navigated, this contains the frame name.

@@ -21,7 +21,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Windows.Forms.Internal;
 
-    /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel"]/*' />
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripPanelDesigner, " + AssemblyRef.SystemDesign)]
@@ -72,7 +71,6 @@ namespace System.Windows.Forms {
 
         private static readonly object EventRendererChanged = new object();
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.ToolStripPanel1"]/*' />
         public ToolStripPanel() {
             if (DpiHelper.IsScalingRequirementMet) {
                 scaledRowMargin = DpiHelper.LogicalToDeviceUnits(rowMargin);
@@ -137,7 +135,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.AutoSize"]/*' />
         [
             DefaultValue(true),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
@@ -153,7 +150,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs\doc[@for="ToolStripPanel.AutoSizeChanged"]*' />
         /// Override base AutoSizeChanged to we can change visibility/browsability attributes
         [
         Browsable(true),
@@ -168,7 +164,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.DefaultPadding"]/*' />
         protected override Padding DefaultPadding {
             get { return Padding.Empty; }
         }
@@ -184,7 +179,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Dock"]/*' />
         public override DockStyle Dock {
             get {
                 return base.Dock;
@@ -214,14 +208,12 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.LayoutEngine"]/*' />
         public override LayoutEngine LayoutEngine {
             get {
                 return FlowLayout.Instance;
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Locked"]/*' />
         [
         DefaultValue(false),
         Browsable(false),
@@ -237,7 +229,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Orientation"]/*' />
         public Orientation Orientation {
             get {
                 return orientation;
@@ -279,7 +270,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DrawMode"]/*' />
         [
         SRDescription(nameof(SR.ToolStripRenderModeDescr)),
         SRCategory(nameof(SR.CatAppearance)),
@@ -305,7 +295,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Rows"]/*' />
         /// <devdoc>
         /// Collection of child controls.
         /// </devdoc>
@@ -342,7 +331,6 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.TabIndex"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -357,7 +345,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.TabIndexChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabIndexChanged {
             add {
@@ -368,7 +355,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.TabIndex"]/*' />
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false),
@@ -386,7 +372,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.TabStopChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabStopChanged {
             add {
@@ -397,7 +382,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Text"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -412,7 +396,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.TextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TextChanged {
             add {
@@ -448,7 +431,6 @@ namespace System.Windows.Forms {
         #endregion ISupportInitialize
 
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.CreateToolStripPanelRowCollection"]/*' />
         private ToolStripPanelRowCollection CreateToolStripPanelRowCollection() {
             return new ToolStripPanelRowCollection(this);
         }
@@ -459,7 +441,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Dispose"]/*' />
         /// <devdoc>
         ///    <para>Disposes of the resources (other than memory) used by
         ///       the <see cref='System.Windows.Forms.ContainerControl'/>
@@ -500,7 +481,6 @@ namespace System.Windows.Forms {
 
 
 #if DEBUG_PAINT
-                /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.OnPaint"]/*' />
                 protected  override void OnPaint(PaintEventArgs e) {
                     base.OnPaint(e);
                     Graphics g = e.Graphics;
@@ -546,7 +526,6 @@ namespace System.Windows.Forms {
             base.OnControlRemoved(e);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnLayout"]/*' />
         protected override void OnLayout(LayoutEventArgs e) {
             if (e.AffectedComponent != ParentInternal && e.AffectedComponent as Control != null) {
                 ISupportToolStripPanel draggedControl = e.AffectedComponent as ISupportToolStripPanel;
@@ -606,7 +585,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnDefaultRendererChanged"]/*' />
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected virtual void OnRendererChanged(EventArgs e) {
@@ -619,7 +597,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.OnParentChanged"]/*' />
         /// <devdoc>
         /// We want to Set ToolStripPanel at DesignTime when the ToolStripPanel is added to the Form,
         /// </devdoc>
@@ -1190,7 +1167,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.PointToRow"]/*' />
         /// <devdoc>
         /// Given a point within the ToolStripPanel client area -
         /// it returns the row.  If no such row exists, returns null
@@ -1300,7 +1276,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.IArrangedElement.Children"]/*' />
         /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get {
@@ -1308,7 +1283,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection"]/*' />
         [
         ListBindable(false),
         ComVisible(false)
@@ -1317,12 +1291,10 @@ namespace System.Windows.Forms {
         public class ToolStripPanelRowCollection : ArrangedElementCollection, IList {
 
             private ToolStripPanel owner;
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.ToolStripPanelRowCollection"]/*' />
             public ToolStripPanelRowCollection(ToolStripPanel owner) {
                 this.owner = owner;
             }
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.ToolStripPanelRowCollection1"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1331,7 +1303,6 @@ namespace System.Windows.Forms {
                 AddRange(value);
             }
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.this"]/*' />
             /// <devdoc>
             /// <para></para>
             /// </devdoc>
@@ -1341,7 +1312,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Add"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1356,7 +1326,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.AddRange"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1380,7 +1349,6 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.AddRange1"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1407,7 +1375,6 @@ namespace System.Windows.Forms {
 
             }
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Contains"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1415,7 +1382,6 @@ namespace System.Windows.Forms {
                 return InnerList.Contains(value);
             }
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Clear"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1445,7 +1411,6 @@ namespace System.Windows.Forms {
             int IList.IndexOf(object value) { return IndexOf(value as ToolStripPanelRow); }
             void IList.Insert(int index, object value) { Insert(index, value as ToolStripPanelRow); }
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.IList.this"]/*' />
             /// <internalonly/>
             object IList.this[int index] {
                 get { return InnerList[index]; }
@@ -1453,7 +1418,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.IndexOf"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1461,7 +1425,6 @@ namespace System.Windows.Forms {
                 return InnerList.IndexOf(value);
             }
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Insert"]/*' />
             public void Insert(int index, ToolStripPanelRow value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1495,7 +1458,6 @@ namespace System.Windows.Forms {
                 
             }
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Remove"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1504,7 +1466,6 @@ namespace System.Windows.Forms {
                 OnAfterRemove(value);
             }
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.RemoveAt"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>
@@ -1519,7 +1480,6 @@ namespace System.Windows.Forms {
 
 
 
-            /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.CopyTo"]/*' />
             /// <devdoc>
             /// <para>[To be supplied.]</para>
             /// </devdoc>

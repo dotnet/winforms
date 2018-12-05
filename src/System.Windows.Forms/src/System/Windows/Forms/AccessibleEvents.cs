@@ -5,7 +5,6 @@
 namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents"]/*' />
     /// <devdoc>
     ///    <para>Specifies
     ///       events that are reported by accessible applications.</para>
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
         //  are perfectly welcome to use it.  Clients of IAccessible* will simply
         //  turn around and get back a non-visual object that describes the sound.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemSound"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -33,7 +31,6 @@ namespace System.Windows.Forms {
         // Sent when an alert needs to be given to the user.  MessageBoxes generate
         // alerts for example.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemAlert"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -44,7 +41,6 @@ namespace System.Windows.Forms {
         // Sent when the foreground (active) window changes, even if it is changing
         // to another window in the same thread as the previous one.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemForeground"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -56,12 +52,10 @@ namespace System.Windows.Forms {
         // Sent when entering into and leaving from menu mode (system, app bar, and
         // track popups).
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemMenuStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemMenuStart = 0x0004,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemMenuEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -75,12 +69,10 @@ namespace System.Windows.Forms {
         // followed almost immediately by EVENT_SYSTEM_MENUPOPUPSTART for the popup
         // being shown.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemMenuPopupStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemMenuPopupStart = 0x0006,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemMenuPopupEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -92,12 +84,10 @@ namespace System.Windows.Forms {
         // EVENT_SYSTEM_CAPTUREEND
         // Sent when a window takes the capture and releases the capture.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemCaptureStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemCaptureStart = 0x0008,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemCaptureEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -108,12 +98,10 @@ namespace System.Windows.Forms {
         // EVENT_SYSTEM_MOVESIZEEND
         // Sent when a window enters and leaves move-size dragging mode.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemMoveSizeStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemMoveSizeStart = 0x000A,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemMoveSizeEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -124,12 +112,10 @@ namespace System.Windows.Forms {
         // EVENT_SYSTEM_CONTEXTHELPEND
         // Sent when a window enters and leaves context sensitive help mode.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemContextHelpStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemContextHelpStart = 0x000C,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemContextHelpEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -142,12 +128,10 @@ namespace System.Windows.Forms {
         // to apps and OLE to generate this, since the system doesn't know.  Like
         // EVENT_SYSTEM_SOUND, it will be a while before this is prevalent.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemDragDropStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemDragDropStart = 0x000E,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemDragDropEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -158,12 +142,10 @@ namespace System.Windows.Forms {
         // EVENT_SYSTEM_DIALOGEND
         // Sent when a dialog comes up and just before it goes away.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemDialogStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemDialogStart = 0x0010,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemDialogEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -175,12 +157,10 @@ namespace System.Windows.Forms {
         // Sent when beginning and ending the tracking of a scrollbar in a window,
         // and also for scrollbar controls.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemScrollingStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemScrollingStart = 0x0012,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemScrollingEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -191,12 +171,10 @@ namespace System.Windows.Forms {
         // EVENT_SYSTEM_SWITCHEND
         // Sent when beginning and ending alt-tab mode with the switch window.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemSwitchStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemSwitchStart = 0x0014,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemSwitchEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -207,12 +185,10 @@ namespace System.Windows.Forms {
         // EVENT_SYSTEM_MINIMIZEEND
         // Sent when a window minimizes and just before it restores.
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemMinimizeStart"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SystemMinimizeStart = 0x0016,
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SystemMinimizeEnd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -247,27 +223,22 @@ namespace System.Windows.Forms {
         //          
         
         //
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.Create"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         Create =                0x8000,  // hwnd + ID + idChild is created item
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.Destroy"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         Destroy =               0x8001,  // hwnd + ID + idChild is destroyed item
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.Show"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         Show =                  0x8002,  // hwnd + ID + idChild is shown item
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.Hide"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         Hide =                  0x8003,  // hwnd + ID + idChild is hidden item
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.Reorder"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -283,27 +254,22 @@ namespace System.Windows.Forms {
         //
         
         
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.Focus"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         Focus =                 0x8005,  // hwnd + ID + idChild is focused item
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.Selection"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         Selection =             0x8006,  // hwnd + ID + idChild is selected item (if only one), or idChild is OBJID_WINDOW if complex
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SelectionAdd"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SelectionAdd =          0x8007,  // hwnd + ID + idChild is item added
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SelectionRemove"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         SelectionRemove =       0x8008,  // hwnd + ID + idChild is item removed
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.SelectionWithin"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -345,48 +311,39 @@ namespace System.Windows.Forms {
         //     are.
         //
         
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.StateChange"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         StateChange =                           0x800A,  // hwnd + ID + idChild is item w/ state change
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.LocationChange"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         LocationChange =                        0x800B,  // hwnd + ID + idChild is moved/sized item
         
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.NameChange"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         NameChange =                            0x800C,  // hwnd + ID + idChild is item w/ name change
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.DescriptionChange"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         DescriptionChange =                     0x800D,  // hwnd + ID + idChild is item w/ desc change
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.ValueChange"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         ValueChange =                           0x800E,  // hwnd + ID + idChild is item w/ value change
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.ParentChange"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         ParentChange =                          0x800F,  // hwnd + ID + idChild is item w/ new parent
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.HelpChange"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         HelpChange =                            0x8010,  // hwnd + ID + idChild is item w/ help change
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.DefaultActionChange"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         DefaultActionChange =                   0x8011,  // hwnd + ID + idChild is item w/ def action change
-        /// <include file='doc\AccessibleEvents.uex' path='docs/doc[@for="AccessibleEvents.AcceleratorChange"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

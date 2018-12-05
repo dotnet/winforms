@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\LeftRightAlignment.uex' path='docs/doc[@for="LeftRightAlignment"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies whether an object or text is aligned to
@@ -24,7 +23,6 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum LeftRightAlignment {
 
-        /// <include file='doc\LeftRightAlignment.uex' path='docs/doc[@for="LeftRightAlignment.Left"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object or
@@ -34,7 +32,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Left = 0,
 
-        /// <include file='doc\LeftRightAlignment.uex' path='docs/doc[@for="LeftRightAlignment.Right"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object or text is aligned to the right of the reference point.

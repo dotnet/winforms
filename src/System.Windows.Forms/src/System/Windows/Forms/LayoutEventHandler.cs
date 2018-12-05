@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <include file='doc\LayoutEventHandler.uex' path='docs/doc[@for="LayoutEventHandler"]/*' />
     /// <devdoc>
     /// </devdoc>
     public delegate void LayoutEventHandler(object sender, LayoutEventArgs e);

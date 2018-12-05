@@ -57,7 +57,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         internal SingleSelectRootGridEntry(PropertyGridView view, object value, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType) : this(view, value,null, baseProvider, host, tab, sortType) {
         }   
 
-        /// <include file='doc\SingleSelectRootGridEntry.uex' path='docs/doc[@for="SingleSelectRootGridEntry.BrowsableAttributes"]/*' />
         /// <devdoc>
         /// The set of attributes that will be used for browse filtering
         /// </devdoc>
@@ -174,7 +173,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         } 
 
-        /// <include file='doc\SingleSelectRootGridEntry.uex' path='docs/doc[@for="SingleSelectRootGridEntry.HelpKeyword"]/*' />
         /// <devdoc>
         ///     Retrieves the keyword that the VS help dynamic help window will
         ///     use when this IPE is selected.
@@ -210,7 +208,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
           
-        /// <include file='doc\SingleSelectRootGridEntry.uex' path='docs/doc[@for="SingleSelectRootGridEntry.PropertyValue"]/*' />
         /// <devdoc>
         /// Gets or sets the value for the property that is represented 
         /// by this GridEntry.
@@ -259,7 +256,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return service;
         }
 
-        /// <include file='doc\SingleSelectRootGridEntry.uex' path='docs/doc[@for="SingleSelectRootGridEntry.ResetBrowsableAttributes"]/*' />
         /// <devdoc>
         /// Reset the Browsable attributes to the default (BrowsableAttribute.Yes)
         /// </devdoc>
@@ -268,7 +264,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\SingleSelectRootGridEntry.uex' path='docs/doc[@for="SingleSelectRootGridEntry.ShowCategories"]/*' />
         /// <devdoc>
         /// Sets the value of this GridEntry from text
         /// </devdoc>

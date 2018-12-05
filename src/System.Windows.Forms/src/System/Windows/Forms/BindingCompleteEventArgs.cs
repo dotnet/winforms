@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.ComponentModel;
 
-    /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs"]/*' />
     /// <devdoc>
     ///     Provides information about a Binding Completed event.
     /// </devdoc>
@@ -18,7 +17,6 @@ namespace System.Windows.Forms
         private	string errorText;
         private	Exception exception;
 
-        /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs.BindingCompleteEventArgs"]/*' />
         /// <devdoc>
         ///    Constructor for BindingCompleteEventArgs.
         /// </devdoc>
@@ -35,7 +33,6 @@ namespace System.Windows.Forms
             this.exception = exception;
         }
 
-        /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs.BindingCompleteEventArgs1"]/*' />
         /// <devdoc>
         ///    Constructor for BindingCompleteEventArgs.
         /// </devdoc>
@@ -46,7 +43,6 @@ namespace System.Windows.Forms
                                         Exception exception) : this(binding, state, context, errorText, exception, true) {
         }
 
-        /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs.BindingCompleteEventArgs2"]/*' />
         /// <devdoc>
         ///    Constructor for BindingCompleteEventArgs.
         /// </devdoc>
@@ -56,7 +52,6 @@ namespace System.Windows.Forms
                                         string errorText) : this(binding, state, context, errorText, null, true) {
         }
 
-        /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs.BindingCompleteEventArgs3"]/*' />
         /// <devdoc>
         ///    Constructor for BindingCompleteEventArgs.
         /// </devdoc>
@@ -65,7 +60,6 @@ namespace System.Windows.Forms
                                         BindingCompleteContext context) : this(binding, state, context, string.Empty, null, false) {
         }
 
-        /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs.Binding"]/*' />
         /// <devdoc>
         /// </devdoc>
         public Binding Binding {
@@ -74,7 +68,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs.BindingCompleteState"]/*' />
         /// <devdoc>
         /// </devdoc>
         public BindingCompleteState BindingCompleteState {
@@ -83,7 +76,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs.BindingCompleteContext"]/*' />
         /// <devdoc>
         /// </devdoc>
         public BindingCompleteContext BindingCompleteContext {
@@ -92,7 +84,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs.ErrorText"]/*' />
         /// <devdoc>
         /// </devdoc>
         public string ErrorText {
@@ -101,7 +92,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\BindingCompleteEventArgs.uex' path='docs/doc[@for="BindingCompleteEventArgs.Exception"]/*' />
         /// <devdoc>
         /// </devdoc>
         public Exception Exception

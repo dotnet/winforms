@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
 
 
-    /// <include file='doc\MouseEventHandler.uex' path='docs/doc[@for="MouseEventHandler"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the method that will handle the

@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\HorizontalAlignment.uex' path='docs/doc[@for="HorizontalAlignment"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies how an object or text in a control is
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum HorizontalAlignment {
 
-        /// <include file='doc\HorizontalAlignment.uex' path='docs/doc[@for="HorizontalAlignment.Left"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object or text is aligned on the left of the control element.
@@ -31,7 +29,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Left = 0,
 
-        /// <include file='doc\HorizontalAlignment.uex' path='docs/doc[@for="HorizontalAlignment.Right"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object or text is aligned on the right of the control element.
@@ -39,7 +36,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Right = 1,
 
-        /// <include file='doc\HorizontalAlignment.uex' path='docs/doc[@for="HorizontalAlignment.Center"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object or text is aligned in the center of the control element.

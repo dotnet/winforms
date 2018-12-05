@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Windows.Forms.Layout;
     
-    /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer"]/*' />
     public class ToolStripSystemRenderer : ToolStripRenderer {
     
         [ThreadStatic()]
@@ -164,7 +163,6 @@ namespace System.Windows.Forms {
   
 
                 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderBackground"]/*' />
         /// <devdoc>
         /// Draw the winbar background.  ToolStrip users should override this if they want to draw differently.
         /// </devdoc>
@@ -209,7 +207,6 @@ namespace System.Windows.Forms {
 
         }
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderBorder"]/*' />
         /// <devdoc>
         /// Draw the border around the ToolStrip.  This should be done as the last step.
         /// </devdoc>
@@ -246,7 +243,6 @@ namespace System.Windows.Forms {
            }
         }
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderGrip"]/*' />
         /// <devdoc>
         /// Draw the grip.  ToolStrip users should override this if they want to draw differently.
         /// </devdoc>
@@ -294,20 +290,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderItem"]/*' />
         /// <devdoc>
         /// Draw the items background
         /// </devdoc>
         protected override void OnRenderItemBackground(ToolStripItemRenderEventArgs e) {
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderImageMargin"]/*' />
         /// <devdoc>
         /// Draw the items background
         /// </devdoc>
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e) {
         }
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderButton"]/*' />
         /// <devdoc>
         /// Draw the button background
         /// </devdoc>
@@ -315,7 +308,6 @@ namespace System.Windows.Forms {
             RenderItemInternal(e);
         }
    
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderDropDownButton"]/*' />
         /// <devdoc>
         /// Draw the button background
         /// </devdoc>
@@ -323,7 +315,6 @@ namespace System.Windows.Forms {
             RenderItemInternal(e);
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderOverflowButton"]/*' />
         /// <devdoc>
         /// Draw the button background
         /// </devdoc>
@@ -346,14 +337,12 @@ namespace System.Windows.Forms {
             } 
         }
        
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderLabel"]/*' />
         /// <devdoc>
         /// Draw the button background
         /// </devdoc>
         protected override void OnRenderLabelBackground(ToolStripItemRenderEventArgs e) {
             RenderLabelInternal(e);
         }
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderMenuItem"]/*' />
         /// <devdoc>
         /// Draw the items background
         /// </devdoc>
@@ -426,7 +415,6 @@ namespace System.Windows.Forms {
            
         }
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderSeparator"]/*' />
         /// <devdoc>
         /// Draws a toolbar separator. ToolStrip users should override this function to change the 
         /// drawing of all separators.
@@ -436,7 +424,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderToolStripStatusLabel"]/*' />
         protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e) {
             RenderLabelInternal(e);
             ToolStripStatusLabel item = e.Item as ToolStripStatusLabel;
@@ -444,7 +431,6 @@ namespace System.Windows.Forms {
             ControlPaint.DrawBorder3D(e.Graphics, new Rectangle(0,0,item.Width-1, item.Height-1), item.BorderStyle, (Border3DSide)item.BorderSides);
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderSplitButton"]/*' />
         /// <devdoc>
         /// Draw the item's background.
         /// </devdoc>

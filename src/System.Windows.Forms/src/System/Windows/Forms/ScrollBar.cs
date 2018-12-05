@@ -18,7 +18,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
 
 
-    /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Implements the basic functionality of a scroll bar control.
@@ -45,7 +44,6 @@ namespace System.Windows.Forms {
         private int wheelDelta = 0;
         private bool scaleScrollBarForDpiChange = true;
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.ScrollBar"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ScrollBar'/>
@@ -88,7 +86,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
             add {
@@ -99,7 +96,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.BackColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -113,7 +109,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.BackColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
@@ -125,7 +120,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.BackgroundImage"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -139,7 +133,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -151,7 +144,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.BackgroundImageLayout"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -165,7 +157,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -177,7 +168,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.CreateParams"]/*' />
         /// <devdoc>
         ///     Retrieves the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
@@ -195,7 +185,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.DefaultImeMode"]/*' />
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
@@ -218,7 +207,6 @@ namespace System.Windows.Forms {
             Scale((float)deviceDpiNew / deviceDpiOld);
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.ForeColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -235,7 +223,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.ForeColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
@@ -247,7 +234,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.Font"]/*' />
         /// <internalonly/><hideinheritance/>
         /// <devdoc>
         /// </devdoc>
@@ -261,7 +247,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.FontChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
@@ -273,7 +258,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -284,7 +268,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.ImeModeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
@@ -296,7 +279,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.LargeChange"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollBar.Value'/>
@@ -331,7 +313,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.Maximum"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the upper limit of values of the scrollable range.
@@ -360,7 +341,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.Minimum"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the lower limit of values of the scrollable range.
@@ -389,7 +369,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.SmallChange"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the value to be added or subtracted to the
@@ -424,7 +403,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.TabStop"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -438,7 +416,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.Text"]/*' />
         /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
@@ -456,7 +433,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.TextChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
@@ -468,7 +444,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.Value"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a numeric value that represents the current
@@ -516,7 +491,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.Click"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click {
@@ -528,7 +502,6 @@ namespace System.Windows.Forms {
             }
         }
          
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.OnPaint"]/*' />
         /// <devdoc>
         ///     ScrollBar Onpaint.
         /// </devdoc>
@@ -543,7 +516,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.DoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
@@ -555,7 +527,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.MouseClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseClick {
@@ -568,7 +539,6 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.MouseDoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
@@ -580,7 +550,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.MouseDown"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDown {
@@ -592,7 +561,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.MouseUp"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseUp {
@@ -604,7 +572,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.MouseMove"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseMove {
@@ -616,7 +583,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.Scroll"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the scroll box has
@@ -634,7 +600,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.ValueChanged"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the <see cref='System.Windows.Forms.ScrollBar.Value'/> property has changed, either by a
@@ -678,7 +643,6 @@ namespace System.Windows.Forms {
             return IntPtr.Zero;
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.OnEnabledChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -689,7 +653,6 @@ namespace System.Windows.Forms {
             base.OnEnabledChanged(e);
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.OnHandleCreated"]/*' />
         /// <devdoc>
         ///     Creates the handle.  overridden to help set up scrollbar information.
         /// </devdoc>
@@ -699,7 +662,6 @@ namespace System.Windows.Forms {
             UpdateScrollInfo();
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.OnScroll"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ScrollBar.ValueChanged'/> event.
@@ -710,7 +672,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,se);
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.OnMouseWheel"]/*' />
         /// <devdoc>
         ///     Converts mouse wheel movements into scrolling, when scrollbar has the focus.
         ///     Typically one wheel step will cause one small scroll increment, in either
@@ -750,7 +711,6 @@ namespace System.Windows.Forms {
             base.OnMouseWheel(e);
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.OnValueChanged"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ScrollBar.ValueChanged'/> event.
@@ -769,7 +729,6 @@ namespace System.Windows.Forms {
             return position;
         }
         
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.ToString"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -778,7 +737,6 @@ namespace System.Windows.Forms {
             return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + Value.ToString(CultureInfo.CurrentCulture);
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.UpdateScrollInfo"]/*' />
         /// <devdoc>
         ///     Internal helper method
         /// </devdoc>
@@ -807,7 +765,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.WmReflectScroll"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -816,7 +773,6 @@ namespace System.Windows.Forms {
             DoScroll(type);
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.DoScroll"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -905,7 +861,6 @@ namespace System.Windows.Forms {
             Value = se.NewValue;
         }
 
-        /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.WndProc"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>

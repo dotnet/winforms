@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using Microsoft.Win32;
 
-    /// <include file='doc\StatusBarPanelClickEvent.uex' path='docs/doc[@for="StatusBarPanelClickEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.StatusBar.OnPanelClick'/>
@@ -24,7 +23,6 @@ namespace System.Windows.Forms {
         readonly StatusBarPanel statusBarPanel;
 
 
-        /// <include file='doc\StatusBarPanelClickEvent.uex' path='docs/doc[@for="StatusBarPanelClickEventArgs.StatusBarPanelClickEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarPanelClickEventArgs'/>
@@ -36,7 +34,6 @@ namespace System.Windows.Forms {
             this.statusBarPanel = statusBarPanel;
         }
 
-        /// <include file='doc\StatusBarPanelClickEvent.uex' path='docs/doc[@for="StatusBarPanelClickEventArgs.StatusBarPanel"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies the <see cref='System.Windows.Forms.StatusBarPanel'/> that represents the clicked panel.

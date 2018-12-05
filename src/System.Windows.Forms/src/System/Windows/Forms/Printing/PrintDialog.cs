@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Security;
 
-    /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog"]/*' />
     /// <devdoc>
     ///    <para> Allows users to select a printer and choose which
     ///       portions of the document to print.</para>
@@ -42,7 +41,6 @@ namespace System.Windows.Forms {
 
         private bool useEXDialog = false;
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.PrintDialog"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintDialog'/> class.</para>
         /// </devdoc>
@@ -66,7 +64,6 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.AllowSomePages"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the Pages option button is enabled.
@@ -82,7 +79,6 @@ namespace System.Windows.Forms {
             set { allowPages = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.AllowPrintToFile"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether the Print to file check box is enabled.</para>
         /// </devdoc>
@@ -96,7 +92,6 @@ namespace System.Windows.Forms {
             set { allowPrintToFile = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.AllowSelection"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the From... To... Page option button is enabled.
@@ -112,7 +107,6 @@ namespace System.Windows.Forms {
             set { allowSelection = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.Document"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating the <see cref='System.Drawing.Printing.PrintDocument'/> used to obtain <see cref='System.Drawing.Printing.PrinterSettings'/>.
@@ -143,7 +137,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.PrinterSettings"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Drawing.Printing.PrinterSettings'/> the
@@ -175,7 +168,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.PrintToFile"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether the Print to file check box is checked.</para>
         /// </devdoc>
@@ -189,7 +181,6 @@ namespace System.Windows.Forms {
             set { printToFile = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.ShowHelp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the Help button is displayed.
@@ -205,7 +196,6 @@ namespace System.Windows.Forms {
             set { showHelp = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.ShowNetwork"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the Network button is displayed.
@@ -262,7 +252,6 @@ namespace System.Windows.Forms {
             return flags;
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Resets all options, the last selected printer, and the page
@@ -341,7 +330,6 @@ namespace System.Windows.Forms {
             return data;
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.RunDialog"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>

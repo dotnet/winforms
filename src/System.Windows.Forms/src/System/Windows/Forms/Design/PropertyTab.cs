@@ -12,7 +12,6 @@ namespace System.Windows.Forms.Design {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab"]/*' />
     /// <devdoc>
     ///    <para>Provides a base class for property tabs.</para>
     /// </devdoc>
@@ -23,13 +22,11 @@ namespace System.Windows.Forms.Design {
         private Bitmap   bitmap;
         private bool     checkedBmp;
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Finalize"]/*' />
         ~PropertyTab() {
             Dispose(false);
         }
 
         // don't override this. Just put a 16x16 bitmap in a file with the same name as your class in your resources.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Bitmap"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a bitmap to display in the property tab.</para>
         /// </devdoc>
@@ -54,7 +51,6 @@ namespace System.Windows.Forms.Design {
         }
 
         // don't override this either.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Components"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the array of components the property tab is associated with.</para>
         /// </devdoc>
@@ -68,7 +64,6 @@ namespace System.Windows.Forms.Design {
         }
 
         // okay.  Override this to give a good TabName.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.TabName"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the name for the property tab.</para>
         /// </devdoc>
@@ -76,7 +71,6 @@ namespace System.Windows.Forms.Design {
             get;
         }
         
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.HelpKeyword"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the help keyword that is to be associated with this tab. This defaults
         ///       to the tab name.</para>
@@ -88,7 +82,6 @@ namespace System.Windows.Forms.Design {
         }
 
         // override this to reject components you don't want to support.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.CanExtend"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether the specified object be can extended.</para>
         /// </devdoc>
@@ -96,7 +89,6 @@ namespace System.Windows.Forms.Design {
             return true;
         }
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Dispose"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -105,7 +97,6 @@ namespace System.Windows.Forms.Design {
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Dispose2"]/*' />
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
                 if (bitmap != null) {
@@ -116,7 +107,6 @@ namespace System.Windows.Forms.Design {
         }
 
         // return the default property item
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.GetDefaultProperty"]/*' />
         /// <devdoc>
         ///    <para>Gets the default property of the specified component.</para>
         /// </devdoc>
@@ -125,7 +115,6 @@ namespace System.Windows.Forms.Design {
         }
 
         // okay, override this to return whatever you want to return... All properties must apply to component.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.GetProperties"]/*' />
         /// <devdoc>
         ///    <para>Gets the properties of the specified component.</para>
         /// </devdoc>
@@ -133,14 +122,12 @@ namespace System.Windows.Forms.Design {
             return GetProperties(component, null);
         }
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.GetProperties1"]/*' />
         /// <devdoc>
         ///    <para>Gets the properties of the specified component which match the specified 
         ///       attributes.</para>
         /// </devdoc>
         public abstract PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes);
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.GetProperties2"]/*' />
         /// <devdoc>
         ///    <para>Gets the properties of the specified component...</para>
         /// </devdoc>

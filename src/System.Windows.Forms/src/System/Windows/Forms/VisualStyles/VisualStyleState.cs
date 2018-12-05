@@ -6,7 +6,6 @@
 
 namespace System.Windows.Forms.VisualStyles {
 
-    /// <include file='doc\VisualStyleState.uex' path='docs/doc[@for="VisualStyleState"]/*' />
     /// <devdoc>
     ///    <para>
     ///     Determines whether visual styles are enabled.
@@ -14,7 +13,6 @@ namespace System.Windows.Forms.VisualStyles {
     /// </devdoc>
 
     public enum VisualStyleState {
-        /// <include file='doc\VisualStyleState.uex' path='docs/doc[@for="VisualStyleState.NoneEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///  Visual styles are not enabled.
@@ -22,7 +20,6 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         NoneEnabled = 0,
 
-        /// <include file='doc\VisualStyleState.uex' path='docs/doc[@for="VisualStyleState.ClientAreaEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         /// Visual styles enabled only for client area.
@@ -30,7 +27,6 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         ClientAreaEnabled = NativeMethods.STAP_ALLOW_CONTROLS,
 
-        /// <include file='doc\VisualStyleState.uex' path='docs/doc[@for="VisualStyleState.NonClientAreaEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         /// Visual styles enabled only for non-client area.
@@ -38,7 +34,6 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         NonClientAreaEnabled = NativeMethods.STAP_ALLOW_NONCLIENT,
 
-        /// <include file='doc\VisualStyleState.uex' path='docs/doc[@for="VisualStyleState.ClientAndNonClientAreasEnabled"]/*' />
         /// <devdoc>
         ///    <para>
         /// Visual styles enabled only for client and non-client areas. 

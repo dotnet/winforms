@@ -23,7 +23,6 @@ namespace System.Internal {
 
         private static object internalSyncObject = new object();
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.Add"]/*' />
         /// <devdoc>
         ///     Adds the given handle to the handle collector.  This keeps the
         ///     handle on a "hot list" of objects that may need to be garbage
@@ -34,7 +33,6 @@ namespace System.Internal {
             return handle;
         }
        
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.Add"]/*' />
         /// <devdoc>
         ///     Suspends GC.Collect
         /// </devdoc>
@@ -45,7 +43,6 @@ namespace System.Internal {
             }
         }
         
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.Add"]/*' />
         /// <devdoc>
         ///     Resumes GC.Collect
         /// </devdoc>        
@@ -78,7 +75,6 @@ namespace System.Internal {
             }
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.RegisterType"]/*' />
         /// <devdoc>
         ///     Registers a new type of handle with the handle collector.
         /// </devdoc>
@@ -97,7 +93,6 @@ namespace System.Internal {
             }
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.Remove"]/*' />
         /// <devdoc>
         ///     Removes the given handle from the handle collector.  Removing a
         ///     handle removes it from our "hot list" of objects that should be
@@ -107,7 +102,6 @@ namespace System.Internal {
             return handleTypes[type - 1].Remove(handle);
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.HandleType"]/*' />
         /// <devdoc>
         ///     Represents a specific type of handle.
         /// </devdoc>
@@ -123,7 +117,6 @@ namespace System.Internal {
             private List<IntPtr> handles = new List<IntPtr>();
 #endif
 
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.HandleType.HandleType"]/*' />
             /// <devdoc>
             ///     Creates a new handle type.
             /// </devdoc>
@@ -134,7 +127,6 @@ namespace System.Internal {
                 this.deltaPercent = 100 - expense;
             }
 
-                            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.HandleType.Add"]/*' />
             /// <devdoc>
             ///     Adds a handle to this handle type for monitoring.
             /// </devdoc>            
@@ -191,7 +183,6 @@ namespace System.Internal {
             }
 
 
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.HandleType.GetHandleCount"]/*' />
             /// <devdoc>
             ///     Retrieves the outstanding handle count for this
             ///     handle type.
@@ -203,7 +194,6 @@ namespace System.Internal {
                 }
             }
 
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.HandleType.NeedCollection"]/*' />
             /// <devdoc>
             ///     Determines if this handle type needs a garbage collection pass.
             /// </devdoc>
@@ -236,7 +226,6 @@ namespace System.Internal {
                 return false;
             }
 
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.HandleCollector.HandleType.Remove"]/*' />
             /// <devdoc>
             ///     Removes the given handle from our monitor list.
             /// </devdoc>

@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using Microsoft.Win32;
 
-    /// <include file='doc\InvalidateEvent.uex' path='docs/doc[@for="InvalidateEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.Control.Invalidate'/>
@@ -21,13 +20,11 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class InvalidateEventArgs : EventArgs {
 
-        /// <include file='doc\InvalidateEvent.uex' path='docs/doc[@for="InvalidateEventArgs.invalidRect"]/*' />
         /// <devdoc>
         ///     Rectangle that bounds the window area which has been invalidated.
         /// </devdoc>
         private readonly Rectangle invalidRect;
 
-        /// <include file='doc\InvalidateEvent.uex' path='docs/doc[@for="InvalidateEventArgs.InvalidateEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.InvalidateEventArgs'/>
@@ -38,7 +35,6 @@ namespace System.Windows.Forms {
             this.invalidRect = invalidRect;
         }
 
-        /// <include file='doc\InvalidateEvent.uex' path='docs/doc[@for="InvalidateEventArgs.InvalidRect"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value

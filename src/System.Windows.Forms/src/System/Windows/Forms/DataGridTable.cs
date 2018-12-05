@@ -17,7 +17,6 @@ namespace System.Windows.Forms {
 
     using Microsoft.Win32;
 
-    /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle"]/*' />
     /// <devdoc>
     /// <para>Represents the table drawn by the <see cref='System.Windows.Forms.DataGrid'/> control at run time.</para>
     /// </devdoc>
@@ -109,7 +108,6 @@ namespace System.Windows.Forms {
         // LinkColor, LinkHoverColor
         //
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.AllowSorting"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -134,7 +132,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.AllowSortingChanged"]/*' />
         /// <devdoc>
         /// <para>[To be  supplied]</para>
         /// </devdoc>
@@ -147,7 +144,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.AlternatingBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -178,7 +174,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.AlternatingBackColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -190,7 +185,6 @@ namespace System.Windows.Forms {
                 Events.RemoveHandler(EventAlternatingBackColor, value);
             }
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetAlternatingBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -201,7 +195,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeAlternatingBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -216,7 +209,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -224,7 +216,6 @@ namespace System.Windows.Forms {
             return !System.Windows.Forms.DataGridTableStyle.DefaultBackBrush.Equals(this.backBrush);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -238,7 +229,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.BackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -269,7 +259,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.BackColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -282,7 +271,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -391,7 +379,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -420,7 +407,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ForeColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -439,7 +425,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -449,7 +434,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.GridLineColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -477,7 +461,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.GridLineColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -490,7 +473,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeGridLineColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -499,7 +481,6 @@ namespace System.Windows.Forms {
             return !GridLineBrush.Equals(DefaultGridLineBrush);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetGridLineColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -522,7 +503,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.GridLineStyle"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -552,7 +532,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.GridLineStyleChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -565,7 +544,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.HeaderBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -601,7 +579,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.HeaderBackColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -620,7 +597,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeHeaderBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -629,7 +605,6 @@ namespace System.Windows.Forms {
             return !HeaderBackBrush.Equals(DefaultHeaderBackBrush);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetHeaderBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -639,7 +614,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.HeaderFont"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -670,7 +644,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.HeaderFontChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -683,7 +656,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeHeaderFont"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -691,7 +663,6 @@ namespace System.Windows.Forms {
             return(headerFont != null);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetHeaderFont"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -707,7 +678,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.HeaderForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -742,7 +712,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.HeaderForeColorChanged"]/*' />
         public event EventHandler HeaderForeColorChanged {
             add {
                 Events.AddHandler(EventHeaderForeColor, value);
@@ -752,7 +721,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeHeaderForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -761,7 +729,6 @@ namespace System.Windows.Forms {
             return !HeaderForePen.Equals(DefaultHeaderForePen);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetHeaderForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -783,7 +750,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.LinkColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -810,7 +776,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.LinkColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -823,7 +788,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeLinkColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -832,7 +796,6 @@ namespace System.Windows.Forms {
             return !LinkBrush.Equals(DefaultLinkBrush);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetLinkColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -847,7 +810,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.LinkHoverColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
@@ -867,7 +829,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.LinkHoverColorChanged"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
@@ -881,7 +842,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeLinkHoverColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
@@ -942,7 +902,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetLinkHoverColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
@@ -952,7 +911,6 @@ namespace System.Windows.Forms {
                 LinkHoverColor = defaultLinkHoverBrush.Color;*/
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.PreferredColumnWidth"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -991,7 +949,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.PreferredColumnWidthChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1004,7 +961,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.PreferredRowHeight"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1052,7 +1008,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.PreferredRowHeightChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1069,7 +1024,6 @@ namespace System.Windows.Forms {
 		PreferredRowHeight = defaultFontHeight + 3;
 	}
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializePreferredRowHeight"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1078,7 +1032,6 @@ namespace System.Windows.Forms {
             return prefferedRowHeight != defaultFontHeight + 3;
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ColumnHeadersVisible"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1103,7 +1056,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ColumnHeadersVisibleChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1116,7 +1068,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.RowHeadersVisible"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1141,7 +1092,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.RowHeadersVisibleChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1154,7 +1104,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.RowHeaderWidth"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1186,7 +1135,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.RowHeaderWidthChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1199,7 +1147,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.SelectionBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1230,7 +1177,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.SelectionBackColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1255,7 +1201,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeSelectionBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1264,7 +1209,6 @@ namespace System.Windows.Forms {
             return !DefaultSelectionBackBrush.Equals(selectionBackBrush);
         }
         
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetSelectionBackColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1273,7 +1217,6 @@ namespace System.Windows.Forms {
                 SelectionBackColor = DefaultSelectionBackBrush.Color;
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.SelectionForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1303,7 +1246,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.SelectionForeColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1316,7 +1258,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeSelectionForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1325,7 +1266,6 @@ namespace System.Windows.Forms {
             return !SelectionForeBrush.Equals(DefaultSelectionForeBrush);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetSelectionForeColor"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1341,7 +1281,6 @@ namespace System.Windows.Forms {
                 this.DataGrid.InvalidateInside();
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.DefaultTableStyle"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
@@ -1352,7 +1291,6 @@ namespace System.Windows.Forms {
         public static readonly DataGridTableStyle DefaultTableStyle = new DataGridTableStyle(true);
 
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.DataGridTableStyle"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridTableStyle'/> class.</para>
@@ -1363,14 +1301,12 @@ namespace System.Windows.Forms {
             this.isDefaultTableStyle = isDefaultTableStyle;
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.DataGridTableStyle1"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
         public DataGridTableStyle() : this(false) {
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.DataGridTableStyle2"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridTableStyle'/> class with the specified
         /// <see cref='System.Windows.Forms.CurrencyManager'/>.</para>
@@ -1446,12 +1382,10 @@ namespace System.Windows.Forms {
             return typeof(IList).IsAssignableFrom(prop.PropertyType) && !typeof(Array).IsAssignableFrom(prop.PropertyType);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.CreateGridColumn"]/*' />
         internal protected virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop) {
             return this.CreateGridColumn(prop, false);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.CreateGridColumn1"]/*' />
         internal protected virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop, bool isDefault) {
             DataGridColumnStyle ret = null;
             Type dataType = prop.PropertyType;
@@ -1493,7 +1427,6 @@ namespace System.Windows.Forms {
         // =        Properties
         // =------------------------------------------------------------------
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.MappingName"]/*' />
         /// <devdoc>
         ///    <para>Gets the name of this grid table.</para>
         /// </devdoc>
@@ -1522,7 +1455,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.MappingNameChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1535,7 +1467,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.RelationsList"]/*' />
         /// <devdoc>
         ///    <para>Gets the
         ///       list of relation objects for the grid table.</para>
@@ -1546,7 +1477,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.GridColumnStyles"]/*' />
         /// <devdoc>
         ///    <para>Gets the collection of columns drawn for this table.</para>
         /// </devdoc>
@@ -1560,7 +1490,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.SetInternalDataGrid"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.DataGrid'/>
@@ -1582,7 +1511,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.DataGrid"]/*' />
         /// <devdoc>
         /// <para>Gets or sets the <see cref='System.Windows.Forms.DataGrid'/> control for the drawn table.</para>
         /// </devdoc>
@@ -1596,7 +1524,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ReadOnly"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether columns can be
         ///       edited.</para>
@@ -1614,7 +1541,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ReadOnlyChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1631,7 +1557,6 @@ namespace System.Windows.Forms {
         // =        Methods
         // =------------------------------------------------------------------
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.BeginEdit"]/*' />
         /// <devdoc>
         ///    <para>Requests an edit operation.</para>
         /// </devdoc>
@@ -1643,7 +1568,6 @@ namespace System.Windows.Forms {
                 return grid.BeginEdit(gridColumn, rowNumber);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.EndEdit"]/*' />
         /// <devdoc>
         ///    <para> Requests an end to an edit
         ///       operation.</para>
@@ -1693,7 +1617,6 @@ namespace System.Windows.Forms {
         }
 
 #if false
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnColumnChanged"]/*' />
         /// <devdoc>
         ///      The DataColumnCollection class actually wires up this
         ///      event handler to the PropertyChanged events of
@@ -1704,7 +1627,6 @@ namespace System.Windows.Forms {
                 GenerateVisibleColumnsCache();
         }
 #endif
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnReadOnlyChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1714,7 +1636,6 @@ namespace System.Windows.Forms {
                 eh(this, e);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnMappingNameChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1724,28 +1645,24 @@ namespace System.Windows.Forms {
                 eh(this, e);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnAlternatingBackColorChanged"]/*' />
         protected virtual void OnAlternatingBackColorChanged(EventArgs e) {
             EventHandler eh = Events[EventAlternatingBackColor] as EventHandler;
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnForeColorChanged"]/*' />
         protected virtual void OnForeColorChanged(EventArgs e) {
             EventHandler eh = Events[EventBackColor] as EventHandler;
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnBackColorChanged"]/*' />
         protected virtual void OnBackColorChanged(EventArgs e) {
             EventHandler eh = Events[EventForeColor] as EventHandler;
             if (eh != null)
                 eh(this, e);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnAllowSortingChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1754,7 +1671,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnGridLineColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1763,7 +1679,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnGridLineStyleChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1772,7 +1687,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnHeaderBackColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1781,7 +1695,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnHeaderFontChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1790,7 +1703,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnHeaderForeColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1799,7 +1711,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnLinkColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1808,7 +1719,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnLinkHoverColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1817,7 +1727,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnPreferredRowHeightChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1826,7 +1735,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnPreferredColumnWidthChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1835,7 +1743,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnColumnHeadersVisibleChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1844,7 +1751,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnRowHeadersVisibleChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1853,7 +1759,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnRowHeaderWidthChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1862,7 +1767,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnSelectionForeColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1871,7 +1775,6 @@ namespace System.Windows.Forms {
             if (eh != null)
                 eh(this, e);
         }
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.OnSelectionBackColorChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1881,7 +1784,6 @@ namespace System.Windows.Forms {
                 eh(this, e);
         }
 
-        /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.Dispose"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>

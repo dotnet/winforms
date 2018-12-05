@@ -20,7 +20,6 @@ namespace System.Windows.Forms {
     using System.Security;
     using System.Security.Permissions;
 
-    /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl"]/*' />
     /// <devdoc>
     ///    <para>Defines a
     ///       base class for
@@ -51,7 +50,6 @@ namespace System.Windows.Forms {
         private static readonly int PropAxContainer            = PropertyStore.CreateKey();
         private const string fontMeasureString                 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ContainerControl"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ContainerControl'/>
         /// class.</para>
@@ -63,7 +61,6 @@ namespace System.Windows.Forms {
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AutoScaleDimensions"]/*' />
         /// <devdoc>
         ///     AutoScaleDimensions represents the DPI or Font setting that the control has been scaled
         ///     to or designed at. Specifically, at design time this property will be set by the
@@ -96,7 +93,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AutoScaleFactor"]/*' />
         /// <devdoc>
         ///     AutoScaleFactor represents the scaling factor difference between
         ///     CurrentAutoScaleDimensions and AutoScaleDimensions. This value is
@@ -118,7 +114,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AutoScaleMode"]/*' />
         /// <devdoc>
         ///     Determines the scaling mode of this control.  The default is no scaling.
         ///
@@ -170,7 +165,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AutoValidate"]/*' />
         /// <devdoc>
         ///     Indicates whether controls in this container will be automatically validated when the focus changes.
         /// </devdoc>
@@ -209,7 +203,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AutoValidateChanged"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -228,7 +221,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.BindingContext"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -268,7 +260,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ActiveControl"]/*' />
         /// <devdoc>
         ///    <para>Indicates the current active control on the container control.</para>
         /// </devdoc>
@@ -288,7 +279,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.CreateParams"]/*' />
         protected override CreateParams CreateParams {
             [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
@@ -298,7 +288,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.CurrentAutoScaleDimensions"]/*' />
         /// <devdoc>
         ///     CurrentAutoScaleDimensions represent the actual DPI or Font settings
         ///     of the display at runtime. If the AutoScaleMode is set to 'None' then
@@ -336,7 +325,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ParentForm"]/*' />
         /// <devdoc>
         ///    <para>Indicates the form that the scrollable control is assigned to. This property is read-only.</para>
         /// </devdoc>
@@ -370,7 +358,6 @@ namespace System.Windows.Forms {
         }
 
         // Package scope for Control
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.IContainerControl.ActivateControl"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>Activates the specified control.</para>
@@ -440,7 +427,6 @@ namespace System.Windows.Forms {
             return ctl != null;
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AdjustFormScrollbars"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -625,7 +611,6 @@ namespace System.Windows.Forms {
             return(AxHost.AxContainer)aXContainer;
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.Dispose"]/*' />
         /// <devdoc>
         ///    <para>Disposes of the resources (other than memory) used by
         ///       the <see cref='System.Windows.Forms.ContainerControl'/>
@@ -801,7 +786,6 @@ namespace System.Windows.Forms {
         internal virtual void OnAutoScaleModeChanged() {
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="Binding.OnAutoValidateChanged"]/*' />
         /// <devdoc>
         ///    Raises the AutoValidateChanged event.
         /// </devdoc>
@@ -826,7 +810,6 @@ namespace System.Windows.Forms {
           }
       }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="ContainerControl.OnChildLayoutResuming"]/*' />
         /// <devdoc>
         ///     Called when a child is about to resume its layout.  The default implementation
         ///     calls OnChildLayoutResuming on the parent.
@@ -855,7 +838,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.OnCreateControl"]/*' />
         /// <devdoc>
         ///    <para> Raises the CreateControl event.</para>
         /// </devdoc>
@@ -868,7 +850,6 @@ namespace System.Windows.Forms {
             OnBindingContextChanged(EventArgs.Empty);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.OnFontChanged"]/*' />
         /// <devdoc>
         ///    We override this to clear the current autoscale cache.
         /// </devdoc>
@@ -895,7 +876,6 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.FormDpiChanged"]/*' />
         /// <devdoc>
         ///   This is called by the top level form to clear the current autoscale cache.
         /// </devdoc>
@@ -922,7 +902,6 @@ namespace System.Windows.Forms {
             base.OnLayout(e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="ContainerControl.OnLayoutResuming"]/*' />
         /// <devdoc>
         ///     Called when the last resume layout call is made.  If performLayout is true
         ///     a layout will occur as soon as this call returns.  Layout is
@@ -934,7 +913,6 @@ namespace System.Windows.Forms {
             base.OnLayoutResuming(performLayout);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.OnParentChanged"]/*' />
         /// <devdoc>
         ///     Called when the parent changes.  Container controls prefer to have their parents
         ///     scale themselves, but when a parent is first changed, and as a result the font
@@ -948,7 +926,6 @@ namespace System.Windows.Forms {
             base.OnParentChanged(e);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.PerformAutoScale"]/*' />
         /// <devdoc>
         ///     Performs scaling of this control.  Scaling works by scaling all children of this control.
         ///     Those children that are ContainerControls will have their PerformAutoScale method called
@@ -958,7 +935,6 @@ namespace System.Windows.Forms {
             PerformAutoScale(true, true);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.PerformAutoScale1"]/*' />
         /// <devdoc>
         ///     Performs scaling of this control.  Scaling works by scaling all children of this control.
         ///
@@ -1054,7 +1030,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="ContainerControl.Scale"]/*' />
         /// <devdoc>
         ///     Overrides the default scaling mechanism to account for autoscaling.  This
         ///     override behaves as follows:  any unchanged controls are always scaled
@@ -1141,7 +1116,6 @@ namespace System.Windows.Forms {
             return group.SelectNextControl(activeControl, forward, false, false, true);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessDialogChar"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    Processes a dialog character. Overrides Control.processDialogChar().
@@ -1163,7 +1137,6 @@ namespace System.Windows.Forms {
             return base.ProcessDialogChar(charCode);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessDialogKey"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    Processes a dialog key. Overrides Control.processDialogKey(). This
@@ -1198,7 +1171,6 @@ namespace System.Windows.Forms {
         }
 
 
-         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessCmdKey"]/*' />
          /// <internalonly/>
          [
              SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
@@ -1221,7 +1193,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessMnemonic"]/*' />
         /// <internalonly/>
         [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
@@ -1307,7 +1278,6 @@ namespace System.Windows.Forms {
             return processed;
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessTabKey"]/*' />
         /// <devdoc>
         ///    <para>Selects the next available control and makes it the active control.</para>
         /// </devdoc>
@@ -1341,7 +1311,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.Select"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -1446,7 +1415,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.UpdateDefaultButton"]/*' />
         /// <devdoc>
         ///     Updates the default button based on current selection, and the
         ///     acceptButton property.
@@ -1667,7 +1635,6 @@ namespace System.Windows.Forms {
             ValidateThroughAncestor(commonAncestor, preventFocusChangeOnError);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.Validate"]/*' />
         /// <devdoc>
         ///     <para>
         ///     Validates the last unvalidated control and its ancestors up through, but not including the current control.
@@ -1686,7 +1653,6 @@ namespace System.Windows.Forms {
             return Validate(false);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.Validate2"]/*' />
         /// <devdoc>
         ///     <para>
         ///     Validates the last unvalidated control and its ancestors up through, but not including the current control.
@@ -1741,7 +1707,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ValidateChildren"]/*' />
         /// <devdoc>
         ///     Validates all selectable child controls in the container, including descendants. This is
         ///     equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
@@ -1752,7 +1717,6 @@ namespace System.Windows.Forms {
             return ValidateChildren(ValidationConstraints.Selectable);
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ValidateChildren1"]/*' />
         /// <devdoc>
         ///     Validates all the child controls in the container. Exactly which controls are
         ///     validated and which controls are skipped is determined by <paramref name="flags"/>.
@@ -1925,7 +1889,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.WndProc"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>

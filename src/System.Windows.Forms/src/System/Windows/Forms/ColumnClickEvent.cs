@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ColumnClickEvent.uex' path='docs/doc[@for="ColumnClickEventArgs"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.ListView.OnColumnClick'/>
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
     public class ColumnClickEventArgs : EventArgs {
         readonly int column;
 
-        /// <include file='doc\ColumnClickEvent.uex' path='docs/doc[@for="ColumnClickEventArgs.ColumnClickEventArgs"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
@@ -31,7 +29,6 @@ namespace System.Windows.Forms {
             this.column = column;
         }
 
-        /// <include file='doc\ColumnClickEvent.uex' path='docs/doc[@for="ColumnClickEventArgs.Column"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
         /// </devdoc>
