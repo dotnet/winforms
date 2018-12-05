@@ -5157,7 +5157,7 @@ namespace System.Windows.Forms {
         ///     scale window size non-lineary. If this message is not processed, the size is scaled linearly by Windows.
         ///     This message is sent to top level windows before WM_DPICHANGED.
         ///     If the application responds to this message, the resulting size will be the candidate rectangle 
-        ///     sent to WM_DPICHANGED. The WPARAM contains a DPI value.� The size needs to be computed if 
+        ///     sent to WM_DPICHANGED. The WPARAM contains a DPI value. The size needs to be computed if 
         ///     the window were to switch to this DPI.�LPARAM is unused and will be zero. 
         ///     The return value is a size, where the LOWORD is the desired width of the window and the HIWORD 
         ///     is the desired height of the window.� A return value of zero indicates that the app does not 
