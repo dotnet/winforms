@@ -266,7 +266,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
                 if (value != borderStyle) {
@@ -433,7 +433,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DrawMode.Normal, (int)DrawMode.OwnerDrawVariable))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DrawMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DrawMode));
                 }
                 if (drawMode != value) {
                     if (MultiColumn && value == DrawMode.OwnerDrawVariable) {
@@ -623,7 +623,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1 || value > 255) {
-                    throw new ArgumentOutOfRangeException("ItemHeight", string.Format(SR.InvalidExBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture), "256"));
+                    throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidExBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture), "256"));
                 }
                 if (itemHeight != value) {
                     itemHeight = value;
@@ -881,7 +881,7 @@ namespace System.Windows.Forms {
                 int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
 
                 if (value < -1 || value >= itemCount) {
-                    throw new ArgumentOutOfRangeException("SelectedIndex", string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(SelectedIndex), string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (selectionMode == SelectionMode.None) {
@@ -1020,7 +1020,7 @@ namespace System.Windows.Forms {
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(SelectionMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SelectionMode));
                 }
 
                 if (selectionMode != value) {
@@ -1330,7 +1330,7 @@ namespace System.Windows.Forms {
 
         private void CheckIndex(int index) {
             if (index < 0 || index >= Items.Count)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
         }
 
         private void CheckNoDataSource() {
@@ -1422,7 +1422,7 @@ namespace System.Windows.Forms {
 
             // The last item in the list is still a valid starting point for a search.
             if (startIndex < -1 || startIndex >= itemCount) {
-                throw new ArgumentOutOfRangeException("startIndex");
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
             }
 
             // Always use the managed FindStringInternal instead of LB_FINDSTRING.
@@ -1456,7 +1456,7 @@ namespace System.Windows.Forms {
 
             // The last item in the list is still a valid starting point for a search.
             if (startIndex < -1 || startIndex >= itemCount) {
-                throw new ArgumentOutOfRangeException("startIndex");
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
             }
 
             // Always use the managed FindStringInternal instead of LB_FINDSTRING.
@@ -1477,7 +1477,7 @@ namespace System.Windows.Forms {
             // no items.
             //
             if (index < 0 || (index > 0 && index >= itemCount))
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
             if (drawMode != DrawMode.OwnerDrawVariable) index = 0;
 
@@ -2125,7 +2125,7 @@ namespace System.Windows.Forms {
         public void SetSelected(int index, bool value) {
             int itemCount = (itemsCollection == null) ? 0: itemsCollection.Count;
             if (index < 0 || index >= itemCount)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
             if (selectionMode == SelectionMode.None)
                 throw new InvalidOperationException(SR.ListBoxInvalidSelectionMode);
@@ -2541,7 +2541,7 @@ namespace System.Windows.Forms {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public void AddRange(ICollection items) {
                 if (items == null) {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
                 EnsureSpace(items.Count);
                 foreach(object i in items) {
@@ -3037,7 +3037,7 @@ namespace System.Windows.Forms {
             {
                 if (item == null)
                 {
-                    throw new ArgumentNullException("item");
+                    throw new ArgumentNullException(nameof(item));
                 }
                 int index = -1;
                 if (!owner.sorted)
@@ -3129,7 +3129,7 @@ namespace System.Windows.Forms {
 
                 if (items == null)
                 {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
                 owner.BeginUpdate();
                 try
@@ -3157,7 +3157,7 @@ namespace System.Windows.Forms {
             public virtual object this[int index] {
                 get {
                     if (index < 0 || index >= InnerArray.GetCount(0)) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     return InnerArray.GetItem(index, 0);
@@ -3241,7 +3241,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public int IndexOf(object value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 return InnerArray.IndexOf(value,0);
@@ -3254,7 +3254,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             internal int IndexOfIdentifier(object value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 return InnerArray.IndexOfIdentifier(value,0);
@@ -3274,11 +3274,11 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index > InnerArray.GetCount(0)) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (item == null) {
-                    throw new ArgumentNullException("item");
+                    throw new ArgumentNullException(nameof(item));
                 }
 
                 // If the combo box is sorted, then nust treat this like an add
@@ -3330,7 +3330,7 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerArray.GetCount(0)) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
@@ -3348,11 +3348,11 @@ namespace System.Windows.Forms {
 
             internal void SetItemInternal(int index, object value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 if (index < 0 || index >= InnerArray.GetCount(0)) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
@@ -3545,7 +3545,7 @@ namespace System.Windows.Forms {
             ]
             int IList.Add(object item) {
                 if (!(item is int)) {
-                    throw new ArgumentException("item");
+                    throw new ArgumentException(nameof(item));
                 }
                 return Add((int)item);
             }
@@ -3576,7 +3576,7 @@ namespace System.Windows.Forms {
             ]
             private void AddRangeInternal(ICollection items) {
                 if (items == null) {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
                 owner.BeginUpdate();
                 try
@@ -3584,7 +3584,7 @@ namespace System.Windows.Forms {
                     EnsureSpace(items.Count);
                     foreach(object item in items) {
                         if (!(item is int)) {
-                            throw new ArgumentException("item");
+                            throw new ArgumentException(nameof(item));
                         }
                         else {
                             AddInternal((int)item);
@@ -3636,7 +3636,7 @@ namespace System.Windows.Forms {
             ]
             void IList.Remove(object value) {
                 if (!(value is int)) {
-                    throw new ArgumentException("value");
+                    throw new ArgumentException(nameof(value));
                 }
                 Remove((int)value);
             }
@@ -3667,7 +3667,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void RemoveAt(int index) {
                 if (index < 0 || index >= count) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 count--;
@@ -3695,7 +3695,7 @@ namespace System.Windows.Forms {
                 set {
 
                     if (index < 0 || index >= count) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
                     innerArray[index] = (int)value;
                     owner.UpdateCustomTabOffsets();
@@ -3719,7 +3719,7 @@ namespace System.Windows.Forms {
                 ]
                 set {
                     if (!(value is int)) {
-                        throw new ArgumentException("value");
+                        throw new ArgumentException(nameof(value));
                     }
                     else {
                         this[index] = (int)value;

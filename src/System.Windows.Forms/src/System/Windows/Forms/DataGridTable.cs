@@ -542,7 +542,7 @@ namespace System.Windows.Forms {
                 
                 //valid values are 0x0 to 0x1. 
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridLineStyle.None, (int)DataGridLineStyle.Solid)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridLineStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridLineStyle));
                 }
                 if (gridLineStyle != value) {
                     gridLineStyle = value;

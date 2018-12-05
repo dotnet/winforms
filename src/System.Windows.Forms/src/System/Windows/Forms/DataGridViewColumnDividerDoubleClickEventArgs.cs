@@ -14,7 +14,7 @@ namespace System.Windows.Forms
         {
             if (columnIndex < -1)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
             this.columnIndex = columnIndex;
         }

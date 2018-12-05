@@ -969,7 +969,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1 || value > ALLOWEDIMAGES) {
-                    throw new ArgumentOutOfRangeException("StateImageIndex", string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(StateImageIndex), string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
                 }
                 StateImageIndexer.Index = value;
                 if (treeView != null && !treeView.CheckBoxes)

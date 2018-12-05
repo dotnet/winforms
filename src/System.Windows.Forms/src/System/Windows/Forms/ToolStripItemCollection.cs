@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripItemCollection(ToolStrip owner, ToolStripItem[] value) {
             if (owner == null) {
-                throw new ArgumentNullException("owner");
+                throw new ArgumentNullException(nameof(owner));
             }
            
             this.owner = owner;
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void AddRange(ToolStripItem[] toolStripItems) {        
             if (toolStripItems == null) {
-                throw new ArgumentNullException("toolStripItems");
+                throw new ArgumentNullException(nameof(toolStripItems));
             }
             if (IsReadOnly) {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -155,7 +155,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void AddRange(ToolStripItemCollection toolStripItems) {
             if (toolStripItems == null) {
-                throw new ArgumentNullException("toolStripItems");
+                throw new ArgumentNullException(nameof(toolStripItems));
             }
             if (IsReadOnly) {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -226,7 +226,7 @@ namespace System.Windows.Forms {
 
         private void CheckCanAddOrInsertItem(ToolStripItem value) {
             if (value == null) {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
             if (IsReadOnly) {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -260,7 +260,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public ToolStripItem[] Find(string key, bool searchAllChildren) {            
             if ((key == null) || (key.Length == 0)) {
-              throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
+              throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
             }
 
             ArrayList foundItems =  FindInternal(key, searchAllChildren, this, new ArrayList());

@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             if (string.IsNullOrEmpty(text)) 
             {
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
         {
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             if (string.IsNullOrEmpty(text)) 
             {
@@ -317,7 +317,7 @@ namespace System.Windows.Forms
         {            
             if (dc == null)
             {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
             if (string.IsNullOrEmpty(text)) 
             {

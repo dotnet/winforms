@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
                 // Verify that the value is within the enum's range.
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(HorizontalAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
                 if (headerAlignment != value) {
                     headerAlignment = value;
@@ -480,7 +480,7 @@ namespace System.Windows.Forms {
             if (value is ListViewGroup) {
                 return Add((ListViewGroup)value);
             }
-            throw new ArgumentException("value");
+            throw new ArgumentException(nameof(value));
         }
                 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange"]/*' />

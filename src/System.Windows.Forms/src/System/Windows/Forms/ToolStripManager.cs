@@ -497,7 +497,7 @@ namespace System.Windows.Forms {
                 /// 
 
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripManagerRenderMode.Custom, (int)ToolStripManagerRenderMode.Professional)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripManagerRenderMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripManagerRenderMode));
                 }
 
                 switch (value) {
@@ -611,7 +611,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void LoadSettings(Form targetForm) {
             if (targetForm == null) {
-                throw new ArgumentNullException("targetForm");
+                throw new ArgumentNullException(nameof(targetForm));
             }
 
             LoadSettings(targetForm, targetForm.GetType().FullName);
@@ -622,11 +622,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void LoadSettings(Form targetForm, string key) {
             if (targetForm == null) {
-                throw new ArgumentNullException("targetForm");
+                throw new ArgumentNullException(nameof(targetForm));
             }
 
             if (String.IsNullOrEmpty(key)) {
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
             }
 
             ToolStripSettingsManager settingsManager = new ToolStripSettingsManager(targetForm, key);
@@ -639,7 +639,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void SaveSettings(Form sourceForm) {
             if (sourceForm == null) {
-                throw new ArgumentNullException("sourceForm");
+                throw new ArgumentNullException(nameof(sourceForm));
             }
 
             SaveSettings(sourceForm, sourceForm.GetType().FullName);
@@ -650,11 +650,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void SaveSettings(Form sourceForm, string key) {
             if (sourceForm == null) {
-                throw new ArgumentNullException("sourceForm");
+                throw new ArgumentNullException(nameof(sourceForm));
             }
 
             if (String.IsNullOrEmpty(key)) {
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
             }
 
             ToolStripSettingsManager settingsManager = new ToolStripSettingsManager(sourceForm, key); ;
@@ -1830,10 +1830,10 @@ namespace System.Windows.Forms {
         public static bool Merge(ToolStrip sourceToolStrip, ToolStrip targetToolStrip) {
             // check arguments
             if (sourceToolStrip == null) {
-                throw new ArgumentNullException("sourceToolStrip");
+                throw new ArgumentNullException(nameof(sourceToolStrip));
             }
             if (targetToolStrip == null) {
-                throw new ArgumentNullException("targetToolStrip");
+                throw new ArgumentNullException(nameof(targetToolStrip));
             }
             if (targetToolStrip == sourceToolStrip) {
                 throw new ArgumentException(SR.ToolStripMergeImpossibleIdentical);
@@ -1997,10 +1997,10 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static bool Merge(ToolStrip sourceToolStrip, string targetName) {
             if (sourceToolStrip == null) {
-                throw new ArgumentNullException("sourceToolStrip");
+                throw new ArgumentNullException(nameof(sourceToolStrip));
             }
             if (targetName == null) {
-                throw new ArgumentNullException("targetName");
+                throw new ArgumentNullException(nameof(targetName));
             }
             
             ToolStrip target = FindToolStrip(targetName);
@@ -2018,7 +2018,7 @@ namespace System.Windows.Forms {
         internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip sourceToolStrip, bool revertMDIControls) {
             bool result = false;
             if (targetToolStrip == null) {
-                throw new ArgumentNullException("targetToolStrip");
+                throw new ArgumentNullException(nameof(targetToolStrip));
             }
             if (targetToolStrip == sourceToolStrip) {
                 throw new ArgumentException(SR.ToolStripMergeImpossibleIdentical);
@@ -2118,7 +2118,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip) {
             if (sourceToolStrip == null) {
-                throw new ArgumentNullException("sourceToolStrip");
+                throw new ArgumentNullException(nameof(sourceToolStrip));
             }
             return RevertMergeInternal(targetToolStrip, sourceToolStrip, /*revertMDIControls*/false);
         }

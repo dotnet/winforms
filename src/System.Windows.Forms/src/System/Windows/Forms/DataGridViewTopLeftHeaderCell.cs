@@ -40,12 +40,12 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             if (this.DataGridView == null)
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             if (this.DataGridView == null)
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
 
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             DataGridViewAdvancedBorderStyle dgvabsEffective;
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex != -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             if (this.DataGridView == null)
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
 
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             Rectangle borderWidthsRect = BorderWidths(this.DataGridView.AdjustedTopLeftHeaderBorderStyle);
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             PaintPrivate(graphics,

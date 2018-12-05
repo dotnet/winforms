@@ -117,7 +117,7 @@ namespace System.Windows.Forms{
             set {
                //valid values are 0x0 to 0x2.
                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridLineStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridLineStyle));
                }
                 if (alignment != value) {
                     alignment = value;
@@ -917,7 +917,7 @@ namespace System.Windows.Forms{
         /// </devdoc>
         protected void CheckValidDataSource(CurrencyManager value) {
             if (value == null) {
-                throw new ArgumentNullException("value", "DataGridColumnStyle.CheckValidDataSource(DataSource value), value == null");
+                throw new ArgumentNullException(nameof(value), "DataGridColumnStyle.CheckValidDataSource(DataSource value), value == null");
             }
             // the code may delete a gridColumn that was editing
             // in that case, we still have to push the value into the backEnd

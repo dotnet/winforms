@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         {
             if (dataGridViewCellStyle == null)
             {
-                throw new ArgumentNullException("dataGridViewCellStyle");
+                throw new ArgumentNullException(nameof(dataGridViewCellStyle));
             }
             this.propertyStore = new PropertyStore();
             this.scope = DataGridViewCellStyleScopes.None;
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
                     case DataGridViewContentAlignment.BottomRight:
                         break;
                     default: 
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewContentAlignment)); 
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewContentAlignment)); 
                 }
                 this.AlignmentInternal = value;
             }
@@ -569,7 +569,7 @@ namespace System.Windows.Forms
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewTriState.NotSet, (int)DataGridViewTriState.False)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewTriState)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewTriState)); 
                 }
                 this.WrapModeInternal = value;
             }
@@ -599,7 +599,7 @@ namespace System.Windows.Forms
         {
             if (dataGridViewCellStyle == null)
             {
-                throw new ArgumentNullException("dataGridViewCellStyle");
+                throw new ArgumentNullException(nameof(dataGridViewCellStyle));
             }
             if (!dataGridViewCellStyle.BackColor.IsEmpty)
             {

@@ -696,7 +696,7 @@ namespace System.Windows.Forms {
             public virtual MenuItem this[int index] {
                 get {
                     if (index < 0 || index >= owner.ItemCount)
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     return owner.items[index];
                 }
                 // set not supported
@@ -862,7 +862,7 @@ namespace System.Windows.Forms {
 
                 // Validate our index
                 if (index < 0 || index > owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
                 }
                                 
                 if (owner.items == null || owner.items.Length == owner.ItemCount) {
@@ -888,7 +888,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void AddRange(MenuItem[] items) {
                 if (items == null) {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
                 foreach(MenuItem item in items) {
                     Add(item);
@@ -942,7 +942,7 @@ namespace System.Windows.Forms {
             public MenuItem [] Find(string key, bool searchAllChildren) {
 
                 if ((key == null) || (key.Length == 0)) {
-                    throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
+                    throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
                 
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 MenuItem item = owner.items[index];

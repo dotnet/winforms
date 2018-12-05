@@ -283,7 +283,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
                 if (BorderStyle != value) {
@@ -412,7 +412,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FlatStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
 
                 if (labelState[StateFlatStyle] != (int)value) {
@@ -513,7 +513,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (ImageIndex != value) {
                     if (value != -1) {
@@ -656,7 +656,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                  throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                  throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
                 if(value != ImageAlign) {
                     Properties.SetInteger(PropImageAlign, (int)value);
@@ -691,7 +691,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutomationLiveSetting));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
                 }
                 liveSetting = value;
             }
@@ -882,7 +882,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
 
                 if (TextAlign != value) {

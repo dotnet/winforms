@@ -167,7 +167,7 @@ namespace System.Windows.Forms
                 DataGridViewCell dataGridViewCell = value;
                 if (dataGridViewCell == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 if (dataGridViewCell.DataGridView != null)
                 {
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
         {
             if (dataGridViewCells == null)
             {
-                throw new ArgumentNullException("dataGridViewCells");
+                throw new ArgumentNullException(nameof(dataGridViewCells));
             }
             if (this.owner.DataGridView != null)
             {

@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)Appearance.Normal, (int)Appearance.Button)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(Appearance));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
                 }
 
                 if (appearance != value) {
@@ -187,7 +187,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
 
                 if (checkAlign != value) {
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
             set {
                 // valid values are 0-2 inclusive.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(CheckState));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
                 }
 
                 if (checkState != value) {

@@ -137,7 +137,7 @@ namespace System.Windows.Forms
                 
                 if (index < 0)
                 {
-                    throw new ArgumentOutOfRangeException("index");
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
                 if (index == 0 && this.owner.RowHeadersVisible)

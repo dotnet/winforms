@@ -52,10 +52,10 @@ namespace System.Resources {
         /// </devdoc>
         public ResXFileRef(string fileName, string typeName) {
             if(fileName == null) {
-                throw (new ArgumentNullException("fileName"));
+                throw (new ArgumentNullException(nameof(fileName)));
             }
             if(typeName == null) {
-                throw (new ArgumentNullException("typeName"));
+                throw (new ArgumentNullException(nameof(typeName)));
             }
             this.fileName = fileName;
             this.typeName = typeName;
@@ -244,18 +244,18 @@ namespace System.Resources {
                     if(stringValue.StartsWith("\"")) {
                         int lastIndexOfQuote = stringValue.LastIndexOf("\"");
                         if (lastIndexOfQuote-1<0)
-                            throw new ArgumentException("value");
+                            throw new ArgumentException(nameof(stringValue));
                         fileName = stringValue.Substring(1, lastIndexOfQuote-1); // remove the quotes in" ..... " 
                         if(lastIndexOfQuote+2>stringValue.Length)
-                            throw new ArgumentException("value");
+                            throw new ArgumentException(nameof(stringValue));
                         remainingString = stringValue.Substring(lastIndexOfQuote+2);
                     } else {
                         int nextSemiColumn = stringValue.IndexOf(";");
                         if(nextSemiColumn == -1)
-                            throw new ArgumentException("value");
+                            throw new ArgumentException(nameof(stringValue));
                         fileName = stringValue.Substring(0,nextSemiColumn);
                         if(nextSemiColumn+1>stringValue.Length)
-                            throw new ArgumentException("value");
+                            throw new ArgumentException(nameof(stringValue));
                         remainingString = stringValue.Substring(nextSemiColumn+1);
                     }
                     string[] parts = remainingString.Split(new char[] {';'});

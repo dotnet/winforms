@@ -127,7 +127,7 @@ namespace System.Windows.Forms {
                 }
 
 	        if (value < 0 || value> (this.listview.Columns.Count - 1)) {
-                    throw new ArgumentOutOfRangeException("DisplayIndex", SR.ColumnHeaderBadDisplayIndex);
+                    throw new ArgumentOutOfRangeException(nameof(DisplayIndex), SR.ColumnHeaderBadDisplayIndex);
 	        }
 
                 int lowDI = Math.Min(this.DisplayIndexInternal, value);
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (imageIndexer.Index != value) {
@@ -332,7 +332,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2. 
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(HorizontalAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
 
                 this.textAlign = value;
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
         public void AutoResize(ColumnHeaderAutoResizeStyle headerAutoResize) {
 
             if (headerAutoResize < ColumnHeaderAutoResizeStyle.None || headerAutoResize > ColumnHeaderAutoResizeStyle.ColumnContent) {
-                throw new InvalidEnumArgumentException("headerAutoResize", (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
+                throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
             }
 
             if (this.listview != null) {

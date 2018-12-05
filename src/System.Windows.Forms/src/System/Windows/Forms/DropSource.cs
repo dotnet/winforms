@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
             public DropSource(ISupportOleDropSource peer ) {
                 if (peer == null)
-                    throw new ArgumentNullException("peer");
+                    throw new ArgumentNullException(nameof(peer));
                 this.peer = peer;
             }
 

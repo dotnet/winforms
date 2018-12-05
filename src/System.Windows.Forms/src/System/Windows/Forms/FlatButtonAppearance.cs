@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException("BorderSize", value, string.Format(SR.InvalidLowBoundArgumentEx, "BorderSize", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(BorderSize), value, string.Format(SR.InvalidLowBoundArgumentEx, "BorderSize", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
 
                 if (borderSize != value) {
                     borderSize = value;

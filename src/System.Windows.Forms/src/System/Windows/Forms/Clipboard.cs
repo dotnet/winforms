@@ -110,15 +110,15 @@ namespace System.Windows.Forms {
             }
 
             if (data == null) {
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             }
 
             if (retryTimes < 0) {
-                throw new ArgumentOutOfRangeException("retryTimes", string.Format(SR.InvalidLowBoundArgumentEx, "retryTimes", retryTimes.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(retryTimes), string.Format(SR.InvalidLowBoundArgumentEx, "retryTimes", retryTimes.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             if (retryDelay < 0) {
-                throw new ArgumentOutOfRangeException("retryDelay", string.Format(SR.InvalidLowBoundArgumentEx, "retryDelay", retryDelay.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(retryDelay), string.Format(SR.InvalidLowBoundArgumentEx, "retryDelay", retryDelay.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
             
@@ -345,7 +345,7 @@ namespace System.Windows.Forms {
         public static bool ContainsText(TextDataFormat format) {
             // valid values are 0x0-0x4 inclusive
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue)){
-                throw new InvalidEnumArgumentException("format", (int)format, typeof(TextDataFormat));
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
 
             IDataObject dataObject = Clipboard.GetDataObject();
@@ -437,7 +437,7 @@ namespace System.Windows.Forms {
             // valid values are 0x0 to 0x4 inclusive
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
             {
-                throw new InvalidEnumArgumentException("format", (int)format, typeof(TextDataFormat));
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
 
             IDataObject dataObject = Clipboard.GetDataObject();
@@ -457,7 +457,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void SetAudio(byte[] audioBytes) {
             if (audioBytes == null) {
-                throw new ArgumentNullException("audioBytes");
+                throw new ArgumentNullException(nameof(audioBytes));
             }
             SetAudio(new MemoryStream(audioBytes));
         }
@@ -468,7 +468,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void SetAudio(Stream audioStream) {
             if (audioStream == null) {
-                throw new ArgumentNullException("audioStream");
+                throw new ArgumentNullException(nameof(audioStream));
             }
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.WaveAudio, false, audioStream);
@@ -492,7 +492,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void SetFileDropList(StringCollection filePaths) {
             if (filePaths == null) {
-                throw new ArgumentNullException("filePaths");
+                throw new ArgumentNullException(nameof(filePaths));
             }
             // throw Argument exception for zero-length filepath collection.
             if (filePaths.Count == 0)
@@ -529,7 +529,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void SetImage(Image image) {
             if (image == null) {
-                throw new ArgumentNullException("image");
+                throw new ArgumentNullException(nameof(image));
             }
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.Bitmap, true, image);
@@ -558,13 +558,13 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void SetText(string text, TextDataFormat format) {
             if (String.IsNullOrEmpty(text)) {
-                throw new ArgumentNullException("text");
+                throw new ArgumentNullException(nameof(text));
             }
 
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
             {
-                throw new InvalidEnumArgumentException("format", (int)format, typeof(TextDataFormat));
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
 
             IDataObject dataObject = new DataObject();

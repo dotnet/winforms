@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected virtual void AddCore(Binding dataBinding) {
             if (dataBinding == null)
-                throw new ArgumentNullException("dataBinding");
+                throw new ArgumentNullException(nameof(dataBinding));
 
             List.Add(dataBinding);
         }

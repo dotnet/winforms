@@ -145,7 +145,7 @@ namespace System.Windows.Forms
             string filename = FileNamesInternal[0];
 
             if (filename == null || (filename.Length == 0))
-                throw new ArgumentNullException("FileName");
+                throw new ArgumentNullException(nameof(FileName));
 
             Stream s = null;
 

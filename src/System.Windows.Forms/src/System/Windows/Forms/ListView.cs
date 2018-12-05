@@ -268,7 +268,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ItemActivation.Standard, (int)ItemActivation.TwoClick)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ItemActivation));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ItemActivation));
                 }
 
                 if (this.HotTracking && value != ItemActivation.OneClick) {
@@ -307,7 +307,7 @@ namespace System.Windows.Forms {
                                                 (int)ListViewAlignment.Left,
                                                 (int)ListViewAlignment.SnapToGrid))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ListViewAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ListViewAlignment));
                 }
                 if (alignStyle != value) {
                     alignStyle = value;
@@ -465,7 +465,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
                 if (borderStyle != value) {
@@ -964,7 +964,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ColumnHeaderStyle.None, (int)ColumnHeaderStyle.Clickable))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ColumnHeaderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ColumnHeaderStyle));
                 }
                 if (headerStyle != value) {
                     // We can switch between NONE and either *one* of the other styles without
@@ -1488,7 +1488,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)SortOrder.None, (int)SortOrder.Descending))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(SortOrder));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SortOrder));
                 }
                 if (sorting != value) {
                     sorting = value;
@@ -1648,7 +1648,7 @@ namespace System.Windows.Forms {
             set {
                 if (tileSize != value) {
                     if (value.IsEmpty || value.Height <= 0 || value.Width <= 0) {
-                        throw new ArgumentOutOfRangeException("TileSize", SR.ListViewTileSizeMustBePositive);
+                        throw new ArgumentOutOfRangeException(nameof(TileSize), SR.ListViewTileSizeMustBePositive);
                     }
 
                     tileSize = value;
@@ -1776,7 +1776,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)View.LargeIcon, (int)View.Tile))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(View));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(View));
                 }
 
                 if (value == View.Tile && VirtualMode) {
@@ -3054,7 +3054,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void EnsureVisible(int index) {
             if (index < 0 || index >= Items.Count) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             if (IsHandleCreated)
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_ENSUREVISIBLE, index, 0);
@@ -3085,7 +3085,7 @@ namespace System.Windows.Forms {
         public ListViewItem FindItemWithText(string text, bool includeSubItemsInSearch, int startIndex, bool isPrefixSearch) {
             if (startIndex < 0 || startIndex >= this.Items.Count)
             {
-                throw new ArgumentOutOfRangeException("startIndex", string.Format(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
             }
             return FindItem(true, text, isPrefixSearch, new Point(0,0), SearchDirectionHint.Down, startIndex, includeSubItemsInSearch);
         }
@@ -3107,7 +3107,7 @@ namespace System.Windows.Forms {
             }
 
             if ( searchDirection < SearchDirectionHint.Left || searchDirection > SearchDirectionHint.Down) {
-                throw new ArgumentOutOfRangeException("searchDirection", string.Format(SR.InvalidArgument, "searchDirection", (searchDirection).ToString()));
+                throw new ArgumentOutOfRangeException(nameof(searchDirection), string.Format(SR.InvalidArgument, "searchDirection", (searchDirection).ToString()));
             }
 
             // the win32 ListView::FindNearestItem does some pretty weird things to determine the nearest item.
@@ -3386,7 +3386,7 @@ namespace System.Windows.Forms {
 
         internal int GetItemState(int index, int mask) {
             if (index < 0 || ((this.VirtualMode && index >= this.VirtualListSize) || (!this.VirtualMode && index >= itemCount))) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
@@ -3407,11 +3407,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public Rectangle GetItemRect(int index, ItemBoundsPortion portion) {
             if (index < 0 || index >= this.Items.Count) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             //valid values are 0x0 to 0x3
             if (!ClientUtils.IsEnumValid(portion, (int)portion, (int)ItemBoundsPortion.Entire, (int)ItemBoundsPortion.ItemOnly)){
-                throw new InvalidEnumArgumentException("portion", (int)portion, typeof(ItemBoundsPortion));
+                throw new InvalidEnumArgumentException(nameof(portion), (int)portion, typeof(ItemBoundsPortion));
             }
 
             if (this.View == View.Details && this.Columns.Count == 0) {
@@ -3495,17 +3495,17 @@ namespace System.Windows.Forms {
                 return Rectangle.Empty;
             }
             if (itemIndex < 0 || itemIndex >= this.Items.Count) {
-                throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(itemIndex), string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
             }
             int subItemCount = Items[itemIndex].SubItems.Count;
 
             if (subItemIndex < 0 || subItemIndex >= subItemCount) {
-                throw new ArgumentOutOfRangeException("subItemIndex", string.Format(SR.InvalidArgument, "subItemIndex", (subItemIndex).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(subItemIndex), string.Format(SR.InvalidArgument, "subItemIndex", (subItemIndex).ToString(CultureInfo.CurrentCulture)));
             }
             //valid values are 0x0 to 0x3
             if (!ClientUtils.IsEnumValid(portion, (int)portion, (int)ItemBoundsPortion.Entire, (int)ItemBoundsPortion.ItemOnly))
             {
-                throw new InvalidEnumArgumentException("portion", (int)portion, typeof(ItemBoundsPortion));
+                throw new InvalidEnumArgumentException(nameof(portion), (int)portion, typeof(ItemBoundsPortion));
             }
 
             if (this.Columns.Count == 0) {
@@ -3600,7 +3600,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         internal ColumnHeader InsertColumn(int index, ColumnHeader ch, bool refreshSubItems) {
             if (ch == null)
-                throw new ArgumentNullException("ch");
+                throw new ArgumentNullException(nameof(ch));
             if (ch.OwnerListview != null)
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, ch.Text), "ch");
 
@@ -4663,22 +4663,22 @@ namespace System.Windows.Forms {
             {
                 if (startIndex < 0 || startIndex >= this.VirtualListSize)
                 {
-                    throw new ArgumentOutOfRangeException("startIndex", string.Format(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (endIndex < 0 || endIndex >= this.VirtualListSize)
                 {
-                    throw new ArgumentOutOfRangeException("endIndex", string.Format(SR.InvalidArgument, "endIndex", (endIndex).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(endIndex), string.Format(SR.InvalidArgument, "endIndex", (endIndex).ToString(CultureInfo.CurrentCulture)));
                 }
             }
             else
             {
                 if (startIndex < 0 || startIndex >= this.Items.Count)
                 {
-                    throw new ArgumentOutOfRangeException("startIndex", string.Format(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(SR.InvalidArgument, "startIndex", (startIndex).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (endIndex < 0 || endIndex >= this.Items.Count)
                 {
-                    throw new ArgumentOutOfRangeException("endIndex", string.Format(SR.InvalidArgument, "endIndex", (endIndex).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(endIndex), string.Format(SR.InvalidArgument, "endIndex", (endIndex).ToString(CultureInfo.CurrentCulture)));
                 }
             }
             if (startIndex > endIndex)
@@ -4908,13 +4908,13 @@ namespace System.Windows.Forms {
             if ((columnIndex < 0) ||
                 (columnIndex >= 0 && this.columnHeaders == null) ||
                 (columnIndex >= this.columnHeaders.Length)) {
-                throw new ArgumentOutOfRangeException("columnIndex", string.Format(SR.InvalidArgument, "columnIndex", (columnIndex).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(columnIndex), string.Format(SR.InvalidArgument, "columnIndex", (columnIndex).ToString(CultureInfo.CurrentCulture)));
             }
 
             //valid values are 0x0 to 0x2
             if (!ClientUtils.IsEnumValid(headerAutoResize, (int)headerAutoResize, (int)ColumnHeaderAutoResizeStyle.None, (int)ColumnHeaderAutoResizeStyle.ColumnContent))
             {
-                throw new InvalidEnumArgumentException("headerAutoResize", (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
+                throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
             }
 
 
@@ -5041,7 +5041,7 @@ namespace System.Windows.Forms {
 
         internal void SetItemImage(int index, int image) {
             if (index < 0 || ((this.VirtualMode && index >= this.VirtualListSize) || (!this.VirtualMode && index >= itemCount))) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             if (this.IsHandleCreated) {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
@@ -5054,7 +5054,7 @@ namespace System.Windows.Forms {
 
         internal void SetItemIndentCount(int index, int indentCount) {
             if (index < 0 || ((this.VirtualMode && index >= this.VirtualListSize) || (!this.VirtualMode && index >= itemCount))) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             if (this.IsHandleCreated) {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
@@ -5069,7 +5069,7 @@ namespace System.Windows.Forms {
             if (VirtualMode)
                 return;
             if (index < 0 || index >= itemCount)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
@@ -5081,7 +5081,7 @@ namespace System.Windows.Forms {
 
         internal void SetItemState(int index, int state, int mask) {
             if (index < -1 || ((this.VirtualMode && index >= this.VirtualListSize) || (!this.VirtualMode && index >= itemCount))) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             Debug.Assert(index == -1 || this.IsHandleCreated, "How did we add items without a handle?");
 
@@ -6455,7 +6455,7 @@ namespace System.Windows.Forms {
                 get {
 
                     if (index < 0) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     // Loop through the main collection until we find the right index.
@@ -6474,7 +6474,7 @@ namespace System.Windows.Forms {
                     }
 
                     // Should never get to this point.
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
             }
 
@@ -7023,7 +7023,7 @@ namespace System.Windows.Forms {
                 get {
 
                     if (index < 0 || index >= Count) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     if (owner.IsHandleCreated) {
@@ -7188,7 +7188,7 @@ namespace System.Windows.Forms {
                 {
                     if (itemIndex < 0 || itemIndex >= this.owner.VirtualListSize)
                     {
-                        throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(itemIndex), string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (this.owner.IsHandleCreated)
                     {
@@ -7204,7 +7204,7 @@ namespace System.Windows.Forms {
                 {
                     if (itemIndex < 0 || itemIndex >= this.owner.Items.Count)
                     {
-                        throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(itemIndex), string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
                     }
                     this.owner.Items[itemIndex].Selected = true;
                     return this.Count;
@@ -7252,7 +7252,7 @@ namespace System.Windows.Forms {
                 {
                     if (itemIndex < 0 || itemIndex >= this.owner.VirtualListSize)
                     {
-                        throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(itemIndex), string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (this.owner.IsHandleCreated)
                     {
@@ -7263,7 +7263,7 @@ namespace System.Windows.Forms {
                 {
                     if (itemIndex < 0 || itemIndex >= this.owner.Items.Count)
                     {
-                        throw new ArgumentOutOfRangeException("itemIndex", string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(itemIndex), string.Format(SR.InvalidArgument, "itemIndex", (itemIndex).ToString(CultureInfo.CurrentCulture)));
                     }
                     this.owner.Items[itemIndex].Selected = false;
                 }
@@ -7365,7 +7365,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (index < 0 || index >= Count) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     if (owner.IsHandleCreated) {
@@ -7682,7 +7682,7 @@ namespace System.Windows.Forms {
             public virtual ColumnHeader this[int index] {
                 get {
                     if (owner.columnHeaders == null || index < 0 || index >= owner.columnHeaders.Length)
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     return owner.columnHeaders[index];
                 }
             }
@@ -7932,7 +7932,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void AddRange(ColumnHeader[] values) {
                 if (values == null) {
-                    throw new ArgumentNullException("values");
+                    throw new ArgumentNullException(nameof(values));
                 }
 
                 Hashtable usedIndices = new Hashtable();
@@ -8059,7 +8059,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void Insert(int index, ColumnHeader value) {
                 if (index < 0 || index > Count) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
                 owner.InsertColumn(index, value);
             }
@@ -8165,7 +8165,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= owner.columnHeaders.Length)
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                 int w = owner.columnHeaders[index].Width; // Update width before detaching from ListView
 
@@ -8359,14 +8359,14 @@ namespace System.Windows.Forms {
             public virtual ListViewItem this[int index] {
                 get {
                     if (index < 0 || index >= InnerList.Count) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     return InnerList[index];
                 }
                 set {
                     if (index < 0 || index >= InnerList.Count) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     }
 
                     InnerList[index] = value;
@@ -8506,7 +8506,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void AddRange(ListViewItem[] items) {
                 if (items == null) {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
 
                 InnerList.AddRange(items);
@@ -8518,7 +8518,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void AddRange(ListViewItemCollection items) {
                 if (items == null) {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
 
                 ListViewItem[] itemArray = new ListViewItem[items.Count];
@@ -8698,7 +8698,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public ListViewItem Insert(int index, ListViewItem item) {
                 if (index < 0 || index > Count) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
                 InnerList.Insert(index, item);
                 return item;
@@ -8777,7 +8777,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= Count) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 InnerList.RemoveAt(index);
@@ -8853,7 +8853,7 @@ namespace System.Windows.Forms {
                     }
                     else {
                         if (displayIndex < 0 || displayIndex >= owner.itemCount)
-                            throw new ArgumentOutOfRangeException("displayIndex", string.Format(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
+                            throw new ArgumentOutOfRangeException(nameof(displayIndex), string.Format(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
 
                         if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed) {
                             Debug.Assert(owner.listItemsArray == null, "listItemsArray not null, even though handle created");
@@ -8872,7 +8872,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (displayIndex < 0 || displayIndex >= owner.itemCount)
-                        throw new ArgumentOutOfRangeException("displayIndex", string.Format(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(displayIndex), string.Format(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
 
                     if (this.owner.ExpectingMouseUp) {
                         this.owner.ItemCollectionChangedInMouseDown = true;
@@ -8910,7 +8910,7 @@ namespace System.Windows.Forms {
 
             public void AddRange(ListViewItem[] values) {
                 if (values == null) {
-                    throw new ArgumentNullException("values");
+                    throw new ArgumentNullException(nameof(values));
                 }
 
                 if (owner.VirtualMode) {
@@ -9076,7 +9076,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index > count) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (owner.VirtualMode) {
@@ -9133,7 +9133,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index >= owner.itemCount)
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                 Debug.Assert(!this.owner.FlipViewToLargeIconAndSmallIcon || this.Count == 0, "the FlipView... bit is turned off after adding 1 item.");
                 

@@ -239,10 +239,10 @@ namespace System.Windows.Forms {
 
                 if (!value.IsEmpty) {
                     if (value.Start < 0) {
-                        throw new ArgumentOutOfRangeException("LinkArea", value, SR.LinkLabelAreaStart);
+                        throw new ArgumentOutOfRangeException(nameof(LinkArea), value, SR.LinkLabelAreaStart);
                     }
                     if (value.Length < -1) {
-                        throw new ArgumentOutOfRangeException("LinkArea", value, SR.LinkLabelAreaLength);
+                        throw new ArgumentOutOfRangeException(nameof(LinkArea), value, SR.LinkLabelAreaLength);
                     }
 
                     if (value.Start != 0 || value.Length != 0) {
@@ -284,7 +284,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)LinkBehavior.SystemDefault, (int)LinkBehavior.NeverUnderline)){
-                    throw new InvalidEnumArgumentException("LinkBehavior", (int)value, typeof(LinkBehavior));
+                    throw new InvalidEnumArgumentException(nameof(LinkBehavior), (int)value, typeof(LinkBehavior));
                 }
                 if (value != linkBehavior) {
                     linkBehavior = value;
@@ -873,7 +873,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int)DialogResult.No))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DialogResult));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DialogResult));
                 }
 
                 dialogResult = value;
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public LinkCollection(LinkLabel owner) {
                 if (owner == null)
-                    throw new ArgumentNullException("owner");
+                    throw new ArgumentNullException(nameof(owner));
                 this.owner = owner;
             }
 

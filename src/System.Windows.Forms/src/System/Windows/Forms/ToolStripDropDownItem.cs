@@ -154,7 +154,7 @@ namespace System.Windows.Forms {
                    case ToolStripDropDownDirection.Default:
                       break;
                    default:
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripDropDownDirection));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripDropDownDirection));
                 }
 
                 if (toolStripDropDownDirection != value) {

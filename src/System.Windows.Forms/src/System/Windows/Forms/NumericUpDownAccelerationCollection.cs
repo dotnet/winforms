@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         {
             if( acceleration == null )
             {
-                throw new ArgumentNullException("acceleration");
+                throw new ArgumentNullException(nameof(acceleration));
             }
 
             // Keep the array sorted, insert in the right spot.
@@ -129,7 +129,7 @@ namespace System.Windows.Forms
         {
             if (accelerations == null)
             {
-                throw new ArgumentNullException("accelerations");
+                throw new ArgumentNullException(nameof(accelerations));
             }
 
             // Accept the range only if ALL elements in the array are not null.

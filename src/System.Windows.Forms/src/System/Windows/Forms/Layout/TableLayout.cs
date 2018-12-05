@@ -111,7 +111,7 @@ namespace System.Windows.Forms.Layout {
     
         private static void Sort(Object[] array, IComparer comparer) {
             if (array == null)
-                throw new ArgumentNullException("array");
+                throw new ArgumentNullException(nameof(array));
 
             if (array.Length > 1) {
                 SorterObjectArray sorter = new SorterObjectArray(array, comparer);

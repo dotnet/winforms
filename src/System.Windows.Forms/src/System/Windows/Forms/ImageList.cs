@@ -98,7 +98,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public ImageList(IContainer container) : this() {
             if (container == null) {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
             container.Add(this);
@@ -172,7 +172,7 @@ namespace System.Windows.Forms {
                                                     (int)ColorDepth.Depth16Bit,
                                                     (int)ColorDepth.Depth24Bit,
                                                     (int)ColorDepth.Depth32Bit)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ColorDepth));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ColorDepth));
                 }
 
                 if (colorDepth != value) {
@@ -263,11 +263,11 @@ namespace System.Windows.Forms {
                 // to keep people's systems from crashing.
                 //
                 if (value.Width <= 0 || value.Width > maxImageWidth) {
-                    throw new ArgumentOutOfRangeException("ImageSize", string.Format(SR.InvalidBoundArgument, "ImageSize.Width", value.Width.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageWidth.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(ImageSize), string.Format(SR.InvalidBoundArgument, "ImageSize.Width", value.Width.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageWidth.ToString()));
                 }
 
                 if (value.Height <= 0 || value.Height > maxImageHeight) {
-                    throw new ArgumentOutOfRangeException("ImageSize", string.Format(SR.InvalidBoundArgument, "ImageSize.Height", value.Height.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageHeight.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(ImageSize), string.Format(SR.InvalidBoundArgument, "ImageSize.Height", value.Height.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageHeight.ToString()));
                 }
 
                 if (imageSize.Width != value.Width || imageSize.Height != value.Height) {
@@ -619,7 +619,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Draw(Graphics g, int x, int y, int width, int height, int index) {
             if (index < 0 || index >= Images.Count)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
             IntPtr dc = g.GetHdc();
             try {
                 SafeNativeMethods.ImageList_DrawEx(new HandleRef(this, Handle), index, new HandleRef(g, dc), x, y,
@@ -686,7 +686,7 @@ namespace System.Windows.Forms {
         [ResourceConsumption(ResourceScope.Machine | ResourceScope.Process, ResourceScope.Machine | ResourceScope.Process)]
         private Bitmap GetBitmap(int index) {
             if (index < 0 || index >= Images.Count)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
             Bitmap result=null;
 
@@ -819,7 +819,7 @@ namespace System.Windows.Forms {
             int count = SafeNativeMethods.ImageList_GetImageCount(handleUse);
 
             if (index < 0 || index >= count)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString()));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString()));
 
             if (temp != null) {
                 Size size = temp.Size;
@@ -1133,15 +1133,15 @@ namespace System.Windows.Forms {
                 [ResourceConsumption(ResourceScope.Machine)]
                 get {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                     return owner.GetBitmap(index);
                 }
                 set {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                     if (value == null) {
-                        throw new ArgumentNullException("value");
+                        throw new ArgumentNullException(nameof(value));
                     }
 
                    if (!(value is Bitmap))
@@ -1276,7 +1276,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void Add(Icon value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 Add(new Original(value.Clone(), OriginalOptions.OwnsImage), null); // WHY WHY WHY do we clone here...
                 // changing it now is a breaking change, so we have to keep track of this specific icon and dispose that
@@ -1288,7 +1288,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void Add(Image value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 Original original = new Original(value, OriginalOptions.Default);
                 Add(original, null);
@@ -1302,7 +1302,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public int Add(Image value, Color transparentColor) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 Original original = new Original(value, OriginalOptions.CustomTransparentColor,
                                                  transparentColor);
@@ -1311,7 +1311,7 @@ namespace System.Windows.Forms {
 
             private int Add(Original original, ImageInfo imageInfo) {
                 if (original == null || original.image == null) {
-                    throw new ArgumentNullException("original");
+                    throw new ArgumentNullException(nameof(original));
                 }
 
                 int index = -1;
@@ -1369,7 +1369,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void AddRange(Image[] images) {
                 if (images == null) {
-                    throw new ArgumentNullException("images");
+                    throw new ArgumentNullException(nameof(images));
                 }
                 owner.inAddRange = true;
                 foreach(Image image in images) {
@@ -1387,7 +1387,7 @@ namespace System.Windows.Forms {
             public int AddStrip(Image value) {
 
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 // strip width must be a positive multiple of image list width
@@ -1569,7 +1569,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void RemoveAt(int index) {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                 AssertInvariant();
                 bool ok = SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), index);

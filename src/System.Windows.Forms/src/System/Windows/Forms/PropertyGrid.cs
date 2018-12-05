@@ -1037,7 +1037,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)PropertySort.NoSort, (int)PropertySort.CategorizedAlphabetical)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(PropertySort));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PropertySort));
                 }
                 ToolStripButton newButton;
                 
@@ -3972,7 +3972,7 @@ namespace System.Windows.Forms {
             Debug.Assert(viewTabs != null, "Tab array destroyed!");
 
             if (tabIndex >= viewTabs.Length || tabIndex < 0) {
-                throw new ArgumentOutOfRangeException("tabIndex", SR.PropertyGridBadTabIndex);
+                throw new ArgumentOutOfRangeException(nameof(tabIndex), SR.PropertyGridBadTabIndex);
             }
 
             if (viewTabScopes[tabIndex] == PropertyTabScope.Static) {
