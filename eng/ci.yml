@@ -46,7 +46,7 @@ jobs:
           value: ''
         
         # Override some values if we're building publicly
-        - ${{ if eq(parameters.runAsPublic, 'false') }}:
+        - ${{ if eq(parameters.runAsPublic, 'true') }}:
 
           - group: Helix Anonymous
           - name: _HelixToken
