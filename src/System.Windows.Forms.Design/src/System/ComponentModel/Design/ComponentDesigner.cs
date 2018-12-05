@@ -186,11 +186,6 @@ namespace System.ComponentModel.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-        ~ComponentDesigner()
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
-
         /// <summary>
         ///     <para>
         ///         Disposes of the resources (other than memory) used
