@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.ToolStripOverflow"]/*' />
         public ToolStripOverflow (ToolStripItem parentItem) : base(parentItem) {
             if (parentItem == null) {
-                throw new ArgumentNullException("parentItem");
+                throw new ArgumentNullException(nameof(parentItem));
             }
             ownerItem = parentItem as ToolStripOverflowButton;
         }

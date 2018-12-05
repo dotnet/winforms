@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.BindingSource1"]/* />
         public BindingSource(System.ComponentModel.IContainer container) : this() {
             if (container == null) {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
             container.Add(this);

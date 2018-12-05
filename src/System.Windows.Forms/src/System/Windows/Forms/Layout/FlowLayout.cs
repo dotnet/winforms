@@ -287,7 +287,7 @@ namespace System.Windows.Forms.Layout {
         public static void SetFlowDirection(IArrangedElement container, FlowDirection value) {
             //valid values are 0x0 to 0x3
             if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlowDirection.LeftToRight, (int)FlowDirection.BottomUp)){
-                throw new InvalidEnumArgumentException("value", (int)value, typeof(FlowDirection));
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlowDirection));
             }
             container.Properties.SetInteger(_flowDirectionProperty, (int) value);
             LayoutTransaction.DoLayout(container, container, PropertyNames.FlowDirection);

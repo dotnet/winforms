@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public Timer(IContainer container) : this() {
             if (container == null) {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
             container.Add(this);
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
             set {
                 lock(syncObj) {
                     if (value < 1)
-                        throw new ArgumentOutOfRangeException("Interval", string.Format(SR.TimerInvalidInterval, value, (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(Interval), string.Format(SR.TimerInvalidInterval, value, (0).ToString(CultureInfo.CurrentCulture)));
 
                     if (interval != value) {
                         interval = value;

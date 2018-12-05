@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
         ]
         public DataGridRow(DataGrid dataGrid, DataGridTableStyle dgTable, int rowNumber) {
             if (dataGrid == null || dgTable.DataGrid == null)
-                throw new ArgumentNullException("dataGrid");
+                throw new ArgumentNullException(nameof(dataGrid));
             if (rowNumber < 0)
                 throw new ArgumentException(SR.DataGridRowRowNumber, "rowNumber");
             // this.dataGrid = dataGrid;

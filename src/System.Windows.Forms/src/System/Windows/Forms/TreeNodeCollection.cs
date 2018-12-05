@@ -59,13 +59,13 @@ namespace System.Windows.Forms {
         public virtual TreeNode this[int index] {
             get {
                 if (index < 0 || index >= owner.childCount) {
-                    throw new ArgumentOutOfRangeException("index");
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
                 return owner.children[index];
             }
             set {
                 if (index < 0 || index >= owner.childCount)
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;
@@ -236,7 +236,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public virtual void AddRange(TreeNode[] nodes) {
             if (nodes == null) {
-                throw new ArgumentNullException("nodes");
+                throw new ArgumentNullException(nameof(nodes));
             }
             if (nodes.Length == 0)
                 return;
@@ -314,7 +314,7 @@ namespace System.Windows.Forms {
        
         private int AddInternal(TreeNode node, int delta) {
             if (node == null) {
-                throw new ArgumentNullException("node");
+                throw new ArgumentNullException(nameof(node));
             }
             if (node.handle != IntPtr.Zero)
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
@@ -353,7 +353,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         int IList.Add(object node) {
             if (node == null) {
-                throw new ArgumentNullException("node");
+                throw new ArgumentNullException(nameof(node));
             }
             else if (node is TreeNode) {
                 return Add((TreeNode)node);

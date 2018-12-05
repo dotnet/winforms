@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
         public DataGridTableStyle this[string tableName] {
             get {
                 if (tableName == null)
-                    throw new ArgumentNullException("tableName");
+                    throw new ArgumentNullException(nameof(tableName));
                 int itemCount = items.Count;
                 for (int i = 0; i < itemCount; ++i) {
                     DataGridTableStyle table = (DataGridTableStyle)items[i];
@@ -210,7 +210,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public virtual void AddRange(DataGridTableStyle[] tables) {
             if (tables == null) {
-                throw new ArgumentNullException("tables");
+                throw new ArgumentNullException(nameof(tables));
             }
             foreach(DataGridTableStyle table in tables) {
                 table.DataGrid = owner;

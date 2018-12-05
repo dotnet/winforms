@@ -117,7 +117,7 @@ namespace System.Windows.Forms {
                                              (int)Border3DStyle.SunkenInner,
                                              (int)Border3DStyle.SunkenOuter
                                                 )) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(Border3DStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Border3DStyle));
                 }
                
                 if (borderStyle != value) {
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutomationLiveSetting));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
                 }
                 liveSetting = value;
             }

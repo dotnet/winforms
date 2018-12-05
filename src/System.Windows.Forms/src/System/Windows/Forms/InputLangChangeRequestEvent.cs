@@ -69,7 +69,7 @@ namespace System.Windows.Forms {
         public InputLanguageChangingEventArgs(InputLanguage inputLanguage, bool sysCharSet) {
 
             if (inputLanguage == null)
-                throw new ArgumentNullException("inputLanguage");
+                throw new ArgumentNullException(nameof(inputLanguage));
 
             this.inputLanguage = inputLanguage;
             this.culture = inputLanguage.Culture;

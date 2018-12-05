@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoSizeMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
                 
                 if (GetAutoSizeMode() != value) {                    
@@ -172,7 +172,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                     }
 
                     borderStyle = value;

@@ -293,7 +293,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                     }
 
                     borderStyle = value;
@@ -571,7 +571,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (ImageIndexer.Index != value) {
@@ -758,10 +758,10 @@ namespace System.Windows.Forms {
             set {
                 if (indent != value) {
                     if (value < 0) {
-                        throw new ArgumentOutOfRangeException("Indent", string.Format(SR.InvalidLowBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(Indent), string.Format(SR.InvalidLowBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value > MaxIndent) {
-                        throw new ArgumentOutOfRangeException("Indent", string.Format(SR.InvalidHighBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (MaxIndent).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(Indent), string.Format(SR.InvalidHighBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (MaxIndent).ToString(CultureInfo.CurrentCulture)));
                     }
                     indent = value;
                     if (IsHandleCreated) {
@@ -800,10 +800,10 @@ namespace System.Windows.Forms {
             set {
                 if (itemHeight != value) {
                     if (value < 1) {
-                        throw new ArgumentOutOfRangeException("ItemHeight", string.Format(SR.InvalidLowBoundArgumentEx, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidLowBoundArgumentEx, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value >= Int16.MaxValue) {
-                        throw new ArgumentOutOfRangeException("ItemHeight", string.Format(SR.InvalidHighBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), Int16.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidHighBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), Int16.MaxValue.ToString(CultureInfo.CurrentCulture)));
                     }
                     itemHeight = value;
                     if (IsHandleCreated) {
@@ -917,7 +917,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TreeViewDrawMode.Normal, (int)TreeViewDrawMode.OwnerDrawAll))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(TreeViewDrawMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TreeViewDrawMode));
                 }
 
                 if (drawMode != value) {
@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("SelectedImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "SelectedImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(SelectedImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "SelectedImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (SelectedImageIndexer.Index != value) {
                     SelectedImageIndexer.Index = value;

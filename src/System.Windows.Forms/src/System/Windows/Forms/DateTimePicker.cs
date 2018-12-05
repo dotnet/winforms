@@ -574,7 +574,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)LeftRightAlignment.Left, (int)LeftRightAlignment.Right)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(LeftRightAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LeftRightAlignment));
                 }
 
                 SetStyleBit((value == LeftRightAlignment.Right), NativeMethods.DTS_RIGHTALIGN);
@@ -631,7 +631,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x1, 0x2,0x4,0x8. max number of bits on at a time is 1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DateTimePickerFormat.Long, (int)DateTimePickerFormat.Custom, /*maxNumberOfBitsOn*/1))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DateTimePickerFormat));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DateTimePickerFormat));
                 }
 
                 if (format != value) {
@@ -720,12 +720,12 @@ namespace System.Windows.Forms {
                 if (value != max) {
                     if (value < EffectiveMinDate(min))
                     {
-                        throw new ArgumentOutOfRangeException("MaxDate", string.Format(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDateTime(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(MaxDate), string.Format(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDateTime(value), "MinDate"));
                     }
 
                     // If trying to set the maximum greater than MaxDateTime, throw.
                     if (value > MaximumDateTime) {
-                        throw new ArgumentOutOfRangeException("MaxDate", string.Format(SR.DateTimePickerMaxDate, FormatDateTime(DateTimePicker.MaxDateTime)));
+                        throw new ArgumentOutOfRangeException(nameof(MaxDate), string.Format(SR.DateTimePickerMaxDate, FormatDateTime(DateTimePicker.MaxDateTime)));
                     }
 
                     max = value;
@@ -774,13 +774,13 @@ namespace System.Windows.Forms {
                 {
                     if (value > EffectiveMaxDate(max))
                     {
-                        throw new ArgumentOutOfRangeException("MinDate", string.Format(SR.InvalidHighBoundArgument, "MinDate", FormatDateTime(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.InvalidHighBoundArgument, "MinDate", FormatDateTime(value), "MaxDate"));
                     }
 
                     // If trying to set the minimum less than MinimumDateTime, throw.
                     if (value < MinimumDateTime)
                     {
-                        throw new ArgumentOutOfRangeException("MinDate", string.Format(SR.DateTimePickerMinDate, FormatDateTime(DateTimePicker.MinimumDateTime)));
+                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.DateTimePickerMinDate, FormatDateTime(DateTimePicker.MinimumDateTime)));
                     }
 
                     min = value;
@@ -1015,7 +1015,7 @@ namespace System.Windows.Forms {
                 // update anyway.
                 if (!userHasSetValue || valueChanged) {
                     if ((value < MinDate) || (value > MaxDate)) {
-                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", FormatDateTime(value), "'MinDate'", "'MaxDate'"));
+                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", FormatDateTime(value), "'MinDate'", "'MaxDate'"));
                     }
 
                     string oldText = this.Text;

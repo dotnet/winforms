@@ -3885,7 +3885,7 @@ namespace System.Windows.Forms {
 
             internal OleInterfaces(AxHost host) {
                 if (host == null)
-                    throw new ArgumentNullException("host");
+                    throw new ArgumentNullException(nameof(host));
                 this.host = host;
             }
 
@@ -6525,7 +6525,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == null) {
-                    throw new ArgumentNullException("destinationType");
+                    throw new ArgumentNullException(nameof(destinationType));
                 }
 
                 if (destinationType == typeof(byte[])) {

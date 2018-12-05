@@ -18,11 +18,11 @@ namespace System.Windows.Forms
         {
             if (rowIndex < 0)
             {
-                throw new ArgumentOutOfRangeException("rowIndex", string.Format(SR.InvalidLowBoundArgumentEx, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(rowIndex), string.Format(SR.InvalidLowBoundArgumentEx, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
             if (rowCount < 1)
             {
-                throw new ArgumentOutOfRangeException("rowCount", string.Format(SR.InvalidLowBoundArgumentEx, "rowCount", rowCount.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(rowCount), string.Format(SR.InvalidLowBoundArgumentEx, "rowCount", rowCount.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
             }
             this.rowIndex = rowIndex;
             this.rowCount = rowCount;

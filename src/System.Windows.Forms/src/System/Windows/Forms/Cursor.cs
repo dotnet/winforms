@@ -614,7 +614,7 @@ namespace System.Windows.Forms {
         private  void LoadPicture(UnsafeNativeMethods.IStream stream) {
 
             if (stream == null) {
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
             }
             try {
                 Guid g = typeof(UnsafeNativeMethods.IPicture).GUID;
@@ -663,7 +663,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal void SavePicture(Stream stream) {
             if (stream == null) {
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
             }
             if(this.resourceId != 0) {
                 throw new FormatException(SR.CursorCannotCovertToBytes);

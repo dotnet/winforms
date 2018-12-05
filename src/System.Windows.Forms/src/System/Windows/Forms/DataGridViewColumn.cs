@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                    case DataGridViewAutoSizeColumnMode.Fill:
                        break;
                    default: 
-                       throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridViewAutoSizeColumnMode)); 
+                       throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnMode)); 
                 }
                 if (this.autoSizeMode != value)
                 {
@@ -365,17 +365,17 @@ namespace System.Windows.Forms
                 {
                     if (value == Int32.MaxValue)
                     {
-                        throw new ArgumentOutOfRangeException("DisplayIndex", value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, Int32.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, Int32.MaxValue.ToString(CultureInfo.CurrentCulture)));
                     }
                     if (this.DataGridView != null)
                     {
                         if (value < 0)
                         {
-                            throw new ArgumentOutOfRangeException("DisplayIndex", value, string.Format(SR.DataGridViewColumn_DisplayIndexNegative));
+                            throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexNegative));
                         }
                         if (value >= this.DataGridView.Columns.Count)
                         {
-                            throw new ArgumentOutOfRangeException("DisplayIndex", value, string.Format(SR.DataGridViewColumn_DisplayIndexExceedsColumnCount));
+                            throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexExceedsColumnCount));
                         }
                         // Will throw an error if a visible frozen column is placed inside a non-frozen area or vice-versa.
                         this.DataGridView.OnColumnDisplayIndexChanging(this, value);
@@ -396,7 +396,7 @@ namespace System.Windows.Forms
                     {
                         if (value < -1)
                         {
-                            throw new ArgumentOutOfRangeException("DisplayIndex", value, string.Format(SR.DataGridViewColumn_DisplayIndexTooNegative));
+                            throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooNegative));
                         }
                         this.displayIndex = value;
                     }
@@ -485,11 +485,11 @@ namespace System.Windows.Forms
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException("FillWeight", string.Format(SR.InvalidLowBoundArgument, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(FillWeight), string.Format(SR.InvalidLowBoundArgument, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (value > (float)ushort.MaxValue)
                 {
-                    throw new ArgumentOutOfRangeException("FillWeight", string.Format(SR.InvalidHighBoundArgumentEx, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(FillWeight), string.Format(SR.InvalidHighBoundArgumentEx, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (this.DataGridView != null)
                 {
@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms
                 case DataGridViewAutoSizeColumnMode.Fill:
                     break;
                 default: 
-                    throw new InvalidEnumArgumentException("value", (int) autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode)); 
+                    throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int) autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode)); 
              }
 
             DataGridView dataGridView = this.DataGridView;

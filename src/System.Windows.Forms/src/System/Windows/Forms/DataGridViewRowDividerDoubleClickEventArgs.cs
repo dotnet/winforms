@@ -14,7 +14,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex < -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             this.rowIndex = rowIndex;
         }

@@ -1328,7 +1328,7 @@ namespace System.Windows.Forms {
                     }
                     break;
                 default:
-                    throw new InvalidEnumArgumentException("mode", (int)mode, typeof(UnhandledExceptionMode));
+                    throw new InvalidEnumArgumentException(nameof(mode), (int)mode, typeof(UnhandledExceptionMode));
             }
         }
 

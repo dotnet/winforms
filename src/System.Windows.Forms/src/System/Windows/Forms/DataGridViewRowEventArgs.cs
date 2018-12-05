@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         {
             if (dataGridViewRow == null)
             {
-                throw new ArgumentNullException("dataGridViewRow");
+                throw new ArgumentNullException(nameof(dataGridViewRow));
             }
             Debug.Assert(dataGridViewRow.Index >= -1);
             this.dataGridViewRow = dataGridViewRow;

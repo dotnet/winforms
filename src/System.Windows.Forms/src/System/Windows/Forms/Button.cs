@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoSizeMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
                 
                 if (GetAutoSizeMode() != value) {                    
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int) DialogResult.No)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DialogResult));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DialogResult));
                 }
                 dialogResult = value;
             }

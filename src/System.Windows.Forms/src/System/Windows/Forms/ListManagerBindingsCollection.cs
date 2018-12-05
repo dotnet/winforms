@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
 
         protected override void AddCore(Binding dataBinding) {
             if (dataBinding == null)
-                throw new ArgumentNullException("dataBinding");
+                throw new ArgumentNullException(nameof(dataBinding));
             if (dataBinding.BindingManagerBase == bindingManagerBase)
                 throw new ArgumentException(SR.BindingsCollectionAdd1, "dataBinding");
             if (dataBinding.BindingManagerBase != null)

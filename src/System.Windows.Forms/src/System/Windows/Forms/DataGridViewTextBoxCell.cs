@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 //}
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("MaxInputLength", string.Format(SR.InvalidLowBoundArgumentEx, "MaxInputLength", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(MaxInputLength), string.Format(SR.InvalidLowBoundArgumentEx, "MaxInputLength", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 this.Properties.SetInteger(PropTextBoxCellMaxInputLength, value);
                 if (OwnsEditingTextBox(this.RowIndex))
@@ -306,7 +306,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             if (this.DataGridView == null || rowIndex < 0 || this.OwningColumn == null)
@@ -362,7 +362,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             if (this.DataGridView == null ||
@@ -427,7 +427,7 @@ namespace System.Windows.Forms
 
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             Size preferredSize;
@@ -631,7 +631,7 @@ namespace System.Windows.Forms
         {
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
 
             PaintPrivate(graphics, 

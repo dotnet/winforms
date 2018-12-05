@@ -2033,7 +2033,7 @@ namespace System.Windows.Forms {
                 ISupportToolStripPanel control = value as ISupportToolStripPanel;
                 
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 if (control == null) {
                     throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));                 
@@ -2053,7 +2053,7 @@ namespace System.Windows.Forms {
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void AddRange(Control[] value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 ToolStripPanel currentOwner = ToolStripPanel;
@@ -2173,7 +2173,7 @@ namespace System.Windows.Forms {
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Insert(int index, Control value) {
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 ISupportToolStripPanel control = value as ISupportToolStripPanel;
                 if (control == null) {
@@ -2262,11 +2262,11 @@ namespace System.Windows.Forms {
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void CopyTo(Control[] array, int index) {
                 if (array == null) {
-                    throw new ArgumentNullException("array");
+                    throw new ArgumentNullException(nameof(array));
                 }
 
                 if (index < 0) {
-                    throw new ArgumentOutOfRangeException("index");
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
                 if (index >= array.Length || InnerList.Count > array.Length - index) {

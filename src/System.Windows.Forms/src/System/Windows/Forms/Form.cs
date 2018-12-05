@@ -698,7 +698,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoSizeMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
                 
                 if (GetAutoSizeMode() != value) {
@@ -833,7 +833,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x6
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormBorderStyle.None, (int)FormBorderStyle.SizableToolWindow))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FormBorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormBorderStyle));
                 }
 
                 // In rectricted mode we don't allow windows w/o min/max/close functionality.
@@ -1211,7 +1211,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int)DialogResult.No))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DialogResult));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DialogResult));
                 }
 
                 dialogResult = value;
@@ -1575,7 +1575,7 @@ namespace System.Windows.Forms {
                 if (!value.Equals( MaximumSize )) {
 
                     if (value.Width < 0 || value.Height < 0 ) {
-                        throw new ArgumentOutOfRangeException("MaximumSize");
+                        throw new ArgumentOutOfRangeException(nameof(MaximumSize));
                     }
 
                     Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms {
                 if (!value.Equals( MinimumSize )) {
 
                     if (value.Width < 0 || value.Height < 0 ) {
-                        throw new ArgumentOutOfRangeException("MinimumSize");
+                        throw new ArgumentOutOfRangeException(nameof(MinimumSize));
                     }
 
                     // ensure that the size we've applied fits into the screen 
@@ -2394,7 +2394,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)SizeGripStyle.Auto, (int)SizeGripStyle.Hide))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(SizeGripStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SizeGripStyle));
                     }
 
                     formState[FormStateSizeGripStyle] = (int)value;
@@ -2424,7 +2424,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormStartPosition.Manual, (int)FormStartPosition.CenterParent))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FormStartPosition));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormStartPosition));
                 }
                 formState[FormStateStartPos] = (int)value;
             }
@@ -2749,7 +2749,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormWindowState.Normal, (int)FormWindowState.Maximized))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FormWindowState));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormWindowState));
                 }
 
                 if (TopLevel && IsRestrictedWindow) {
@@ -5157,10 +5157,10 @@ namespace System.Windows.Forms {
         ///     scale window size non-lineary. If this message is not processed, the size is scaled linearly by Windows.
         ///     This message is sent to top level windows before WM_DPICHANGED.
         ///     If the application responds to this message, the resulting size will be the candidate rectangle 
-        ///     sent to WM_DPICHANGED. The WPARAM contains a DPI value.� The size needs to be computed if 
-        ///     the window were to switch to this DPI.�LPARAM is unused and will be zero. 
+        ///     sent to WM_DPICHANGED. The WPARAM contains a DPI value. The size needs to be computed if 
+        ///     the window were to switch to this DPI. LPARAM is unused and will be zero. 
         ///     The return value is a size, where the LOWORD is the desired width of the window and the HIWORD 
-        ///     is the desired height of the window.� A return value of zero indicates that the app does not 
+        ///     is the desired height of the window. A return value of zero indicates that the app does not 
         ///     want any special behavior and the candidate rectangle will be computed linearly.
         /// </devdoc>
         private void WmGetDpiScaledSize(ref Message m) {

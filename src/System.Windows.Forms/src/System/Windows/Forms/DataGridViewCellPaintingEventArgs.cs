@@ -42,15 +42,15 @@ namespace System.Windows.Forms
         {
             if (dataGridView == null)
             {
-                throw new ArgumentNullException("dataGridView");
+                throw new ArgumentNullException(nameof(dataGridView));
             }
             if (graphics == null)
             {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             if (cellStyle == null)
             {
-                throw new ArgumentNullException("cellStyle");
+                throw new ArgumentNullException(nameof(cellStyle));
             }
             if ((paintParts & ~DataGridViewPaintParts.All) != 0)
             {

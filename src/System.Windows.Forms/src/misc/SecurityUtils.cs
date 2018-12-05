@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         internal static object SecureCreateInstance(Type type, object[] args, bool allowNonPublic) {
             if (type == null) {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance;
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
         internal static object SecureConstructorInvoke(Type type, Type[] argTypes, object[] args, 
                                                        bool allowNonPublic, BindingFlags extraFlags) {
             if (type == null) {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
    
             // if it's an internal type, we demand reflection permission.

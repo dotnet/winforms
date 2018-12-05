@@ -379,7 +379,7 @@ namespace System.Resources {
         /// </devdoc>
         public virtual void AddAlias(string aliasName, AssemblyName assemblyName) {
            if (assemblyName == null) {
-               throw new ArgumentNullException("assemblyName");
+               throw new ArgumentNullException(nameof(assemblyName));
            }
 
            if (cachedAliases == null) {

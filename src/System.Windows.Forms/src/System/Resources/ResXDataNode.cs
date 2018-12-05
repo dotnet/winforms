@@ -106,10 +106,10 @@ namespace System.Resources {
         ]
         public ResXDataNode(string name, object value, Func<Type, string> typeNameConverter) {
             if(name == null) {
-                throw (new ArgumentNullException("name"));
+                throw (new ArgumentNullException(nameof(name)));
             }
             if(name.Length == 0) {
-                throw (new ArgumentException("name"));
+                throw (new ArgumentException(nameof(name)));
             }
 
             this.typeNameConverter = typeNameConverter;
@@ -139,13 +139,13 @@ namespace System.Resources {
         ]
         public ResXDataNode(string name, ResXFileRef fileRef, Func<Type, string> typeNameConverter) {
             if(name == null) {
-                throw (new ArgumentNullException("name"));
+                throw (new ArgumentNullException(nameof(name)));
             }
             if(fileRef == null) {
-                throw (new ArgumentNullException("fileRef"));
+                throw (new ArgumentNullException(nameof(fileRef)));
             }
             if(name.Length == 0) {
-                throw (new ArgumentException("name"));
+                throw (new ArgumentException(nameof(name)));
             }
             this.name = name;
             this.fileRef = fileRef;
@@ -219,10 +219,10 @@ namespace System.Resources {
             ]
             set {
                 if(value == null) {
-                    throw (new ArgumentNullException("Name"));
+                    throw (new ArgumentNullException(nameof(Name)));
                 }
                 if(value.Length == 0) {
-                    throw (new ArgumentException("Name"));
+                    throw (new ArgumentException(nameof(Name)));
                 }
                 name = value;
             }

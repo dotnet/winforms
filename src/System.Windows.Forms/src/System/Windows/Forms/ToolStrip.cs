@@ -737,7 +737,7 @@ namespace System.Windows.Forms {
                    case ToolStripDropDownDirection.Default:
                       break;
                    default:
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripDropDownDirection));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripDropDownDirection));
                 }
 
                 toolStripDropDownDirection = value;
@@ -930,7 +930,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripGripStyle.Hidden, (int)ToolStripGripStyle.Visible)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripGripStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripGripStyle));
                 }
                 if (toolStripGripStyle != value) {
                     toolStripGripStyle = value;
@@ -1332,7 +1332,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripLayoutStyle.StackWithOverflow, (int)ToolStripLayoutStyle.Table)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripLayoutStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripLayoutStyle));
                 }
                 if (layoutStyle != value) {
                     layoutStyle = value;
@@ -1721,7 +1721,7 @@ namespace System.Windows.Forms {
              set {
                  //valid values are 0x0 to 0x3
                  if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripRenderMode.Custom, (int)ToolStripRenderMode.ManagerRenderMode)){
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripRenderMode));
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripRenderMode));
                  }
                  if (value == ToolStripRenderMode.Custom) {
                      throw new NotSupportedException(SR.ToolStripRenderModeUseRendererPropertyInstead);
@@ -1848,7 +1848,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripTextDirection.Inherit, (int)ToolStripTextDirection.Vertical270)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripTextDirection));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripTextDirection));
                 }
                 Properties.SetObject(ToolStrip.PropTextDirection, value);
 
@@ -2192,7 +2192,7 @@ namespace System.Windows.Forms {
         public virtual ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction)
         {
             if (!WindowsFormsUtils.EnumValidator.IsValidArrowDirection(direction)) {
-                throw new InvalidEnumArgumentException("direction", (int)direction, typeof(ArrowDirection));
+                throw new InvalidEnumArgumentException(nameof(direction), (int)direction, typeof(ArrowDirection));
             }
 
             switch (direction) {
@@ -4071,7 +4071,7 @@ namespace System.Windows.Forms {
         /// <param name=m></param>
         protected internal void SetItemLocation(ToolStripItem item, Point location) {
             if (item == null) {
-                throw new ArgumentNullException("item");
+                throw new ArgumentNullException(nameof(item));
             }
             if (item.Owner != this) {
                 throw new NotSupportedException(SR.ToolStripCanOnlyPositionItsOwnItems);
@@ -5138,7 +5138,7 @@ namespace System.Windows.Forms {
 
                 if (owner == null) {
                     // 
-                    throw new ArgumentNullException("owner");
+                    throw new ArgumentNullException(nameof(owner));
                 }
                 this.owner = owner;
             }
