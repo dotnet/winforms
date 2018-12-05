@@ -419,26 +419,9 @@ namespace System.Windows.Forms
         {
             if (audioBytes == null)
             {
-                throw new ArgumentNullException("audioBytes");
+                throw new ArgumentNullException(nameof(audioBytes));
             }
             SetAudio(new MemoryStream(audioBytes));
-        }
-
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetAudio"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public virtual void SetAudio(Span<byte> audioBytes)
-        {
-            if (audioBytes.IsEmpty)
-            {
-                throw new ArgumentException(nameof(audioBytes));
-            }
-
-            var stream = new MemoryStream(audioBytes.Length);
-            stream.Write(audioBytes);
-            stream.Seek(0, SeekOrigin.Begin);
-            SetAudio(stream);
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetAudio1"]/*' />
@@ -1051,11 +1034,10 @@ namespace System.Windows.Forms
             }
             try
             {
-                unsafe
-                {
-                    var span = new Span<byte>(ptr.ToPointer(), size);
-                    stream.Read(span);
-                }
+                byte[] bytes = new byte[size];
+                stream.Position = 0;
+                stream.Read(bytes, 0, size);
+                Marshal.Copy(bytes, 0, ptr, size);
             }
             finally
             {
@@ -1990,11 +1972,9 @@ namespace System.Windows.Forms
                 try
                 {
                     int size = UnsafeNativeMethods.GlobalSize(new HandleRef(null, handle));
-                    unsafe
-                    {
-                        var span = new Span<byte>(ptr.ToPointer(), size);
-                        stringData = Encoding.UTF8.GetString(span);
-                    }
+                    byte[] bytes = new byte[size];
+                    Marshal.Copy(ptr, bytes, 0, size);
+                    stringData = Encoding.UTF8.GetString(bytes);
                 }
                 finally
                 {

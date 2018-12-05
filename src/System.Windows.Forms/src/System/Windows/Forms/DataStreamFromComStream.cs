@@ -107,24 +107,6 @@ namespace System.Windows.Forms
             return bytesRead;
         }
 
-        /// <summary>
-        /// Read data from the given buffer
-        /// </summary>
-        /// <param name="buffer">The buffer containing the data</param>
-        /// <returns>The number of processed bytes</returns>
-        public unsafe override int Read(Span<byte> buffer)
-        {
-            int bytesRead = 0;
-            if (!buffer.IsEmpty)
-            {
-                fixed (byte* ch = &buffer[0])
-                {
-                    bytesRead = _Read(ch, buffer.Length);
-                }
-            }
-            return bytesRead;
-        }
-
         public override void SetLength(long value)
         {
             comStream.SetSize(value);
@@ -154,23 +136,6 @@ namespace System.Windows.Forms
             if (bytesWritten < count)
             {
                 throw new IOException(SR.DataStreamWrite);
-            }
-        }
-
-        public unsafe override void Write(ReadOnlySpan<byte> buffer)
-        {
-            if (buffer.IsEmpty)
-                return;
-
-            try
-            {
-                fixed (byte* b = &buffer[0])
-                {
-                    _Write(b, buffer.Length);
-                }
-            }
-            catch
-            {
             }
         }
 
