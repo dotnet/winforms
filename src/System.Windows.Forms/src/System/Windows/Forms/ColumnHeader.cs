@@ -444,9 +444,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Dispose"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (listview != null) {
@@ -480,9 +477,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.ShouldPersistText"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         internal bool ShouldSerializeText() {
             return(text != null);
         }

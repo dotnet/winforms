@@ -304,9 +304,6 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_STARTPAGECHANGED = new object();
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.StartPageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
         public event EventHandler StartPageChanged {
             add {
@@ -655,9 +652,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnStartPageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnStartPageChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_STARTPAGECHANGED] as EventHandler;
             if (eh != null) {

@@ -26,9 +26,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckedEventArgs.ItemCheckedEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ItemCheckedEventArgs(ListViewItem item) {
             this.lvi = item;
         }

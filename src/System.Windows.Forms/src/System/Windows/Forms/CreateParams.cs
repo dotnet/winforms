@@ -9,9 +9,6 @@ namespace System.Windows.Forms {
     using System;
 
     /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class CreateParams {
         string className;
         string caption;
@@ -132,9 +129,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CreateParams.uex' path='docs/doc[@for="CreateParams.ToString"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override string ToString() {
             StringBuilder sb = new StringBuilder(64);
             sb.Append("CreateParams {'");

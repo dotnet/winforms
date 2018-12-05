@@ -1125,9 +1125,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
             add {
@@ -1161,9 +1158,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
         public event EventHandler BackgroundImageChanged {
             add {
@@ -1216,9 +1210,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
         public event EventHandler BackgroundImageLayoutChanged {
             add {
@@ -1252,9 +1243,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetBindings"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetBindings() {
             ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(PropBindings);
@@ -1307,9 +1295,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContext"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1325,9 +1310,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
         public event EventHandler BindingContextChanged {
             add {
@@ -1507,9 +1489,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CausesValidationChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
         public event EventHandler CausesValidationChanged {
             add {
@@ -1720,9 +1699,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatPropertyChanged)),
         SRDescription(nameof(SR.ControlOnContextMenuChangedDescr)),
@@ -1775,9 +1751,6 @@ example usage
 
         }
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuStripChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged {
             add {
@@ -2096,9 +2069,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CursorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
         public event EventHandler CursorChanged {
             add {
@@ -2367,9 +2337,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DockChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnDockChangedDescr))]
         public event EventHandler DockChanged {
             add {
@@ -2594,9 +2561,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnFontChangedDescr))]
         public event EventHandler FontChanged {
             add {
@@ -2656,9 +2620,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontHeight"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected int FontHeight {
             get {
                 bool found;
@@ -2746,9 +2707,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
             add {
@@ -3234,9 +3192,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LocationChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
         public event EventHandler LocationChanged {
             add {
@@ -3273,9 +3228,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MarginChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
         public event EventHandler MarginChanged
         {
@@ -3618,9 +3570,6 @@ example usage
         // Helper function for Rtl
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RenderRightToLeft"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Obsolete("This property has been deprecated. Please use RightToLeft instead. http://go.microsoft.com/fwlink/?linkid=14202")]
         protected internal bool RenderRightToLeft
         {
@@ -3778,9 +3727,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
             add {
@@ -3893,9 +3839,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
         public event EventHandler SizeChanged {
             add {
@@ -3936,9 +3879,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabIndexChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
         public event EventHandler TabIndexChanged {
             add {
@@ -3986,9 +3926,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabStopChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
         public event EventHandler TabStopChanged {
             add {
@@ -4069,9 +4006,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTextChangedDescr))]
         public event EventHandler TextChanged {
             add {
@@ -4605,9 +4539,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragDrop"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragDropDescr))]
         public event DragEventHandler DragDrop {
             add {
@@ -4620,9 +4551,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragEnter"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragEnterDescr))]
         public event DragEventHandler DragEnter {
             add {
@@ -4635,9 +4563,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragOver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragOverDescr))]
         public event DragEventHandler DragOver {
             add {
@@ -4650,9 +4575,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragLeave"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
         public event EventHandler DragLeave {
             add {
@@ -4664,9 +4586,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GiveFeedback"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
         public event GiveFeedbackEventHandler GiveFeedback {
             add {
@@ -4709,9 +4628,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HelpRequested"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnHelpDescr))]
         public event HelpEventHandler HelpRequested {
             add {
@@ -4724,9 +4640,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidated"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnInvalidateDescr))]
         public event InvalidateEventHandler Invalidated {
             add {
@@ -4772,9 +4685,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PaddingChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public event EventHandler PaddingChanged {
             add {
@@ -4787,9 +4697,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Paint"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ControlOnPaintDescr))]
         public event PaintEventHandler Paint {
             add {
@@ -4802,9 +4709,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryContinueDrag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
         public event QueryContinueDragEventHandler QueryContinueDrag {
             add {
@@ -4816,9 +4720,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryAccessibilityHelp"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
             add {
@@ -5186,9 +5087,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ChangeUICues"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
         public event UICuesEventHandler ChangeUICues {
             add {
@@ -5200,9 +5098,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.StyleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
         public event EventHandler StyleChanged {
             add {
@@ -5214,9 +5109,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SystemColorsChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
         public event EventHandler SystemColorsChanged {
             add {
@@ -5257,18 +5149,12 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityNotifyClients"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void AccessibilityNotifyClients(AccessibleEvents accEvent, int childID) {
             AccessibilityNotifyClients(accEvent, NativeMethods.OBJID_CLIENT, childID);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityNotifyClients1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID) {
             if (IsHandleCreated) {
@@ -5516,9 +5402,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ParentChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnParentChangedDescr))]
         public event EventHandler ParentChanged {
             add {
@@ -6283,9 +6166,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetTopLevel"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected bool GetTopLevel() {
             return(state & STATE_TOPLEVEL) != 0;
         }
@@ -7501,17 +7381,11 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokePaint"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void InvokePaint(Control c, PaintEventArgs e) {
             c.OnPaint(e);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokePaintBackground"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void InvokePaintBackground(Control c, PaintEventArgs e) {
            c.OnPaintBackground(e);
         }
@@ -7934,9 +7808,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7974,9 +7845,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackgroundImageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8003,9 +7871,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackgroundImageLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageLayoutChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8022,9 +7887,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBindingContextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8049,9 +7911,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCausesValidationChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCausesValidationChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8073,9 +7932,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnContextMenuChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8086,9 +7942,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnContextMenuStripChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuStripChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8099,9 +7952,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCursorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCursorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8122,9 +7972,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDockChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDockChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8178,9 +8025,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFontChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8227,9 +8071,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnForeColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8256,9 +8097,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8300,9 +8138,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8313,9 +8148,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackgroundImageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackgroundImageChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8323,9 +8155,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBindingContextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBindingContextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8335,9 +8164,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentCursorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentCursorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8347,9 +8173,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentEnabledChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentEnabledChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8359,9 +8182,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8417,9 +8237,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentForeColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8430,9 +8247,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentRightToLeftChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8442,9 +8256,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentVisibleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentVisibleChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8519,9 +8330,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTabIndexChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabIndexChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8532,9 +8340,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTabStopChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabStopChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8545,9 +8350,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8617,9 +8419,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8648,9 +8447,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnClientSizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClientSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8818,9 +8614,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLocationChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLocationChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8966,9 +8759,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnEnter"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnter(EventArgs e) {
             Contract.Requires(e != null);
@@ -9152,9 +8942,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeLostFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeLostFocus(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
@@ -9465,9 +9252,6 @@ example usage
         }
        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnSizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -10847,9 +10631,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetCursor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void ResetCursor() {
             Cursor = null;
@@ -11589,9 +11370,6 @@ example usage
 
         // used by Form
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Select1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void Select(bool directed, bool forward) {
             IContainerControl c = GetContainerControlInternal();
 
@@ -12012,9 +11790,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetTopLevel"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void SetTopLevel(bool value) {
             if (value && IsActiveX) {
                 throw new InvalidOperationException(SR.TopLevelNotAllowedIfActiveX);
@@ -12058,9 +11833,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetVisibleCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void SetVisibleCore(bool value) {
             try {
                 System.Internal.HandleCollector.SuspendCollect();
@@ -12259,36 +12031,24 @@ example usage
         // Helper function - translates text alignment for Rtl controls
         // Read TextAlign as Left == Near, Right == Far
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected HorizontalAlignment RtlTranslateAlignment(HorizontalAlignment align) {
             return RtlTranslateHorizontal(align);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected LeftRightAlignment RtlTranslateAlignment(LeftRightAlignment align) {
             return RtlTranslateLeftRight(align);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment2"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected ContentAlignment RtlTranslateAlignment(ContentAlignment align) {
             return RtlTranslateContent(align);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateHorizontal"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected HorizontalAlignment RtlTranslateHorizontal(HorizontalAlignment align) {
 
@@ -12305,9 +12065,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateLeftRight"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected LeftRightAlignment RtlTranslateLeftRight(LeftRightAlignment align) {
 
@@ -12324,9 +12081,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateContent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal ContentAlignment RtlTranslateContent(ContentAlignment align) {
             if (RightToLeft.Yes == RightToLeft) {
@@ -14654,9 +14408,6 @@ example usage
 
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.ControlCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ControlCollection(Control owner) {
                 this.owner = owner;
             }
@@ -14776,9 +14527,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual void AddRange(Control[] controls) {
                 if (controls == null) {
@@ -14816,9 +14564,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(Control control) {
                 return InnerList.Contains(control);
             }
@@ -14897,9 +14642,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(Control control) {
                 return InnerList.IndexOf(control);
             }
@@ -14998,9 +14740,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.RemoveAt"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void RemoveAt(int index) {
                 Remove(this[index]);
             }
@@ -15058,9 +14797,6 @@ example usage
 
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Clear"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual void Clear() {
 #if DEBUG
                 int layoutSuspendCount = owner.LayoutSuspendCount;
@@ -19348,9 +19084,6 @@ example usage
             // constructors
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ControlAccessibleObject(Control ownerControl) {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
@@ -19377,9 +19110,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal ControlAccessibleObject(Control ownerControl, int accObjId) {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
@@ -19538,9 +19268,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Description"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Description {
                 get {
                     string description = ownerControl.AccessibleDescription;
@@ -19554,9 +19281,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Handle"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IntPtr Handle {
 
                 get {
@@ -19599,9 +19323,6 @@ example usage
             } // end Handle
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Help"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Help {
                 get {
                     QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[EventQueryAccessibilityHelp];
@@ -19628,9 +19349,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Name"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Name {
                 get {
                     // Special case: If an explicit name has been set in the AccessibleName property, use that.
@@ -19694,9 +19412,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Owner"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public Control Owner {
                 get {
                     return ownerControl;
@@ -19745,9 +19460,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Role"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = ownerControl.AccessibleRole;
@@ -19762,9 +19474,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.GetHelpTopic"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override int GetHelpTopic(out string fileName) {
                 int topic = 0;
 
@@ -19796,9 +19505,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void NotifyClients(AccessibleEvents accEvent) {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
                                   this.ToString() + ", accEvent = " + accEvent.ToString() + ", childID = self");
@@ -19807,9 +19513,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void NotifyClients(AccessibleEvents accEvent, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
@@ -19821,9 +19524,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
@@ -19893,9 +19593,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ToString"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string ToString() {
                 if (Owner != null) {
                     return "ControlAccessibleObject: Owner = " + Owner.ToString();

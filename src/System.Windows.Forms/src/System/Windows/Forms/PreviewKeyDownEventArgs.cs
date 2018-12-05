@@ -21,9 +21,6 @@ namespace System.Windows.Forms {
         private bool _isInputKey;
 
         /// <include file='doc\PreviewKeyDownEvent.uex' path='docs/doc[@for="PreviewKeyDownEventArgs.PreviewKeyDownEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public PreviewKeyDownEventArgs(Keys keyData) {
             _keyData = keyData;
         }

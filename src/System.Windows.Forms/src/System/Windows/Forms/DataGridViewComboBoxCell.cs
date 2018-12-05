@@ -2749,9 +2749,6 @@ namespace System.Windows.Forms
             private IComparer comparer;
 
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.ObjectCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ObjectCollection(DataGridViewComboBoxCell owner) 
             {
                 Debug.Assert(owner != null);
@@ -2828,9 +2825,6 @@ namespace System.Windows.Forms
             }
             
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly 
             {
                 get 
@@ -2889,9 +2883,6 @@ namespace System.Windows.Forms
             }
             
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(params object[] items)
             {
                 //this.owner.CheckNoSharedCell();
@@ -2901,9 +2892,6 @@ namespace System.Windows.Forms
             }
             
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.AddRange1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(ObjectCollection value) 
             {
                 //this.owner.CheckNoSharedCell();
@@ -2998,9 +2986,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(object value) 
             {
                 return IndexOf(value) != -1;
@@ -3040,9 +3025,6 @@ namespace System.Windows.Forms
             }
             
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(object value) 
             {
                 if (value == null) 

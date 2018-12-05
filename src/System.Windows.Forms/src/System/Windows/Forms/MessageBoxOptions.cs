@@ -5,9 +5,6 @@
 
 namespace System.Windows.Forms {
     /// <include file='doc\MessageBoxOptions.uex' path='docs/doc[@for="MessageBoxOptions"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [Flags]
     public enum MessageBoxOptions {
         /// <include file='doc\MessageBoxOptions.uex' path='docs/doc[@for="MessageBoxOptions.ServiceNotification"]/*' />

@@ -5,105 +5,52 @@
 namespace System.Windows.Forms {
 
     /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="ACLineStatus"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       To be supplied.
-    ///    </para>
-    /// </devdoc>
     public enum PowerLineStatus
     {
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerLineStatus.Offline"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         Offline = 0,
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerLineStatus.Online"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         Online = 1,
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerLineStatus.Unknown"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         Unknown = 255
     }
 
     /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       To be supplied.
-    ///    </para>
-    /// </devdoc>
     [Flags]
     public enum BatteryChargeStatus
     {
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.High"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         High = 1,
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Low"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         Low = 2,
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Critical"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         Critical = 4,
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Charging"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         Charging = 8,
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.NoSystemBattery"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         NoSystemBattery = 128,
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Unknown"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         Unknown = 255
     }
 
     /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       To be supplied.
-    ///    </para>
-    /// </devdoc>
     public enum PowerState
     {
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerState.Suspend"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         Suspend = 0,
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerState.Hibernate"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         Hibernate = 1
     }
 
     /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       To be supplied.
-    ///    </para>
-    /// </devdoc>
     public class PowerStatus
     {
         private NativeMethods.SYSTEM_POWER_STATUS systemPowerStatus;
@@ -112,9 +59,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.ACLineStatus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public PowerLineStatus PowerLineStatus
         {
             get
@@ -125,9 +69,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryChargeStatus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public BatteryChargeStatus BatteryChargeStatus
         {
             get
@@ -138,9 +79,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryFullLifetime"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int BatteryFullLifetime
         {
             get
@@ -151,9 +89,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryLifePercent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public float BatteryLifePercent
         {
             get
@@ -165,9 +100,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryLifeRemaining"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int BatteryLifeRemaining
         {
             get

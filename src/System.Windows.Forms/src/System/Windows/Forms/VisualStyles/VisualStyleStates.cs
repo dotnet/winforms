@@ -10,11 +10,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace System.Windows.Forms.VisualStyles {
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="ComboBoxState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -30,11 +25,6 @@ namespace System.Windows.Forms.VisualStyles {
     }
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="CheckBoxState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -66,11 +56,6 @@ namespace System.Windows.Forms.VisualStyles {
     } 
     
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="GroupBoxState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -95,11 +80,6 @@ namespace System.Windows.Forms.VisualStyles {
     }
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="PushButtonState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -117,11 +97,6 @@ namespace System.Windows.Forms.VisualStyles {
     }
     
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="RadioButtonState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -145,11 +120,6 @@ namespace System.Windows.Forms.VisualStyles {
     } 
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="ScrollBarArrowButtonState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -190,11 +160,6 @@ namespace System.Windows.Forms.VisualStyles {
 
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="ScrollBarState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -211,11 +176,6 @@ namespace System.Windows.Forms.VisualStyles {
     }
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="ScrollBarSizeBoxState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -227,11 +187,6 @@ namespace System.Windows.Forms.VisualStyles {
     }
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="TabItemState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -248,11 +203,6 @@ namespace System.Windows.Forms.VisualStyles {
     }
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="TextBoxState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue"),
         SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")
@@ -274,11 +224,6 @@ namespace System.Windows.Forms.VisualStyles {
     }
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="WindowCloseButtonState"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]
@@ -298,11 +243,6 @@ namespace System.Windows.Forms.VisualStyles {
     }
 
     /// <include file='doc\VisualStyleStates.uex' path='docs/doc[@for="TrackBarThumb]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       [To be supplied]
-    ///    </para>
-    /// </devdoc>
     [
         SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")
     ]

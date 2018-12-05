@@ -1833,9 +1833,6 @@ namespace System.Windows.Forms {
                 }
 
                 /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject.Role"]/*' />
-                /// <devdoc>
-                ///    <para>[To be supplied.]</para>
-                /// </devdoc>
                 public override AccessibleRole Role {
                     get {
                         AccessibleRole role = Owner.AccessibleRole;

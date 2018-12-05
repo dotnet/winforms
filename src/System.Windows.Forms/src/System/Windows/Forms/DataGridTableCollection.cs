@@ -119,9 +119,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.List"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override ArrayList List {
             get {
                 return items;
@@ -205,9 +202,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.AddRange"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void AddRange(DataGridTableStyle[] tables) {
             if (tables == null) {
                 throw new ArgumentNullException("tables");
@@ -221,9 +215,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.CollectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event CollectionChangeEventHandler CollectionChanged {
             add {
                 onCollectionChanged += value;
@@ -234,9 +225,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.Clear"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Clear() {
             for (int i = 0; i < items.Count; i++) {
                 DataGridTableStyle element = (DataGridTableStyle)items[i];
@@ -286,9 +274,6 @@ namespace System.Windows.Forms {
         */
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.OnCollectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void OnCollectionChanged(CollectionChangeEventArgs e) {
             if (onCollectionChanged != null)
                 onCollectionChanged(this, e);
@@ -311,9 +296,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.Remove"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Remove(DataGridTableStyle table) {
             int tableIndex = -1;
             int itemsCount = items.Count;
@@ -329,9 +311,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.RemoveAt"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void RemoveAt(int index) {
             DataGridTableStyle element = (DataGridTableStyle)items[index];
             element.MappingNameChanged -= new EventHandler(TableStyleMappingNameChanged);

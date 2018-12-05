@@ -195,9 +195,6 @@ namespace System.Windows.Forms {
        
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
             get {
@@ -223,9 +220,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -249,9 +243,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -301,9 +292,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -894,9 +882,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
             get {
@@ -920,9 +905,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DrawItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
             add {
@@ -934,9 +916,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -949,9 +928,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectedIndexChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
@@ -1387,9 +1363,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnHandleDestroyed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnHandleDestroyed(EventArgs e) {
             if (!Disposing) {
                 selectedIndex = SelectedIndex;
@@ -1508,9 +1481,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {
@@ -1635,9 +1605,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             cachedDisplayRect = Rectangle.Empty;
@@ -1679,9 +1646,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.RemoveAll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void RemoveAll() {
             this.Controls.Clear();
 
@@ -2213,9 +2177,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public class TabPageCollection : IList {
             private TabControl owner;
             /// A caching mechanism for key accessor
@@ -2224,9 +2185,6 @@ namespace System.Windows.Forms {
             private int lastAccessedIndex = -1;
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.TabPageCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>            
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public TabPageCollection( TabControl owner ) {
                 if (owner == null) {
@@ -2236,9 +2194,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.this"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual TabPage this[int index] {
                 get {
                     return owner.GetTabPage(index);
@@ -2293,9 +2248,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Count"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [Browsable(false)]
             public int Count {
                 get {
@@ -2328,9 +2280,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -2338,9 +2287,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public void Add(TabPage value) {
@@ -2373,9 +2319,6 @@ namespace System.Windows.Forms {
             // <-- NEW ADD OVERLOADS FOR WHIDBEY
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Add(string text) {
                 TabPage page = new TabPage();
                 page.Text = text;
@@ -2383,9 +2326,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Add(string key, string text) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2394,9 +2334,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add3"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Add(string key, string text, int imageIndex) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2406,9 +2343,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add4"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Add(string key, string text, string imageKey) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2420,9 +2354,6 @@ namespace System.Windows.Forms {
             // END - NEW ADD OVERLOADS FOR WHIDBEY -->
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>            
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public void AddRange(TabPage[] pages) {
                 if (pages == null) {
@@ -2434,9 +2365,6 @@ namespace System.Windows.Forms {
              }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>            
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public bool Contains(TabPage page) {
 
@@ -2469,9 +2397,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>            
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public int IndexOf(TabPage page) {
 
@@ -2566,9 +2491,6 @@ namespace System.Windows.Forms {
             // <-- NEW INSERT OVERLOADS FOR WHIDBEY
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string text) {
                 TabPage page = new TabPage();
                 page.Text = text;
@@ -2576,9 +2498,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string key, string text) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2587,9 +2506,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert3"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string key, string text, int imageIndex) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2600,9 +2516,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert4"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string key, string text, string imageKey) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2625,9 +2538,6 @@ namespace System.Windows.Forms {
            }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Clear"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual void Clear() {
                 owner.RemoveAll();
             }
@@ -2641,9 +2551,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 TabPage[] tabPages = owner.GetTabPages();
                 if (tabPages != null) {
@@ -2655,9 +2562,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public void Remove(TabPage value) {
@@ -2678,9 +2582,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.RemoveAt"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void RemoveAt(int index) {
                 owner.Controls.RemoveAt(index);
             }
@@ -2713,18 +2614,12 @@ namespace System.Windows.Forms {
 
             /// <internalonly/>
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection.ControlCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ControlCollection(TabControl owner)
             : base(owner) {
                 this.owner = owner;
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection.Add"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override void Add(Control value) {
                 if (!(value is TabPage)) {
                     throw new ArgumentException(string.Format(SR.TabControlInvalidTabPageType, value.GetType().Name));
@@ -2771,9 +2666,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override void Remove(Control value) {
                 base.Remove(value);
                 if (!(value is TabPage)) {

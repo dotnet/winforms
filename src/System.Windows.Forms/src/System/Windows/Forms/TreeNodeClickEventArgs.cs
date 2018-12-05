@@ -25,18 +25,12 @@ namespace System.Windows.Forms {
         
 
         /// <include file='doc\TreeNodeClickEventArgs.uex' path='docs/doc[@for="TreeNodeClickEventArgs.TreeNodeClickEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeNodeMouseClickEventArgs(TreeNode node, MouseButtons button, int clicks, int x, int y)
             : base(button, clicks, x, y, 0) {
             this.node = node;
         }
 
         /// <include file='doc\NodeLabelEditEvent.uex' path='docs/doc[@for="NodeLabelEditEventArgs.Node"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeNode Node {
             get {
                 return node;

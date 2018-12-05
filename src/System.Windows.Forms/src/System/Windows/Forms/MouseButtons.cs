@@ -64,15 +64,9 @@ namespace System.Windows.Forms {
         Middle = 0x00400000,        
         
         /// <include file='doc\MouseButtons.uex' path='docs/doc[@for="MouseButtons.XButton1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         XButton1 = 0x00800000,        
         
         /// <include file='doc\MouseButtons.uex' path='docs/doc[@for="MouseButtons.XButton2"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         XButton2 = 0x01000000,
     }
 }

@@ -238,9 +238,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Anchor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override AnchorStyles Anchor {
             get {
@@ -252,9 +249,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Dock"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override DockStyle Dock {
             get {
@@ -278,9 +272,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Enabled"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public bool Enabled {
             get {
@@ -374,9 +365,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabIndex"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public int TabIndex {
             get {
@@ -412,9 +400,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabStop"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public bool TabStop {
             get {
@@ -438,9 +423,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Localizable (true),
         Browsable (true),
@@ -496,9 +478,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Visible"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public bool Visible {
             get {

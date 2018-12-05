@@ -96,11 +96,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -754,9 +749,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject.Role"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;
@@ -870,18 +862,12 @@ namespace System.Windows.Forms {
             private DomainItemListAccessibleObject parent;
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.DomainItemAccessibleObject"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public DomainItemAccessibleObject(string name, AccessibleObject parent) : base() {
                 this.name = name;
                 this.parent = (DomainItemListAccessibleObject)parent;
             }
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Name"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Name {
                 get {
                     return name;
@@ -892,9 +878,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Parent"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleObject Parent {
                 [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
@@ -903,9 +886,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Role"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     return AccessibleRole.ListItem;
@@ -913,9 +893,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.State"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleStates State {
                 get {
                     return AccessibleStates.Selectable;
@@ -923,9 +900,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Value"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Value {
                 [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {

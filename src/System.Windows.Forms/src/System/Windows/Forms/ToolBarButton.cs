@@ -80,9 +80,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToolBarButton1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ToolBarButton(string text) : base() {
             this.Text = text;
         }

@@ -2288,9 +2288,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UseStdAccessibleObjects"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         /// <internalonly/>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected void UseStdAccessibleObjects(IntPtr handle) {
@@ -2611,7 +2608,7 @@ namespace System.Windows.Forms
 
             int result = NativeMethods.S_FALSE;
             try {
-                // The activityId can be any string. It cannot be null. It isn’t used currently.
+                // The activityId can be any string. It cannot be null. It isnï¿½t used currently.
                 result = UnsafeNativeMethods.UiaRaiseNotificationEvent(
                     this,
                     notificationKind,

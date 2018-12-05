@@ -2025,9 +2025,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Add"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             [EditorBrowsable(EditorBrowsableState.Never)]
             public int Add(Control value) {
                 ISupportToolStripPanel control = value as ISupportToolStripPanel;
@@ -2046,9 +2043,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.AddRange"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void AddRange(Control[] value) {
@@ -2075,9 +2069,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Contains"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(Control value) {
                 for (int i = 0; i < Count; i++) {
                     if (GetControl(i) == value) {
@@ -2088,9 +2079,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Clear"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual void Clear() {
                 if (owner != null) {
                     ToolStripPanel.SuspendLayout();
@@ -2154,9 +2142,6 @@ namespace System.Windows.Forms {
             void IList.Insert(int index, object value) { Insert(index, value as Control); }
 
             /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.IndexOf"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(Control value) {
                 for (int i = 0; i < Count; i++) {
                     if (GetControl(i) == value) {
@@ -2167,9 +2152,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Insert"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Insert(int index, Control value) {
                 if (value == null) {
@@ -2231,9 +2213,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Remove"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Remove(Control value) {
@@ -2242,9 +2221,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.RemoveAt"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void RemoveAt(int index) {
                 if (index >= 0 && index < Count) {
@@ -2256,9 +2232,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.CopyTo"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void CopyTo(Control[] array, int index) {
                 if (array == null) {

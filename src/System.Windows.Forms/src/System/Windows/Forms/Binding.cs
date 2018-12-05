@@ -120,9 +120,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.DataSource"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object DataSource {
             get {
                 return this.bindToObject.DataSource;
@@ -130,9 +127,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.BindingMemberInfo"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public BindingMemberInfo BindingMemberInfo {
             get {
                 return this.bindToObject.BindingMemberInfo;
@@ -283,9 +277,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.BindingComplete"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event BindingCompleteEventHandler BindingComplete {
             add {
                 onComplete += value;
@@ -296,9 +287,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Parse"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event ConvertEventHandler Parse {
             add {
                 onParse += value;
@@ -309,9 +297,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Format"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event ConvertEventHandler Format {
             add {
                 onFormat += value;
@@ -322,9 +307,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.FormattingEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [DefaultValue(false)]
         public bool FormattingEnabled {
 
@@ -669,9 +651,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.OnParse"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnParse(ConvertEventArgs cevent) {
             if (onParse != null) {
                 onParse(this, cevent);
@@ -685,9 +664,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.OnFormat"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnFormat(ConvertEventArgs cevent) {
             if (onFormat!= null) {
                 onFormat(this, cevent);
@@ -699,9 +675,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         private object ParseObject(object value) {
             Type type = this.bindToObject.BindToType;
 
@@ -756,9 +729,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         private object FormatObject(object value) {
             // We will not format the object when the control is in design time.
             // This is because if we bind a boolean property on a control to a

@@ -133,9 +133,6 @@ namespace System.Windows.Forms {
         // a color appropriate for certain elements that are ControlDark in normal color schemes,
         // but for which ControlDark does not work in high contrast color schemes
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.ContrastControlDark"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Color ContrastControlDark {
             get {
                 return SystemInformation.HighContrast ? SystemColors.WindowFrame : SystemColors.ControlDark;
@@ -526,9 +523,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static void DrawBorder(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
             // Optimized version
             switch (style) {
@@ -1733,9 +1727,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawMixedCheckBox1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static void DrawMixedCheckBox(Graphics graphics, int x, int y, int width, int height, ButtonState state) {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_BUTTON,
                              NativeMethods.DFCS_BUTTON3STATE | (int) state, Color.Empty, Color.Empty);

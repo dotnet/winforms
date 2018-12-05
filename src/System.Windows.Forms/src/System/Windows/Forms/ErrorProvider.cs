@@ -89,9 +89,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorProvider1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ErrorProvider(ContainerControl parentControl) : this() {
             this.parentControl = parentControl;
             propChangedEvent = new EventHandler(ParentControl_BindingContextChanged);
@@ -99,9 +96,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorProvider2"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ErrorProvider(IContainer container) : this() {
             if (container == null) {
                 throw new ArgumentNullException("container");
@@ -246,9 +240,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
             add {
@@ -363,9 +354,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ShouldSerializeDataSource"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         private bool ShouldSerializeDataSource() {
             return (dataSource != null);
         }
@@ -391,17 +379,11 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ShouldSerializeDataMember"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         private bool ShouldSerializeDataMember() {
             return (dataMember != null && dataMember.Length != 0);
         }
 
         /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.BindToDataAndErrors"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void BindToDataAndErrors(object newDataSource, string newDataMember) {
             Set_ErrorManager(newDataSource, newDataMember, false);
         }
@@ -452,9 +434,6 @@ namespace System.Windows.Forms {
 
         // Work around... we should figure out if errors changed automatically.
         /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.UpdateBinding"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void UpdateBinding() {
             ErrorManager_CurrentChanged(errorManager, EventArgs.Empty);
         }
@@ -810,9 +789,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftChanged(EventArgs e) {
 

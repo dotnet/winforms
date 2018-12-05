@@ -235,9 +235,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -261,9 +258,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -349,9 +343,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.CreateParams"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override CreateParams CreateParams {
             [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
@@ -629,9 +620,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Multiline"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [DefaultValue(true)]
         public override bool Multiline {
             get {
@@ -1428,9 +1416,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Localizable(true),
         RefreshProperties(RefreshProperties.All)
@@ -1600,9 +1585,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ContentsResized"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxContentsResized))]
         public event ContentsResizedEventHandler ContentsResized {
             add {
@@ -1645,9 +1627,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragLeave"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DragLeave {
             add {
@@ -1659,9 +1638,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragOver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DragEventHandler DragOver {
             add {
@@ -1673,9 +1649,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GiveFeedback"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event GiveFeedbackEventHandler GiveFeedback {
             add {
@@ -1687,9 +1660,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.QueryContinueDrag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event QueryContinueDragEventHandler QueryContinueDrag {
             add {
@@ -1701,9 +1671,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.HScroll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxHScroll))]
         public event EventHandler HScroll {
             add {
@@ -1715,9 +1682,6 @@ namespace System.Windows.Forms {
         }        
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.LinkClicked"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxLinkClick))]
         public event LinkClickedEventHandler LinkClicked {
             add {
@@ -1730,9 +1694,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ImeChange"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxIMEChange))]
         public event EventHandler ImeChange {
             add {
@@ -1745,9 +1706,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Protected"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxProtected))]
         public event EventHandler Protected {
             add {
@@ -1760,9 +1718,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxSelChange))]
         public event EventHandler SelectionChanged {
             add {
@@ -1775,9 +1730,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.VScroll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxVScroll))]
         public event EventHandler VScroll {
             add {
@@ -2453,9 +2405,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnBackColorChanged(EventArgs e) {
             if (IsHandleCreated)
             {
@@ -2472,9 +2421,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
             // When the RTL property is changed, here's what happens. Let's assume that we change from
@@ -2521,9 +2467,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnHandleCreated"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
             // base.OnHandleCreated is called somewhere in the middle of this
 
@@ -2614,9 +2557,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnHandleDestroyed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnHandleDestroyed(EventArgs e) {
             base.OnHandleDestroyed(e);
             
@@ -3659,9 +3599,6 @@ namespace System.Windows.Forms {
         // </doc>
         //
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WndProc"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {

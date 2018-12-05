@@ -50,9 +50,6 @@ namespace System.Windows.Forms {
             : base(prop) {}
 
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.DataGridBoolColumn2"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault)
             : base(prop, isDefault){}
 

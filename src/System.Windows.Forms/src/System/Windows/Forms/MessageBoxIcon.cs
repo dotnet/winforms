@@ -8,9 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms {
     /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>    
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum MessageBoxIcon {
         /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.None"]/*' />

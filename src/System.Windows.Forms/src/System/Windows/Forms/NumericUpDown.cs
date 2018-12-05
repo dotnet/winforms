@@ -85,9 +85,6 @@ namespace System.Windows.Forms {
         private long buttonPressedStartTime;
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.NumericUpDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "0" is the default value for numeric up down.
                                                                                                         // So we don't have to localize it.
@@ -254,11 +251,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),

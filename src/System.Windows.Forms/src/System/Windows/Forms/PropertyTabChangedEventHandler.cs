@@ -9,8 +9,5 @@ namespace System.Windows.Forms {
     using System;
 
     /// <include file='doc\PropertyTabChangedEventHandler.uex' path='docs/doc[@for="PropertyTabChangedEventHandler"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public delegate void PropertyTabChangedEventHandler(object s, PropertyTabChangedEventArgs e);
 }

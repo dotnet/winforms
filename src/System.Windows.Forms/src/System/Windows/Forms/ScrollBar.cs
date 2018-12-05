@@ -679,9 +679,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.OnEnabledChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnEnabledChanged(EventArgs e) {
             if (Enabled) {
                 UpdateScrollInfo();

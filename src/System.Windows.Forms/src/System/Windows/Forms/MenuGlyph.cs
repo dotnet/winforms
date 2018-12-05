@@ -38,14 +38,8 @@ namespace System.Windows.Forms {
         Bullet = NativeMethods.DFCS_MENUBULLET,
 
         /// <include file='doc\MenuGlyph.uex' path='docs/doc[@for="MenuGlyph.Min"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Min = NativeMethods.DFCS_MENUARROW,
         /// <include file='doc\MenuGlyph.uex' path='docs/doc[@for="MenuGlyph.Max"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Max = NativeMethods.DFCS_MENUBULLET,
 
     }

@@ -141,9 +141,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.List"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override ArrayList List
         {
             get
@@ -242,9 +239,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.CollectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event CollectionChangeEventHandler CollectionChanged
         {
             add
@@ -290,9 +284,6 @@ namespace System.Windows.Forms
         }
         
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.AddRange"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewCell[] dataGridViewCells)
         {
@@ -340,9 +331,6 @@ namespace System.Windows.Forms
         }
         
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.Clear"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void Clear()
         {
             if (this.owner.DataGridView != null)
@@ -411,9 +399,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.OnCollectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void OnCollectionChanged(CollectionChangeEventArgs e)
         {
             if (this.onCollectionChanged != null)
@@ -423,9 +408,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.Remove"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void Remove(DataGridViewCell cell)
         {
             if (this.owner.DataGridView != null)
@@ -453,9 +435,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.RemoveAt"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void RemoveAt(int index)
         {
             if (this.owner.DataGridView != null)

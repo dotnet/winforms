@@ -15,9 +15,6 @@ using System.Net;
 namespace System.Windows.Forms {
 
     /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public sealed class HtmlElementEventArgs : EventArgs {
         private UnsafeNativeMethods.IHTMLEventObj htmlEventObj;
         private HtmlShimManager shimManager;
@@ -36,9 +33,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.MouseButtonsPressed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public MouseButtons MouseButtonsPressed {
             get {
                 MouseButtons buttons = MouseButtons.None;
@@ -57,9 +51,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.ClientMousePosition"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Point ClientMousePosition {
             get {
                 return new Point(this.NativeHTMLEventObj.GetClientX(), this.NativeHTMLEventObj.GetClientY());
@@ -67,9 +58,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.OffsetMousePosition"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Point OffsetMousePosition {
             get {
                 return new Point(this.NativeHTMLEventObj.GetOffsetX(), this.NativeHTMLEventObj.GetOffsetY());
@@ -77,9 +65,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.MousePosition"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Point MousePosition {
             get {
                 return new Point(this.NativeHTMLEventObj.GetX(), this.NativeHTMLEventObj.GetY());
@@ -87,9 +72,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.BubbleEvent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool BubbleEvent {
             get {
                 return !this.NativeHTMLEventObj.GetCancelBubble();
@@ -100,9 +82,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.KeyPressedCode"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int KeyPressedCode {
             get {
                 return this.NativeHTMLEventObj.GetKeyCode();
@@ -149,9 +128,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.EventType"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string EventType {
             get {
                 return this.NativeHTMLEventObj.GetEventType();
@@ -159,9 +135,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.ReturnValue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool ReturnValue {
             get {
                 object obj = this.NativeHTMLEventObj.GetReturnValue();
@@ -174,9 +147,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.FromElement"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public HtmlElement FromElement {
             get {
@@ -186,9 +156,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementEventArgs.uex' path='docs/doc[@for="HtmlElementEventArgs.ToElement"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public HtmlElement ToElement {
             get {

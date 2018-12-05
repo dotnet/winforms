@@ -15,9 +15,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
 
     /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [
     Editor("System.Windows.Forms.Design.TreeNodeCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
     ]
@@ -53,9 +50,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.this"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual TreeNode this[int index] {
             get {
                 if (index < 0 || index >= owner.childCount) {
@@ -112,9 +106,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Count"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
         [Browsable(false)]
         public int Count {
@@ -148,9 +139,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IsReadOnly"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool IsReadOnly {
             get {  
                 return false;
@@ -231,9 +219,6 @@ namespace System.Windows.Forms {
         // END - NEW ADD OVERLOADS IN WHIDBEY -->
         
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.AddRange"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void AddRange(TreeNode[] nodes) {
             if (nodes == null) {
                 throw new ArgumentNullException("nodes");
@@ -256,9 +241,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Find"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeNode[] Find (string key, bool searchAllChildren) {
              ArrayList foundNodes =  FindInternal(key, searchAllChildren, this, new ArrayList());
 
@@ -365,9 +347,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Contains"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool Contains(TreeNode node) {
             return IndexOf(node) != -1;
         }
@@ -393,9 +372,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IndexOf"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int IndexOf(TreeNode node) {
             for(int index=0; index < Count; ++index) {
                 if (this[index] == node) {
@@ -571,9 +547,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.CopyTo"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void CopyTo(Array dest, int index) {
             if (owner.childCount > 0) {
                 System.Array.Copy(owner.children, 0, dest, index, owner.childCount);
@@ -581,9 +554,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Remove"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Remove(TreeNode node) {
             node.Remove();
         }
@@ -597,9 +567,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.RemoveAt"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void RemoveAt(int index) {
             this[index].Remove();
         }
@@ -617,9 +584,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.GetEnumerator"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public IEnumerator GetEnumerator() {
             return new WindowsFormsUtils.ArraySubsetEnumerator(owner.children, owner.childCount);
         }

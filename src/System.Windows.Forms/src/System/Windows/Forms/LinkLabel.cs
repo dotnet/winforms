@@ -384,9 +384,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OverrideCursor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected Cursor OverrideCursor {
             get {
                 return overrideCursor;
@@ -1274,9 +1271,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnPaintBackground"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnPaintBackground(PaintEventArgs e) {
             Image i = this.Image;
 
@@ -1307,9 +1301,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             InvalidateTextLayout();
@@ -1333,9 +1324,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnEnabledChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
             
@@ -1350,9 +1338,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnTextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnTextChanged(EventArgs e) {
             base.OnTextChanged(e);
             InvalidateTextLayout();
@@ -1360,9 +1345,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnTextAlignChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnTextAlignChanged(EventArgs e) {
             base.OnTextAlignChanged(e);
             InvalidateTextLayout();
@@ -1696,9 +1678,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Select"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void Select(bool directed, bool forward) {
 
             if (directed) {
@@ -1949,9 +1928,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public class LinkCollection : IList {
             private LinkLabel owner;
             private bool linksAdded = false;   //whether we should serialize the linkCollection
@@ -1963,9 +1939,6 @@ namespace System.Windows.Forms {
             private int lastAccessedIndex = -1;
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.LinkCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public LinkCollection(LinkLabel owner) {
                 if (owner == null)
                     throw new ArgumentNullException("owner");
@@ -1973,9 +1946,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.this"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual Link this[int index] {
                 get {
                     return(Link)owner.links[index];
@@ -2031,9 +2001,6 @@ namespace System.Windows.Forms {
   
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Count"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [Browsable(false)]
             public int Count {
                 get {
@@ -2076,9 +2043,6 @@ namespace System.Windows.Forms {
             }
            
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -2086,9 +2050,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Add"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public Link Add(int start, int length) {
                 if (length != 0) {
                     linksAdded = true;
@@ -2097,9 +2058,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Add1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public Link Add(int start, int length, object linkData) {
                 if (length != 0) {
                     linksAdded = true;
@@ -2125,9 +2083,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Add2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int Add(Link value) {
                 if (value != null && value.Length != 0) {
                     linksAdded = true;
@@ -2195,9 +2150,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(Link link) {
                 return owner.links.Contains(link);
             }
@@ -2222,9 +2174,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(Link link) {
                 return owner.links.IndexOf(link);
             }
@@ -2307,9 +2256,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 if (owner.links != null) {
                     return owner.links.GetEnumerator();
@@ -2320,9 +2266,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Remove(Link value) {
 
                 if (value.Owner != this.owner) {
@@ -2350,9 +2293,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.RemoveAt"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void RemoveAt(int index) {
                 Remove(this[index]);
             }
@@ -2378,9 +2318,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         TypeConverter(typeof(LinkConverter))
         ]
@@ -2431,9 +2368,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.Enabled"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [DefaultValue(true)]
             public bool Enabled {
                 get {
@@ -2458,9 +2392,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.Length"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int Length {
                 get { 
                     if (length == -1) {
@@ -2486,9 +2417,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.LinkData"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [DefaultValue(null)]
             public object LinkData {
                 get {
@@ -2539,9 +2467,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.Start"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int Start { 
                 get {
                     return start;
@@ -2578,9 +2503,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.Visited"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [DefaultValue(false)]
             public bool Visited {
                 get {
@@ -2613,9 +2535,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkComparer"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         private class LinkComparer : IComparer {
             int IComparer.Compare(object link1, object link2) {
 

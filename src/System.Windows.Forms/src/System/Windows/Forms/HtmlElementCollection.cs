@@ -17,9 +17,6 @@ using System.Collections;
 
 namespace System.Windows.Forms {
     /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public sealed class HtmlElementCollection : ICollection {
         private UnsafeNativeMethods.IHTMLElementCollection htmlElementCollection;
         private HtmlElement[] elementsArray;
@@ -52,9 +49,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.this"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement this[int index] {
             get {
                 //do some bounds checking here...
@@ -77,9 +71,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.this1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement this[string elementId] {
             get {
                 if (this.NativeHtmlElementCollection != null) {
@@ -104,9 +95,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.GetElementsByName"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElementCollection GetElementsByName(string name) {
             int count = this.Count;
             HtmlElement[] temp = new HtmlElement[count];    // count is the maximum # of matches

@@ -291,9 +291,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override Image BackgroundImage {
             get {
@@ -305,9 +302,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -567,9 +561,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OverrideCursor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         private Cursor OverrideCursor {
             get {
                 return overrideCursor;
@@ -633,11 +624,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1059,9 +1045,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoving"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterCancelEventHandler SplitterMoving {
             add {
@@ -1073,9 +1056,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoved"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved {
             add {
@@ -1412,9 +1392,6 @@ namespace System.Windows.Forms {
         ////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
@@ -1899,9 +1876,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Select"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void Select(bool directed, bool forward) {
             // avoid re-entrant code.
             // SelectNextControl can call back on us.. and we might end up infinitely recursing.

@@ -987,9 +987,6 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_SIZEMODECHANGED = new object();
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.SizeModeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
         public event EventHandler SizeModeChanged {
             add {
@@ -1092,9 +1089,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.KeyUp"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
             add {
@@ -1106,9 +1100,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.KeyDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
             add {
@@ -1120,9 +1111,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.KeyPress"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
             add {
@@ -1332,18 +1320,12 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnVisibleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnVisibleChanged(EventArgs e) {
             base.OnVisibleChanged(e);
             Animate();
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnParentChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnParentChanged(EventArgs e) {
             base.OnParentChanged(e);
             Animate();
@@ -1363,9 +1345,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnSizeModeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnSizeModeChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_SIZEMODECHANGED] as EventHandler;
             if (eh != null) {

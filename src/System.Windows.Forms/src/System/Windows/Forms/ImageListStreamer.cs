@@ -201,9 +201,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer.GetObjectData"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 
         public void /*cpr: ISerializable*/GetObjectData(SerializationInfo si, StreamingContext context) {
             MemoryStream stream = new MemoryStream();

@@ -96,9 +96,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private int maxWidth = -1;
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.hotItem"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         private int hotItem = -1;
 
         // Track the current scale factor so we can scale our buttons
@@ -255,9 +252,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -281,9 +275,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -1890,9 +1881,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -1916,9 +1904,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Add1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int Add(string text) {
                 ToolBarButton button = new ToolBarButton(text);
                 return Add(button);
@@ -1936,9 +1921,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(ToolBarButton[] buttons) {
                 if (buttons == null) {
                     throw new ArgumentNullException("buttons");
@@ -1982,9 +1964,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(ToolBarButton button) {
                 return IndexOf(button) != -1;
             }
@@ -2019,9 +1998,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(ToolBarButton button) {
                 for(int index=0; index < Count; ++index) {
                     if (this[index] == button) {
@@ -2074,9 +2050,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Insert"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, ToolBarButton button) {
                 owner.InsertButton(index, button);
             }
@@ -2135,9 +2108,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Remove(ToolBarButton button) {
                 int index = IndexOf(button);
                 if (index != -1) {

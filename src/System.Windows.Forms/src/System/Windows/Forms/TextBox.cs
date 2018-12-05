@@ -272,9 +272,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.Multiline"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override bool Multiline {
             get {
                 return base.Multiline;
@@ -537,9 +534,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.TextAlignChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
             add {
@@ -606,9 +600,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             if (this.AutoCompleteMode != AutoCompleteMode.None) {
@@ -678,9 +669,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnTextAlignChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnTextAlignChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
             if (eh != null) {
