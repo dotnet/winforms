@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-\        [CLSCompliant(false)]
+        [CLSCompliant(false)]
         public void CreateComponentFromTool(ToolboxItem tool)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
