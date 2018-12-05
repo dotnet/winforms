@@ -73,15 +73,15 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(AudioData))]
         public void DataObject_SetAudio(Memory<byte> audioBytes)
         {
-            var inner = new TestDataObject();
-            inner.AutoConvert = true;
-
-            var outer = new DataObject((IDataObject)inner);
-            outer.SetAudio(audioBytes.Span);
-
-            Assert.True(audioBytes.Span.SequenceEqual(inner.GetDataAsStream()));
-            Assert.Equal(DataFormats.WaveAudio, inner.Format);
-            Assert.False(inner.AutoConvert);
+            var dataObject = new DataObject();
+            dataObject.SetAudio(audioBytes.Span);
+            using (var stream = dataObject.GetAudioStream())
+            {
+                var blob = new byte[stream.Length];
+                var read = stream.Read(blob);
+                Assert.Equal(blob.Length, read);
+                Assert.True(audioBytes.Span.SequenceEqual(blob));
+            }
         }
 
         [Fact]
@@ -89,47 +89,6 @@ namespace System.Windows.Forms.Tests
         {
             var outer = new DataObject();
             Assert.Throws<ArgumentException>(() => outer.SetAudio(Array.Empty<byte>().AsSpan()));
-        }
-
-        private class TestDataObject : DataObject
-        {
-            public object Data { get; set; }
-            public string Format { get; set; }
-            public bool AutoConvert { get; set; }
-            public Type FormatType { get; set; }
-
-            public byte[] GetDataAsStream()
-            {
-                if (!(Data is System.IO.Stream stream))
-                    throw new Exception($"The content of {nameof(Data)} was expected to be a Stream");
-
-                var blob = new byte[stream.Length];
-                var read = stream.Read(blob);
-                if (blob.Length != read)
-                    throw new Exception($"The stream length {stream.Length} does not match the content length {read}");
-                return blob;
-            }
-
-            public override void SetData(object data) => Data = data;
-
-            public override void SetData(string format, bool autoConvert, object data)
-            {
-                Format = format;
-                AutoConvert = autoConvert;
-                Data = data;
-            }
-
-            public override void SetData(string format, object data)
-            {
-                Format = format;
-                Data = data;
-            }
-
-            public override void SetData(Type format, object data)
-            {
-                FormatType = format;
-                Data = data;
-            }
         }
     }
 }
