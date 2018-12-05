@@ -83,14 +83,23 @@
 
   <!-- Set package paths for project reference outputs -->
   <Target Name="SetPackagePath" DependsOnTargets="ResolveReferences">
+  
+    <!-- Create booleans for Refs and Facades to use in settting package paths and packaging pdbs -->
+    <ItemGroup>
+      <TfmSpecificPackageFile>
+        <IsReference>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj'))</IsReference>
+        <IsFacade>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Facade.csproj'))</IsFacade>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+
     <ItemGroup>
       <TfmSpecificPackageFile>
         <!-- Put everything under lib by default -->
         <PackagePath>lib/$(TargetFramework)</PackagePath>
         <!-- If the reference ends with Ref.csproj, it's a reference binary, so put it under ref instead -->
-        <PackagePath Condition="$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj'))">ref/$(TargetFramework)</PackagePath>
+        <PackagePath Condition="'%(TfmSpecificPackageFile.IsReference)' == 'true'">ref/$(TargetFramework)</PackagePath>
         <!-- If the reference ends with Facade.csproj, it's a facade binary, so put it under both lib and ref  -->
-        <PackagePath Condition="$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Facade.csproj'))">lib/$(TargetFramework);ref/$(TargetFramework)</PackagePath>
+        <PackagePath Condition="'%(TfmSpecificPackageFile.IsFacade)' == 'true'">lib/$(TargetFramework);ref/$(TargetFramework)</PackagePath>
       </TfmSpecificPackageFile>
     </ItemGroup>
   </Target>
@@ -105,8 +114,8 @@
       <_baseDirectory>%(TfmSpecificPackageFile.RootDir)%(TfmSpecificPackageFile.Directory)</_baseDirectory>
       <_baseFileName>%(TfmSpecificPackageFile.FileName)</_baseFileName>
       <_packagePath>%(TfmSpecificPackageFile.PackagePath)</_packagePath>
-      <_isReferenceAssembly>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj'))</_isReferenceAssembly>
-      <_isFacadeAssembly>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Facade.csproj'))</_isFacadeAssembly>
+      <_isReferenceAssembly>%(TfmSpecificPackageFile.IsReference)</_isReferenceAssembly>
+      <_isFacadeAssembly>%(TfmSpecificPackageFile.IsFacade)</_isFacadeAssembly>
     </PropertyGroup>
     
     <ItemGroup>
