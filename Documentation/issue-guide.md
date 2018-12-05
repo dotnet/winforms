@@ -31,7 +31,7 @@ We use GitHub [labels](https://github.com/dotnet/winforms/labels) on our issues 
 
 * **Issue Type**: These labels classify the type of issue. We use the following types:
     * [api-suggestion](https://github.com/dotnet/winforms/labels/api-suggestion): Issues which would add new APIs (see [API Review process](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/api-review-process.md) for details).
-        * Note: WinForms API process is not finalized yet. We may need to add additional UI-specific steps to it (e.g. accessibility review and [documentation](https://github.com/dotnet/docs/tree/master/docs/framework/winforms) update process). Expect finalized API review version post-3.0 when we will be ready to take new APIs.
+        * Note: WinForms API process is not finalized yet. We may need to add additional UI-specific steps to it (for example, accessibility review and [documentation](https://docs.microsoft.com/dotnet/framework/winforms) update process). Expect finalized API review version post-3.0 when we will be ready to take new APIs.
     * [bug](https://github.com/dotnet/winforms/labels/bug), [enhancement](https://github.com/dotnet/winforms/labels/enhancement), [test-bug](https://github.com/dotnet/winforms/labels/test-bug), [test-enhancement](https://github.com/dotnet/winforms/labels/test-enhancement), [question](https://github.com/dotnet/winforms/labels/question), [documentation](https://github.com/dotnet/winforms/labels/documentation): See [label description](https://github.com/dotnet/winforms/labels) for details.
 * **Other**:
     * [up-for-grabs](https://github.com/dotnet/winforms/labels/up-for-grabs): Smaller sections of work which we believe are well scoped. These sorts of issues are a good place to start if you are new. Anyone is free to work on these issues.
@@ -70,14 +70,14 @@ Guidance for triaging issues for WinForms team members:
 1. Don't be afraid to say no, or close issues - just explain why and be polite.
 1. Don't be afraid to be wrong - just be flexible when new information appears.
 
-Feel free to use other labels if it helps your triage efforts (e.g. **needs-more-info**, **design-discussion**, **tenet-compatibility**, etc.).
+Feel free to use other labels if it helps your triage efforts (for example, **needs-more-info**, **design-discussion**, **tenet-compatibility**, etc.).
 
 ### Motivation for triage rules
 
 1. Issue has no **Assignee**, unless someone is working on the issue at the moment.
     * Motivation: Observation is that contributors are less likely to grab assigned issues, no matter what the repo rules say.
 1. Use **up-for-grabs** as much as possible, ideally with a quick note about next steps / complexity of the issue.
-    * Note: Per http://up-for-grabs.net, such issues should be no longer than few nights' worth of work. They should be actionable (i.e. no mysterious CI failures that can't be tested in the open).
+    * Note: Per https://up-for-grabs.net, such issues should be no longer than few nights' worth of work. They should be actionable (that is, no mysterious CI failures that can't be tested in the open).
 1. Set milestone to **Future**, unless you can 95%-commit you can fund the issue in specific milestone.
     * Motivation: Helps communicate desire/timeline to community. Can spark further priority/impact discussion.
 1. Each issue has exactly one "*issue type*" label (**bug**, **enhancement**, **api-suggestion**, **test-bug**, **test-enhancement**, **question**, **documentation**, etc.).
@@ -92,6 +92,6 @@ Each PR has to have reviewer approval from at least one WinForms team member who
 1. Don't set any  labels on PRs. They are superfluous and not needed (exceptions: **NO MERGE**).
     * Motivation: All the important info (*issue type* label, API approval label, etc.) is already captured on the associated issue.
 1. Push PRs forward, don't let them go stale (response every 5+ days, ideally no PRs older than 2 weeks).
-1. Close stuck or long-term blocked PRs (e.g. due to missing API approval, etc.) and reopen them once they are unstuck.
+1. Close stuck or long-term blocked PRs (for example, due to missing API approval, etc.) and reopen them once they are unstuck.
     * Motivation: Keep only active PRs. WIP (work-in-progress) PRs should be rare and should not become stale (2+ weeks old). If a PR is stale and there is not immediate path forward, consider closing the PR until it is unblocked/unstuck.
 1. Link PR to related issue via [auto-closing](https://help.github.com/articles/closing-issues-via-commit-messages/) (add "Fixes #12345" into your PR description).
