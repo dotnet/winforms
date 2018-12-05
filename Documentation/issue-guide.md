@@ -31,7 +31,7 @@ We use GitHub [labels](https://github.com/dotnet/winforms/labels) on our issues 
 
 * **Issue Type**: These labels classify the type of issue. We use the following types:
     * [api-suggestion](https://github.com/dotnet/winforms/labels/api-suggestion): Issues which would add new APIs (see [API Review process](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/api-review-process.md) for details).
-        * Note: WinForms API process is not finalized yet. We may need to add additional UI-specific steps to it (e.g. accessibility review). Expect finalized API review version post-3.0 when we will be ready to take new APIs.
+        * Note: WinForms API process is not finalized yet. We may need to add additional UI-specific steps to it (e.g. accessibility review and [documentation](https://github.com/dotnet/docs/tree/master/docs/framework/winforms) update process). Expect finalized API review version post-3.0 when we will be ready to take new APIs.
     * [bug](https://github.com/dotnet/winforms/labels/bug), [enhancement](https://github.com/dotnet/winforms/labels/enhancement), [test-bug](https://github.com/dotnet/winforms/labels/test-bug), [test-enhancement](https://github.com/dotnet/winforms/labels/test-enhancement), [question](https://github.com/dotnet/winforms/labels/question), [documentation](https://github.com/dotnet/winforms/labels/documentation): See [label description](https://github.com/dotnet/winforms/labels) for details.
 * **Other**:
     * [up-for-grabs](https://github.com/dotnet/winforms/labels/up-for-grabs): Smaller sections of work which we believe are well scoped. These sorts of issues are a good place to start if you are new. Anyone is free to work on these issues.
