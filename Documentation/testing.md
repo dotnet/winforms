@@ -5,7 +5,7 @@ This document describes our approach to unit testing.
 We are still working on a scalable solution for functional testing.
 
 ## Building tests
-Tests are automatically built when running `.\build` since all test projects are referenced in `WinForms.sln` at the repo root.
+Tests are automatically built when running `.\build` since all test projects are referenced in `Winforms.sln` at the repo root.
 
 ## Running tests
 
@@ -36,7 +36,7 @@ Build FAILED.
 * To see the actual test(s) that failed, along with their error message(s), open the .html file that is displayed in the error message (which is always under `artifacts\TestResults`)
 
 ### Testing from Visual Studio
-To test from Visual Studio, open WinForms.sln in Visual Studio and test how you normally would (using the Test Explorer, for example)
+To test from Visual Studio, open Winforms.sln in Visual Studio and test how you normally would (using the Test Explorer, for example)
 
 ### Troubleshooting Visual Studio test errors
 * When testing from Visual Studio, test errors show up as normal in the test explorer.
