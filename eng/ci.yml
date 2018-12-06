@@ -41,17 +41,6 @@ jobs:
         - name: _OfficialBuildIdArgs
           value: ''
 
-        # needed for helix
-        - name: _HelixToken
-          value: ''
-        
-        # Override some values if we're building publicly
-        - ${{ if eq(parameters.runAsPublic, 'true') }}:
-
-          - group: Helix Anonymous
-          - name: _HelixToken
-            value: $(BotAccount-dotnet-github-anon-kaonashi-bot-helix-token)
-
         # Override some values if we're building internally
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
@@ -80,10 +69,6 @@ jobs:
               /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-
-          - group: DotNet-HelixApi-Access
-          - name: _HelixToken
-            value: $(HelixApiAccessToken)
 
       strategy:
         matrix:
