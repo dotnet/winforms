@@ -124,4 +124,24 @@ To run them, execute the following command the Runner_WinformsControlsTest direc
 
 #### Interpreting results
 
-The 
+The execution of that command will return a 0 if all tests passed and a -1 if even one test failed. To look at _slightly_ more in-depth results, see the `results.log` file generated alongside the .bat and .ps1 files. An example set of entries in that file follows:
+
+```txt
+12/6/2018 9:41 AM: ***************************
+12/6/2018 9:41 AM: Overall Form Open passed.
+12/6/2018 9:41 AM: Buttons passed.
+12/6/2018 9:41 AM: Calendar passed.
+12/6/2018 9:41 AM: TreeView, ImageList failed.
+12/6/2018 9:41 AM: Content alignment passed.
+12/6/2018 9:41 AM: Multiple controls passed.
+12/6/2018 9:41 AM: DataGridView passed.
+12/6/2018 9:41 AM: Menus failed.
+12/6/2018 9:41 AM: Panels passed.
+12/6/2018 9:42 AM: Splitter passed.
+12/6/2018 9:42 AM: ComboBoxes passed.
+12/6/2018 9:42 AM: MDI Parent failed.
+12/6/2018 9:42 AM: Property Grid passed.
+12/6/2018 9:42 AM: ListView failed.
+12/6/2018 9:42 AM: DateTimePickerButton passed.
+12/6/2018 9:42 AM: FolderBrowserDialogButton passed.
+```
