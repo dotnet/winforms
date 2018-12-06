@@ -385,6 +385,24 @@ namespace System.Windows.Forms {
             }
         }
 
+        public static HighDpiMode HighDpiMode
+        {
+            get
+            {
+                return DpiHelper.GetWinformsApplicationDpiAwareness();
+            }
+        }
+
+        public static bool SetHighDpiMode(HighDpiMode highDpiMode)
+        {
+            if (DpiHelper.FirstParkingWindowCreated)
+            {
+                return false;
+            }
+
+            return DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
+        }
+
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.LocalUserAppDataPath"]/*' />
         /// <devdoc>
         ///    <para>Gets the path for the application data specific to a local, non-roaming user.</para>
@@ -4093,6 +4111,7 @@ namespace System.Windows.Forms {
                 SetState(STATE_TOPLEVEL, true);
                 Text = "WindowsFormsParkingWindow";
                 Visible = false;
+                DpiHelper.FirstParkingWindowCreated = true;
             }
 
             protected override CreateParams CreateParams {
@@ -4373,6 +4392,15 @@ namespace System.Windows.Forms {
             }
         }
 
+    }
+
+    public enum HighDpiMode
+    {
+        Uninitialized,
+        DpiUnaware,
+        SystemAware,
+        PerMonitor,
+        PerMonitorV2
     }
 }
 

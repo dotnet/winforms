@@ -49,6 +49,20 @@ namespace System.Windows.Forms
                 return;
             }
 
+#if WINFORMS_NAMESPACE
+            try
+            {
+                if (!DpiHelper.SetWinformsApplicationDpiAwareness(Application.HighDpiMode))
+                {
+                    System.Diagnostics.Debug.WriteLine("Failed to set Application DPI awareness");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Failed to set Application DPI awareness " + ex.ToString());
+            }
+#endif
+
             IntPtr hDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
             if (hDC != IntPtr.Zero)
             {
@@ -129,12 +143,12 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static int DeviceDpi 
+        internal static int DeviceDpi
         {
-            get 
+            get
             {
                 Initialize();
-                return (int)deviceDpi; 
+                return (int)deviceDpi;
             }
         }
 
@@ -153,9 +167,9 @@ namespace System.Windows.Forms
 
         private static InterpolationMode InterpolationMode
         {
-            get 
+            get
             {
-                if (interpolationMode == InterpolationMode.Invalid) 
+                if (interpolationMode == InterpolationMode.Invalid)
                 {
                     int dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactor * 100);
 
@@ -165,15 +179,15 @@ namespace System.Windows.Forms
                     // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
                     // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better 
                     // results because it uses less neighboring pixels.
-                    if ((dpiScalePercent % 100) == 0) 
+                    if ((dpiScalePercent % 100) == 0)
                     {
                         interpolationMode = InterpolationMode.NearestNeighbor;
-                    } 
-                    else if (dpiScalePercent < 100) 
+                    }
+                    else if (dpiScalePercent < 100)
                     {
                         interpolationMode = InterpolationMode.HighQualityBilinear;
-                    } 
-                    else 
+                    }
+                    else
                     {
                         interpolationMode = InterpolationMode.HighQualityBicubic;
                     }
@@ -207,7 +221,7 @@ namespace System.Windows.Forms
             return deviceImage;
         }
 
-        private static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0) 
+        private static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0)
         {
             Size deviceImageSize = DpiHelper.LogicalToDeviceUnits(logicalImage.Size, deviceDpi);
             return ScaleBitmapToSize(logicalImage, deviceImageSize);
@@ -232,9 +246,9 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value">value in logical units</param>
         /// <returns>value in device units</returns>
-        public static int LogicalToDeviceUnits(int value, int devicePixels = 0) 
+        public static int LogicalToDeviceUnits(int value, int devicePixels = 0)
         {
-            if (devicePixels == 0) 
+            if (devicePixels == 0)
             {
                 return (int)Math.Round(LogicalToDeviceUnitsScalingFactor * (double)value);
             }
@@ -248,7 +262,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value">The horizontal value in logical units</param>
         /// <returns>The horizontal value in device units</returns>
-        public static int LogicalToDeviceUnitsX(int value) 
+        public static int LogicalToDeviceUnitsX(int value)
         {
             return LogicalToDeviceUnits(value, 0);
         }
@@ -259,11 +273,11 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value">The vertical value in logical units</param>
         /// <returns>The vertical value in device units</returns>
-        public static int LogicalToDeviceUnitsY(int value) 
+        public static int LogicalToDeviceUnitsY(int value)
         {
             return LogicalToDeviceUnits(value, 0);
         }
-        
+
         /// <summary>
         /// Returns a new Size with the input's
         /// dimensions converted from logical units to device units.
@@ -298,7 +312,7 @@ namespace System.Windows.Forms
         /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
         public static void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap, int deviceDpi = 0)
         {
-            if (logicalBitmap == null) 
+            if (logicalBitmap == null)
             {
                 return;
             }
@@ -335,7 +349,164 @@ namespace System.Windows.Forms
             button.Image = deviceBitmap;
         }
 #endif
+        /// <summary>
+        /// Set, when the first (Parking)Window has been created. From that moment on, 
+        /// we will not be able nor allow to change the Process' DpiMode.
+        /// </summary>
+        internal static bool FirstParkingWindowCreated {get; set;}
 
+        /// <summary>
+        /// Sets the DPI awareness. If not available on the current OS, it falls back to the next possible.
+        /// </summary>
+        /// <returns>true/false - If the process DPI awareness is successfully set, returns true. Otherwise false.</returns>
+        internal static HighDpiMode GetWinformsApplicationDpiAwareness()
+        {
+            // For Windows 10 RS2 and above
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext)))
+            {
+
+                DpiAwarenessContext dpiAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
+
+                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE))
+                {
+                    return HighDpiMode.DpiUnaware;
+                }
+
+                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+                {
+                    return HighDpiMode.SystemAware;
+                }
+
+                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE))
+                {
+                    return HighDpiMode.PerMonitor;
+                }
+
+                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+                {
+                    return HighDpiMode.PerMonitorV2;
+                }
+                return HighDpiMode.Uninitialized;
+            }
+
+            // For operating systems windows 8.1 to Windows 10 redstone 1 version.
+            else if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SafeNativeMethods.GetProcessDpiAwareness)))
+            {
+                CAPS.PROCESS_DPI_AWARENESS processDpiAwareness;
+
+                SafeNativeMethods.GetProcessDpiAwareness(IntPtr.Zero, out processDpiAwareness);
+                switch (processDpiAwareness)
+                {
+                    case CAPS.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNINITIALIZED:
+                        return HighDpiMode.Uninitialized;
+                    case CAPS.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE:
+                        return HighDpiMode.DpiUnaware;
+                    case CAPS.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE:
+                        return HighDpiMode.SystemAware;
+                    case CAPS.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE:
+                        return HighDpiMode.PerMonitor;
+                    default:
+                        return HighDpiMode.Uninitialized;
+                }
+            }
+
+            // For operating systems windows 7 to windows 8
+            else if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SafeNativeMethods.IsProcessDPIAware)))
+            {
+                if (SafeNativeMethods.IsProcessDPIAware())
+                {
+                    return HighDpiMode.SystemAware;
+                }
+                else
+                {
+                    return HighDpiMode.DpiUnaware;
+                }
+            }
+
+            // We should never get here, except someone ported this with force to <Windows 7.
+            return HighDpiMode.Uninitialized;
+        }
+
+        /// <summary>
+        /// Sets the DPI awareness. If not available on the current OS, it falls back to the next possible.
+        /// </summary>
+        /// <returns>true/false - If the process DPI awareness is successfully set, returns true. Otherwise false.</returns>
+        internal static bool SetWinformsApplicationDpiAwareness(HighDpiMode highDpiMode)
+        {
+            NativeMethods.PROCESS_DPI_AWARENESS dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNINITIALIZED;
+
+            // For Windows 10 RS2 and above
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SafeNativeMethods.SetProcessDpiAwarenessContext)))
+            {
+                int rs2AndAboveDpiFlag;
+                switch (highDpiMode)
+                {
+                    case HighDpiMode.SystemAware:
+                        rs2AndAboveDpiFlag = NativeMethods.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
+                        break;
+                    case HighDpiMode.PerMonitor:
+                        rs2AndAboveDpiFlag = NativeMethods.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE;
+                        break;
+                    case HighDpiMode.PerMonitorV2:
+                        rs2AndAboveDpiFlag = NativeMethods.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2;
+                        break;
+                    default:
+                        rs2AndAboveDpiFlag = NativeMethods.DPI_AWARENESS_CONTEXT_UNAWARE;
+                        break;
+                }
+
+                return SafeNativeMethods.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag);
+
+            }
+            // For operating systems Windows 8.1 to Windows 10 RS1 version.
+            else if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SafeNativeMethods.SetProcessDpiAwareness)))
+            {
+                switch (highDpiMode)
+                {
+                    case HighDpiMode.DpiUnaware:
+                        dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE;
+                        break;
+                    case HighDpiMode.SystemAware:
+                        dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
+                        break;
+                    case HighDpiMode.PerMonitor:
+                    case HighDpiMode.PerMonitorV2:
+                        dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE;
+                        break;
+                    default:
+                        dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
+                        break;
+                }
+
+                return SafeNativeMethods.SetProcessDpiAwareness(dpiFlag) != NativeMethods.S_OK;
+            }
+
+            // For operating systems windows 7 to windows 8
+            else if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SafeNativeMethods.SetProcessDPIAware)))
+            {
+                switch (highDpiMode)
+                {
+                    case HighDpiMode.DpiUnaware:
+                        dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE;
+                        break;
+                    case HighDpiMode.SystemAware:
+                    case HighDpiMode.PerMonitor:
+                    case HighDpiMode.PerMonitorV2:
+                        dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
+                        break;
+                    default:
+                        dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
+                        break;
+                }
+
+                if (dpiFlag == NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE)
+                {
+                    return SafeNativeMethods.SetProcessDPIAware();
+                }
+            }
+
+            return false;
+        }
     }
 
     internal enum DpiAwarenessContext
