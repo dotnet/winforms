@@ -70,7 +70,7 @@ Naming
   * This is very useful when viewing test results, and when browsing in the test explorer
 
 Strategy
-* **Unit tests should be part of the same pull request as code changes**
+* **Unit tests should be part of the same PR as code changes**
   * Unit tests must be added for any change to public APIs. We will accept unit tests for internal methods as well. 
 * **Code Coverage**
   * In Visual Studio Test Explorer, select all tests, right click and execute 'Analyze code coverage for selected tests' command. This will run all tests and give a summary of blocks covered in 'Code Coverage Results' window. The summary can be drilled down to method level.   
