@@ -74,7 +74,7 @@ Strategy
   * Unit tests must be added for any change to public APIs. We will accept unit tests for internal methods as well. 
 * **Code Coverage**
   * In Visual Studio Test Explorer, select all tests, right click and execute 'Analyze code coverage for selected tests' command. This will run all tests and give a summary of blocks covered in 'Code Coverage Results' window. The summary can be drilled down to method level.   
-  Any code change accompanied with unit tests is expected to increase code coverage for the code modified. 
+  * Any code change accompanied with unit tests is expected to increase code coverage for the code modified. 
 * Avoid duplicating tests just for different inputs
   * Use `[Theory]` for this, followed by either `[InlineData]` or `[MemberData]`. See existing tests for examples on how to use these attributes
   * The exception to this is if the code behavior is fundamentally different based on the inputs. For example, if a method throws an ArgumentException for invalid inputs, that should be a separate test.
