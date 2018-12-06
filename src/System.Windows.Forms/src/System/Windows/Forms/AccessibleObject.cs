@@ -2608,7 +2608,7 @@ namespace System.Windows.Forms
 
             int result = NativeMethods.S_FALSE;
             try {
-                // The activityId can be any string. It cannot be null. It isnt used currently.
+                // The activityId can be any string. It cannot be null. It is not used currently.
                 result = UnsafeNativeMethods.UiaRaiseNotificationEvent(
                     this,
                     notificationKind,
