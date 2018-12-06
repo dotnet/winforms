@@ -5,7 +5,7 @@ This document describes our approach to unit testing.
 We are still working on a scalable solution for functional testing.
 
 ## Building tests
-Tests are automatically built when running `.\build` since all test projects are referenced in `System.Windows.Forms.sln` at the repo root.
+Tests are automatically built when running `.\build` since all test projects are referenced in `Winforms.sln` at the repo root.
 
 ## Running tests
 
@@ -36,7 +36,7 @@ Build FAILED.
 * To see the actual test(s) that failed, along with their error message(s), open the .html file that is displayed in the error message (which is always under `artifacts\TestResults`)
 
 ### Testing from Visual Studio
-To test from Visual Studio, open System.Windows.Forms.sln in Visual Studio and test how you normally would (using the Test Explorer, for example)
+To test from Visual Studio, open Winforms.sln in Visual Studio and test how you normally would (using the Test Explorer, for example)
 
 ### Troubleshooting Visual Studio test errors
 * When testing from Visual Studio, test errors show up as normal in the test explorer.
@@ -71,7 +71,10 @@ Naming
 
 Strategy
 * **Unit tests should be part of the same PR as code changes**
-  * Please test internal methods as well, not just publics. 
+  * Unit tests must be added for any change to public APIs. We will accept unit tests for internal methods as well. 
+* **Code Coverage**
+  * In Visual Studio Test Explorer, select all tests, right click and execute 'Analyze code coverage for selected tests' command. This will run all tests and give a summary of blocks covered in 'Code Coverage Results' window. The summary can be drilled down to method level.   
+  * Any code change accompanied with unit tests is expected to increase code coverage for the code modified. 
 * Avoid duplicating tests just for different inputs
   * Use `[Theory]` for this, followed by either `[InlineData]` or `[MemberData]`. See existing tests for examples on how to use these attributes
   * The exception to this is if the code behavior is fundamentally different based on the inputs. For example, if a method throws an ArgumentException for invalid inputs, that should be a separate test.

@@ -1142,7 +1142,7 @@ namespace System.Windows.Forms {
         /// <param name="dpi">dpi requested</param>
         /// <returns>returns system metrics for dpi</returns>
         public static int TryGetSystemMetricsForDpi(int nIndex, uint dpi) {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, "GetSystemMetricsForDpi")) {
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(UnsafeNativeMethods.GetSystemMetricsForDpi))) {
                 return GetSystemMetricsForDpi(nIndex, dpi);
             }
             else {
@@ -1176,7 +1176,7 @@ namespace System.Windows.Forms {
         /// Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API is not available on the OS that this application is running.
         /// </summary>
         public static bool TrySystemParametersInfoForDpi(int nAction, int nParam, [In, Out] NativeMethods.NONCLIENTMETRICS metrics, int nUpdate, uint dpi) {
-            if(ApiHelper.IsApiAvailable(ExternDll.User32, "SystemParametersInfoForDpi")) {
+            if(ApiHelper.IsApiAvailable(ExternDll.User32, nameof(UnsafeNativeMethods.SystemParametersInfoForDpi))) {
                 return SystemParametersInfoForDpi(nAction,  nParam, metrics,  nUpdate,  dpi);
             }
             else {

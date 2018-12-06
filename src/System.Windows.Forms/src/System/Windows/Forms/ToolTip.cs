@@ -170,8 +170,7 @@ namespace System.Windows.Forms {
 
         internal string GetCaptionForTool(Control tool) {
             Debug.Assert(tool != null, "tool should not be null");
-            Debug.Assert(this.tools[tool] as TipInfo != null, "There is no TipInfo with Caption for the tool");
-            return ((TipInfo)this.tools[tool]).Caption;
+            return ((TipInfo)this.tools[tool])?.Caption;
         }
 
         /// <devdoc>

@@ -101,8 +101,6 @@ namespace System.Windows.Forms {
 
         private Point                          mouseEnterWhenShown      = InvalidMouseEnter;
 
-        private readonly WeakReference<ToolTip> currentToolTipReference;
-
         private const int                      INSERTION_BEAM_WIDTH     = 6;
         
         internal static int                    insertionBeamWidth       = INSERTION_BEAM_WIDTH;
@@ -209,12 +207,7 @@ namespace System.Windows.Forms {
             Size defaultSize = DefaultSize;
             SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
             this.ShowItemToolTips = DefaultShowItemToolTips;
-            ResumeLayout(true);
-
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                this.currentToolTipReference = new WeakReference<ToolTip>(null);
-            }
-            
+            ResumeLayout(true);            
         }
 
         public ToolStrip(params ToolStripItem[] items) : this() {
@@ -1726,6 +1719,18 @@ namespace System.Windows.Forms {
                     showItemToolTips = value;
                     if (!showItemToolTips) {
                         UpdateToolTip(null);
+                    }
+
+                    if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
+                        ToolTip internalToolTip = this.ToolTip;
+                        foreach (ToolStripItem item in this.Items) {
+                            if (showItemToolTips) {
+                                KeyboardToolTipStateMachine.Instance.Hook(item, internalToolTip);
+                            }
+                            else {
+                                KeyboardToolTipStateMachine.Instance.Unhook(item, internalToolTip);
+                            }
+                        } 
                     }
 
                     // If the overflow button has not been created, don't check its properties
@@ -4417,7 +4422,10 @@ namespace System.Windows.Forms {
                     finally {
                          System.Security.CodeAccessPermission.RevertAssert();
                     }
-                    ToolTip.Active = false;
+
+                    if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
+                        ToolTip.Active = false;
+                    }
 
                     currentlyActiveTooltipItem = item;
 
@@ -4426,7 +4434,9 @@ namespace System.Windows.Forms {
                         Cursor currentCursor = Cursor.CurrentInternal;
 
                         if (currentCursor != null) {
-                            ToolTip.Active = true;
+                            if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
+                                ToolTip.Active = true;
+                            }
 
                             Point cursorLocation = Cursor.Position;
                             cursorLocation.Y += Cursor.Size.Height - currentCursor.HotSpot.Y;
@@ -4606,45 +4616,18 @@ namespace System.Windows.Forms {
             return new WindowsFormsUtils.ReadOnlyControlCollection(this, /* isReadOnly = */ !DesignMode);
         }
 
-        internal override void OnKeyboardToolTipHook(ToolTip toolTip) {
-            base.OnKeyboardToolTipHook(toolTip);
-
-            this.currentToolTipReference.SetTarget(toolTip);
-
-            if (this.toolStripItemCollection != null) {
-                foreach (ToolStripItem item in this.toolStripItemCollection) {
-                    KeyboardToolTipStateMachine.Instance.Hook(item, toolTip);
-                }
-            }
-        }
-
-        internal override void OnKeyboardToolTipUnhook(ToolTip toolTip) {
-            base.OnKeyboardToolTipUnhook(toolTip);
-
-            this.currentToolTipReference.SetTarget(null);
-
-            if (this.toolStripItemCollection != null) {
-                foreach (ToolStripItem item in this.toolStripItemCollection) {
-                    KeyboardToolTipStateMachine.Instance.Unhook(item, toolTip);
-                }
-            }
-        }
 
         internal void OnItemAddedInternal(ToolStripItem item) {
             if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                ToolTip currentToolTip;
-                if (this.currentToolTipReference.TryGetTarget(out currentToolTip) && currentToolTip != null) {
-                    KeyboardToolTipStateMachine.Instance.Hook(item, currentToolTip);
+                if (this.ShowItemToolTips) {
+                    KeyboardToolTipStateMachine.Instance.Hook(item, this.ToolTip);
                 }
             }
         }
 
         internal void OnItemRemovedInternal(ToolStripItem item) {
             if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                ToolTip currentToolTip;
-                if (this.currentToolTipReference.TryGetTarget(out currentToolTip) && currentToolTip != null) {
-                    KeyboardToolTipStateMachine.Instance.Unhook(item, currentToolTip);
-                }
+                KeyboardToolTipStateMachine.Instance.Unhook(item, this.ToolTip);
             }
         }
 

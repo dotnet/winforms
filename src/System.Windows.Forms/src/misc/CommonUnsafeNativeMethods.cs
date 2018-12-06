@@ -93,7 +93,11 @@ namespace System.Windows.Forms
         /// <returns>true/false</returns>
         public static bool TryFindDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, "AreDpiAwarenessContextsEqual"))
+            if(dpiContextA == DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED && dpiContextB == DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+            {
+                return true;
+            }
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.AreDpiAwarenessContextsEqual)))
             {
                 return AreDpiAwarenessContextsEqual(dpiContextA, dpiContextB);
             }
@@ -107,7 +111,7 @@ namespace System.Windows.Forms
         /// <returns> returns thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
         public static DpiAwarenessContext TryGetThreadDpiAwarenessContext()
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, "GetThreadDpiAwarenessContext"))
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext)))
             {
                 return GetThreadDpiAwarenessContext();
             }
@@ -122,11 +126,15 @@ namespace System.Windows.Forms
         /// Tries to set thread dpi awareness context
         /// </summary>
         /// <returns> returns old thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
-        public static DpiAwarenessContext TrySetThreadDpiAwarenessContext(DpiAwarenessContext dpiCOntext)
+        public static DpiAwarenessContext TrySetThreadDpiAwarenessContext(DpiAwarenessContext dpiContext)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, "SetThreadDpiAwarenessContext"))
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.SetThreadDpiAwarenessContext)))
             {
-                return SetThreadDpiAwarenessContext(dpiCOntext);
+                if (dpiContext == DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+                {
+                    throw new ArgumentException(nameof(dpiContext), dpiContext.ToString());
+                }
+                return SetThreadDpiAwarenessContext(dpiContext);
             }
             else
             {

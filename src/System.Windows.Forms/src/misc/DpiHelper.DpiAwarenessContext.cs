@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    if (!CommonUnsafeNativeMethods.AreDpiAwarenessContextsEqual(awareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
+                    if (!CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(awareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
                     {
                         originalAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
 

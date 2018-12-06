@@ -701,8 +701,8 @@ namespace System.Windows.Forms {
             KeyboardToolTipStateMachine.Instance.Unhook(this.DropDown, toolTip);
         }
     }
-        
-
+    
+    [System.Runtime.InteropServices.ComVisible(true)]
     public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject {
         private ToolStripDropDownItem owner;
         public ToolStripDropDownItemAccessibleObject(ToolStripDropDownItem item) : base(item) {
