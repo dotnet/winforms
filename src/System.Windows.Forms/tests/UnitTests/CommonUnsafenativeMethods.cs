@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
@@ -14,7 +15,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the TryFindDpiAwarenessContextsEqual test
         /// </summary>
         public static TheoryData TryFindDpiAwarenessContextsEqualData =>
-            TestHelper.GetEnumTheoryData<DpiAwarenessContext>();
+            CommonTestHelper.GetEnumTheoryData<DpiAwarenessContext>();
         
 
         Theory]
@@ -35,7 +36,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the TrySetThreadDpiAwarenessContextGetSet test
         /// </summary>
         public static TheoryData TrySetThreadDpiAwarenessContextGetSetData =>
-            TestHelper.GetEnumTheoryData<DpiAwarenessContext>();
+            CommonTestHelper.GetEnumTheoryData<DpiAwarenessContext>();
 
         [Theory]
         [MemberData(nameof(TrySetThreadDpiAwarenessContextGetSetData))]

@@ -6,6 +6,7 @@ using Xunit;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
+using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
@@ -135,7 +136,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the CreateControlInternal test
         /// </summary>
         public static TheoryData<bool> CreateControlInternalData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(CreateControlInternalData))]
@@ -158,7 +159,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the TabIndexGetSet test
         /// </summary>
         public static TheoryData<uint> TabIndexGetSetData =>
-            TestHelper.GetUIntTheoryData();
+            CommonTestHelper.GetUIntTheoryData();
 
         [Theory]
         [MemberData(nameof(TabIndexGetSetData))]
@@ -175,7 +176,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the TabStopGetSet test
         /// </summary>
         public static TheoryData<bool> TabStopGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(TabStopGetSetData))]
@@ -192,7 +193,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the TabStopInternalGetSet test
         /// </summary>
         public static TheoryData<bool> TabStopInternalGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(TabStopInternalGetSetData))]
@@ -541,7 +542,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AccessibleRole test
         /// </summary>
         public static TheoryData<AccessibleRole> AccessibleRoleData =>
-            TestHelper.GetEnumTheoryData<AccessibleRole>();
+            CommonTestHelper.GetEnumTheoryData<AccessibleRole>();
 
         [Theory]
         [MemberData(nameof(AccessibleRoleData))]
@@ -558,7 +559,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AccessibleRoleInvalid test
         /// </summary>
         public static TheoryData<CheckState> AccessibleRoleInvalidData =>
-            TestHelper.GetEnumTheoryDataInvalid<CheckState>();
+            CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();
 
         [Theory]
         [MemberData(nameof(AccessibleRoleInvalidData))]
@@ -574,7 +575,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the IsAccessibleGetSet test
         /// </summary>
         public static TheoryData<bool> IsAccessibleGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(IsAccessibleGetSetData))]
@@ -658,7 +659,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the BackgroundImageLayoutGetSet test
         /// </summary>
         public static TheoryData<ImageLayout> BackgroundImageLayoutData =>
-            TestHelper.GetEnumTheoryData<ImageLayout>();
+            CommonTestHelper.GetEnumTheoryData<ImageLayout>();
 
         [Theory]
         [MemberData(nameof(BackgroundImageLayoutData))]
@@ -675,7 +676,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the BackgroundImageLayoutGetSetInvalid test
         /// </summary>
         public static TheoryData<ImageLayout> BackgroundImageLayoutGetSetInvalidData =>
-            TestHelper.GetEnumTheoryDataInvalid<ImageLayout>();
+            CommonTestHelper.GetEnumTheoryDataInvalid<ImageLayout>();
 
         [Theory]
         [MemberData(nameof(BackgroundImageLayoutGetSetInvalidData))]
@@ -728,7 +729,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the ApplySizeConstraints test
         /// </summary>
         public static TheoryData<int> ApplySizeConstraintsData =>
-            TestHelper.GetIntTheoryData();
+            CommonTestHelper.GetIntTheoryData();
 
         [Theory]
         [MemberData(nameof(ApplySizeConstraintsData))]
@@ -767,7 +768,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the ApplyBoundsConstraints test
         /// </summary>
         public static TheoryData<int> ApplyBoundsConstraintsData =>
-            TestHelper.GetIntTheoryData();
+            CommonTestHelper.GetIntTheoryData();
 
         [Theory]
         [MemberData(nameof(ApplySizeConstraintsData))]
@@ -804,7 +805,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AnchorGetSet test
         /// </summary>
         public static TheoryData<AnchorStyles> AnchorData =>
-            TestHelper.GetEnumTheoryData<AnchorStyles>();
+            CommonTestHelper.GetEnumTheoryData<AnchorStyles>();
 
         [Theory]
         [MemberData(nameof(AnchorData))]
@@ -832,7 +833,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the HeightGetSet test
         /// </summary>
         public static TheoryData<int> HeightGetSetData =>
-            TestHelper.GetIntTheoryData();
+            CommonTestHelper.GetIntTheoryData();
 
         [Theory]
         [MemberData(nameof(HeightGetSetData))]
@@ -849,7 +850,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the LeftGetSet test
         /// </summary>
         public static TheoryData<int> LeftGetSetData =>
-            TestHelper.GetIntTheoryData();
+            CommonTestHelper.GetIntTheoryData();
 
         [Theory]
         [MemberData(nameof(LeftGetSetData))]
@@ -866,7 +867,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the TopGetSet test
         /// </summary>
         public static TheoryData<int> TopGetSetData =>
-            TestHelper.GetIntTheoryData();
+            CommonTestHelper.GetIntTheoryData();
 
         [Theory]
         [MemberData(nameof(TopGetSetData))]
@@ -951,7 +952,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the RequiredScaling test
         /// </summary>
         public static TheoryData<BoundsSpecified> RequiredScalingData =>
-            TestHelper.GetEnumTheoryData<BoundsSpecified>();
+            CommonTestHelper.GetEnumTheoryData<BoundsSpecified>();
 
         [Theory]
         [MemberData(nameof(RequiredScalingData))]
@@ -968,7 +969,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the RequiredScalingEnabled test
         /// </summary>
         public static TheoryData<bool> RequiredScalingEnabledData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(RequiredScalingEnabledData))]
@@ -1010,7 +1011,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the RightToLeftInvalid test
         /// </summary>
         public static TheoryData<RightToLeft> RightToLeftInvalidData =>
-            TestHelper.GetEnumTheoryDataInvalid<RightToLeft>();
+            CommonTestHelper.GetEnumTheoryDataInvalid<RightToLeft>();
 
         [Theory]
         [MemberData(nameof(RightToLeftInvalidData))]
@@ -1044,7 +1045,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the WidthGetSet test
         /// </summary>
         public static TheoryData<int> WidthGetSetData =>
-            TestHelper.GetIntTheoryData();
+            CommonTestHelper.GetIntTheoryData();
 
         [Theory]
         [MemberData(nameof(WidthGetSetData))]
@@ -1256,7 +1257,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the EnabledGetSet test
         /// </summary>
         public static TheoryData<bool> EnabledGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(EnabledGetSetData))]
@@ -1273,7 +1274,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the VisibleGetSet test
         /// </summary>
         public static TheoryData<bool> VisibleGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(VisibleGetSetData))]
@@ -1361,7 +1362,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the WindowTextGetSet test
         /// </summary>
         public static TheoryData<string> WindowTextGetSetData =>
-            TestHelper.GetStringTheoryData();
+            CommonTestHelper.GetStringTheoryData();
 
         [Theory]
         [MemberData(nameof(WindowTextGetSetData))]
@@ -1378,7 +1379,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the NameGetSet test
         /// </summary>
         public static TheoryData<string> NameGetSetData =>
-            TestHelper.GetStringTheoryData();
+            CommonTestHelper.GetStringTheoryData();
 
         [Theory]
         [MemberData(nameof(NameGetSetData))]
@@ -1395,7 +1396,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the TextGetSet test
         /// </summary>
         public static TheoryData<string> TextGetSetData =>
-            TestHelper.GetStringTheoryData();
+            CommonTestHelper.GetStringTheoryData();
 
         [Theory]
         [MemberData(nameof(TextGetSetData))]
@@ -1416,7 +1417,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the CaptureGetSet test
         /// </summary>
         public static TheoryData<bool> CaptureGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(CaptureGetSetData))]
@@ -1433,7 +1434,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the CaptureInternalGetSet test
         /// </summary>
         public static TheoryData<bool> CaptureInternalGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(CaptureInternalGetSetData))]
@@ -1580,7 +1581,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the GetChildAtPointNull test
         /// </summary>
         public static TheoryData<GetChildAtPointSkip> GetChildAtPointNullData =>
-            TestHelper.GetEnumTheoryData<GetChildAtPointSkip>();
+            CommonTestHelper.GetEnumTheoryData<GetChildAtPointSkip>();
 
         [Theory]
         [MemberData(nameof(GetChildAtPointNullData))]
@@ -1597,7 +1598,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the GetChildAtPointInvalid test
         /// </summary>
         public static TheoryData<GetChildAtPointSkip> GetChildAtPointInvalidData =>
-            TestHelper.GetEnumTheoryDataInvalid<GetChildAtPointSkip>();
+            CommonTestHelper.GetEnumTheoryDataInvalid<GetChildAtPointSkip>();
 
         [Theory]
         [MemberData(nameof(GetChildAtPointInvalidData))]
@@ -1637,7 +1638,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the DoDragDrop test
         /// </summary>
         public static TheoryData<DragDropEffects> DoDragDropData =>
-            TestHelper.GetEnumTheoryData<DragDropEffects>();
+            CommonTestHelper.GetEnumTheoryData<DragDropEffects>();
 
         [Theory]
         [MemberData(nameof(DoDragDropData))]
@@ -1680,7 +1681,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the UseWaitCursorGetSet test
         /// </summary>
         public static TheoryData<bool> UseWaitCursorGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(UseWaitCursorGetSetData))]
@@ -1722,7 +1723,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AllowDropGetSet test
         /// </summary>
         public static TheoryData<bool> AllowDropData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(AllowDropData))]
@@ -1739,7 +1740,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AutoSizeGetSet test
         /// </summary>
         public static TheoryData<bool> AutoSizeGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         /// <summary>
         /// Data for the AutoScrollOffsetGetSet test
@@ -1774,7 +1775,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the CausesValidationGetSet test
         /// </summary>
         public static TheoryData<bool> CausesValidationData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(CausesValidationData))]
@@ -1842,7 +1843,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the ValidationCancelledGetSet test
         /// </summary>
         public static TheoryData<bool> ValidationCancelledGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(ValidationCancelledGetSetData))]
@@ -1859,7 +1860,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the IsTopMdiWindowClosingGetSet test
         /// </summary>
         public static TheoryData<bool> IsTopMdiWindowClosingGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(IsTopMdiWindowClosingGetSetData))]
@@ -1893,7 +1894,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the DockGetSet test
         /// </summary>
         public static TheoryData<DockStyle> DockGetSetData =>
-            TestHelper.GetEnumTheoryData<DockStyle>();
+            CommonTestHelper.GetEnumTheoryData<DockStyle>();
 
         [Theory]
         [MemberData(nameof(DockGetSetData))]
