@@ -10,14 +10,14 @@ namespace System.Windows.Forms.Tests
     {
         
 
-        /// <summary>
+        /*/// <summary>
         /// Data for the TryFindDpiAwarenessContextsEqual test
         /// </summary>
         public static TheoryData TryFindDpiAwarenessContextsEqualData =>
             TestHelper.GetEnumTheoryData<DpiAwarenessContext>();
         
 
-        [Theory]
+        Theory]
         [MemberData(nameof(TryFindDpiAwarenessContextsEqualData))]
         internal void CommonUnsafeNativeMathods_TryFindDpiAwarenessContextsEqual(DpiAwarenessContext item)
         { 
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Tests
                 var ex = Assert.Throws<ArgumentException>(() => CommonUnsafeNativeMethods.TrySetThreadDpiAwarenessContext(DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED));
                 Assert.Equal(DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED.ToString(), ex.ParamName);
             }
-        }
+        }*/
 
     }
 }
