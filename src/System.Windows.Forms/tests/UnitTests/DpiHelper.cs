@@ -4,6 +4,7 @@
 
 using Xunit;
 using System.Drawing;
+using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
@@ -14,7 +15,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the LogicalToDeviceUnits test
         /// </summary>
         public static TheoryData<int> LogicalToDeviceUnitsData =>
-            TestHelper.GetIntTheoryData();
+            CommonTestHelper.GetIntTheoryData();
 
         [Theory]
         [MemberData(nameof(LogicalToDeviceUnitsData))]

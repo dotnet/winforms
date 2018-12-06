@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Winforms.Common.TestHelper;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Design.Tests
         /// <summary>
         /// Bool data
         /// </summary>
-        public static TheoryData BoolData => UtilityMethods.GetBoolTheoryData();
+        public static TheoryData BoolData => CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(BoolData))]
@@ -151,7 +151,7 @@ namespace System.Windows.Forms.Design.Tests
         /// Data for the GlyphSelectionType enum
         /// </summary>
         public static TheoryData<Behavior.GlyphSelectionType> GlyphSelectionTypeData =>
-                        UtilityMethods.GetEnumTheoryData<Behavior.GlyphSelectionType>();
+                        CommonTestHelper.GetEnumTheoryData<Behavior.GlyphSelectionType>();
 
         [Theory]
         [MemberData(nameof(GlyphSelectionTypeData))]

@@ -5,6 +5,7 @@
 using Xunit;
 using System.Drawing;
 using System.ComponentModel;
+using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
@@ -25,7 +26,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AppearanceGetSet test
         /// </summary>
         public static TheoryData<Appearance> AppearanceGetSetData =>
-            TestHelper.GetEnumTheoryData<Appearance>();
+            CommonTestHelper.GetEnumTheoryData<Appearance>();
 
         [Theory]
         [MemberData(nameof(AppearanceGetSetData))]
@@ -42,7 +43,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AppearanceGetSetInvalid test
         /// </summary>
         public static TheoryData<Appearance> AppearanceGetSetInvalidData =>
-            TestHelper.GetEnumTheoryDataInvalid<Appearance>();
+            CommonTestHelper.GetEnumTheoryDataInvalid<Appearance>();
 
         [Theory]
         [MemberData(nameof(AppearanceGetSetInvalidData))]
@@ -58,7 +59,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AutoCheck test
         /// </summary>
         public static TheoryData<bool> AutoCheckData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(AutoCheckData))]
@@ -75,7 +76,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the ContentAlignmentGetSet test
         /// </summary>
         public static TheoryData<ContentAlignment> ContentAlignmentGetSetData =>
-            TestHelper.GetEnumTheoryData<ContentAlignment>();
+            CommonTestHelper.GetEnumTheoryData<ContentAlignment>();
 
         [Theory]
         [MemberData(nameof(ContentAlignmentGetSetData))]
@@ -94,7 +95,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the ContentAlignmentGetSetInvalid test
         /// </summary>
         public static TheoryData<ContentAlignment> ContentAlignmentGetSetInvalidData =>
-            TestHelper.GetEnumTheoryDataInvalid<ContentAlignment>();
+            CommonTestHelper.GetEnumTheoryDataInvalid<ContentAlignment>();
 
         [Theory]
         [MemberData(nameof(ContentAlignmentGetSetInvalidData))]
@@ -122,7 +123,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the CheckStateGetSet test
         /// </summary>
         public static TheoryData<CheckState> CheckStateGetSetData =>
-            TestHelper.GetEnumTheoryData<CheckState>();
+            CommonTestHelper.GetEnumTheoryData<CheckState>();
 
         [Theory]
         [MemberData(nameof(CheckStateGetSetData))]
@@ -139,7 +140,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the CheckStateGetSetInvalid test
         /// </summary>
         public static TheoryData<CheckState> CheckStateGetSetInvalidData =>
-            TestHelper.GetEnumTheoryDataInvalid<CheckState>();
+            CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();
 
         [Theory]
         [MemberData(nameof(CheckStateGetSetInvalidData))]
@@ -155,7 +156,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the ThreeState test
         /// </summary>
         public static TheoryData<bool> ThreeStateData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(ThreeStateData))]
