@@ -132,9 +132,9 @@
       </TfmSpecificPackageFile>
 
       <!-- Get resource dlls -->
-      <TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).resources.dll">
+      <!--TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).resources.dll">
         <PackagePath>$(_packagePath)%(RecursiveDir)</PackagePath>
-      </TfmSpecificPackageFile>
+      </TfmSpecificPackageFile-->
 
     </ItemGroup>
   </Target>
