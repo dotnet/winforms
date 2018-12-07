@@ -11,7 +11,6 @@ namespace System.ComponentModel.Design
 {
     [ComVisible(true)]
     [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
-    [SecurityCritical]
     public class DesignerActionListCollection : CollectionBase
     {
         public DesignerActionListCollection()
