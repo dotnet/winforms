@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if !SYSTEM_WEB
-
 namespace System.Resources {
 
     using System.Diagnostics;
@@ -66,5 +64,3 @@ namespace System.Resources {
         }
     }
 }
-
-#endif // !SYSTEM_WEB
