@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(0, 0, "foo1")]
         [InlineData(1, 1, "foo2")]
         [InlineData(3, 3, "Cowman")]
-        public void DomainUpDown_SelectedIndex(int indexToSet, int indexAfterSet, string value)
+        public void DomainUpDown_SelectedIndexGetSet(int indexToSet, int indexAfterSet, string value)
         {
             var underTest = GetNewDomainUpDown();
 
