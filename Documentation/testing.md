@@ -100,7 +100,7 @@ Tests are built and executed by file name convention
 
 Currently, there is a single functional test in the repository: the WinformsControlsTest
 
-### Running the app
+### Running the application
 
 In the console, run the following command from the base of the repository:
 
@@ -108,9 +108,11 @@ In the console, run the following command from the base of the repository:
 .\.dotnet\dotnet.exe .\artifacts\bin\WinformsControlsTest\Debug\netcoreapp3.0\WinformsControlsTest.dll
 ```
 
-Note that this will fail if the WinformsControlsTest is not built
+**Note:** that this will fail if the WinformsControlsTest is not built. See [Build](testing.md) for more information on how to build from source.
 
 ### The test runner
+
+This runner will open the application and all single-depth dialogs with the SendKeys API; reporting whether or not it was possible to do so.
 
 #### Running
 
