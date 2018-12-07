@@ -5409,8 +5409,7 @@ namespace System.Windows.Forms {
                 OnColumnClick(new ColumnClickEventArgs(columnIndex));
             }
 
-            if (nmhdr->code == NativeMethods.HDN_BEGINTRACKA ||
-                nmhdr->code == NativeMethods.HDN_BEGINTRACKW) {
+            if (nmhdr->code == NativeMethods.HDN_BEGINTRACK) {
                this.listViewState[LISTVIEWSTATE_headerControlTracking] = true;
 
                // Reset our tracking information for the new BEGINTRACK cycle.
@@ -5428,8 +5427,7 @@ namespace System.Windows.Forms {
                }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ITEMCHANGINGA || 
-                nmhdr->code == NativeMethods.HDN_ITEMCHANGINGW) {
+            if (nmhdr->code == NativeMethods.HDN_ITEMCHANGING) {
                 NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER) m.GetLParam(typeof(NativeMethods.NMHEADER));
 
                 if (columnHeaders != null && nmheader.iItem < columnHeaders.Length &&
@@ -5463,8 +5461,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if ((nmhdr->code == NativeMethods.HDN_ITEMCHANGEDA ||
-                nmhdr->code == NativeMethods.HDN_ITEMCHANGEDW) &&
+            if ((nmhdr->code == NativeMethods.HDN_ITEMCHANGED) &&
                 !this.listViewState[LISTVIEWSTATE_headerControlTracking]) {
                 NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
                 if (columnHeaders != null && nmheader.iItem < columnHeaders.Length) {
@@ -5511,8 +5508,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ENDTRACKA || 
-                nmhdr->code == NativeMethods.HDN_ENDTRACKW) {
+            if (nmhdr->code == NativeMethods.HDN_ENDTRACK) {
                 Debug.Assert(this.listViewState[LISTVIEWSTATE_headerControlTracking], "HDN_ENDTRACK and HDN_BEGINTRACK are out of sync...");
                 this.listViewState[LISTVIEWSTATE_headerControlTracking] = false;
                 if (this.listViewState1[LISTVIEWSTATE1_cancelledColumnWidthChanging]) {
@@ -5537,9 +5533,6 @@ namespace System.Windows.Forms {
             if (nmhdr->code == NativeMethods.HDN_ENDDRAG) {
                 NativeMethods.NMHEADER header = (NativeMethods.NMHEADER) m.GetLParam(typeof(NativeMethods.NMHEADER));
                 if (header.pItem != IntPtr.Zero) {
-                    // 
-
-
 
                     NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) UnsafeNativeMethods.PtrToStructure((IntPtr) header.pItem, typeof(NativeMethods.HDITEM2));
                     if ((hdItem.mask & NativeMethods.HDI_ORDER) == NativeMethods.HDI_ORDER) {
@@ -5592,8 +5585,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_DIVIDERDBLCLICKA ||
-                nmhdr->code == NativeMethods.HDN_DIVIDERDBLCLICKW) {
+            if (nmhdr->code == NativeMethods.HDN_DIVIDERDBLCLICK) {
                 // We need to keep track that the user double clicked the column header divider
                 // so we know that the column header width is changing.
                 this.listViewState[LISTVIEWSTATE_headerDividerDblClick] = true;
@@ -5705,8 +5697,7 @@ namespace System.Windows.Forms {
                     CustomDraw(ref m);
                     break;
 
-                case NativeMethods.LVN_BEGINLABELEDITA:
-                case NativeMethods.LVN_BEGINLABELEDITW: {
+                case NativeMethods.LVN_BEGINLABELEDIT: {
                         NativeMethods.NMLVDISPINFO_NOTEXT nmlvdp = (NativeMethods.NMLVDISPINFO_NOTEXT)m.GetLParam(typeof(NativeMethods.NMLVDISPINFO_NOTEXT));
                         LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem);
                         OnBeforeLabelEdit(e);
@@ -5722,8 +5713,7 @@ namespace System.Windows.Forms {
                         break;
                     }
 
-                case NativeMethods.LVN_ENDLABELEDITA:
-                case NativeMethods.LVN_ENDLABELEDITW: {
+                case NativeMethods.LVN_ENDLABELEDIT: {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NativeMethods.NMLVDISPINFO nmlvdp = (NativeMethods.NMLVDISPINFO)m.GetLParam(typeof(NativeMethods.NMLVDISPINFO));
                         LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem, nmlvdp.item.pszText);
@@ -5950,14 +5940,8 @@ namespace System.Windows.Forms {
                                     text = text.Substring(0, dispInfo.item.cchTextMax - 1);
                                 }
 
-                                if (Marshal.SystemDefaultCharSize == 1) {
-                                    // ANSI. Use byte
-                                    byte[] buff = System.Text.Encoding.Default.GetBytes(text + "\0");
-                                    Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
-                                } else {
-                                    char[] buff = (text + "\0").ToCharArray();
-                                    Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
-                                }
+                                char[] buff = (text + "\0").ToCharArray();
+                                Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
                             }
 
                             if ((dispInfo.item.mask & NativeMethods.LVIF_IMAGE) != 0 && lvItem.ImageIndex != -1) {
@@ -6034,17 +6018,11 @@ namespace System.Windows.Forms {
                                 
                                 UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
-                                if (Marshal.SystemDefaultCharSize == 1) {
-                                    // ANSI. Use byte.
-                                    // we need to copy the null terminator character ourselves
-                                    byte[] byteBuf = System.Text.Encoding.Default.GetBytes(lvi.ToolTipText + "\0");
-                                    Marshal.Copy(byteBuf, 0, infoTip.lpszText, Math.Min(byteBuf.Length, infoTip.cchTextMax));
-                                } else {
-                                    // UNICODE. Use char.
-                                    // we need to copy the null terminator character ourselves
-                                    char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
-                                    Marshal.Copy(charBuf, 0, infoTip.lpszText, Math.Min(charBuf.Length, infoTip.cchTextMax));
-                                }
+                                // UNICODE. Use char.
+                                // we need to copy the null terminator character ourselves
+                                char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
+                                Marshal.Copy(charBuf, 0, infoTip.lpszText, Math.Min(charBuf.Length, infoTip.cchTextMax));
+
                                 Marshal.StructureToPtr(infoTip, (IntPtr) m.LParam, false);
                             }
                         }

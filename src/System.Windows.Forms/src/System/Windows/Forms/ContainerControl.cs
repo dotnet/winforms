@@ -748,7 +748,7 @@ namespace System.Windows.Forms {
 
                 try {
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
-                    SafeNativeMethods.GetTextMetrics(hdc, ref tm);
+                    SafeNativeMethods.GetTextMetricsW(hdc, ref tm);
 
                     retval.Height = tm.tmHeight;
 

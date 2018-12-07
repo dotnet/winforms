@@ -3940,18 +3940,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void FillInCreateParamsStartPosition(CreateParams cp) {
 
-            //           Removed logic that forced MDI children to always be
-            //           default size and position... need to verify that
-            //           this works on Win9X
-            /*
-            if (getIsMdiChild()) {
-            cp.x = NativeMethods.CW_USEDEFAULT;
-            cp.y = NativeMethods.CW_USEDEFAULT;
-            cp.width = NativeMethods.CW_USEDEFAULT;
-            cp.height = NativeMethods.CW_USEDEFAULT;
-            }
-            else {
-            */
             if (formState[FormStateSetClientSize] != 0) {
 
                 // When computing the client window size, don't tell them that
@@ -3965,7 +3953,6 @@ namespace System.Windows.Forms {
                 }               
                 cp.Width = correct.Width;
                 cp.Height = correct.Height;
-               
             }
 
             switch ((FormStartPosition)formState[FormStateStartPos]) {

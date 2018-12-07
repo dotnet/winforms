@@ -716,7 +716,7 @@ namespace System.Windows.Forms {
                 // fetch the string
                 info.cch += 1;  // according to MSDN we need to increment the count we receive by 1.
                 info.wID = nativeMenuCommandID;
-                IntPtr allocatedStringBuffer = Marshal.AllocCoTaskMem(info.cch * Marshal.SystemDefaultCharSize);
+                IntPtr allocatedStringBuffer = Marshal.AllocCoTaskMem(info.cch * sizeof(char));
                 info.dwTypeData = allocatedStringBuffer;
                 
 

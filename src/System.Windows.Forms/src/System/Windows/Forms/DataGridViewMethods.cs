@@ -8202,8 +8202,6 @@ namespace System.Windows.Forms
             byte[] sourceBytes = Encoding.Unicode.GetBytes(sbContent.ToString());
             byte[] destinationBytes = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, sourceBytes);
 
-            // Marshal.SystemDefaultCharSize is 2 on WinXP Pro - so the offsets seem to be in character counts instead of bytes. 
-            // Test on JPN and Win9x machines.
             int bytecountEndOfFragment = 135 + destinationBytes.Length;
             int bytecountEndOfHtml = bytecountEndOfFragment + 36;
             string prefix = string.Format(CultureInfo.InvariantCulture, DATAGRIDVIEW_htmlPrefix, bytecountEndOfHtml.ToString("00000000", CultureInfo.InvariantCulture), bytecountEndOfFragment.ToString("00000000", CultureInfo.InvariantCulture)) + DATAGRIDVIEW_htmlStartFragment;
@@ -8216,7 +8214,7 @@ namespace System.Windows.Forms
             utf8Stream = new System.IO.MemoryStream(bytecountEndOfHtml + 1);
             utf8Stream.Write(destinationBytes, 0, bytecountEndOfHtml);
             utf8Stream.WriteByte((byte)0);
-            
+
             #if DEBUG
             Debug.Assert(destinationBytes[97] == '<');
             Debug.Assert(destinationBytes[bytecountEndOfHtml-1] == '>');

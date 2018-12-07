@@ -2903,36 +2903,28 @@ namespace System.Windows.Forms {
                 NativeMethods.NMTREEVIEW* nmtv = (NativeMethods.NMTREEVIEW*)m.LParam;
 
                 switch (nmtv->nmhdr.code) {
-                    case NativeMethods.TVN_ITEMEXPANDINGA:
-                    case NativeMethods.TVN_ITEMEXPANDINGW:
+                    case NativeMethods.TVN_ITEMEXPANDING:
                         m.Result = TvnExpanding(nmtv);
                         break;
-                    case NativeMethods.TVN_ITEMEXPANDEDA:
-                    case NativeMethods.TVN_ITEMEXPANDEDW:
+                    case NativeMethods.TVN_ITEMEXPANDED:
                         TvnExpanded(nmtv);
                         break;
-                    case NativeMethods.TVN_SELCHANGINGA:
-                    case NativeMethods.TVN_SELCHANGINGW:
+                    case NativeMethods.TVN_SELCHANGING:
                         m.Result = TvnSelecting(nmtv);
                         break;
-                    case NativeMethods.TVN_SELCHANGEDA:
-                    case NativeMethods.TVN_SELCHANGEDW:
+                    case NativeMethods.TVN_SELCHANGED:
                         TvnSelected(nmtv);
                         break;
-                    case NativeMethods.TVN_BEGINDRAGA:
-                    case NativeMethods.TVN_BEGINDRAGW:
+                    case NativeMethods.TVN_BEGINDRAG:
                         TvnBeginDrag(MouseButtons.Left, nmtv);
                         break;
-                    case NativeMethods.TVN_BEGINRDRAGA:
-                    case NativeMethods.TVN_BEGINRDRAGW:
+                    case NativeMethods.TVN_BEGINRDRAG:
                         TvnBeginDrag(MouseButtons.Right, nmtv);
                         break;
-                    case NativeMethods.TVN_BEGINLABELEDITA:
-                    case NativeMethods.TVN_BEGINLABELEDITW:
+                    case NativeMethods.TVN_BEGINLABELEDIT:
                         m.Result = TvnBeginLabelEdit((NativeMethods.NMTVDISPINFO)m.GetLParam(typeof(NativeMethods.NMTVDISPINFO)));
                         break;
-                    case NativeMethods.TVN_ENDLABELEDITA:
-                    case NativeMethods.TVN_ENDLABELEDITW:
+                    case NativeMethods.TVN_ENDLABELEDIT:
                         m.Result = TvnEndLabelEdit((NativeMethods.NMTVDISPINFO)m.GetLParam(typeof(NativeMethods.NMTVDISPINFO)));
                         break;
                     case NativeMethods.NM_CLICK:
@@ -3100,8 +3092,7 @@ namespace System.Windows.Forms {
         case NativeMethods.WM_PRINT:
             WmPrint(ref m);
             break;
-                case NativeMethods.TVM_SETITEMA:
-                case NativeMethods.TVM_SETITEMW:
+                case NativeMethods.TVM_SETITEM:
                     base.WndProc(ref m);
                     if (this.CheckBoxes) {
                         NativeMethods.TV_ITEM item = (NativeMethods.TV_ITEM) m.GetLParam(typeof(NativeMethods.TV_ITEM));
@@ -3121,8 +3112,7 @@ namespace System.Windows.Forms {
                 case NativeMethods.WM_NOTIFY:
                     NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (nmhdr.code) {
-                        case NativeMethods.TTN_GETDISPINFOA:
-                        case NativeMethods.TTN_GETDISPINFOW:
+                        case NativeMethods.TTN_GETDISPINFO:
                             // MSDN:
                             // Setting the max width has the added benefit of enabling multiline
                             // tool tips!
@@ -3131,7 +3121,7 @@ namespace System.Windows.Forms {
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
-						case NativeMethods.TTN_SHOW:
+                        case NativeMethods.TTN_SHOW:
                             if (WmShowToolTip(ref m))
                             {
                                 m.Result = (IntPtr)1;
@@ -3327,7 +3317,6 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-
 
                 default:
                     base.WndProc(ref m);

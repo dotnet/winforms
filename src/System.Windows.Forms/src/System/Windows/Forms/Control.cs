@@ -7716,7 +7716,7 @@ example usage
         /// </devdoc>
         private void MarshalStringToMessage(string value, ref Message m) {
             if (m.LParam == IntPtr.Zero) {
-                m.Result = (IntPtr)((value.Length + 1) * Marshal.SystemDefaultCharSize);
+                m.Result = (IntPtr)((value.Length + 1) * sizeof(char));
                 return;
             }
 
@@ -7731,19 +7731,13 @@ example usage
             byte[] nullBytes;
             byte[] bytes;
 
-            if (Marshal.SystemDefaultCharSize == 1) {
-                bytes = Encoding.Default.GetBytes(value);
-                nullBytes = Encoding.Default.GetBytes(nullChar);
-            }
-            else {
-                bytes = Encoding.Unicode.GetBytes(value);
-                nullBytes = Encoding.Unicode.GetBytes(nullChar);
-            }
+            bytes = Encoding.Unicode.GetBytes(value);
+            nullBytes = Encoding.Unicode.GetBytes(nullChar);
 
             Marshal.Copy(bytes, 0, m.LParam, bytes.Length);
             Marshal.Copy(nullBytes, 0, unchecked((IntPtr)((long)m.LParam + (long)bytes.Length)), nullBytes.Length);
 
-            m.Result = (IntPtr)((bytes.Length + nullBytes.Length)/Marshal.SystemDefaultCharSize);
+            m.Result = (IntPtr)((bytes.Length + nullBytes.Length) / sizeof(char));
         }
 
         // Used by form to notify the control that it has been "entered"
@@ -10291,60 +10285,10 @@ example usage
             else if (m.Msg == NativeMethods.WM_IME_CHAR) {
                 int charsToIgnore = this.ImeWmCharsToIgnore;
 
-                if (Marshal.SystemDefaultCharSize == 1) {
-                    // On Win9X we get either an SBCS or an  MBCS value. We must convert it to
-                    // UNICODE to use in the KeyPressEventArg.
-                    //
-                    // Convert the character in this message to UNICODE
-                    // for use in the KeyPress event, but then convert it back from UNICODE
-                    // to its source value for processing in the DefWindowProc, which will expect a
-                    // non-UNICODE character.
-                    char unicodeChar = (char)0;
-                    byte[] b = new byte[] {(byte)(unchecked((int)(long)m.WParam) >> 8), unchecked((byte)(long)m.WParam)};
-                    char[] unicodeCharArray = new char[1];
-                    int stringLength = UnsafeNativeMethods.MultiByteToWideChar(0 /*CP_ACP*/, UnsafeNativeMethods.MB_PRECOMPOSED, b, b.Length, unicodeCharArray, 0);
-                    if (stringLength > 0) {
-                        unicodeCharArray = new char[stringLength];
-                        UnsafeNativeMethods.MultiByteToWideChar(0 /*CP_ACP*/, UnsafeNativeMethods.MB_PRECOMPOSED, b, b.Length, unicodeCharArray, unicodeCharArray.Length);
+                charsToIgnore += (3 - sizeof(char));
+                this.ImeWmCharsToIgnore = charsToIgnore;
 
-                        // Per the docs for WM_IME_CHAR, the processing of this message by DefWindowProc
-                        // will produce two WM_CHAR messages if the character value is a DBCS character.
-                        // Otherwise, only one WM_CHAR message will be generated. Therefore, only ignore
-                        // one WM_CHAR message for SBCS characters and two WM_CHAR messages for DBCS
-                        // characters.
-
-                        // What type of character were we passed?
-                        if (unicodeCharArray[0] != 0) {
-                            // This was an MBCS character, so pass along the first character
-                            // from the resultant array.
-                            unicodeChar = unicodeCharArray[0];
-
-                            charsToIgnore += 2;
-                        }
-                        else if (unicodeCharArray[0] == 0 && unicodeCharArray.Length >= 2) {
-                            // This was an SBCS character, so pass along the second character
-                            // from the resultant array since the first character in the array is NULL.
-                            unicodeChar = unicodeCharArray[1];
-
-                            charsToIgnore += 1;
-                        }
-                    }
-                    else {
-                        //MultiByteToWideChar failed
-                        throw new Win32Exception();
-                    }
-
-                    this.ImeWmCharsToIgnore = charsToIgnore;
-
-                    // 
-                    kpe = new KeyPressEventArgs(unicodeChar);
-                }
-                else {
-                    charsToIgnore += (3 - Marshal.SystemDefaultCharSize);
-                    this.ImeWmCharsToIgnore = charsToIgnore;
-
-                    kpe = new KeyPressEventArgs(unchecked((char)(long)m.WParam));
-                }
+                kpe = new KeyPressEventArgs(unchecked((char)(long)m.WParam));
 
                 char preEventCharacter = kpe.KeyChar;
                 OnKeyPress(kpe);
@@ -10354,52 +10298,7 @@ example usage
                     newWParam = m.WParam;
                 }
                 else {
-                    if (Marshal.SystemDefaultCharSize == 1) {
-                        // On Win9X we work with either an SBCS or an MBCS value. Since we
-                        // already converted it to UNICODE to send it to the KeyPress event, we must now convert
-                        // it back to either MBCS or SBCS for processing by the DefWindowProc.
-                        //
-                        string keyChar = new string(new char[] { kpe.KeyChar });
-                        byte[] mbcsBytes = null;
-                        int bytesNeeded = UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/, 0, keyChar, keyChar.Length, null, 0, IntPtr.Zero, IntPtr.Zero);
-                        // GB18030 defines 4 byte characters: we shouldn't assume that the length is capped at 2.
-                        if (bytesNeeded >= 2) {
-                            // This is an MBCS character.
-                            mbcsBytes = new byte[bytesNeeded];
-                            UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/, 0, keyChar, keyChar.Length, mbcsBytes, mbcsBytes.Length, IntPtr.Zero, IntPtr.Zero);
-
-                            int sizeOfIntPtr = Marshal.SizeOf(typeof(IntPtr));
-                            if (bytesNeeded > sizeOfIntPtr) {
-                                bytesNeeded = sizeOfIntPtr; //Same again: we wouldn't be able to stuff anything larger into a WParam
-                            }
-                            long wParam = 0;
-                            for (int i = 0; i < bytesNeeded; i++) {
-                                wParam <<= 8;
-                                wParam |= (long)mbcsBytes[i];
-                            }
-                            newWParam = (IntPtr)wParam;
-                        }
-                        else if (bytesNeeded == 1) {
-                            // This is an SBCS character.
-                            mbcsBytes = new byte[bytesNeeded];
-                            UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/,
-                                                                    0,
-                                                                    keyChar,
-                                                                    keyChar.Length,
-                                                                    mbcsBytes,
-                                                                    mbcsBytes.Length,
-                                                                    IntPtr.Zero,
-                                                                    IntPtr.Zero);
-                            newWParam = (IntPtr)((int)mbcsBytes[0]);
-                        }
-                        else {
-                            //We don't know what's going on: WideCharToMultiByte failed.  We can't deal with that.
-                            newWParam = m.WParam;
-                        }
-                    }
-                    else {
-                        newWParam = (IntPtr)kpe.KeyChar;
-                    }
+                    newWParam = (IntPtr)kpe.KeyChar;
                 }
             }
             else {
@@ -14041,7 +13940,7 @@ example usage
                     WmNotifyFormat(ref m);
                     break;
                 case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFYFORMAT:
-                    m.Result = (IntPtr)(Marshal.SystemDefaultCharSize == 1 ? NativeMethods.NFR_ANSI : NativeMethods.NFR_UNICODE);
+                    m.Result = (IntPtr)(NativeMethods.NFR_UNICODE);
                     break;
                 case NativeMethods.WM_SHOWWINDOW:
                     WmShowWindow(ref m);

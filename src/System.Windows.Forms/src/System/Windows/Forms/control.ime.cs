@@ -339,8 +339,6 @@ namespace System.Windows.Forms {
             // after all messages are sent, corresponding WM_CHAR messages are also sent. (in non-unicode 
             // windows two WM_CHAR messages are sent per char in the IME).  We need to keep a counter 
             // not to process each character twice or more.
-            // Marshal.SystemDefaultCharSize represents the default character size on the system; the default 
-            // is 2 for Unicode systems and 1 for ANSI systems.  This is how it is implemented in Control.
             get {
                 return Properties.GetInteger( PropImeWmCharsToIgnore );
             }
