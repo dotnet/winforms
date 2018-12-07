@@ -21,4 +21,8 @@
     <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\Common\src\ApiHelper.cs" Link="Common\ApiHelper.cs" />
+  </ItemGroup>
+
 </Project>
