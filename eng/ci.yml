@@ -77,6 +77,11 @@ jobs:
             # override some variables for debug
             _PublishType: none
             _SignType: test
+
+            # Test signing is running into sporadic failures on build machines, so disable it for now
+            # TODO: remove the following line once the issue is fixed
+            _SignArgs: ''
+
             _DotNetPublishToBlobFeed : false
           Build_Release:
             _BuildConfig: Release
