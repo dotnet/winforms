@@ -89,7 +89,7 @@ Feel free to use other labels if it helps your triage efforts (for example, **ne
 
 Each PR has to have reviewer approval from at least one WinForms team member who is not author of the change, before it can be merged.
 
-1. Don't set any  labels on PRs. They are superfluous and not needed 
+1. Please don't set any labels on PRs. 
     * exceptions: 
       * **request-no-squash** may be supplied by the PR author(s) to request that history not be squashed at merge; this is a request, not a requirement 
       * **NO-MERGE** may be supplied by the WinForms team in order to indicate that the PR should be halted; a reason should be given in the comments
