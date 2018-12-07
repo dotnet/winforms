@@ -7400,7 +7400,6 @@ namespace System.Windows.Forms {
 
     }
 
-    [SecurityCritical]
     [ComImport()]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("E44C3566-915D-4070-99C6-047BFF5A08F5")]
@@ -8368,7 +8367,6 @@ namespace System.Windows.Forms {
         /// <SecurityNote>
         ///     Critical:Elevates to Unmanaged code permission
         /// </SecurityNote>
-        [SecurityCritical]
         [ComImport()]
         [Guid("6D5140C1-7436-11CE-8034-00AA006009FA")]
         [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
@@ -8376,12 +8374,11 @@ namespace System.Windows.Forms {
             ///<SecurityNote>
             /// Critical elevates via a SUC.
             ///</SecurityNote>
-            [SuppressUnmanagedCodeSecurity, SecurityCritical]
+            [SuppressUnmanagedCodeSecurity]
             [PreserveSig]
             int QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObj);
         }
 
-        [SecurityCritical]
         [ComVisible(true)]
         [ComImport()]
         [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
@@ -8436,7 +8433,6 @@ namespace System.Windows.Forms {
         }
 
 
-        [SecurityCritical]
         [ComVisible(true)]
         [ComImport()]
         [Guid("d847d3a5-cab0-4a98-8c32-ecb45c59ad24")]
@@ -8458,7 +8454,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SecurityCritical]
         [ComVisible(true)]
         [ComImport()]
         [Guid("c7935180-6fb3-4201-b174-7df73adbf64a")]
@@ -8483,7 +8478,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SecurityCritical]
         [ComImport()]
         [ComVisible(true)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -8504,7 +8498,6 @@ namespace System.Windows.Forms {
             double SmallChange { get; }
         }
 
-        [SecurityCritical]
         [ComImport()]
         [ComVisible(true)]
         [Guid("D6DD68D1-86FD-4332-8666-9ABEDEA2D24C")]
@@ -8588,7 +8581,6 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [Guid("f7063da8-8359-439c-9297-bbc5299a7d87")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [SecurityCritical]
         [ComImport()]
         [CLSCompliant(false)]
         public interface IRawElementProviderFragment : IRawElementProviderSimple {
@@ -8655,7 +8647,6 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [Guid("620ce2a5-ab8f-40a9-86cb-de3c75599b58")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [SecurityCritical]
         [ComImport()]
         [CLSCompliant(false)]
         public interface IRawElementProviderFragmentRoot : IRawElementProviderFragment {
@@ -8689,7 +8680,6 @@ namespace System.Windows.Forms {
             ToggleState_Indeterminate = 2
         }
 
-        [SecurityCritical]
         [ComImport()]
         [ComVisible(true)]
         [Guid("56D00BD0-C4F4-433C-A836-1A52A57E0892")]
@@ -8711,7 +8701,6 @@ namespace System.Windows.Forms {
             RowOrColumnMajor_Indeterminate = 2
         }
 
-        [SecurityCritical]
         [ComImport()]
         [ComVisible(true)]
         [Guid("9c860395-97b3-490a-b52a-858cc22af166")]
@@ -8729,7 +8718,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SecurityCritical]
         [ComImport()]
         [ComVisible(true)]
         [Guid("b9734fa6-771f-4d78-9c90-2517999349cd")]

@@ -18,7 +18,6 @@ namespace System.Windows.Forms.Design
     ///     Provides an editor for picking shortcut keys.
     /// </summary>
     [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-    [SecurityCritical]
     [CLSCompliant(false)]
     public class ShortcutKeysEditor : UITypeEditor
     {
