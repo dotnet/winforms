@@ -2,11 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if SYSTEM_WEB
-namespace System.PrivateResources {
-#else
 namespace System.Resources {
-#endif
 
     using System.Diagnostics;
     using System.Runtime.Serialization;
@@ -25,9 +21,6 @@ namespace System.Resources {
     using System.Xml;
     using System.ComponentModel.Design;
     using System.Globalization;
-#if SYSTEM_WEB
-    using System.Web;   // This is needed to access the SR resource strings
-#endif
     
     /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader"]/*' />
     /// <devdoc>
@@ -35,15 +28,7 @@ namespace System.Resources {
     /// </devdoc>
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
-#if SYSTEM_WEB
-    internal class ResXResourceReader : IResourceReader {
-#else
     public class ResXResourceReader : IResourceReader {
-#endif
-
-        //static readonly char[] SpecialChars = new char[]{' ', '\r', '\n'};
-
-        //IFormatter binaryFormatter = null;
         string fileName = null;
         TextReader reader = null;
         Stream stream = null;
@@ -170,27 +155,6 @@ namespace System.Resources {
                 basePath = value;
             }
         }
-
-#if UNUSED
-        /// <devdoc>
-        ///     Retrieves the resource data set. This will demand load it.
-        /// </devdoc>
-        private ListDictionary ResData {
-            get {
-                EnsureResData();
-                return resData;
-            }
-        }
-
-        /// <devdoc>
-        ///     Returns the typeResolver used to find types defined in the ResX contents.
-        /// </devdoc>
-        private ITypeResolutionService TypeResolver {
-            get {
-                return this.typeResolver;
-            }
-        }
-#endif
 
         /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.ResXResourceReader5"]/*' />
         /// <devdoc>
@@ -452,18 +416,12 @@ namespace System.Resources {
                     writerTypeName = writerTypeName.Split(new char[] {','})[0].Trim();
                 }
 
-// Don't check validity, since our reader/writer classes are in System.Web.Compilation,
-// while the file format has them in System.Resources.  
-#if SYSTEM_WEB
-                validFile = true;
-#else
                 if (readerTypeName != null && 
                     writerTypeName != null && 
                     readerTypeName.Equals(readerType.FullName) && 
                     writerTypeName.Equals(writerType.FullName)) {
                     validFile = true;
                 }
-#endif
             }
 
             if (!validFile) {
@@ -554,13 +512,6 @@ namespace System.Resources {
                 }
             }
         }
-
-#if UNUSED
-        private string GetSimpleName(string typeName) {
-             int indexStart = typeName.IndexOf(",");
-             return typeName.Substring(0, indexStart); 
-        }
-#endif
 
         private void ParseAssemblyNode(XmlReader reader, bool isMetaData)
         {
