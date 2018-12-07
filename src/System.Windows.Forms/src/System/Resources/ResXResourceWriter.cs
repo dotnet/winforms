@@ -2,11 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if SYSTEM_WEB
-namespace System.PrivateResources {
-#else
 namespace System.Resources {
-#endif
 
     using System.Diagnostics;
     using System.Reflection;
@@ -22,9 +18,6 @@ namespace System.Resources {
     using System.Xml;
     using System.Runtime.Serialization;
     using System.Diagnostics.CodeAnalysis;
-#if SYSTEM_WEB
-    using System.Web;   // This is needed to access the SR resource strings
-#endif
 
     /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter"]/*' />
     /// <devdoc>
@@ -33,11 +26,7 @@ namespace System.Resources {
     /// </devdoc>
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
-#if SYSTEM_WEB
-    internal class ResXResourceWriter : IResourceWriter {
-#else
     public class ResXResourceWriter : IResourceWriter {
-#endif
         internal const string TypeStr = "type";
         internal const string NameStr = "name";
         internal const string DataStr = "data";
@@ -655,35 +644,7 @@ namespace System.Resources {
              if(indexStart == -1)
                 return null;
              return typeName.Substring(indexStart + 2);
-        }
-
-#if UNUSED
-        private string GetSimpleName(string typeName) {
-             int indexStart = typeName.IndexOf(",");
-             int indexEnd =  typeName.IndexOf(",", indexStart + 1);
-             return typeName.Substring(indexStart + 2, indexEnd - indexStart  - 3); 
-        }
-
-        static string StripVersionInformation(string typeName) {
-            int indexStart = typeName.IndexOf(" Version=");
-            if(indexStart ==-1)
-                indexStart = typeName.IndexOf("Version=");
-            if(indexStart ==-1)
-                indexStart = typeName.IndexOf("version=");
-            int indexEnd = -1;
-            string result = typeName;
-            if(indexStart != -1) {
-                // foudn version
-                indexEnd = typeName.IndexOf(",", indexStart);
-                if(indexEnd != -1) {
-                    result = typeName.Remove(indexStart, indexEnd-indexStart+1);
-                }
-            }
-            return result;
-            
-        }
-#endif
-        
+        }    
 
         static string ToBase64WrappedString(byte[] data) {
             const int lineWrap = 80;

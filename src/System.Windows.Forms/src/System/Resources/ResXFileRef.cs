@@ -2,12 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if SYSTEM_WEB
-namespace System.PrivateResources {
-#else
 namespace System.Resources {
-#endif
-
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
 
@@ -34,11 +29,8 @@ namespace System.Resources {
     [TypeConverterAttribute(typeof(ResXFileRef.Converter)), Serializable]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
-#if SYSTEM_WEB
-    internal class ResXFileRef {
-#else
+
     public class ResXFileRef {
-#endif
         private string fileName;
         private string typeName;
         [OptionalField(VersionAdded = 2)]
