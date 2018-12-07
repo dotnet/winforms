@@ -76,11 +76,11 @@ jobs:
             _BuildConfig: Debug
             # override some variables for debug
             _PublishType: none
-            _SignType: test
 
             # Test signing is running into sporadic failures on build machines, so disable it for now
-            # TODO: remove the following line once the issue is fixed
-            _SignArgs: ''
+            # TODO: revert this once https://github.com/dotnet/core-eng/issues/4734 is resolved
+            #_SignType: test
+            _SignType: ''
 
             _DotNetPublishToBlobFeed : false
           Build_Release:
