@@ -4,6 +4,7 @@
 
 using Xunit;
 using System.ComponentModel;
+using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
@@ -23,7 +24,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AutoSizeModeGetSet test
         /// </summary>
         public static TheoryData<AutoSizeMode> AutoSizeModeGetSetData =>
-            TestHelper.GetEnumTheoryData<AutoSizeMode>();
+            CommonTestHelper.GetEnumTheoryData<AutoSizeMode>();
 
         [Theory]
         [MemberData(nameof(AutoSizeModeGetSetData))]
@@ -40,7 +41,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AutoSizeModeGetSetInvalid test
         /// </summary>
         public static TheoryData<AutoSizeMode> AutoSizeModeGetSetInvalidData =>
-            TestHelper.GetEnumTheoryDataInvalid<AutoSizeMode>();
+            CommonTestHelper.GetEnumTheoryDataInvalid<AutoSizeMode>();
 
         [Theory]
         [MemberData(nameof(AutoSizeModeGetSetInvalidData))]
@@ -99,7 +100,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the DialogResultGetSet test
         /// </summary>
         public static TheoryData<DialogResult> DialogResultGetSetData =>
-            TestHelper.GetEnumTheoryData<DialogResult>();
+            CommonTestHelper.GetEnumTheoryData<DialogResult>();
 
         [Theory]
         [MemberData(nameof(DialogResultGetSetData))]
@@ -116,7 +117,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the DialogResultGetSetInvalid test
         /// </summary>
         public static TheoryData<DialogResult> DialogResultGetSetInvalidData =>
-            TestHelper.GetEnumTheoryDataInvalid<DialogResult>();
+            CommonTestHelper.GetEnumTheoryDataInvalid<DialogResult>();
 
         [Theory]
         [MemberData(nameof(DialogResultGetSetInvalidData))]
@@ -133,7 +134,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the NotifyDefault test
         /// </summary>
         public static TheoryData<bool> NotifyDefaultData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(NotifyDefaultData))]
