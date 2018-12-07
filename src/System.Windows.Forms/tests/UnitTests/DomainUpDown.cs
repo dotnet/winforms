@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
-using Moq;
-using System.Drawing;
 
 namespace System.Windows.Forms.Tests
 {
@@ -13,20 +11,19 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DomainUpDown_Constructor()
         {
-            var domainUpDown = new DomainUpDown();
-
-            // and & assert
-            Assert.NotNull(domainUpDown);
-            Assert.False(domainUpDown.AllowDrop);
-            Assert.False(domainUpDown.Wrap);
-            Assert.Equal(String.Empty, domainUpDown.Text);
+            var underTest = GetNewDomainUpDown();
+            
+            Assert.NotNull(underTest);
+            Assert.False(underTest.AllowDrop);
+            Assert.False(underTest.Wrap);
+            Assert.Equal(string.Empty, underTest.Text);
         }
 
         [Theory]
         [InlineData(0, 0, "foo1")]
         [InlineData(1, 1, "foo2")]
         [InlineData(3, 3, "Cowman")]
-        public void DomainUpDown_SelectedIndex(int indexToSet, int indexAfterSet, String value)
+        public void DomainUpDown_SelectedIndex(int indexToSet, int indexAfterSet, string value)
         {
             var underTest = GetNewDomainUpDown();
 
@@ -36,11 +33,14 @@ namespace System.Windows.Forms.Tests
         }
         
         [Fact]
-        public void DomainUpDown_SelectedIndex_Exception()
+        public void DomainUpDown_SelectedIndex_ArgumentOutOfRangeException()
         {
             var underTest = GetNewDomainUpDown();
-            Exception ex = Assert.Throws<ArgumentOutOfRangeException>(() => underTest.SelectedIndex = 3100);
-            Assert.Contains("Value of '3100' is not valid for 'SelectedIndex'.\r\nParameter name: SelectedIndex", ex.Message);
+            var index = 3100;
+            var paramName = "SelectedIndex";
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => underTest.SelectedIndex = index);
+            Assert.Equal(paramName, ex.ParamName);
+            Assert.Contains($"Value of '{index}' is not valid for '{paramName}'.\r\nParameter name: {paramName}", ex.Message);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("foo5", 0, -1)]
         [InlineData("foo5", 4, -1)]
         [InlineData("", 0, -1)]
-        public void DomainUpDown_MatchIndex(String search, int start, int index)
+        public void DomainUpDown_MatchIndex(string search, int start, int index)
         {
             var underTest = GetNewDomainUpDown();
             var expected = index;
@@ -76,11 +76,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DomainUpDown_MatchIndex_Exception()
+        public void DomainUpDown_MatchIndex_NullReferenceException()
         {
             var underTest = GetNewDomainUpDown();
-            Exception ex = Assert.Throws<NullReferenceException>(() => underTest.MatchIndex(null, false, 0));
-            Assert.Equal("Object reference not set to an instance of an object.", ex.Message);
+            Assert.Throws<NullReferenceException>(() => underTest.MatchIndex(null, false, 0));
         }
 
         [Theory]
@@ -113,10 +112,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
         }
 
-        private DomainUpDown GetNewDomainUpDown(Boolean sorted = false) {
+        private DomainUpDown GetNewDomainUpDown(bool sorted = false) {
             var domainUpDown = new DomainUpDown();
             domainUpDown.Sorted = sorted;
             var items = domainUpDown.Items;
+            Assert.NotNull(items);
             items.Add("foo1");
             items.Add("foo2");
             items.Add("foo3");

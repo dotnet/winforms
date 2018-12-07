@@ -296,27 +296,18 @@ namespace System.Windows.Forms {
             if (UserEdit) {
                 matchIndex = MatchIndex(Text, false, domainIndex);
             }
-            if (matchIndex != -1)
-            {
+            if (matchIndex != -1) {
                 // Found a match, so select this value
-                if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling)
-                {
+                if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling) {
                     domainIndex = matchIndex;
-                }
-                else
-                {
+                } else {
                     SelectIndex(matchIndex);
                 }
-            }
-            else
-            {
+            } else {
                 // Otherwise, get the next string in the domain list
-                if (domainIndex < domainItems.Count - 1)
-                {
+                if (domainIndex < domainItems.Count - 1) {
                     SelectIndex(domainIndex + 1);
-                }
-                else if (Wrap)
-                {
+                } else if (Wrap) {
                     SelectIndex(0);
                 }
             }
@@ -559,31 +550,20 @@ namespace System.Windows.Forms {
             if (UserEdit) {
                 matchIndex = MatchIndex(Text, false, domainIndex);
             }
-            if (matchIndex != -1)
-            {
+            if (matchIndex != -1) {
                 // Found a match, so set the domain index accordingly
                 //In legacy (.NET framework 4.7.1 and below), we were just updating selected index but no actualy change in the spinner.
                 //with new runtime, we update the selected index and perform spinner action.
-                if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling)
-                {
+                if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling) {
                     domainIndex = matchIndex;
-                }
-                else
-                {
+                } else {
                     SelectIndex(matchIndex);
                 }
-            }
-            else
-            {
-
+            } else {
                 // Otherwise, get the previous string in the domain list            
-
-                if (domainIndex > 0)
-                {
+                if (domainIndex > 0) {
                     SelectIndex(domainIndex - 1);
-                }
-                else if (Wrap)
-                {
+                } else if (Wrap) {
                     SelectIndex(domainItems.Count - 1);
                 }
             }
