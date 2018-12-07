@@ -8,17 +8,11 @@ namespace System.Windows.Forms {
     using System.Globalization;
     
     /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public struct BindingMemberInfo {
         private string dataList;
         private string dataField;
             
         /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.BindingMemberInfo"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public BindingMemberInfo(string dataMember) {
             if (dataMember == null)
                 dataMember = "";
@@ -35,9 +29,6 @@ namespace System.Windows.Forms {
         }
             
         /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.BindingPath"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string BindingPath {
             get {
                 return (dataList != null ? dataList : "");
@@ -45,9 +36,6 @@ namespace System.Windows.Forms {
         }
             
         /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.BindingField"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string BindingField {
             get {
                 return (dataField != null ? dataField : "");
@@ -55,9 +43,6 @@ namespace System.Windows.Forms {
         }
             
         /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.BindingMember"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string BindingMember {
             get {
                 return (BindingPath.Length > 0 ? BindingPath + "." + BindingField : BindingField);
@@ -65,9 +50,6 @@ namespace System.Windows.Forms {
         }
             
         /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.Equals"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override bool Equals(object otherObject) {
             if (otherObject is BindingMemberInfo) {
                 BindingMemberInfo otherMember = (BindingMemberInfo) otherObject;
@@ -85,9 +67,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.GetHashCode"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override int GetHashCode() {
             return base.GetHashCode();
         }

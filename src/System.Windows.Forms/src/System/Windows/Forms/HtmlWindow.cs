@@ -17,9 +17,6 @@ using System.Security.Permissions;
 namespace System.Windows.Forms
 {
     /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [PermissionSetAttribute(SecurityAction.LinkDemand, Name = "FullTrust")]
     public sealed class HtmlWindow
     {
@@ -75,9 +72,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Document"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlDocument Document
         {
             get
@@ -88,9 +82,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.DomWindow"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object DomWindow
         {
             get
@@ -100,9 +91,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Frames"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlWindowCollection Frames
         {
             get
@@ -113,9 +101,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.History"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlHistory History
         {
             get
@@ -126,9 +111,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.IsClosed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool IsClosed
         {
             get
@@ -154,9 +136,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Opener"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlWindow Opener
         {
             get
@@ -167,9 +146,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Parent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlWindow Parent
         {
             get
@@ -180,9 +156,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Position"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Point Position
         {
             get
@@ -210,9 +183,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.StatusBarText"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string StatusBarText
         {
             get
@@ -226,9 +196,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Url"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Uri Url
         {
             get 
@@ -240,9 +207,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.WindowFrameElement"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement WindowFrameElement
         {
             get
@@ -253,54 +217,36 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Alert"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Alert(string message)
         {
             this.NativeHtmlWindow.Alert(message);
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.AttachEventHandler"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             WindowShim.AttachEventHandler(eventName, eventHandler);
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Close"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Close()
         {
             this.NativeHtmlWindow.Close();
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Confirm"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool Confirm(string message)
         {
             return this.NativeHtmlWindow.Confirm(message);
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.DetachEventHandler"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             WindowShim.DetachEventHandler(eventName, eventHandler);
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Focus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Focus()
         {
             this.NativeHtmlWindow.Focus();
@@ -325,18 +271,12 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Navigate"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Navigate(Uri url)
         {
             this.NativeHtmlWindow.Navigate(url.ToString());
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Navigate"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
         /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
         /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
@@ -348,9 +288,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Open"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
         /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
         /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
@@ -363,9 +300,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Open"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
         public HtmlWindow Open(Uri url, string target, string windowOptions, bool replaceEntry)
         {
@@ -373,9 +307,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.OpenNew"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
         /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
         /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
@@ -388,9 +319,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.OpenNew"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
         public HtmlWindow OpenNew(Uri url, string windowOptions)
         {
@@ -398,18 +326,12 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Prompt"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string Prompt(string message, string defaultInputValue)
         {
             return this.NativeHtmlWindow.Prompt(message, defaultInputValue).ToString();
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.RemoveFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void RemoveFocus()
         {
             this.NativeHtmlWindow.Blur();
@@ -455,9 +377,6 @@ namespace System.Windows.Forms
         //
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Error"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementErrorEventHandler Error
         {
             add
@@ -471,9 +390,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.GotFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler GotFocus
         {
             add
@@ -487,9 +403,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Load"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Load
         {
             add
@@ -503,9 +416,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.LostFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler LostFocus
         {
             add
@@ -519,9 +429,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Resize"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Resize
         {
             add
@@ -535,9 +442,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Scroll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Scroll
         {
             add
@@ -551,9 +455,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Unload"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Unload
         {
             add

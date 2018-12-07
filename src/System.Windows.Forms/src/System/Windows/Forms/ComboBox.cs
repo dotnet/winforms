@@ -310,9 +310,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -324,9 +321,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -852,11 +846,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1234,9 +1223,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Localizable(true),
         Bindable(true)
@@ -1372,9 +1358,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
             add {
@@ -1386,9 +1369,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
         public event EventHandler DropDown {
             add {
@@ -1401,9 +1381,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.MeasureItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
             add {
@@ -1418,9 +1395,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedIndexChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
@@ -1432,9 +1406,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectionChangeCommitted"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectionChangeCommittedEventDescr))]
         public event EventHandler SelectionChangeCommitted {
             add {
@@ -1446,9 +1417,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownStyleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
         public event EventHandler DropDownStyleChanged {
             add {
@@ -2757,9 +2725,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnTextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnTextChanged(EventArgs e) {
             if (SystemAutoCompleteEnabled) {
@@ -3833,9 +3798,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [ListBindable(false)]
         public class ObjectCollection : IList {
 
@@ -3844,9 +3806,6 @@ namespace System.Windows.Forms {
             private IComparer comparer;
 
             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.ObjectCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ObjectCollection(ComboBox owner) {
                 this.owner = owner;
             }
@@ -3904,9 +3863,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -3989,9 +3945,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(object[] items) {
                 owner.CheckNoDataSource();
                 owner.BeginUpdate();
@@ -4066,9 +4019,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(object value) {
                 return IndexOf(value) != -1;
             }
@@ -4096,9 +4046,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(object value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));

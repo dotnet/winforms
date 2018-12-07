@@ -148,9 +148,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
             get {
@@ -179,9 +176,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -205,9 +199,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -582,9 +573,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -645,9 +633,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.FormatChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
         public event EventHandler FormatChanged {
             add {
@@ -834,11 +819,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1060,9 +1040,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -1228,9 +1205,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnFormatChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnFormatChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_FORMATCHANGED] as EventHandler;
             if (eh != null) {
@@ -1270,9 +1244,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {

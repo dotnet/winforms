@@ -10,9 +10,6 @@ namespace System.Windows.Forms {
 
     /// <include file='doc\PreProcessControlState.uex' path='docs/doc[@for="PreProcessControlState"]/*' />
     /// <internalonly />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>    
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]
     public enum PreProcessControlState {

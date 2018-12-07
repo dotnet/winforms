@@ -26,9 +26,6 @@ namespace System.Windows.Forms {
         ShowKeyboard = 0x02,
         
         /// <include file='doc\UICuesEvent.uex' path='docs/doc[@for="UICues.Shown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Shown = ShowFocus | ShowKeyboard,
         
         /// <include file='doc\UICuesEvent.uex' path='docs/doc[@for="UICues.ChangeFocus"]/*' />
@@ -44,15 +41,9 @@ namespace System.Windows.Forms {
         ChangeKeyboard = 0x08,
         
         /// <include file='doc\UICuesEvent.uex' path='docs/doc[@for="UICues.Changed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Changed = ChangeFocus | ChangeKeyboard,
         
         /// <include file='doc\UICuesEvent.uex' path='docs/doc[@for="UICues.None"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         None = 0x00,
     }
 
@@ -67,9 +58,6 @@ namespace System.Windows.Forms {
         private readonly UICues uicues;
         
         /// <include file='doc\UICuesEvent.uex' path='docs/doc[@for="UICuesEventArgs.UICuesEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public UICuesEventArgs(UICues uicues) {
             this.uicues = uicues;
@@ -116,9 +104,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\UICuesEvent.uex' path='docs/doc[@for="UICuesEventArgs.Changed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public UICues Changed {
             get {
                 return (uicues & UICues.Changed);

@@ -196,9 +196,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -222,9 +219,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -1071,9 +1065,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1231,11 +1222,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1270,9 +1256,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.DrawItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
             add {
@@ -1285,9 +1268,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.MeasureItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
             add {
@@ -1300,9 +1280,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
@@ -1339,9 +1316,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.CreateItemCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual ObjectCollection CreateItemCollection() {
             return new ObjectCollection(this);
         }
@@ -1717,9 +1691,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.OnChangeUICues"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnChangeUICues(UICuesEventArgs e) {
 
             // ListBox seems to get a bit confused when the UI cues change for the first
@@ -1817,9 +1788,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.OnMeasureItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnMeasureItem(MeasureItemEventArgs e) {
             MeasureItemEventHandler handler = (MeasureItemEventHandler)Events[EVENT_MEASUREITEM];
             if (handler != null) {
@@ -1828,9 +1796,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
 
@@ -1857,9 +1822,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.OnResize"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnResize(EventArgs e) {
 
             base.OnResize(e);
@@ -2928,9 +2890,6 @@ namespace System.Windows.Forms {
             private ItemArray items;
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.ObjectCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ObjectCollection(ListBox owner) {
                 this.owner = owner;
             }
@@ -3004,9 +2963,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -3108,18 +3064,12 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.AddRange1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(ObjectCollection value) {
                 owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)value);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(object[] items) {
                 owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)items);
@@ -3200,9 +3150,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(object value) {
                 return IndexOf(value) != -1;
             }
@@ -3236,9 +3183,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(object value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -3248,9 +3192,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.IndexOfIdentifier"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             /// <internalonly/>
             internal int IndexOfIdentifier(object value) {
                 if (value == null) {
@@ -3385,18 +3326,12 @@ namespace System.Windows.Forms {
         //******************************************************************************************
         // IntegerCollection
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.IntegerCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public class IntegerCollection : IList {
             private ListBox owner;
             private int[] innerArray;
             private int count=0;
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.IntegerCollection.IntegerCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IntegerCollection(ListBox owner) {
                 this.owner = owner;
             }
@@ -3437,9 +3372,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.IntegerCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             bool IList.IsReadOnly {
                 get {
                     return false;
@@ -3447,9 +3379,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.IntegerCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(int item) {
                 return IndexOf(item) != -1;
             }
@@ -3472,9 +3401,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.IntegerCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(int item) {
                 int index = -1;
 
@@ -3551,17 +3477,11 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.IntegerCollection.AddRange2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(int[] items) {
                 AddRangeInternal((ICollection)items);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.IntegerCollection.AddRange1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(IntegerCollection value) {
                 AddRangeInternal((ICollection)value);
             }
@@ -3729,9 +3649,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.IntegerCollection.CopyTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void CopyTo(Array destination, int index) {
                 int cnt = Count;
                 for (int i = 0; i < cnt; i++) {
@@ -3740,9 +3657,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.IntegerCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             IEnumerator IEnumerable.GetEnumerator() {
                 return new CustomTabOffsetsEnumerator(this);
             }
@@ -3804,17 +3718,11 @@ namespace System.Windows.Forms {
 
         // SelectedIndices
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public class SelectedIndexCollection : IList {
             private ListBox owner;
 
             /* C#r: protected */
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.SelectedIndexCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public SelectedIndexCollection(ListBox owner) {
                 this.owner = owner;
             }
@@ -3855,9 +3763,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return true;
@@ -3865,9 +3770,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(int selectedIndex) {
                 return IndexOf(selectedIndex) != -1;
             }
@@ -3884,9 +3786,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(int selectedIndex) {
 
                 // Just what does this do?  The selectedIndex parameter above is the index into the
@@ -3978,9 +3877,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.CopyTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void CopyTo(Array destination, int index) {
                 int cnt = Count;
                 for (int i = 0; i < cnt; i++) {
@@ -3989,9 +3885,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.ClearSelected"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Clear() {
                 if (owner != null) {
                     owner.ClearSelected();
@@ -3999,9 +3892,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.Add"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Add(int index) {
                 if (owner != null) {
                     ObjectCollection items = owner.Items;
@@ -4014,9 +3904,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Remove(int index) {
                 if (owner != null) {
                     ObjectCollection items = owner.Items;
@@ -4029,9 +3916,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 return new SelectedIndexEnumerator(this);
             }
@@ -4091,9 +3975,6 @@ namespace System.Windows.Forms {
 
         // Should be "ObjectCollection", except we already have one of those.
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public class SelectedObjectCollection : IList {
 
             // This is the bitmask used within ItemArray to identify selected objects.
@@ -4106,9 +3987,6 @@ namespace System.Windows.Forms {
 
             /* C#r: protected */
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection.SelectedObjectCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public SelectedObjectCollection(ListBox owner) {
                 this.owner = owner;
                 this.stateDirty = true;
@@ -4213,9 +4091,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return true;
@@ -4223,17 +4098,11 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(object selectedObject) {
                 return IndexOf(selectedObject) != -1;
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(object selectedObject) {
                 return InnerArray.IndexOf(selectedObject, SelectedObjectMask);
             }
@@ -4295,9 +4164,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection.CopyTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void CopyTo(Array destination, int index) {
                 int cnt = InnerArray.GetCount(SelectedObjectMask);
                 for (int i = 0; i < cnt; i++) {
@@ -4306,9 +4172,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 return InnerArray.GetEnumerator(SelectedObjectMask);
             }
@@ -4341,9 +4204,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection.ClearSelected"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Clear() {
                 if (owner != null) {
                     owner.ClearSelected();
@@ -4351,9 +4211,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection.Add"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Add(object value)  {
                 if (owner != null) {
                     ObjectCollection items = owner.Items;
@@ -4367,9 +4224,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedObjectCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Remove(object value) {
                 if (owner != null) {
                     ObjectCollection items = owner.Items;

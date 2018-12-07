@@ -19,9 +19,6 @@ namespace System.Windows.Forms.Design
     /// </summary>
     public class ControlDesigner : ComponentDesigner
     {
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         protected AccessibleObject accessibilityObj = null;
 
         protected BehaviorService BehaviorService => throw new NotImplementedException(SR.NotImplementedByDesign);
@@ -42,9 +39,6 @@ namespace System.Windows.Forms.Design
         public override ICollection AssociatedComponents =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public virtual AccessibleObject AccessibilityObject =>
             throw new NotImplementedException(SR.NotImplementedByDesign);
 
@@ -468,57 +462,27 @@ namespace System.Windows.Forms.Design
         [ComVisible(true)]
         public class ControlDesignerAccessibleObject : AccessibleObject
         {
-            /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public ControlDesignerAccessibleObject(ControlDesigner designer, Control control)
             {
                 throw new NotImplementedException(SR.NotImplementedByDesign);
             }
 
-        /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public override Rectangle Bounds => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-            /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public override string Description => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-            /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public override string DefaultAction => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-            /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public override string Name => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-            /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public override AccessibleObject Parent => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-            /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public override AccessibleRole Role => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-            /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public override AccessibleStates State => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-            /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public override string Value => throw new NotImplementedException(SR.NotImplementedByDesign);
 
-            /// <summary>
-            ///     <para>[To be supplied.]</para>
-            /// </summary>
             public override AccessibleObject GetChild(int index)
             {
                 throw new NotImplementedException(SR.NotImplementedByDesign);

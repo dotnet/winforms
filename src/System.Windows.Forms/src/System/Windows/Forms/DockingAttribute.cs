@@ -70,9 +70,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.GetHashCode"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override int GetHashCode() {
             return dockingBehavior.GetHashCode();
         }

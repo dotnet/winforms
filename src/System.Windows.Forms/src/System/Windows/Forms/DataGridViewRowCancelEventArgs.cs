@@ -9,9 +9,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
 
     /// <include file='doc\DataGridViewRowCancelEventArgs.uex' path='docs/doc[@for="DataGridViewRowCancelEventArgs"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class DataGridViewRowCancelEventArgs : CancelEventArgs
     {
         private DataGridViewRow dataGridViewRow;
@@ -25,9 +22,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewRowCancelEventArgs.uex' path='docs/doc[@for="DataGridViewRowCancelEventArgs.Row"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public DataGridViewRow Row
         {
             get

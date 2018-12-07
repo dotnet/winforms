@@ -340,9 +340,6 @@ namespace System.Resources {
         }
 
         /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.GetEnumerator"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // NOTE: Part of IResourceReader - not protected by class level LinkDemand.
         public IDictionaryEnumerator GetEnumerator() {
             isReaderDirty = true;

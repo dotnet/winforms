@@ -8,9 +8,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
 
     /// <include file='doc\DataGridViewCellValidatingEventArgs.uex' path='docs/doc[@for="DataGridViewCellValidatingEventArgs"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class DataGridViewCellValidatingEventArgs : CancelEventArgs
     {
         private int rowIndex, columnIndex;

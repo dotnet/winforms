@@ -52,7 +52,6 @@ namespace System.Windows.Forms.Design
         {
         }
 
-        /// <summary>>[To be supplied.]            /// </summary>
         protected sealed class FolderBrowser : Component
         {
             private static readonly int MAX_PATH = 260;

@@ -8,9 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace System.Windows.Forms {
 
     /// <include file='doc\MessageBoxDefaultButton.uex' path='docs/doc[@for="MessageBoxDefaultButton"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>    
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum MessageBoxDefaultButton {
         /// <include file='doc\MessageBoxDefaultButton.uex' path='docs/doc[@for="MessageBoxDefaultButton.Button1"]/*' />

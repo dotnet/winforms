@@ -321,9 +321,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ImeModeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [WinCategory( "Behavior" ), SRDescription( nameof(SR.ControlOnImeModeChangedDescr) )]
         public event EventHandler ImeModeChanged {
             add {

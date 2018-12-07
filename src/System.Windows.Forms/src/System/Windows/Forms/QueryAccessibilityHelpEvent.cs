@@ -27,16 +27,10 @@ namespace System.Windows.Forms {
         private string helpKeyword;
         
         /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.QueryAccessibilityHelpEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public QueryAccessibilityHelpEventArgs() {
         }
         
         /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.QueryAccessibilityHelpEventArgs1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public QueryAccessibilityHelpEventArgs(string helpNamespace, string helpString, string helpKeyword) {
             this.helpNamespace = helpNamespace;
             this.helpString = helpString;
@@ -44,9 +38,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.HelpNamespace"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string HelpNamespace { 
             get {
                 return helpNamespace;
@@ -57,9 +48,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.HelpString"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string HelpString { 
             get {
                 return helpString;
@@ -70,9 +58,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\QueryAccessibilityHelpEvent.uex' path='docs/doc[@for="QueryAccessibilityHelpEventArgs.HelpKeyword"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string HelpKeyword { 
             get {
                 return helpKeyword;

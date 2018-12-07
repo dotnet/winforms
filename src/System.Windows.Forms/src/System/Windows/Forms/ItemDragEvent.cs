@@ -24,35 +24,23 @@ namespace System.Windows.Forms {
         readonly object item;
 
         /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.ItemDragEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ItemDragEventArgs(MouseButtons button) {
             this.button = button;
             this.item = null;
         }
         
         /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.ItemDragEventArgs1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ItemDragEventArgs(MouseButtons button, object item) {
             this.button = button;
             this.item = item;
         }
         
         /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.Button"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public MouseButtons Button {
             get { return button; }
         }
 
         /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.Item"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object Item {
             get { return item; }
         }

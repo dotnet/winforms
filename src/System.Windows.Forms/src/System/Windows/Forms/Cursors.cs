@@ -90,9 +90,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.AppStarting"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor AppStarting {
             get {
                 if (appStarting == null)
@@ -102,9 +99,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Arrow"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor Arrow {
             get {
                 if (arrow == null)
@@ -114,9 +108,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Cross"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor Cross {
             get {
                 if (cross == null)
@@ -126,9 +117,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Default"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor Default {
             get {
                 if (defaultCursor == null)
@@ -138,9 +126,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.IBeam"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor IBeam {
             get {
                 if (iBeam == null)
@@ -150,9 +135,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.No"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor No {
             get {
                 if (no == null)
@@ -162,9 +144,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeAll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor SizeAll {
             get {
                 if (sizeAll == null)
@@ -174,9 +153,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeNESW"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor SizeNESW {
             get {
                 if (sizeNESW == null)
@@ -186,9 +162,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeNS"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor SizeNS {
             get {
                 if (sizeNS == null)
@@ -198,9 +171,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeNWSE"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor SizeNWSE {
             get {
                 if (sizeNWSE == null)
@@ -210,9 +180,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeWE"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor SizeWE {
             get {
                 if (sizeWE == null)
@@ -222,9 +189,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.UpArrow"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor UpArrow {
             get {
                 if (upArrow == null)
@@ -234,9 +198,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.WaitCursor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor WaitCursor {
             get {
                 if (wait == null)
@@ -246,9 +207,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Help"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor Help {
             get {
                 if (help == null)
@@ -258,9 +216,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.HSplit"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor HSplit {
             get {
                 if (hSplit == null)
@@ -270,9 +225,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.VSplit"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor VSplit {
             get {
                 if (vSplit == null)
@@ -282,9 +234,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.NoMove2D"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor NoMove2D {
             get {
                 if (noMove2D == null)
@@ -294,9 +243,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.NoMoveHoriz"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor NoMoveHoriz {
             get {
                 if (noMoveHoriz == null)
@@ -306,9 +252,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.NoMoveVert"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor NoMoveVert {
             get {
                 if (noMoveVert == null)
@@ -318,9 +261,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanEast"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor PanEast {
             get {
                 if (panEast == null)
@@ -330,9 +270,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanNE"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor PanNE {
             get {
                 if (panNE == null)
@@ -342,9 +279,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanNorth"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor PanNorth {
             get {
                 if (panNorth == null)
@@ -354,9 +288,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanNW"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor PanNW {
             get {
                 if (panNW == null)
@@ -366,9 +297,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanSE"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor PanSE {
             get {
                 if (panSE == null)
@@ -378,9 +306,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanSouth"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor PanSouth {
             get {
                 if (panSouth == null)
@@ -390,9 +315,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanSW"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor PanSW {
             get {
                 if (panSW == null)
@@ -402,9 +324,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanWest"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor PanWest {
             get {
                 if (panWest == null)
@@ -414,9 +333,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Hand"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Cursor Hand {
             get {
                 if (hand == null)

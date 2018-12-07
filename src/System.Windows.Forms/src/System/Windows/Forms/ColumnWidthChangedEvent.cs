@@ -19,17 +19,11 @@ namespace System.Windows.Forms {
         readonly int columnIndex;
 
         /// <include file='doc\ColumnWidthChangedEvent.uex' path='docs/doc[@for="ColumnWidthEventArgs.ColumnWidthChangedEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ColumnWidthChangedEventArgs(int columnIndex) {
             this.columnIndex = columnIndex;
         }
 
         /// <include file='doc\ColumnWidthChangedEvent.uex' path='docs/doc[@for="ColumnWidthChangedEventArgs.ColumnIndex"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int ColumnIndex {
             get {
                 return columnIndex;

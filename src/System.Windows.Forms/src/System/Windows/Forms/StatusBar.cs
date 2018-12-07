@@ -180,9 +180,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -1331,9 +1328,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.StatusBarPanelCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -1377,9 +1371,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.StatusBarPanelCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual void AddRange(StatusBarPanel[] panels) {
                 if (panels == null) {
                     throw new ArgumentNullException(nameof(panels));
@@ -1390,9 +1381,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.StatusBarPanelCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(StatusBarPanel panel) {
                 return IndexOf(panel) != -1;
             }
@@ -1418,9 +1406,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.StatusBarPanelCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(StatusBarPanel panel) {
                 for(int index=0; index < Count; ++index) {
                     if (this[index] == panel) {

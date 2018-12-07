@@ -550,9 +550,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackColorChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
             add {
@@ -778,9 +775,6 @@ namespace System.Windows.Forms {
                 Events.RemoveHandler(EventDisplayStyleChanged, value);
             }
         }
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]     
         private RightToLeft DefaultRightToLeft {
             get {
@@ -815,9 +809,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragDrop"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatDragDrop)), 
         SRDescription(nameof(SR.ToolStripItemOnDragDropDescr)),
@@ -834,9 +825,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragEnter"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatDragDrop)), 
         SRDescription(nameof(SR.ToolStripItemOnDragEnterDescr)),
@@ -853,9 +841,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragOver"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatDragDrop)), 
         SRDescription(nameof(SR.ToolStripItemOnDragOverDescr)),
@@ -872,9 +857,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragLeave"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatDragDrop)), 
         SRDescription(nameof(SR.ToolStripItemOnDragLeaveDescr)),
@@ -954,9 +936,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.EnabledChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [ 
         SRDescription(nameof(SR.ToolStripItemEnabledChangedDescr))
         ]
@@ -1020,9 +999,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ForeColorChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
             add {
@@ -1067,9 +1043,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.GiveFeedback"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatDragDrop)), 
         SRDescription(nameof(SR.ToolStripItemOnGiveFeedbackDescr)),
@@ -1746,9 +1719,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Paint"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.ToolStripItemOwnerChangedDescr))
@@ -1763,9 +1733,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Paint"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatAppearance)), 
         SRDescription(nameof(SR.ToolStripItemOnPaintDescr))
@@ -1936,9 +1903,6 @@ namespace System.Windows.Forms {
          }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.QueryContinueDrag"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatDragDrop)), 
         SRDescription(nameof(SR.ToolStripItemOnQueryContinueDragDescr)),
@@ -1955,9 +1919,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.QueryAccessibilityHelp"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripItemOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
             add {
@@ -2086,9 +2047,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.RightToLeftChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
             add {
@@ -2280,9 +2238,6 @@ namespace System.Windows.Forms {
         }
        
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnTextChangedDescr))]
         public event EventHandler TextChanged {
             add {
@@ -2393,9 +2348,6 @@ namespace System.Windows.Forms {
 
         
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.VisibleChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged {
             add {
@@ -2967,9 +2919,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackColorChanged(EventArgs e) {
            this.Invalidate();
@@ -3152,9 +3101,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnForeColorChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnForeColorChanged(EventArgs e) {
            this.Invalidate();
@@ -3162,9 +3108,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnFontChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFontChanged(EventArgs e) {
            cachedTextSize = Size.Empty;
@@ -3234,9 +3177,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackColorChanged(EventArgs e) {
             Color backColor = Properties.GetColor(PropBackColor);
@@ -3281,9 +3221,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnParentForeColorChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentForeColorChanged(EventArgs e) {
             Color foreColor = Properties.GetColor(PropForeColor);
@@ -3293,9 +3230,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnParentRightToLeftChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal virtual void OnParentRightToLeftChanged(EventArgs e) {
             if (!Properties.ContainsInteger(PropRightToLeft) || ((RightToLeft)Properties.GetInteger(PropRightToLeft)) == RightToLeft.Inherit) {
@@ -3351,9 +3285,6 @@ namespace System.Windows.Forms {
         }
 #endif
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnTextChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e) {
            cachedTextSize = Size.Empty;
@@ -4009,9 +3940,6 @@ namespace System.Windows.Forms {
             // constructors
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.ToolStripItemAccessibleObject"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public ToolStripItemAccessibleObject(ToolStripItem ownerItem) {
 
                 Debug.Assert(ownerItem != null, "Cannot construct a ToolStripItemAccessibleObject with a null ownerItem");
@@ -4036,9 +3964,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Description"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Description {
                 get {
                     string description = ownerItem.AccessibleDescription;
@@ -4052,9 +3977,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Help"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Help {
                 get {
                     QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.EventQueryAccessibilityHelp];
@@ -4140,9 +4062,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Name"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Name {
                 get {
                     string name = ownerItem.AccessibleName;
@@ -4164,9 +4083,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Owner"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             internal ToolStripItem Owner {
                 get {
                     return ownerItem;
@@ -4174,9 +4090,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Role"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = ownerItem.AccessibleRole;
@@ -4241,9 +4154,6 @@ namespace System.Windows.Forms {
                 }
             }
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.GetHelpTopic"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public override int GetHelpTopic(out string fileName) {
                 int topic = 0;
 
@@ -4328,9 +4238,6 @@ namespace System.Windows.Forms {
             }
            
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.ToString"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string ToString() {
                 if (Owner != null) {
                     return "ToolStripItemAccessibleObject: Owner = " + Owner.ToString();                    

@@ -1376,9 +1376,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutCompleted"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
         public event EventHandler LayoutCompleted {
             add {
@@ -1399,9 +1396,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutStyleChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutStyleChangedDescr))]
         public event EventHandler LayoutStyleChanged {
             add {
@@ -1423,9 +1417,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LocationChanging"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         internal event ToolStripLocationCancelEventHandler LocationChanging {
             add {
                 Events.AddHandler(EventLocationChanging, value);
@@ -1523,9 +1514,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.PaintGrip"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripPaintGripDescr))]
         public event PaintEventHandler PaintGrip {
             add {
@@ -3723,9 +3711,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);

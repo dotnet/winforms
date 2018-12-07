@@ -1019,9 +1019,6 @@ namespace System.Windows.Forms {
               }
           }
 
-          /// <devdoc>
-          ///    <para>[To be supplied.]</para>
-          /// </devdoc>
           [
           Browsable(false), 
           EditorBrowsable(EditorBrowsableState.Never), 

@@ -80,45 +80,24 @@ namespace System.Resources {
 
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.BinSerializedObjectMimeType"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly string BinSerializedObjectMimeType = "application/x-microsoft.net.object.binary.base64";
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.SoapSerializedObjectMimeType"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly string SoapSerializedObjectMimeType = "application/x-microsoft.net.object.soap.base64";
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.DefaultSerializedObjectMimeType"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly string DefaultSerializedObjectMimeType = BinSerializedObjectMimeType;
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ByteArraySerializedObjectMimeType"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly string ByteArraySerializedObjectMimeType = "application/x-microsoft.net.object.bytearray.base64";
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResMimeType"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly string ResMimeType = "text/microsoft-resx";
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Version"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly string Version = "2.0";
 
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResourceSchema"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly string ResourceSchema = @"
     <!-- 
     Microsoft ResX Schema 
@@ -638,9 +617,6 @@ namespace System.Resources {
         }
 
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Dispose"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // NOTE: Part of IDisposable - not protected by class level LinkDemand.
         public virtual void Dispose() {
             Dispose(true);
