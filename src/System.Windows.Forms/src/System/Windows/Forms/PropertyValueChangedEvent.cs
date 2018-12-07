@@ -28,9 +28,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs.ChangedItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public GridItem ChangedItem {
             get {
                 return changedItem;
@@ -38,9 +35,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs.OldValue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object OldValue {
             get {
                 return oldValue;

@@ -33,9 +33,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.BindableComponent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public IBindableComponent BindableComponent {
             get {
                 return this.control;
@@ -43,9 +40,6 @@ namespace System.Windows.Forms {
         }
                 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Control"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Control Control {
             get {
                 return this.control as Control;
@@ -53,9 +47,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.this"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Binding this[string propertyName] {
             get {
                 foreach (Binding binding in this) {
@@ -164,9 +155,6 @@ namespace System.Windows.Forms {
 
         // internalonly
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.ClearCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void ClearCore() {
             int numLinks = Count;
             for (int i = 0; i < numLinks; i++) {
@@ -212,9 +200,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.RemoveCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void RemoveCore(Binding dataBinding) {
             if (dataBinding.BindableComponent != control)
                 throw new ArgumentException(SR.BindingsCollectionForeign);

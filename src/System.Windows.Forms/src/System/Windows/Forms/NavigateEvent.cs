@@ -17,9 +17,6 @@ namespace System.Windows.Forms {
         private bool isForward = true;
 
         /// <include file='doc\NavigateEvent.uex' path='docs/doc[@for="NavigateEventArgs.Forward"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool Forward {
             get {
                 return isForward;
@@ -27,9 +24,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NavigateEvent.uex' path='docs/doc[@for="NavigateEventArgs.NavigateEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public NavigateEventArgs(bool isForward) {
             this.isForward = isForward;
         }

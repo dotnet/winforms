@@ -147,9 +147,6 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_APPEARANCECHANGED = new object();
 
         /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.AppearanceChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnAppearanceChangedDescr))]
         public event EventHandler AppearanceChanged {
             add {
@@ -639,16 +636,10 @@ namespace System.Windows.Forms {
         public class RadioButtonAccessibleObject : ButtonBaseAccessibleObject {
 
             /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.RadioButtonAccessibleObject"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public RadioButtonAccessibleObject(RadioButton owner) : base(owner) {
             }
 
             /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.DefaultAction"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string DefaultAction {
                 get {
                     string defaultAction = Owner.AccessibleDefaultActionDescription;
@@ -661,9 +652,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.Role"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;
@@ -675,9 +663,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.State"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleStates State {
                 get {
                     if (((RadioButton)Owner).Checked) {
@@ -688,9 +673,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.DoDefaultAction"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 ((RadioButton)Owner).PerformClick();

@@ -34,24 +34,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
         protected static readonly Guid wfcMenuCommand = new Guid("{5a51cf82-7619-4a5d-b054-47f438425aa7}");
 
         /// <include file='doc\PropertyGridCommands.uex' path='docs/doc[@for="PropertyGridCommands.Reset"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly CommandID Reset          = new CommandID(wfcMenuCommand, 0x3000);
         /// <include file='doc\PropertyGridCommands.uex' path='docs/doc[@for="PropertyGridCommands.Description"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly CommandID Description    = new CommandID(wfcMenuCommand, 0x3001);
         /// <include file='doc\PropertyGridCommands.uex' path='docs/doc[@for="PropertyGridCommands.Hide"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly CommandID Hide           = new CommandID(wfcMenuCommand, 0x3002);
         /// <include file='doc\PropertyGridCommands.uex' path='docs/doc[@for="PropertyGridCommands.Commands"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static readonly CommandID Commands       = new CommandID(wfcMenuCommand, 0x3010);
     }
 

@@ -517,11 +517,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -533,9 +528,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.PaddingChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1555,7 +1547,7 @@ namespace System.Windows.Forms {
                     throw new ArgumentException(string.Format(SR.WebBrowserNavigateAbsoluteUri, "uri"));
                 }
 
-                // Characters outside of US-ASCII may appear in Windows file paths and accordingly they’re allowed in file URIs.
+                // Characters outside of US-ASCII may appear in Windows file paths and accordingly they are allowed in file URIs.
                 // Therefore, do not use the escaped AbsoluteUri for file schemes. Can't use ToString() either since the correct 
                 // syntax for file schemas includes percent escaped characters. We are stuck with OriginalString and hope that 
                 // it is well-formed.

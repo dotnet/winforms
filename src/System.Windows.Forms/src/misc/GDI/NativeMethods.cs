@@ -26,9 +26,6 @@ namespace System.Experimental.Gdi
     internal
 #endif
     partial class IntNativeMethods     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-        public const int MaxTextLengthInWin9x = 8192;
-
         public const int
         DT_TOP                      = 0x00000000,
         DT_LEFT                     = 0x00000000,

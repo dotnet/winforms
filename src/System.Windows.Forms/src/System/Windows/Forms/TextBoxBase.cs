@@ -155,9 +155,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AcceptsTabChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
         public event EventHandler AcceptsTabChanged {
             add {
@@ -410,9 +407,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BorderStyleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
         public event EventHandler BorderStyleChanged {
             add {
@@ -525,9 +519,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Click"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
             add {
@@ -539,9 +530,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.MouseClick"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
             add {
@@ -622,9 +610,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.HideSelectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
         public event EventHandler HideSelectionChanged {
             add {
@@ -805,9 +790,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ModifiedChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
         public event EventHandler ModifiedChanged {
             add {
@@ -860,9 +842,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.MultilineChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr))]
         public event EventHandler MultilineChanged {
             add {
@@ -874,11 +853,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -890,9 +864,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PaddingChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1016,12 +987,6 @@ namespace System.Windows.Forms {
                 // ditto for end
                 end = Math.Max( 0, end );
 
-                if( this.SelectionUsesDbcsOffsetsInWin9x && Marshal.SystemDefaultCharSize == 1 ) {
-                    // When processing EM_GETSEL, EDIT control returns byte offsets instead of character offsets, this 
-                    // makes a difference in unicode code pages like Japanese.  We need to adjust the offsets.
-                    ToUnicodeOffsets( WindowText, ref start, ref end );
-                }
-
                 length = end - start;
             }
 
@@ -1076,9 +1041,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ReadOnlyChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
         public event EventHandler ReadOnlyChanged {
             add {
@@ -1243,31 +1205,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.TextLength"]/*' />
         [Browsable(false)]
-        public virtual int TextLength {
-            get {
-                // Note: Currently Winforms does not fully support surrogates.  If 
-                // the text contains surrogate characters this property may return incorrect values.
+        public virtual int TextLength
+            // Note: Currently Winforms does not fully support surrogates.  If
+            // the text contains surrogate characters this property may return incorrect values.
 
-                if (IsHandleCreated && Marshal.SystemDefaultCharSize == 2) {
-                    return SafeNativeMethods.GetWindowTextLength(new HandleRef(this, Handle));
-                }
-                else {
-                    return Text.Length;
-                }
-            }
-        }
-
-        /// <devdoc>
-        ///     Specifies whether the control uses unicode to set/get text selection information (WM_GESEL/WM_SETSEL)
-        ///     in Win9x.
-        /// </devdoc>
-        internal virtual bool SelectionUsesDbcsOffsetsInWin9x {
-            get {
-                return true;
-            }
-        }
+            => IsHandleCreated ? SafeNativeMethods.GetWindowTextLength(new HandleRef(this, Handle)) : Text.Length;
 
         // Since setting the WindowText while the handle is created
         // generates a WM_COMMAND message, we must trap that case
@@ -1588,9 +1531,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ProcessDialogKey"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "TextBoxBase.ProcessDialogKey [" + keyData.ToString() + "]");
@@ -1621,9 +1561,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnAcceptsTabChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnAcceptsTabChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_ACCEPTSTABCHANGED] as EventHandler;
             if (eh != null) {
@@ -1632,9 +1569,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnBorderStyleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnBorderStyleChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_BORDERSTYLECHANGED] as EventHandler;
             if (eh != null) {
@@ -1643,18 +1577,12 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             AdjustHeight(false);
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnHideSelectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnHideSelectionChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_HIDESELECTIONCHANGED] as EventHandler;
             if (eh != null) {
@@ -1663,9 +1591,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnModifiedChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnModifiedChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_MODIFIEDCHANGED] as EventHandler;
             if (eh != null) {
@@ -1697,9 +1622,6 @@ namespace System.Windows.Forms {
         }
 
          /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnMultilineChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnMultilineChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_MULTILINECHANGED] as EventHandler;
             if (eh != null) {
@@ -1714,9 +1636,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnReadOnlyChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnReadOnlyChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_READONLYCHANGED] as EventHandler;
             if (eh != null) {
@@ -2038,13 +1957,6 @@ namespace System.Windows.Forms {
                 }
                 else if (end > textLength) {
                     end = textLength;
-                }
-
-                if (this.SelectionUsesDbcsOffsetsInWin9x && Marshal.SystemDefaultCharSize == 1) {
-                    // EDIT control expects selection values to be byte offsets instead of character offsets, 
-                    // this makes a difference in unicode code pages like Japanese.  
-                    // We need to adjust the offsets.
-                    ToDbcsOffsets(WindowText, ref start, ref end);
                 }
             }
         }

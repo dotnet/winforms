@@ -96,9 +96,6 @@ namespace System.Windows.Forms {
 
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem() {
             StateSelected = false;
             UseItemStyleForSubItems = true;
@@ -119,32 +116,20 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem2"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string text) : this(text, -1) {            
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem3"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string text, int imageIndex) : this() {
             this.ImageIndexer.Index = imageIndex;
             Text = text;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem4"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items) : this(items, -1) {
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem5"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items, int imageIndex) : this() {
 
             this.ImageIndexer.Index = imageIndex;
@@ -158,9 +143,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem6"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font) : this(items, imageIndex) {
             this.ForeColor = foreColor;
             this.BackColor = backColor;
@@ -168,9 +150,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem7"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(ListViewSubItem[] subItems, int imageIndex) : this() {
 
             this.ImageIndexer.Index = imageIndex;
@@ -185,75 +164,48 @@ namespace System.Windows.Forms {
         }
           
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem8"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(ListViewGroup group) : this() {
             this.Group = group;
         }        
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem9"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string text, ListViewGroup group) : this(text) {
             this.Group = group;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem10"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string text, int imageIndex, ListViewGroup group) : this(text, imageIndex) {
             this.Group = group;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem11"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items, ListViewGroup group) : this(items) {
             this.Group = group;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem12"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items, int imageIndex, ListViewGroup group) : this(items, imageIndex) {
             this.Group = group;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem13"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group) :
             this(items, imageIndex, foreColor, backColor, font) {
             this.Group = group;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem14"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(ListViewSubItem[] subItems, int imageIndex, ListViewGroup group) : this(subItems, imageIndex) {
             this.Group = group;
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem15"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string text, string imageKey) : this() {
             this.ImageIndexer.Key = imageKey;
             Text = text;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem16"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items, string imageKey) : this() {
 
             this.ImageIndexer.Key = imageKey;
@@ -267,9 +219,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem17"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font) : this(items, imageKey) {
             this.ForeColor = foreColor;
             this.BackColor = backColor;
@@ -277,9 +226,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem18"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(ListViewSubItem[] subItems, string imageKey) : this() {
 
             this.ImageIndexer.Key = imageKey;
@@ -294,34 +240,22 @@ namespace System.Windows.Forms {
         }
           
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem19"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string text, string imageKey, ListViewGroup group) : this(text, imageKey) {
             this.Group = group;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem20"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items, string imageKey, ListViewGroup group) : this(items, imageKey) {
             this.Group = group;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem21"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group) :
             this(items, imageKey, foreColor, backColor, font) {
             this.Group = group;
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem22"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem(ListViewSubItem[] subItems, string imageKey, ListViewGroup group) : this(subItems, imageKey) {
             this.Group = group;
         }
@@ -369,9 +303,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Checked"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         DefaultValue(false),
         RefreshPropertiesAttribute(RefreshProperties.Repaint),
@@ -427,9 +358,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Font"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Localizable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -453,9 +381,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRCategory(nameof(SR.CatAppearance))
@@ -763,9 +688,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.StateImageIndex"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Localizable(true),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
@@ -830,9 +752,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.SubItems"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),        
@@ -960,9 +879,6 @@ namespace System.Windows.Forms {
         }                   
                    
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Clone"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual object Clone() {
             ListViewSubItem[] clonedSubItems = new ListViewSubItem[this.SubItems.Count];
             for(int index=0; index < this.SubItems.Count; ++index) {
@@ -1226,9 +1142,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Remove"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void Remove() {
             if (listView != null) {
                 listView.Items.Remove(this);
@@ -1236,9 +1149,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Deserialize"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void Deserialize(SerializationInfo info, StreamingContext context) {
 
             bool foundSubItems = false;
@@ -1353,9 +1263,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ToString"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override string ToString() {
             return "ListViewItem: {" + Text + "}";
         }
@@ -1400,9 +1307,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
             TypeConverterAttribute(typeof(ListViewSubItemConverter)),
             ToolboxItem(false),
@@ -1426,25 +1330,16 @@ namespace System.Windows.Forms {
             private object userData;
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ListViewSubItem"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewSubItem() {
             }
                 
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ListViewSubItem1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewSubItem(ListViewItem owner, string text) {
                 this.owner = owner;
                 this.text = text;
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ListViewSubItem2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewSubItem(ListViewItem owner, string text, Color foreColor, Color backColor, Font font) {
                 this.owner = owner;
                 this.text = text;
@@ -1456,9 +1351,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.BackColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public Color BackColor {
                 get {
                     if (style != null && style.backColor != Color.Empty) {
@@ -1521,9 +1413,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.Font"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [
             Localizable(true)
             ]
@@ -1554,9 +1443,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ForeColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public Color ForeColor {
                 get {
                     if (style != null && style.foreColor != Color.Empty) {
@@ -1602,9 +1488,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.Text"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [
             Localizable(true)
             ]
@@ -1621,9 +1504,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.Name"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [
             Localizable(true)
             ]
@@ -1668,9 +1548,6 @@ namespace System.Windows.Forms {
             //
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ResetStyle"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetStyle() {
                 if (style != null) {
                     style = null;
@@ -1681,9 +1558,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ToString"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string ToString() {
                 return "ListViewSubItem: {" + Text + "}";
             }
@@ -1697,9 +1571,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public class ListViewSubItemCollection : IList {
             private ListViewItem owner;
 
@@ -1711,9 +1582,6 @@ namespace System.Windows.Forms {
         
 
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.ListViewSubItemCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewSubItemCollection(ListViewItem owner) {
                 this.owner = owner;
             }
@@ -1754,9 +1622,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -1822,9 +1687,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Add"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewSubItem Add(ListViewSubItem item) {
                 EnsureSubItemSpace(1, -1);
                 item.owner = this.owner;
@@ -1907,9 +1769,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Clear"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Clear() {
                 int oldCount = owner.SubItemCount;
                 if (oldCount > 0) {
@@ -1919,9 +1778,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(ListViewSubItem subItem) {
                 return IndexOf(subItem) != -1;
             }
@@ -2004,9 +1860,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(ListViewSubItem subItem) {
                 for(int index=0; index < Count; ++index) {
                     if (owner.subItems[index] == subItem) {
@@ -2067,9 +1920,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Insert"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, ListViewSubItem item) {
             
                 if (index < 0 || index > Count) {
@@ -2099,9 +1949,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Remove(ListViewSubItem item) {
                 int index = IndexOf(item);
                 if (index != -1) {                    
@@ -2118,9 +1965,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.RemoveAt"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void RemoveAt(int index) {
             
                 if (index < 0 || index >= Count) {
@@ -2158,9 +2002,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 if (owner.subItems != null) {
                     return new WindowsFormsUtils.ArraySubsetEnumerator(owner.subItems, owner.SubItemCount);

@@ -239,9 +239,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.IsDefault"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected internal bool IsDefault {
             get {
                 return GetFlag(FlagIsDefault);
@@ -1033,9 +1030,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnEnabledChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
             Animate();
@@ -1048,9 +1042,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnTextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnTextChanged(EventArgs e) {
             using(LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text)) {
                 base.OnTextChanged(e);
@@ -1145,18 +1136,12 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnParentChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnParentChanged(EventArgs e) {
             base.OnParentChanged(e);
             Animate();
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnVisibleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnVisibleChanged(EventArgs e) {
             base.OnVisibleChanged(e);
             Animate();
@@ -1257,9 +1242,6 @@ namespace System.Windows.Forms {
         
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.WndProc"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {

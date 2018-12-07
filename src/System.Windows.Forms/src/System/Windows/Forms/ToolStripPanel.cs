@@ -836,7 +836,7 @@ namespace System.Windows.Forms {
                     Region rgn = new Region(bounds);  // create region 
                     rgn.Exclude(regionRect);          // exclude the center part
 
-                    // set it into the toolstripdropdown’s region
+                    // set it into the toolstripdropdownï¿½s region
                     IntSecurity.ChangeWindowRegionForTopLevel.Assert();
                     this.Region = rgn;     
                     // RevertAssert automatically called here when exiting function.
@@ -1323,9 +1323,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.ToolStripPanelRowCollection1"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public ToolStripPanelRowCollection(ToolStripPanel owner, ToolStripPanelRow[] value) {
                 this.owner = owner;
                 AddRange(value);
@@ -1342,9 +1339,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Add"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public int Add(ToolStripPanelRow value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1357,9 +1351,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.AddRange"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(ToolStripPanelRow[] value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1381,9 +1372,6 @@ namespace System.Windows.Forms {
                 }
             }
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.AddRange1"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(ToolStripPanelRowCollection value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1408,17 +1396,11 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Contains"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(ToolStripPanelRow value) {
                 return InnerList.Contains(value);
             }
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Clear"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual void Clear() {
                 if (owner != null) {
                     owner.SuspendLayout();
@@ -1454,9 +1436,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.IndexOf"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(ToolStripPanelRow value) {
                 return InnerList.IndexOf(value);
             }
@@ -1496,18 +1475,12 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.Remove"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Remove(ToolStripPanelRow value) {
                 InnerList.Remove(value);
                 OnAfterRemove(value);
             }
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.RemoveAt"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public void RemoveAt(int index) {
                 ToolStripPanelRow item = null;
                 if (index < Count && index >= 0) {
@@ -1520,9 +1493,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.CopyTo"]/*' />
-            /// <devdoc>
-            /// <para>[To be supplied.]</para>
-            /// </devdoc>
             public void CopyTo(ToolStripPanelRow[] array, int index) {
                 InnerList.CopyTo(array, index);
             }

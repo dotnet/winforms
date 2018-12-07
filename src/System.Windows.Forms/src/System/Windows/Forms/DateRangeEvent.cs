@@ -23,25 +23,16 @@ namespace System.Windows.Forms {
         readonly DateTime end;   // The date for the last day in the user's selection range.
 
         /// <include file='doc\DateRangeEvent.uex' path='docs/doc[@for="DateRangeEventArgs.DateRangeEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public DateRangeEventArgs(DateTime start, DateTime end) {
             this.start = start;
             this.end = end;
         }
 
         /// <include file='doc\DateRangeEvent.uex' path='docs/doc[@for="DateRangeEventArgs.Start"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public DateTime Start {
             get { return start; }
         }
         /// <include file='doc\DateRangeEvent.uex' path='docs/doc[@for="DateRangeEventArgs.End"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public DateTime End {
             get { return end; }
         }

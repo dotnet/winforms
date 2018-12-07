@@ -297,9 +297,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRDescription(nameof(SR.MonthCalendarMonthBackColorDescr))]
         public override Color BackColor {
             get {
@@ -316,9 +313,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -343,9 +337,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -521,9 +512,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRDescription(nameof(SR.MonthCalendarForeColorDescr))]
         public override Color ForeColor {
             get {
@@ -701,11 +689,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1013,9 +996,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
             get {
@@ -1212,9 +1192,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DateChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateChangedDescr))]
         public event DateRangeEventHandler DateChanged {
             add {
@@ -1227,9 +1204,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DateSelected"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateSelectedDescr))]
         public event DateRangeEventHandler DateSelected {
             add {
@@ -1292,9 +1266,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -1691,36 +1662,24 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             AdjustSize();
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnForeColorChanged(EventArgs e) {
             base.OnForeColorChanged(e);
             SetControlColor(NativeMethods.MCSC_TEXT, ForeColor);
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
             SetControlColor(NativeMethods.MCSC_MONTHBK, BackColor);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {

@@ -33,9 +33,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LayoutEvent.uex' path='docs/doc[@for="LayoutEventArgs.AffectedControl"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Control AffectedControl {
             get {
                 return affectedComponent as Control;
@@ -43,9 +40,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LayoutEvent.uex' path='docs/doc[@for="LayoutEventArgs.AffectedProperty"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string AffectedProperty {
             get {
                 return affectedProperty;

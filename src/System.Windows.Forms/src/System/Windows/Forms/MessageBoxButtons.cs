@@ -5,9 +5,6 @@
 
 namespace System.Windows.Forms {
     /// <include file='doc\MessageBoxButtons.uex' path='docs/doc[@for="MessageBoxButtons"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public enum MessageBoxButtons {
         /// <include file='doc\MessageBoxButtons.uex' path='docs/doc[@for="MessageBoxButtons.OK"]/*' />
         /// <devdoc>

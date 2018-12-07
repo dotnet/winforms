@@ -8,9 +8,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
 
     /// <include file='doc\DataGridViewCellMouseEventArgs.uex' path='docs/doc[@for="DataGridViewCellMouseEventArgs"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class DataGridViewCellMouseEventArgs : MouseEventArgs
     {
         private int rowIndex, columnIndex;

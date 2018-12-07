@@ -97,9 +97,6 @@ namespace System.Windows.Forms.Design {
         }
 
         /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Dispose"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);

@@ -15,9 +15,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
     /// <include file='doc\DataGridTablesFactory.uex' path='docs/doc[@for="GridTablesFactory"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public sealed class GridTablesFactory {
         // private static DataTableComparer dtComparer = new DataTableComparer();
 

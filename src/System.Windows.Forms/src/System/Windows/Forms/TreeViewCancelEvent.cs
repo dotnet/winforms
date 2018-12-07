@@ -29,9 +29,6 @@ namespace System.Windows.Forms {
         private TreeViewAction action;
 
         /// <include file='doc\TreeViewCancelEvent.uex' path='docs/doc[@for="TreeViewCancelEventArgs.TreeViewCancelEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeViewCancelEventArgs(TreeNode node, bool cancel, TreeViewAction action)
         : base(cancel) {
             this.node = node;                                           
@@ -39,9 +36,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeViewCancelEvent.uex' path='docs/doc[@for="TreeViewCancelEventArgs.Node"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeNode Node {
             get {
                 return node;
@@ -49,9 +43,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TreeViewCancelEvent.uex' path='docs/doc[@for="TreeViewCancelEventArgs.Action"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeViewAction Action {
             get {
                 return action;

@@ -17,9 +17,6 @@ using System.Security.Permissions;
 namespace System.Windows.Forms
 {
     /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [PermissionSetAttribute(SecurityAction.LinkDemand, Name = "FullTrust")]
     public sealed class HtmlElement
     {
@@ -57,9 +54,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.All"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElementCollection All
         {
             get
@@ -70,9 +64,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Children"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElementCollection Children
         {
             get
@@ -83,9 +74,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.CanHaveChildren"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool CanHaveChildren
         {
             get
@@ -95,9 +83,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ClientRectangle"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Rectangle ClientRectangle
         {
             get
@@ -110,9 +95,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Document"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlDocument Document
         {
             get
@@ -123,9 +105,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Enabled"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool Enabled
         {
             get
@@ -157,9 +136,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.FirstChild"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement FirstChild
         {
             get
@@ -176,9 +152,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Id"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string Id
         {
             [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
@@ -194,9 +167,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InnerHtml"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string InnerHtml
         {
             get
@@ -221,9 +191,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InnerText"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string InnerText
         {
             get
@@ -248,9 +215,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Name"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string Name
         {
             get
@@ -273,9 +237,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.NextSibling"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement NextSibling
         {
             get
@@ -293,9 +254,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OffsetRectangle"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Rectangle OffsetRectangle
         {
             get
@@ -306,9 +264,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OffsetParent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement OffsetParent
         {
             get
@@ -319,9 +274,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OuterHtml"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string OuterHtml
         {
             get
@@ -346,9 +298,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OuterText"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string OuterText
         {
             get
@@ -373,9 +322,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Parent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement Parent
         {
             get
@@ -388,9 +334,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollRectangle"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Rectangle ScrollRectangle
         {
             get
@@ -402,9 +345,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollLeft"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int ScrollLeft
         {
             get
@@ -418,9 +358,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollTop"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int ScrollTop
         {
             get
@@ -442,9 +379,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Style"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string Style
         {
             get
@@ -458,9 +392,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.TagName"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string TagName
         {
             get
@@ -470,9 +401,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.TabIndex"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public short TabIndex
         {
             get
@@ -487,9 +415,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DomElement"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object DomElement
         {
             get
@@ -500,18 +425,12 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.AppendChild"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement AppendChild(HtmlElement newElement)
         {
             return this.InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, newElement);
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.AttachEventHandler"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             ElementShim.AttachEventHandler(eventName, eventHandler);
@@ -519,18 +438,12 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DetachEventHandler"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             ElementShim.DetachEventHandler(eventName, eventHandler);
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Focus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Focus()
         {
             try
@@ -548,9 +461,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.GetAttribute"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public string GetAttribute(string attributeName)
         {
@@ -559,18 +469,12 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.GetElementsByTagName"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElementCollection GetElementsByTagName(string tagName)
         {
             UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetElementsByTagName(tagName);
             return iHTMLElementCollection != null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
         }
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InsertAdjacentElement"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
         {
             UnsafeNativeMethods.IHTMLElement iHtmlElement = ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
@@ -579,18 +483,12 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InvokeMember"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object InvokeMember(string methodName)
         {
             return InvokeMember(methodName, null);
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InvokeMember"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object InvokeMember(string methodName, params object[] parameter)
         {
             object retVal = null;
@@ -650,18 +548,12 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.RemoveFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void RemoveFocus()
         {
             ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).Blur();
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.RaiseEvent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // PM review done
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
         public void RaiseEvent(string eventName)
@@ -671,18 +563,12 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollIntoView"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void ScrollIntoView(bool alignWithTop)
         {
             this.NativeHtmlElement.ScrollIntoView((object)alignWithTop);
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.SetAttribute"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void SetAttribute(string attributeName, string value)
         {
             try
@@ -704,9 +590,6 @@ namespace System.Windows.Forms
         // Events:
         //
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Click"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Click
         {
             add
@@ -722,9 +605,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DoubleClick"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler DoubleClick
         {
             add
@@ -738,9 +618,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Drag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Drag
         {
             add
@@ -755,9 +632,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DragEnd"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler DragEnd
         {
             add
@@ -772,9 +646,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Drag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler DragLeave
         {
             add
@@ -789,9 +660,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DragOver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler DragOver
         {
             add
@@ -805,9 +673,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Focusing"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Focusing
         {
             add
@@ -821,9 +686,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Focus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler GotFocus
         {
             add
@@ -838,9 +700,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.LosingFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler LosingFocus
         {
             add
@@ -854,9 +713,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.LostFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler LostFocus
         {
             add
@@ -870,9 +726,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.KeyDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler KeyDown
         {
             add
@@ -885,9 +738,6 @@ namespace System.Windows.Forms
             }
         }
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.KeyPress"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler KeyPress
         {
             add
@@ -901,9 +751,6 @@ namespace System.Windows.Forms
 
         }
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.KeyUp"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler KeyUp
         {
             add
@@ -917,9 +764,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseMove"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler MouseMove
         {
             add
@@ -932,9 +776,6 @@ namespace System.Windows.Forms
             }
         }
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler MouseDown
         {
             add
@@ -947,9 +788,6 @@ namespace System.Windows.Forms
             }
         }
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseOver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler MouseOver
         {
             add
@@ -963,9 +801,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseUp"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler MouseUp
         {
             add
@@ -1582,9 +1417,6 @@ namespace System.Windows.Forms
     }
 
     /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElementInsertionOrientation"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public enum HtmlElementInsertionOrientation
     {
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElementInsertionOrientation.BeforeBegin"]/*' />

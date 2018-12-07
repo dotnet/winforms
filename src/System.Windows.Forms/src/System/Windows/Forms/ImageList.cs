@@ -222,9 +222,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Images"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(null),
@@ -396,9 +393,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.RecreateHandle"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))
@@ -765,9 +759,6 @@ namespace System.Windows.Forms {
 
 #if DEBUG_ONLY_APIS
         /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.DebugOnly_GetMasterImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Bitmap DebugOnly_GetMasterImage() {
             if (Images.Empty)
                 return null;
@@ -776,9 +767,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.DebugOnly_GetMasterMask"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Bitmap DebugOnly_GetMasterMask() {
             if (Images.Empty)
                 return null;
@@ -999,9 +987,6 @@ namespace System.Windows.Forms {
 
         // Everything other than set_All, Add, and Clear will force handle creation.
         /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Editor("System.Windows.Forms.Design.ImageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
@@ -1055,9 +1040,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Count"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [Browsable(false)]
             public int Count {
                 [ResourceExposure(ResourceScope.None)]
@@ -1104,9 +1086,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -1124,9 +1103,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.this"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public Image this[int index] {
                 [ResourceExposure(ResourceScope.Machine)]
@@ -1271,9 +1247,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Add"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Add(Icon value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1364,9 +1337,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageListCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(Image[] images) {
                 if (images == null) {
                     throw new ArgumentNullException(nameof(images));
@@ -1422,9 +1392,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [EditorBrowsable(EditorBrowsableState.Never)]
             public bool Contains(Image image) {
                 throw new NotSupportedException();
@@ -1450,9 +1417,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [EditorBrowsable(EditorBrowsableState.Never)]
             public int IndexOf(Image image) {
                 throw new NotSupportedException();
@@ -1531,9 +1495,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 // Forces handle creation
 
@@ -1546,9 +1507,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Remove(Image image) {
                 throw new NotSupportedException();
@@ -1564,9 +1522,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.RemoveAt"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void RemoveAt(int index) {
                 if (index < 0 || index >= Count)
                     throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));

@@ -57,9 +57,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.Collapse"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse {
             add {

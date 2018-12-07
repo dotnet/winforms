@@ -920,9 +920,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.TextAlignChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
             add {
@@ -1078,9 +1075,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.CalcImageRenderBounds"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected Rectangle CalcImageRenderBounds(Image image, Rectangle r, ContentAlignment align) {
             Size pointImageSize = image.Size;
 
@@ -1155,9 +1149,6 @@ namespace System.Windows.Forms {
     
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.Dispose"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 StopAnimate();
@@ -1449,9 +1440,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             MeasureTextCache.InvalidateCache();
             base.OnFontChanged(e);
@@ -1471,9 +1459,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnTextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnTextChanged(EventArgs e) {
   
             using(LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text)) {
@@ -1489,9 +1474,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnTextAlignChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnTextAlignChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
             if (eh != null) {
@@ -1582,9 +1564,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnEnabledChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
             Animate();
@@ -1592,9 +1571,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnParentChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnParentChanged(EventArgs e) {
             base.OnParentChanged(e);
             if (SelfSizing) {
@@ -1611,9 +1587,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnVisibleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnVisibleChanged(EventArgs e) {
             base.OnVisibleChanged(e);
             Animate();
@@ -1756,9 +1729,6 @@ namespace System.Windows.Forms {
             public LabelAccessibleObject(Label owner) : base(owner) {
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;

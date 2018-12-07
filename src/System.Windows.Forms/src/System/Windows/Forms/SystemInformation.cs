@@ -877,11 +877,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.TerminalServerSession"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       To be supplied.
-        ///    </para>
-        /// </devdoc>
         public static bool TerminalServerSession {
             get {
                 return(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_REMOTESESSION) & 0x00000001) != 0;

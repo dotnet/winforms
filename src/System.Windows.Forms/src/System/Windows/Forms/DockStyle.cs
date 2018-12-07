@@ -26,34 +26,16 @@ namespace System.Windows.Forms {
     ]
     public enum DockStyle {
         /// <include file='doc\DockStyle.uex' path='docs/doc[@for="DockStyle.None"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         None   = 0,
         /// <include file='doc\DockStyle.uex' path='docs/doc[@for="DockStyle.Top"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Top    = 1,
         /// <include file='doc\DockStyle.uex' path='docs/doc[@for="DockStyle.Bottom"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Bottom = 2,
         /// <include file='doc\DockStyle.uex' path='docs/doc[@for="DockStyle.Left"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Left   = 3,
         /// <include file='doc\DockStyle.uex' path='docs/doc[@for="DockStyle.Right"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Right  = 4,
         /// <include file='doc\DockStyle.uex' path='docs/doc[@for="DockStyle.Fill"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Fill   = 5,
     }
 }

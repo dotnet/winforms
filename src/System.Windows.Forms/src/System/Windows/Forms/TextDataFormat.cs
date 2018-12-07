@@ -10,29 +10,14 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum TextDataFormat {
         /// <include file='doc\TextDataFormat.uex' path='docs/doc[@for="TextDataFormat.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Text,
         /// <include file='doc\TextDataFormat.uex' path='docs/doc[@for="TextDataFormat.UnicodeText"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         UnicodeText,
         /// <include file='doc\TextDataFormat.uex' path='docs/doc[@for="TextDataFormat.Rtf"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Rtf,
         /// <include file='doc\TextDataFormat.uex' path='docs/doc[@for="TextDataFormat.Html"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         Html,
         /// <include file='doc\TextDataFormat.uex' path='docs/doc[@for="TextDataFormat.CommaSeparatedValue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         CommaSeparatedValue
     }
 }

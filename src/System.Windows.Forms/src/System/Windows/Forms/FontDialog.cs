@@ -33,9 +33,6 @@ namespace System.Windows.Forms {
     ]
     public class FontDialog : CommonDialog {
         /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.EventApply"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected static readonly object EventApply = new object();
 
         private const int defaultMinSize = 0;

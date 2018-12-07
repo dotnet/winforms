@@ -18,9 +18,6 @@ using System.Globalization;
 
 namespace System.Windows.Forms {
     /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [PermissionSetAttribute(SecurityAction.LinkDemand, Name = "FullTrust")]
     public sealed class HtmlHistory : IDisposable
     {
@@ -51,9 +48,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Length"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int Length {
             get {
                 return (int)this.NativeOmHistory.GetLength();
@@ -61,9 +55,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Back"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Back(int numberBack) {
             if (numberBack < 0) {
                 throw new ArgumentOutOfRangeException(nameof(numberBack), string.Format(SR.InvalidLowBoundArgumentEx, "numberBack", numberBack.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
@@ -75,9 +66,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Forward"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Forward(int numberForward) {
             if (numberForward < 0) {
                 throw new ArgumentOutOfRangeException(nameof(numberForward), string.Format(SR.InvalidLowBoundArgumentEx, "numberForward", numberForward.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
@@ -123,9 +111,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.DomHistory"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object DomHistory {
             get {
                 return this.NativeOmHistory;

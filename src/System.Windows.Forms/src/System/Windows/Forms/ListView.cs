@@ -365,9 +365,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.BackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override Color BackColor {
             get {
                 if (ShouldSerializeBackColor()) {
@@ -386,9 +383,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -635,9 +629,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.Columns"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -833,9 +824,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override Color ForeColor
         {
             get {
@@ -1066,9 +1054,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.InsertionMark"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1094,9 +1079,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.Items"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -1311,9 +1293,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -1451,9 +1430,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ShowItemToolTips"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -1472,9 +1448,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.Sorting"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(SortOrder.None),
@@ -1515,9 +1488,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.StateImageList"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
@@ -1594,9 +1564,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
             get {
@@ -1620,9 +1587,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.TileSize"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
             SRCategory(nameof(SR.CatAppearance)),
             Browsable(true),
@@ -1672,9 +1636,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.TopItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -1735,9 +1696,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.UseCompatibleStateImageBehavior"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Advanced),
@@ -1754,9 +1712,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.View"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(View.LargeIcon),
@@ -1804,9 +1759,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.VirtualListSize"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
@@ -1846,9 +1798,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.VirtualMode"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -1887,9 +1836,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.AfterLabelEdit"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewAfterLabelEditDescr))]
         public event LabelEditEventHandler AfterLabelEdit {
             add {
@@ -1901,9 +1847,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.BeforeLabelEdit"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewBeforeLabelEditDescr))]
         public event LabelEditEventHandler BeforeLabelEdit {
             add {
@@ -1915,9 +1858,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CacheVirtualItems"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewCacheVirtualItemsEventDescr))]
         public event CacheVirtualItemsEventHandler CacheVirtualItems {
             add {
@@ -1929,9 +1869,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnClick"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewColumnClickDescr))]
         public event ColumnClickEventHandler ColumnClick {
             add {
@@ -2027,9 +1964,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ItemActivate"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemClickDescr))]
         public event EventHandler ItemActivate {
             add {
@@ -2041,9 +1975,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ItemCheck"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
             add {
@@ -2055,9 +1986,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ItemChecked"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewItemCheckedDescr))]
         public event ItemCheckedEventHandler ItemChecked {
             add {
@@ -2069,9 +1997,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ItemDrag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemDragDescr))]
         public event ItemDragEventHandler ItemDrag {
             add {
@@ -2083,9 +2008,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.NodeMouseHover"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemMouseHoverDescr))]
         public event ListViewItemMouseHoverEventHandler ItemMouseHover {
             add {
@@ -2108,11 +2030,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -2147,9 +2064,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.RetrieveVirtualItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewRetrieveVirtualItemEventDescr))]
         public event RetrieveVirtualItemEventHandler RetrieveVirtualItem {
             add {
@@ -2174,9 +2088,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewSelectedIndexChangedDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
@@ -4210,9 +4121,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
 
@@ -4363,9 +4271,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.OnHandleDestroyed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnHandleDestroyed(EventArgs e) {
             // don't save the list view items state when in virtual mode : it is the responsability of the
             // user to cache the list view items in virtual mode
@@ -4435,9 +4340,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.OnItemDrag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnItemDrag(ItemDragEventArgs e) {
             if (onItemDrag != null) onItemDrag(this, e);
         }
@@ -4493,9 +4395,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {
@@ -5245,9 +5144,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.UpdateExtendedStyles"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void UpdateExtendedStyles() {
 
             if (IsHandleCreated) {
@@ -5513,8 +5409,7 @@ namespace System.Windows.Forms {
                 OnColumnClick(new ColumnClickEventArgs(columnIndex));
             }
 
-            if (nmhdr->code == NativeMethods.HDN_BEGINTRACKA ||
-                nmhdr->code == NativeMethods.HDN_BEGINTRACKW) {
+            if (nmhdr->code == NativeMethods.HDN_BEGINTRACK) {
                this.listViewState[LISTVIEWSTATE_headerControlTracking] = true;
 
                // Reset our tracking information for the new BEGINTRACK cycle.
@@ -5532,8 +5427,7 @@ namespace System.Windows.Forms {
                }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ITEMCHANGINGA || 
-                nmhdr->code == NativeMethods.HDN_ITEMCHANGINGW) {
+            if (nmhdr->code == NativeMethods.HDN_ITEMCHANGING) {
                 NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER) m.GetLParam(typeof(NativeMethods.NMHEADER));
 
                 if (columnHeaders != null && nmheader.iItem < columnHeaders.Length &&
@@ -5567,8 +5461,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if ((nmhdr->code == NativeMethods.HDN_ITEMCHANGEDA ||
-                nmhdr->code == NativeMethods.HDN_ITEMCHANGEDW) &&
+            if ((nmhdr->code == NativeMethods.HDN_ITEMCHANGED) &&
                 !this.listViewState[LISTVIEWSTATE_headerControlTracking]) {
                 NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
                 if (columnHeaders != null && nmheader.iItem < columnHeaders.Length) {
@@ -5615,8 +5508,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ENDTRACKA || 
-                nmhdr->code == NativeMethods.HDN_ENDTRACKW) {
+            if (nmhdr->code == NativeMethods.HDN_ENDTRACK) {
                 Debug.Assert(this.listViewState[LISTVIEWSTATE_headerControlTracking], "HDN_ENDTRACK and HDN_BEGINTRACK are out of sync...");
                 this.listViewState[LISTVIEWSTATE_headerControlTracking] = false;
                 if (this.listViewState1[LISTVIEWSTATE1_cancelledColumnWidthChanging]) {
@@ -5641,9 +5533,6 @@ namespace System.Windows.Forms {
             if (nmhdr->code == NativeMethods.HDN_ENDDRAG) {
                 NativeMethods.NMHEADER header = (NativeMethods.NMHEADER) m.GetLParam(typeof(NativeMethods.NMHEADER));
                 if (header.pItem != IntPtr.Zero) {
-                    // 
-
-
 
                     NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) UnsafeNativeMethods.PtrToStructure((IntPtr) header.pItem, typeof(NativeMethods.HDITEM2));
                     if ((hdItem.mask & NativeMethods.HDI_ORDER) == NativeMethods.HDI_ORDER) {
@@ -5696,8 +5585,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_DIVIDERDBLCLICKA ||
-                nmhdr->code == NativeMethods.HDN_DIVIDERDBLCLICKW) {
+            if (nmhdr->code == NativeMethods.HDN_DIVIDERDBLCLICK) {
                 // We need to keep track that the user double clicked the column header divider
                 // so we know that the column header width is changing.
                 this.listViewState[LISTVIEWSTATE_headerDividerDblClick] = true;
@@ -5809,8 +5697,7 @@ namespace System.Windows.Forms {
                     CustomDraw(ref m);
                     break;
 
-                case NativeMethods.LVN_BEGINLABELEDITA:
-                case NativeMethods.LVN_BEGINLABELEDITW: {
+                case NativeMethods.LVN_BEGINLABELEDIT: {
                         NativeMethods.NMLVDISPINFO_NOTEXT nmlvdp = (NativeMethods.NMLVDISPINFO_NOTEXT)m.GetLParam(typeof(NativeMethods.NMLVDISPINFO_NOTEXT));
                         LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem);
                         OnBeforeLabelEdit(e);
@@ -5826,8 +5713,7 @@ namespace System.Windows.Forms {
                         break;
                     }
 
-                case NativeMethods.LVN_ENDLABELEDITA:
-                case NativeMethods.LVN_ENDLABELEDITW: {
+                case NativeMethods.LVN_ENDLABELEDIT: {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NativeMethods.NMLVDISPINFO nmlvdp = (NativeMethods.NMLVDISPINFO)m.GetLParam(typeof(NativeMethods.NMLVDISPINFO));
                         LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem, nmlvdp.item.pszText);
@@ -6054,14 +5940,8 @@ namespace System.Windows.Forms {
                                     text = text.Substring(0, dispInfo.item.cchTextMax - 1);
                                 }
 
-                                if (Marshal.SystemDefaultCharSize == 1) {
-                                    // ANSI. Use byte
-                                    byte[] buff = System.Text.Encoding.Default.GetBytes(text + "\0");
-                                    Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
-                                } else {
-                                    char[] buff = (text + "\0").ToCharArray();
-                                    Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
-                                }
+                                char[] buff = (text + "\0").ToCharArray();
+                                Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
                             }
 
                             if ((dispInfo.item.mask & NativeMethods.LVIF_IMAGE) != 0 && lvItem.ImageIndex != -1) {
@@ -6138,17 +6018,11 @@ namespace System.Windows.Forms {
                                 
                                 UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
-                                if (Marshal.SystemDefaultCharSize == 1) {
-                                    // ANSI. Use byte.
-                                    // we need to copy the null terminator character ourselves
-                                    byte[] byteBuf = System.Text.Encoding.Default.GetBytes(lvi.ToolTipText + "\0");
-                                    Marshal.Copy(byteBuf, 0, infoTip.lpszText, Math.Min(byteBuf.Length, infoTip.cchTextMax));
-                                } else {
-                                    // UNICODE. Use char.
-                                    // we need to copy the null terminator character ourselves
-                                    char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
-                                    Marshal.Copy(charBuf, 0, infoTip.lpszText, Math.Min(charBuf.Length, infoTip.cchTextMax));
-                                }
+                                // UNICODE. Use char.
+                                // we need to copy the null terminator character ourselves
+                                char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
+                                Marshal.Copy(charBuf, 0, infoTip.lpszText, Math.Min(charBuf.Length, infoTip.cchTextMax));
+
                                 Marshal.StructureToPtr(infoTip, (IntPtr) m.LParam, false);
                             }
                         }
@@ -6395,18 +6269,12 @@ namespace System.Windows.Forms {
         //end subhag
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedIndexCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [ListBindable(false)]
         public class CheckedIndexCollection : IList {
             private ListView owner;
 
             /* C#r: protected */
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedIndexCollection.CheckedIndexCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public CheckedIndexCollection(ListView owner) {
                 this.owner = owner;
             }
@@ -6514,9 +6382,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedIndexCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return true;
@@ -6524,9 +6389,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedIndexCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(int checkedIndex) {
                 if (owner.Items[checkedIndex].Checked) {
                     return true;
@@ -6548,9 +6410,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedIndexCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(int checkedIndex) {
                 int[] indices = IndicesArray;
                 for(int index=0; index < indices.Length; ++index) {
@@ -6611,9 +6470,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedIndexCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 int[] indices = IndicesArray;
                 if (indices != null) {
@@ -6626,9 +6482,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedListViewItemCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [ListBindable(false)]
         public class CheckedListViewItemCollection : IList {
             private ListView owner;
@@ -6640,9 +6493,6 @@ namespace System.Windows.Forms {
 
             /* C#r: protected */
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedListViewItemCollection.CheckedListViewItemCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public CheckedListViewItemCollection(ListView owner) {
                 this.owner = owner;
             }
@@ -6757,9 +6607,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedListViewItemCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return true;
@@ -6768,9 +6615,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedListViewItemCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(ListViewItem item) {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
@@ -6812,9 +6656,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedListViewItemCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(ListViewItem item) {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
@@ -6931,9 +6772,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CheckedListViewItemCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
@@ -6951,18 +6789,12 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [ListBindable(false)]
         public class SelectedIndexCollection : IList {
             private ListView owner;
 
             /* C#r: protected */
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexCollection.SelectedIndexCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public SelectedIndexCollection(ListView owner) {
                 this.owner = owner;
             }
@@ -7082,9 +6914,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -7092,9 +6921,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(int selectedIndex) {
                 return owner.Items[selectedIndex].Selected;
             }
@@ -7111,9 +6937,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(int selectedIndex) {
                 int[] indices = IndicesArray;
                 for(int index=0; index < indices.Length; ++index) {
@@ -7232,9 +7055,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 int[] indices = IndicesArray;
                 if (indices != null) {
@@ -7271,9 +7091,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedListViewItemCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [ListBindable(false)]
         public class SelectedListViewItemCollection : IList {
             private ListView owner;
@@ -7285,9 +7102,6 @@ namespace System.Windows.Forms {
 
             /* C#r: protected */
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedListViewItemCollection.SelectedListViewItemCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public SelectedListViewItemCollection(ListView owner) {
                 this.owner = owner;
             }
@@ -7440,9 +7254,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedListViewItemCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return true;
@@ -7530,9 +7341,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedListViewItemCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(ListViewItem item) {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
@@ -7557,9 +7365,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedListViewItemCollection.CopyTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void CopyTo(Array dest, int index) {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
@@ -7571,9 +7376,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedListViewItemCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
@@ -7589,9 +7391,6 @@ namespace System.Windows.Forms {
            }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedListViewItemCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(ListViewItem item) {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
@@ -7659,17 +7458,11 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [ListBindable(false)]
         public class ColumnHeaderCollection : IList {
             private ListView owner;
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.ColumnHeaderCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ColumnHeaderCollection(ListView owner) {
                 this.owner = owner;
             }
@@ -7757,9 +7550,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -7843,9 +7633,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Add1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual int Add(ColumnHeader value) {
                 int index = Count;
                 owner.InsertColumn(index, value);
@@ -7853,9 +7640,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Add2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual ColumnHeader Add(string text) {
                 ColumnHeader columnHeader = new ColumnHeader();
                 columnHeader.Text = text;
@@ -7865,9 +7649,6 @@ namespace System.Windows.Forms {
             // <-- NEW ADD OVERLOADS IN WHIDBEY
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Add3"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual ColumnHeader Add(string text, int width) {
                 ColumnHeader columnHeader = new ColumnHeader();
                 columnHeader.Text = text;
@@ -7876,9 +7657,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Add4"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual ColumnHeader Add(string key, string text) {
                 ColumnHeader columnHeader = new ColumnHeader();
                 columnHeader.Name = key;
@@ -7887,9 +7665,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Add5"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual ColumnHeader Add(string key, string text, int width) {
                 ColumnHeader columnHeader = new ColumnHeader();
                 columnHeader.Name = key;
@@ -7899,9 +7674,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Add6"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual ColumnHeader Add(string key, string text, int width, HorizontalAlignment textAlign, string imageKey) {
                 ColumnHeader columnHeader = new ColumnHeader(imageKey);
                 columnHeader.Name = key;
@@ -7912,9 +7684,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Add7"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual ColumnHeader Add(string key, string text, int width, HorizontalAlignment textAlign, int imageIndex) {
                 ColumnHeader columnHeader = new ColumnHeader(imageIndex);
                 columnHeader.Name = key;
@@ -7927,9 +7696,6 @@ namespace System.Windows.Forms {
             // END - NEW ADD OVERLOADS IN WHIDBEY  -->
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual void AddRange(ColumnHeader[] values) {
                 if (values == null) {
                     throw new ArgumentNullException(nameof(values));
@@ -7999,9 +7765,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(ColumnHeader value) {
                 return IndexOf(value) != -1;
             }
@@ -8032,9 +7795,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(ColumnHeader value) {
                 for(int index=0; index < Count; ++index) {
                     if (this[index] == value) {
@@ -8054,9 +7814,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Insert"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, ColumnHeader value) {
                 if (index < 0 || index > Count) {
                     throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
@@ -8073,9 +7830,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Insert1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string text, int width, HorizontalAlignment textAlign) {
                 ColumnHeader columnHeader = new ColumnHeader();
                 columnHeader.Text = text;
@@ -8087,9 +7841,6 @@ namespace System.Windows.Forms {
             // <-- NEW INSERT OVERLOADS IN WHIDBEY
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Insert2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string text) {
                 ColumnHeader columnHeader = new ColumnHeader();
                 columnHeader.Text = text;
@@ -8097,9 +7848,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Insert3"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string text, int width) {
                 ColumnHeader columnHeader = new ColumnHeader();
                 columnHeader.Text = text;
@@ -8108,9 +7856,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Insert4"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string key, string text) {
                 ColumnHeader columnHeader = new ColumnHeader();
                 columnHeader.Name = key;
@@ -8119,9 +7864,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Insert5"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string key, string text, int width) {
                 ColumnHeader columnHeader = new ColumnHeader();
                 columnHeader.Name = key;
@@ -8131,9 +7873,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Insert6"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string key, string text, int width, HorizontalAlignment textAlign, string imageKey) {
                 ColumnHeader columnHeader = new ColumnHeader(imageKey);
                 columnHeader.Name = key;
@@ -8144,9 +7883,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Insert7"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, string key, string text, int width, HorizontalAlignment textAlign, int imageIndex) {
                 ColumnHeader columnHeader = new ColumnHeader(imageIndex);
                 columnHeader.Name = key;
@@ -8218,9 +7954,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual void Remove(ColumnHeader column) {
                 int index = IndexOf(column);
                 if (index != -1) {
@@ -8237,9 +7970,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 if (owner.columnHeaders != null) {
                     return owner.columnHeaders.GetEnumerator();
@@ -8284,9 +8014,6 @@ namespace System.Windows.Forms {
             private IInnerList innerList;
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.ListViewItemCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewItemCollection(ListView owner) {
                 // Kept for APPCOMPAT reasons.
                 // In Whidbey this constructor is a no-op.
@@ -8343,9 +8070,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -8501,9 +8225,6 @@ namespace System.Windows.Forms {
             // END - NEW ADD OVERLOADS IN WHIDBEY  -->
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(ListViewItem[] items) {
                 if (items == null) {
                     throw new ArgumentNullException(nameof(items));
@@ -8513,9 +8234,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(ListViewItemCollection items) {
                 if (items == null) {
                     throw new ArgumentNullException(nameof(items));
@@ -8535,9 +8253,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(ListViewItem item) {
                 return InnerList.Contains(item);
             }
@@ -8562,9 +8277,6 @@ namespace System.Windows.Forms {
            }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.CopyTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void CopyTo(Array dest, int index) {
                 InnerList.CopyTo(dest, index);
             }
@@ -8618,9 +8330,6 @@ namespace System.Windows.Forms {
              }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 if (this.InnerList.OwnerIsVirtualListView && !this.InnerList.OwnerIsDesignMode) {
                     // Throw the exception only at runtime.
@@ -8630,9 +8339,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(ListViewItem item) {
                 for(int index=0; index < Count; ++index) {
                     if (this[index] == item) {
@@ -8693,9 +8399,6 @@ namespace System.Windows.Forms {
            }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.Insert"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewItem Insert(int index, ListViewItem item) {
                 if (index < 0 || index > Count) {
                     throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
@@ -8705,17 +8408,11 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.Insert1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewItem Insert(int index, string text) {
                 return Insert(index, new ListViewItem(text));
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.Insert2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewItem Insert(int index, string text, int imageIndex) {
                 return Insert(index, new ListViewItem(text, imageIndex));
             }
@@ -8734,17 +8431,11 @@ namespace System.Windows.Forms {
             // <-- NEW INSERT OVERLOADS IN WHIDBEY
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.Insert3"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ListViewItem Insert(int index, string text, string imageKey) {
                 return Insert(index, new ListViewItem(text, imageKey));
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.Insert4"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual ListViewItem Insert(int index, string key, string text, string imageKey) {
                 ListViewItem li = new ListViewItem(text, imageKey);
                 li.Name = key;
@@ -8752,9 +8443,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ListViewItemCollection.Insert5"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual ListViewItem Insert(int index, string key, string text, int imageIndex) {
                 ListViewItem li = new ListViewItem(text, imageIndex);
                 li.Name = key;

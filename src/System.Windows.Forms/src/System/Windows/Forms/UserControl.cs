@@ -134,9 +134,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.AutoValidateChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
@@ -332,9 +329,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.OnMouseDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseDown(MouseEventArgs e) {
             if (!FocusInside())
@@ -360,9 +354,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.WndProc"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {

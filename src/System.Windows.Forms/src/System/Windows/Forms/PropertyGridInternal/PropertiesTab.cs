@@ -16,18 +16,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using Microsoft.Win32;
 
     /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class PropertiesTab : PropertyTab {
 
 
         /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.TabName"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override string TabName {
             get {
                 return SR.PBRSToolTipProperties;
@@ -35,9 +29,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.HelpKeyword"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override string HelpKeyword {
             get {
                 return "vs.properties"; // do not localize.
@@ -45,9 +36,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.GetDefaultProperty"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override PropertyDescriptor GetDefaultProperty(object obj) {
                PropertyDescriptor def = base.GetDefaultProperty(obj);
 
@@ -66,17 +54,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.GetProperties"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) {
                return GetProperties(null, component, attributes);
         }
         
         /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.GetProperties1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes) {
             if (attributes == null) {
                 attributes = new Attribute[]{BrowsableAttribute.Yes};
