@@ -4,6 +4,7 @@
 
 using Xunit;
 using System.Drawing;
+using System.Linq;
 
 namespace System.Windows.Forms.Tests
 {
@@ -219,6 +220,16 @@ namespace System.Windows.Forms.Tests
                 data.Add(new Font(family, System.Single.MaxValue));
             }
             return data;
+        }
+
+        // get some fake audio data to be used in DataObject tests
+        public static TheoryData<Memory<byte>> GetMemoryBytes()
+        {
+            var audioData = new TheoryData<Memory<byte>>();
+            audioData.Add(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }.AsMemory());
+            audioData.Add(new byte[] { 10, 55, 99, 255 }.AsMemory());
+            audioData.Add(Enumerable.Range(0, 255).Select(a => (byte)a).ToArray());
+            return audioData;
         }
 
         #endregion
