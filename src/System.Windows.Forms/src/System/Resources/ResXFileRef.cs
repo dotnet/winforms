@@ -182,11 +182,9 @@ namespace System.Resources {
 
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.CanConvertTo"]/*' />
             public override bool CanConvertTo(ITypeDescriptorContext context, 
-                                              Type destinationType) {
-                if (destinationType == typeof(string)) {
-                    return true;
-                }
-                return false;
+                                              Type destinationType)
+            {
+                return destinationType == typeof(string);
             }
 
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertTo"]/*' />
@@ -226,13 +224,13 @@ namespace System.Resources {
                             throw new ArgumentException(nameof(stringValue));
                         remainingString = stringValue.Substring(nextSemiColumn+1);
                     }
-                    string[] parts = remainingString.Split(new char[] {';'});
+                    string[] parts = remainingString.Split(';');
                     if(parts.Length > 1) {
-                        result = new string[] { fileName, parts[0], parts[1] };
+                        result = new[] { fileName, parts[0], parts[1] };
                     } else if(parts.Length > 0) {
-                        result = new string[] { fileName, parts[0] };
+                        result = new[] { fileName, parts[0] };
                     } else {
-                        result = new string[] { fileName };
+                        result = new[] { fileName };
                     }
                 }
                 return result;  
@@ -241,58 +239,55 @@ namespace System.Resources {
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertFrom"]/*' />
             [ResourceExposure(ResourceScope.Machine)]
             [ResourceConsumption(ResourceScope.Machine)]
-            public override Object ConvertFrom(ITypeDescriptorContext context, 
+            public override object ConvertFrom(ITypeDescriptorContext context, 
                                                CultureInfo culture,
-                                               Object value) {
-                Object created = null;
-                string stringValue = value as string;
-                if (stringValue != null) {
-                    string[] parts = ResXFileRef.Converter.ParseResxFileRefString(stringValue);
+                                               object value) {
+                if (value is string stringValue) {
+                    string[] parts = ParseResxFileRefString(stringValue);
                     string fileName = parts[0];
                     Type toCreate = Type.GetType(parts[1], true);
 
                     // special case string and byte[]
-                    if(toCreate.Equals(typeof(string))) {
+                    if(toCreate == typeof(string)) {
                         // we have a string, now we need to check the encoding
-                        Encoding textFileEncoding = Encoding.Default;
-                        if(parts.Length > 2) {
-                            textFileEncoding = Encoding.GetEncoding(parts[2]);
-                        }
+                        Encoding textFileEncoding = 
+                            parts.Length > 2
+                                ? Encoding.GetEncoding(parts[2]) 
+                                : Encoding.Default;
                         using (StreamReader sr = new StreamReader(fileName, textFileEncoding)) {
-                            created = sr.ReadToEnd();
-                        }
-                    } else {
-
-                        // this is a regular file, we call it's constructor with a stream as a parameter
-                        // or if it's a byte array we just return that
-                        byte[] temp = null;
-
-                        using (FileStream s = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read)) {
-                            Debug.Assert(s != null, "Couldn't open " + fileName);
-                            temp = new byte[s.Length];
-                            s.Read(temp, 0, (int)s.Length);
-                        }
-
-                        if(toCreate.Equals(typeof(byte[]))) {
-                            created = temp;
-                        } else {
-                            MemoryStream memStream = new MemoryStream(temp);
-                            if(toCreate.Equals(typeof(MemoryStream))) {
-                                return memStream;
-                            } else if(toCreate.Equals(typeof(System.Drawing.Bitmap)) && fileName.EndsWith(".ico")) {
-                                // we special case the .ico bitmaps because GDI+ destroy the alpha channel component and
-                                // we don't want that to happen
-                                Icon ico = new Icon(memStream);
-                                created = ico.ToBitmap();
-                            } else {
-                                created = Activator.CreateInstance(toCreate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance, null, new Object[] {memStream}, null);
-                            }
+                            return sr.ReadToEnd();
                         }
                     }
-                }
-                return created;
-            }
+                    
+                    // this is a regular file, we call it's constructor with a stream as a parameter
+                    // or if it's a byte array we just return that
+                    byte[] temp = null;
 
+                    using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+                        Debug.Assert(fileStream != null, "Couldn't open " + fileName);
+                        temp = new byte[fileStream.Length];
+                        fileStream.Read(temp, 0, (int)fileStream.Length);
+                    }
+
+                    if(toCreate == typeof(byte[])) {
+                        return temp;
+                    }
+                    
+                    MemoryStream memStream = new MemoryStream(temp);
+                    if(toCreate == typeof(MemoryStream)) {
+                        return memStream;
+                    }
+                    if(toCreate == typeof(Bitmap) && fileName.EndsWith(".ico")) {
+                        // we special case the .ico bitmaps because GDI+ destroy the alpha channel component and
+                        // we don't want that to happen
+                        Icon ico = new Icon(memStream);
+                        return ico.ToBitmap();
+                    }
+                    
+                    return Activator.CreateInstance(toCreate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance, null, new object[] {memStream}, null);               
+                }
+                return null;
+            }
         }
     }
 }
