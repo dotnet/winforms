@@ -94,12 +94,15 @@ namespace System.Windows.Forms
         {
         }
 
-        public override int Read(byte[] buffer, int index, int count)
+        public unsafe override int Read(byte[] buffer, int index, int count)
         {
             int bytesRead = 0;
             if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
             {
-                bytesRead = Read(buffer.AsSpan(index, count));
+                fixed (byte* ch = buffer)
+                {
+                    bytesRead = _Read((void*)(ch + index), count);
+                }
             }
             return bytesRead;
         }
@@ -132,17 +135,30 @@ namespace System.Windows.Forms
             return comStream.Seek(offset, (int)origin);
         }
 
-        public override void Write(byte[] buffer, int index, int count)
+        public unsafe override void Write(byte[] buffer, int index, int count)
         {
+            int bytesWritten = 0;
             if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
             {
-                Write(new ReadOnlySpan<byte>(buffer, index, count));
+                try
+                {
+                    fixed (byte* b = buffer)
+                    {
+                        bytesWritten = _Write((void*)(b + index), count);
+                    }
+                }
+                catch
+                {
+                }
+            }
+            if (bytesWritten < count)
+            {
+                throw new IOException(SR.DataStreamWrite);
             }
         }
 
         public unsafe override void Write(ReadOnlySpan<byte> buffer)
         {
-            int bytesWritten = 0;
             if (buffer.IsEmpty)
                 return;
 
@@ -150,15 +166,11 @@ namespace System.Windows.Forms
             {
                 fixed (byte* b = &buffer[0])
                 {
-                    bytesWritten = _Write(b, buffer.Length);
+                    _Write(b, buffer.Length);
                 }
             }
             catch
             {
-            }
-            if (bytesWritten < buffer.Length)
-            {
-                throw new IOException(SR.DataStreamWrite);
             }
         }
 
