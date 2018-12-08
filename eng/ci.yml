@@ -80,7 +80,8 @@ jobs:
             # Test signing is running into sporadic failures on build machines, so disable it for now
             # TODO: revert this once https://github.com/dotnet/core-eng/issues/4734 is resolved
             #_SignType: test
-            _SignType: ''
+            _SignType: none
+            _SignArgs: none
 
             _DotNetPublishToBlobFeed : false
           Build_Release:
