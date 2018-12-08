@@ -344,7 +344,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.CreateParams"]/*' />
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 // Check for library
                 if (moduleHandle == IntPtr.Zero) {
@@ -2636,7 +2635,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ProcessCmdKey"]/*' />
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
             if (this.RichTextShortcutsEnabled == false) {
                 foreach (int shortcutValue in shortcutsToDisable) {
@@ -2830,7 +2828,6 @@ namespace System.Windows.Forms {
         /// This is just here as a minor perf improvement, so we don't have to call expensive RevertAssert.
         /// When the method exits, we effectively revert the assert.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
         [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
         static private void FontToLogFont(Font value, NativeMethods.LOGFONT logfont) {
             value.ToLogFont(logfont);
@@ -3212,7 +3209,6 @@ namespace System.Windows.Forms {
         ///   information look up the MSDN info on this interface. This is designed to be a back door of 
         ///   sorts, which is why it is fairly obscure, and uses the RichEdit name instead of RichTextBox.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected virtual object CreateRichEditOleCallback() {
             return new OleCallback(this);
         }
@@ -3559,7 +3555,6 @@ namespace System.Windows.Forms {
         // </doc>
         //
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WndProc"]/*' />
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:

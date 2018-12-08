@@ -10,8 +10,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Windows.Forms.VisualStyles;
     using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms.Internal;
     using System.Windows.Forms.ButtonInternal;
     using System.Diagnostics.CodeAnalysis;
@@ -1839,7 +1837,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 DataGridViewCheckBoxCell dataGridViewCell = (DataGridViewCheckBoxCell) this.Owner;

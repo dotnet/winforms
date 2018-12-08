@@ -4,7 +4,6 @@
 
 
 namespace System.Windows.Forms.PropertyGridInternal {
-    using System.Security.Permissions;
     using System.Runtime.Serialization.Formatters;
     using System.Threading;
     using System.Runtime.InteropServices;
@@ -6824,7 +6823,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <devdoc>
             ///      Navigate to another object.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
 
                 if (GetChildCount() > 0) {

@@ -13,7 +13,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms.VisualStyles;
     using System.ComponentModel;
     using System.Windows.Forms.Internal;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Runtime.Versioning;
 
@@ -1255,7 +1254,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.ParentPrivate;
@@ -1316,7 +1314,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Value"]/*' />
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return string.Empty;
@@ -1324,7 +1321,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 if ((this.Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
@@ -1336,7 +1332,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 Debug.Assert(this.Owner.DataGridView.RowHeadersVisible, "if the rows are not visible how did you get the row headers acc obj?");
@@ -1422,7 +1417,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Select"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags)
             {
                 if (this.Owner == null)

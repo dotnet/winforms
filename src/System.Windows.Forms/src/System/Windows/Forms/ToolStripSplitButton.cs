@@ -4,8 +4,6 @@
 
 namespace System.Windows.Forms {
     using System;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Drawing;
     using System.Windows.Forms;
     using System.Drawing.Imaging;
@@ -436,7 +434,6 @@ namespace System.Windows.Forms {
             SupportsSpaceKey = true;
         }
 
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessDialogKey(Keys keyData) {
             if (Enabled && (keyData == Keys.Enter || (SupportsSpaceKey && keyData == Keys.Space))) {
                PerformButtonClick();
@@ -446,7 +443,6 @@ namespace System.Windows.Forms {
             return base.ProcessDialogKey(keyData);
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
            // checking IsMnemonic is not necessary - toolstrip does this for us          
            PerformButtonClick();
@@ -787,7 +783,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 owner.PerformButtonClick();
             }

@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    using System.Security.Permissions;
     
     using System.Runtime.InteropServices;
     using System.ComponentModel;
@@ -804,7 +803,6 @@ namespace System.Windows.Forms {
             }
             
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return parent;
                 }
@@ -865,7 +863,6 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return parent;
                 }
@@ -887,7 +884,6 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Value"]/*' />
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return name;
                 }

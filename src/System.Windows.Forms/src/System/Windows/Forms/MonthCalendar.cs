@@ -422,7 +422,6 @@ namespace System.Windows.Forms {
         ///     correctly.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_MONTHCAL;
@@ -2365,7 +2364,6 @@ namespace System.Windows.Forms {
         ///     Overrided wndProc
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_LBUTTONDOWN:

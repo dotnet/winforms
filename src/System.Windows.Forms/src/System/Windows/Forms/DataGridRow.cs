@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing;
     using System.Drawing.Imaging;
-    using System.Security.Permissions;
     using Microsoft.Win32;
     using System.Collections;
 
@@ -776,7 +775,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return DataGrid.AccessibilityObject;
                 }
@@ -815,7 +813,6 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return Name;
                 }
@@ -854,7 +851,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Down:
@@ -883,7 +879,6 @@ namespace System.Windows.Forms {
 
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
                 // Focus the PropertyGridView window
                 //
@@ -925,7 +920,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return owner.AccessibleObject;
                 }
@@ -968,7 +962,6 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (owner is DataGridAddNewRow) {
                         return null;
@@ -978,7 +971,6 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 set {
                     if (!(owner is DataGridAddNewRow)) {
                         object realValue =  DataGridRowAccessibleObject.DisplayStringToCell(DataGrid, owner.RowNumber, column, value);
@@ -987,7 +979,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 Select(AccessibleSelection.TakeFocus | AccessibleSelection.TakeSelection);
             }
@@ -1008,7 +999,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Right:
@@ -1050,7 +1040,6 @@ namespace System.Windows.Forms {
 
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
                 // Focus the PropertyGridView window
                 //

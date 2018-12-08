@@ -103,7 +103,6 @@ namespace System.Windows.Forms {
         ///    should remain on the <see cref='System.Windows.Forms.Clipboard'/>
         ///    after the application exits.</para>
         /// </devdoc>
-        [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         public static void SetDataObject(object data, bool copy, int retryTimes, int retryDelay) {
             if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
                 throw new System.Threading.ThreadStateException(SR.ThreadMustBeSTA);

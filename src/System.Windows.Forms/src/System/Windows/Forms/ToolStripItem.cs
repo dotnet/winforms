@@ -2491,7 +2491,6 @@ namespace System.Windows.Forms {
         /// that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
         /// implements System.Windows.Forms.IDataObject.
         /// </devdoc>        
-        [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) {
             int[] finalEffect = new int[] {(int)DragDropEffects.None};
@@ -3331,8 +3330,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// See Control.ProcessDialogKey for more info.
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal virtual bool ProcessDialogKey(Keys keyData) {
             // 
             if (keyData == Keys.Enter || (state[stateSupportsSpaceKey] && keyData == Keys.Space)) {
@@ -3348,18 +3345,12 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// See Control.ProcessCmdKey for more info.
         /// </devdoc>
-        [
-        SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected internal virtual bool ProcessCmdKey(ref Message m, Keys keyData) {
             return false;
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ProcessMnemonic"]/*' />
         
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal virtual bool ProcessMnemonic(char charCode) {
             // checking IsMnemonic is not necessary - control does this for us.
@@ -4147,7 +4138,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 if (Owner != null) {
                     ((ToolStripItem)Owner).PerformClick();
@@ -4182,7 +4172,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection) {
                 ToolStripItem nextItem = null;
 
@@ -4268,8 +4257,6 @@ namespace System.Windows.Forms {
             /// <para>When overridden in a derived class, gets or sets the parent of an accessible object.</para>
             /// </devdoc>
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (Owner.IsOnDropDown) {
                         // Return the owner item as the accessible parent.

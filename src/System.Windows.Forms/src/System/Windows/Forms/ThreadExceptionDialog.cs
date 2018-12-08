@@ -26,10 +26,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [
         ComVisible(true),
-        ClassInterface(ClassInterfaceType.AutoDispatch),
-        SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        UIPermission(SecurityAction.Assert, Window=UIPermissionWindow.AllWindows)]
+        ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ThreadExceptionDialog : Form {
 
         private const string DownBitmapName = "down.bmp";

@@ -33,10 +33,6 @@ namespace System.Windows.Forms {
     ///       and a window procedure. The class automatically manages window class creation and registration.
     ///    </para>
     /// </devdoc>
-    [
-        SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)
-    ]
     public class NativeWindow : MarshalByRefObject, IWin32Window {
 #if DEBUG
         private static readonly BooleanSwitch AlwaysUseNormalWndProc = new BooleanSwitch("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
@@ -1442,9 +1438,6 @@ namespace System.Windows.Forms {
         ///     WindowClass encapsulates a window class.
         /// </devdoc>
         /// <internalonly/>
-        [
-        System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags = System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-        ]
         private class WindowClass {
             internal static WindowClass cache;
 

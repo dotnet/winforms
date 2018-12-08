@@ -24,8 +24,6 @@ namespace System.Resources {
     ///     ResX resource writer. See the text in "ResourceSchema" for more 
     ///     information.
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class ResXResourceWriter : IResourceWriter {
         internal const string TypeStr = "type";
         internal const string NameStr = "name";

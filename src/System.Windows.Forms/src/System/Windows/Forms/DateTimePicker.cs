@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    using System.Security.Permissions;
 
     using System.Drawing;
     using System.Windows.Forms.Internal;
@@ -446,7 +445,6 @@ namespace System.Windows.Forms {
         ///     Returns the CreateParams used to create this window.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_DATETIMEPICK;
@@ -1142,7 +1140,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Destroys the physical window handle.
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override void DestroyHandle() {
             value = Value;
             base.DestroyHandle();
@@ -1649,7 +1646,6 @@ namespace System.Windows.Forms {
         ///     Overrided wndProc
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_LBUTTONDOWN:
@@ -1749,7 +1745,6 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.Value"]/*' />
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     string baseValue = base.Value;
                     if (baseValue == null || baseValue.Length == 0) {

@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Forms.VisualStyles;
-    using System.Security.Permissions;
     using System.Windows.Forms.ButtonInternal;
     using System.Globalization;
 
@@ -1113,7 +1112,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 DataGridViewButtonCell dataGridViewCell = (DataGridViewButtonCell)this.Owner;

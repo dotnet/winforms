@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    using System.Security.Permissions;
     using Microsoft.Win32;
     using System.ComponentModel;
     using System.Drawing;
@@ -187,7 +186,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_TRACKBAR;
@@ -1132,7 +1130,6 @@ namespace System.Windows.Forms {
         ///     base.wndProc(m); to ensure the button continues to function properly.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_REFLECT+NativeMethods.WM_HSCROLL:

@@ -7300,7 +7300,6 @@ namespace System.Windows.Forms {
             ///       further.
             ///    </para>
             /// </devdoc>
-            [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
             protected override bool ProcessDialogKey(Keys keyData) {
                 Debug.WriteLineIf(CompModSwitches.DataGridKeys.TraceVerbose, "DataGridKeys: ProcessDialogKey " + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(keyData));
                 DataGridRow[] localGridRows = DataGridRows;
@@ -7481,9 +7480,6 @@ namespace System.Windows.Forms {
             ///       Processes keys for grid navigation.
             ///    </para>
             /// </devdoc>
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
             // 
             protected bool ProcessGridKey(KeyEventArgs ke) {
@@ -8035,9 +8031,6 @@ namespace System.Windows.Forms {
             ///    <para>Previews a keyboard message and returns a value indicating if the key was
             ///       consumed.</para>
             /// </devdoc>
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             protected override bool ProcessKeyPreview(ref Message m) {
                 if (m.Msg == NativeMethods.WM_KEYDOWN) {
                     KeyEventArgs ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
@@ -8080,7 +8073,6 @@ namespace System.Windows.Forms {
             ///       Gets a value indicating whether the Tab key should be processed.
             ///    </para>
             /// </devdoc>
-            [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
             protected bool ProcessTabKey(Keys keyData) {
                 if (this.listManager == null || myGridTable == null)
                     return false;
@@ -9035,7 +9027,6 @@ namespace System.Windows.Forms {
                     return null;
                 }
 
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                     // We're only handling FirstChild and LastChild here
                     if (GetChildCount() > 0) {

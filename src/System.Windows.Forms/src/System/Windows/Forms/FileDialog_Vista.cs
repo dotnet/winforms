@@ -57,7 +57,6 @@ namespace System.Windows.Forms
         internal abstract FileDialogNative.IFileDialog CreateVistaDialog();
 
         [
-            SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode),
             SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")
         ]
         private bool RunDialogVista(IntPtr hWndOwner)

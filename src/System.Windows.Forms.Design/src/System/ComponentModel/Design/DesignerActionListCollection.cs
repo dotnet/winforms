@@ -4,13 +4,10 @@
 
 using System.Collections;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Security.Permissions;
 
 namespace System.ComponentModel.Design
 {
     [ComVisible(true)]
-    [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
     public class DesignerActionListCollection : CollectionBase
     {
         public DesignerActionListCollection()

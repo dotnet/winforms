@@ -13,7 +13,6 @@ namespace System.Experimental.Gdi
     using System;
     using System.Internal;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Collections;
     using System.IO;
     using System.Text;
@@ -21,9 +20,6 @@ namespace System.Experimental.Gdi
     using System.Drawing;
     using System.Diagnostics;
     using System.Runtime.Versioning;
-    [
-    System.Security.SuppressUnmanagedCodeSecurityAttribute()
-    ]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else

@@ -315,7 +315,6 @@ namespace System.Windows.Forms {
         ///    Overrides Control.  A Label is a Win32 STATIC control, which we setup here.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "STATIC";
@@ -1613,7 +1612,6 @@ namespace System.Windows.Forms {
         ///       mnemonic for this control.
         ///    </para>
         /// </devdoc>        
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic()) {
                 Control parent = ParentInternal;
@@ -1705,7 +1703,6 @@ namespace System.Windows.Forms {
         ///       class would normally override.
         ///    </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_NCHITTEST:

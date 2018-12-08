@@ -287,7 +287,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.CreateParams"]/*' />
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
@@ -1148,7 +1147,6 @@ namespace System.Windows.Forms {
         ///    called.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogChar(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogChar [" + charCode.ToString() + "]");
@@ -1171,7 +1169,6 @@ namespace System.Windows.Forms {
         ///    on the form. For the arrow keys,
         ///    !!!
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogKey [" + keyData.ToString() + "]");
@@ -1197,9 +1194,6 @@ namespace System.Windows.Forms {
 
          /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessCmdKey"]/*' />
          /// <internalonly/>
-         [
-             SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-         ]
          protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessCmdKey " + msg.ToString());
 
@@ -1220,7 +1214,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessMnemonic"]/*' />
         /// <internalonly/>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessMnemonic [" + charCode.ToString() + "]");
@@ -1308,7 +1301,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Selects the next available control and makes it the active control.</para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool ProcessTabKey(bool forward) {
             if (SelectNextControl(activeControl, forward, true, true, false)) return true;
             return false;
@@ -1924,7 +1916,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_SETFOCUS:

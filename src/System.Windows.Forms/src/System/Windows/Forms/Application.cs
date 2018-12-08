@@ -434,7 +434,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static FormCollection OpenForms {
-            [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
             get {
                 return OpenFormsInternal;
             }
@@ -585,8 +584,7 @@ namespace System.Windows.Forms {
 
         // Allows the hosting environment to register a callback 
         [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)
+            EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public static void RegisterMessageLoop(MessageLoopCallback callback) {
             ThreadContext.FromCurrent().RegisterMessageLoop(callback);
@@ -651,8 +649,7 @@ namespace System.Windows.Forms {
 
         // Allows the hosting environment to unregister a callback 
         [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)
+            EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public static void UnregisterMessageLoop() {
             ThreadContext.FromCurrent().RegisterMessageLoop(null);
@@ -866,8 +863,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///  Processes all message filters for given message
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         EditorBrowsable(EditorBrowsableState.Advanced),         
+        [EditorBrowsable(EditorBrowsableState.Advanced),         
          SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")  // using ref is OK.
         ]
         public static bool FilterMessage(ref Message message) {            
@@ -926,14 +922,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static event EventHandler EnterThreadModal {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
                     current.enterModalHandler += value;
                 }
             }        
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             remove {
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
@@ -950,14 +944,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static event EventHandler LeaveThreadModal {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
                     current.leaveModalHandler += value;
                 }
             }
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             remove {
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
@@ -1365,7 +1357,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
             EditorBrowsable(EditorBrowsableState.Advanced),
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
             SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers"),
             SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")
         ]
@@ -1389,10 +1380,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Restarts the application.</para>
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         public static void Restart()
         {
             if (Assembly.GetEntryAssembly() == null)

@@ -310,7 +310,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 switch (characterCasing) {
@@ -692,7 +691,6 @@ namespace System.Windows.Forms {
         /// keyData - bitmask containing one or more keys
         /// </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
             bool returnValue = base.ProcessCmdKey(ref m, keyData);
             if (!returnValue && this.Multiline && !LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBox 
@@ -853,7 +851,6 @@ namespace System.Windows.Forms {
         ///    to add extra functionality, but should not forget to call
         ///    base.wndProc(m); to ensure the combo continues to function properly.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 // Work around a very obscure Windows issue.

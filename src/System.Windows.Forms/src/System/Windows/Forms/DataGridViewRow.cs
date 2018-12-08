@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Drawing;
     using System.Windows.Forms.VisualStyles;
-    using System.Security.Permissions;
     using System.Globalization;
 
     /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow"]/*' />
@@ -2011,7 +2010,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.ParentPrivate;
@@ -2118,7 +2116,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Value"]/*' />
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     if (this.owner == null)
@@ -2225,7 +2222,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 if (this.owner == null)
@@ -2303,7 +2299,6 @@ namespace System.Windows.Forms
             }
             
             /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Select"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags)
             {
                 if (this.owner == null)
@@ -2444,7 +2439,6 @@ namespace System.Windows.Forms
 
             public override AccessibleObject Parent
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.owner.AccessibilityObject;
@@ -2469,7 +2463,6 @@ namespace System.Windows.Forms
 
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.Name;
@@ -2535,7 +2528,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 switch (navigationDirection)

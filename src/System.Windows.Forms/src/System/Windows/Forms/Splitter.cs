@@ -252,7 +252,6 @@ namespace System.Windows.Forms {
         ///     filled up with the basic info.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
@@ -1030,9 +1029,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             /// </devdoc>
             /// <internalonly/>
-            [
-                System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode),
-            ]
             public bool PreFilterMessage(ref Message m) {
                 if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {
                     if (m.Msg == NativeMethods.WM_KEYDOWN && unchecked((int)(long)m.WParam) == (int)Keys.Escape) {

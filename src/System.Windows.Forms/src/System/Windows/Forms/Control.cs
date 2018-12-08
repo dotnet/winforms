@@ -1804,10 +1804,6 @@ example usage
         ///     below:
         /// </devdoc>
         protected virtual CreateParams CreateParams {
-            [
-                SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             get {
 
                 // CLR4.0 or later, comctl32.dll needs to be loaded explicitly.
@@ -4417,11 +4413,9 @@ example usage
         SRDescription(nameof(SR.ControlWindowTargetDescr))
         ]
         public IWindowTarget WindowTarget {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 return window.WindowTarget;
             }
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             set {
                 window.WindowTarget = value;
             }
@@ -5060,11 +5054,9 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.PreviewKeyDownDescr))]
         public event PreviewKeyDownEventHandler PreviewKeyDown {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             add {
                 Events.AddHandler(EventPreviewKeyDown, value);
             }
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             remove {
                 Events.RemoveHandler(EventPreviewKeyDown, value);
             }
@@ -5634,7 +5626,6 @@ example usage
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Advanced),
-        UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)
         ]
         protected virtual void CreateHandle() {
             IntPtr userCookie = IntPtr.Zero;
@@ -5779,8 +5770,6 @@ example usage
         /// </devdoc>
         /* Primarily here for Form to override */
         [
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         protected virtual void DefWndProc(ref Message m) {
@@ -5794,8 +5783,6 @@ example usage
         ///     always call base.destroyHandle.
         /// </devdoc>
         [
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         protected virtual void DestroyHandle() {
@@ -5962,7 +5949,6 @@ example usage
         ///     that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
         ///     implements System.Windows.Forms.IDataObject.
         /// </devdoc>
-        [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) {            
             int[] finalEffect = new int[] {(int)DragDropEffects.None};
             UnsafeNativeMethods.IOleDropSource dropSource = new DropSource( this );
@@ -6009,7 +5995,6 @@ example usage
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"),          // Using Bitmap instead of Image intentionally
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters"), // targetBounds is the name of the param passed in.
                                                                                                          // So we don't have to localize it.
-            UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)
         ]
         public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds) {
 
@@ -6118,7 +6103,6 @@ example usage
         ///     Retrieves the form that this control is on. The control's parent
         ///     may not be the same as the form.
         /// </devdoc>
-        [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
         public Form FindForm() {
             return FindFormInternal();
         }
@@ -7462,7 +7446,6 @@ example usage
         // 
 
 
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool IsInputChar(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputChar 0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture));
 
@@ -7491,7 +7474,6 @@ example usage
         // 
 
 
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool IsInputKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
 
@@ -9233,8 +9215,6 @@ example usage
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Advanced),
-        SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
         SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
         ]
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e) {
@@ -9900,8 +9880,6 @@ example usage
         ///     preProcessMessage().
         ///     </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         public virtual bool PreProcessMessage(ref Message msg) {
          //   Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.PreProcessMessage " + msg.ToString());
 
@@ -9951,7 +9929,6 @@ example usage
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced),
-         SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
          SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly"),
          SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters"),
          SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")]  // using ref is OK.
@@ -10069,10 +10046,6 @@ example usage
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
             ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
@@ -10198,8 +10171,6 @@ example usage
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]     
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool ProcessDialogChar(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogChar [" + charCode.ToString() + "]");
             return parent == null? false: parent.ProcessDialogChar(charCode);
@@ -10229,8 +10200,6 @@ example usage
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]        
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool ProcessDialogKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
             return parent == null? false: parent.ProcessDialogKey(keyData);
@@ -10256,10 +10225,6 @@ example usage
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual bool ProcessKeyEventArgs(ref Message m) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyEventArgs " + m.ToString());
             KeyEventArgs ke = null;
@@ -10343,10 +10308,6 @@ example usage
         ///     returned.
         /// Controls will seldom, if ever, need to override this method.
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected internal virtual bool ProcessKeyMessage(ref Message m) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyMessage " + m.ToString());
             if (parent != null && parent.ProcessKeyPreview(ref m)) return true;
@@ -10378,10 +10339,6 @@ example usage
         ///     returned.
         ///     </para>
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual bool ProcessKeyPreview(ref Message m) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyPreview " + m.ToString());
             return parent == null? false: parent.ProcessKeyPreview(ref m);
@@ -10412,8 +10369,6 @@ example usage
         ///     to indicate that the control has no mnemonic.
         ///     </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal virtual bool ProcessMnemonic(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessMnemonic [0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture) + "]");
@@ -13679,10 +13634,6 @@ example usage
         ///     through the preProcessMessage function. Inheriting controls should
         ///     call base.wndProc for any messages that they don't handle.
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual void WndProc(ref Message m) {
             //
             // 
@@ -16034,7 +15985,6 @@ example usage
             ///     return false if the control is not sited).
             /// </devdoc>
             internal bool IsIE {
-                [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (!checkedIE) {
                         if (clientSite == null) {
@@ -16430,7 +16380,6 @@ example usage
             /// <devdoc>
             /// </devdoc>
             /// <internalonly/>
-            [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
             internal int GetControlInfo(NativeMethods.tagCONTROLINFO pCI) {
                 if (accelCount == -1) {
                     ArrayList mnemonicList = new ArrayList();
@@ -16593,7 +16542,6 @@ example usage
             /// <devdoc>
             ///      In place activates this Object.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
             internal void InPlaceActivate(int verb)
             {
                 // If we don't have a client site, then there's not much to do.
@@ -17588,7 +17536,6 @@ example usage
             /// <devdoc>
             ///      Implements IPersistPropertyBag::Save
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
             internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, bool fClearDirty, bool fSaveAllProperties) {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(control,
                     new Attribute[] {DesignerSerializationVisibilityAttribute.Visible});
@@ -17804,7 +17751,6 @@ example usage
             /// <devdoc>
             ///      Implements IOleObject::SetExtent
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
             internal void SetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel) {
                 if ((dwDrawAspect & NativeMethods.DVASPECT_CONTENT) != 0) {
 
@@ -18327,7 +18273,6 @@ example usage
             private class PropertyBagStream : UnsafeNativeMethods.IPropertyBag {
                 private Hashtable bag = new Hashtable();
 
-                [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 internal void Read(UnsafeNativeMethods.IStream istream) {
                     // visual basic's memory streams don't support seeking, so we have to
                     // work around this limitation here.  We do this by copying
@@ -18367,7 +18312,6 @@ example usage
                     }
                 }
 
-                [SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 int UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
                 {
                     if (!bag.Contains(pszPropName))
@@ -18377,14 +18321,12 @@ example usage
                     return NativeMethods.S_OK;
                 }
 
-                [SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 int UnsafeNativeMethods.IPropertyBag.Write(string pszPropName, ref object pVar)
                 {
                     bag[pszPropName] = pVar;
                     return NativeMethods.S_OK;
                 }
 
-                [SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 internal void Write(UnsafeNativeMethods.IStream istream)
                 {
                     Stream stream = new DataStreamFromComStream(istream);
@@ -19270,8 +19212,6 @@ example usage
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="ControlAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-                [SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return base.Parent;
                 }

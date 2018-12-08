@@ -384,7 +384,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "COMBOBOX";
@@ -2843,9 +2842,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ProcessKeyEventArgs"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        ]
         protected override bool ProcessKeyEventArgs(ref Message m) {
             if (this.AutoCompleteMode != AutoCompleteMode.None &&
                 this.AutoCompleteSource == AutoCompleteSource.ListItems &&
@@ -3457,7 +3453,6 @@ namespace System.Windows.Forms {
         ///     base.wndProc(m); to ensure the combo continues to function properly.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 // We don't want to fire the focus events twice -
@@ -4194,7 +4189,6 @@ namespace System.Windows.Forms {
             ComboBox owner;
 
             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ChildAccessibleObject.ChildAccessibleObject"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public ChildAccessibleObject(ComboBox owner, IntPtr handle) {
                 Debug.Assert(owner != null && owner.Handle != IntPtr.Zero, "ComboBox's handle hasn't been created");
 

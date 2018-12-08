@@ -1829,8 +1829,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// Review: Changing this would break VB users. so suppresing this message.
         /// 
-     	[SecurityPermissionAttribute(SecurityAction.Demand, Flags=SecurityPermissionFlag.SerializationFormatter), 		
-         SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.SerializationFormatter)]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected virtual void Serialize(SerializationInfo si, StreamingContext context) {
             if (propBag != null) {
@@ -1952,7 +1950,6 @@ namespace System.Windows.Forms {
         /// ISerializable private implementation
         /// </devdoc>
         /// <internalonly/>
-    	[SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 		
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
              Serialize(si, context);
         }

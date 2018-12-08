@@ -247,7 +247,6 @@ namespace System.Windows.Forms
         ///    <para>When overridden in a derived class, gets or sets the parent of an accessible object.</para>
         /// </devdoc>
         public virtual AccessibleObject Parent {
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get {
                 if (systemIAccessible != null) {
                     return WrapIAccessible(systemIAccessible.accParent);
@@ -295,7 +294,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         public virtual string Value {
             // Does nothing by default
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get {
                 if (systemIAccessible != null) {
                     try {
@@ -310,7 +308,6 @@ namespace System.Windows.Forms
                 return "";
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             set {
                 if (systemIAccessible != null) {
                     try {
@@ -1426,7 +1423,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///      Performs the default action associated with this accessible object.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public virtual void DoDefaultAction() {
             // By default, just does the system default action if available
             //
@@ -2063,7 +2059,6 @@ namespace System.Windows.Forms
         ///     effectively 'preempting' what WindowFromAccessibleObject() would do.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd) {
             // See if we have an inner object that can provide the window handle
             if (systemIOleWindow != null) {
@@ -2086,7 +2081,6 @@ namespace System.Windows.Forms
         ///     See GetWindow() above for details.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp(int fEnterMode) {
             // See if we have an inner object that can provide help
             if (systemIOleWindow != null) {
@@ -2147,7 +2141,6 @@ namespace System.Windows.Forms
         ///    <para>When overridden in a derived class,
         ///       navigates to another object.</para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public virtual AccessibleObject Navigate(AccessibleNavigation navdir) {
         
             // Some default behavior for objects with AccessibleObject children
@@ -2197,7 +2190,6 @@ namespace System.Windows.Forms
         ///       Selects this accessible object.
         ///    </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public virtual void Select(AccessibleSelection flags) {
         
             // By default, do the system behavior
@@ -2282,21 +2274,18 @@ namespace System.Windows.Forms
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         internal IAccessible GetSystemIAccessibleInternal() {
             return this.systemIAccessible;
         }
 
         /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UseStdAccessibleObjects"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected void UseStdAccessibleObjects(IntPtr handle) {
             UseStdAccessibleObjects(handle, AccessibleObjectId);
         }
         
         /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UseStdAccessibleObjects1"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected void UseStdAccessibleObjects(IntPtr handle, int objid) {
             // Get a standard accessible Object
             Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
@@ -2897,9 +2886,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Create a new wrapper. Protect this with UnmanagedCode Permission
         /// </summary>
-        [
-        SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)
-        ]
         internal InternalAccessibleObject(AccessibleObject accessibleImplemention) {
             // Get all the casts done here to catch any issues early 
             publicIAccessible = (IAccessible) accessibleImplemention;

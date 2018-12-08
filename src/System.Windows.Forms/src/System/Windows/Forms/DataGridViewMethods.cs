@@ -20421,9 +20421,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessAKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessAKey(Keys keyData)
         {
             if ((keyData & (Keys.Shift | Keys.Control | Keys.Alt)) == Keys.Control &&
@@ -20437,7 +20434,6 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessDeleteKey"]/*' />
         [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
             SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters") // Derived controls may need keyData.
         ]
         protected bool ProcessDeleteKey(Keys keyData)
@@ -20569,7 +20565,6 @@ namespace System.Windows.Forms
         ///       further.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             Keys key = (keyData & Keys.KeyCode);
@@ -20674,9 +20669,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessDownKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessDownKey(Keys keyData)
         {
             bool moved;
@@ -21522,9 +21514,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessEndKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessEndKey(Keys keyData)
         {
             bool success;
@@ -21820,9 +21809,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessEnterKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessEnterKey(Keys keyData)
         {
             // When Enter is pressed, no matter Ctrl is also pressed or not,
@@ -21901,7 +21887,6 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessEscapeKey"]/*' />
         [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
             SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters") // Derived controls may need keyData.
         ]
         protected bool ProcessEscapeKey(Keys keyData)
@@ -21923,7 +21908,6 @@ namespace System.Windows.Forms
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessF2Key"]/*' />
         [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
             SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters") // Derived controls may need keyData.
         ]
         protected bool ProcessF2Key(Keys keyData)
@@ -21956,9 +21940,6 @@ namespace System.Windows.Forms
         ///     'UseLegacyAccessibilityFeatures2' accessibility switch 
         ///     should be set to false to enable the feature.
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        ]
         protected bool ProcessF3Key(Keys keyData)
         {
             if (this.ptCurrentCell.X != -1 && AccessibilityImprovements.Level2)
@@ -21977,9 +21958,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessHomeKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessHomeKey(Keys keyData)
         {
             bool success;
@@ -22257,9 +22235,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessInsertKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessInsertKey(Keys keyData)
         {
             if (((keyData & (Keys.Shift | Keys.Control | Keys.Alt)) == Keys.Control ||
@@ -22277,9 +22252,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessKeyEventArgs"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        ]
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
             if (m.Msg == NativeMethods.WM_SYSKEYDOWN || m.Msg == NativeMethods.WM_KEYDOWN)
@@ -22340,9 +22312,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessKeyPreview"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected override bool ProcessKeyPreview(ref Message m) 
         {
             bool dataGridViewWantsInputKey;
@@ -22458,9 +22427,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessLeftKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessLeftKey(Keys keyData)
         {
             if (this.RightToLeftInternal)
@@ -23214,9 +23180,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessNextKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessNextKey(Keys keyData)
         {
             bool success;
@@ -23453,9 +23416,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessPriorKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessPriorKey(Keys keyData)
         {
             bool success;
@@ -23694,9 +23654,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessRightKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessRightKey(Keys keyData)
         {
             if (this.RightToLeftInternal)
@@ -24434,9 +24391,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessSpaceKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessSpaceKey(Keys keyData)
         {
             if ((keyData & (Keys.Control | Keys.Shift | Keys.Alt)) == Keys.Shift &&
@@ -24520,7 +24474,6 @@ namespace System.Windows.Forms
         ///       Gets a value indicating whether the Tab key should be processed.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected bool ProcessTabKey(Keys keyData)
         {
             if (this.StandardTab)
@@ -24623,10 +24576,6 @@ namespace System.Windows.Forms
         ///       Processes keys for dataGridView navigation.
         ///    </para>
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
-        ]
         protected virtual bool ProcessDataGridViewKey(KeyEventArgs e) 
         {
             switch (e.KeyCode)
@@ -24710,9 +24659,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessUpKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessUpKey(Keys keyData)
         {
             bool success;
@@ -25407,9 +25353,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessZeroKey"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected bool ProcessZeroKey(Keys keyData)
         {
             if (this.ptCurrentCell.X != -1 && !this.IsCurrentCellInEditMode && ColumnEditable(this.ptCurrentCell.X))
@@ -29920,7 +29863,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.WndProc"]/*' />
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) 
         {
             switch (m.Msg)

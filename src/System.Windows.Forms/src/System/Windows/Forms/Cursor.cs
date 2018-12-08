@@ -537,7 +537,6 @@ namespace System.Windows.Forms {
         /// ISerializable private implementation
         /// </devdoc>
         /// <internalonly/>
-    	[SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 		
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             if (cursorData != null) {
                 si.AddValue("CursorData", cursorData, typeof(byte[]));

@@ -323,7 +323,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_TABCONTROL;
@@ -1577,9 +1576,6 @@ namespace System.Windows.Forms {
         ///     We override this to get the Ctrl and Ctrl-Shift Tab functionality.
         /// </devdoc>
         /// <internalonly/>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected override bool ProcessKeyPreview(ref Message m) {
             if (ProcessKeyEventArgs(ref m)) return true;
             return base.ProcessKeyPreview(ref m);
@@ -2107,7 +2103,6 @@ namespace System.Windows.Forms {
         ///     base.wndProc(m); to ensure the tab continues to function properly.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {

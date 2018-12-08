@@ -23,7 +23,6 @@ namespace System.Resources {
     using System.Xml;
     using System.ComponentModel.Design;
     using System.Globalization;
-    using System.Security.Permissions;
     using System.Runtime.Versioning;
 
     /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode"]/*' />
@@ -31,7 +30,6 @@ namespace System.Resources {
     ///    
     /// </devdoc>
     [Serializable]
-    [PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public sealed class ResXDataNode : ISerializable {
 
         private static readonly char[] SpecialChars = new char[]{' ', '\r', '\n'};

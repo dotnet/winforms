@@ -27,9 +27,6 @@ namespace System.Resources {
     ///     for the value of the resource item, the external resource is loaded.
     /// </devdoc>
     [TypeConverterAttribute(typeof(ResXFileRef.Converter)), Serializable]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
-
     public class ResXFileRef {
         private string fileName;
         private string typeName;
@@ -168,8 +165,6 @@ namespace System.Resources {
 
 
         /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter"]/*' />
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class Converter : TypeConverter {
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.CanConvertFrom"]/*' />
             public override bool CanConvertFrom(ITypeDescriptorContext context,

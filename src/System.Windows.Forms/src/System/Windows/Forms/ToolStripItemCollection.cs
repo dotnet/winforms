@@ -21,7 +21,6 @@ namespace System.Windows.Forms {
     [
     Editor("System.Windows.Forms.Design.ToolStripCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
     ListBindable(false),
-    UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)
     ]
     public class ToolStripItemCollection : ArrangedElementCollection, IList {
         

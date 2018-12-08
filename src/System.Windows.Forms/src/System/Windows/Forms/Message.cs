@@ -20,7 +20,6 @@ namespace System.Windows.Forms {
     ///    <para> 
     ///       Implements a Windows message.</para>
     /// </devdoc>
-    [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
     [SuppressMessage("Microsoft.Security", "CA2108:ReviewDeclarativeSecurityOnValueTypes")]
     public struct Message {
 #if DEBUG

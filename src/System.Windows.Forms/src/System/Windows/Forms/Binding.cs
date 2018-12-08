@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.Collections;
     using System.Globalization;
-    using System.Security.Permissions;
-    using System.Security;
 
     /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding"]/*' />
     /// <devdoc>
@@ -143,9 +141,6 @@ namespace System.Windows.Forms {
         DefaultValue(null)
         ]
         public IBindableComponent BindableComponent {
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             get {
                 return this.control;
             }
@@ -161,9 +156,6 @@ namespace System.Windows.Forms {
         DefaultValue(null)
         ]
         public Control Control {
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             get {
                 return this.control as Control;
             }

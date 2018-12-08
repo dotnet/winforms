@@ -462,7 +462,6 @@ namespace System.Windows.Forms {
         ///       specific functionality to a common dialog box.
         ///    </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)] 
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
             
             switch (msg) {

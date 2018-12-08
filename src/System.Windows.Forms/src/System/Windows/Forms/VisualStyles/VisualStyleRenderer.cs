@@ -550,8 +550,6 @@ namespace System.Windows.Forms.VisualStyles {
         ///       [See win32 equivalent.]
         ///    </para>
         /// </devdoc>
-        [SuppressUnmanagedCodeSecurity, 
-         SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         public Region GetBackgroundRegion(IDeviceContext dc, Rectangle bounds) {
             if (dc == null) {
                 throw new ArgumentNullException(nameof(dc));

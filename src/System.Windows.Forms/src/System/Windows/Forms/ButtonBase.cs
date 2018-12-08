@@ -193,7 +193,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.CreateParams"]/*' />
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw) {
@@ -1243,7 +1242,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.WndProc"]/*' />
         
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -1322,7 +1320,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBaseAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 ((ButtonBase)Owner).OnClick(EventArgs.Empty);
             }

@@ -11,8 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu"]/*' />
     /// <devdoc>
@@ -58,7 +56,6 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ContextMenuSourceControlDescr))
         ]
         public Control SourceControl {
-            [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
             get {
                 return sourceControl;
             }
@@ -159,10 +156,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [
-            System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode),
-            System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) {
             sourceControl = control;
             return ProcessCmdKey(ref msg, keyData);

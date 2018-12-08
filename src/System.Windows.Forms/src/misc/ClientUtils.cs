@@ -21,7 +21,6 @@
     using System.Globalization;
     using System.Collections;
     using System.Diagnostics;
-    using System.Security.Permissions;    
 
     // Miscellaneous utilities
     static internal class ClientUtils {

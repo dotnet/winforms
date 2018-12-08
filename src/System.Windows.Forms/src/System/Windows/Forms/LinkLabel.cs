@@ -1526,7 +1526,6 @@ namespace System.Windows.Forms {
         ///       will seldom, if ever, need to override this method.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             if ((keyData & (Keys.Alt | Keys.Control)) != Keys.Alt) {
                 Keys keyCode = keyData & Keys.KeyCode;
@@ -1915,7 +1914,6 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message msg) {
             switch (msg.Msg) {
                 case NativeMethods.WM_SETCURSOR:
@@ -2705,7 +2703,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return link.Owner.AccessibilityObject;                
                 }
@@ -2733,7 +2730,6 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (AccessibilityImprovements.Level1) {
                         // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
@@ -2744,7 +2740,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 link.Owner.OnLinkClicked(new LinkLabelLinkClickedEventArgs(link));
             }

@@ -146,7 +146,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.CreateParams"]/*' />
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw) {
@@ -775,7 +774,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.WndProc"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
        
             if (OwnerDraw) {

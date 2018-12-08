@@ -979,7 +979,6 @@ namespace System.Windows.Forms {
         ///    If a subclass overrides this function, it must call the base implementation.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
 
@@ -1953,7 +1952,6 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormMergedMenuDescr)),
         ]
         public MainMenu MergedMenu {
-            [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
             get {
                 return this.MergedMenuPrivate;
             }
@@ -3742,7 +3740,6 @@ namespace System.Windows.Forms {
         ///       </para>
         /// </devdoc>
         [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         protected override void DefWndProc(ref Message m) {
@@ -4362,7 +4359,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overriden to handle MDI mnemonic processing properly.
         /// </devdoc>        
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             // MDI container form has at least one control, the MDI client which contains the MDI children. We need
             // to allow the MDI children process the mnemonic before any other control in the MDI container (like
@@ -5193,9 +5189,6 @@ namespace System.Windows.Forms {
         ///     Processes a command key. Overrides Control.processCmdKey() to provide
         ///     additional handling of main menu command keys and Mdi accelerators.
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             if (base.ProcessCmdKey(ref msg, keyData)) return true;
 
@@ -5233,7 +5226,6 @@ namespace System.Windows.Forms {
         /// The method performs no processing on keys that include the ALT or
         ///     CONTROL modifiers.
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None) {
                 Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -5276,7 +5268,6 @@ namespace System.Windows.Forms {
         ///    Processes a dialog character For a MdiChild.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogChar(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Form.ProcessDialogChar [" + charCode.ToString() + "]");
@@ -5305,9 +5296,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ProcessKeyPreview"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected override bool ProcessKeyPreview(ref Message m) {
             if (formState[FormStateKeyPreview] != 0 && ProcessKeyEventArgs(ref m))
                 return true;
@@ -5315,7 +5303,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ProcessTabKey"]/*' />
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessTabKey(bool forward) {
             if (SelectNextControl(ActiveControl, forward, true, true, true))
                 return true;
@@ -7407,7 +7394,6 @@ namespace System.Windows.Forms {
         ///     Base wndProc encapsulation.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_NCACTIVATE:

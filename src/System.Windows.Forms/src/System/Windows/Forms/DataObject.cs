@@ -628,7 +628,6 @@ namespace System.Windows.Forms
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DAdvise"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DAdvise");
@@ -646,7 +645,6 @@ namespace System.Windows.Forms
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DUnadvise"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.DUnadvise(int dwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DUnadvise");
@@ -664,7 +662,6 @@ namespace System.Windows.Forms
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumDAdvise"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumDAdvise");
@@ -682,7 +679,6 @@ namespace System.Windows.Forms
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumFormatEtc"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumFormatEtc: " + dwDirection.ToString());
@@ -706,7 +702,6 @@ namespace System.Windows.Forms
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetCanonicalFormatEtc"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetCanonicalFormatEtc");
@@ -724,7 +719,6 @@ namespace System.Windows.Forms
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetData"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetData");
@@ -779,7 +773,6 @@ namespace System.Windows.Forms
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetDataHere"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetDataHere");
@@ -799,7 +792,6 @@ namespace System.Windows.Forms
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.QueryGetData"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int IComDataObject.QueryGetData(ref FORMATETC formatetc)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData");
@@ -847,7 +839,6 @@ namespace System.Windows.Forms
         // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.SetData"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
         {
 
@@ -948,9 +939,6 @@ namespace System.Windows.Forms
             return SaveStreamToHandle(ref handle, stream);
         }
 
-        [
-            SecurityPermissionAttribute(SecurityAction.Assert, Flags = SecurityPermissionFlag.SerializationFormatter)
-        ]
         private static void SaveObjectToHandleSerializer(Stream stream, object data, bool restrictSerialization)
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -1974,7 +1962,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            [SecurityPermission(SecurityAction.Assert, UnmanagedCode = true)]
             private int QueryGetDataUnsafe(ref FORMATETC formatetc)
             {
                 return innerData.QueryGetData(ref formatetc);

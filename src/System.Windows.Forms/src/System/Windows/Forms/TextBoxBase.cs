@@ -198,7 +198,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Implements the <see cref='System.Windows.Forms.TextBoxBase.ShortcutsEnabled'/> property.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             // First call parent's ProcessCmdKey, since we don't to eat up
             // the shortcut key we are not supported in TextBox.
@@ -476,7 +475,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "EDIT";
@@ -1404,7 +1402,6 @@ namespace System.Windows.Forms {
         ///       Copies the current selection in the text box to the Clipboard.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         public void Copy() {
             SendMessage(NativeMethods.WM_COPY, 0, 0);
         }
@@ -1522,7 +1519,6 @@ namespace System.Windows.Forms {
         ///       Replaces the current selection in the text box with the contents of the Clipboard.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         public void Paste() {
             Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ClipboardRead Demanded");
             IntSecurity.ClipboardRead.Demand();
@@ -1531,7 +1527,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ProcessDialogKey"]/*' />
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "TextBoxBase.ProcessDialogKey [" + keyData.ToString() + "]");
             Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -2193,7 +2188,6 @@ namespace System.Windows.Forms {
         ///    to add extra functionality, but should not forget to call
         ///    base.wndProc(m); to ensure the control continues to function properly.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_LBUTTONDBLCLK:

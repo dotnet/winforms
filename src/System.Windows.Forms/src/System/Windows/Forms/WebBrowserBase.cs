@@ -14,7 +14,6 @@ using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Reflection;
 using System.Globalization;
-using System.Security.Permissions;
 using Microsoft.Win32;
 using System.Collections.Specialized;
 using System.IO;
@@ -46,8 +45,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    PermissionSetAttribute(SecurityAction.LinkDemand, Name="FullTrust"),
-    PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust"),
     DefaultProperty(nameof(Name)), DefaultEvent(nameof(Enter)),
     Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
     public class WebBrowserBase : Control {
@@ -264,7 +261,6 @@ namespace System.Windows.Forms {
         }
 
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [UIPermission(SecurityAction.LinkDemand, Window = UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
@@ -373,7 +369,6 @@ namespace System.Windows.Forms {
         //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ProcessMnemonic"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             bool processed = false;
 
@@ -418,9 +413,6 @@ namespace System.Windows.Forms {
         // others are first processed by the wndproc of Control
         //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.WndProc"]/*' />
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         PermissionSetAttribute(SecurityAction.LinkDemand, Name="FullTrust"),
-         PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust")]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 //

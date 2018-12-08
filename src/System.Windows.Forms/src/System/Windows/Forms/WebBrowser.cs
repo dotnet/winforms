@@ -27,8 +27,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust"),
-    PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust"),
     DefaultProperty(nameof(Url)), DefaultEvent(nameof(DocumentCompleted)),
     Docking(DockingBehavior.AutoDock),
     SRDescription(nameof(SR.DescriptionWebBrowser)),
@@ -70,7 +68,6 @@ namespace System.Windows.Forms {
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser'/> control.
         ///     </para>
         /// </devdoc>
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public WebBrowser() : base("8856f961-340a-11d0-a96b-00c04fd705a2") {
                 CheckIfCreatedInIE();
     
@@ -1685,8 +1682,7 @@ namespace System.Windows.Forms {
         /// method in the WebBrowser class. 
         ///     </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         ComVisible(false)]
+        [ComVisible(false)]
         protected class WebBrowserSite : WebBrowserSiteBase, UnsafeNativeMethods.IDocHostUIHandler
         {
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.WebBrowserSite"]/*' />
@@ -1695,7 +1691,6 @@ namespace System.Windows.Forms {
             /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser.WebBrowserSite'/> class.
             ///     </para>
             /// </devdoc>
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             public WebBrowserSite(WebBrowser host) : base(host) {
             }
 

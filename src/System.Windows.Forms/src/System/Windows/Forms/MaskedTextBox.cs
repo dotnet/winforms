@@ -338,7 +338,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected override CreateParams CreateParams 
         {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get 
             {
                 CreateParams cp = base.CreateParams;
@@ -1679,7 +1678,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Advanced),
-        UIPermission(SecurityAction.InheritanceDemand, Window = UIPermissionWindow.AllWindows)
         ]
         protected override void CreateHandle()
         {
@@ -2673,7 +2671,6 @@ namespace System.Windows.Forms
         /// 
         ///     Implements the handling of Ctrl+A (select all). Note: Code copied from TextBox.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             //
@@ -2700,7 +2697,6 @@ namespace System.Windows.Forms
         ///     to DefWndProc (the characters would be displayed in the text box always).
         ///     
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected internal override bool ProcessKeyMessage(ref Message m)
         {
             // call base's method so the WM_CHAR and other messages are processed; this gives Control the 
@@ -3194,7 +3190,6 @@ namespace System.Windows.Forms
         ///     We need to override the WndProc method to have full control over what characters can be
         ///     displayed in the text box; particularly, we have special handling when IME is turned on.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m)
         {
             // Handle messages for special cases (unsupported operations or cases where mask doesn not matter).

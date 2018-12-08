@@ -440,10 +440,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /* SECURITYUNDONE : should require EventQueue permission */
         protected virtual IntPtr Instance {
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-                SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             [ResourceExposure(ResourceScope.Process)]
             [ResourceConsumption(ResourceScope.Process)]
             get { return UnsafeNativeMethods.GetModuleHandle(null); }
@@ -738,7 +734,6 @@ namespace System.Windows.Forms {
         ///       specific functionality to the file dialog box.
         ///    </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
             if (msg == NativeMethods.WM_NOTIFY) {
                 dialogHWnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd));

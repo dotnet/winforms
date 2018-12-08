@@ -230,10 +230,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected virtual CreateParams CreateParams {
-            [
-                SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             get {
                 CreateParams cp = new CreateParams();
                 if (TopLevelControl != null && !TopLevelControl.IsDisposed) {
@@ -406,7 +402,6 @@ namespace System.Windows.Forms {
             {
                 return ownerDraw;
             }
-            [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
             set 
             {
                 ownerDraw = value;

@@ -892,7 +892,6 @@ namespace System.Windows.Forms {
                     ForceSynchronousPaint();
                 }
 
-                [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 protected override void WndProc(ref Message m){                
                     if (m.Msg == NativeMethods.WM_NCHITTEST){
                         m.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
