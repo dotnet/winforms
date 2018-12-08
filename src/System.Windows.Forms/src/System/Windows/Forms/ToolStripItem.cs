@@ -17,8 +17,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Collections.Specialized;
     using System.Drawing.Design;
-    using System.Security.Permissions;
-    using System.Security;
     using System.Configuration;        
     using System.Drawing.Imaging;
     using System.Diagnostics.CodeAnalysis;
@@ -959,7 +957,6 @@ namespace System.Windows.Forms {
        
         private void EnsureParentDropTargetRegistered() {
             if (ParentInternal != null) {
-                IntSecurity.ClipboardRead.Demand();
                 ParentInternal.DropTargetManager.EnsureRegistered(this);
             }
         }
@@ -4154,9 +4151,6 @@ namespace System.Windows.Forms {
                     handler(Owner, args);
 
                     fileName = args.HelpNamespace;                             
-                    if (fileName != null && fileName.Length > 0) {
-                        IntSecurity.DemandFileIO(FileIOPermissionAccess.PathDiscovery, fileName);
-                    }
 
                     try {
                         topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);

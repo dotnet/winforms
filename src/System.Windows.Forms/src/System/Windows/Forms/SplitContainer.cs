@@ -13,8 +13,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.Collections;
     using System.Drawing.Drawing2D;
@@ -1956,7 +1954,6 @@ namespace System.Windows.Forms {
                         c.ActiveControl = this;
                     }
                     else {
-                        IntSecurity.ModifyFocus.Demand();
                         cc.SetActiveControlInternal(this);
                     }
                 }
@@ -2139,24 +2136,12 @@ namespace System.Windows.Forms {
             initialSplitterDistance = splitterDistance;
             initialSplitterRectangle = SplitterRectangle;
 
-            // 
-
-
-
-
-
-
-            IntSecurity.UnmanagedCode.Assert();
-            try {
-                if (splitContainerMessageFilter == null)
-                {
-                   splitContainerMessageFilter = new SplitContainerMessageFilter(this);
-                }
-                Application.AddMessageFilter(splitContainerMessageFilter);
+            if (splitContainerMessageFilter == null)
+            {
+                splitContainerMessageFilter = new SplitContainerMessageFilter(this);
             }
-            finally {
-                CodeAccessPermission.RevertAssert();
-            }
+            Application.AddMessageFilter(splitContainerMessageFilter);
+
             CaptureInternal = true;
             DrawSplitBar(DRAW_START);
         }

@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
 
     using System;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Windows.Forms.Layout;
 
@@ -2228,19 +2226,13 @@ namespace System.Windows.Forms {
         private void WmPrint(ref Message m) {
             base.WndProc(ref m);
             if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D) {
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    using (Graphics g = Graphics.FromHdc(m.WParam)) {
-                        Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
-                        using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
-                            g.DrawRectangle(pen, rect);
-                        }
-                        rect.Inflate(-1, -1);
-                        g.DrawRectangle(SystemPens.Window, rect);
+                using (Graphics g = Graphics.FromHdc(m.WParam)) {
+                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
+                        g.DrawRectangle(pen, rect);
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                    rect.Inflate(-1, -1);
+                    g.DrawRectangle(SystemPens.Window, rect);
                 }
             }
         }

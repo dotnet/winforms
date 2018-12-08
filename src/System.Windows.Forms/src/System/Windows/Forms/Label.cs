@@ -5,7 +5,6 @@
 namespace System.Windows.Forms {
 
     using System;
-    using System.Security.Permissions;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.ComponentModel.Design;
@@ -1385,14 +1384,11 @@ namespace System.Windows.Forms {
         protected override void OnMouseEnter(EventArgs e) {
             if (!controlToolTip && !DesignMode && AutoEllipsis && showToolTip && textToolTip != null) {
 
-                // 
-                IntSecurity.AllWindows.Assert();
                 try {
                     controlToolTip = true;
                     textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
                 }
                 finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
                     controlToolTip = false;
                 }
                     
@@ -1411,15 +1407,9 @@ namespace System.Windows.Forms {
         [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         protected override void OnMouseLeave(EventArgs e) {
             if (!controlToolTip && textToolTip != null && textToolTip.GetHandleCreated()) {
-                    textToolTip.RemoveAll();
-                    // 
-                    IntSecurity.AllWindows.Assert();
-                    try {
-                        textToolTip.Hide(this);
-                    }
-                    finally {
-                        System.Security.CodeAccessPermission.RevertAssert();
-                    }
+                textToolTip.RemoveAll();
+
+                textToolTip.Hide(this);
             }
 
             base.OnMouseLeave(e);
@@ -1616,19 +1606,10 @@ namespace System.Windows.Forms {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic()) {
                 Control parent = ParentInternal;
                 if (parent != null) {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        if (parent.SelectNextControl(this, true, false, true, false)) {
-                            if (!parent.ContainsFocus) {
-                                parent.Focus();
-                            }
+                    if (parent.SelectNextControl(this, true, false, true, false)) {
+                        if (!parent.ContainsFocus) {
+                            parent.Focus();
                         }
-                    }
-                    finally {
-                        System.Security.CodeAccessPermission.RevertAssert();
                     }
                 }
                 return true;

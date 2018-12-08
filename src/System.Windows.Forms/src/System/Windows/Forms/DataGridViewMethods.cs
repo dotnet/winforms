@@ -10,8 +10,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Collections;
     using System.Windows.Forms.Design;    
     using System.ComponentModel.Design;
@@ -2693,7 +2691,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Debug.Assert(this.editingControl == null);
-                    this.editingControl = (Control)SecurityUtils.SecureCreateInstance(editControlType);
+                    this.editingControl = (Control)Activator.CreateInstance(editControlType);
                     Debug.Assert(this.editingControl != null);
 
                     ((IDataGridViewEditingControl)this.editingControl).EditingControlDataGridView = this;
@@ -5430,17 +5428,7 @@ namespace System.Windows.Forms
                 {
                     this.cachedScrollableRegion = UnsafeNativeMethods.GetRectsFromRegion(handle);
 
-                    // 
-
-                    IntSecurity.ObjectFromWin32Handle.Assert();
-                    try
-                    {
-                        region.ReleaseHrgn(handle);
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    region.ReleaseHrgn(handle);
                 }
             }
             return this.cachedScrollableRegion;
@@ -20613,7 +20601,6 @@ namespace System.Windows.Forms
             }
             else if (key == Keys.Tab)
             {
-                IntSecurity.AllWindows.Demand();
                 if (ProcessTabKey(keyData))
                 {
                     return true;
@@ -20641,19 +20628,7 @@ namespace System.Windows.Forms
                     keyData &= ~Keys.Control;
                     bool ret = false;
 
-                    // 
-
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try
-                    {
-                        ret = base.ProcessDialogKey(keyData);
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    ret = base.ProcessDialogKey(keyData);
 
                     if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_leavingWithTabKey] && this.Focused)
                     {

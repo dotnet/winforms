@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Windows.Forms;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Runtime.Versioning;
     using Microsoft.Win32;
 
@@ -553,15 +551,10 @@ namespace System.Windows.Forms {
 
             Graphics graphics = Graphics.FromHdcInternal(screenDC);
 
-            // 
-
-
-            IntSecurity.ObjectFromWin32Handle.Assert();
             try {
                 Font.ToLogFont(lf, graphics);
             }
             finally {
-                CodeAccessPermission.RevertAssert();
                 graphics.Dispose();
             }
             UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, screenDC));
@@ -680,13 +673,7 @@ namespace System.Windows.Forms {
             try {
                 Font fontInWorldUnits = null;
                 try {
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        fontInWorldUnits = Font.FromLogFont(lf, screenDC);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    fontInWorldUnits = Font.FromLogFont(lf, screenDC);
 
                     // The dialog claims its working in points (a device-independent unit),
                     // but actually gives us something in world units (device-dependent).

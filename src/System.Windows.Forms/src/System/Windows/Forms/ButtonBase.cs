@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Drawing.Imaging;
     using System;
-    using System.Security.Permissions;
     using System.Drawing.Drawing2D;
     using System.Drawing;
     using System.Drawing.Design;
@@ -817,14 +816,7 @@ namespace System.Windows.Forms {
             SetFlag(FlagMouseOver, true);
             Invalidate();
             if (!DesignMode && AutoEllipsis && ShowToolTip && textToolTip != null) {
-                // 
-                IntSecurity.AllWindows.Assert();
-                try { 
-                    textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
-                }
-                finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
-                }
+                textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
             }
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
@@ -841,14 +833,7 @@ namespace System.Windows.Forms {
         protected override void OnMouseLeave(EventArgs eventargs) {
             SetFlag(FlagMouseOver, false);    
             if (textToolTip != null) {
-                // 
-                IntSecurity.AllWindows.Assert();
-                try {
-                    textToolTip.Hide(this);
-                }
-                finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
-                }
+                textToolTip.Hide(this);
             }
             Invalidate();
             // call base last, so if it invokes any listeners that disable the button, we

@@ -10,8 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System;
-    using System.Security.Permissions;
-    using System.Security;
     using System.Drawing;
     using System.Windows.Forms.Internal;
     using System.Drawing.Design;
@@ -3043,17 +3041,11 @@ namespace System.Windows.Forms {
             base.WndProc(ref m);
 
             if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D) {
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    using (Graphics g = Graphics.FromHdc(m.WParam)) {
-                        Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
-                        g.DrawRectangle(new Pen(VisualStyleInformation.TextControlBorder), rect);
-                        rect.Inflate(-1, -1);
-                        g.DrawRectangle(SystemPens.Window, rect);
-                    }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                using (Graphics g = Graphics.FromHdc(m.WParam)) {
+                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    g.DrawRectangle(new Pen(VisualStyleInformation.TextControlBorder), rect);
+                    rect.Inflate(-1, -1);
+                    g.DrawRectangle(SystemPens.Window, rect);
                 }
             }
         }

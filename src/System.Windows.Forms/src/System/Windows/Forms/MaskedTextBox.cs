@@ -9,8 +9,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Runtime.InteropServices;
     using System.Globalization;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Diagnostics;
     using System.Collections;
     using System.Collections.Specialized;
@@ -2992,13 +2990,6 @@ namespace System.Windows.Forms
 
             try
             {
-                // 
-
-
-
-
-                IntSecurity.ClipboardWrite.Assert();
-
                 if (text.Length == 0)
                 {
                     Clipboard.Clear();
@@ -3150,7 +3141,6 @@ namespace System.Windows.Forms
 
             try
             {
-                IntSecurity.ClipboardRead.Assert();
                 text = Clipboard.GetText();
             }
             catch (Exception ex)
@@ -3169,19 +3159,13 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m) {
             base.WndProc(ref m);
             if ((NativeMethods.PRF_NONCLIENT & unchecked( (int) (long)m.LParam)) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D) {
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    using (Graphics g = Graphics.FromHdc(m.WParam)) {
-                        Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
-                        using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
-                            g.DrawRectangle(pen, rect);
-                        }
-                        rect.Inflate(-1, -1);
-                        g.DrawRectangle(SystemPens.Window, rect);
+                using (Graphics g = Graphics.FromHdc(m.WParam)) {
+                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
+                        g.DrawRectangle(pen, rect);
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                    rect.Inflate(-1, -1);
+                    g.DrawRectangle(SystemPens.Window, rect);
                 }
             }
         }

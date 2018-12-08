@@ -13,8 +13,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Runtime.Versioning;
     using System.Globalization;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms.Layout;
     using System.Windows.Forms.ComponentModel;
     using System.ComponentModel;
@@ -237,15 +235,6 @@ namespace System.Windows.Forms {
                 }
                 if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
-                }
-
-                if (value != AutoCompleteSource.None && 
-                    value != AutoCompleteSource.CustomSource && 
-                    value != AutoCompleteSource.ListItems)
-                {
-                    FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
-                    fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-                    fiop.Demand();
                 }
 
                 autoCompleteSource = value;
@@ -3054,7 +3043,7 @@ namespace System.Windows.Forms {
                         }
                         int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), (int)AutoCompleteSource | mode);
                     }
-                    catch (SecurityException) {
+                    catch (System.Security.SecurityException) {
                         // If we don't have full trust, degrade gracefully. Allow the control to
                         // function without auto-complete. Allow the app to continue running.
                     }
@@ -3695,16 +3684,7 @@ namespace System.Windows.Forms {
 
                     // If the requested object identifier is UiaRootObjectId, 
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    InternalAccessibleObject internalAccessibleObject;
-                    IntSecurity.UnmanagedCode.Assert();
-                    try
-                    {
-                        internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    InternalAccessibleObject internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
                     m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
                         new HandleRef(this, Handle),
                         m.WParam,
@@ -3730,16 +3710,10 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.IAccessibleInternal iacc = null;
 
                         if (_accessibilityObject == null) {
-                            IntSecurity.UnmanagedCode.Assert();
-                            try {
-                                wfAccessibleObject = AccessibilityImprovements.Level3
-                                    ? GetChildAccessibleObject(_childWindowType)
-                                    : new ChildAccessibleObject(_owner, Handle);
-                                _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
-                            }
-                            finally {
-                                CodeAccessPermission.RevertAssert();
-                            }
+                            wfAccessibleObject = AccessibilityImprovements.Level3
+                                ? GetChildAccessibleObject(_childWindowType)
+                                : new ChildAccessibleObject(_owner, Handle);
+                            _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
                         }
                         iacc = (UnsafeNativeMethods.IAccessibleInternal)_accessibilityObject;
 
@@ -3747,12 +3721,10 @@ namespace System.Windows.Forms {
                         //
                         punkAcc = Marshal.GetIUnknownForObject(iacc);
 
-                        IntSecurity.UnmanagedCode.Assert();
                         try {
                             m.Result = UnsafeNativeMethods.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(this, punkAcc));
                         }
                         finally {
-                            CodeAccessPermission.RevertAssert();
                             Marshal.Release(punkAcc);
                         }
                     }

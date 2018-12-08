@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
-    using System.Security.Permissions;    
     using System.Collections;
     using System.Windows.Forms.Design;
     using System.Drawing;
@@ -316,8 +315,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         public MenuItem FindMenuItem(int type, IntPtr value) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ControlFromHandleOrLocation Demanded");
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return FindMenuItemInternal(type, value);
         }
 

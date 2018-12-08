@@ -17,8 +17,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Windows.Forms.Internal;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl"]/*' />
     /// <devdoc>
@@ -344,8 +342,6 @@ namespace System.Windows.Forms {
         ]
         public Form ParentForm {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
                 return ParentFormInternal;
             }
         }
@@ -372,9 +368,6 @@ namespace System.Windows.Forms {
         /// <para>Activates the specified control.</para>
         /// </devdoc>
         bool IContainerControl.ActivateControl(Control control) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
-
             return ActivateControlInternal(control, true);
         }
 
@@ -459,19 +452,8 @@ namespace System.Windows.Forms {
             Debug.Assert(control != null);
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::AfterControlRemoved(" + control.Name + ") - " + this.Name);
             if (control == activeControl || control.Contains(activeControl)) {
-                bool selected;
-                // 
+                bool selected = SelectNextControl(control, true, true, true, true);
 
-
-                IntSecurity.ModifyFocus.Assert ();
-                try
-                {
-                    selected = SelectNextControl(control, true, true, true, true);
-                }
-                finally
-                {
-                    CodeAccessPermission.RevertAssert ();
-                }
                 if (selected && this.activeControl != control)
                 {
                     // Add the check. If it is set to true, do not call into FocusActiveControlInternal().
@@ -497,16 +479,7 @@ namespace System.Windows.Forms {
                     Form f = FindFormInternal();
                     if (f != null)
                     {
-                        // 
-                        IntSecurity.ModifyFocus.Assert ();
-                        try
-                        {
-                            f.SelectNextControl(this, true, true, true, true);
-                        }
-                        finally
-                        {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        f.SelectNextControl(this, true, true, true, true);
                     }
                 }
             }
@@ -809,16 +782,10 @@ namespace System.Windows.Forms {
         
         internal override void OnFrameWindowActivate(bool fActivate) {
           if (fActivate) {
-              IntSecurity.ModifyFocus.Assert();
-              try {
-                  if (ActiveControl == null) {
-                      SelectNextControl(null, true, true, true, false);
-                  }
-                  InnerMostActiveContainerControl.FocusActiveControlInternal();
-              }
-              finally {
-                  CodeAccessPermission.RevertAssert();
-              }
+                if (ActiveControl == null) {
+                    SelectNextControl(null, true, true, true, false);
+                }
+                InnerMostActiveContainerControl.FocusActiveControlInternal();
           }
       }
 
@@ -1886,17 +1853,7 @@ namespace System.Windows.Forms {
                                 succeeded = knowncontainer.ActivateControlInternal(this);
                             }
                             else {
-
-                                // 
-
-
-                                IntSecurity.ModifyFocus.Assert();
-                                try {
-                                    succeeded = c.ActivateControl(this);
-                                }
-                                finally {
-                                    CodeAccessPermission.RevertAssert();
-                                }
+                                succeeded = c.ActivateControl(this);
                             }
                             if (!succeeded) {
                                 return;

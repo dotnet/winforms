@@ -9,8 +9,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security;
-    using System.Security.Permissions;
     using System;
     using System.Windows.Forms;
 
@@ -138,27 +136,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         public override string ToString() {
-            // Link Demand on System.Windows.Forms.Message
-            // fails to protect overriden methods.
-            bool unrestricted = false;
-            try 
-            {
-                IntSecurity.UnmanagedCode.Demand();
-                unrestricted = true;
-            }
-            catch (SecurityException)
-            {
-                // eat the exception.
-            }
-            
-            if (unrestricted)
-            {
-                return MessageDecoder.ToString(this);
-            }
-            else
-            {
-                return base.ToString();
-            }
+            return MessageDecoder.ToString(this);
         }
     }
 }

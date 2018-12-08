@@ -438,13 +438,6 @@ namespace System.Windows.Forms {
                 throw new ArgumentException(SR.CantShowMBServiceWithHelp, "options");
             }
 
-            // demand if not safe known options.
-            if ((options & ~(MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading)) != 0) {                
-                IntSecurity.UnmanagedCode.Demand();
-            }
-
-            IntSecurity.SafeSubWindows.Demand();
-
             int style = (showHelp) ? HELP_BUTTON : 0; 
             style |= (int) buttons | (int) icon | (int) defaultButton | (int) options;
 

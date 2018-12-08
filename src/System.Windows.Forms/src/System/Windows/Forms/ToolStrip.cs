@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Threading;
     using System.Windows.Forms.Layout;
     using System.ComponentModel.Design.Serialization;
@@ -4478,14 +4477,7 @@ namespace System.Windows.Forms {
 
                 if (item != currentlyActiveTooltipItem && ToolTip != null) {
 
-                    // 
-                    IntSecurity.AllWindows.Assert();
-                    try {
-                        ToolTip.Hide(this);
-                    }
-                    finally {
-                         System.Security.CodeAccessPermission.RevertAssert();
-                    }
+                    ToolTip.Hide(this);
 
                     if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
                         ToolTip.Active = false;
@@ -4507,17 +4499,10 @@ namespace System.Windows.Forms {
 
                             cursorLocation = WindowsFormsUtils.ConstrainToScreenBounds(new Rectangle(cursorLocation, onePixel)).Location;
 
-                            // 
-                            IntSecurity.AllWindows.Assert();
-                            try {                                           
-                                ToolTip.Show(currentlyActiveTooltipItem.ToolTipText,
-                                         this,
-                                         PointToClient(cursorLocation),
-                                         ToolTip.AutoPopDelay);                           
-                            }
-                            finally {
-                                System.Security.CodeAccessPermission.RevertAssert();
-                            }
+                            ToolTip.Show(currentlyActiveTooltipItem.ToolTipText,
+                                        this,
+                                        PointToClient(cursorLocation),
+                                        ToolTip.AutoPopDelay);                           
                         }
                     }
                 }

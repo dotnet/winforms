@@ -7,8 +7,6 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.ComponentModel;
-using System.Security;
-using System.Security.Permissions;
 
 namespace System.Windows.Forms
 {
@@ -137,16 +135,7 @@ namespace System.Windows.Forms
                 if (currentContext == null || currentContext.GetType() == typeof(SynchronizationContext)) {
                     previousSyncContext = currentContext;
 
-                    // 
-
-
-                    new PermissionSet(PermissionState.Unrestricted).Assert();
-                    try {
-                        AsyncOperationManager.SynchronizationContext = new WindowsFormsSynchronizationContext();
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    AsyncOperationManager.SynchronizationContext = new WindowsFormsSynchronizationContext();
                 }
             }
             finally {
@@ -163,7 +152,6 @@ namespace System.Windows.Forms
                 WindowsFormsSynchronizationContext winFormsSyncContext = AsyncOperationManager.SynchronizationContext as WindowsFormsSynchronizationContext;
                 if (winFormsSyncContext != null) {
                     try {
-                        new PermissionSet(PermissionState.Unrestricted).Assert();
                         if (previousSyncContext == null) {
                             AsyncOperationManager.SynchronizationContext = new SynchronizationContext();
                         }
@@ -173,7 +161,6 @@ namespace System.Windows.Forms
                     }
                     finally {
                         previousSyncContext = null;
-                        CodeAccessPermission.RevertAssert();
                     }
                 }
             }

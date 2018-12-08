@@ -11,8 +11,6 @@ namespace System.Windows.Forms {
     using System.Runtime.ConstrainedExecution;
     using System.Runtime.CompilerServices;
     using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Diagnostics;
     using System;
     using System.Collections;
@@ -483,54 +481,48 @@ namespace System.Windows.Forms {
             };
             */
 
-            new RegistryPermission(PermissionState.Unrestricted).Assert();
+            Debug.Assert(wndProcFlags == 0x00, "Re-entrancy into IsDebuggerInstalled()");
+
+            RegistryKey debugKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework");
+            if (debugKey == null) {
+                Debug.WriteLineIf(WndProcChoice.TraceVerbose, ".NETFramework key not found");
+                return wndProcFlags;
+            }
             try {
-
-                Debug.Assert(wndProcFlags == 0x00, "Re-entrancy into IsDebuggerInstalled()");
-
-                RegistryKey debugKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework");
-                if (debugKey == null) {
-                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, ".NETFramework key not found");
-                    return wndProcFlags;
-                }
-                try {
-                    object value = debugKey.GetValue("DbgJITDebugLaunchSetting");
-                    if (value != null) {
-                        Debug.WriteLineIf(WndProcChoice.TraceVerbose, "DbgJITDebugLaunchSetting value found, debugger is installed");
-                        int dbgJit = 0;
-                        try {
-                            dbgJit = (int)value;
-                        }
-                        catch (InvalidCastException) {
-                            // If the value isn't a DWORD, then we will 
-                            // continue to use the non-debuggable wndproc
-                            //
-                            dbgJit = 1;
-                        }
-
-                        // From the enum above, 0x01 == "Terminate App"... for
-                        // anything else, we should flag that the debugger
-                        // will catch unhandled exceptions
-                        //
-                        if (dbgJit != 1) {
-                            wndProcFlags |= DebuggerPresent;
-                            wndProcFlags |= LoadConfigSettings;
-                        }
+                object value = debugKey.GetValue("DbgJITDebugLaunchSetting");
+                if (value != null) {
+                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, "DbgJITDebugLaunchSetting value found, debugger is installed");
+                    int dbgJit = 0;
+                    try {
+                        dbgJit = (int)value;
                     }
-                    else if (debugKey.GetValue("DbgManagedDebugger") != null) {
-                        //if there is a debugger installed, check the config files to decide
-                        //whether to allow JIT debugging.
+                    catch (InvalidCastException) {
+                        // If the value isn't a DWORD, then we will 
+                        // continue to use the non-debuggable wndproc
+                        //
+                        dbgJit = 1;
+                    }
+
+                    // From the enum above, 0x01 == "Terminate App"... for
+                    // anything else, we should flag that the debugger
+                    // will catch unhandled exceptions
+                    //
+                    if (dbgJit != 1) {
                         wndProcFlags |= DebuggerPresent;
                         wndProcFlags |= LoadConfigSettings;
                     }
                 }
-                finally {
-                    debugKey.Close();
+                else if (debugKey.GetValue("DbgManagedDebugger") != null) {
+                    //if there is a debugger installed, check the config files to decide
+                    //whether to allow JIT debugging.
+                    wndProcFlags |= DebuggerPresent;
+                    wndProcFlags |= LoadConfigSettings;
                 }
             }
             finally {
-                System.Security.CodeAccessPermission.RevertAssert();
+                debugKey.Close();
             }
+
 
             return wndProcFlags;
         }
@@ -615,13 +607,7 @@ namespace System.Windows.Forms {
 
 
                 if (suppressedGC) {
-                    new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
-                    try {
-                        GC.ReRegisterForFinalize(this);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    GC.ReRegisterForFinalize(this);
                     suppressedGC = false;
                 }
 
@@ -687,17 +673,6 @@ namespace System.Windows.Forms {
         ]
         public virtual void CreateHandle(CreateParams cp) {
 
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "CreateAnyWindow Demanded");
-            IntSecurity.CreateAnyWindow.Demand();
-
-            if ((cp.Style & NativeMethods.WS_CHILD) != NativeMethods.WS_CHILD
-                || cp.Parent == IntPtr.Zero) {
-
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "TopLevelWindow Demanded");
-                IntSecurity.TopLevelWindow.Demand();
-            }
-
-            // 
             lock (this) { 
                 CheckReleased();
                 WindowClass windowClass = WindowClass.Create(cp.ClassName, cp.ClassStyle);
@@ -840,13 +815,7 @@ namespace System.Windows.Forms {
                 // Now that we have disposed, there is no need to finalize us any more.  So
                 // Mark to the garbage collector that we no longer need finalization.
                 //
-                new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
-                try {
-                    GC.SuppressFinalize(this);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                GC.SuppressFinalize(this);
                 suppressedGC = true;
             }
         }
@@ -1141,13 +1110,7 @@ namespace System.Windows.Forms {
                             // Now that we have disposed, there is no need to finalize us any more.  So
                             // Mark to the garbage collector that we no longer need finalization.
                             //
-                            new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
-                            try {
-                                GC.SuppressFinalize(this);
-                            }
-                            finally {
-                                CodeAccessPermission.RevertAssert();
-                            }
+                            GC.SuppressFinalize(this);
                             suppressedGC = true;
                         }
                     }

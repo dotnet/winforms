@@ -9,8 +9,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.Windows.Forms.Layout;
     using System.Runtime.InteropServices;
@@ -590,26 +588,12 @@ namespace System.Windows.Forms {
                 if (!state[stateIsRestrictedWindowChecked]) {
                     state[stateIsRestrictedWindowChecked] = true;
                     state[stateIsRestrictedWindow] = false;
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Checking for restricted window...");
-                    Debug.Indent();
 #if DEBUG
                     if (AlwaysRestrictWindows.Enabled) {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Always restricted switch is on...");
                         state[stateIsRestrictedWindow] = true;
-                        Debug.Unindent();
                         return true;
                     }
 #endif                    
-
-                    try {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "WindowAdornmentModification Demanded");
-                        IntSecurity.WindowAdornmentModification.Demand();
-                    }
-                    catch {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Caught exception, we are restricted...");
-                        state[stateIsRestrictedWindow] = true;
-                    }
-                    Debug.Unindent();
                 }
 
                 return state[stateIsRestrictedWindow];

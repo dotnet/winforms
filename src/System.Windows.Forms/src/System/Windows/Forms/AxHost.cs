@@ -24,8 +24,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Runtime.Serialization;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Threading;
     using System.Windows.Forms.ComponentModel;
     using System.Windows.Forms.ComponentModel.Com2Interop;
@@ -2145,9 +2143,6 @@ namespace System.Windows.Forms {
         ]
         public ContainerControl ContainingControl {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
-
                 if (containingControl == null) {
                     containingControl = FindContainerControlInternal();
                 }
@@ -2864,29 +2859,23 @@ namespace System.Windows.Forms {
             
             bool singleThreaded = true;
 
-            new RegistryPermission(PermissionState.Unrestricted).Assert();
             try {
-                try {
-                    using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString() + "\\InprocServer32", /*writable*/false)) {
-                        object value = rk.GetValue("ThreadingModel");
+                using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString() + "\\InprocServer32", /*writable*/false)) {
+                    object value = rk.GetValue("ThreadingModel");
 
-                        if (value != null && value is string) {
-                            if (value.Equals("Both") 
-                                || value.Equals("Apartment") 
-                                || value.Equals("Free")) {
+                    if (value != null && value is string) {
+                        if (value.Equals("Both") 
+                            || value.Equals("Apartment") 
+                            || value.Equals("Free")) {
 
-                                singleThreaded = false;
-                            }
+                            singleThreaded = false;
                         }
                     }
                 }
-                catch (Exception t) {
-                    Debug.Fail(t.ToString());
-                    throw new InvalidOperationException(SR.AXNoThreadInfo);
-                }
             }
-            finally {
-                System.Security.CodeAccessPermission.RevertAssert();
+            catch (Exception t) {
+                Debug.Fail(t.ToString());
+                throw new InvalidOperationException(SR.AXNoThreadInfo);
             }
 
             if (singleThreaded) {
@@ -3573,13 +3562,7 @@ namespace System.Windows.Forms {
                     }
                 }
 #if DEBUG
-                new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                try {
-                    callStack = Environment.StackTrace;
-                }
-                finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
-                }
+                callStack = Environment.StackTrace;
 #endif
             }
 
@@ -4422,9 +4405,6 @@ namespace System.Windows.Forms {
         }
 
         private AxContainer GetParentContainer() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-            IntSecurity.GetParent.Demand();
-
             if (container == null) {
                 container = AxContainer.FindContainerForControl(this);
             }
@@ -6519,7 +6499,6 @@ namespace System.Windows.Forms {
             /// </devdoc>
             /// <internalonly/>
             void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
-                IntSecurity.UnmanagedCode.Demand();
                 MemoryStream stream = new MemoryStream();
                 Save(stream);
 

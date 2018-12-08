@@ -12,12 +12,10 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Diagnostics;
     using System;
-    using System.Security.Permissions;
     using System.Drawing;
     using Microsoft.Win32;
     using System.ComponentModel;
     using System.Drawing.Printing;
-    using CodeAccessPermission = System.Security.CodeAccessPermission;
     using System.Globalization;
 
     /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl"]/*' />
@@ -446,7 +444,6 @@ namespace System.Windows.Forms {
             if (document == null)
                 pageInfo = new PreviewPageInfo[0];
             else {
-                IntSecurity.SafePrinting.Demand(); 
 
                 PrintController oldController = document.PrintController;
                 PreviewPrintController previewController = new PreviewPrintController();

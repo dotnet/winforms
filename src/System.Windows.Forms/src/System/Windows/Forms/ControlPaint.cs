@@ -16,8 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Drawing;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Drawing.Text;
     using System.Drawing.Imaging;
     using System.Drawing.Drawing2D;
@@ -2050,13 +2048,7 @@ namespace System.Windows.Forms {
 
             NativeMethods.LOGFONT logfont = new NativeMethods.LOGFONT();
 
-            IntSecurity.ObjectFromWin32Handle.Assert();
-            try {
-                source.ToLogFont(logfont);
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
-            }
+            source.ToLogFont(logfont);
 
             short fontWeight = target.GetWeight();
             if (fontWeight != logfont.lfWeight) {

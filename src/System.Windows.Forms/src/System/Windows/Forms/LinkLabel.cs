@@ -14,8 +14,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Text;
     using System.Windows.Forms.ComponentModel;
     using System.Globalization;
@@ -898,12 +896,7 @@ namespace System.Windows.Forms {
 
             try {
                 Link focusLink = FocusLink;
-                if (focusLink == null) {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    
+                if (focusLink == null) {                   
                     // Set focus on first link.  
                     // This will raise the OnGotFocus event again but it will not be processed because processingOnGotFocus is true.
                     Select(true /*directed*/, true /*forward*/);
@@ -2623,17 +2616,7 @@ namespace System.Windows.Forms {
             public override Rectangle Bounds {
                 get {
                     Region region = link.VisualRegion;
-                    Graphics g = null;
-
-                    IntSecurity.ObjectFromWin32Handle.Assert();
-                    try
-                    {
-                        g = Graphics.FromHwnd(link.Owner.Handle);
-                    }
-                    finally 
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    Graphics g = Graphics.FromHwnd(link.Owner.Handle);
 
                     // Make sure we have a region for this link
                     //

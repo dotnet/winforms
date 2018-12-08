@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
 
     using System;
-    using System.Security.Permissions;
     using System.Drawing;
     using System.ComponentModel;
     using System.Windows.Forms;
@@ -52,7 +51,6 @@ namespace System.Windows.Forms {
         private string initialDir;
         private string defaultExt;
         private string[] fileNames;
-        private bool securityCheckFileNames;
         private string filter;
         private int filterIndex;
         private bool supportMultiDottedExtensions;
@@ -96,8 +94,6 @@ namespace System.Windows.Forms {
             }
 
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
                 SetOption(OPTION_ADDEXTENSION, value);
             }
         }
@@ -118,8 +114,6 @@ namespace System.Windows.Forms {
             }
 
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
                 SetOption(NativeMethods.OFN_FILEMUSTEXIST, value);
             }
         }
@@ -142,8 +136,6 @@ namespace System.Windows.Forms {
             }
 
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
                 SetOption(NativeMethods.OFN_PATHMUSTEXIST, value);
             }
         }
@@ -194,8 +186,6 @@ namespace System.Windows.Forms {
                 return !GetOption(NativeMethods.OFN_NODEREFERENCELINKS);
             }
             set { 
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
                 SetOption(NativeMethods.OFN_NODEREFERENCELINKS, !value);
             }
         }
@@ -229,19 +219,6 @@ namespace System.Windows.Forms {
                 }
                 else {
                     if (fileNames[0].Length > 0) {
-
-                        // See if we need to perform a security check on file names.  We need
-                        // to do this if the set of file names was provided by the file dialog.
-                        // A developer can set file names through the FileDialog API as well,
-                        // but we don't need to check those since the developer can provide any
-                        // name s/he wants.  This is important because it is otherwise possible
-                        // to get the FileName property to accept garbage, but throw during get.
-                        
-                        if (securityCheckFileNames) {
-                            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileIO(" + fileNames[0] + ") Demanded");
-                            IntSecurity.DemandFileIO(FileIOPermissionAccess.AllAccess, fileNames[0]);
-                        }
-
                         return fileNames[0];
                     }
                     else {
@@ -250,18 +227,12 @@ namespace System.Windows.Forms {
                 }
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
                 if (value == null) {
                     fileNames = null;
                 }
                 else {
                     fileNames = new string[] {value};
                 }
-
-                // As the developer has called this API and set the file name with an arbitrary value,
-                // we do not need to perform a security check on the name.
-                securityCheckFileNames = false;
             }
         }
 
@@ -279,22 +250,7 @@ namespace System.Windows.Forms {
         ]
         public string[] FileNames {
             get{
-                string[] files = FileNamesInternal;
-
-                // See if we need to perform a security check on file names.  We need
-                // to do this if the set of file names was provided by the file dialog.
-                // A developer can set file names through the FileDialog API as well,
-                // but we don't need to check those since the developer can provide any
-                // name s/he wants.  This is important because it is otherwise possible
-                // to get the FileName property to accept garbage, but throw during get.
-
-                if (securityCheckFileNames) {
-                    foreach (string file in files) {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileIO(" + file + ") Demanded");
-                        IntSecurity.DemandFileIO(FileIOPermissionAccess.AllAccess, file);
-                    }
-                }    
-                return files;
+                return FileNamesInternal;
             }
         }
 
@@ -424,9 +380,6 @@ namespace System.Windows.Forms {
                 return initialDir == null? "": initialDir;
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
-
                 initialDir = value;
             }
         }
@@ -478,9 +431,6 @@ namespace System.Windows.Forms {
                 return GetOption(NativeMethods.OFN_NOCHANGEDIR);
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
-
                 SetOption(NativeMethods.OFN_NOCHANGEDIR, value);
             }
         }
@@ -548,9 +498,6 @@ namespace System.Windows.Forms {
                 return title == null? "": title;
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
-
                 title = value;
             }
         }
@@ -572,9 +519,6 @@ namespace System.Windows.Forms {
                 return !GetOption(NativeMethods.OFN_NOVALIDATE);
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
-
                 SetOption(NativeMethods.OFN_NOVALIDATE, !value);
             }
         }
@@ -610,7 +554,6 @@ namespace System.Windows.Forms {
             int saveOptions = options;
             int saveFilterIndex = filterIndex;
             string[] saveFileNames = fileNames;
-            bool saveSecurityCheckFileNames = securityCheckFileNames;
             bool ok = false;
             try {
                 options = options & ~NativeMethods.OFN_READONLY |
@@ -618,12 +561,6 @@ namespace System.Windows.Forms {
                 filterIndex = ofn.nFilterIndex;
                 charBuffer.PutCoTaskMem(ofn.lpstrFile);
 
-                // We are filling in the file names list with secure
-                // data.  Any access to this list now will require
-                // a security demand.  We set this bit before actually
-                // setting the names; otherwise a thread ---- could
-                // expose them.
-                securityCheckFileNames = true;
                 Thread.MemoryBarrier();
 
                 if ((options & NativeMethods.OFN_ALLOWMULTISELECT) == 0) {
@@ -654,7 +591,6 @@ namespace System.Windows.Forms {
             }
             finally {
                 if (!ok) {
-                    securityCheckFileNames = saveSecurityCheckFileNames;
                     Thread.MemoryBarrier();
                     fileNames = saveFileNames;
 
@@ -675,15 +611,7 @@ namespace System.Windows.Forms {
         {
             bool fileExists = false;
             try {
-                // 
-
-                new FileIOPermission(FileIOPermissionAccess.Read, IntSecurity.UnsafeGetFullPath(fileName)).Assert();
-                try {
-                    fileExists = File.Exists(fileName);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                fileExists = File.Exists(fileName);
             }
             catch (System.IO.PathTooLongException) {
             }
@@ -971,7 +899,7 @@ namespace System.Windows.Forms {
             if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA) {
                 throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
             }
-            EnsureFileDialogPermission();
+
             if (this.UseVistaDialogInternal)
             {
                 return RunDialogVista(hWndOwner);
@@ -981,8 +909,6 @@ namespace System.Windows.Forms {
                 return RunDialogOld(hWndOwner);
             }
         }
-
-        internal abstract void EnsureFileDialogPermission();
 
         private bool RunDialogOld(IntPtr hWndOwner)
         {

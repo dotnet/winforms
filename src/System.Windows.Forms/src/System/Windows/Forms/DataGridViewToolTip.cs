@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Security;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -56,29 +55,15 @@ namespace System.Windows.Forms
                     this.toolTip.AutoPopDelay = 0;
                 }
 
-                if (this.dataGridView.IsRestricted)
+                if (activate)
                 {
-                    IntSecurity.AllWindows.Assert();
+                    this.toolTip.Active = true;
+                    this.toolTip.Show(this.dataGridView.ToolTipPrivate, this.dataGridView);
                 }
-                try
+                else if (this.toolTip != null)
                 {
-                    if (activate)
-                    {
-                        this.toolTip.Active = true;
-                        this.toolTip.Show(this.dataGridView.ToolTipPrivate, this.dataGridView);
-                    }
-                    else if (this.toolTip != null)
-                    {
-                        this.toolTip.Hide(this.dataGridView);
-                        this.toolTip.Active = false;
-                    }
-                }
-                finally
-                {
-                    if (this.dataGridView.IsRestricted)
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    this.toolTip.Hide(this.dataGridView);
+                    this.toolTip.Active = false;
                 }
 
                 this.toolTipActivated = activate;

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,8 +14,6 @@ namespace System.Windows.Forms {
     using System;
     using System.IO;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Collections;
     using System.Globalization;
     using System.Runtime.Versioning;
@@ -195,7 +193,6 @@ namespace System.Windows.Forms {
                     try {
                         //We need access to be able to read from the registry here.  We're not creating a 
                         //registry key, nor are we returning information from the registry to the user.
-                        new RegistryPermission(PermissionState.Unrestricted).Assert();
                         RegistryKey key = Registry.LocalMachine.OpenSubKey(CommonAppDataRegistryKeyName);
                         if (key != null) {
                             object value = key.GetValue(everettThreadAffinityValue);
@@ -206,7 +203,7 @@ namespace System.Windows.Forms {
                             }
                         }
                     }
-                    catch (SecurityException) {
+                    catch (System.Security.SecurityException) {
                         // Can't read the key: use default value (false)
                     }
                     catch (InvalidCastException) {
@@ -332,8 +329,6 @@ namespace System.Windows.Forms {
                 return InputLanguage.CurrentInputLanguage;
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-                IntSecurity.AffectThreadBehavior.Demand();
                 InputLanguage.CurrentInputLanguage = value;
             }
         }
@@ -363,7 +358,7 @@ namespace System.Windows.Forms {
                     Assembly asm = Assembly.GetEntryAssembly();
                     if (asm == null) {
                         StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
-                        executablePath = IntSecurity.UnsafeGetFullPath(sb.ToString());
+                        executablePath = Path.GetFullPath(sb.ToString());
                     }
                     else {
                         string cb = asm.CodeBase;
@@ -376,11 +371,7 @@ namespace System.Windows.Forms {
                         }
                     }
                 }
-                Uri exeUri = new Uri(executablePath);
-                if (exeUri.Scheme == "file") {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileIO(" + executablePath + ") Demanded");
-                    new FileIOPermission(FileIOPermissionAccess.PathDiscovery, executablePath).Demand();
-                }
+
                 return executablePath;
             }
         }
@@ -615,8 +606,6 @@ namespace System.Windows.Forms {
                 return safeTopLevelCaptionSuffix;
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "WindowAdornmentModification Demanded");
-                IntSecurity.WindowAdornmentModification.Demand();
                 if (value == null) value = string.Empty;
                 safeTopLevelCaptionSuffix = value;
             }
@@ -641,8 +630,6 @@ namespace System.Windows.Forms {
                     // startupPath = Path.GetDirectoryName(sb.ToString());
                     startupPath = AppContext.BaseDirectory;
                 }
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileIO(" + startupPath + ") Demanded");
-                new FileIOPermission(FileIOPermissionAccess.PathDiscovery, startupPath).Demand();
                 return startupPath;
             }
         }
@@ -855,8 +842,6 @@ namespace System.Windows.Forms {
         ///       destinations.</para>
         /// </devdoc>
         public static void AddMessageFilter(IMessageFilter value) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ManipulateWndProcAndHandles Demanded");
-            IntSecurity.UnmanagedCode.Demand();
             ThreadContext.FromCurrent().AddMessageFilter(value);
         }
 
@@ -964,9 +949,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static event ThreadExceptionEventHandler ThreadException {
             add {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-                IntSecurity.AffectThreadBehavior.Demand();
-
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
                     current.threadExceptionHandler = value;
@@ -1031,15 +1013,8 @@ namespace System.Windows.Forms {
         public static void EnableVisualStyles() {
             string assemblyLoc = null;
             
-            FileIOPermission fiop = new FileIOPermission(PermissionState.None);
-            fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-            fiop.Assert();
-            try {
-                assemblyLoc = typeof(Application).Assembly.Location;
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
-            }
+            assemblyLoc = typeof(Application).Assembly.Location;
+
             // Pull manifest from our resources
             if (assemblyLoc != null) {
                 // CSC embeds DLL manifests as resource ID 2
@@ -1088,13 +1063,6 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
         ]
         public static void Exit(CancelEventArgs e) {
-            Assembly entryAssembly = Assembly.GetEntryAssembly();
-            Assembly callingAssembly = Assembly.GetCallingAssembly();
-            if (entryAssembly == null || callingAssembly == null || !entryAssembly.Equals(callingAssembly))
-            {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-                IntSecurity.AffectThreadBehavior.Demand();
-            }
             bool cancelExit = ExitInternal();
             if (e != null) {
                 e.Cancel = cancelExit;
@@ -1145,18 +1113,13 @@ namespace System.Windows.Forms {
         ///       current thread and closes all windows on the thread.</para>
         /// </devdoc>
         public static void ExitThread() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-            IntSecurity.AffectThreadBehavior.Demand();
-
-            ExitThreadInternal();
-        }
-
-        private static void ExitThreadInternal() {
             ThreadContext context = ThreadContext.FromCurrent();
-            if (context.ApplicationContext != null) {
+            if (context.ApplicationContext != null)
+            {
                 context.ApplicationContext.ExitThread();
             }
-            else {
+            else
+            {
                 context.Dispose(true);
             }
         }
@@ -1183,19 +1146,7 @@ namespace System.Windows.Forms {
                 if (appFileVersion == null) {
                     Type t = GetAppMainType();
                     if (t != null) {
-                        // 
-
-
-                        FileIOPermission fiop = new FileIOPermission( PermissionState.None );
-                        fiop.AllFiles = FileIOPermissionAccess.PathDiscovery | FileIOPermissionAccess.Read;
-                        fiop.Assert();
-
-                        try {
-                            appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
                     }
                     else {
                         appFileVersion = FileVersionInfo.GetVersionInfo(ExecutablePath);
@@ -1393,20 +1344,8 @@ namespace System.Windows.Forms {
             Debug.Assert(process != null);
             if (string.Equals(process.MainModule.ModuleName, IEEXEC, StringComparison.OrdinalIgnoreCase))
             {
-                string clrPath = string.Empty;
+                string clrPath = Path.GetDirectoryName(typeof(object).Module.FullyQualifiedName);
 
-                // 
-
-
-                new FileIOPermission(PermissionState.Unrestricted).Assert();
-                try
-                {
-                    clrPath = Path.GetDirectoryName(typeof(object).Module.FullyQualifiedName);
-                }
-                finally
-                {
-                    CodeAccessPermission.RevertAssert();
-                }
                 if (string.Equals(clrPath + "\\" + IEEXEC, process.MainModule.FileName, StringComparison.OrdinalIgnoreCase))
                 {
                     // HRef exe case
@@ -1526,7 +1465,6 @@ namespace System.Windows.Forms {
         ///     Returns true if the call succeeded, else false.
         /// </devdoc>
         public static bool SetSuspendState(PowerState state, bool force, bool disableWakeEvent) {
-            IntSecurity.AffectMachineState.Demand();
             return UnsafeNativeMethods.SetSuspendState(state == PowerState.Hibernate, force, disableWakeEvent);
         }
 
@@ -1559,9 +1497,6 @@ namespace System.Windows.Forms {
         ///     precedence over the application exception mode.
         /// </devdoc>
         public static void SetUnhandledExceptionMode(UnhandledExceptionMode mode, bool threadScope) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-            IntSecurity.AffectThreadBehavior.Demand();
-
             NativeWindow.SetUnhandledExceptionModeInternal(mode, threadScope);
         }
         
@@ -2583,21 +2518,11 @@ namespace System.Windows.Forms {
                         }
 #endif
 
-
-
-
-
-                        IntSecurity.ManipulateWndProcAndHandles.Assert();
-                        try {
-                            using (DpiHelper.EnterDpiAwarenessScope(context)) {
-                                parkingWindow = new ParkingWindow();
-                            }
-
-                            parkingWindows.Add(parkingWindow);
+                        using (DpiHelper.EnterDpiAwarenessScope(context)) {
+                            parkingWindow = new ParkingWindow();
                         }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+
+                        parkingWindows.Add(parkingWindow);
                     }
                     return parkingWindow;
                 }
@@ -3221,36 +3146,17 @@ namespace System.Windows.Forms {
                             ThreadExceptionDialog td = new ThreadExceptionDialog(t);
                             DialogResult result = DialogResult.OK;
 
-                            // 
-
-
-
-                            IntSecurity.ModifyFocus.Assert();
                             try {
                                 result = td.ShowDialog();
                             }
                             finally {
-                                CodeAccessPermission.RevertAssert();
                                 td.Dispose();
                             }
                             switch (result) {
                                 case DialogResult.Abort:
-                                    // 
-
-
-
-
-
-
-
-
 
                                     Application.ExitInternal();
 
-                                    // 
-
-
-                                    new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
                                     Environment.Exit(0);
                                     break;
                                 case DialogResult.Yes:

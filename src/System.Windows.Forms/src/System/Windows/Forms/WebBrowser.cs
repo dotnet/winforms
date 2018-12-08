@@ -10,8 +10,6 @@ using System.Drawing;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Printing;
 using System.Windows.Forms;
-using System.Security.Permissions;
-using System.Security;
 using System.Runtime.InteropServices;
 using System.Net;
 using System.Text;
@@ -842,8 +840,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void Print() {
-            IntSecurity.DefaultPrinting.Demand();
-
             object nullObjectArray = null;
             try
             {
@@ -944,8 +940,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowPageSetupDialog() {
-            IntSecurity.SafePrinting.Demand();
-
             object nullObjectArray = null;
             try {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PAGESETUP, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
@@ -965,8 +959,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowPrintDialog() {
-            IntSecurity.SafePrinting.Demand();
-
             object nullObjectArray = null;
             
             try {
@@ -986,8 +978,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowPrintPreviewDialog() {
-            IntSecurity.SafePrinting.Demand();
-
             object nullObjectArray = null;
             
             try {
@@ -1028,8 +1018,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowSaveAsDialog() {
-            IntSecurity.FileDialogSaveFile.Demand();
-
             object nullObjectArray = null;
             
             try {

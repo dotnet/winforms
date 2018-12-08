@@ -15,8 +15,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;    
     using System.Windows.Forms.Design;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog"]/*' />
     /// <devdoc>
@@ -252,8 +250,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")]
         public DialogResult ShowDialog( IWin32Window owner ) {
-
-            IntSecurity.SafeSubWindows.Demand();
 
             if (!SystemInformation.UserInteractive) {
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);

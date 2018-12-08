@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security;
-    using System.Security.Permissions;
 
     using System;
     using System.Drawing.Design;    
@@ -1121,9 +1119,6 @@ namespace System.Windows.Forms {
         ///     Returns a TreeNode object for the given HTREEITEM handle
         /// </devdoc>
         public static TreeNode FromHandle(TreeView tree, IntPtr handle) {
-            // 
-
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return tree.NodeFromHandle(handle);
         }
 

@@ -8,8 +8,6 @@ namespace System.Windows.Forms {
         using System.Runtime.InteropServices;
         using System.Runtime.Remoting;
         using System.ComponentModel;
-        using System.Security;
-        using System.Security.Permissions;
         using System;
         using System.Collections;
         using System.Windows.Forms;
@@ -5618,14 +5616,7 @@ namespace System.Windows.Forms {
                         if (handle != IntPtr.Zero) {
                             cachedScrollableRegion = UnsafeNativeMethods.GetRectsFromRegion(handle);
 
-                            // 
-
-                            IntSecurity.ObjectFromWin32Handle.Assert();
-                            try {
-                                region.ReleaseHrgn(handle);
-                            } finally {
-                                CodeAccessPermission.RevertAssert();
-                            }
+                            region.ReleaseHrgn(handle);
                         }
                     }
                 }
@@ -8108,18 +8099,7 @@ namespace System.Windows.Forms {
                         gridState[GRIDSTATE_editControlChanging] = false;
                     }
     
-                    bool ret = false;
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        ret = base.ProcessDialogKey(ke);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-                    return ret;
+                    return base.ProcessDialogKey(ke);
                 }
     
                 // see if the child relationships can use this TAB key
@@ -8133,21 +8113,7 @@ namespace System.Windows.Forms {
                 if (localRows.Length == 0) {
                     EndEdit();
     
-                    bool ret = false;
-    
-                    // 
-
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        ret = base.ProcessDialogKey(keyData);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-    
-                    return ret;
+                    return base.ProcessDialogKey(keyData);
                 }
     
                 for (int i = 0; i < cols.Count; i ++) {
@@ -8186,21 +8152,7 @@ namespace System.Windows.Forms {
                     if ((this.currentRow == this.DataGridRowsLength -1) && ((keyData & Keys.Shift) == 0)) {
     
                         EndEdit();
-                        bool ret = false;
-    
-                        // 
-
-
-
-                        IntSecurity.ModifyFocus.Assert();
-                        try {
-                            ret = base.ProcessDialogKey(keyData);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
-    
-                        return ret;
+                        return base.ProcessDialogKey(keyData);
                     }
                 }
     
@@ -8241,21 +8193,7 @@ namespace System.Windows.Forms {
                     // then shift - tab should move to the next control on the form
                     if (this.currentRow == 0 && ((keyData & Keys.Shift) == Keys.Shift)) {
                         EndEdit();
-                        bool ret = false;
-    
-                        // 
-
-
-
-                        IntSecurity.ModifyFocus.Assert();
-                        try {
-                            ret = base.ProcessDialogKey(keyData);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
-    
-                        return ret;
+                        return base.ProcessDialogKey(keyData);
                     }
                 }
     

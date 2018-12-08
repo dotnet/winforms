@@ -9,7 +9,6 @@ namespace System.Windows.Forms.Design {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.Windows.Forms.Internal;
     using System.Drawing;
@@ -547,7 +546,7 @@ namespace System.Windows.Forms.Design {
                 this.form = form;
 
                 try {
-                    pageControl = (ComponentEditorPage)SecurityUtils.SecureCreateInstance(pageClass);
+                    pageControl = (ComponentEditorPage)Activator.CreateInstance(pageClass);
                 }
                 catch (TargetInvocationException e) {
                     Debug.Fail(e.ToString());

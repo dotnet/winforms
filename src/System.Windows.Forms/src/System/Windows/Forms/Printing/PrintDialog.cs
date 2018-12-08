@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Drawing.Printing;
     using System.Runtime.InteropServices;
-    using System.Security;
 
     /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog"]/*' />
     /// <devdoc>
@@ -349,8 +348,6 @@ namespace System.Windows.Forms {
         protected override bool RunDialog(IntPtr hwndOwner) {
             bool returnValue = false;
 
-            IntSecurity.SafePrinting.Demand();
-
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
 
             if (!UseEXDialog || (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
@@ -375,8 +372,6 @@ namespace System.Windows.Forms {
             data.hwndOwner = hwndOwner;
             data.lpfnPrintHook = hookProcPtr;
 
-            IntSecurity.AllPrintingAndUnmanagedCode.Assert();
-
             try {
                 if (PageSettings == null)
                     data.hDevMode = PrinterSettings.GetHdevmode();
@@ -389,9 +384,6 @@ namespace System.Windows.Forms {
                 data.hDevMode = IntPtr.Zero;
                 data.hDevNames = IntPtr.Zero;
                 // Leave those fields null; Windows will fill them in
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
             }
 
             try {
@@ -415,13 +407,8 @@ namespace System.Windows.Forms {
                 if (!UnsafeNativeMethods.PrintDlg(data))
                     return false;
 
-                IntSecurity.AllPrintingAndUnmanagedCode.Assert();
-                try {
-                    UpdatePrinterSettings(data.hDevMode, data.hDevNames, data.nCopies, data.Flags, settings, PageSettings);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                UpdatePrinterSettings(data.hDevMode, data.hDevNames, data.nCopies, data.Flags, settings, PageSettings);
+
                 PrintToFile = ((data.Flags & NativeMethods.PD_PRINTTOFILE) != 0);
                 PrinterSettings.PrintToFile = PrintToFile;
 
@@ -457,7 +444,6 @@ namespace System.Windows.Forms {
             data.nCopies = PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
 
-            IntSecurity.AllPrintingAndUnmanagedCode.Assert();
             try {
                 if (PageSettings == null)
                     data.hDevMode = PrinterSettings.GetHdevmode();
@@ -470,9 +456,6 @@ namespace System.Windows.Forms {
                 data.hDevMode = IntPtr.Zero;
                 data.hDevNames = IntPtr.Zero;
                 // Leave those fields null; Windows will fill them in
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
             }
 
             try {
@@ -509,13 +492,8 @@ namespace System.Windows.Forms {
                     return false;
                 }
 
-                IntSecurity.AllPrintingAndUnmanagedCode.Assert();
-                try {
-                    UpdatePrinterSettings(data.hDevMode, data.hDevNames, (short)data.nCopies, data.Flags, PrinterSettings, PageSettings);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                UpdatePrinterSettings(data.hDevMode, data.hDevNames, (short)data.nCopies, data.Flags, PrinterSettings, PageSettings);
+
                 PrintToFile = ((data.Flags & NativeMethods.PD_PRINTTOFILE) != 0);
                 PrinterSettings.PrintToFile = PrintToFile;
                 if (AllowSomePages) {

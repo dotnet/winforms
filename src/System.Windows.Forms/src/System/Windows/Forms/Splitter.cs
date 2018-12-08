@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.Globalization;
 
@@ -926,21 +924,12 @@ namespace System.Windows.Forms {
                 splitTarget = spd.target;
                 splitSize = GetSplitSize(x, y);
 
-                // 
-
-
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    if (splitterMessageFilter != null)
-                    {
-                        splitterMessageFilter = new SplitterMessageFilter(this);
-                    }
-                    Application.AddMessageFilter(splitterMessageFilter);
+                if (splitterMessageFilter != null)
+                {
+                    splitterMessageFilter = new SplitterMessageFilter(this);
                 }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                Application.AddMessageFilter(splitterMessageFilter);
+
                 CaptureInternal = true;
                 DrawSplitBar(DRAW_START);
             }

@@ -27,8 +27,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Globalization;
-    using System.Security.Permissions;
-    using System.Security;
     using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
@@ -91,14 +89,8 @@ namespace System.Windows.Forms {
         internal static string GetAllocationStack() {
             if (ControlFinalization.TraceVerbose) {
             //  the operation is safe (data obtained from the CLR). This code is for debugging purposes only.
-                new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                try {
-                    return Environment.StackTrace;
-                }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-                }
+                return Environment.StackTrace;
+            }
             else {
                 return "Enable 'ControlFinalization' switch to see stack of allocation";
             }
@@ -866,15 +858,6 @@ example usage
 
             set {
                 if (GetState(STATE_ALLOWDROP) != value) {
-                    // Since we won't call SetAcceptDrops without a handle,
-                    // we do the security demand here. Without this demand
-                    // we are still safe, but you get the exception at an
-                    // odd time. This gives a better experience.
-                    //
-                    if (value && !IsHandleCreated) {
-                        IntSecurity.ClipboardRead.Demand();
-                    }
-
                     SetState(STATE_ALLOWDROP, value);
 
                     if (IsHandleCreated) {
@@ -1441,10 +1424,6 @@ example usage
             }
 
             set {
-                if (value) {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetCapture Demanded");
-                    IntSecurity.GetCapture.Demand();
-                }
                 CaptureInternal = value;
             }
         }
@@ -2037,9 +2016,6 @@ example usage
                 Cursor localCursor = (Cursor)Properties.GetObject(PropCursor);
                 Cursor resolvedCursor = Cursor;
                 if (localCursor != value) {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyCursor Demanded");
-                    IntSecurity.ModifyCursor.Demand();
-
                     Properties.SetObject(PropCursor, value);
                 }
 
@@ -3373,9 +3349,6 @@ example usage
         ]
         public Control Parent {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
-
                 return ParentInternal;
             }
             set {
@@ -3507,11 +3480,6 @@ example usage
                 return (Region)Properties.GetObject(PropRegion);
             }
             set {
-                if (GetState(STATE_TOPLEVEL)) {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ChangeWindowRegion Demanded");
-                    IntSecurity.ChangeWindowRegionForTopLevel.Demand();
-                }
-
                 Region oldRegion = Region;
                 if (oldRegion != value) {
                     Properties.SetObject(PropRegion, value);
@@ -4045,8 +4013,6 @@ example usage
         ]
         public Control TopLevelControl {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
                 return TopLevelControlInternal;
             }
         }
@@ -5605,8 +5571,6 @@ example usage
         public System.Drawing.Graphics CreateGraphics() {
             using (new MultithreadSafeCallScope())
             {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "CreateGraphicsForControl Demanded");
-                IntSecurity.CreateGraphicsForControl.Demand();
                 return CreateGraphicsInternal();
             }
         }
@@ -6193,8 +6157,6 @@ example usage
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool Focus() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::Focus - " + this.Name);
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
 
             //here, we call our internal method (which form overrides)
             //see comments in FocusInternal
@@ -6240,8 +6202,6 @@ example usage
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Control FromChildHandle(IntPtr handle) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ControlFromHandleOrLocation Demanded");
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return FromChildHandleInternal(handle);
         }
 
@@ -6261,8 +6221,6 @@ example usage
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Control FromHandle(IntPtr handle) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ControlFromHandleOrLocation Demanded");
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return FromHandleInternal(handle);
         }
 
@@ -6339,10 +6297,6 @@ example usage
             // for IntSecurity.ControlFromHandleOrLocation == ALLWindows.
 
             Control ctl = FromChildHandleInternal(hwnd);
-            if (ctl != null && !IsDescendant(ctl)) {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ControlFromHandleOrLocation Demanded");
-                IntSecurity.ControlFromHandleOrLocation.Demand();
-            }
 
             return(ctl == this) ? null : ctl;
         }
@@ -6363,8 +6317,6 @@ example usage
         ///     parent controls and forms.
         /// </devdoc>
         public IContainerControl GetContainerControl() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-            IntSecurity.GetParent.Demand();
             return GetContainerControlInternal();
         }
 
@@ -6892,7 +6844,6 @@ example usage
                 return hWnd;
             }
             else {
-                IntSecurity.AllWindows.Demand();
                 hWnd = window.Handle;
                 if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd))) {
                     return hWnd;
@@ -7621,18 +7572,7 @@ example usage
                 throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
             }
 
-            // We have to demand unmanaged code permission here for the control hosted in
-            // the browser case. Without this check, we will expose a security hole, because
-            // ActiveXImpl.OnMessage() will assert unmanaged code for everyone as part of
-            // its implementation.
-            // The right fix is to remove the Assert() on top of the ActiveXImpl class, and
-            // visit each method to see if it needs unmanaged code permission, and if so, add
-            // the permission just to that method(s).
-            //
             ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(PropActiveXImpl);
-            if (activeXImpl != null) {
-                IntSecurity.UnmanagedCode.Demand();
-            }
 
             // We don't want to wait if we're on the same thread, or else we'll deadlock.
             // It is important that syncSameThread always be false for asynchronous calls.
@@ -8520,22 +8460,12 @@ example usage
 
                 // Cache Handle in a local before asserting so we minimize code running under the Assert.
                 IntPtr handle = Handle;
-                
-                // Reviewed  : ControlAccessibleObject.set_Handle demands UnmanagedCode permission for public use, it doesn't
-                //             expose any security vulnerability indirectly. The sec Assert is safe.
-                //
-                IntSecurity.UnmanagedCode.Assert();
-                
-                try {
-                    if (accObj != null) {
-                        accObj.Handle = handle;
-                    }
-                    if (ncAccObj != null) {
-                        ncAccObj.Handle = handle;
-                    }
+                               
+                if (accObj != null) {
+                    accObj.Handle = handle;
                 }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                if (ncAccObj != null) {
+                    ncAccObj.Handle = handle;
                 }
 
                 // Set the window text from the Text property.
@@ -9899,17 +9829,7 @@ example usage
                     ret = false;
                 }
                 else {
-                    // 
-
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        ret = ProcessDialogKey(keyData);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    ret = ProcessDialogKey(keyData);
                 }
             }
             else if (msg.Msg == NativeMethods.WM_CHAR || msg.Msg == NativeMethods.WM_SYSCHAR) {
@@ -10692,8 +10612,6 @@ example usage
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static bool ReflectMessage(IntPtr hWnd, ref Message m) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "SendMessages Demanded");
-            IntSecurity.SendMessages.Demand();
             return ReflectMessageInternal(hWnd, ref m);
         }
         
@@ -10828,7 +10746,6 @@ example usage
                         throw new ThreadStateException(SR.ThreadMustBeSTA);
                     }
                     if (accept) {
-                        IntSecurity.ClipboardRead.Demand();
 
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + Handle.ToString());
                         // Register
@@ -11618,13 +11535,6 @@ example usage
         protected void SetStyle(ControlStyles flag, bool value) {
             // WARNING: if we ever add argument checking to "flag", we will need
             // to move private styles like Layered to State.
-            // Calling SetStyle(ControlStyles.EnableNotifyMessage,...) should require UnmanagedCode
-            if ((flag & ControlStyles.EnableNotifyMessage) != 0 && value)
-            {
-                // demand security permission for this condition.
-                // this will throw security exception in semi-trust.
-                IntSecurity.UnmanagedCode.Demand();
-            }
             controlStyle = value? controlStyle | flag: controlStyle & ~flag;
         }
 
@@ -11649,17 +11559,6 @@ example usage
                 throw new InvalidOperationException(SR.TopLevelNotAllowedIfActiveX);
             }
             else {
-                if (value) {
-                    if (this is Form) {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "TopLevelWindow Demanded");
-                        IntSecurity.TopLevelWindow.Demand();
-                    }
-                    else {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "UnrestrictedWindows Demanded");
-                        IntSecurity.UnrestrictedWindows.Demand();
-                    }
-                }
-
                 SetTopLevelInternal(value);
             }
         }
@@ -12589,13 +12488,7 @@ example usage
             if (m.Msg == NativeMethods.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && this.SupportsUiaProviders) {
                 // If the requested object identifier is UiaRootObjectId, 
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    intAccessibleObject = new InternalAccessibleObject(this.AccessibilityObject);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                intAccessibleObject = new InternalAccessibleObject(this.AccessibilityObject);
                 m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
                     new HandleRef(this, Handle),
                     m.WParam,
@@ -12608,16 +12501,7 @@ example usage
             AccessibleObject ctrlAccessibleObject = GetAccessibilityObject(unchecked((int)(long)m.LParam));
 
             if (ctrlAccessibleObject != null) {
-                // 
-
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    intAccessibleObject = new InternalAccessibleObject(ctrlAccessibleObject);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                intAccessibleObject = new InternalAccessibleObject(ctrlAccessibleObject);
             }
 
             // See "How to Handle WM_GETOBJECT" in MSDN
@@ -12656,18 +12540,11 @@ example usage
                         //
                         punkAcc = Marshal.GetIUnknownForObject(iacc);
 
-                        // 
-
-
-
-
-                        IntSecurity.UnmanagedCode.Assert();
                         try {
                             m.Result = UnsafeNativeMethods.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(ctrlAccessibleObject, punkAcc));
                             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "LresultFromObject returned " + m.Result.ToString());
                         }
                         finally {
-                            CodeAccessPermission.RevertAssert();
                             Marshal.Release(punkAcc);
                         }
                     }
@@ -13445,13 +13322,7 @@ example usage
                         // Reviewed : Taking focus and activating a control in response
                         //          : to a user gesture (WM_SETFOCUS) is OK.
                         //
-                        IntSecurity.ModifyFocus.Assert();
-                        try {
-                            activateSucceed = c.ActivateControl(this);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        activateSucceed = c.ActivateControl(this);
                     }
 
                     if (!activateSucceed) {
@@ -15893,15 +15764,9 @@ example usage
 
 
                                 UnsafeNativeMethods.IFont ifont = (UnsafeNativeMethods.IFont)obj;
-                                IntSecurity.ObjectFromWin32Handle.Assert();
                                 Font font = null;
-                                try {
-                                    hfont = ifont.GetHFont();
-                                    font = Font.FromHfont(hfont);
-                                }
-                                finally {
-                                    CodeAccessPermission.RevertAssert();
-                                }
+                                hfont = ifont.GetHFont();
+                                font = Font.FromHfont(hfont);
                                 prop.Value = font;
                             }
                             catch (Exception e) {
@@ -16343,17 +16208,9 @@ example usage
                     UnsafeNativeMethods.IDispatch disp = (UnsafeNativeMethods.IDispatch)clientSite;
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
-                    int hr = NativeMethods.E_FAIL;
-
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        hr = disp.Invoke(dispid, ref g, NativeMethods.LOCALE_USER_DEFAULT,
-                                         NativeMethods.DISPATCH_PROPERTYGET, new NativeMethods.tagDISPPARAMS(),
-                                         pvt, null, null);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    int hr = disp.Invoke(dispid, ref g, NativeMethods.LOCALE_USER_DEFAULT,
+                                        NativeMethods.DISPATCH_PROPERTYGET, new NativeMethods.tagDISPPARAMS(),
+                                        pvt, null, null);
                     if (NativeMethods.Succeeded(hr)) {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke succeeded. VT=" + pvt[0].GetType().FullName);
                         obj = pvt[0];
@@ -16709,13 +16566,7 @@ example usage
                 //
                 UnsafeNativeMethods.IOleInPlaceSite oleClientSite = clientSite as UnsafeNativeMethods.IOleInPlaceSite;
                 if (oleClientSite != null) {
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        oleClientSite.OnInPlaceDeactivate();
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    oleClientSite.OnInPlaceDeactivate();
                 }
 
                 control.Visible = false;
@@ -16773,7 +16624,6 @@ example usage
             internal void Load(UnsafeNativeMethods.IStorage stg) {
                 UnsafeNativeMethods.IStream stream = null;
 
-                IntSecurity.UnmanagedCode.Assert();
                 try {
                     stream = stg.OpenStream(this.GetStreamName(), IntPtr.Zero, NativeMethods.STGM_READ | NativeMethods.STGM_SHARE_EXCLUSIVE, 0);
                 }
@@ -16786,9 +16636,6 @@ example usage
                     else {
                         throw;
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
                 }
 
                 Load(stream);
@@ -16827,15 +16674,7 @@ example usage
 
                     try {
                         object obj = null;
-                        int hr = NativeMethods.E_FAIL;
-
-                        IntSecurity.UnmanagedCode.Assert();
-                        try {
-                            hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        int hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
 
                         if (NativeMethods.Succeeded(hr) && obj != null) {
                             Debug.Indent();
@@ -17076,14 +16915,8 @@ example usage
                 if (activeXState[uiActive] && fActivate != 0 && inPlaceFrame != null) {
                     // we have to explicitly say we don't wany any border space.
                     //
-                    int hr;
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        hr = inPlaceFrame.SetBorderSpace(null);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    int hr = inPlaceFrame.SetBorderSpace(null);
+
                     if (NativeMethods.Failed(hr) && hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL) {
                         UnsafeNativeMethods.ThrowExceptionForHR(hr);
                     }
@@ -17096,13 +16929,7 @@ example usage
             internal void OnFocus(bool focus) {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AXSource: SetFocus:  " + focus.ToString());
                 if (activeXState[inPlaceActive] && clientSite is UnsafeNativeMethods.IOleControlSite) {
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        ((UnsafeNativeMethods.IOleControlSite)clientSite).OnFocus(focus ? 1 : 0);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    ((UnsafeNativeMethods.IOleControlSite)clientSite).OnFocus(focus ? 1 : 0);
                 }
 
                 if (focus && activeXState[inPlaceActive] && !activeXState[uiActive]) {
@@ -17140,7 +16967,6 @@ example usage
 
                     prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
 
-                    IntSecurity.UnmanagedCode.Assert();
                     try
                     {
                         IntPtr hfont = IntPtr.Zero;
@@ -17158,9 +16984,6 @@ example usage
                         // Do NULL, so we just defer to the default font
                         prop.Value = null;
                     }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
                 }
 
                 // Now use the rest of the goo that we got passed in.
@@ -17175,13 +16998,7 @@ example usage
                     SetAdvise(NativeMethods.DVASPECT_CONTENT, 0, (IAdviseSink)pQaContainer.pAdviseSink);
                 }
                 
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    ((UnsafeNativeMethods.IOleObject)control).GetMiscStatus(NativeMethods.DVASPECT_CONTENT, out status);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                ((UnsafeNativeMethods.IOleObject)control).GetMiscStatus(NativeMethods.DVASPECT_CONTENT, out status);
                 pQaControl.dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
@@ -17199,7 +17016,6 @@ example usage
 
                     if (eventInterface != null) {
 
-                        IntSecurity.UnmanagedCode.Assert();
                         try {
                             // For the default source interface, call IConnectionPoint.Advise with the supplied event sink.
                             // This is easier said than done. See notes in AdviseHelper.AdviseConnectionPoint.
@@ -17209,9 +17025,6 @@ example usage
                             if (ClientUtils.IsSecurityOrCriticalException(e)) {
                                 throw;
                             }
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
                         }
                     }
                 }
@@ -17497,15 +17310,7 @@ example usage
             ///      Implements IPersistStorage::Save
             /// </devdoc>
             internal void Save(UnsafeNativeMethods.IStorage stg, bool fSameAsLoad) {
-                UnsafeNativeMethods.IStream stream = null;
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    stream = stg.CreateStream(this.GetStreamName(), NativeMethods.STGM_WRITE | NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE, 0, 0);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                UnsafeNativeMethods.IStream stream = stg.CreateStream(this.GetStreamName(), NativeMethods.STGM_WRITE | NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE, 0, 0);
                 Debug.Assert(stream != null, "Stream should be non-null, or an exception should have been thrown.");
                 Save(stream, true);
                 UnsafeNativeMethods.ReleaseComObject(stream);
@@ -17521,13 +17326,8 @@ example usage
                 //
                 PropertyBagStream bag = new PropertyBagStream();
                 Save(bag, fClearDirty, false);
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    bag.Write(stream);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                bag.Write(stream);
+
                 if (UnsafeNativeMethods.IsComObject(stream)) {
                     UnsafeNativeMethods.ReleaseComObject(stream);
                 }
@@ -17595,7 +17395,6 @@ example usage
             /// <internalonly/>
             private void SendOnSave() {
                 int cnt = adviseList.Count;
-                IntSecurity.UnmanagedCode.Assert();
                 for (int i = 0; i < cnt; i++) {
                     IAdviseSink s = (IAdviseSink)adviseList[i];
                     Debug.Assert(s != null, "NULL in our advise list");
@@ -17649,36 +17448,18 @@ example usage
                             // to ask SystemEvents to shutdown.  This is to
                             // prevent a crash.
 
-                            // 
-
-
-
-
-
-                            new PermissionSet(PermissionState.Unrestricted).Assert();
-                            try {
-                                MethodInfo method = typeof(SystemEvents).GetMethod("Shutdown",
-                                                                                  BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
-                                                                                  null, new Type[0], new ParameterModifier[0]);
-                                Debug.Assert(method != null, "No Shutdown method on SystemEvents");
-                                if (method != null) {
-                                    method.Invoke(null, null);
-                                }
-                            }
-                            finally {
-                                CodeAccessPermission.RevertAssert();
+                            MethodInfo method = typeof(SystemEvents).GetMethod("Shutdown",
+                                                                                BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
+                                                                                null, new Type[0], new ParameterModifier[0]);
+                            Debug.Assert(method != null, "No Shutdown method on SystemEvents");
+                            if (method != null) {
+                                method.Invoke(null, null);
                             }
                         }
                     }
 
                     if (UnsafeNativeMethods.IsComObject(clientSite)) {
-                        IntSecurity.UnmanagedCode.Assert();
-                        try {
-                            Marshal.FinalReleaseComObject(clientSite);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        Marshal.FinalReleaseComObject(clientSite);
                     }
                 }
 
@@ -17726,22 +17507,12 @@ example usage
                         //
                         // 
 
-
-
-
-
-                        new PermissionSet(PermissionState.Unrestricted).Assert();
-                        try {
-                            MethodInfo method = typeof(SystemEvents).GetMethod("Startup",
-                                                                              BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
-                                                                              null, new Type[0], new ParameterModifier[0]);
-                            Debug.Assert(method != null, "No Startup method on SystemEvents");
-                            if (method != null) {
-                                method.Invoke(null, null);
-                            }
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
+                        MethodInfo method = typeof(SystemEvents).GetMethod("Startup",
+                                                                            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
+                                                                            null, new Type[0], new ParameterModifier[0]);
+                        Debug.Assert(method != null, "No Startup method on SystemEvents");
+                        if (method != null) {
+                            method.Invoke(null, null);
                         }
                     }
                 }
@@ -18071,13 +17842,8 @@ example usage
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_SHIFT) < 0)     keyState |= 1;
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_CONTROL) < 0)   keyState |= 2;
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_MENU) < 0)      keyState |= 4;
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        hr = ioleClientSite.TranslateAccelerator(ref lpmsg, keyState);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+
+                    hr = ioleClientSite.TranslateAccelerator(ref lpmsg, keyState);
                 }
                 
                 return hr;
@@ -18103,7 +17869,6 @@ example usage
                 }
 
                 //May need this for SetActiveObject & OnUIDeactivate, so leave until function return
-                IntSecurity.UnmanagedCode.Assert();
                 Debug.Assert(inPlaceFrame != null, "No inplace frame -- how dod we go UI active?");
                 inPlaceFrame.SetActiveObject(null, null);
 
@@ -18163,12 +17928,10 @@ example usage
                         adjustRect = rc;
                         activeXState[adjustingRect] = true;
 
-                        IntSecurity.UnmanagedCode.Assert();
                         try {
                             ioleClientSite.OnPosRectChange(rc);
                         }
                         finally {
-                            CodeAccessPermission.RevertAssert();
                             adjustRect = null;
                             activeXState[adjustingRect] = false;
                         }
@@ -18196,7 +17959,6 @@ example usage
 
                 UnsafeNativeMethods.IOleControlSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleControlSite;
                 if (ioleClientSite != null) {
-                    IntSecurity.UnmanagedCode.Assert();
                     ioleClientSite.OnControlInfoChanged();
                 }
             }
@@ -18222,13 +17984,7 @@ example usage
                 //       is to make sure we don't call OnViewChange in this case.
                 //
                 if (viewAdviseSink != null && !activeXState[saving]) {
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        viewAdviseSink.OnViewChange(NativeMethods.DVASPECT_CONTENT, -1);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    viewAdviseSink.OnViewChange(NativeMethods.DVASPECT_CONTENT, -1);
 
                     if (activeXState[viewAdviseOnlyOnce]) {
                         if (UnsafeNativeMethods.IsComObject(viewAdviseSink)) {
@@ -18262,7 +18018,6 @@ example usage
                     }
                 }
 
-                IntSecurity.UnmanagedCode.Assert();
                 controlWindowTarget.OnMessage(ref m);
             }
 
@@ -18369,19 +18124,7 @@ example usage
                 if (service == typeof(HtmlDocument)) {
 
                     UnsafeNativeMethods.IOleContainer iOlecontainer;
-                    int hr;
-                    try {
-                        // 
-
-
-
-                        IntSecurity.UnmanagedCode.Assert();
-                        hr = clientSite.GetContainer(out iOlecontainer);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-
+                    int hr = clientSite.GetContainer(out iOlecontainer);
 
                     if (NativeMethods.Succeeded(hr)
                             && (iOlecontainer is UnsafeNativeMethods.IHTMLDocument)) {
@@ -18396,7 +18139,6 @@ example usage
 
                 }
                 else if (clientSite.GetType().IsAssignableFrom(service)) {
-                    IntSecurity.UnmanagedCode.Demand();
                     retVal = clientSite;
                 }
 
@@ -18455,16 +18197,7 @@ example usage
                 NativeMethods.tagFONTDESC fontDesc = new NativeMethods.tagFONTDESC();
                 NativeMethods.LOGFONT logFont = new NativeMethods.LOGFONT();
 
-                // 
-
-
-                IntSecurity.ObjectFromWin32Handle.Assert();
-                try {
-                    font.ToLogFont(logFont);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                font.ToLogFont(logFont);
 
                 fontDesc.lpstrName = font.Name;
                 fontDesc.cySize = (long)(font.SizeInPoints * 10000);
@@ -18493,19 +18226,10 @@ example usage
 
             public object MarshalNativeToManaged(IntPtr pObj) {
                 UnsafeNativeMethods.IFont nativeFont = (UnsafeNativeMethods.IFont)Marshal.GetObjectForIUnknown(pObj);
-                IntPtr hfont = IntPtr.Zero;
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    hfont = nativeFont.GetHFont();
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                IntPtr hfont = nativeFont.GetHFont();
 
                 Font font = null;
 
-                IntSecurity.ObjectFromWin32Handle.Assert();
                 try {
                     font = Font.FromHfont(hfont);
                 }
@@ -18515,9 +18239,6 @@ example usage
                     }
 
                     font = Control.DefaultFont;
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
                 }
 
                 return font;
@@ -18936,16 +18657,7 @@ example usage
                 // we will invoke 3rd party HandleCreated event handlers
                 IntPtr handle = ownerControl.Handle;
 
-                // Reviewed  : ControlAccessibleObject.set_Handle demands UnmanagedCode permission for public use, it doesn't
-                //             expose any security vulnerability indirectly. The sec Assert is safe.
-                //
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    this.Handle = handle;
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                this.Handle = handle;
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject1"]/*' />
@@ -18961,16 +18673,7 @@ example usage
                 this.ownerControl = ownerControl;
                 IntPtr handle = ownerControl.Handle;
 
-                // Reviewed  : ControlAccessibleObject.set_Handle demands UnmanagedCode permission for public use, it doesn't
-                //             expose any security vulnerability indirectly. The sec Assert is safe.
-                //
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    this.Handle = handle;
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                this.Handle = handle;
             }
 
             /// <devdoc>
@@ -19127,9 +18830,6 @@ example usage
                 }
 
                 set {
-                    // Demand security permission for this!
-                    IntSecurity.UnmanagedCode.Demand();
-
                     if (handle != value) {
                         handle = value;
 
@@ -19321,9 +19021,6 @@ example usage
                     handler(Owner, args);
 
                     fileName = args.HelpNamespace;
-                    if (!string.IsNullOrEmpty(fileName)) {
-                        IntSecurity.DemandFileIO(FileIOPermissionAccess.PathDiscovery, fileName);
-                    }
 
                     try {
                         topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
@@ -19730,29 +19427,9 @@ example usage
             [ResourceConsumption(ResourceScope.Machine)]
             private FileVersionInfo GetFileVersionInfo() {
                 if (versionInfo == null) {
-                    string path;
+                    string path = owner.GetType().Module.FullyQualifiedName;
 
-                    // 
-
-                    FileIOPermission fiop = new FileIOPermission( PermissionState.None );
-                    fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-                    fiop.Assert();
-                    try {
-                        path = owner.GetType().Module.FullyQualifiedName;
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-
-                    // 
-
-                    new FileIOPermission(FileIOPermissionAccess.Read, path).Assert();
-                    try {
-                        versionInfo = FileVersionInfo.GetVersionInfo(path);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    versionInfo = FileVersionInfo.GetVersionInfo(path);
                 }
 
                 return versionInfo;

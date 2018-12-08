@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Drawing;    
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.Security.Permissions;
     using System.Windows.Forms.Design;
     using System.Windows.Forms.Layout;
 
@@ -337,14 +336,8 @@ namespace System.Windows.Forms {
 
         private void WmSetFocus(ref Message m) {
             if (!HostedInWin32DialogManager) {
-                IntSecurity.ModifyFocus.Assert();
-                try {
-                    if (ActiveControl == null)
-                        SelectNextControl(null, true, true, true, false);
-                }
-                finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
-                }
+                if (ActiveControl == null)
+                    SelectNextControl(null, true, true, true, false);
             }
             if (!ValidationCancelled) {
                 base.WndProc(ref m);

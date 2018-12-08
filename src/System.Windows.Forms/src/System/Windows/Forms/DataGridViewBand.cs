@@ -10,8 +10,6 @@ namespace System.Windows.Forms
     using System.Text;
     using System;
     using System.Globalization;
-    using System.Security;
-    using System.Security.Permissions;
         
     /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand"]/*' />
     /// <devdoc>
@@ -347,7 +345,7 @@ namespace System.Windows.Forms
                 {
                     Type cellType = this.DefaultHeaderCellType;
 
-                    headerCell = (DataGridViewHeaderCell) SecurityUtils.SecureCreateInstance(cellType);
+                    headerCell = (DataGridViewHeaderCell) Activator.CreateInstance(cellType);
                     headerCell.DataGridViewInternal = this.DataGridView;
                     if (this.bandIsRow)
                     {

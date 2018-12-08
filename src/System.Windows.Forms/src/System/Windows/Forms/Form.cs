@@ -22,7 +22,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.Security;
-    using System.Security.Permissions;
     using System.Security.Policy;
     using System.Threading;
     using System.Windows.Forms.Design;
@@ -422,9 +421,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static Form ActiveForm {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
-
                 IntPtr hwnd = UnsafeNativeMethods.GetForegroundWindow();
                 Control c = Control.FromHandleInternal(hwnd);
                 if (c != null && c is Form) {
@@ -1431,34 +1427,14 @@ namespace System.Windows.Forms {
                 /// 
                 if (formState[FormStateIsRestrictedWindowChecked] == 0) {
                     formState[FormStateIsRestrictedWindow] = 0;
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Checking for restricted window...");
-                    Debug.Indent();
 #if DEBUG
                     if (AlwaysRestrictWindows.Enabled) {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Always restricted switch is on...");
                         formState[FormStateIsRestrictedWindow] = 1;
                         formState[FormStateIsRestrictedWindowChecked] = 1;
-                        Debug.Unindent();
                         return true;
                     }
 #endif
 
-                    try {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "WindowAdornmentModification Demanded");
-                        IntSecurity.WindowAdornmentModification.Demand();
-                    }
-                    catch (SecurityException) {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Caught security exception, we are restricted...");
-                        formState[FormStateIsRestrictedWindow] = 1;
-                    }
-                    catch {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Caught non-security exception...");
-                        Debug.Unindent();
-                        formState[FormStateIsRestrictedWindow] = 1; // To be on the safe side
-                        formState[FormStateIsRestrictedWindowChecked] = 1;
-                        throw;
-                    }
-                    Debug.Unindent();
                     formState[FormStateIsRestrictedWindowChecked] = 1;
                 }
 
@@ -1856,9 +1832,6 @@ namespace System.Windows.Forms {
         ]
         public Form MdiParent {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
-
                 return MdiParentInternal;
             }
             set {
@@ -2130,7 +2103,6 @@ namespace System.Windows.Forms {
         ]
         public Form Owner {
             get {
-                IntSecurity.GetParent.Demand();
                 return OwnerInternal;
             }
             set {
@@ -2582,7 +2554,6 @@ namespace System.Windows.Forms {
                     bool oldLayered = (formState[FormStateLayered] == 1);
                     if (value != Color.Empty)
                     {
-                        IntSecurity.TransparentWindows.Demand();
                         AllowTransparency = true;
                         formState[FormStateLayered] = 1;
                     }
@@ -3050,9 +3021,6 @@ namespace System.Windows.Forms {
         ///    <para>Activates the form and gives it focus.</para>
         /// </devdoc>
         public void Activate() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
-
             if (Visible && IsHandleCreated) {
                 if (IsMdiChild) {
                     MdiParentInternal.MdiClient.SendMessage(NativeMethods.WM_MDIACTIVATE, Handle, 0);
@@ -3072,9 +3040,6 @@ namespace System.Windows.Forms {
         ///     to be used directly from your code.
         /// </devdoc>
         protected void ActivateMdiChild(Form form) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
-            
             ActivateMdiChildInternal(form);
         }
 
@@ -4208,25 +4173,12 @@ namespace System.Windows.Forms {
                 //way we can safely ignore these from the url list
                 ArrayList loadedAssembliesFromGac = new ArrayList();
 
-                // 
-
-                FileIOPermission fiop = new FileIOPermission( PermissionState.None );
-                fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-                fiop.Assert();
-
-                try
+                foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+                    if (asm.GlobalAssemblyCache)
                     {
-                        if (asm.GlobalAssemblyCache)
-                        {
-                            loadedAssembliesFromGac.Add(asm.CodeBase.ToUpper(CultureInfo.InvariantCulture));
-                        }
+                        loadedAssembliesFromGac.Add(asm.CodeBase.ToUpper(CultureInfo.InvariantCulture));
                     }
-                }
-                finally
-                {
-                    CodeAccessPermission.RevertAssert();
                 }
 
                 //now, build up a sitelist which contains a friendly string
@@ -4260,17 +4212,7 @@ namespace System.Windows.Forms {
                 //
                 if (siteList.Count == 0) {
                     //here, we'll set the local machine name to the site string
-                    //
-
-                    // 
-
-                    new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                    try {
-                        securitySite = Environment.MachineName;
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    securitySite = Environment.MachineName;
                 }
                 else if (siteList.Count == 1)
                 {
@@ -4932,15 +4874,7 @@ namespace System.Windows.Forms {
 
                 UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ptToSnap);
                 if (!button.IsWindowObscured) {
-                    // 
-
-                    IntSecurity.AdjustCursorPosition.Assert();
-                    try {
-                        Cursor.Position = new Point(ptToSnap.x, ptToSnap.y);
-                    }
-                    finally {
-                        System.Security.CodeAccessPermission.RevertAssert();
-                    }
+                    Cursor.Position = new Point(ptToSnap.x, ptToSnap.y);
                 }
             }
         }
@@ -5645,9 +5579,6 @@ namespace System.Windows.Forms {
         ///     Selects this form, and optionally selects the next/previous control.
         /// </devdoc>
         protected override void Select(bool directed, bool forward) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
-            
             SelectInternal(directed, forward);
         }
 
@@ -5657,11 +5588,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         // SECURITY WARNING: This method bypasses a security demand. Use with caution!
         private void SelectInternal(bool directed, bool forward) {
-            // SelectNextControl & set_ActiveControl below demand a ModifyFocus permission, let's revert it.
-            // Reviewed : This method is to be called by Form only so asserting here is safe.
-            //
-            IntSecurity.ModifyFocus.Assert();
-
             if (directed) {
                 SelectNextControl(null, forward, true, true, false);
             }

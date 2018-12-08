@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Collections;
     using System.Collections.Specialized;
-    using System.Security.Permissions;
     using System.Windows.Forms.Design;
     using System.Windows.Forms.Layout;
     using System.ComponentModel.Design;
@@ -1520,9 +1519,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public void Paste() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ClipboardRead Demanded");
-            IntSecurity.ClipboardRead.Demand();
-
             SendMessage(NativeMethods.WM_PASTE, 0, 0);
         }
 
