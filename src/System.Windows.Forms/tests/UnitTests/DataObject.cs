@@ -66,5 +66,29 @@ namespace System.Windows.Forms.Tests
             Assert.True(dataObject.GetDataPresent(format, autoConvert: false));
             Assert.Equal(input, dataObject.GetData(format, autoConvert: false));
         }
+
+        public static TheoryData<Memory<byte>> AudioData => TestHelper.GetMemoryBytes();
+
+        [Theory]
+        [MemberData(nameof(AudioData))]
+        public void DataObject_SetAudio(Memory<byte> audioBytes)
+        {
+            var dataObject = new DataObject();
+            dataObject.SetAudio(audioBytes.Span);
+            using (var stream = dataObject.GetAudioStream())
+            {
+                var blob = new byte[stream.Length];
+                var read = stream.Read(blob);
+                Assert.Equal(blob.Length, read);
+                Assert.True(audioBytes.Span.SequenceEqual(blob));
+            }
+        }
+
+        [Fact]
+        public void DataObject_SetAudioEmpty()
+        {
+            var outer = new DataObject();
+            Assert.Throws<ArgumentException>(() => outer.SetAudio(Array.Empty<byte>().AsSpan()));
+        }
     }
 }
