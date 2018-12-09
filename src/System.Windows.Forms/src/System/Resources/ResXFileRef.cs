@@ -117,7 +117,8 @@ namespace System.Resources {
                 {
                     break;
 
-                } else if (path1[i] == Path.DirectorySeparatorChar) {
+                }
+                if (path1[i] == Path.DirectorySeparatorChar) {
                     si = i;
                 }
             }
