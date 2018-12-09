@@ -189,11 +189,11 @@ namespace System.Resources {
             }
 
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertTo"]/*' />
-            public override Object ConvertTo(ITypeDescriptorContext context, 
+            public override object ConvertTo(ITypeDescriptorContext context, 
                                              CultureInfo culture, 
-                                             Object value, 
+                                             object value, 
                                              Type destinationType) {
-                Object created = null;
+                object created = null;
                 if (destinationType == typeof(string)) {
                     created = ((ResXFileRef)value).ToString();
                 }
