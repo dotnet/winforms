@@ -35,7 +35,7 @@ namespace System.Resources {
     [PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public sealed class ResXDataNode : ISerializable {
 
-        private static readonly char[] SpecialChars = {' ', '\r', '\n'};
+        private static readonly char[] SpecialChars = new char[] {' ', '\r', '\n'};
 
         private DataNodeInfo nodeInfo;
 
@@ -74,7 +74,7 @@ namespace System.Resources {
             return new ResXDataNode
             {
                 // nodeinfo is just made up of immutable objects, we don't need to clone it
-                nodeInfo = nodeInfo?.Clone(),
+                nodeInfo = this.nodeInfo?.Clone(),
                 name = this.name,
                 comment = this.comment,
                 typeName = this.typeName,
@@ -191,7 +191,7 @@ namespace System.Resources {
                 if(result == null && nodeInfo != null) {
                     result = nodeInfo.Comment;
                 }
-                return result ?? String.Empty;
+                return result ?? string.Empty;
             }
             set {
                 comment= value;
