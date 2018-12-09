@@ -83,12 +83,5 @@ namespace System.Windows.Forms.Tests
                 Assert.True(audioBytes.Span.SequenceEqual(blob));
             }
         }
-
-        [Fact]
-        public void DataObject_SetAudioEmpty()
-        {
-            var outer = new DataObject();
-            Assert.Throws<ArgumentException>(() => outer.SetAudio(Array.Empty<byte>().AsSpan()));
-        }
     }
 }

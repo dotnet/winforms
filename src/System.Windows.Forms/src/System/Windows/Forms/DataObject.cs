@@ -394,11 +394,6 @@ namespace System.Windows.Forms
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetAudio"]/*' />
         public virtual void SetAudio(Span<byte> audioBytes)
         {
-            if (audioBytes.IsEmpty)
-            {
-                throw new ArgumentException(nameof(audioBytes));
-            }
-
             var stream = new MemoryStream(audioBytes.Length);
             stream.Write(audioBytes);
             stream.Seek(0, SeekOrigin.Begin);
