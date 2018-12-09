@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoSizeMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
                 
                 if (GetAutoSizeMode() != value) {                    
@@ -134,9 +134,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.AutoValidateChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
@@ -172,7 +169,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                     }
 
                     borderStyle = value;
@@ -332,9 +329,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.OnMouseDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseDown(MouseEventArgs e) {
             if (!FocusInside())
@@ -360,9 +354,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.WndProc"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {

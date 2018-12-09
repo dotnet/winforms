@@ -428,9 +428,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetAlternatingBackColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetAlternatingBackColor() {
                 if (ShouldSerializeAlternatingBackColor()) {
                     AlternatingBackColor = DefaultAlternatingBackBrush.Color;
@@ -439,9 +436,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeAlternatingBackColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual bool ShouldSerializeAlternatingBackColor()
             {
                 return !AlternatingBackBrush.Equals(DefaultAlternatingBackBrush);
@@ -477,9 +471,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetBackColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override void ResetBackColor() {
                 if (!this.BackColor.Equals(DefaultBackBrush.Color)) {
                     this.BackColor = DefaultBackBrush.Color;
@@ -487,9 +478,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ForeColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [
              SRCategory(nameof(SR.CatColors)),
              SRDescription(nameof(SR.ControlForeColorDescr))
@@ -503,9 +491,6 @@ namespace System.Windows.Forms {
                 }
             }
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetForeColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override void ResetForeColor() {
                 if (!this.ForeColor.Equals(DefaultForeBrush.Color)) {
                     this.ForeColor = DefaultForeBrush.Color;
@@ -551,7 +536,7 @@ namespace System.Windows.Forms {
                 set {
                     //valid values are 0x0 to 0x2. 
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                     }
                     if (borderStyle != value) {
                         borderStyle = value;
@@ -565,9 +550,6 @@ namespace System.Windows.Forms {
             private static readonly object EVENT_BORDERSTYLECHANGED = new object();
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BorderStyleChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnBorderStyleChangedDescr))]
             public event EventHandler BorderStyleChanged {
                 add {
@@ -867,9 +849,6 @@ namespace System.Windows.Forms {
             private static readonly object EVENT_CAPTIONVISIBLECHANGED = new object();
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CaptionVisibleChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnCaptionVisibleChangedDescr))]
             public event EventHandler CaptionVisibleChanged {
                 add {
@@ -1146,9 +1125,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CurrentCellChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnCurrentCellChangedDescr))]
             public event EventHandler CurrentCellChanged {
                 add {
@@ -1212,27 +1188,18 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeSelectionBackColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected bool ShouldSerializeSelectionBackColor()
             {
                 return !DefaultSelectionBackBrush.Equals(selectionBackBrush);
             }
             
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetSelectionBackColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetSelectionBackColor() {
                 if (ShouldSerializeSelectionBackColor())
                     SelectionBackColor = DefaultSelectionBackBrush.Color;
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.SelectionForeColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [
              SRCategory(nameof(SR.CatColors)),
              SRDescription(nameof(SR.DataGridSelectionForeColorDescr))        
@@ -1253,26 +1220,17 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeSelectionForeColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual bool ShouldSerializeSelectionForeColor()
             {
                 return !SelectionForeBrush.Equals(DefaultSelectionForeBrush);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetSelectionForeColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetSelectionForeColor() {
                 if (ShouldSerializeSelectionForeColor())
                     SelectionForeColor = DefaultSelectionForeBrush.Color;
             }
     
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal override bool ShouldSerializeForeColor()
             {
                 return !DefaultForeBrush.Color.Equals(this.ForeColor);
@@ -1473,9 +1431,6 @@ namespace System.Windows.Forms {
             private static readonly object EVENT_DATASOURCECHANGED = new object();
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.DataSourceChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnDataSourceChangedDescr))]
             public event EventHandler DataSourceChanged {
                 add {
@@ -1515,9 +1470,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.SetDataBinding"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void SetDataBinding(object dataSource, string dataMember) {
                 parentRows.Clear();
                 originalState = null;
@@ -1811,18 +1763,12 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeGridLineColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual bool ShouldSerializeGridLineColor()
             {
                 return !GridLineBrush.Equals(DefaultGridLineBrush);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetGridLineColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetGridLineColor() {
                 if (ShouldSerializeGridLineColor()) {
                     GridLineColor = DefaultGridLineBrush.Color;
@@ -1854,7 +1800,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x1.
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridLineStyle.None, (int)DataGridLineStyle.Solid))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridLineStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridLineStyle));
                     }
                     if (gridLineStyle != value) {
                         gridLineStyle = value;
@@ -1893,7 +1839,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x3
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridParentRowsLabelStyle.None, (int)DataGridParentRowsLabelStyle.Both))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridParentRowsLabelStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridParentRowsLabelStyle));
                     }
     
                     if (parentRowsLabels != value)
@@ -1908,9 +1854,6 @@ namespace System.Windows.Forms {
             private static readonly object EVENT_PARENTROWSLABELSTYLECHANGED = new object();
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsLabelStyleChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnParentRowsLabelStyleChangedDescr))]
             public event EventHandler ParentRowsLabelStyleChanged {
                 add {
@@ -1970,9 +1913,6 @@ namespace System.Windows.Forms {
             private static readonly object EVENT_FLATMODECHANGED = new object();
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.FlatModeChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnFlatModeChangedDescr))]
             public event EventHandler FlatModeChanged {
                 add {
@@ -2022,18 +1962,12 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeHeaderBackColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual bool ShouldSerializeHeaderBackColor()
             {
                 return !HeaderBackBrush.Equals(DefaultHeaderBackBrush);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetHeaderBackColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetHeaderBackColor() {
                 if(ShouldSerializeHeaderBackColor()) {
                     HeaderBackColor = DefaultHeaderBackBrush.Color;
@@ -2054,9 +1988,6 @@ namespace System.Windows.Forms {
 	     }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeBackgroundColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual bool ShouldSerializeBackgroundColor()
             {
                 return !BackgroundBrush.Equals(DefaultBackgroundBrush);
@@ -2096,9 +2027,6 @@ namespace System.Windows.Forms {
             private static readonly object EVENT_BACKGROUNDCOLORCHANGED = new object();
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundColorChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnBackgroundColorChangedDescr))]
             public event EventHandler BackgroundColorChanged {
                 add {
@@ -2125,7 +2053,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value == null)
-                        throw new ArgumentNullException("HeaderFont");
+                        throw new ArgumentNullException(nameof(HeaderFont));
                     if (!value.Equals(headerFont)) {
                         headerFont = value;
                         RecalculateFonts();
@@ -2136,17 +2064,11 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeHeaderFont"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected bool ShouldSerializeHeaderFont() {
                 return(headerFont != null);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetHeaderFont"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetHeaderFont() {
                 if (headerFont != null) {
                     headerFont = null;
@@ -2192,18 +2114,12 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeHeaderForeColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual bool ShouldSerializeHeaderForeColor()
             {
                 return !HeaderForePen.Equals(DefaultHeaderForePen);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetHeaderForeColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetHeaderForeColor() {
                 if(ShouldSerializeHeaderForeColor()) {
                     HeaderForeColor = DefaultHeaderForeBrush.Color;
@@ -2359,18 +2275,12 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal virtual bool ShouldSerializeLinkColor()
             {
                 return !LinkBrush.Equals(DefaultLinkBrush);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetLinkColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetLinkColor() {
                 if (ShouldSerializeLinkColor())
                     LinkColor = DefaultLinkBrush.Color;
@@ -2406,9 +2316,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializeLinkHoverColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual bool ShouldSerializeLinkHoverColor()
             {
                 return false;
@@ -2416,9 +2323,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ResetLinkHoverColor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void ResetLinkHoverColor() { 
                 /*
                 if (ShouldSerializeLinkHoverColor())
@@ -2474,9 +2378,6 @@ namespace System.Windows.Forms {
             private static readonly object EVENT_ALLOWNAVIGATIONCHANGED = new object();
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.AllowNavigationChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnNavigationModeChangedDescr))]
             public event EventHandler AllowNavigationChanged {
                 add {
@@ -2488,9 +2389,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Cursor"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [
                 Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
             ]
@@ -2518,9 +2416,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImage"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [
                 Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
             ]
@@ -2536,9 +2431,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImageLayout"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [
                 Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
             ]
@@ -2719,9 +2611,6 @@ namespace System.Windows.Forms {
     	     }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ShouldSerializePreferredRowHeight"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected bool ShouldSerializePreferredRowHeight()
             {
                 return prefferedRowHeight != defaultFontHeight + 3;
@@ -2780,9 +2669,6 @@ namespace System.Windows.Forms {
             private static readonly object EVENT_READONLYCHANGED = new object();
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ReadOnlyChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnReadOnlyChangedDescr))]
             public event EventHandler ReadOnlyChanged {
                 add {
@@ -2851,9 +2737,6 @@ namespace System.Windows.Forms {
             private static readonly object EVENT_PARENTROWSVISIBLECHANGED = new object();
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsVisibleChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnParentRowsVisibleChangedDescr))]
             public event EventHandler ParentRowsVisibleChanged {
                 add {
@@ -2894,9 +2777,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.RowHeaderWidth"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [
              SRCategory(nameof(SR.CatLayout)),
              DefaultValue(defaultRowHeaderWidth),
@@ -3011,9 +2891,9 @@ namespace System.Windows.Forms {
                 get {
                     EnsureBound();
                     if (rowIndex < 0 || rowIndex >= DataGridRowsLength)
-                        throw new ArgumentOutOfRangeException("rowIndex");
+                        throw new ArgumentOutOfRangeException(nameof(rowIndex));
                     if (columnIndex < 0 || columnIndex >= myGridTable.GridColumnStyles.Count)
-                        throw new ArgumentOutOfRangeException("columnIndex");
+                        throw new ArgumentOutOfRangeException(nameof(columnIndex));
                     CurrencyManager listManager = this.listManager;
                     DataGridColumnStyle column = myGridTable.GridColumnStyles[columnIndex];
                     return column.GetColumnValueAtRow(listManager, rowIndex);
@@ -3021,9 +2901,9 @@ namespace System.Windows.Forms {
                 set {
                     EnsureBound();
                     if (rowIndex < 0 || rowIndex >= DataGridRowsLength)
-                        throw new ArgumentOutOfRangeException("rowIndex");
+                        throw new ArgumentOutOfRangeException(nameof(rowIndex));
                     if (columnIndex < 0 || columnIndex >= myGridTable.GridColumnStyles.Count)
-                        throw new ArgumentOutOfRangeException("columnIndex");
+                        throw new ArgumentOutOfRangeException(nameof(columnIndex));
                     CurrencyManager listManager = this.listManager;
                     if (listManager.Position != rowIndex)
                         listManager.Position = rowIndex;
@@ -3357,9 +3237,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnBorderStyleChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnBorderStyleChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_BORDERSTYLECHANGED] as EventHandler;
                 if (eh != null) {
@@ -3368,9 +3245,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnCaptionVisibleChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnCaptionVisibleChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_CAPTIONVISIBLECHANGED] as EventHandler;
                 if (eh != null) {
@@ -3379,9 +3253,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnCurrentCellChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnCurrentCellChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_CURRENTCELLCHANGED] as EventHandler;
                 if (eh != null) {
@@ -3412,9 +3283,6 @@ namespace System.Windows.Forms {
             */
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnFlatModeChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnFlatModeChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_FLATMODECHANGED] as EventHandler;
                 if (eh != null) {
@@ -3423,9 +3291,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnBackgroundColorChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnBackgroundColorChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_BACKGROUNDCOLORCHANGED] as EventHandler;
                 if (eh != null) {
@@ -3434,9 +3299,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnAllowNavigationChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnAllowNavigationChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_ALLOWNAVIGATIONCHANGED] as EventHandler;
                 if (eh != null) {
@@ -3445,9 +3307,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnParentRowsVisibleChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnParentRowsVisibleChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_PARENTROWSVISIBLECHANGED] as EventHandler;
                 if (eh != null) {
@@ -3456,9 +3315,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnParentRowsLabelStyleChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnParentRowsLabelStyleChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_PARENTROWSLABELSTYLECHANGED] as EventHandler;
                 if (eh != null) {
@@ -3467,9 +3323,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnReadOnlyChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnReadOnlyChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_READONLYCHANGED] as EventHandler;
                 if (eh != null) {
@@ -3718,9 +3571,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnBackColorChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected override void OnBackColorChanged(EventArgs e) {
                 backBrush = new SolidBrush(BackColor);
                 Invalidate();
@@ -3729,9 +3579,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnBindingContextChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected override void OnBindingContextChanged(EventArgs e) {
                 if (this.DataSource != null && !gridState[GRIDSTATE_inSetListManager])
                     try {
@@ -3758,9 +3605,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnDataSourceChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual void OnDataSourceChanged(EventArgs e) {
                 EventHandler eh = Events[EVENT_DATASOURCECHANGED] as EventHandler;
                 if (eh != null) {
@@ -3786,9 +3630,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnForeColorChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected override void OnForeColorChanged(EventArgs e) {
                 foreBrush = new SolidBrush(ForeColor);
                 Invalidate();
@@ -3797,9 +3638,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.OnFontChanged"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected override void OnFontChanged(EventArgs e) {
                 // let the caption know about the event changed
                 //
@@ -6098,9 +5936,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CreateGridColumn1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop)
             {
                 return myGridTable == null ? null : myGridTable.CreateGridColumn(prop);
@@ -6676,7 +6511,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public bool IsExpanded(int rowNumber) {
                 if (rowNumber < 0 || rowNumber > DataGridRowsLength)
-                    throw new ArgumentOutOfRangeException("rowNumber");
+                    throw new ArgumentOutOfRangeException(nameof(rowNumber));
                 DataGridRow[] localGridRows = DataGridRows;
     
                 // 
@@ -6969,7 +6804,7 @@ namespace System.Windows.Forms {
                     return;
                 DataGridRow[] localGridRows = DataGridRows;
                 if (rowNumber < 0 || rowNumber > DataGridRowsLength - (policy.AllowAdd ? 2:1)) {
-                    throw new ArgumentOutOfRangeException("rowNumber");
+                    throw new ArgumentOutOfRangeException(nameof(rowNumber));
                 }
                 EnsureBound();
     
@@ -8902,7 +8737,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private void SetRowExpansionState(int row, bool expanded) {
                 if (row < -1 || row > DataGridRowsLength - (policy.AllowAdd ? 2:1)) {
-                    throw new ArgumentOutOfRangeException("row");
+                    throw new ArgumentOutOfRangeException(nameof(row));
                 }
     
                 DataGridRow[] localGridRows = DataGridRows;

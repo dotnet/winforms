@@ -698,7 +698,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoSizeMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
                 
                 if (GetAutoSizeMode() != value) {
@@ -736,9 +736,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.AutoValidateChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
@@ -833,7 +830,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x6
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormBorderStyle.None, (int)FormBorderStyle.SizableToolWindow))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FormBorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormBorderStyle));
                 }
 
                 // In rectricted mode we don't allow windows w/o min/max/close functionality.
@@ -1211,7 +1208,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int)DialogResult.No))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DialogResult));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DialogResult));
                 }
 
                 dialogResult = value;
@@ -1262,9 +1259,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
@@ -1537,9 +1531,6 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_MAXIMIZEDBOUNDSCHANGED = new object();
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MaximizedBoundsChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMaximizedBoundsChangedDescr))]
         public event EventHandler MaximizedBoundsChanged {
             add {
@@ -1575,7 +1566,7 @@ namespace System.Windows.Forms {
                 if (!value.Equals( MaximumSize )) {
 
                     if (value.Width < 0 || value.Height < 0 ) {
-                        throw new ArgumentOutOfRangeException("MaximumSize");
+                        throw new ArgumentOutOfRangeException(nameof(MaximumSize));
                     }
 
                     Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
@@ -1607,9 +1598,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MaximumSizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMaximumSizeChangedDescr))]
         public event EventHandler MaximumSizeChanged {
             add {
@@ -1733,7 +1721,7 @@ namespace System.Windows.Forms {
                 if (!value.Equals( MinimumSize )) {
 
                     if (value.Width < 0 || value.Height < 0 ) {
-                        throw new ArgumentOutOfRangeException("MinimumSize");
+                        throw new ArgumentOutOfRangeException(nameof(MinimumSize));
                     }
 
                     // ensure that the size we've applied fits into the screen 
@@ -1782,9 +1770,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MinimumSizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMinimumSizeChangedDescr))]
         public event EventHandler MinimumSizeChanged {
             add {
@@ -2394,7 +2379,7 @@ namespace System.Windows.Forms {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)SizeGripStyle.Auto, (int)SizeGripStyle.Hide))
                     {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(SizeGripStyle));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SizeGripStyle));
                     }
 
                     formState[FormStateSizeGripStyle] = (int)value;
@@ -2424,7 +2409,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormStartPosition.Manual, (int)FormStartPosition.CenterParent))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FormStartPosition));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormStartPosition));
                 }
                 formState[FormStateStartPos] = (int)value;
             }
@@ -2749,7 +2734,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormWindowState.Normal, (int)FormWindowState.Maximized))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FormWindowState));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormWindowState));
                 }
 
                 if (TopLevel && IsRestrictedWindow) {
@@ -3038,9 +3023,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -3958,18 +3940,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void FillInCreateParamsStartPosition(CreateParams cp) {
 
-            //           Removed logic that forced MDI children to always be
-            //           default size and position... need to verify that
-            //           this works on Win9X
-            /*
-            if (getIsMdiChild()) {
-            cp.x = NativeMethods.CW_USEDEFAULT;
-            cp.y = NativeMethods.CW_USEDEFAULT;
-            cp.width = NativeMethods.CW_USEDEFAULT;
-            cp.height = NativeMethods.CW_USEDEFAULT;
-            }
-            else {
-            */
             if (formState[FormStateSetClientSize] != 0) {
 
                 // When computing the client window size, don't tell them that
@@ -3983,7 +3953,6 @@ namespace System.Windows.Forms {
                 }               
                 cp.Width = correct.Width;
                 cp.Height = correct.Height;
-               
             }
 
             switch ((FormStartPosition)formState[FormStateStartPos]) {
@@ -4076,9 +4045,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.GetAutoScaleSize"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("This method has been deprecated. Use the AutoScaleDimensions property instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         [
@@ -4716,9 +4682,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnEnter(EventArgs e) {
             base.OnEnter(e);
@@ -4730,9 +4693,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnFontChanged(EventArgs e) {
             if (DesignMode) {
@@ -4899,9 +4859,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnMaximizedBoundsChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMaximizedBoundsChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_MAXIMIZEDBOUNDSCHANGED] as EventHandler;
@@ -4911,9 +4868,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnMaximumSizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMaximumSizeChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_MAXIMUMSIZECHANGED] as EventHandler;
@@ -4923,9 +4877,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnMinimumSizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMinimumSizeChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_MINIMUMSIZECHANGED] as EventHandler;
@@ -4958,9 +4909,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnVisibleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnVisibleChanged(EventArgs e) {
             UpdateRenderSizeGrip();
@@ -5157,10 +5105,10 @@ namespace System.Windows.Forms {
         ///     scale window size non-lineary. If this message is not processed, the size is scaled linearly by Windows.
         ///     This message is sent to top level windows before WM_DPICHANGED.
         ///     If the application responds to this message, the resulting size will be the candidate rectangle 
-        ///     sent to WM_DPICHANGED. The WPARAM contains a DPI value.� The size needs to be computed if 
-        ///     the window were to switch to this DPI.�LPARAM is unused and will be zero. 
+        ///     sent to WM_DPICHANGED. The WPARAM contains a DPI value. The size needs to be computed if 
+        ///     the window were to switch to this DPI. LPARAM is unused and will be zero. 
         ///     The return value is a size, where the LOWORD is the desired width of the window and the HIWORD 
-        ///     is the desired height of the window.� A return value of zero indicates that the app does not 
+        ///     is the desired height of the window. A return value of zero indicates that the app does not 
         ///     want any special behavior and the candidate rectangle will be computed linearly.
         /// </devdoc>
         private void WmGetDpiScaledSize(ref Message m) {
@@ -5175,9 +5123,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {
@@ -5213,9 +5158,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnTextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnTextChanged(EventArgs e) {
             base.OnTextChanged(e);
@@ -5363,9 +5305,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ProcessKeyPreview"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
             SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
         ]
@@ -5376,9 +5315,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ProcessTabKey"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessTabKey(bool forward) {
             if (SelectNextControl(ActiveControl, forward, true, true, true))
@@ -6758,9 +6694,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnStyleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnStyleChanged(EventArgs e) {
             base.OnStyleChanged(e);

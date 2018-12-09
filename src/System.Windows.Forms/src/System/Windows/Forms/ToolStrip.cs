@@ -102,8 +102,6 @@ namespace System.Windows.Forms {
 
         private Point                          mouseEnterWhenShown      = InvalidMouseEnter;
 
-        private readonly WeakReference<ToolTip> currentToolTipReference;
-
         private const int                      INSERTION_BEAM_WIDTH     = 6;
         
         internal static int                    insertionBeamWidth       = INSERTION_BEAM_WIDTH;
@@ -211,12 +209,7 @@ namespace System.Windows.Forms {
             Size defaultSize = DefaultSize;
             SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
             this.ShowItemToolTips = DefaultShowItemToolTips;
-            ResumeLayout(true);
-
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                this.currentToolTipReference = new WeakReference<ToolTip>(null);
-            }
-            
+            ResumeLayout(true);            
         }
 
         public ToolStrip(params ToolStripItem[] items) : this() {
@@ -737,7 +730,7 @@ namespace System.Windows.Forms {
                    case ToolStripDropDownDirection.Default:
                       break;
                    default:
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripDropDownDirection));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripDropDownDirection));
                 }
 
                 toolStripDropDownDirection = value;
@@ -930,7 +923,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripGripStyle.Hidden, (int)ToolStripGripStyle.Visible)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripGripStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripGripStyle));
                 }
                 if (toolStripGripStyle != value) {
                     toolStripGripStyle = value;
@@ -1332,7 +1325,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripLayoutStyle.StackWithOverflow, (int)ToolStripLayoutStyle.Table)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripLayoutStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripLayoutStyle));
                 }
                 if (layoutStyle != value) {
                     layoutStyle = value;
@@ -1383,9 +1376,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutCompleted"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
         public event EventHandler LayoutCompleted {
             add {
@@ -1406,9 +1396,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutStyleChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutStyleChangedDescr))]
         public event EventHandler LayoutStyleChanged {
             add {
@@ -1430,9 +1417,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LocationChanging"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         internal event ToolStripLocationCancelEventHandler LocationChanging {
             add {
                 Events.AddHandler(EventLocationChanging, value);
@@ -1530,9 +1514,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.PaintGrip"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripPaintGripDescr))]
         public event PaintEventHandler PaintGrip {
             add {
@@ -1721,7 +1702,7 @@ namespace System.Windows.Forms {
              set {
                  //valid values are 0x0 to 0x3
                  if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripRenderMode.Custom, (int)ToolStripRenderMode.ManagerRenderMode)){
-                     throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripRenderMode));
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripRenderMode));
                  }
                  if (value == ToolStripRenderMode.Custom) {
                      throw new NotSupportedException(SR.ToolStripRenderModeUseRendererPropertyInstead);
@@ -1767,6 +1748,18 @@ namespace System.Windows.Forms {
                     showItemToolTips = value;
                     if (!showItemToolTips) {
                         UpdateToolTip(null);
+                    }
+
+                    if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
+                        ToolTip internalToolTip = this.ToolTip;
+                        foreach (ToolStripItem item in this.Items) {
+                            if (showItemToolTips) {
+                                KeyboardToolTipStateMachine.Instance.Hook(item, internalToolTip);
+                            }
+                            else {
+                                KeyboardToolTipStateMachine.Instance.Unhook(item, internalToolTip);
+                            }
+                        } 
                     }
 
                     // If the overflow button has not been created, don't check its properties
@@ -1848,7 +1841,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripTextDirection.Inherit, (int)ToolStripTextDirection.Vertical270)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripTextDirection));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripTextDirection));
                 }
                 Properties.SetObject(ToolStrip.PropTextDirection, value);
 
@@ -2192,7 +2185,7 @@ namespace System.Windows.Forms {
         public virtual ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction)
         {
             if (!WindowsFormsUtils.EnumValidator.IsValidArrowDirection(direction)) {
-                throw new InvalidEnumArgumentException("direction", (int)direction, typeof(ArrowDirection));
+                throw new InvalidEnumArgumentException(nameof(direction), (int)direction, typeof(ArrowDirection));
             }
 
             switch (direction) {
@@ -3718,9 +3711,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
@@ -4071,7 +4061,7 @@ namespace System.Windows.Forms {
         /// <param name=m></param>
         protected internal void SetItemLocation(ToolStripItem item, Point location) {
             if (item == null) {
-                throw new ArgumentNullException("item");
+                throw new ArgumentNullException(nameof(item));
             }
             if (item.Owner != this) {
                 throw new NotSupportedException(SR.ToolStripCanOnlyPositionItsOwnItems);
@@ -4499,7 +4489,10 @@ namespace System.Windows.Forms {
                     finally {
                          System.Security.CodeAccessPermission.RevertAssert();
                     }
-                    ToolTip.Active = false;
+
+                    if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
+                        ToolTip.Active = false;
+                    }
 
                     currentlyActiveTooltipItem = item;
 
@@ -4508,7 +4501,9 @@ namespace System.Windows.Forms {
                         Cursor currentCursor = Cursor.CurrentInternal;
 
                         if (currentCursor != null) {
-                            ToolTip.Active = true;
+                            if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
+                                ToolTip.Active = true;
+                            }
 
                             Point cursorLocation = Cursor.Position;
                             cursorLocation.Y += Cursor.Size.Height - currentCursor.HotSpot.Y;
@@ -4694,45 +4689,18 @@ namespace System.Windows.Forms {
             return new WindowsFormsUtils.ReadOnlyControlCollection(this, /* isReadOnly = */ !DesignMode);
         }
 
-        internal override void OnKeyboardToolTipHook(ToolTip toolTip) {
-            base.OnKeyboardToolTipHook(toolTip);
-
-            this.currentToolTipReference.SetTarget(toolTip);
-
-            if (this.toolStripItemCollection != null) {
-                foreach (ToolStripItem item in this.toolStripItemCollection) {
-                    KeyboardToolTipStateMachine.Instance.Hook(item, toolTip);
-                }
-            }
-        }
-
-        internal override void OnKeyboardToolTipUnhook(ToolTip toolTip) {
-            base.OnKeyboardToolTipUnhook(toolTip);
-
-            this.currentToolTipReference.SetTarget(null);
-
-            if (this.toolStripItemCollection != null) {
-                foreach (ToolStripItem item in this.toolStripItemCollection) {
-                    KeyboardToolTipStateMachine.Instance.Unhook(item, toolTip);
-                }
-            }
-        }
 
         internal void OnItemAddedInternal(ToolStripItem item) {
             if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                ToolTip currentToolTip;
-                if (this.currentToolTipReference.TryGetTarget(out currentToolTip) && currentToolTip != null) {
-                    KeyboardToolTipStateMachine.Instance.Hook(item, currentToolTip);
+                if (this.ShowItemToolTips) {
+                    KeyboardToolTipStateMachine.Instance.Hook(item, this.ToolTip);
                 }
             }
         }
 
         internal void OnItemRemovedInternal(ToolStripItem item) {
             if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                ToolTip currentToolTip;
-                if (this.currentToolTipReference.TryGetTarget(out currentToolTip) && currentToolTip != null) {
-                    KeyboardToolTipStateMachine.Instance.Unhook(item, currentToolTip);
-                }
+                KeyboardToolTipStateMachine.Instance.Unhook(item, this.ToolTip);
             }
         }
 
@@ -5138,7 +5106,7 @@ namespace System.Windows.Forms {
 
                 if (owner == null) {
                     // 
-                    throw new ArgumentNullException("owner");
+                    throw new ArgumentNullException(nameof(owner));
                 }
                 this.owner = owner;
             }

@@ -30,23 +30,14 @@ namespace System.Windows.Forms {
             this.size = size;
         }
         /// <include file='doc\DateBoldEvent.uex' path='docs/doc[@for="DateBoldEventArgs.StartDate"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public DateTime StartDate {
             get { return startDate; }
         }
         /// <include file='doc\DateBoldEvent.uex' path='docs/doc[@for="DateBoldEventArgs.Size"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int Size {
             get { return size; }
         }
         /// <include file='doc\DateBoldEvent.uex' path='docs/doc[@for="DateBoldEventArgs.DaysToBold"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int[] DaysToBold {
             get { return daysToBold; }
             set { daysToBold = value; }

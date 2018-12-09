@@ -283,7 +283,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
                 if (BorderStyle != value) {
@@ -412,7 +412,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FlatStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
 
                 if (labelState[StateFlatStyle] != (int)value) {
@@ -513,7 +513,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
                 if (ImageIndex != value) {
                     if (value != -1) {
@@ -656,7 +656,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                  throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                  throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
                 if(value != ImageAlign) {
                     Properties.SetInteger(PropImageAlign, (int)value);
@@ -691,7 +691,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutomationLiveSetting));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
                 }
                 liveSetting = value;
             }
@@ -882,7 +882,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
 
                 if (TextAlign != value) {
@@ -920,9 +920,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.TextAlignChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
             add {
@@ -1078,9 +1075,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.CalcImageRenderBounds"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected Rectangle CalcImageRenderBounds(Image image, Rectangle r, ContentAlignment align) {
             Size pointImageSize = image.Size;
 
@@ -1155,9 +1149,6 @@ namespace System.Windows.Forms {
     
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.Dispose"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 StopAnimate();
@@ -1449,9 +1440,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             MeasureTextCache.InvalidateCache();
             base.OnFontChanged(e);
@@ -1471,9 +1459,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnTextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnTextChanged(EventArgs e) {
   
             using(LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text)) {
@@ -1489,9 +1474,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnTextAlignChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnTextAlignChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
             if (eh != null) {
@@ -1582,9 +1564,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnEnabledChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
             Animate();
@@ -1592,9 +1571,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnParentChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnParentChanged(EventArgs e) {
             base.OnParentChanged(e);
             if (SelfSizing) {
@@ -1611,9 +1587,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnVisibleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnVisibleChanged(EventArgs e) {
             base.OnVisibleChanged(e);
             Animate();
@@ -1756,9 +1729,6 @@ namespace System.Windows.Forms {
             public LabelAccessibleObject(Label owner) : base(owner) {
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;

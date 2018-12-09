@@ -25,26 +25,17 @@ namespace System.Windows.Forms {
         TreeViewAction action = TreeViewAction.Unknown;
         
         /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.TreeViewEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeViewEventArgs(TreeNode node) {
             this.node = node;
         }
         
         /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.TreeViewEventArgs1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeViewEventArgs(TreeNode node, TreeViewAction action) {
             this.node = node;                                           
             this.action = action;
         }
         
         /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.Node"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeNode Node {
             get {
                 return node;

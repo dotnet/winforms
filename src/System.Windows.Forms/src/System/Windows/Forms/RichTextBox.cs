@@ -235,9 +235,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -261,9 +258,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -305,7 +299,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("BulletIndent", string.Format(SR.InvalidArgument, "BulletIndent", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(BulletIndent), string.Format(SR.InvalidArgument, "BulletIndent", (value).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 this.bulletIndent = value;
@@ -349,9 +343,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.CreateParams"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override CreateParams CreateParams {
             [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
@@ -363,7 +354,7 @@ namespace System.Windows.Forms {
                     int lastWin32Error = Marshal.GetLastWin32Error();
 
                     // This code has been here since the inception of the project, 
-                    // we can�t determine why we have to compare w/ 32 here.
+                    // we can't determine why we have to compare w/ 32 here.
                     // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space) (see Dev10 
                     if ((ulong)moduleHandle < (ulong)32) {
                         throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
@@ -393,12 +384,7 @@ namespace System.Windows.Forms {
                 }
 
                 CreateParams cp = base.CreateParams;
-                if (Marshal.SystemDefaultCharSize == 1) {
-                    cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITA : RichTextBoxConstants.WC_RICHEDITA_41;
-                }
-                else {
-                    cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITW : RichTextBoxConstants.WC_RICHEDITW_41;
-                }
+                cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITW : RichTextBoxConstants.WC_RICHEDITW_41;
 
                 if (Multiline) {
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_HORIZ) != 0 && !WordWrap) {
@@ -629,9 +615,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Multiline"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [DefaultValue(true)]
         public override bool Multiline {
             get {
@@ -704,7 +687,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.rightMargin != value) {
                     if (value < 0)
-                        throw new ArgumentOutOfRangeException("RightMargin", string.Format(SR.InvalidLowBoundArgumentEx, "RightMargin", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(RightMargin), string.Format(SR.InvalidLowBoundArgumentEx, "RightMargin", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     this.rightMargin = value;
 
                     if (value == 0) {
@@ -796,7 +779,7 @@ namespace System.Windows.Forms {
                     (int)RichTextBoxScrollBars.ForcedVertical,
                     (int)RichTextBoxScrollBars.ForcedBoth)) {
 
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(RichTextBoxScrollBars));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RichTextBoxScrollBars));
                 }
 
                 if (value != ScrollBars) {
@@ -852,7 +835,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(HorizontalAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
 
                 ForceHandleCreate();
@@ -964,7 +947,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value > 2000 || value < -2000)
-                    throw new ArgumentOutOfRangeException("SelectionCharOffset", string.Format(SR.InvalidBoundArgument, "SelectionCharOffset", value, -2000, 2000));
+                    throw new ArgumentOutOfRangeException(nameof(SelectionCharOffset), string.Format(SR.InvalidBoundArgument, "SelectionCharOffset", value, -2000, 2000));
 
                 ForceHandleCreate();
                 NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA();
@@ -1224,16 +1207,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        ///     Specifies whether the control uses unicode to set/get text selection information (WM_GESEL/WM_SETSEL)
-        ///     in Win9x.
-        /// </devdoc>
-        internal override bool SelectionUsesDbcsOffsetsInWin9x {
-            get {
-                return false; // false for RichEdit, true for Edit.
-            }
-        }
-
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectedRtf"]/*' />
         /// <devdoc>
         ///     The currently selected text of a RichTextBox control, including
@@ -1289,7 +1262,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException("SelectionRightIndent", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionRightIndent", value, 0));
+                    throw new ArgumentOutOfRangeException(nameof(SelectionRightIndent), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionRightIndent", value, 0));
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
@@ -1333,7 +1306,7 @@ namespace System.Windows.Forms {
             set {
                 // Verify the argument, and throw an error if is bad
                 if (value != null && value.Length > RichTextBoxConstants.MAX_TAB_STOPS)
-                    throw new ArgumentOutOfRangeException("SelectionTabs", SR.SelTabCountRange);
+                    throw new ArgumentOutOfRangeException(nameof(SelectionTabs), SR.SelTabCountRange);
 
                 ForceHandleCreate();
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
@@ -1428,9 +1401,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Localizable(true),
         RefreshProperties(RefreshProperties.All)
@@ -1498,22 +1468,15 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.TextLength"]/*' />
         [Browsable(false)]
         public override int TextLength {
-            get 
+            get
             {
-                NativeMethods.GETTEXTLENGTHEX gtl = new NativeMethods.GETTEXTLENGTHEX();
-
-                gtl.flags = RichTextBoxConstants.GTL_NUMCHARS;
-
-                if (Marshal.SystemDefaultCharSize == 1 /*ANSI*/)
+                NativeMethods.GETTEXTLENGTHEX gtl = new NativeMethods.GETTEXTLENGTHEX
                 {
-                    gtl.codepage = 0;  /* CP_ANSI */;
-                }
-                else
-                {
-                    gtl.codepage = 1200; /* CP_UNICODE */
-                }
+                    flags = RichTextBoxConstants.GTL_NUMCHARS,
+                    codepage = 1200 /* CP_UNICODE */
+                };
 
-                return unchecked( (int) (long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETTEXTLENGTHEX, gtl, 0 /*ignored*/)); 
+                return unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETTEXTLENGTHEX, gtl, 0 /*ignored*/));
             }
         }
 
@@ -1593,16 +1556,13 @@ namespace System.Windows.Forms {
                 if (zoomMultiplier == value) return;
 
                 if (value <= 0.015625f || value >= 64.0f)
-                    throw new ArgumentOutOfRangeException("ZoomFactor", string.Format(SR.InvalidExBoundArgument, "ZoomFactor", (value).ToString(CultureInfo.CurrentCulture), (0.015625f).ToString(CultureInfo.CurrentCulture), (64.0f).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ZoomFactor), string.Format(SR.InvalidExBoundArgument, "ZoomFactor", (value).ToString(CultureInfo.CurrentCulture), (0.015625f).ToString(CultureInfo.CurrentCulture), (64.0f).ToString(CultureInfo.CurrentCulture)));
                 SendZoomFactor(value);
             }
         }
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ContentsResized"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxContentsResized))]
         public event ContentsResizedEventHandler ContentsResized {
             add {
@@ -1645,9 +1605,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragLeave"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DragLeave {
             add {
@@ -1659,9 +1616,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragOver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DragEventHandler DragOver {
             add {
@@ -1673,9 +1627,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GiveFeedback"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event GiveFeedbackEventHandler GiveFeedback {
             add {
@@ -1687,9 +1638,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.QueryContinueDrag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event QueryContinueDragEventHandler QueryContinueDrag {
             add {
@@ -1701,9 +1649,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.HScroll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxHScroll))]
         public event EventHandler HScroll {
             add {
@@ -1715,9 +1660,6 @@ namespace System.Windows.Forms {
         }        
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.LinkClicked"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxLinkClick))]
         public event LinkClickedEventHandler LinkClicked {
             add {
@@ -1730,9 +1672,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ImeChange"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxIMEChange))]
         public event EventHandler ImeChange {
             add {
@@ -1745,9 +1684,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Protected"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxProtected))]
         public event EventHandler Protected {
             add {
@@ -1760,9 +1696,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxSelChange))]
         public event EventHandler SelectionChanged {
             add {
@@ -1775,9 +1708,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.VScroll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxVScroll))]
         public event EventHandler VScroll {
             add {
@@ -1960,11 +1890,11 @@ namespace System.Windows.Forms {
             int textLen = TextLength;
 
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             if (start < 0 || start > textLen)
-                throw new ArgumentOutOfRangeException("start", string.Format(SR.InvalidBoundArgument, "start", start, 0, textLen));
+                throw new ArgumentOutOfRangeException(nameof(start), string.Format(SR.InvalidBoundArgument, "start", start, 0, textLen));
             if (end < -1)
-                throw new ArgumentOutOfRangeException("end", string.Format(SR.RichTextFindEndInvalid, end));
+                throw new ArgumentOutOfRangeException(nameof(end), string.Format(SR.RichTextFindEndInvalid, end));
 
             bool selectWord = true;
             NativeMethods.FINDTEXT ft = new NativeMethods.FINDTEXT();
@@ -2098,11 +2028,11 @@ namespace System.Windows.Forms {
             int textLength = TextLength;
 
             if (characterSet == null)
-                throw new ArgumentNullException("characterSet");
+                throw new ArgumentNullException(nameof(characterSet));
             if (start < 0 || start > textLength)
-                throw new ArgumentOutOfRangeException("start", string.Format(SR.InvalidBoundArgument, "start", start, 0, textLength));
+                throw new ArgumentOutOfRangeException(nameof(start), string.Format(SR.InvalidBoundArgument, "start", start, 0, textLength));
             if (end < start && end != -1)
-                throw new ArgumentOutOfRangeException("end", string.Format(SR.InvalidLowBoundArgumentEx, "end", end, "start"));
+                throw new ArgumentOutOfRangeException(nameof(end), string.Format(SR.InvalidLowBoundArgumentEx, "end", end, "start"));
 
             // Don't do anything if we get nothing to look for
             if (characterSet.Length == 0)
@@ -2409,7 +2339,7 @@ namespace System.Windows.Forms {
         public void LoadFile(string path, RichTextBoxStreamType fileType) {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText)){
-                throw new InvalidEnumArgumentException("fileType", (int)fileType, typeof(RichTextBoxStreamType));
+                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
         
             Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -2429,7 +2359,7 @@ namespace System.Windows.Forms {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
             {
-                throw new InvalidEnumArgumentException("fileType", (int)fileType, typeof(RichTextBoxStreamType));
+                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
         
             int flags;
@@ -2453,9 +2383,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnBackColorChanged(EventArgs e) {
             if (IsHandleCreated)
             {
@@ -2472,9 +2399,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
             // When the RTL property is changed, here's what happens. Let's assume that we change from
@@ -2521,9 +2445,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnHandleCreated"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
             // base.OnHandleCreated is called somewhere in the middle of this
 
@@ -2614,9 +2535,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnHandleDestroyed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnHandleDestroyed(EventArgs e) {
             base.OnHandleDestroyed(e);
             
@@ -2760,7 +2678,7 @@ namespace System.Windows.Forms {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
             {
-                throw new InvalidEnumArgumentException("fileType", (int)fileType, typeof(RichTextBoxStreamType));
+                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
             
             Stream file = File.Create(path);
@@ -2795,7 +2713,7 @@ namespace System.Windows.Forms {
                     flags = RichTextBoxConstants.SF_TEXTIZED;
                     break;
                 default:
-                    throw new InvalidEnumArgumentException("fileType", (int)fileType, typeof(RichTextBoxStreamType));
+                    throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
 
             StreamOut(data, flags, true);
@@ -2894,37 +2812,19 @@ namespace System.Windows.Forms {
             if (value.Strikeout) dwEffects |= RichTextBoxConstants.CFE_STRIKEOUT;
             if (value.Underline) dwEffects |= RichTextBoxConstants.CFE_UNDERLINE;
 
-            if (Marshal.SystemDefaultCharSize == 1)            
-            {
-                bytesFaceName = Encoding.Default.GetBytes(logfont.lfFaceName);
+            bytesFaceName = Encoding.Unicode.GetBytes(logfont.lfFaceName);
 
-                NativeMethods.CHARFORMATA cfA = new NativeMethods.CHARFORMATA();
-                for (int i=0; i<bytesFaceName.Length; i++) cfA.szFaceName[i] = bytesFaceName[i];
-                cfA.dwMask = dwMask;
-                cfA.dwEffects = dwEffects;
-                cfA.yHeight = (int) (value.SizeInPoints * 20);
-                cfA.bCharSet = logfont.lfCharSet;
-                cfA.bPitchAndFamily = logfont.lfPitchAndFamily;
+            NativeMethods.CHARFORMATW cfW = new NativeMethods.CHARFORMATW();
+            for (int i=0; i<bytesFaceName.Length; i++) cfW.szFaceName[i] = bytesFaceName[i];
+            cfW.dwMask = dwMask;
+            cfW.dwEffects = dwEffects;
+            cfW.yHeight = (int) (value.SizeInPoints * 20);
+            cfW.bCharSet = logfont.lfCharSet;
+            cfW.bPitchAndFamily = logfont.lfPitchAndFamily;
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfA);
-            }
-            else
-            {
-                bytesFaceName = Encoding.Unicode.GetBytes(logfont.lfFaceName);
-
-                NativeMethods.CHARFORMATW cfW = new NativeMethods.CHARFORMATW();
-                for (int i=0; i<bytesFaceName.Length; i++) cfW.szFaceName[i] = bytesFaceName[i];
-                cfW.dwMask = dwMask;
-                cfW.dwEffects = dwEffects;
-                cfW.yHeight = (int) (value.SizeInPoints * 20);
-                cfW.bCharSet = logfont.lfCharSet;
-                cfW.bPitchAndFamily = logfont.lfPitchAndFamily;
-
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfW);
-            }
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfW);
         }
 
-        
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.FontToLogFont"]/*' />
         /// <devdoc>
         /// This is just here as a minor perf improvement, so we don't have to call expensive RevertAssert.
@@ -3659,9 +3559,6 @@ namespace System.Windows.Forms {
         // </doc>
         //
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WndProc"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
@@ -3716,7 +3613,7 @@ namespace System.Windows.Forms {
                     // the WM_GETOBJECT+OBJID_QUERYCLASSNAMEIDX message. But RICHEDIT20 doesn't do that - so we must do it ourselves.
                     // Otherwise OLEACC will treat rich edit controls as custom controls, so the accessible Role and Value will be wrong.
                     if (unchecked((int)(long)m.LParam) == NativeMethods.OBJID_QUERYCLASSNAMEIDX) {
-                        m.Result = (IntPtr) ((Marshal.SystemDefaultCharSize == 1) ? (65536+29) : (65536+30));
+                        m.Result = (IntPtr)(65536+30);
                     }
                     break;
 

@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoScaleMode.None, (int)AutoScaleMode.Inherit)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoScaleMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoScaleMode));
                 }
 
                 bool scalingNeeded = false;
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
                     case AutoValidate.Inherit:
                         break;
                     default:
-                        throw new InvalidEnumArgumentException("AutoValidate", (int) value, typeof(AutoValidate));
+                        throw new InvalidEnumArgumentException(nameof(AutoValidate), (int) value, typeof(AutoValidate));
                 }
 
                 if (autoValidate != value) {
@@ -210,9 +210,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AutoValidateChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -301,7 +298,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.CurrentAutoScaleDimensions"]/*' />
         /// <devdoc>
         ///     CurrentAutoScaleDimensions represent the actual DPI or Font settings
-        ///     of the display at runtime. If the AutoScaleMode is set to �None� then
+        ///     of the display at runtime. If the AutoScaleMode is set to 'None' then
         ///     the CurrentAutoScaleDimensions is equal to the ActualScaleDimensions
         /// </devdoc>
         [Browsable(false)]
@@ -751,7 +748,7 @@ namespace System.Windows.Forms {
 
                 try {
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
-                    SafeNativeMethods.GetTextMetrics(hdc, ref tm);
+                    SafeNativeMethods.GetTextMetricsW(hdc, ref tm);
 
                     retval.Height = tm.tmHeight;
 
@@ -1342,9 +1339,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.Select"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void Select(bool directed, bool forward) {
             bool correctParentActiveControl = true;
             if (ParentInternal != null)
@@ -1764,7 +1758,7 @@ namespace System.Windows.Forms {
             // Not using ClientUtils.IsValidEnum here because this is a flags enum and everything is valid between 0x00 and 0x1F.
             if ((int)validationConstraints < 0x00 || (int)validationConstraints > 0x1F)
             {
-                throw new InvalidEnumArgumentException("validationConstraints", (int)validationConstraints, typeof(ValidationConstraints)); 
+                throw new InvalidEnumArgumentException(nameof(validationConstraints), (int)validationConstraints, typeof(ValidationConstraints)); 
             }
             return !PerformContainerValidation(validationConstraints);
         }

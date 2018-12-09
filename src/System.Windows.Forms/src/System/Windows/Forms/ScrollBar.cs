@@ -322,7 +322,7 @@ namespace System.Windows.Forms {
                 if (largeChange != value) {
                 
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("LargeChange", string.Format(SR.InvalidLowBoundArgumentEx, "LargeChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(LargeChange), string.Format(SR.InvalidLowBoundArgumentEx, "LargeChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                 
                     largeChange = value;
@@ -415,7 +415,7 @@ namespace System.Windows.Forms {
                 if (smallChange != value) {
                 
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("SmallChange", string.Format(SR.InvalidLowBoundArgumentEx, "SmallChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(SmallChange), string.Format(SR.InvalidLowBoundArgumentEx, "SmallChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                 
                     smallChange = value;
@@ -490,7 +490,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if (value < minimum || value > maximum) {
-                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
+                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
                     }
                     this.value = value;
                     UpdateScrollInfo();
@@ -679,9 +679,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ScrollBar.uex' path='docs/doc[@for="ScrollBar.OnEnabledChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnEnabledChanged(EventArgs e) {
             if (Enabled) {
                 UpdateScrollInfo();

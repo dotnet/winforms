@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public NotifyIcon(IContainer container) : this() {
             if (container == null) {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
             container.Add(this);
@@ -135,7 +135,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolTipIcon.None, (int)ToolTipIcon.Error)){
-                   throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolTipIcon));
+                   throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolTipIcon));
                 }
                 if (value != balloonTipIcon) {
                     balloonTipIcon = value;
@@ -296,7 +296,7 @@ namespace System.Windows.Forms {
                 if (value == null) value = "";
                 if (value != null && !value.Equals(this.text)) {
                     if (value != null && value.Length > 63) {
-                        throw new ArgumentOutOfRangeException("Text", value, string.Format(SR.TrayIcon_TextTooLong));
+                        throw new ArgumentOutOfRangeException(nameof(Text), value, string.Format(SR.TrayIcon_TextTooLong));
                     }
                     this.text = value;
                     if (added) {
@@ -667,7 +667,7 @@ namespace System.Windows.Forms {
         public void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon) {
 
             if (timeout < 0) {
-               throw new ArgumentOutOfRangeException("timeout", string.Format(SR.InvalidArgument, "timeout", (timeout).ToString(CultureInfo.CurrentCulture)));
+               throw new ArgumentOutOfRangeException(nameof(timeout), string.Format(SR.InvalidArgument, "timeout", (timeout).ToString(CultureInfo.CurrentCulture)));
             }
 
             if (string.IsNullOrEmpty(tipText))
@@ -677,7 +677,7 @@ namespace System.Windows.Forms {
 
             //valid values are 0x0 to 0x3
             if (!ClientUtils.IsEnumValid(tipIcon, (int)tipIcon, (int)ToolTipIcon.None, (int)ToolTipIcon.Error)){
-                throw new InvalidEnumArgumentException("tipIcon", (int)tipIcon, typeof(ToolTipIcon));
+                throw new InvalidEnumArgumentException(nameof(tipIcon), (int)tipIcon, typeof(ToolTipIcon));
             }
             
             

@@ -80,9 +80,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToolBarButton1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ToolBarButton(string text) : base() {
             this.Text = text;
         }
@@ -194,7 +191,7 @@ namespace System.Windows.Forms {
             set {
                 if (ImageIndexer.Index != value) {
                     if (value < -1)
-                        throw new ArgumentOutOfRangeException("ImageIndex", string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), -1));
+                        throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), -1));
 
                     ImageIndexer.Index = value;
                     UpdateButton(false);
@@ -353,7 +350,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x1 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarButtonStyle.PushButton, (int)ToolBarButtonStyle.DropDownButton)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolBarButtonStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarButtonStyle));
                 }
                 if (style == value) return;
                 style = value;

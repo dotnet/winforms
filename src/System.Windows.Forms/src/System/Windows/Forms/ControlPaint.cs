@@ -133,9 +133,6 @@ namespace System.Windows.Forms {
         // a color appropriate for certain elements that are ControlDark in normal color schemes,
         // but for which ControlDark does not work in high contrast color schemes
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.ContrastControlDark"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static Color ContrastControlDark {
             get {
                 return SystemInformation.HighContrast ? SystemColors.WindowFrame : SystemColors.ControlDark;
@@ -248,7 +245,7 @@ namespace System.Windows.Forms {
         [ResourceConsumption(ResourceScope.Machine)]
         public static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap) {
             if (bitmap == null) {
-                throw new ArgumentNullException("bitmap");
+                throw new ArgumentNullException(nameof(bitmap));
             }
             Size size = bitmap.Size;
             int width = bitmap.Width;
@@ -426,7 +423,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal static void PrintBorder(Graphics graphics, Rectangle bounds, BorderStyle style, Border3DStyle b3dStyle) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             switch (style) {
                 case BorderStyle.FixedSingle:
@@ -451,7 +448,7 @@ namespace System.Windows.Forms {
         
         internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect,  Point scrollOffset, RightToLeft rightToLeft) {
             if (g == null) {
-                throw new ArgumentNullException("g");
+                throw new ArgumentNullException(nameof(g));
             }
          
             if(backgroundImageLayout == ImageLayout.Tile) {
@@ -526,9 +523,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static void DrawBorder(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
             // Optimized version
             switch (style) {
@@ -564,7 +558,7 @@ namespace System.Windows.Forms {
                                       Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle) {
             // Very general, and very slow
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             int[] topLineLefts = new int[topWidth];
@@ -944,7 +938,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void DrawBorder3D(Graphics graphics, int x, int y, int width, int height, Border3DStyle style, Border3DSide sides) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             int edge = ((int)style) & 0x0F;
@@ -980,7 +974,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private static void DrawBorderComplex(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             if (style == ButtonBorderStyle.Inset) { // button being pushed
                 HLSColor hls = new HLSColor(color);
@@ -1082,7 +1076,7 @@ namespace System.Windows.Forms {
         private static void DrawBorderSimple(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
             // Common case: system color with solid pen
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             bool stockBorder = (style == ButtonBorderStyle.Solid && color.IsSystemColor);
             Pen pen;
@@ -1185,7 +1179,7 @@ namespace System.Windows.Forms {
         public static void DrawContainerGrabHandle(Graphics graphics, Rectangle bounds) {
 
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             Brush brush = Brushes.White;
             Pen pen = Pens.Black;
@@ -1232,7 +1226,7 @@ namespace System.Windows.Forms {
             // Background color of checkbox
             //
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             Brush background = ((state & ButtonState.Inactive) == ButtonState.Inactive) ?
                                SystemBrushes.Control :
@@ -1252,10 +1246,10 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, Color foreground, Brush background, ButtonState state) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             if (rectangle.Width < 0 || rectangle.Height < 0) {
-                throw new ArgumentOutOfRangeException("rectangle");
+                throw new ArgumentOutOfRangeException(nameof(rectangle));
             }
 
             Rectangle offsetRectangle = new Rectangle(rectangle.X + 1, rectangle.Y + 1,
@@ -1327,7 +1321,7 @@ namespace System.Windows.Forms {
 
         private static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color color, bool highContrast) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             rectangle.Width--;
             rectangle.Height--;
@@ -1348,13 +1342,13 @@ namespace System.Windows.Forms {
         private static void DrawFrameControl(Graphics graphics, int x, int y, int width, int height, 
                                              int kind, int state, Color foreColor, Color backColor) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             if (width < 0) {
-                throw new ArgumentOutOfRangeException("width");
+                throw new ArgumentOutOfRangeException(nameof(width));
             }
             if (height < 0) {
-                throw new ArgumentOutOfRangeException("height");
+                throw new ArgumentOutOfRangeException(nameof(height));
             }
 
             NativeMethods.RECT rcFrame = NativeMethods.RECT.FromXYWH(0, 0, width, height);
@@ -1396,7 +1390,7 @@ namespace System.Windows.Forms {
             Brush brush;
             
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             if (primary) {
@@ -1446,10 +1440,10 @@ namespace System.Windows.Forms {
         public static void DrawGrid(Graphics graphics, Rectangle area, Size pixelsBetweenDots, Color backColor) {
 
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             if (pixelsBetweenDots.Width <= 0 || pixelsBetweenDots.Height <= 0) {
-                throw new ArgumentOutOfRangeException("pixelsBetweenDots");
+                throw new ArgumentOutOfRangeException(nameof(pixelsBetweenDots));
             }
 
             float intensity = backColor.GetBrightness();
@@ -1528,7 +1522,7 @@ namespace System.Windows.Forms {
         private static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination, 
                                                ColorMatrix matrix) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             ImageAttributes attributes = new ImageAttributes();
             attributes.SetColorMatrix(matrix);
@@ -1551,10 +1545,10 @@ namespace System.Windows.Forms {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]        
         internal static void DrawImageDisabled(Graphics graphics, Image image, Rectangle imageBounds, Color background, bool unscaledImage) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             if (image == null) {
-                throw new ArgumentNullException("image");
+                throw new ArgumentNullException(nameof(image));
             }
 #if GRAYSCALE_DISABLED
             Size imageSize = image.Size;
@@ -1663,7 +1657,7 @@ namespace System.Windows.Forms {
             Pen pen;
 
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             if (primary) {
@@ -1733,9 +1727,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawMixedCheckBox1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static void DrawMixedCheckBox(Graphics graphics, int x, int y, int width, int height, ButtonState state) {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_BUTTON,
                              NativeMethods.DFCS_BUTTON3STATE | (int) state, Color.Empty, Color.Empty);
@@ -1864,7 +1855,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void DrawSelectionFrame(Graphics graphics, bool active, Rectangle outsideRect, Rectangle insideRect, Color backColor) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             Brush frameBrush;            
@@ -1900,7 +1891,7 @@ namespace System.Windows.Forms {
             // Note: We don't paint any background to facilitate transparency, background images, etc...
             //
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             using( Pen bright = new Pen(LightLight(backColor)) ) {
@@ -1928,7 +1919,7 @@ namespace System.Windows.Forms {
                                               StringFormat format) {
 
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
@@ -1956,7 +1947,7 @@ namespace System.Windows.Forms {
                                               Color color, Rectangle layoutRectangle,
                                               TextFormatFlags format) {
             if (dc == null) {
-                throw new ArgumentNullException("dc");
+                throw new ArgumentNullException(nameof(dc));
             }
 
             if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
@@ -1980,7 +1971,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static void DrawVisualStyleBorder(Graphics graphics, Rectangle bounds) {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
             using (Pen borderPen = new Pen(System.Windows.Forms.VisualStyles.VisualStyleInformation.TextControlBorder)) {
                 graphics.DrawRectangle(borderPen, bounds);

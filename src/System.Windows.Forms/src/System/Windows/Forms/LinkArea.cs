@@ -12,9 +12,6 @@ namespace System.Windows.Forms {
     using System.Collections;
 
     /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [
         TypeConverterAttribute(typeof(LinkArea.LinkAreaConverter)),
         Serializable
@@ -24,18 +21,12 @@ namespace System.Windows.Forms {
         int length;
 
         /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkArea"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public LinkArea(int start, int length) {
             this.start = start;
             this.length = length;
         }
 
         /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.Start"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int Start {
             get {
                 return start;
@@ -46,9 +37,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.Length"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int Length {
             get {
                 return length;
@@ -176,7 +164,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == null) {
-                    throw new ArgumentNullException("destinationType");
+                    throw new ArgumentNullException(nameof(destinationType));
                 }
 
                 if (destinationType == typeof(string) && value is LinkArea) {

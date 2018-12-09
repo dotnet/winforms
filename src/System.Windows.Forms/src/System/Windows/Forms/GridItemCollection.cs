@@ -14,9 +14,6 @@ namespace System.Windows.Forms
     public class GridItemCollection : ICollection {
     
         /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.Empty"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public static GridItemCollection Empty = new GridItemCollection(new GridItem[0]);
 
         internal GridItem[] entries;
@@ -67,9 +64,6 @@ namespace System.Windows.Forms
         }
         
         /// <include file='doc\GridItemCollection.uex' path='docs/doc[@for="GridItemCollection.this1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public GridItem this[string label]{
             get {
                 foreach(GridItem g in entries) {

@@ -72,9 +72,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MDIClient.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -148,9 +145,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.CreateControlsInstance"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override Control.ControlCollection CreateControlsInstance() {
             return new ControlCollection(this);
         }
@@ -229,9 +223,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.SetBoundsCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
             if (IsHandleCreated && (site == null || !site.DesignMode)) {
@@ -402,9 +393,6 @@ namespace System.Windows.Forms {
             /*C#r: protected*/
 
             /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.ControlCollection.ControlCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ControlCollection(MdiClient owner)
             : base(owner) {
                 this.owner = owner;

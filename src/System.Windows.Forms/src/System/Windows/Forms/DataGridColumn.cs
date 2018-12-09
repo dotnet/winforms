@@ -16,9 +16,6 @@ namespace System.Windows.Forms{
     using System.Runtime.InteropServices;
 
     /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="IDataGridColumnStyleEditingNotificationService"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public interface IDataGridColumnStyleEditingNotificationService {
         /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing"]/*' />
         void ColumnStartedEditing(Control editingControl);
@@ -117,7 +114,7 @@ namespace System.Windows.Forms{
             set {
                //valid values are 0x0 to 0x2.
                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DataGridLineStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridLineStyle));
                }
                 if (alignment != value) {
                     alignment = value;
@@ -625,9 +622,6 @@ namespace System.Windows.Forms{
         }
 
         /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.MappingName"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Editor("System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
         Localizable(true), 
@@ -917,7 +911,7 @@ namespace System.Windows.Forms{
         /// </devdoc>
         protected void CheckValidDataSource(CurrencyManager value) {
             if (value == null) {
-                throw new ArgumentNullException("value", "DataGridColumnStyle.CheckValidDataSource(DataSource value), value == null");
+                throw new ArgumentNullException(nameof(value), "DataGridColumnStyle.CheckValidDataSource(DataSource value), value == null");
             }
             // the code may delete a gridColumn that was editing
             // in that case, we still have to push the value into the backEnd
@@ -1178,17 +1172,11 @@ namespace System.Windows.Forms{
 
         
         /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>        
         [System.Runtime.InteropServices.ComVisible(true)]                                                    
         protected class DataGridColumnHeaderAccessibleObject : AccessibleObject {
             DataGridColumnStyle owner = null;
 
             /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.DataGridColumnHeaderAccessibleObject"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public DataGridColumnHeaderAccessibleObject(DataGridColumnStyle owner) : this() {
                 Debug.Assert(owner != null, "DataGridColumnHeaderAccessibleObject must have a valid owner DataGridColumn");
                 this.owner = owner;
@@ -1196,16 +1184,10 @@ namespace System.Windows.Forms{
             }
 
             /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.DataGridColumnHeaderAccessibleObject1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public DataGridColumnHeaderAccessibleObject() : base() {
             }
 
             /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Bounds"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override Rectangle Bounds {
                 get {
                     // we need to get the width and the X coordinate of this column on the screen
@@ -1235,9 +1217,6 @@ namespace System.Windows.Forms{
             }
 
             /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Name"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Name {
                 get {
                     return Owner.headerName;
@@ -1245,9 +1224,6 @@ namespace System.Windows.Forms{
             }
 
             /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Owner"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             protected DataGridColumnStyle Owner {
                 get {
                     return owner;
@@ -1255,9 +1231,6 @@ namespace System.Windows.Forms{
             }
 
             /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Parent"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleObject Parent {
                 [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
@@ -1272,9 +1245,6 @@ namespace System.Windows.Forms{
             }
 
             /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Role"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     return AccessibleRole.ColumnHeader;
@@ -1282,9 +1252,6 @@ namespace System.Windows.Forms{
             }
 
             /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Navigate"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {

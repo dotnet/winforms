@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
             get { return columns;}
             set {
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException("Columns", string.Format(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(Columns), string.Format(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 columns = value;
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
             set {
                 
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException("Rows", string.Format(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(Rows), string.Format(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 rows = value;
@@ -290,7 +290,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0 ) {
-                    throw new ArgumentOutOfRangeException("StartPage", string.Format(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(StartPage), string.Format(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
                 int oldValue = StartPage;
                 startPage = value;
@@ -304,9 +304,6 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_STARTPAGECHANGED = new object();
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.StartPageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
         public event EventHandler StartPageChanged {
             add {
@@ -655,9 +652,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnStartPageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnStartPageChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_STARTPAGECHANGED] as EventHandler;
             if (eh != null) {

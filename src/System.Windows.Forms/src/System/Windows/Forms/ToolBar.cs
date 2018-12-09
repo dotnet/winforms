@@ -96,9 +96,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private int maxWidth = -1;
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.hotItem"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         private int hotItem = -1;
 
         // Track the current scale factor so we can scale our buttons
@@ -161,7 +158,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarAppearance.Normal, (int)ToolBarAppearance.Flat)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolBarAppearance));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarAppearance));
                 }
 
                 if (value != appearance) {
@@ -255,9 +252,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -281,9 +275,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -325,7 +316,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
 
@@ -394,7 +385,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value.Width < 0 || value.Height < 0)
-                    throw new ArgumentOutOfRangeException("ButtonSize", string.Format(SR.InvalidArgument, "ButtonSize", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(ButtonSize), string.Format(SR.InvalidArgument, "ButtonSize", value.ToString()));
 
                 if (buttonSize != value) {
                     buttonSize = value;
@@ -520,7 +511,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x5
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DockStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DockStyle));
                 }
 
                 if (Dock != value) {
@@ -928,7 +919,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarTextAlign.Underneath, (int)ToolBarTextAlign.Right)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolBarTextAlign));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarTextAlign));
                 }
 
                 if (textAlign == value) return;
@@ -1184,9 +1175,9 @@ namespace System.Windows.Forms {
         private void InsertButton(int index, ToolBarButton value) {
 
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             if (index < 0 || ((buttons != null) && (index > buttonCount)))
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
             // insert the button into our local array, and then into the
             // real windows ToolBar control
@@ -1206,7 +1197,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private int InternalAddButton(ToolBarButton button) {
             if (button == null)
-                throw new ArgumentNullException("button");
+                throw new ArgumentNullException(nameof(button));
             int index = buttonCount;
             Insert(index, button);
             return index;
@@ -1589,28 +1580,6 @@ namespace System.Windows.Forms {
             Marshal.StructureToPtr(ttt, m.LParam, false);
         }
 
-        private void WmNotifyNeedTextA(ref Message m) {
-
-            NativeMethods.TOOLTIPTEXTA ttt = (NativeMethods.TOOLTIPTEXTA) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXTA));
-            int commandID = (int)ttt.hdr.idFrom;
-            ToolBarButton tbb = (ToolBarButton) buttons[commandID];
-
-            if (tbb != null && tbb.ToolTipText != null)
-                ttt.lpszText = tbb.ToolTipText;
-            else
-                ttt.lpszText = null;
-
-            ttt.hinst = IntPtr.Zero;
-
-            // RightToLeft reading order
-            //
-            if (RightToLeft == RightToLeft.Yes) {
-                ttt.uFlags |= NativeMethods.TTF_RTLREADING;
-            }
-
-            Marshal.StructureToPtr(ttt, m.LParam, false);
-        }
-
         // Track the currently hot item since the user might be using the tab and
         // arrow keys to navigate the toolbar and if that's the case, we'll need to know where to re-
         // position the tooltip window when the underlying toolbar control attempts to display it.
@@ -1672,27 +1641,14 @@ namespace System.Windows.Forms {
                 case NativeMethods.WM_NOTIFY + NativeMethods.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code) {
-                        case NativeMethods.TTN_NEEDTEXTA:
+                        case NativeMethods.TTN_NEEDTEXT:
                             // MSDN:
                             // Setting the max width has the added benefit of enabling multiline
                             // tool tips!
 
-                            WmNotifyNeedTextA(ref m);
+                            WmNotifyNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
-
-                        case NativeMethods.TTN_NEEDTEXTW:
-                            // On Win 98/IE 5,we still get W messages.  If we ignore them, it will send the A version.
-                            if (Marshal.SystemDefaultCharSize == 2) {
-                                // MSDN:
-                                // Setting the max width has the added benefit of enabling multiline
-                                // tool tips!
-
-                                WmNotifyNeedText(ref m);
-                                m.Result = (IntPtr)1;
-                                return;
-                            }
-                            break;
                         case NativeMethods.TTN_SHOW:
                             // Prevent the tooltip from displaying in the upper left corner of the
                             // desktop when the control is nowhere near that location.
@@ -1799,7 +1755,7 @@ namespace System.Windows.Forms {
             public virtual ToolBarButton this[int index] {
                 get {
                     if (index < 0 || ((owner.buttons != null) && (index >= owner.buttonCount)))
-                         throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                         throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                    return owner.buttons[index];
                 }
                 set {
@@ -1807,10 +1763,10 @@ namespace System.Windows.Forms {
                     // Sanity check parameters
                     //
                     if (index < 0 || ((owner.buttons != null) && index >= owner.buttonCount)) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value == null) {
-                        throw new ArgumentNullException("value");
+                        throw new ArgumentNullException(nameof(value));
                     }
 
                     owner.InternalSetButton(index, value, true, true);
@@ -1890,9 +1846,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -1916,9 +1869,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Add1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int Add(string text) {
                 ToolBarButton button = new ToolBarButton(text);
                 return Add(button);
@@ -1936,12 +1886,9 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddRange(ToolBarButton[] buttons) {
                 if (buttons == null) {
-                    throw new ArgumentNullException("buttons");
+                    throw new ArgumentNullException(nameof(buttons));
                 }
                 try {
                     suspendUpdate = true;
@@ -1982,9 +1929,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(ToolBarButton button) {
                 return IndexOf(button) != -1;
             }
@@ -2019,9 +1963,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(ToolBarButton button) {
                 for(int index=0; index < Count; ++index) {
                     if (this[index] == button) {
@@ -2074,9 +2015,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Insert"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Insert(int index, ToolBarButton button) {
                 owner.InsertButton(index, button);
             }
@@ -2110,7 +2048,7 @@ namespace System.Windows.Forms {
                 int count = (owner.buttons == null) ? 0 : owner.buttonCount;
 
                 if (index < 0 || index >= count)
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
 
                 if (owner.IsHandleCreated) {
                     owner.SendMessage(NativeMethods.TB_DELETEBUTTON, index, 0);
@@ -2135,9 +2073,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ToolBarButtonCollection.Remove"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void Remove(ToolBarButton button) {
                 int index = IndexOf(button);
                 if (index != -1) {

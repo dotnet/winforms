@@ -30,7 +30,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         
         public void AddRange(GridEntry[] value) {
             if (value == null) {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
             if (entries != null) {
                 GridEntry[] newArray = new GridEntry[entries.Length + value.Length];

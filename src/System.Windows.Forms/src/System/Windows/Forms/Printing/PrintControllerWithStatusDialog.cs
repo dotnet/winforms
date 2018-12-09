@@ -14,9 +14,6 @@ namespace System.Windows.Forms {
     using System.Security.Permissions;
 
     /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class PrintControllerWithStatusDialog : PrintController {
         private PrintController underlyingController;
         private PrintDocument document;
@@ -25,17 +22,11 @@ namespace System.Windows.Forms {
         private string dialogTitle;
 
         /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.PrintControllerWithStatusDialog"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public PrintControllerWithStatusDialog(PrintController underlyingController) 
         : this(underlyingController, string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePrint)) {
         }
 
         /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.PrintControllerWithStatusDialog1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public PrintControllerWithStatusDialog(PrintController underlyingController, string dialogTitle) {
             this.underlyingController = underlyingController;
             this.dialogTitle = dialogTitle;

@@ -24,17 +24,11 @@ namespace System.Windows.Forms {
         readonly int column;
 
         /// <include file='doc\ColumnClickEvent.uex' path='docs/doc[@for="ColumnClickEventArgs.ColumnClickEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ColumnClickEventArgs(int column) {
             this.column = column;
         }
 
         /// <include file='doc\ColumnClickEvent.uex' path='docs/doc[@for="ColumnClickEventArgs.Column"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int Column {
             get {
                 return column;

@@ -267,9 +267,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Add"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual int Add(DataGridColumnStyle column) {
             if (this.isDefault) {
                 throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
@@ -296,7 +293,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.AddRange"]/*' />
         public void AddRange(DataGridColumnStyle[] columns) {
             if (columns == null) {
-                throw new ArgumentNullException("columns");
+                throw new ArgumentNullException(nameof(columns));
             }
             for (int i = 0; i < columns.Length; i++) {
                 Add(columns[i]);            
@@ -339,9 +336,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Clear"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Clear() {
             for (int i = 0; i < Count; i ++) {
                 this[i].ReleaseHostedControl();
@@ -560,9 +554,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.ResetPropertyDescriptors"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void ResetPropertyDescriptors() {
             for (int i = 0; i < this.Count; i++) {
                 this[i].PropertyDescriptor = null;

@@ -70,9 +70,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\AutoCompleteStringCollection.uex' path='docs/doc[@for="AutoCompleteStringCollection.CollectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event CollectionChangeEventHandler CollectionChanged
         {
             add
@@ -86,9 +83,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AutoCompleteStringCollection.uex' path='docs/doc[@for="AutoCompleteStringCollection.OnCollectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void OnCollectionChanged(CollectionChangeEventArgs e)
         {
             if (this.onCollectionChanged != null)
@@ -115,7 +109,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void AddRange(string[] value) {
             if (value == null) {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
             data.AddRange(value);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));

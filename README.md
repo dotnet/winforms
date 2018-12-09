@@ -3,9 +3,9 @@
 
 Windows Forms (WinForms) is a UI framework for building Windows desktop applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms.
 
-WinForms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enable drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
+WinForms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
-> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update.
+> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See issue #147](https://github.com/dotnet/winforms/issues/147).
 
 See the [Windows Forms Roadmap](roadmap.md) to learn about project priorities, status and ship dates.
 
@@ -18,7 +18,7 @@ This repo contains WinForms for .NET Core. It does not contain the .NET Framewor
 * [.NET Core 3.0 SDK Preview 1](https://www.microsoft.com/net/download)
 * [Getting started instructions](Documentation/getting-started.md)
 * [Contributing guide](Documentation/contributing.md)
-* [Porting guide](Documentation/porting-guide.md)
+* [Porting guide](Documentation/porting-guidelines.md)
 
 ## Status
 
@@ -39,8 +39,8 @@ The Visual Studio WinForms designer is not yet available and will be part of a V
 
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
-* The [contributing guidelines](Documentation/contributing.md) and the more general [.NET Core contributing guide](https://github.com/dotnet/coreclr/blob/master/Documentation/project-docs/contributing.md) define contributing rules.
-* The [Developer Guide](developer-guide.md) defines the setup and workflow for working on this repo.
+* The [contributing guidelines](Documentation/contributing.md) and the more general [.NET Core contributing guide](Documentation/project-docs/contributing.md) define contributing rules.
+* The [Developer Guide](Documentation/developer-guide.md) defines the setup and workflow for working on this repo.
 * If you have a question or have found a bug, [file an issue](https://github.com/dotnet/winforms/issues/new).
 * Use [daily builds](Documentation/getting-started.md#installation) if you want to contribute and stay up to date with the team.
 

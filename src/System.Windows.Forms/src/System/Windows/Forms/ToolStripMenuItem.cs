@@ -393,7 +393,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(CheckState));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
                 }
                   
                 if (value != CheckState) {
@@ -476,7 +476,7 @@ namespace System.Windows.Forms {
             set {
                 if ((value != Keys.None) && !ToolStripManager.IsValidShortcut(value)){
                     // prevent use of alt, ctrl, shift modifiers with no key code.
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(Keys));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Keys));
                 }
                 Keys originalShortcut = ShortcutKeys;
                 if (originalShortcut != value) {
@@ -716,7 +716,7 @@ namespace System.Windows.Forms {
                 // fetch the string
                 info.cch += 1;  // according to MSDN we need to increment the count we receive by 1.
                 info.wID = nativeMenuCommandID;
-                IntPtr allocatedStringBuffer = Marshal.AllocCoTaskMem(info.cch * Marshal.SystemDefaultCharSize);
+                IntPtr allocatedStringBuffer = Marshal.AllocCoTaskMem(info.cch * sizeof(char));
                 info.dwTypeData = allocatedStringBuffer;
                 
 

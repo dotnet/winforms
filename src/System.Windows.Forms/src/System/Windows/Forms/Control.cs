@@ -762,7 +762,7 @@ example usage
             set {
                 //valid values are -1 to 0x40
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AccessibleRole.Default, (int)AccessibleRole.OutlineButton)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AccessibleRole));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AccessibleRole));
                 }
                 Properties.SetInteger(PropAccessibleRole, (int)value);
             }
@@ -1125,9 +1125,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
             add {
@@ -1161,9 +1158,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
         public event EventHandler BackgroundImageChanged {
             add {
@@ -1198,7 +1192,7 @@ example usage
                 if (BackgroundImageLayout != value) {
                     //valid values are 0x0 to 0x4
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)ImageLayout.None, (int)ImageLayout.Zoom)){
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(ImageLayout));
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImageLayout));
                     }
                     // Check if the value is either center, strech or zoom;
                     if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch) {                    
@@ -1216,9 +1210,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
         public event EventHandler BackgroundImageLayoutChanged {
             add {
@@ -1252,9 +1243,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetBindings"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetBindings() {
             ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(PropBindings);
@@ -1307,9 +1295,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContext"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1325,9 +1310,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
         public event EventHandler BindingContextChanged {
             add {
@@ -1507,9 +1489,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CausesValidationChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
         public event EventHandler CausesValidationChanged {
             add {
@@ -1720,9 +1699,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatPropertyChanged)),
         SRDescription(nameof(SR.ControlOnContextMenuChangedDescr)),
@@ -1775,9 +1751,6 @@ example usage
 
         }
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuStripChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged {
             add {
@@ -2096,9 +2069,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CursorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
         public event EventHandler CursorChanged {
             add {
@@ -2367,9 +2337,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DockChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnDockChangedDescr))]
         public event EventHandler DockChanged {
             add {
@@ -2594,9 +2561,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnFontChangedDescr))]
         public event EventHandler FontChanged {
             add {
@@ -2656,9 +2620,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontHeight"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected int FontHeight {
             get {
                 bool found;
@@ -2746,9 +2707,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
             add {
@@ -3234,9 +3192,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LocationChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
         public event EventHandler LocationChanged {
             add {
@@ -3273,9 +3228,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MarginChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
         public event EventHandler MarginChanged
         {
@@ -3618,9 +3570,6 @@ example usage
         // Helper function for Rtl
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RenderRightToLeft"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Obsolete("This property has been deprecated. Please use RightToLeft instead. http://go.microsoft.com/fwlink/?linkid=14202")]
         protected internal bool RenderRightToLeft
         {
@@ -3756,7 +3705,7 @@ example usage
             set {
                 //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
-                    throw new InvalidEnumArgumentException("RightToLeft", (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
                 }
 
                 RightToLeft oldValue = RightToLeft;
@@ -3778,9 +3727,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
             add {
@@ -3893,9 +3839,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
         public event EventHandler SizeChanged {
             add {
@@ -3924,7 +3867,7 @@ example usage
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("TabIndex", string.Format(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(TabIndex), string.Format(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (tabIndex != value) {
@@ -3936,9 +3879,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabIndexChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
         public event EventHandler TabIndexChanged {
             add {
@@ -3986,9 +3926,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabStopChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
         public event EventHandler TabStopChanged {
             add {
@@ -4069,9 +4006,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTextChangedDescr))]
         public event EventHandler TextChanged {
             add {
@@ -4605,9 +4539,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragDrop"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragDropDescr))]
         public event DragEventHandler DragDrop {
             add {
@@ -4620,9 +4551,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragEnter"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragEnterDescr))]
         public event DragEventHandler DragEnter {
             add {
@@ -4635,9 +4563,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragOver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragOverDescr))]
         public event DragEventHandler DragOver {
             add {
@@ -4650,9 +4575,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragLeave"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
         public event EventHandler DragLeave {
             add {
@@ -4664,9 +4586,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GiveFeedback"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
         public event GiveFeedbackEventHandler GiveFeedback {
             add {
@@ -4709,9 +4628,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HelpRequested"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnHelpDescr))]
         public event HelpEventHandler HelpRequested {
             add {
@@ -4724,9 +4640,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidated"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnInvalidateDescr))]
         public event InvalidateEventHandler Invalidated {
             add {
@@ -4772,9 +4685,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PaddingChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public event EventHandler PaddingChanged {
             add {
@@ -4787,9 +4697,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Paint"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ControlOnPaintDescr))]
         public event PaintEventHandler Paint {
             add {
@@ -4802,9 +4709,6 @@ example usage
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryContinueDrag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
         public event QueryContinueDragEventHandler QueryContinueDrag {
             add {
@@ -4816,9 +4720,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryAccessibilityHelp"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
             add {
@@ -5186,9 +5087,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ChangeUICues"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
         public event UICuesEventHandler ChangeUICues {
             add {
@@ -5200,9 +5098,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.StyleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
         public event EventHandler StyleChanged {
             add {
@@ -5214,9 +5109,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SystemColorsChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
         public event EventHandler SystemColorsChanged {
             add {
@@ -5257,18 +5149,12 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityNotifyClients"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void AccessibilityNotifyClients(AccessibleEvents accEvent, int childID) {
             AccessibilityNotifyClients(accEvent, NativeMethods.OBJID_CLIENT, childID);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityNotifyClients1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID) {
             if (IsHandleCreated) {
@@ -5316,7 +5202,7 @@ example usage
         protected static void ActiveXRegister(Type type) {
 
             if (type == null) {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             // If the user is not registering an AX control, then
@@ -5395,7 +5281,7 @@ example usage
         protected static void ActiveXUnregister(Type type) {
 
             if (type == null) {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             // If the user is not unregistering an AX control, then
@@ -5516,9 +5402,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ParentChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnParentChangedDescr))]
         public event EventHandler ParentChanged {
             add {
@@ -6131,12 +6014,12 @@ example usage
         public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds) {
 
             if (bitmap == null) {
-                throw new ArgumentNullException("bitmap");
+                throw new ArgumentNullException(nameof(bitmap));
             }
 
             if (targetBounds.Width <= 0 || targetBounds.Height <= 0
                 || targetBounds.X < 0 || targetBounds.Y < 0) {
-                throw new ArgumentException("targetBounds");
+                throw new ArgumentException(nameof(targetBounds));
             }
 
             if (!IsHandleCreated) {
@@ -6179,7 +6062,7 @@ example usage
             using (new MultithreadSafeCallScope())
             {
                 if (asyncResult == null) {
-                    throw new ArgumentNullException("asyncResult");
+                    throw new ArgumentNullException(nameof(asyncResult));
                 }
 
                 ThreadMethodEntry entry = asyncResult as ThreadMethodEntry;
@@ -6283,9 +6166,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetTopLevel"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected bool GetTopLevel() {
             return(state & STATE_TOPLEVEL) != 0;
         }
@@ -6459,7 +6339,7 @@ example usage
             // Since this is a Flags Enumeration... the only way to validate skipValue is by checking if its within the range.
             if(value < 0 || value > 7)
             {
-                throw new InvalidEnumArgumentException("skipValue", value, typeof(GetChildAtPointSkip));
+                throw new InvalidEnumArgumentException(nameof(skipValue), value, typeof(GetChildAtPointSkip));
             }
 
             IntPtr hwnd = UnsafeNativeMethods.ChildWindowFromPointEx(new HandleRef(null, Handle), pt.X, pt.Y, value);
@@ -7501,17 +7381,11 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokePaint"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void InvokePaint(Control c, PaintEventArgs e) {
             c.OnPaint(e);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokePaintBackground"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void InvokePaintBackground(Control c, PaintEventArgs e) {
            c.OnPaintBackground(e);
         }
@@ -7842,7 +7716,7 @@ example usage
         /// </devdoc>
         private void MarshalStringToMessage(string value, ref Message m) {
             if (m.LParam == IntPtr.Zero) {
-                m.Result = (IntPtr)((value.Length + 1) * Marshal.SystemDefaultCharSize);
+                m.Result = (IntPtr)((value.Length + 1) * sizeof(char));
                 return;
             }
 
@@ -7857,19 +7731,13 @@ example usage
             byte[] nullBytes;
             byte[] bytes;
 
-            if (Marshal.SystemDefaultCharSize == 1) {
-                bytes = Encoding.Default.GetBytes(value);
-                nullBytes = Encoding.Default.GetBytes(nullChar);
-            }
-            else {
-                bytes = Encoding.Unicode.GetBytes(value);
-                nullBytes = Encoding.Unicode.GetBytes(nullChar);
-            }
+            bytes = Encoding.Unicode.GetBytes(value);
+            nullBytes = Encoding.Unicode.GetBytes(nullChar);
 
             Marshal.Copy(bytes, 0, m.LParam, bytes.Length);
             Marshal.Copy(nullBytes, 0, unchecked((IntPtr)((long)m.LParam + (long)bytes.Length)), nullBytes.Length);
 
-            m.Result = (IntPtr)((bytes.Length + nullBytes.Length)/Marshal.SystemDefaultCharSize);
+            m.Result = (IntPtr)((bytes.Length + nullBytes.Length) / sizeof(char));
         }
 
         // Used by form to notify the control that it has been "entered"
@@ -7934,9 +7802,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7974,9 +7839,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackgroundImageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8003,9 +7865,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackgroundImageLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageLayoutChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8022,9 +7881,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBindingContextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8049,9 +7905,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCausesValidationChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCausesValidationChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8073,9 +7926,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnContextMenuChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8086,9 +7936,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnContextMenuStripChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuStripChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8099,9 +7946,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCursorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCursorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8122,9 +7966,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDockChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDockChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8178,9 +8019,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFontChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8227,9 +8065,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnForeColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8256,9 +8091,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8300,9 +8132,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8313,9 +8142,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackgroundImageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackgroundImageChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8323,9 +8149,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBindingContextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBindingContextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8335,9 +8158,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentCursorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentCursorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8347,9 +8167,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentEnabledChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentEnabledChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8359,9 +8176,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8417,9 +8231,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentForeColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8430,9 +8241,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentRightToLeftChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8442,9 +8250,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentVisibleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentVisibleChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8474,7 +8279,7 @@ example usage
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPrint(PaintEventArgs e) {
             if (e == null) {
-                throw new ArgumentNullException("e");
+                throw new ArgumentNullException(nameof(e));
             }
             Contract.EndContractBlock();
 
@@ -8519,9 +8324,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTabIndexChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabIndexChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8532,9 +8334,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTabStopChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabStopChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8545,9 +8344,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8617,9 +8413,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8648,9 +8441,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnClientSizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClientSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8818,9 +8608,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLocationChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLocationChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8966,9 +8753,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnEnter"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnter(EventArgs e) {
             Contract.Requires(e != null);
@@ -9152,9 +8936,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeLostFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeLostFocus(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
@@ -9465,9 +9246,6 @@ example usage
         }
        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnSizeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -10507,60 +10285,10 @@ example usage
             else if (m.Msg == NativeMethods.WM_IME_CHAR) {
                 int charsToIgnore = this.ImeWmCharsToIgnore;
 
-                if (Marshal.SystemDefaultCharSize == 1) {
-                    // On Win9X we get either an SBCS or an  MBCS value. We must convert it to
-                    // UNICODE to use in the KeyPressEventArg.
-                    //
-                    // Convert the character in this message to UNICODE
-                    // for use in the KeyPress event, but then convert it back from UNICODE
-                    // to its source value for processing in the DefWindowProc, which will expect a
-                    // non-UNICODE character.
-                    char unicodeChar = (char)0;
-                    byte[] b = new byte[] {(byte)(unchecked((int)(long)m.WParam) >> 8), unchecked((byte)(long)m.WParam)};
-                    char[] unicodeCharArray = new char[1];
-                    int stringLength = UnsafeNativeMethods.MultiByteToWideChar(0 /*CP_ACP*/, UnsafeNativeMethods.MB_PRECOMPOSED, b, b.Length, unicodeCharArray, 0);
-                    if (stringLength > 0) {
-                        unicodeCharArray = new char[stringLength];
-                        UnsafeNativeMethods.MultiByteToWideChar(0 /*CP_ACP*/, UnsafeNativeMethods.MB_PRECOMPOSED, b, b.Length, unicodeCharArray, unicodeCharArray.Length);
+                charsToIgnore += (3 - sizeof(char));
+                this.ImeWmCharsToIgnore = charsToIgnore;
 
-                        // Per the docs for WM_IME_CHAR, the processing of this message by DefWindowProc
-                        // will produce two WM_CHAR messages if the character value is a DBCS character.
-                        // Otherwise, only one WM_CHAR message will be generated. Therefore, only ignore
-                        // one WM_CHAR message for SBCS characters and two WM_CHAR messages for DBCS
-                        // characters.
-
-                        // What type of character were we passed?
-                        if (unicodeCharArray[0] != 0) {
-                            // This was an MBCS character, so pass along the first character
-                            // from the resultant array.
-                            unicodeChar = unicodeCharArray[0];
-
-                            charsToIgnore += 2;
-                        }
-                        else if (unicodeCharArray[0] == 0 && unicodeCharArray.Length >= 2) {
-                            // This was an SBCS character, so pass along the second character
-                            // from the resultant array since the first character in the array is NULL.
-                            unicodeChar = unicodeCharArray[1];
-
-                            charsToIgnore += 1;
-                        }
-                    }
-                    else {
-                        //MultiByteToWideChar failed
-                        throw new Win32Exception();
-                    }
-
-                    this.ImeWmCharsToIgnore = charsToIgnore;
-
-                    // 
-                    kpe = new KeyPressEventArgs(unicodeChar);
-                }
-                else {
-                    charsToIgnore += (3 - Marshal.SystemDefaultCharSize);
-                    this.ImeWmCharsToIgnore = charsToIgnore;
-
-                    kpe = new KeyPressEventArgs(unchecked((char)(long)m.WParam));
-                }
+                kpe = new KeyPressEventArgs(unchecked((char)(long)m.WParam));
 
                 char preEventCharacter = kpe.KeyChar;
                 OnKeyPress(kpe);
@@ -10570,52 +10298,7 @@ example usage
                     newWParam = m.WParam;
                 }
                 else {
-                    if (Marshal.SystemDefaultCharSize == 1) {
-                        // On Win9X we work with either an SBCS or an MBCS value. Since we
-                        // already converted it to UNICODE to send it to the KeyPress event, we must now convert
-                        // it back to either MBCS or SBCS for processing by the DefWindowProc.
-                        //
-                        string keyChar = new string(new char[] { kpe.KeyChar });
-                        byte[] mbcsBytes = null;
-                        int bytesNeeded = UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/, 0, keyChar, keyChar.Length, null, 0, IntPtr.Zero, IntPtr.Zero);
-                        // GB18030 defines 4 byte characters: we shouldn't assume that the length is capped at 2.
-                        if (bytesNeeded >= 2) {
-                            // This is an MBCS character.
-                            mbcsBytes = new byte[bytesNeeded];
-                            UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/, 0, keyChar, keyChar.Length, mbcsBytes, mbcsBytes.Length, IntPtr.Zero, IntPtr.Zero);
-
-                            int sizeOfIntPtr = Marshal.SizeOf(typeof(IntPtr));
-                            if (bytesNeeded > sizeOfIntPtr) {
-                                bytesNeeded = sizeOfIntPtr; //Same again: we wouldn't be able to stuff anything larger into a WParam
-                            }
-                            long wParam = 0;
-                            for (int i = 0; i < bytesNeeded; i++) {
-                                wParam <<= 8;
-                                wParam |= (long)mbcsBytes[i];
-                            }
-                            newWParam = (IntPtr)wParam;
-                        }
-                        else if (bytesNeeded == 1) {
-                            // This is an SBCS character.
-                            mbcsBytes = new byte[bytesNeeded];
-                            UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/,
-                                                                    0,
-                                                                    keyChar,
-                                                                    keyChar.Length,
-                                                                    mbcsBytes,
-                                                                    mbcsBytes.Length,
-                                                                    IntPtr.Zero,
-                                                                    IntPtr.Zero);
-                            newWParam = (IntPtr)((int)mbcsBytes[0]);
-                        }
-                        else {
-                            //We don't know what's going on: WideCharToMultiByte failed.  We can't deal with that.
-                            newWParam = m.WParam;
-                        }
-                    }
-                    else {
-                        newWParam = (IntPtr)kpe.KeyChar;
-                    }
+                    newWParam = (IntPtr)kpe.KeyChar;
                 }
             }
             else {
@@ -10847,9 +10530,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetCursor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void ResetCursor() {
             Cursor = null;
@@ -11589,9 +11269,6 @@ example usage
 
         // used by Form
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Select1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void Select(bool directed, bool forward) {
             IContainerControl c = GetContainerControlInternal();
 
@@ -12012,9 +11689,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetTopLevel"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void SetTopLevel(bool value) {
             if (value && IsActiveX) {
                 throw new InvalidOperationException(SR.TopLevelNotAllowedIfActiveX);
@@ -12058,9 +11732,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetVisibleCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void SetVisibleCore(bool value) {
             try {
                 System.Internal.HandleCollector.SuspendCollect();
@@ -12259,36 +11930,24 @@ example usage
         // Helper function - translates text alignment for Rtl controls
         // Read TextAlign as Left == Near, Right == Far
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected HorizontalAlignment RtlTranslateAlignment(HorizontalAlignment align) {
             return RtlTranslateHorizontal(align);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected LeftRightAlignment RtlTranslateAlignment(LeftRightAlignment align) {
             return RtlTranslateLeftRight(align);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment2"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected ContentAlignment RtlTranslateAlignment(ContentAlignment align) {
             return RtlTranslateContent(align);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateHorizontal"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected HorizontalAlignment RtlTranslateHorizontal(HorizontalAlignment align) {
 
@@ -12305,9 +11964,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateLeftRight"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected LeftRightAlignment RtlTranslateLeftRight(LeftRightAlignment align) {
 
@@ -12324,9 +11980,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateContent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal ContentAlignment RtlTranslateContent(ContentAlignment align) {
             if (RightToLeft.Yes == RightToLeft) {
@@ -14287,7 +13940,7 @@ example usage
                     WmNotifyFormat(ref m);
                     break;
                 case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFYFORMAT:
-                    m.Result = (IntPtr)(Marshal.SystemDefaultCharSize == 1 ? NativeMethods.NFR_ANSI : NativeMethods.NFR_UNICODE);
+                    m.Result = (IntPtr)(NativeMethods.NFR_UNICODE);
                     break;
                 case NativeMethods.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
@@ -14654,9 +14307,6 @@ example usage
 
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.ControlCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ControlCollection(Control owner) {
                 this.owner = owner;
             }
@@ -14776,13 +14426,10 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual void AddRange(Control[] controls) {
                 if (controls == null) {
-                    throw new ArgumentNullException("controls");
+                    throw new ArgumentNullException(nameof(controls));
                 }
                 if (controls.Length > 0) {
 #if DEBUG
@@ -14816,9 +14463,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(Control control) {
                 return InnerList.Contains(control);
             }
@@ -14832,7 +14476,7 @@ example usage
             /// </devdoc>
             public Control[] Find(string key, bool searchAllChildren) {
                 if (String.IsNullOrEmpty(key)) {
-                   throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
+                   throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
                 ArrayList foundControls =  FindInternal(key, searchAllChildren, this, new ArrayList());
@@ -14897,9 +14541,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(Control control) {
                 return InnerList.IndexOf(control);
             }
@@ -14998,9 +14639,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.RemoveAt"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void RemoveAt(int index) {
                 Remove(this[index]);
             }
@@ -15024,7 +14662,7 @@ example usage
                 get {
                     //do some bounds checking here...
                     if (index < 0 || index >= Count) {
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
                     }
 
                     Control control = (Control) InnerList[index];
@@ -15058,9 +14696,6 @@ example usage
 
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Clear"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual void Clear() {
 #if DEBUG
                 int layoutSuspendCount = owner.LayoutSuspendCount;
@@ -15117,7 +14752,7 @@ example usage
                 // Sanity check parameters
                 //
                 if (child == null) {
-                    throw new ArgumentNullException("child");
+                    throw new ArgumentNullException(nameof(child));
                 }
 
                 int currentIndex = GetChildIndex(child);
@@ -19173,7 +18808,7 @@ example usage
 
                 // Security fix: make sure the size has non-negative width and height.
                 if (size.Width < 0 || size.Height < 0) {
-                    throw new ArgumentException("size", SR.ControlMetaFileDCWrapperSizeInvalid);
+                    throw new ArgumentException(nameof(size), SR.ControlMetaFileDCWrapperSizeInvalid);
                 }
 
                 hMetafileDC = hOriginalDC;
@@ -19348,14 +18983,11 @@ example usage
             // constructors
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ControlAccessibleObject(Control ownerControl) {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
                 if (ownerControl == null) {
-                    throw new ArgumentNullException("ownerControl");
+                    throw new ArgumentNullException(nameof(ownerControl));
                 }
 
                 this.ownerControl = ownerControl;
@@ -19377,14 +19009,11 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal ControlAccessibleObject(Control ownerControl, int accObjId) {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
                 if (ownerControl == null) {
-                    throw new ArgumentNullException("ownerControl");
+                    throw new ArgumentNullException(nameof(ownerControl));
                 }
 
                 this.AccessibleObjectId = accObjId; // ...must set this *before* setting the Handle property
@@ -19538,9 +19167,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Description"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Description {
                 get {
                     string description = ownerControl.AccessibleDescription;
@@ -19554,9 +19180,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Handle"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IntPtr Handle {
 
                 get {
@@ -19599,9 +19222,6 @@ example usage
             } // end Handle
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Help"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Help {
                 get {
                     QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[EventQueryAccessibilityHelp];
@@ -19628,9 +19248,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Name"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string Name {
                 get {
                     // Special case: If an explicit name has been set in the AccessibleName property, use that.
@@ -19694,9 +19311,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Owner"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public Control Owner {
                 get {
                     return ownerControl;
@@ -19745,9 +19359,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Role"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = ownerControl.AccessibleRole;
@@ -19762,9 +19373,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.GetHelpTopic"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override int GetHelpTopic(out string fileName) {
                 int topic = 0;
 
@@ -19796,9 +19404,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void NotifyClients(AccessibleEvents accEvent) {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
                                   this.ToString() + ", accEvent = " + accEvent.ToString() + ", childID = self");
@@ -19807,9 +19412,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void NotifyClients(AccessibleEvents accEvent, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
@@ -19821,9 +19423,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
@@ -19893,9 +19492,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ToString"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string ToString() {
                 if (Owner != null) {
                     return "ControlAccessibleObject: Owner = " + Owner.ToString();

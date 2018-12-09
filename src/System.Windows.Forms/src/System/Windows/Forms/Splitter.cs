@@ -87,9 +87,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.AllowDrop"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop {
             get {
@@ -127,9 +124,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -153,9 +147,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -179,9 +170,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -205,9 +193,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Font"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>        
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
             get {
@@ -249,7 +234,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
             
                 if (borderStyle != value) {
@@ -469,9 +454,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.TabStop"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop {
             get {
@@ -495,9 +477,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>        
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never), 
         Bindable(false), 
@@ -525,9 +504,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Enter"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter {
             add {
@@ -539,9 +515,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.KeyUp"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
             add {
@@ -553,9 +526,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.KeyDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
             add {
@@ -567,9 +537,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.KeyPress"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
             add {
@@ -581,9 +548,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Leave"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Leave {
             add {
@@ -595,9 +559,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitterMoving"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterEventHandler SplitterMoving {
             add {
@@ -610,9 +571,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitterMoved"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved {
             add {
@@ -941,9 +899,6 @@ namespace System.Windows.Forms {
         
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SetBoundsCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             if (Horizontal) {
                 if (width < 1) {

@@ -5,6 +5,7 @@
 using Xunit;
 using Moq;
 using System.Drawing;
+using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
@@ -40,7 +41,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the ActiveGetSet test
         /// </summary>
         public static TheoryData<bool> ActiveGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(ActiveGetSetData))]
@@ -135,7 +136,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AllowTransparencyGetSet test
         /// </summary>
         public static TheoryData<bool> AllowTransparencyGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(AllowTransparencyGetSetData))]
@@ -152,7 +153,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AutoScaleModeGetSet test
         /// </summary>
         public static TheoryData<AutoScaleMode> AutoScaleModeGetSetData =>
-            TestHelper.GetEnumTheoryData<AutoScaleMode>();
+            CommonTestHelper.GetEnumTheoryData<AutoScaleMode>();
 
         [Theory]
         [MemberData(nameof(AutoScaleModeGetSetData))]
@@ -169,7 +170,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AutoScrollGetSet test
         /// </summary>
         public static TheoryData<bool> AutoScrollGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(AutoScrollGetSetData))]
@@ -186,7 +187,7 @@ namespace System.Windows.Forms.Tests
         /// Data for the AutoSizeGetSet test
         /// </summary>
         public static TheoryData<bool> AutoSizeGetSetData =>
-            TestHelper.GetBoolTheoryData();
+            CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(AutoSizeGetSetData))]

@@ -133,9 +133,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -159,9 +156,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -262,9 +256,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Font"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
             get {
@@ -355,7 +346,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("LargeChange", string.Format(SR.TrackBarLargeChangeError, value));
+                    throw new ArgumentOutOfRangeException(nameof(LargeChange), string.Format(SR.TrackBarLargeChangeError, value));
                 }
 
                 if (largeChange != value) {
@@ -436,7 +427,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(Orientation));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Orientation));
                 }
 
                 if (orientation != value) {
@@ -464,11 +455,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -564,7 +550,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException("SmallChange", string.Format(SR.TrackBarSmallChangeError, value));
+                    throw new ArgumentOutOfRangeException(nameof(SmallChange), string.Format(SR.TrackBarSmallChangeError, value));
                 }
                 if (smallChange != value) {
                     smallChange = value;
@@ -577,9 +563,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>        
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
         public override string Text {
             get {
@@ -623,7 +606,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TickStyle.None, (int)TickStyle.Both))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(TickStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TickStyle));
                 }
 
                 if (tickStyle != value) {
@@ -680,7 +663,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if (!initializing && ((value < minimum) || (value > maximum)))
-                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
+                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
                     this.value = value;
                     SetTrackBarPosition();
                     OnValueChanged(EventArgs.Empty);
@@ -737,9 +720,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.RightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -751,9 +731,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Scroll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TrackBarOnScrollDescr))]
         public event EventHandler Scroll {
             add {
@@ -780,9 +757,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ValueChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
             add {
@@ -925,9 +899,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {

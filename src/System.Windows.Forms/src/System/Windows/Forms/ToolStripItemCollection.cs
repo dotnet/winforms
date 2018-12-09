@@ -39,9 +39,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         internal ToolStripItemCollection(ToolStrip owner, bool itemsCollection, bool isReadOnly) {
             this.owner = owner;
             this.itemsCollection = itemsCollection;
@@ -49,13 +46,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.ToolStripItemCollection"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripItemCollection(ToolStrip owner, ToolStripItem[] value) {
             if (owner == null) {
-                throw new ArgumentNullException("owner");
+                throw new ArgumentNullException(nameof(owner));
             }
            
             this.owner = owner;
@@ -112,9 +106,6 @@ namespace System.Windows.Forms {
         }
             
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Add"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public int Add(ToolStripItem value) {
             CheckCanAddOrInsertItem(value);
             
@@ -129,12 +120,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.AddRange"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public void AddRange(ToolStripItem[] toolStripItems) {        
             if (toolStripItems == null) {
-                throw new ArgumentNullException("toolStripItems");
+                throw new ArgumentNullException(nameof(toolStripItems));
             }
             if (IsReadOnly) {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -150,12 +138,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.AddRange1"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public void AddRange(ToolStripItemCollection toolStripItems) {
             if (toolStripItems == null) {
-                throw new ArgumentNullException("toolStripItems");
+                throw new ArgumentNullException(nameof(toolStripItems));
             }
             if (IsReadOnly) {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -173,18 +158,12 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Contains"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool Contains(ToolStripItem value) {
             return InnerList.Contains(value);
         }
 
         
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Clear"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void Clear() {
             if (IsReadOnly) {
                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -226,7 +205,7 @@ namespace System.Windows.Forms {
 
         private void CheckCanAddOrInsertItem(ToolStripItem value) {
             if (value == null) {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
             if (IsReadOnly) {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -260,7 +239,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public ToolStripItem[] Find(string key, bool searchAllChildren) {            
             if ((key == null) || (key.Length == 0)) {
-              throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
+              throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
             }
 
             ArrayList foundItems =  FindInternal(key, searchAllChildren, this, new ArrayList());
@@ -351,9 +330,6 @@ namespace System.Windows.Forms {
             set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
         }
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Insert"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Insert(int index, ToolStripItem value) {
             CheckCanAddOrInsertItem(value);
             SetOwner(value);
@@ -373,9 +349,6 @@ namespace System.Windows.Forms {
         }
 			
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.IndexOf"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public int IndexOf(ToolStripItem value) {
             return InnerList.IndexOf(value);
         }
@@ -447,9 +420,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Remove"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Remove(ToolStripItem value) {
             if (IsReadOnly) {
                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -459,9 +429,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.RemoveAt"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public void RemoveAt(int index) {
             if (IsReadOnly) {
                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -489,9 +456,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.CopyTo"]/*' />
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         public void CopyTo(ToolStripItem[] array, int index) {
             InnerList.CopyTo(array, index);
         }

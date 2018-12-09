@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public PaintEventArgs(Graphics graphics, Rectangle clipRect) {
             if( graphics == null ){
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             this.graphics = graphics;

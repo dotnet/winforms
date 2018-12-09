@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
             set {
                 if (largeChange != value ) {
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("LargeChange", string.Format(SR.InvalidLowBoundArgumentEx, "LargeChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(LargeChange), string.Format(SR.InvalidLowBoundArgumentEx, "LargeChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                     largeChange = value;
                     largeChangeSetExternally = true;
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
                 }
                 if (minimum != value) {
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("Minimum", string.Format(SR.InvalidLowBoundArgumentEx, "Minimum", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(Minimum), string.Format(SR.InvalidLowBoundArgumentEx, "Minimum", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (maximum < value)
                         maximum = value;
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
                 if (smallChange != value) {
                 
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException("SmallChange", string.Format(SR.InvalidLowBoundArgumentEx, "SmallChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(SmallChange), string.Format(SR.InvalidLowBoundArgumentEx, "SmallChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                 
                     smallChange = value;
@@ -263,7 +263,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if (value < minimum || value > maximum) {
-                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
+                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
                     }
                     this.value = value;
                     UpdateScrollInfo();

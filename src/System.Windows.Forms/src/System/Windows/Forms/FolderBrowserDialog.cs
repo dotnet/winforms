@@ -156,7 +156,7 @@ namespace System.Windows.Forms
                 // leaving in Enum.IsDefined because this Enum is likely to grow and we dont own it.
                 if (!Enum.IsDefined(typeof(System.Environment.SpecialFolder), value)) 
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(System.Environment.SpecialFolder));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(System.Environment.SpecialFolder));
                 }
                 rootFolder = value;
             }
@@ -353,8 +353,8 @@ namespace System.Windows.Forms
                 // Construct a BROWSEINFO
                 UnsafeNativeMethods.BROWSEINFO bi = new UnsafeNativeMethods.BROWSEINFO();
 
-                pszDisplayName = Marshal.AllocHGlobal(NativeMethods.MAX_PATH * Marshal.SystemDefaultCharSize);
-                pszSelectedPath = Marshal.AllocHGlobal((NativeMethods.MAX_PATH + 1) * Marshal.SystemDefaultCharSize);
+                pszDisplayName = Marshal.AllocHGlobal(NativeMethods.MAX_PATH * sizeof(char));
+                pszSelectedPath = Marshal.AllocHGlobal((NativeMethods.MAX_PATH + 1) * sizeof(char));
                 this.callback = new UnsafeNativeMethods.BrowseCallbackProc(this.FolderBrowserDialog_BrowseCallbackProc);
 
                 bi.pidlRoot = pidlRoot;
@@ -427,7 +427,7 @@ namespace System.Windows.Forms
                     IntPtr selectedPidl = lParam;
                     if (selectedPidl != IntPtr.Zero)
                     {
-                        IntPtr pszSelectedPath = Marshal.AllocHGlobal((NativeMethods.MAX_PATH + 1) * Marshal.SystemDefaultCharSize);
+                        IntPtr pszSelectedPath = Marshal.AllocHGlobal((NativeMethods.MAX_PATH + 1) * sizeof(char));
                         // Try to retrieve the path from the IDList
                         bool isFileSystemFolder = UnsafeNativeMethods.Shell32.SHGetPathFromIDListLongPath(selectedPidl, ref pszSelectedPath);
                         Marshal.FreeHGlobal(pszSelectedPath);

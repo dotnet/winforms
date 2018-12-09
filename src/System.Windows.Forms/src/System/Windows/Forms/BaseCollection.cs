@@ -33,9 +33,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.CopyTo"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void CopyTo(Array ar, int index) {
             List.CopyTo(ar, index);
         }
@@ -49,9 +46,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.IsReadOnly"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -62,9 +56,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.IsSynchronized"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool IsSynchronized {
             get {
@@ -74,9 +65,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.SyncRoot"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public object SyncRoot {
             get {
@@ -85,9 +73,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.List"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual ArrayList List {
             get {
                 return null;

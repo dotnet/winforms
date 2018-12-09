@@ -33,9 +33,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.BindableComponent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public IBindableComponent BindableComponent {
             get {
                 return this.control;
@@ -43,9 +40,6 @@ namespace System.Windows.Forms {
         }
                 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Control"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Control Control {
             get {
                 return this.control as Control;
@@ -53,9 +47,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.this"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Binding this[string propertyName] {
             get {
                 foreach (Binding binding in this) {
@@ -113,7 +104,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add4"]/*' />
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue, string formatString, IFormatProvider formatInfo) {
             if (dataSource == null)
-                throw new ArgumentNullException("dataSource");
+                throw new ArgumentNullException(nameof(dataSource));
             Binding binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, formatInfo);
             Add(binding);
             return binding;
@@ -128,7 +119,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void AddCore(Binding dataBinding) {
             if (dataBinding == null)
-                throw new ArgumentNullException("dataBinding");
+                throw new ArgumentNullException(nameof(dataBinding));
             if (dataBinding.BindableComponent == control)
                 throw new ArgumentException(SR.BindingsCollectionAdd1);
             if (dataBinding.BindableComponent != null)
@@ -164,9 +155,6 @@ namespace System.Windows.Forms {
 
         // internalonly
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.ClearCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void ClearCore() {
             int numLinks = Count;
             for (int i = 0; i < numLinks; i++) {
@@ -212,9 +200,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.RemoveCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void RemoveCore(Binding dataBinding) {
             if (dataBinding.BindableComponent != control)
                 throw new ArgumentException(SR.BindingsCollectionForeign);

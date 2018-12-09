@@ -347,9 +347,6 @@ namespace System.Windows.Forms {
         // Control overrides:
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
             get {
@@ -362,9 +359,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage {
@@ -378,9 +372,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout {
@@ -411,9 +402,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseClick"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseClick {
             add { 
@@ -424,9 +412,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseDoubleClick"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseDoubleClick {
             add { 
@@ -437,9 +422,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Cursor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Cursor Cursor {
             get {
@@ -452,9 +434,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContextMenu"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ContextMenu ContextMenu {
             get {
@@ -478,9 +457,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Enabled"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public virtual new bool Enabled {
             get {
@@ -493,9 +469,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Font"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
             get {
@@ -508,9 +481,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -523,9 +493,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RightToLeft"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -544,9 +511,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override string Text {
             get {
@@ -574,9 +538,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BeginInit"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void BeginInit() {
         }
@@ -681,9 +642,6 @@ namespace System.Windows.Forms {
 #endif
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
             add {
@@ -694,9 +652,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add {
@@ -707,9 +662,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add {
@@ -720,9 +672,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BindingContextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BindingContextChanged {
             add {
@@ -733,9 +682,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContextMenuChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ContextMenuChanged {
             add {
@@ -746,9 +692,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CursorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged {
             add {
@@ -772,9 +715,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.FontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
             add {
@@ -785,9 +725,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add {
@@ -798,9 +735,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler RightToLeftChanged {
             add {
@@ -811,9 +745,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.TextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add {
@@ -837,9 +768,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragDrop"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragDrop {
             add {
@@ -851,9 +779,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragEnter"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragEnter {
             add {
@@ -864,9 +789,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragOver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragOver {
             add {
@@ -878,9 +800,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragLeave"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DragLeave {
             add {
@@ -891,9 +810,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GiveFeedback"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event GiveFeedbackEventHandler GiveFeedback {
             add {
@@ -904,9 +820,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HelpRequested"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event HelpEventHandler HelpRequested {
             add {
@@ -917,9 +830,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Paint"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event PaintEventHandler Paint {
             add {
@@ -930,9 +840,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.QueryContinueDrag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryContinueDragEventHandler QueryContinueDrag {
             add {
@@ -943,9 +850,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.QueryAccessibilityHelp"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
             add {
@@ -969,9 +873,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ImeModeChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ImeModeChanged {
             add {
@@ -1129,9 +1030,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ChangeUICues"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event UICuesEventHandler ChangeUICues {
             add {
@@ -1142,9 +1040,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StyleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler StyleChanged {
             add {
@@ -1155,27 +1050,18 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnForeColorChanged(EventArgs e) {
             base.OnForeColorChanged(e);
             AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
             AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
@@ -1799,9 +1685,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnInPlaceActive"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         /// <internalonly/>
         protected virtual void OnInPlaceActive() {
         }
@@ -1877,9 +1760,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.SetVisibleCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void SetVisibleCore(bool value) {
             if (GetState(STATE_VISIBLE) != value) {
                 bool oldVisible = Visible;
@@ -1984,9 +1864,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessDialogKey"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) 
@@ -2457,9 +2334,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DoVerb"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void DoVerb(int verb) {
             Control parent = ParentInternal;
             GetOleObject().DoVerb(verb, IntPtr.Zero, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, FillInRect(new NativeMethods.COMRECT(), Bounds));
@@ -2671,9 +2545,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.InvokeEditMode"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void InvokeEditMode() {
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "invoking EditMode for "+this.ToString());
@@ -2707,9 +2578,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetAttributes"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         AttributeCollection ICustomTypeDescriptor.GetAttributes() {
             if (!axState[editorRefresh] && HasPropertyPages()) {
@@ -2753,9 +2621,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultEvent"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptor ICustomTypeDescriptor.GetDefaultEvent() {
             return TypeDescriptor.GetDefaultEvent(this, true);
@@ -2763,9 +2628,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultProperty"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() {
             return TypeDescriptor.GetDefaultProperty(this, true);
@@ -2792,9 +2654,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetEvents"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents() {
             return TypeDescriptor.GetEvents(this, true);
@@ -2802,9 +2661,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetEvents(Attribute"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes) {
             return TypeDescriptor.GetEvents(this, attributes, true);
@@ -2971,9 +2827,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() {
             return FillProperties(null);
@@ -2981,9 +2834,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties1"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes) {
             return FillProperties(attributes);
@@ -2991,9 +2841,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetPropertyOwner"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         Object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd) {
             return this;
@@ -3247,9 +3094,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CreateSink"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void CreateSink() {
                 // nop...  windows forms wrapper will override...
@@ -3257,9 +3101,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DetachSink"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void DetachSink() {
                 // nop...  windows forms wrapper will override...
@@ -3273,9 +3114,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HasPropertyPages"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool HasPropertyPages() {
             if (!CanShowPropertyPages()) return false;
             NativeMethods.ISpecifyPropertyPages ispp = (NativeMethods.ISpecifyPropertyPages) GetOcx();
@@ -3314,9 +3152,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MakeDirty"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void MakeDirty() {
             ISite isite = Site;
@@ -3333,9 +3168,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShowPropertyPages"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void ShowPropertyPages() {
             if (ParentInternal == null) return;
             if (!ParentInternal.IsHandleCreated) return;
@@ -3343,9 +3175,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShowPropertyPages1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void ShowPropertyPages(Control control) {
             try {
                 if (!CanShowPropertyPages()) return;
@@ -3678,9 +3507,6 @@ namespace System.Windows.Forms {
         }       
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class ConnectionPointCookie {
@@ -3885,7 +3711,7 @@ namespace System.Windows.Forms {
 
             internal OleInterfaces(AxHost host) {
                 if (host == null)
-                    throw new ArgumentNullException("host");
+                    throw new ArgumentNullException(nameof(host));
                 this.host = host;
             }
 
@@ -4212,9 +4038,6 @@ namespace System.Windows.Forms {
             // IOleInPlaceSite methods:
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OleInterfaces.GetWindow"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [ResourceExposure(ResourceScope.Process)]
             [ResourceConsumption(ResourceScope.Process)]
             IntPtr UnsafeNativeMethods.IOleInPlaceSite.GetWindow() {
@@ -4229,9 +4052,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceSite.ContextSensitiveHelp(int fEnterMode) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ContextSensitiveHelp");
                 return NativeMethods.E_NOTIMPL;
@@ -5331,9 +5151,6 @@ namespace System.Windows.Forms {
                 }
             }   
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal UnsafeNativeMethods.IExtender GetProxyForControl(Control ctl) {
                 UnsafeNativeMethods.IExtender rval = null;
                 if (proxyCache == null) {
@@ -5363,24 +5180,15 @@ namespace System.Windows.Forms {
                 return rval;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal string GetNameForControl(Control ctl) {
                 string name = (ctl.Site != null) ? ctl.Site.Name : ctl.Name;
                 return (name == null) ? "" : name;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal Object GetProxyForContainer() {
                 return this;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal void AddControl(Control ctl) {
                 // 
                 lock(this) { 
@@ -5420,16 +5228,10 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private void LockComponents() {
                 lockCount++;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private void UnlockComponents() {
                 lockCount--;
                 if (lockCount == 0) {
@@ -5437,9 +5239,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal UnsafeNativeMethods.IEnumUnknown EnumControls(Control ctl, int dwOleContF, int dwWhich) {
                 GetComponents();
 
@@ -5535,9 +5334,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private void MaybeAdd(ArrayList l, Control ctl, bool selected, int dwOleContF, bool ignoreBelong) {
                 if (!ignoreBelong && ctl != parent && !GetControlBelongs(ctl)) return;
                 if (selected) {
@@ -5554,9 +5350,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private void FillComponentsTable(IContainer container) {
                 if (container != null) {
                     ComponentCollection comps = container.Components;
@@ -5608,16 +5401,10 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private Hashtable GetComponents() {
                 return GetComponents(GetParentsContainer());
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private Hashtable GetComponents(IContainer cont) {
                 if (lockCount == 0) {
                     FillComponentsTable(cont);
@@ -5625,26 +5412,17 @@ namespace System.Windows.Forms {
                 return components;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private bool GetControlBelongs(Control ctl) {
                 Hashtable comps = GetComponents();
                 return comps[ctl] != null;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private IContainer GetParentIsDesigned() {
                 ISite site = parent.Site;
                 if (site != null && site.DesignMode) return site.Container;
                 return null;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private IContainer GetParentsContainer() {
                 IContainer rval = GetParentIsDesigned();
                 Debug.Assert(rval == null || assocContainer == null || (rval == assocContainer),
@@ -5652,9 +5430,6 @@ namespace System.Windows.Forms {
                 return rval == null ? assocContainer : rval;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private bool RegisterControl(AxHost ctl) {
                 ISite site = ctl.Site;
                 if (site != null) {
@@ -5683,9 +5458,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal static AxContainer FindContainerForControl(Control ctl) {
                 AxHost axctl = ctl as AxHost;
                 if (axctl != null)
@@ -5717,9 +5489,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             // FxCop: Currently not used
             private void OnOldActiveControlInternal(Control valueOld) {
                 if (siteUIActive == valueOld) siteUIActive.UiDeactivate();
@@ -5738,9 +5507,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             // FxCop: Currently not used
             private void OnNewActiveControlInternal(AxHost value) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "New active control. siteUIActive is" +siteUIActive.ToString()+" Control is "+value.ToString());
@@ -5777,9 +5543,6 @@ namespace System.Windows.Forms {
             }
 #endif
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal void OnInPlaceDeactivate(AxHost site) {
                 if (siteActive == site) {
                     siteActive = null;
@@ -5793,9 +5556,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal void OnUIDeactivate(AxHost site) {
 #if DEBUG
                 if (siteUIActive != null)
@@ -5816,9 +5576,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal void OnUIActivate(AxHost site) {
                 // The ShDocVw control repeatedly calls OnUIActivate() with the same
                 // site. This causes the assert below to fire.
@@ -5848,9 +5605,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private void ListAxControls(ArrayList list, bool fuseOcx) {
                 Hashtable components = GetComponents();
                 if (components == null) return;
@@ -5872,9 +5626,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal void ControlCreated(AxHost invoker) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in controlCreated for "+invoker.ToString()+" fAC: "+formAlreadyCreated.ToString());
                 if (formAlreadyCreated) {
@@ -5907,9 +5658,6 @@ namespace System.Windows.Forms {
             // IOleContainer methods:
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.ParseDisplayName"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleContainer.ParseDisplayName(Object pbc, string pszDisplayName, int[] pchEaten, Object[] ppmkOut) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ParseDisplayName");
                 if (ppmkOut != null)
@@ -5919,9 +5667,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.EnumObjects"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleContainer.EnumObjects(int grfFlags, out UnsafeNativeMethods.IEnumUnknown ppenum) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnumObjects");
                 ppenum = null;
@@ -5941,9 +5686,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.LockContainer"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleContainer.LockContainer(bool fLock) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in LockContainer");
                 return NativeMethods.E_NOTIMPL;
@@ -5962,35 +5704,23 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.GetBorder"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.GetBorder(NativeMethods.COMRECT lprectBorder) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetBorder");
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.RequestBorderSpace"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.RequestBorderSpace(NativeMethods.COMRECT pborderwidths) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RequestBorderSpace");
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetBorderSpace"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.SetBorderSpace(NativeMethods.COMRECT pborderwidths) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetBorderSpace");
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal void OnExitEditMode(AxHost ctl) {
                 Debug.Assert(ctlInEditMode == null || ctlInEditMode == ctl, "who is exiting edit mode?");
                 if (ctlInEditMode == null || ctlInEditMode != ctl) return;
@@ -5998,9 +5728,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetActiveObject"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.SetActiveObject(UnsafeNativeMethods.IOleInPlaceActiveObject pActiveObject, string pszObjName) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetActiveObject " + ((pszObjName == null) ? "<null>" : pszObjName));
                 if (siteUIActive != null) {
@@ -6055,53 +5782,35 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.InsertMenus"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, NativeMethods.tagOleMenuGroupWidths lpMenuWidths) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in InsertMenus");
                 return NativeMethods.S_OK;
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetMenu"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetMenu");
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.RemoveMenus"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RemoveMenus");
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetStatusText"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.SetStatusText(string pszStatusText) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetStatusText");
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.EnableModeless"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.EnableModeless(bool fEnable) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnableModeless");
                 return NativeMethods.E_NOTIMPL;
             }
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.TranslateAccelerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             int UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(ref NativeMethods.MSG lpmsg, short wID) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in IOleInPlaceFrame.TranslateAccelerator");
                 return NativeMethods.S_FALSE;
@@ -6525,7 +6234,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == null) {
-                    throw new ArgumentNullException("destinationType");
+                    throw new ArgumentNullException(nameof(destinationType));
                 }
 
                 if (destinationType == typeof(byte[])) {
@@ -6570,9 +6279,6 @@ namespace System.Windows.Forms {
             private PropertyBagStream propBag;
             
             // create on save from ipersist stream
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal State(MemoryStream ms, int storageType, AxHost ctl, PropertyBagStream propBag) {
                 type = storageType;
                 this.propBag = propBag;
@@ -6594,9 +6300,6 @@ namespace System.Windows.Forms {
             }
 
             // create on init new w/ storage...
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal State(AxHost ctl) {
                 CreateStorage();
                 manualUpdate = ctl.GetAxState(AxHost.manualUpdate);
@@ -6605,9 +6308,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.State.State2"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public State(Stream ms, int storageType, bool manualUpdate, string licKey) {
                 type = storageType;
                 // dangerous?
@@ -6656,9 +6356,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal int Type {
                 get {
                     return type;
@@ -6676,9 +6373,6 @@ namespace System.Windows.Forms {
                 return licenseKey;
             }
 
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             private void CreateStorage() {
                 Debug.Assert(storage == null, "but we already have a storage!!!");
                 IntPtr hglobal = IntPtr.Zero;
@@ -6910,17 +6604,11 @@ namespace System.Windows.Forms {
         protected delegate void AboutBoxDelegate();
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxComponentEditor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         [ComVisible(false)]
         public class AxComponentEditor : WindowsFormsComponentEditor {
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxComponentEditor.EditComponent"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent) {
                 AxHost host = obj as AxHost;
                 if (host != null)

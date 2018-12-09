@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public MainMenu(IContainer container) : this() {
             if (container == null) {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
             container.Add(this);
@@ -57,9 +57,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.Collapse"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse {
             add {
@@ -101,7 +98,7 @@ namespace System.Windows.Forms {
             
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
-                    throw new InvalidEnumArgumentException("RightToLeft", (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
                 }
                 if (rightToLeft != value) {
                     rightToLeft = value;

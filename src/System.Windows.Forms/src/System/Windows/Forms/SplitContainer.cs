@@ -291,9 +291,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override Image BackgroundImage {
             get {
@@ -305,9 +302,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -359,7 +353,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
                 if (borderStyle != value) {
@@ -474,7 +468,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FixedPanel.None, (int)FixedPanel.Panel2)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FixedPanel));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FixedPanel));
                 }
 
                 if (fixedPanel != value) {
@@ -554,7 +548,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(Orientation));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Orientation));
                 }
                 if (orientation != value) {
                     orientation = value;
@@ -567,9 +561,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OverrideCursor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         private Cursor OverrideCursor {
             get {
                 return overrideCursor;
@@ -633,11 +624,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -788,7 +774,7 @@ namespace System.Windows.Forms {
                 if (value != SplitterDistance)
                 {
                     if (value < 0) {
-                        throw new ArgumentOutOfRangeException("SplitterDistance", string.Format(SR.InvalidLowBoundArgument, "SplitterDistance", (value).ToString(CultureInfo.CurrentCulture), "0"));
+                        throw new ArgumentOutOfRangeException(nameof(SplitterDistance), string.Format(SR.InvalidLowBoundArgument, "SplitterDistance", (value).ToString(CultureInfo.CurrentCulture), "0"));
                     }
                     
 
@@ -884,7 +870,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException("SplitterIncrement", string.Format(SR.InvalidLowBoundArgumentEx, "SplitterIncrement", (value).ToString(CultureInfo.CurrentCulture), "1"));
+                    throw new ArgumentOutOfRangeException(nameof(SplitterIncrement), string.Format(SR.InvalidLowBoundArgumentEx, "SplitterIncrement", (value).ToString(CultureInfo.CurrentCulture), "1"));
                 }
 
                 splitterInc = value;
@@ -1059,9 +1045,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoving"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterCancelEventHandler SplitterMoving {
             add {
@@ -1073,9 +1056,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoved"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved {
             add {
@@ -1412,9 +1392,6 @@ namespace System.Windows.Forms {
         ////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
@@ -1437,17 +1414,17 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void ApplyPanel1MinSize(int value) {
             if (value < 0) {
-                throw new ArgumentOutOfRangeException("Panel1MinSize", string.Format(SR.InvalidLowBoundArgument, "Panel1MinSize", (value).ToString(CultureInfo.CurrentCulture), "0"));
+                throw new ArgumentOutOfRangeException(nameof(Panel1MinSize), string.Format(SR.InvalidLowBoundArgument, "Panel1MinSize", (value).ToString(CultureInfo.CurrentCulture), "0"));
             }
 
             if (Orientation== Orientation.Vertical) {
                 if (DesignMode && Width != DefaultSize.Width && value + Panel2MinSize + SplitterWidth > Width) {
-                    throw new ArgumentOutOfRangeException("Panel1MinSize", string.Format(SR.InvalidArgument, "Panel1MinSize", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(Panel1MinSize), string.Format(SR.InvalidArgument, "Panel1MinSize", (value).ToString(CultureInfo.CurrentCulture)));
                 }
             }
             else if (Orientation == Orientation.Horizontal) {
                 if (DesignMode && Height != DefaultSize.Height && value + Panel2MinSize + SplitterWidth > Height) {
-                    throw new ArgumentOutOfRangeException("Panel1MinSize", string.Format(SR.InvalidArgument, "Panel1MinSize", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(Panel1MinSize), string.Format(SR.InvalidArgument, "Panel1MinSize", (value).ToString(CultureInfo.CurrentCulture)));
                 }
             }
 
@@ -1462,17 +1439,17 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void ApplyPanel2MinSize(int value) {
             if (value < 0) {
-                throw new ArgumentOutOfRangeException("Panel2MinSize", string.Format(SR.InvalidLowBoundArgument, "Panel2MinSize", (value).ToString(CultureInfo.CurrentCulture), "0"));
+                throw new ArgumentOutOfRangeException(nameof(Panel2MinSize), string.Format(SR.InvalidLowBoundArgument, "Panel2MinSize", (value).ToString(CultureInfo.CurrentCulture), "0"));
             }
             if (Orientation == Orientation.Vertical) {
                 if (DesignMode && Width != DefaultSize.Width && value + Panel1MinSize + SplitterWidth > Width) {
-                    throw new ArgumentOutOfRangeException("Panel2MinSize", string.Format(SR.InvalidArgument, "Panel2MinSize", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(Panel2MinSize), string.Format(SR.InvalidArgument, "Panel2MinSize", (value).ToString(CultureInfo.CurrentCulture)));
                 }
 
             }
             else if (Orientation == Orientation.Horizontal) {
                 if (DesignMode && Height != DefaultSize.Height && value + Panel1MinSize + SplitterWidth > Height) {
-                    throw new ArgumentOutOfRangeException("Panel2MinSize", string.Format(SR.InvalidArgument, "Panel2MinSize", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(Panel2MinSize), string.Format(SR.InvalidArgument, "Panel2MinSize", (value).ToString(CultureInfo.CurrentCulture)));
                 }
             }
             panel2MinSize = value;
@@ -1486,17 +1463,17 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void ApplySplitterWidth(int value) {
             if (value < 1) {
-                throw new ArgumentOutOfRangeException("SplitterWidth", string.Format(SR.InvalidLowBoundArgumentEx, "SplitterWidth", (value).ToString(CultureInfo.CurrentCulture), "1"));
+                throw new ArgumentOutOfRangeException(nameof(SplitterWidth), string.Format(SR.InvalidLowBoundArgumentEx, "SplitterWidth", (value).ToString(CultureInfo.CurrentCulture), "1"));
             }
             if (Orientation == Orientation.Vertical) {
                 if (DesignMode && value + Panel1MinSize + Panel2MinSize > Width) {
-                    throw new ArgumentOutOfRangeException("SplitterWidth", string.Format(SR.InvalidArgument, "SplitterWidth", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(SplitterWidth), string.Format(SR.InvalidArgument, "SplitterWidth", (value).ToString(CultureInfo.CurrentCulture)));
                 }
 
             }
             else if (Orientation == Orientation.Horizontal) {
                 if (DesignMode && value + Panel1MinSize + Panel2MinSize > Height) {
-                    throw new ArgumentOutOfRangeException("SplitterWidth", string.Format(SR.InvalidArgument, "SplitterWidth", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(SplitterWidth), string.Format(SR.InvalidArgument, "SplitterWidth", (value).ToString(CultureInfo.CurrentCulture)));
                 }
             }
             splitterWidth = value;
@@ -1899,9 +1876,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Select"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void Select(bool directed, bool forward) {
             // avoid re-entrant code.
             // SelectNextControl can call back on us.. and we might end up infinitely recursing.

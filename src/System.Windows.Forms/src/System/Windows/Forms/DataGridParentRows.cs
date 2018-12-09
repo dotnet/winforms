@@ -271,7 +271,7 @@ namespace System.Windows.Forms {
 
         internal void CheckNull(object value, string propName) {
             if (value == null)
-                throw new ArgumentNullException("propName");
+                throw new ArgumentNullException(nameof(propName));
         }
 
         internal void Dispose() {

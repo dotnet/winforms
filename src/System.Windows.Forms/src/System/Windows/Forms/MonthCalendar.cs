@@ -297,9 +297,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRDescription(nameof(SR.MonthCalendarMonthBackColorDescr))]
         public override Color BackColor {
             get {
@@ -316,9 +313,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -343,9 +337,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -503,7 +494,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)Day.Monday, (int)Day.Default)){
-                     throw new InvalidEnumArgumentException("FirstDayOfWeek", (int)value, typeof(Day));
+                     throw new InvalidEnumArgumentException(nameof(FirstDayOfWeek), (int)value, typeof(Day));
                 }
 
                 if (value != firstDayOfWeek) {
@@ -521,9 +512,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRDescription(nameof(SR.MonthCalendarForeColorDescr))]
         public override Color ForeColor {
             get {
@@ -579,7 +567,7 @@ namespace System.Windows.Forms {
             set {
                 if (value != maxDate) {
                     if (value < DateTimePicker.EffectiveMinDate(minDate)) {
-                        throw new ArgumentOutOfRangeException("MaxDate", string.Format(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(MaxDate), string.Format(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDate(value), "MinDate"));
                     }
                     maxDate = value;
                     SetRange();
@@ -604,7 +592,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException("MaxSelectionCount", string.Format(SR.InvalidLowBoundArgumentEx, "MaxSelectionCount", (value).ToString("D", CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(MaxSelectionCount), string.Format(SR.InvalidLowBoundArgumentEx, "MaxSelectionCount", (value).ToString("D", CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 if (value != maxSelectionCount) {
@@ -634,13 +622,13 @@ namespace System.Windows.Forms {
             set {
                 if (value != minDate) {
                     if (value > DateTimePicker.EffectiveMaxDate(maxDate)) {
-                        throw new ArgumentOutOfRangeException("MinDate", string.Format(SR.InvalidHighBoundArgument, "MinDate", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.InvalidHighBoundArgument, "MinDate", FormatDate(value), "MaxDate"));
                     }
 
                     // If trying to set the minimum less than DateTimePicker.MinimumDateTime, throw
                     // an exception.
                     if (value < DateTimePicker.MinimumDateTime) {
-                        throw new ArgumentOutOfRangeException("MinDate", string.Format(SR.InvalidLowBoundArgumentEx, "MinDate", FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
+                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.InvalidLowBoundArgumentEx, "MinDate", FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
                     }
 
                     minDate = value;
@@ -701,11 +689,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -775,10 +758,10 @@ namespace System.Windows.Forms {
                 if (scrollChange != value) {
 
                     if (value < 0) {
-                        throw new ArgumentOutOfRangeException("ScrollChange", string.Format(SR.InvalidLowBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(ScrollChange), string.Format(SR.InvalidLowBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
                     }
                     if (value > MaxScrollChange) {
-                        throw new ArgumentOutOfRangeException("ScrollChange", string.Format(SR.InvalidHighBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (MaxScrollChange).ToString("D", CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(ScrollChange), string.Format(SR.InvalidHighBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (MaxScrollChange).ToString("D", CultureInfo.CurrentCulture)));
                     }
 
                     if (IsHandleCreated) {
@@ -809,10 +792,10 @@ namespace System.Windows.Forms {
 
                     // Keep SelectionEnd within min and max
                     if (value < MinDate) {
-                        throw new ArgumentOutOfRangeException("SelectionEnd", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionEnd", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(SelectionEnd), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionEnd", FormatDate(value), "MinDate"));
                     }
                     if (value > MaxDate) {
-                        throw new ArgumentOutOfRangeException("SelectionEnd", string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(SelectionEnd), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(value), "MaxDate"));
                     }
 
                     // If we've moved SelectionEnd before SelectionStart, move SelectionStart back
@@ -853,10 +836,10 @@ namespace System.Windows.Forms {
                     // Keep SelectionStart within min and max
                     //
                     if (value < minDate) {
-                        throw new ArgumentOutOfRangeException("SelectionStart", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(value), "MinDate"));
                     }
                     if (value > maxDate) {
-                        throw new ArgumentOutOfRangeException("SelectionStart", string.Format(SR.InvalidHighBoundArgumentEx, "SelectionStart", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionStart", FormatDate(value), "MaxDate"));
                     }
 
                     // If we've moved SelectionStart beyond SelectionEnd, move SelectionEnd forward
@@ -1013,9 +996,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
             get {
@@ -1064,12 +1044,12 @@ namespace System.Windows.Forms {
 
                     // throw if trying to set the TodayDate to a value greater than MaxDate
                     if (DateTime.Compare(value, maxDate) > 0) {
-                        throw new ArgumentOutOfRangeException("TodayDate", string.Format(SR.InvalidHighBoundArgumentEx, "TodayDate", FormatDate(value), FormatDate(maxDate)));
+                        throw new ArgumentOutOfRangeException(nameof(TodayDate), string.Format(SR.InvalidHighBoundArgumentEx, "TodayDate", FormatDate(value), FormatDate(maxDate)));
                     }
 
                     // throw if trying to set the TodayDate to a value less than MinDate
                     if (DateTime.Compare(value, minDate) < 0) {
-                        throw new ArgumentOutOfRangeException("TodayDate", string.Format(SR.InvalidLowBoundArgument, "TodayDate", FormatDate(value), FormatDate(minDate)));
+                        throw new ArgumentOutOfRangeException(nameof(TodayDate), string.Format(SR.InvalidLowBoundArgument, "TodayDate", FormatDate(value), FormatDate(minDate)));
                     }
 
                     todayDate = value.Date;
@@ -1212,9 +1192,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DateChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateChangedDescr))]
         public event DateRangeEventHandler DateChanged {
             add {
@@ -1227,9 +1204,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DateSelected"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateSelectedDescr))]
         public event DateRangeEventHandler DateSelected {
             add {
@@ -1292,9 +1266,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -1691,36 +1662,24 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             AdjustSize();
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnForeColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnForeColorChanged(EventArgs e) {
             base.OnForeColorChanged(e);
             SetControlColor(NativeMethods.MCSC_TEXT, ForeColor);
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
             SetControlColor(NativeMethods.MCSC_MONTHBK, BackColor);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {
@@ -2032,10 +1991,10 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void SetCalendarDimensions(int x, int y) {
             if (x < 1) {
-                throw new ArgumentOutOfRangeException("x", string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(x), string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
             }
             if (y < 1) {
-                throw new ArgumentOutOfRangeException("y", string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(y), string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
             }
 
             // MonthCalendar limits the dimensions to x * y <= 12
@@ -2067,10 +2026,10 @@ namespace System.Windows.Forms {
         public void SetDate(DateTime date) {
 
             if (date.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date", string.Format(SR.InvalidLowBoundArgumentEx, "date", FormatDate(date), "MinDate"));
+                throw new ArgumentOutOfRangeException(nameof(date), string.Format(SR.InvalidLowBoundArgumentEx, "date", FormatDate(date), "MinDate"));
             }
             if (date.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date", string.Format(SR.InvalidHighBoundArgumentEx, "date", FormatDate(date), "MaxDate"));
+                throw new ArgumentOutOfRangeException(nameof(date), string.Format(SR.InvalidHighBoundArgumentEx, "date", FormatDate(date), "MaxDate"));
             }
 
             SetSelectionRange(date, date);
@@ -2086,16 +2045,16 @@ namespace System.Windows.Forms {
 
             // Keep the dates within the min and max dates
             if (date1.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date1", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date1), "MinDate"));
+                throw new ArgumentOutOfRangeException(nameof(date1), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date1), "MinDate"));
             }
             if (date1.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date1", string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date1), "MaxDate"));
+                throw new ArgumentOutOfRangeException(nameof(date1), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date1), "MaxDate"));
             }
             if (date2.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date2", string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date2), "MinDate"));
+                throw new ArgumentOutOfRangeException(nameof(date2), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date2), "MinDate"));
             }
             if (date2.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException("date2", string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date2), "MaxDate"));
+                throw new ArgumentOutOfRangeException(nameof(date2), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date2), "MaxDate"));
             }
 
             // If date1 > date2, we just select date2 (compat)

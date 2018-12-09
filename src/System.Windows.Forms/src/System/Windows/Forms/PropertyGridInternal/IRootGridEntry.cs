@@ -18,28 +18,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
         using Microsoft.Win32;
 
         /// <include file='doc\IRootGridEntry.uex' path='docs/doc[@for="IRootGridEntry"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public interface IRootGridEntry{
                 /// <include file='doc\IRootGridEntry.uex' path='docs/doc[@for="IRootGridEntry.BrowsableAttributes"]/*' />
-                /// <devdoc>
-                ///    <para>[To be supplied.]</para>
-                /// </devdoc>
                 AttributeCollection BrowsableAttributes {
                      get;
                      set;
                 }
                 /// <include file='doc\IRootGridEntry.uex' path='docs/doc[@for="IRootGridEntry.ResetBrowsableAttributes"]/*' />
-                /// <devdoc>
-                ///    <para>[To be supplied.]</para>
-                /// </devdoc>
 
                 void ResetBrowsableAttributes();
                 /// <include file='doc\IRootGridEntry.uex' path='docs/doc[@for="IRootGridEntry.ShowCategories"]/*' />
-                /// <devdoc>
-                ///    <para>[To be supplied.]</para>
-                /// </devdoc>
                 void ShowCategories(bool showCategories);
         }
 }

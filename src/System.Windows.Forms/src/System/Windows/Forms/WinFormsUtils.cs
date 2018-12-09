@@ -539,7 +539,7 @@ namespace System.Windows.Forms
                 Control.CheckParentingCycle(ownerControl, value);
 
                 if (value == null) {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 if (IsReadOnly) {
                     throw new NotSupportedException(SR.ReadonlyControlsCollection);
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
             [ResourceConsumption(ResourceScope.Process)]
             public DCMapping(HandleRef hDC, Rectangle bounds) {
                 if (hDC.Handle == IntPtr.Zero) {
-                    throw new ArgumentNullException("hDC");
+                    throw new ArgumentNullException(nameof(hDC));
                 }
 
                 bool success;

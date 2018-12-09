@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
         public ToolStripDropTargetManager(ToolStrip owner) {
             this.owner = owner;
             if (owner == null) {
-                throw new ArgumentNullException("owner");
+                throw new ArgumentNullException(nameof(owner));
             }
         }
     

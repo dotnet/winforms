@@ -41,9 +41,6 @@ namespace System.Windows.Forms {
         private const int FILEBUFSIZE = 8192;
 
         /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.EventFileOk"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         /// <internalonly/>
         protected static readonly object EventFileOk = new object();
 

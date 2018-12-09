@@ -13,9 +13,6 @@ namespace System.Windows.Forms {
     using System.Reflection;
     
     /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class ListBindingConverter : TypeConverter {
                                             
         private static Type[] ctorTypes = null;  // the list of type of our ctor parameters.
@@ -69,7 +66,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
-                throw new ArgumentNullException("destinationType");
+                throw new ArgumentNullException(nameof(destinationType));
             }
 
             if (destinationType == typeof(InstanceDescriptor) && value is Binding) {

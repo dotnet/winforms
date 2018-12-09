@@ -126,7 +126,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(AutoSizeMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
                 
                 if (GetAutoSizeMode() != value) {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
                 {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(FlatStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
 
                 if (flatStyle != value) {
@@ -302,9 +302,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Localizable(true)
         ]

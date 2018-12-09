@@ -153,9 +153,6 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         [CLSCompliant(false)]
         protected static void InvokeCreateTool(ParentControlDesigner toInvoke, ToolboxItem tool)
         {

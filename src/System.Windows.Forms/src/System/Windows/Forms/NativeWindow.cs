@@ -575,13 +575,8 @@ namespace System.Windows.Forms {
             AssignHandle(handle, true);
         }
 
-        // 
-
-
-
 
         internal void AssignHandle(IntPtr handle, bool assignUniqueID) {
-            // 
             lock (this) {
                 CheckReleased();
                 Debug.Assert(handle != IntPtr.Zero, "handle is 0");
@@ -591,7 +586,7 @@ namespace System.Windows.Forms {
                 this.handle = handle;
 
                 if (userDefWindowProc == IntPtr.Zero) {
-                    string defproc = (Marshal.SystemDefaultCharSize == 1 ? "DefWindowProcA" : "DefWindowProcW");
+                    string defproc = "DefWindowProcW";
 
                     userDefWindowProc = UnsafeNativeMethods.GetProcAddress(new HandleRef(null, UnsafeNativeMethods.GetModuleHandle("user32.dll")), defproc);
                     if (userDefWindowProc == IntPtr.Zero) {
@@ -1328,7 +1323,7 @@ namespace System.Windows.Forms {
                     }
                     break;
                 default:
-                    throw new InvalidEnumArgumentException("mode", (int)mode, typeof(UnhandledExceptionMode));
+                    throw new InvalidEnumArgumentException(nameof(mode), (int)mode, typeof(UnhandledExceptionMode));
             }
         }
 
@@ -1556,7 +1551,7 @@ namespace System.Windows.Forms {
                 NativeMethods.WNDCLASS_D wndclass = new NativeMethods.WNDCLASS_D();
 
                 if (userDefWindowProc == IntPtr.Zero) {
-                    string defproc = (Marshal.SystemDefaultCharSize == 1 ? "DefWindowProcA" : "DefWindowProcW");
+                    string defproc = "DefWindowProcW";
 
                     userDefWindowProc = UnsafeNativeMethods.GetProcAddress(new HandleRef(null, UnsafeNativeMethods.GetModuleHandle("user32.dll")), defproc);
                     if (userDefWindowProc == IntPtr.Zero) {

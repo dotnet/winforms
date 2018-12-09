@@ -154,7 +154,7 @@ namespace System.Windows.Forms {
                    case ToolStripDropDownDirection.Default:
                       break;
                    default:
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ToolStripDropDownDirection));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripDropDownDirection));
                 }
 
                 if (toolStripDropDownDirection != value) {
@@ -728,6 +728,7 @@ namespace System.Windows.Forms {
         
 
     /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject"]/*' />
+    [System.Runtime.InteropServices.ComVisible(true)]
     public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject {
         private ToolStripDropDownItem owner;
         /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject.ToolStripDropDownItemAccessibleObject"]/*' />

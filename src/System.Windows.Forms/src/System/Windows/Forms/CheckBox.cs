@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)Appearance.Normal, (int)Appearance.Button)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(Appearance));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
                 }
 
                 if (appearance != value) {
@@ -131,9 +131,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.AppearanceChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
         public event EventHandler AppearanceChanged {
             add {
@@ -187,7 +184,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
 
                 if (checkAlign != value) {
@@ -252,7 +249,7 @@ namespace System.Windows.Forms {
             set {
                 // valid values are 0-2 inclusive.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(CheckState));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
                 }
 
                 if (checkState != value) {
@@ -502,9 +499,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnAppearanceChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnAppearanceChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_APPEARANCECHANGED] as EventHandler;
             if (eh != null) {
@@ -708,16 +702,10 @@ namespace System.Windows.Forms {
         public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject {
 
             /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public CheckBoxAccessibleObject(Control owner) : base(owner) {
             }
 
             /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.DefaultAction"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override string DefaultAction {
                 get {
                     string defaultAction = Owner.AccessibleDefaultActionDescription;
@@ -735,9 +723,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.Role"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;
@@ -749,9 +734,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.State"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override AccessibleStates State {
                 get {
                     switch (((CheckBox)Owner).CheckState) {
@@ -766,9 +748,6 @@ namespace System.Windows.Forms {
             }                        
 
             /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.DoDefaultAction"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 CheckBox cb = this.Owner as CheckBox;

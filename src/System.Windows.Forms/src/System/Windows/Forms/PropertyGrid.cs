@@ -23,9 +23,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
     /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
@@ -169,9 +166,6 @@ namespace System.Windows.Forms {
         private static object          EventSelectedObjectsChanged = new object();
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyGrid"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // the "PropertyGridToolBar" caption is for testing.
                                                                                                         // So we don't have to localize it.
@@ -347,9 +341,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.AutoScroll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll {
@@ -362,9 +353,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override Color BackColor {
             get {
                 return base.BackColor;
@@ -377,9 +365,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -403,9 +388,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -429,9 +411,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BrowsableAttributes"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -701,9 +680,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.DefaultTabType"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -970,9 +946,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.LineColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridLineColorDesc)),
@@ -996,11 +969,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1037,7 +1005,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)PropertySort.NoSort, (int)PropertySort.CategorizedAlphabetical)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(PropertySort));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PropertySort));
                 }
                 ToolStripButton newButton;
                 
@@ -1074,9 +1042,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1117,9 +1082,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedObjects"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1358,9 +1320,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedTab"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1375,9 +1334,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedGridItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1451,9 +1407,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.LargeButtons"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridLargeButtonsDesc)),
@@ -1531,9 +1484,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ViewBackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridViewBackColorDesc)),
@@ -1550,9 +1500,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ViewForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridViewForeColorDesc)),
@@ -1760,9 +1707,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelecteObjectsChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
         public event EventHandler SelectedObjectsChanged {
             add {
@@ -2109,9 +2053,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.Dispose"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void Dispose(bool disposing) {
 
             if (disposing) {
@@ -2272,9 +2213,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.DropDownDone"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        /// <para>[To be supplied.]</para>
-        /// </devdoc>
         void IComPropertyBrowser.DropDownDone() {
             GetPropertyGridView().DropDownDone();
         }
@@ -2428,9 +2366,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ExpandAllGridItems"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void ExpandAllGridItems() {
             gridView.RecursivelyExpand(peMain, false, true, PropertyGridView.MaxRecurseExpand);
         }
@@ -2798,9 +2733,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnHandleCreated"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected override void OnHandleCreated(EventArgs e) {
@@ -2813,9 +2745,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnHandleDestroyed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected override void OnHandleDestroyed(EventArgs e) {
@@ -2824,9 +2753,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnGotFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3022,9 +2948,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnMouseDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3041,9 +2964,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnMouseMove"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3070,9 +2990,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnMouseUp"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3141,9 +3058,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnComComponentNameChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>        
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected void OnComComponentNameChanged(ComponentRenameEventArgs e) {
@@ -3153,9 +3067,6 @@ namespace System.Windows.Forms {
         
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnNotifyPropertyValueUIItemsChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // Seems safe - doesn't do anything interesting
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected void OnNotifyPropertyValueUIItemsChanged(object sender, EventArgs e) {
@@ -3164,9 +3075,6 @@ namespace System.Windows.Forms {
         }
   
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnPaint"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // Seems safe - doesn't do anything interesting
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnPaint(PaintEventArgs pevent) {
@@ -3214,9 +3122,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnPropertySortChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // Seems safe - just fires an event
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertySortChanged(EventArgs e) {
@@ -3225,9 +3130,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnPropertyTabChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // Seems safe - just fires an event
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertyTabChanged (PropertyTabChangedEventArgs e) {
@@ -3236,9 +3138,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnPropertyValueChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // Seems safe - just fires an event
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertyValueChanged(PropertyValueChangedEventArgs e) {
@@ -3278,9 +3177,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnSelectedGridItemChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3293,9 +3189,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnSelectedObjectsChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3509,9 +3402,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnVisibleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3755,9 +3645,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.Refresh"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override void Refresh() {
             if (GetFlag(RefreshingProperties)) {
                 return;
@@ -3972,7 +3859,7 @@ namespace System.Windows.Forms {
             Debug.Assert(viewTabs != null, "Tab array destroyed!");
 
             if (tabIndex >= viewTabs.Length || tabIndex < 0) {
-                throw new ArgumentOutOfRangeException("tabIndex", SR.PropertyGridBadTabIndex);
+                throw new ArgumentOutOfRangeException(nameof(tabIndex), SR.PropertyGridBadTabIndex);
             }
 
             if (viewTabScopes[tabIndex] == PropertyTabScope.Static) {
@@ -4089,9 +3976,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ResetSelectedProperty"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void ResetSelectedProperty() {
             GetPropertyGridView().Reset();
         }
@@ -4420,9 +4304,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ShowEventsButton"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected void ShowEventsButton(bool value) {
             if (viewTabs != null && viewTabs.Length > EVENTS && (viewTabs[EVENTS] is EventsTab)) {
                
@@ -4695,9 +4576,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnSystemColorsChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -4738,9 +4616,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.WndProc"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         // 
 
 
@@ -4950,16 +4825,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class PropertyTabCollection : ICollection {
         
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             internal static PropertyTabCollection Empty = new PropertyTabCollection(null);
             
             private  PropertyGrid   owner;
@@ -5011,9 +4880,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.AddTabType"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddTabType(Type propertyTabType) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
@@ -5022,9 +4888,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.AddTabType1"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void AddTabType(Type propertyTabType, PropertyTabScope tabScope) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
@@ -5068,9 +4931,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.RemoveTabType"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void RemoveTabType(Type propertyTabType) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);

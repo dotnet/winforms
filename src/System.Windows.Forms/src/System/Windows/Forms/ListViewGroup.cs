@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
                 // Verify that the value is within the enum's range.
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(HorizontalAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
                 if (headerAlignment != value) {
                     headerAlignment = value;
@@ -227,9 +227,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Deserialize"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         private void Deserialize(SerializationInfo info, StreamingContext context) {
 
             int count = 0;
@@ -273,9 +270,6 @@ namespace System.Windows.Forms {
         }                
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.GetObjectData"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>        
         [SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
             info.AddValue("Header", this.Header);
@@ -311,9 +305,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Count"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public int Count
         {
             get
@@ -366,9 +357,6 @@ namespace System.Windows.Forms {
         }
                 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.this"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public ListViewGroup this[int index] {
             get
             {
@@ -384,9 +372,6 @@ namespace System.Windows.Forms {
         }
                 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.this2"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public ListViewGroup this[string key] {
             get {
 
@@ -438,9 +423,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Add"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public int Add(ListViewGroup group)
         {
             if (this.Contains(group)) {
@@ -459,9 +441,6 @@ namespace System.Windows.Forms {
         }        
         
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Add1"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public ListViewGroup Add(string key, string headerText)
         {
             ListViewGroup group = new ListViewGroup(key, headerText);
@@ -480,13 +459,10 @@ namespace System.Windows.Forms {
             if (value is ListViewGroup) {
                 return Add((ListViewGroup)value);
             }
-            throw new ArgumentException("value");
+            throw new ArgumentException(nameof(value));
         }
                 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public void AddRange(ListViewGroup[] groups)
         {
             for(int i=0; i < groups.Length; i++) {
@@ -495,9 +471,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange2"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public void AddRange(ListViewGroupCollection groups)
         {
             for(int i=0; i < groups.Count; i++) {
@@ -515,9 +488,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Clear"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public void Clear() {
             if (listView.IsHandleCreated) {
                 for(int i=0; i < Count; i++) {
@@ -537,9 +507,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Contains"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public bool Contains(ListViewGroup value) {
             return this.List.Contains(value);
         }
@@ -555,26 +522,17 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.CopyTo"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public void CopyTo(Array array, int index) {
             this.List.CopyTo(array, index);
         }
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.GetEnumerator"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public IEnumerator GetEnumerator()
         {
             return this.List.GetEnumerator();
         }
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IndexOf"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public int IndexOf(ListViewGroup value) {
             return this.List.IndexOf(value);
         }
@@ -589,9 +547,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Insert"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public void Insert(int index, ListViewGroup group) {
             if (Contains(group)) {
                 return;
@@ -623,9 +578,6 @@ namespace System.Windows.Forms {
         }
        
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Remove"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public void Remove(ListViewGroup group) {
             group.ListViewInternal = null;            
             this.List.Remove(group);
@@ -645,9 +597,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.RemoveAt"]/*' />
-        /// <devdoc>
-        ///     To be supplied.
-        /// </devdoc>
         public void RemoveAt(int index) {
             Remove(this[index]);
         }        

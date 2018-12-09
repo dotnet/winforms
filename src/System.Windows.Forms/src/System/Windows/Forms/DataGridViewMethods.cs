@@ -35,12 +35,12 @@ namespace System.Windows.Forms
         {
             if (cellAddress.X < 0 || cellAddress.X >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("cellAddress");
+                throw new ArgumentOutOfRangeException(nameof(cellAddress));
             }
 
             if (cellAddress.Y < 0 || cellAddress.Y >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("cellAddress");
+                throw new ArgumentOutOfRangeException(nameof(cellAddress));
             }
 
             int visibleRowIndex = this.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, cellAddress.Y);
@@ -1680,12 +1680,12 @@ namespace System.Windows.Forms
                 case DataGridViewAutoSizeColumnMode.Fill:
                     break;
                 default:
-                    throw new InvalidEnumArgumentException("autoSizeColumnMode", (int)autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode));
+                    throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int)autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode));
             }
 
             if (columnIndex < 0 || columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
 
             if (autoSizeColumnMode == DataGridViewAutoSizeColumnMode.ColumnHeader && !this.ColumnHeadersVisible)
@@ -1781,7 +1781,7 @@ namespace System.Windows.Forms
         {
             if (columnIndex < -1 || columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
 
             if (!this.ColumnHeadersVisible)
@@ -1943,12 +1943,12 @@ namespace System.Windows.Forms
         {
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             // not using ClientUtils here because it's a flags enum, masking instead.
             if (((DataGridViewAutoSizeRowCriteriaInternal) autoSizeRowMode & invalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
             {
-                throw new InvalidEnumArgumentException("autoSizeRowMode", (int) autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
+                throw new InvalidEnumArgumentException(nameof(autoSizeRowMode), (int) autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
             }
             if (autoSizeRowMode == DataGridViewAutoSizeRowMode.RowHeader && !this.RowHeadersVisible)
             {
@@ -1980,7 +1980,7 @@ namespace System.Windows.Forms
             // custom range checking, not using ClientUtils.
             if (rowHeadersWidthSizeMode < DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders || rowHeadersWidthSizeMode > DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader)
             {     
-                throw new InvalidEnumArgumentException("rowHeadersWidthSizeMode", (int)rowHeadersWidthSizeMode, typeof(DataGridViewRowHeadersWidthSizeMode)); 
+                throw new InvalidEnumArgumentException(nameof(rowHeadersWidthSizeMode), (int)rowHeadersWidthSizeMode, typeof(DataGridViewRowHeadersWidthSizeMode)); 
             }
 
           
@@ -2129,7 +2129,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex < -1 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             if (rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing ||
                 rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing)
@@ -2138,7 +2138,7 @@ namespace System.Windows.Forms
             }
             if (rowHeadersWidthSizeMode < DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders || rowHeadersWidthSizeMode > DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader) 
             {
-                 throw new InvalidEnumArgumentException("rowHeadersWidthSizeMode", (int)rowHeadersWidthSizeMode, typeof(DataGridViewRowHeadersWidthSizeMode)); 
+                 throw new InvalidEnumArgumentException(nameof(rowHeadersWidthSizeMode), (int)rowHeadersWidthSizeMode, typeof(DataGridViewRowHeadersWidthSizeMode)); 
             }
            
             if (!this.RowHeadersVisible)
@@ -2371,7 +2371,7 @@ namespace System.Windows.Forms
                 case DataGridViewAutoSizeRowsMode.DisplayedCells:
                     break;
                 default: 
-                    throw new InvalidEnumArgumentException("value", (int)autoSizeRowsMode, typeof(DataGridViewAutoSizeRowsMode)); 
+                    throw new InvalidEnumArgumentException(nameof(autoSizeRowsMode), (int)autoSizeRowsMode, typeof(DataGridViewAutoSizeRowsMode)); 
             }
 
             if (autoSizeRowsMode == DataGridViewAutoSizeRowsMode.None)
@@ -2394,7 +2394,7 @@ namespace System.Windows.Forms
             // not using ClientUtils.IsEnumValid here because DataGridViewAutoSizeRowCriteriaInternal is a flags enum.
             if (((DataGridViewAutoSizeRowCriteriaInternal) autoSizeRowMode & invalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
             {
-                throw new InvalidEnumArgumentException("autoSizeRowMode", (int) autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
+                throw new InvalidEnumArgumentException(nameof(autoSizeRowMode), (int) autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
             }
 
             if (autoSizeRowMode == DataGridViewAutoSizeRowMode.RowHeader && !this.RowHeadersVisible)
@@ -2404,12 +2404,12 @@ namespace System.Windows.Forms
 
             if (rowsCount < 0)
             {
-                throw new ArgumentOutOfRangeException("rowsCount");
+                throw new ArgumentOutOfRangeException(nameof(rowsCount));
             }
 
             if (rowIndexStart < 0)
             {
-                throw new ArgumentOutOfRangeException("rowIndexStart");
+                throw new ArgumentOutOfRangeException(nameof(rowIndexStart));
             }
 
             if (!this.IsHandleCreated)
@@ -3493,7 +3493,7 @@ namespace System.Windows.Forms
                 {
                     if (columnIndexException < 0 || columnIndexException >= this.Columns.Count)
                     {
-                        throw new ArgumentOutOfRangeException("columnIndexException");
+                        throw new ArgumentOutOfRangeException(nameof(columnIndexException));
                     }
                     break;
                 }
@@ -3503,7 +3503,7 @@ namespace System.Windows.Forms
                 {
                     if (columnIndexException < -1 || columnIndexException >= this.Columns.Count)
                     {
-                        throw new ArgumentOutOfRangeException("columnIndexException");
+                        throw new ArgumentOutOfRangeException(nameof(columnIndexException));
                     }
                     break;
                 }
@@ -3517,7 +3517,7 @@ namespace System.Windows.Forms
                 {
                     if (rowIndexException < 0 || rowIndexException >= this.Rows.Count)
                     {
-                        throw new ArgumentOutOfRangeException("rowIndexException");
+                        throw new ArgumentOutOfRangeException(nameof(rowIndexException));
                     }
                     break;
                 }
@@ -3527,7 +3527,7 @@ namespace System.Windows.Forms
                 {
                     if (rowIndexException < -1 || rowIndexException >= this.Rows.Count)
                     {
-                        throw new ArgumentOutOfRangeException("rowIndexException");
+                        throw new ArgumentOutOfRangeException(nameof(rowIndexException));
                     }
                     break;
                 }
@@ -7086,7 +7086,7 @@ namespace System.Windows.Forms
             {
                 if (columnIndex >= this.Columns.Count)
                 {
-                    throw new ArgumentOutOfRangeException("columnIndex");
+                    throw new ArgumentOutOfRangeException(nameof(columnIndex));
                 }
                 columnRect = GetColumnDisplayRectanglePrivate(columnIndex, cutOverflow);
             }
@@ -7094,7 +7094,7 @@ namespace System.Windows.Forms
             {
                 if (columnIndex != -1)
                 {
-                    throw new ArgumentOutOfRangeException("columnIndex");
+                    throw new ArgumentOutOfRangeException(nameof(columnIndex));
                 }
                 if (rowIndex >= 0)
                 {
@@ -7110,7 +7110,7 @@ namespace System.Windows.Forms
             {
                 if (rowIndex >= this.Rows.Count)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 rowRect = GetRowDisplayRectanglePrivate(rowIndex, cutOverflow);
             }
@@ -7118,7 +7118,7 @@ namespace System.Windows.Forms
             {
                 if (rowIndex != -1)
                 {
-                    throw new ArgumentOutOfRangeException("rowIndex");
+                    throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
                 if (columnIndex >= 0)
                 {
@@ -8202,8 +8202,6 @@ namespace System.Windows.Forms
             byte[] sourceBytes = Encoding.Unicode.GetBytes(sbContent.ToString());
             byte[] destinationBytes = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, sourceBytes);
 
-            // Marshal.SystemDefaultCharSize is 2 on WinXP Pro - so the offsets seem to be in character counts instead of bytes. 
-            // Test on JPN and Win9x machines.
             int bytecountEndOfFragment = 135 + destinationBytes.Length;
             int bytecountEndOfHtml = bytecountEndOfFragment + 36;
             string prefix = string.Format(CultureInfo.InvariantCulture, DATAGRIDVIEW_htmlPrefix, bytecountEndOfHtml.ToString("00000000", CultureInfo.InvariantCulture), bytecountEndOfFragment.ToString("00000000", CultureInfo.InvariantCulture)) + DATAGRIDVIEW_htmlStartFragment;
@@ -8216,7 +8214,7 @@ namespace System.Windows.Forms
             utf8Stream = new System.IO.MemoryStream(bytecountEndOfHtml + 1);
             utf8Stream.Write(destinationBytes, 0, bytecountEndOfHtml);
             utf8Stream.WriteByte((byte)0);
-            
+
             #if DEBUG
             Debug.Assert(destinationBytes[97] == '<');
             Debug.Assert(destinationBytes[bytecountEndOfHtml-1] == '>');
@@ -8231,7 +8229,7 @@ namespace System.Windows.Forms
         {
             if (columnIndex < 0 || columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
             return GetColumnDisplayRectanglePrivate(columnIndex, cutOverflow);
         }
@@ -9093,7 +9091,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             return GetRowDisplayRectanglePrivate(rowIndex, cutOverflow);
         }
@@ -9918,7 +9916,7 @@ namespace System.Windows.Forms
         {
             if (dataGridViewCell == null)
             {
-                throw new ArgumentNullException("dataGridViewCell");
+                throw new ArgumentNullException(nameof(dataGridViewCell));
             }
             if (dataGridViewCell.DataGridView != this)
             {
@@ -9939,11 +9937,11 @@ namespace System.Windows.Forms
         {
             if (columnIndex < -1 || columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
             if (rowIndex < -1 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             InvalidateCellPrivate(columnIndex, rowIndex);
         }
@@ -9968,7 +9966,7 @@ namespace System.Windows.Forms
         {
             if (columnIndex < 0 || columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
             InvalidateColumnInternal(columnIndex);
         }
@@ -10014,7 +10012,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             InvalidateRowPrivate(rowIndex);
         }
@@ -10876,7 +10874,7 @@ namespace System.Windows.Forms
             // throw an exception if the column to be added breaks the rules
             if (dataGridViewColumn == null)
             {
-                throw new ArgumentNullException("dataGridViewColumn");
+                throw new ArgumentNullException(nameof(dataGridViewColumn));
             }
             if (dataGridViewColumn.DataGridView != null)
             {
@@ -11124,7 +11122,7 @@ namespace System.Windows.Forms
             // throw an exception if the row to be added breaks the rules
             if (dataGridViewRow == null)
             {
-                throw new ArgumentNullException("dataGridViewRow");
+                throw new ArgumentNullException(nameof(dataGridViewRow));
             }
 
             // !Do not check for dataGridViewRow.Selected flag. Caller does it instead!
@@ -26808,13 +26806,13 @@ namespace System.Windows.Forms
                 (columnIndex >= 0 && rowIndex == -1) ||
                 columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
             if (rowIndex < -1 ||
                 (columnIndex == -1 && rowIndex >= 0) ||
                 rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             if (columnIndex > -1 &&
@@ -27443,10 +27441,10 @@ namespace System.Windows.Forms
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             if ((specified & BoundsSpecified.Width) == BoundsSpecified.Width && width > upperSize) {
-                throw new ArgumentOutOfRangeException("width", width, string.Format(SR.DataGridView_SizeTooLarge, (upperSize).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(width), width, string.Format(SR.DataGridView_SizeTooLarge, (upperSize).ToString(CultureInfo.CurrentCulture)));
             }
             if ((specified & BoundsSpecified.Height) == BoundsSpecified.Height && height > upperSize) {
-                throw new ArgumentOutOfRangeException("height", height, string.Format(SR.DataGridView_SizeTooLarge, (upperSize).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(height), height, string.Format(SR.DataGridView_SizeTooLarge, (upperSize).ToString(CultureInfo.CurrentCulture)));
             }
             base.SetBoundsCore(x, y, width, height, specified);
         }
@@ -27605,12 +27603,12 @@ namespace System.Windows.Forms
         {
             if (columnIndex < 0 || columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
 
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             // cell selection changes
@@ -27925,7 +27923,7 @@ namespace System.Windows.Forms
         {
             if (columnIndex < 0 || columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
 
             this.noSelectionChangeCount++;
@@ -28040,7 +28038,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             this.noSelectionChangeCount++;
@@ -28137,12 +28135,12 @@ namespace System.Windows.Forms
         {
             if (dataGridViewColumn == null)
             {
-                throw new ArgumentNullException("dataGridViewColumn");
+                throw new ArgumentNullException(nameof(dataGridViewColumn));
             }
 
             if (direction != ListSortDirection.Ascending && direction != ListSortDirection.Descending)
             {
-                throw new InvalidEnumArgumentException("direction", (int)direction, typeof(ListSortDirection));
+                throw new InvalidEnumArgumentException(nameof(direction), (int)direction, typeof(ListSortDirection));
             }
 
             if (dataGridViewColumn.DataGridView != this)
@@ -28163,7 +28161,7 @@ namespace System.Windows.Forms
         {
             if (comparer == null)
             {
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             }
 
             if (this.VirtualMode)
@@ -28874,11 +28872,11 @@ namespace System.Windows.Forms
         {
             if (columnIndex < -1 || columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
             if (rowIndex < -1 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             if (this.IsHandleCreated)
             {
@@ -28891,11 +28889,11 @@ namespace System.Windows.Forms
         {
             if (columnIndex < 0 || columnIndex >= this.Columns.Count)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             if (this.IsHandleCreated)
             {
@@ -28950,7 +28948,7 @@ namespace System.Windows.Forms
         {
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             if (this.IsHandleCreated && this.layout.RowHeadersVisible)
             {
@@ -28963,15 +28961,15 @@ namespace System.Windows.Forms
         {
             if (rowIndexStart < 0 || rowIndexStart >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndexStart");
+                throw new ArgumentOutOfRangeException(nameof(rowIndexStart));
             }
             if (rowIndexEnd < 0 || rowIndexEnd >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndexEnd");
+                throw new ArgumentOutOfRangeException(nameof(rowIndexEnd));
             }
             if (rowIndexEnd < rowIndexStart)
             {
-                throw new ArgumentOutOfRangeException("rowIndexEnd");
+                throw new ArgumentOutOfRangeException(nameof(rowIndexEnd));
             }
             if (this.IsHandleCreated && this.layout.RowHeadersVisible)
             {
@@ -29001,7 +28999,7 @@ namespace System.Windows.Forms
         {
             if ((updateToEnd && rowIndex < 0) || (!updateToEnd && rowIndex < -1) || rowIndex >= this.Rows.Count)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             this.Rows.InvalidateCachedRowsHeights();

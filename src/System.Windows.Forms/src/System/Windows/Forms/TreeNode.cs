@@ -758,9 +758,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Nodes"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         ListBindable(false), 
         Browsable(false)
@@ -950,9 +947,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.StateImageIndex"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Localizable(true),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
@@ -969,7 +963,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1 || value > ALLOWEDIMAGES) {
-                    throw new ArgumentOutOfRangeException("StateImageIndex", string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(StateImageIndex), string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
                 }
                 StateImageIndexer.Index = value;
                 if (treeView != null && !treeView.CheckBoxes)
@@ -1381,9 +1375,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Deserialize"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void Deserialize(SerializationInfo serializationInfo, StreamingContext context) {
 
             int childCount = 0;

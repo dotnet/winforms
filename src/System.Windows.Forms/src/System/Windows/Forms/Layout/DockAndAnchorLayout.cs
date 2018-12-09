@@ -665,7 +665,7 @@ namespace System.Windows.Forms.Layout {
             if (GetDock(element) != value) {
                 //valid values are 0x0 to 0x5
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(DockStyle));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DockStyle));
                 }
 
                 bool dockNeedsLayout = CommonProperties.GetNeedsDockLayout(element);

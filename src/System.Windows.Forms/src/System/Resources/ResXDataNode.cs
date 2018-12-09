@@ -40,10 +40,6 @@ namespace System.Resources {
 
         private string name;
         private string comment;
-#if UNUSED
-        private string mimeType;
-        private string valueData;
-#endif
 
         private string typeName; // is only used when we create a resxdatanode manually with an object and contains the FQN
 
@@ -78,10 +74,7 @@ namespace System.Resources {
             result.nodeInfo = (this.nodeInfo != null) ? this.nodeInfo.Clone() : null; // nodeinfo is just made up of immutable objects, we don't need to clone it
             result.name = this.name;
             result.comment = this.comment;
-#if UNUSED            
-            result.mimeType = this.mimeType;
-            result.valueData = this.valueData;
-#endif            
+            
             result.typeName = this.typeName;
             result.fileRefFullPath = this.fileRefFullPath;
             result.fileRefType = this.fileRefType;
@@ -106,10 +99,10 @@ namespace System.Resources {
         ]
         public ResXDataNode(string name, object value, Func<Type, string> typeNameConverter) {
             if(name == null) {
-                throw (new ArgumentNullException("name"));
+                throw (new ArgumentNullException(nameof(name)));
             }
             if(name.Length == 0) {
-                throw (new ArgumentException("name"));
+                throw (new ArgumentException(nameof(name)));
             }
 
             this.typeNameConverter = typeNameConverter;
@@ -139,13 +132,13 @@ namespace System.Resources {
         ]
         public ResXDataNode(string name, ResXFileRef fileRef, Func<Type, string> typeNameConverter) {
             if(name == null) {
-                throw (new ArgumentNullException("name"));
+                throw (new ArgumentNullException(nameof(name)));
             }
             if(fileRef == null) {
-                throw (new ArgumentNullException("fileRef"));
+                throw (new ArgumentNullException(nameof(fileRef)));
             }
             if(name.Length == 0) {
-                throw (new ArgumentException("name"));
+                throw (new ArgumentException(nameof(name)));
             }
             this.name = name;
             this.fileRef = fileRef;
@@ -219,36 +212,14 @@ namespace System.Resources {
             ]
             set {
                 if(value == null) {
-                    throw (new ArgumentNullException("Name"));
+                    throw (new ArgumentNullException(nameof(Name)));
                 }
                 if(value.Length == 0) {
-                    throw (new ArgumentException("Name"));
+                    throw (new ArgumentException(nameof(Name)));
                 }
                 name = value;
             }
         }
-
-#if UNUSED
-        private string MimeType {
-            get {
-                string result = mimeType;
-                if(result == null && nodeInfo != null) {
-                    result = nodeInfo.MimeType;
-                }
-                return result;
-            }
-        }
-
-        private string ValueData {
-            get {
-                string result = valueData;
-                if(result == null && nodeInfo != null) {
-                    result = nodeInfo.ValueData;
-                }
-                return result;
-            }
-        }
-#endif
         
         /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.FileRef"]/*' />
         /// <devdoc>
@@ -302,22 +273,6 @@ namespace System.Resources {
                 return result;
             }
         }
-
-
-#if SOAP_FORMATTER
-        /// <devdoc>
-        ///     As a performance optimization, we isolate the soap class here in a separate
-        ///     function.  We don't care about the binary formatter because it lives in 
-        ///     mscorlib, which is already loaded.  The soap formatter lives in a separate
-        ///     assembly, however, so there is value in preventing it from needlessly
-        ///     being loaded.
-        /// </devdoc>
-        [MethodImplAttribute(MethodImplOptions.NoInlining)]
-        private IFormatter CreateSoapFormatter() {
-            return new System.Runtime.Serialization.Formatters.Soap.SoapFormatter();
-        }
-#endif
-
 
         private static string ToBase64WrappedString(byte[] data) {
             const int lineWrap = 80;
@@ -442,27 +397,7 @@ namespace System.Resources {
                         }
                     }
                 }
-#if SOAP_FORMATTER
-                else if (String.Equals(mimeTypeName, ResXResourceWriter.SoapSerializedObjectMimeType)
-                         || String.Equals(mimeTypeName, ResXResourceWriter.CompatSoapSerializedObjectMimeType)) {
-                    string text = dataNodeInfo.ValueData;
-                    byte[] serializedData;
-                    serializedData = FromBase64WrappedString(text);
-
-                    if (serializedData != null && serializedData.Length > 0) {
-
-                        // Performance : don't inline a new SoapFormatter here.  That will always bring in
-                        //               the soap assembly, which we don't want.  Throw this in another
-                        //               function so the class doesn't have to get loaded.
-                        //
-                        IFormatter formatter = CreateSoapFormatter();
-                        result = formatter.Deserialize(new MemoryStream(serializedData));
-                        if (result is ResXNullRef) {
-                            result = null;
-                        }
-                    }
-                }
-#endif
+                
                 else if (String.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)) {
                     if (typeName != null && typeName.Length > 0) {
                         Type type = ResolveType(typeName, typeResolver);

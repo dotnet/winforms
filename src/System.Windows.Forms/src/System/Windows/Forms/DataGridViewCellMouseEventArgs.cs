@@ -8,9 +8,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
 
     /// <include file='doc\DataGridViewCellMouseEventArgs.uex' path='docs/doc[@for="DataGridViewCellMouseEventArgs"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class DataGridViewCellMouseEventArgs : MouseEventArgs
     {
         private int rowIndex, columnIndex;
@@ -24,11 +21,11 @@ namespace System.Windows.Forms
         {
             if (columnIndex < -1)
             {
-                throw new ArgumentOutOfRangeException("columnIndex");
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
             if (rowIndex < -1)
             {
-                throw new ArgumentOutOfRangeException("rowIndex");
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
             this.columnIndex = columnIndex;
             this.rowIndex = rowIndex;

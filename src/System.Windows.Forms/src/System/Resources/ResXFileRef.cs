@@ -2,12 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if SYSTEM_WEB
-namespace System.PrivateResources {
-#else
 namespace System.Resources {
-#endif
-
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
 
@@ -34,11 +29,8 @@ namespace System.Resources {
     [TypeConverterAttribute(typeof(ResXFileRef.Converter)), Serializable]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
-#if SYSTEM_WEB
-    internal class ResXFileRef {
-#else
+
     public class ResXFileRef {
-#endif
         private string fileName;
         private string typeName;
         [OptionalField(VersionAdded = 2)]
@@ -52,10 +44,10 @@ namespace System.Resources {
         /// </devdoc>
         public ResXFileRef(string fileName, string typeName) {
             if(fileName == null) {
-                throw (new ArgumentNullException("fileName"));
+                throw (new ArgumentNullException(nameof(fileName)));
             }
             if(typeName == null) {
-                throw (new ArgumentNullException("typeName"));
+                throw (new ArgumentNullException(nameof(typeName)));
             }
             this.fileName = fileName;
             this.typeName = typeName;
@@ -88,9 +80,6 @@ namespace System.Resources {
 
 
         /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.FileName"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string FileName {
             get {
                 return fileName;
@@ -98,9 +87,6 @@ namespace System.Resources {
         }
 
         /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.TextFileEncoding"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string TypeName {
             get {
                 return typeName;
@@ -108,9 +94,6 @@ namespace System.Resources {
         }
 
         /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.TextFileEncoding"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Encoding TextFileEncoding {
             get {
                 return textFileEncoding;
@@ -166,9 +149,6 @@ namespace System.Resources {
         }
 
         /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.ToString"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override string ToString() {
             string result = "";
             
@@ -188,16 +168,10 @@ namespace System.Resources {
 
 
         /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
         [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class Converter : TypeConverter {
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.CanConvertFrom"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override bool CanConvertFrom(ITypeDescriptorContext context,
                                                 Type sourceType) {
                 if (sourceType == typeof(string)) {
@@ -207,9 +181,6 @@ namespace System.Resources {
             }
 
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.CanConvertTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override bool CanConvertTo(ITypeDescriptorContext context, 
                                               Type destinationType) {
                 if (destinationType == typeof(string)) {
@@ -219,9 +190,6 @@ namespace System.Resources {
             }
 
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public override Object ConvertTo(ITypeDescriptorContext context, 
                                              CultureInfo culture, 
                                              Object value, 
@@ -244,18 +212,18 @@ namespace System.Resources {
                     if(stringValue.StartsWith("\"")) {
                         int lastIndexOfQuote = stringValue.LastIndexOf("\"");
                         if (lastIndexOfQuote-1<0)
-                            throw new ArgumentException("value");
+                            throw new ArgumentException(nameof(stringValue));
                         fileName = stringValue.Substring(1, lastIndexOfQuote-1); // remove the quotes in" ..... " 
                         if(lastIndexOfQuote+2>stringValue.Length)
-                            throw new ArgumentException("value");
+                            throw new ArgumentException(nameof(stringValue));
                         remainingString = stringValue.Substring(lastIndexOfQuote+2);
                     } else {
                         int nextSemiColumn = stringValue.IndexOf(";");
                         if(nextSemiColumn == -1)
-                            throw new ArgumentException("value");
+                            throw new ArgumentException(nameof(stringValue));
                         fileName = stringValue.Substring(0,nextSemiColumn);
                         if(nextSemiColumn+1>stringValue.Length)
-                            throw new ArgumentException("value");
+                            throw new ArgumentException(nameof(stringValue));
                         remainingString = stringValue.Substring(nextSemiColumn+1);
                     }
                     string[] parts = remainingString.Split(new char[] {';'});
@@ -271,9 +239,6 @@ namespace System.Resources {
             }
 
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertFrom"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             [ResourceExposure(ResourceScope.Machine)]
             [ResourceConsumption(ResourceScope.Machine)]
             public override Object ConvertFrom(ITypeDescriptorContext context, 

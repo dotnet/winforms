@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
                 }
                 else {
                     if (tempList == null) {
-                        throw new ArgumentNullException("dataSource");
+                        throw new ArgumentNullException(nameof(dataSource));
                     }
                     throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), "dataSource");
                 }
@@ -292,9 +292,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.AddNew"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override void AddNew() {
             IBindingList ibl = list as IBindingList;
             if (ibl != null) {
@@ -443,9 +440,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.RemoveAt"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override void RemoveAt(int index) {
             list.RemoveAt(index);
         }
@@ -528,7 +522,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal int Find(PropertyDescriptor property, Object key, bool keepIndex) {
             if (key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
 
             if (property != null && (list is IBindingList) && ((IBindingList)list).SupportsSearching) {
                 return ((IBindingList)list).Find(property, key);
@@ -948,9 +942,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.UpdateIsBinding"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void UpdateIsBinding() {
             UpdateIsBinding(true);
         }

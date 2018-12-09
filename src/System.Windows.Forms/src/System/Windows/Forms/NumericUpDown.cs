@@ -85,9 +85,6 @@ namespace System.Windows.Forms {
         private long buttonPressedStartTime;
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.NumericUpDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "0" is the default value for numeric up down.
                                                                                                         // So we don't have to localize it.
@@ -138,7 +135,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 0 || value > 99) {
-                    throw new ArgumentOutOfRangeException("DecimalPlaces", string.Format(SR.InvalidBoundArgument, "DecimalPlaces", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture), "99"));
+                    throw new ArgumentOutOfRangeException(nameof(DecimalPlaces), string.Format(SR.InvalidBoundArgument, "DecimalPlaces", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture), "99"));
                 }
                 decimalPlaces = value;
                 UpdateEditText();
@@ -190,7 +187,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < (Decimal)0.0) {
-                    throw new ArgumentOutOfRangeException("Increment", string.Format(SR.InvalidArgument, "Increment", value.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(Increment), string.Format(SR.InvalidArgument, "Increment", value.ToString(CultureInfo.CurrentCulture)));
                 }
                 else {
                     this.increment = value;
@@ -254,11 +251,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -370,7 +362,7 @@ namespace System.Windows.Forms {
                 if (value != currentValue) {
                 
                     if (!initializing && ((value < minimum) || (value > maximum))) {
-                        throw new ArgumentOutOfRangeException("Value", string.Format(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
+                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
                     }
                     else {
                         currentValue = value;                       

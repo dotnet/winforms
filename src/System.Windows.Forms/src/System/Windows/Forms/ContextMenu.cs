@@ -65,9 +65,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Popup"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup {
             add {
@@ -123,7 +120,7 @@ namespace System.Windows.Forms {
             
                 //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
-                    throw new InvalidEnumArgumentException("RightToLeft", (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
                 }
                 if (RightToLeft != value) {
                     rightToLeft = value;
@@ -216,7 +213,7 @@ namespace System.Windows.Forms {
 
         private void Show(Control control, Point pos, int flags) {
             if (control == null)
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
 
             if (!control.IsHandleCreated || !control.Visible)
                 throw new ArgumentException(SR.ContextMenuInvalidParent, "control");

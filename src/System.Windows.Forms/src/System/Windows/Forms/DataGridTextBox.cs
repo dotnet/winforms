@@ -21,8 +21,7 @@ namespace System.Windows.Forms{
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultProperty("GridEditName")
+    DesignTimeVisible(false)
     ]
     public class DataGridTextBox : TextBox {
 
@@ -65,9 +64,6 @@ namespace System.Windows.Forms{
         }
 
         /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.OnKeyPress"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
             base.OnKeyPress(e);
@@ -92,9 +88,6 @@ namespace System.Windows.Forms{
         }
 
         /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.ProcessKeyMessage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected internal override bool ProcessKeyMessage(ref Message m)
         {
@@ -245,9 +238,6 @@ namespace System.Windows.Forms{
         }
 
         /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.IsInEditOrNavigateMode"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool IsInEditOrNavigateMode {
             get {
                 return isInEditOrNavigateMode;

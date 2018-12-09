@@ -225,9 +225,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DrawMode"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -241,9 +238,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ItemHeight"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -297,7 +291,7 @@ namespace System.Windows.Forms {
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended)){
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(SelectionMode));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SelectionMode));
                 }
                 if (value != SelectionMode.One
                     && value != SelectionMode.None) {
@@ -408,9 +402,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ItemCheck"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
             add {
@@ -470,11 +461,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -508,9 +494,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CreateItemCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override ListBox.ObjectCollection CreateItemCollection() {
             return new ObjectCollection(this);
         }
@@ -523,7 +506,7 @@ namespace System.Windows.Forms {
         public CheckState GetItemCheckState(int index) {
 
             if (index < 0 || index >= Items.Count)
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             return CheckedItems.GetCheckedState(index);
         }
 
@@ -867,9 +850,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
 
@@ -879,9 +859,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnFontChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
 
             // Update the item height
@@ -926,9 +903,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnMeasureItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnMeasureItem(MeasureItemEventArgs e) {
             base.OnMeasureItem(e);
 
@@ -986,11 +960,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void SetItemCheckState(int index, CheckState value) {
             if (index < 0 || index >= Items.Count) {
-                throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
             }
             // valid values are 0-2 inclusive.
             if (!ClientUtils.IsEnumValid(value,(int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate)){
-                throw new InvalidEnumArgumentException("value", (int)value, typeof(CheckState));
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
             }
             CheckState currentValue = CheckedItems.GetCheckedState(index);
 
@@ -1115,16 +1089,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         new public class ObjectCollection : ListBox.ObjectCollection {
             private CheckedListBox owner;
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection.ObjectCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public ObjectCollection(CheckedListBox owner)
             : base(owner) {
                 this.owner = owner;
@@ -1150,7 +1118,7 @@ namespace System.Windows.Forms {
                 //
                 // Valid values are 0-2 inclusive.
                 if (!ClientUtils.IsEnumValid(check, (int)check, (int)CheckState.Unchecked, (int)CheckState.Indeterminate)){
-                    throw new InvalidEnumArgumentException("value", (int)check, typeof(CheckState));
+                    throw new InvalidEnumArgumentException(nameof(check), (int)check, typeof(CheckState));
                 }
 
                 int index = base.Add(item);
@@ -1161,9 +1129,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public class CheckedIndexCollection : IList {
             private CheckedListBox owner;
 
@@ -1206,9 +1171,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return true;
@@ -1269,9 +1231,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(int index) {
                  return (IndexOf(index) != -1);
             }
@@ -1288,9 +1247,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.CopyTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void CopyTo(Array dest, int index) {
                 int cnt = owner.CheckedItems.Count;
                 for (int i = 0; i < cnt; i++) {
@@ -1309,9 +1265,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 int[] indices = new int[this.Count];
                 CopyTo(indices, 0);
@@ -1319,9 +1272,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(int index) {
                 if (index >= 0 && index < owner.Items.Count) {
                     object value = InnerArray.GetEntryObject(index, 0);
@@ -1344,9 +1294,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public class CheckedItemCollection : IList {
 
             internal static int CheckedItemMask = ItemArray.CreateMask();
@@ -1418,9 +1365,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return true;
@@ -1428,17 +1372,11 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(object item) {
                 return IndexOf(item) != -1;
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(object item) {
                 return InnerArray.IndexOf(item, AnyMask);
             }
@@ -1478,9 +1416,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.CopyTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void CopyTo(Array dest, int index) {
                 int cnt = InnerArray.GetCount(AnyMask);
                 for (int i = 0; i < cnt; i++) {
@@ -1507,9 +1442,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 return InnerArray.GetEnumerator(AnyMask, true);
             }

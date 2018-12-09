@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         {
             if (dataGridViewColumn == null)
             {
-                throw new ArgumentNullException("dataGridViewColumn");
+                throw new ArgumentNullException(nameof(dataGridViewColumn));
             }
             Debug.Assert(dataGridViewColumn.Index >= -1);
             this.dataGridViewColumn = dataGridViewColumn;

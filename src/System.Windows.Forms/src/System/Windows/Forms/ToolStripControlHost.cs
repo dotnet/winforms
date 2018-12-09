@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
         
         public ToolStripControlHost(Control c) {
             if (c == null) {
-                throw new ArgumentNullException("c", SR.ControlCannotBeNull);
+                throw new ArgumentNullException(nameof(c), SR.ControlCannotBeNull);
             }
             control = c;
             SyncControlParent();
@@ -140,7 +140,7 @@ namespace System.Windows.Forms {
             get { return controlAlign; }
             set { 
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(ContentAlignment));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
                 if (controlAlign != value) {
                     controlAlign = value;
@@ -1155,7 +1155,7 @@ namespace System.Windows.Forms {
             /// </summary>
             object IServiceProvider.GetService(Type service) {
                 if (service == null) {
-                    throw new ArgumentNullException("service");
+                    throw new ArgumentNullException(nameof(service));
                 }
 
                 // We have to implement our own dictionary service. If we don't,

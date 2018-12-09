@@ -161,7 +161,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.Width < 0 || value.Height < 0) {
-                    throw new ArgumentOutOfRangeException("AutoScrollMargin", string.Format(SR.InvalidArgument, "AutoScrollMargin", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(AutoScrollMargin), string.Format(SR.InvalidArgument, "AutoScrollMargin", value.ToString()));
                 }
                 SetAutoScrollMargin(value.Width, value.Height);
             }
@@ -739,9 +739,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
@@ -775,9 +772,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.OnVisibleChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnVisibleChanged(EventArgs e) {
             if (Visible) {

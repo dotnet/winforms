@@ -159,9 +159,6 @@ namespace System.Windows.Forms {
         
 
         /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItems"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -669,9 +666,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [ListBindable(false)]
         public class MenuItemCollection : IList {
             private Menu owner;
@@ -682,21 +676,15 @@ namespace System.Windows.Forms {
             private int lastAccessedIndex = -1;
 
             /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.MenuItemCollection"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public MenuItemCollection(Menu owner) {
                 this.owner = owner;
             }
             
             /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.this"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual MenuItem this[int index] {
                 get {
                     if (index < 0 || index >= owner.ItemCount)
-                        throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
                     return owner.items[index];
                 }
                 // set not supported
@@ -737,9 +725,6 @@ namespace System.Windows.Forms {
             }
   
             /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Count"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int Count {
                 get {
                     return owner.ItemCount;
@@ -771,9 +756,6 @@ namespace System.Windows.Forms {
             }
            
             /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.IsReadOnly"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool IsReadOnly {
                 get {
                     return false;
@@ -862,7 +844,7 @@ namespace System.Windows.Forms {
 
                 // Validate our index
                 if (index < 0 || index > owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
                 }
                                 
                 if (owner.items == null || owner.items.Length == owner.ItemCount) {
@@ -883,12 +865,9 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.AddRange"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public virtual void AddRange(MenuItem[] items) {
                 if (items == null) {
-                    throw new ArgumentNullException("items");
+                    throw new ArgumentNullException(nameof(items));
                 }
                 foreach(MenuItem item in items) {
                     Add(item);
@@ -907,9 +886,6 @@ namespace System.Windows.Forms {
             }
            
             /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Contains"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public bool Contains(MenuItem value) {
                 return IndexOf(value) != -1;
             }
@@ -942,7 +918,7 @@ namespace System.Windows.Forms {
             public MenuItem [] Find(string key, bool searchAllChildren) {
 
                 if ((key == null) || (key.Length == 0)) {
-                    throw new System.ArgumentNullException("key", SR.FindKeyMayNotBeEmptyOrNull);
+                    throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
                 
@@ -997,9 +973,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.IndexOf"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public int IndexOf(MenuItem value) {
                 for(int index=0; index < Count; ++index) {
                     if (this[index] == value) {
@@ -1096,9 +1069,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.CopyTo"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public void CopyTo(Array dest, int index) {
                 if (owner.ItemCount > 0) {
                     System.Array.Copy(owner.items, 0, dest, index, owner.ItemCount);
@@ -1106,9 +1076,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.GetEnumerator"]/*' />
-            /// <devdoc>
-            ///    <para>[To be supplied.]</para>
-            /// </devdoc>
             public IEnumerator GetEnumerator() {
                 return new WindowsFormsUtils.ArraySubsetEnumerator(owner.items, owner.ItemCount);
             }
@@ -1120,7 +1087,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException("index", string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
                 }
 
                 MenuItem item = owner.items[index];
