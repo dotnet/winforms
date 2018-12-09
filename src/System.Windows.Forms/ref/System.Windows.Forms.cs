@@ -372,6 +372,7 @@ namespace System.Windows.Forms
         public static System.Globalization.CultureInfo CurrentCulture { get { throw null; } set { } }
         public static System.Windows.Forms.InputLanguage CurrentInputLanguage { get { throw null; } set { } }
         public static string ExecutablePath { get { throw null; } }
+        public static HighDpiMode HighDpiMode { get {throw null; } }
         public static string LocalUserAppDataPath { get { throw null; } }
         public static bool MessageLoop { get { throw null; } }
         public static System.Windows.Forms.FormCollection OpenForms { get { throw null; } }
@@ -395,6 +396,7 @@ namespace System.Windows.Forms
         public static void AddMessageFilter(System.Windows.Forms.IMessageFilter value) { }
         public static void DoEvents() { }
         public static void EnableVisualStyles() { }
+        public static bool SetHighDpiMode(HighDpiMode highDpiMode) { throw null; }
         public static void Exit() { }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public static void Exit(System.ComponentModel.CancelEventArgs e) { }
@@ -7711,6 +7713,16 @@ namespace System.Windows.Forms
         public virtual void SetShowHelp(System.Windows.Forms.Control ctl, bool value) { }
         public override string ToString() { throw null; }
     }
+
+    public enum HighDpiMode
+    {
+        Uninitialized,
+        DpiUnaware,
+        SystemAware,
+        PerMonitor,
+        PerMonitorV2
+    }
+
     public enum HorizontalAlignment
     {
         Center = 2,
