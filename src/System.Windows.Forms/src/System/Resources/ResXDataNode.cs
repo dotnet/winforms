@@ -83,7 +83,7 @@ namespace System.Resources {
                 fileRefTextEncoding = this.fileRefTextEncoding,
                 // we don't clone the value, because we don't know how
                 value = this.value,
-                fileRef = fileRef?.Clone(),
+                fileRef = this.fileRef?.Clone(),
                 typeNameConverter = this.typeNameConverter
             };
         }
