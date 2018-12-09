@@ -99,10 +99,8 @@ namespace System.Windows.Forms
             int bytesRead = 0;
             if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
             {
-                fixed (byte* ch = buffer)
-                {
-                    bytesRead = _Read((void*)(ch + index), count);
-                }
+                var span = new Span<byte>(buffer, index, count);
+                bytesRead = Read(span);
             }
             return bytesRead;
         }
@@ -137,23 +135,10 @@ namespace System.Windows.Forms
 
         public unsafe override void Write(byte[] buffer, int index, int count)
         {
-            int bytesWritten = 0;
             if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
             {
-                try
-                {
-                    fixed (byte* b = buffer)
-                    {
-                        bytesWritten = _Write((void*)(b + index), count);
-                    }
-                }
-                catch
-                {
-                }
-            }
-            if (bytesWritten < count)
-            {
-                throw new IOException(SR.DataStreamWrite);
+                var span = new ReadOnlySpan<byte>(buffer, index, count);
+                Write(span);
             }
         }
 
@@ -162,15 +147,20 @@ namespace System.Windows.Forms
             if (buffer.IsEmpty)
                 return;
 
+            int bytesWritten = 0;
             try
             {
                 fixed (byte* b = &buffer[0])
                 {
-                    _Write(b, buffer.Length);
+                    bytesWritten = _Write(b, buffer.Length);
                 }
             }
             catch
             {
+            }
+            if (bytesWritten < buffer.Length)
+            {
+                throw new IOException(SR.DataStreamWrite);
             }
         }
 
