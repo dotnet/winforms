@@ -113,6 +113,7 @@ namespace System.Windows.Forms.Tests
             audioData.Add(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }.AsMemory());
             audioData.Add(new byte[] { 10, 55, 99, 255 }.AsMemory());
             audioData.Add(Enumerable.Range(0, 255).Select(a => (byte)a).ToArray());
+            audioData.Add(Memory<byte>.Empty);
             return audioData;
         }
         #endregion
