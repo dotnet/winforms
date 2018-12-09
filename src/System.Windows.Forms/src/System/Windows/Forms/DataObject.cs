@@ -391,23 +391,6 @@ namespace System.Windows.Forms
             SetAudio(new MemoryStream(audioBytes));
         }
 
-        /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetAudio"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public virtual void SetAudio(Span<byte> audioBytes)
-        {
-            if (audioBytes.IsEmpty)
-            {
-                throw new ArgumentException(nameof(audioBytes));
-            }
-
-            var stream = new MemoryStream(audioBytes.Length);
-            stream.Write(audioBytes);
-            stream.Seek(0, SeekOrigin.Begin);
-            SetAudio(stream);
-        }
-
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetAudio1"]/*' />
         public virtual void SetAudio(Stream audioStream)
         {
