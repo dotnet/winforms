@@ -31,7 +31,7 @@ jobs:
         - name: _SignArgs
           value: ''
         - name: _Sign
-          vale: true
+          value: true
 
         # needed for darc (dependency flow) publishing
         - name: _PublishType
