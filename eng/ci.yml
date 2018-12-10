@@ -150,7 +150,7 @@ jobs:
           IncludeDotNetCli: true
           DotNetCliPackageType: 'sdk'
           # We build with '3.0.100-preview-009764' but Helix can't currently use non-publicly-released sdk versions
-          DotNetCliVersion: '3.0.100-preview-009820'
+          DotNetCliVersion: '3.0.100-preview-009812'
           EnableXUnitReporter: true
           WaitForWorkItemCompletion: true
           IsExternal: false
