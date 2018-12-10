@@ -295,9 +295,8 @@ namespace System.Windows.Forms {
                 // Found a match, so select this value
                 if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling) {
                     domainIndex = matchIndex;
-                } else {
-                    SelectIndex(matchIndex);
                 }
+                SelectIndex(matchIndex);
             } else {
                 // Otherwise, get the next string in the domain list
                 if (domainIndex < domainItems.Count - 1) {
@@ -551,9 +550,8 @@ namespace System.Windows.Forms {
                 //with new runtime, we update the selected index and perform spinner action.
                 if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling) {
                     domainIndex = matchIndex;
-                } else {
-                    SelectIndex(matchIndex);
                 }
+                SelectIndex(matchIndex);
             } else {
                 // Otherwise, get the previous string in the domain list            
                 if (domainIndex > 0) {
