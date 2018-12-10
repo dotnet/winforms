@@ -9,7 +9,6 @@ root = true
 [*]
 indent_style = space
 charset = utf-8-bom
-end_of_line = crlf
 insert_final_newline = true
 trim_trailing_whitespace = true
 indent_size = 4
