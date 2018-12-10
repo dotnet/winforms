@@ -89,7 +89,11 @@ Feel free to use other labels if it helps your triage efforts (for example, **ne
 
 Each PR has to have reviewer approval from at least one WinForms team member who is not author of the change, before it can be merged.
 
-1. Don't set any  labels on PRs. They are superfluous and not needed (exceptions: **NO MERGE**).
+1. Please don't set any labels on PRs. 
+    * exceptions: 
+      * **request-no-squash** may be supplied by the PR author(s) to request that history not be squashed at merge; this is a request, not a requirement 
+      * **NO-MERGE** may be supplied by the WinForms team in order to indicate that the PR should be halted; a reason should be given in the comments
+      * **waiting-on-testing** may be supplied by the WinForms team to inform the PR author(s) that their PR is being delayed due to internal, manual testing; this action does not require action by the author(s). 
     * Motivation: All the important info (*issue type* label, API approval label, etc.) is already captured on the associated issue.
 1. Push PRs forward, don't let them go stale (response every 5+ days, ideally no PRs older than 2 weeks).
 1. Close stuck or long-term blocked PRs (for example, due to missing API approval, etc.) and reopen them once they are unstuck.

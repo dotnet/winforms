@@ -26,6 +26,9 @@
     <IsPackable>true</IsPackable>
     <NoWarn>$(NoWarn);NU5125</NoWarn>
 
+    <!-- Disable a VS-specific target that is failing when building this csproj -->
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+
   </PropertyGroup>
 
   <!-- nuspec properties -->
