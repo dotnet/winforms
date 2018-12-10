@@ -94,7 +94,14 @@ namespace System.Windows.Forms
         {
         }
 
-        public unsafe override int Read(byte[] buffer, int index, int count)
+        /// <summary>
+        /// Read the data into the given buffer
+        /// </summary>
+        /// <param name="buffer">The buffer receiving the data</param>
+        /// <param name="index">The offset from the beginning of the buffer</param>
+        /// <param name="count">The number of bytes to read</param>
+        /// <returns>The number of bytes read</returns>
+        public override int Read(byte[] buffer, int index, int count)
         {
             int bytesRead = 0;
             if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
@@ -106,10 +113,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Read data from the given buffer
+        /// Read the data into the given buffer
         /// </summary>
-        /// <param name="buffer">The buffer containing the data</param>
-        /// <returns>The number of processed bytes</returns>
+        /// <param name="buffer">The buffer receiving the data</param>
+        /// <returns>The number of bytes read</returns>
         public unsafe override int Read(Span<byte> buffer)
         {
             int bytesRead = 0;
@@ -133,15 +140,32 @@ namespace System.Windows.Forms
             return comStream.Seek(offset, (int)origin);
         }
 
-        public unsafe override void Write(byte[] buffer, int index, int count)
+        /// <summary>
+        /// Writes the data contained in the given buffer
+        /// </summary>
+        /// <param name="buffer">The buffer containing the data to write</param>
+        /// <param name="index">The offset from the beginning of the buffer</param>
+        /// <param name="count">The number of bytes to write</param>
+        public override void Write(byte[] buffer, int index, int count)
         {
+            if (count == 0)
+                return;
+
             if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
             {
                 var span = new ReadOnlySpan<byte>(buffer, index, count);
                 Write(span);
+                return;
             }
+
+            throw new IOException(SR.DataStreamWrite);
         }
 
+
+        /// <summary>
+        /// Writes the data contained in the given buffer
+        /// </summary>
+        /// <param name="buffer">The buffer to write</param>
         public unsafe override void Write(ReadOnlySpan<byte> buffer)
         {
             if (buffer.IsEmpty)
