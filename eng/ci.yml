@@ -30,6 +30,8 @@ jobs:
           value: test
         - name: _SignArgs
           value: ''
+        - name: _Sign
+          value: true
 
         # needed for darc (dependency flow) publishing
         - name: _PublishType
@@ -70,7 +72,7 @@ jobs:
           # until the agent is running on the machine. They can be overridden any time before they are resolved,
           # like in the job matrix below (see Build_Debug)
           - name: _SignArgs
-            value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName)
+            value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
           - name: _PublishArgs
             value: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
               /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
@@ -89,7 +91,13 @@ jobs:
             _BuildConfig: Debug
             # override some variables for debug
             _PublishType: none
-            _SignType: test
+
+            # Test signing is running into sporadic failures on build machines, so disable it for now
+            # TODO: revert this once https://github.com/dotnet/core-eng/issues/4734 is resolved
+            #_SignType: test
+            _SignType: ''
+            _Sign: false
+
             _DotNetPublishToBlobFeed : false
           Build_Release:
             _BuildConfig: Release
@@ -98,7 +106,7 @@ jobs:
       - checkout: self
         clean: true
 
-      # Use utility script to run script command dependent on agent OS.
+      # Build, test, pack, and sign
       - script: eng\common\cibuild.cmd
           -configuration $(_BuildConfig) 
           -prepareMachine
@@ -150,3 +158,15 @@ jobs:
           WaitForWorkItemCompletion: true
           condition: succeeded()
           continueOnError: false
+
+      # Publish the nuget package as a build artifact
+      # Only do this if the build is internal AND the config is released (this ensures package contents are real signed)
+      - ${{ if eq(parameters.runAsPublic, 'false') }}:
+        - task: PublishPipelineArtifact@0
+          inputs:
+            artifactName: 'Package'
+            targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
+          displayName: Publish package to build artifacts
+          continueOnError: true
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+
