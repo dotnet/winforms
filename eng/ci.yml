@@ -151,9 +151,6 @@ jobs:
           #XUnitRunnerVersion: ''
           IncludeDotNetCli: true
           DotNetCliPackageType: 'sdk'
-          # We build with '3.0.100-preview-009764' but Helix can't currently use non-publicly-released sdk versions
-          # TODO: Move our SDK version up to match this, and remove this line afterwards
-          DotNetCliVersion: '3.0.100-preview-009820'
           EnableXUnitReporter: true
           WaitForWorkItemCompletion: true
           condition: succeeded()
