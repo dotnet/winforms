@@ -19,6 +19,10 @@ cd MyWinFormsApp
 dotnet run
 ```
 
+## Designing Forms
+
+WinForms Core does not yet have a dedicated Designer tool. For the time being, you can use [this workaround](winforms-designer.md).
+
 ## Samples
 
 Check out the [.NET Core 3.0 WinForms samples](https://github.com/dotnet/samples/tree/master/windowsforms) for both basic and advanced scenarios.
