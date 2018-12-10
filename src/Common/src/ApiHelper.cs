@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal static class ApiHelper
     {
-        private static ConcurrentDictionary<Tuple<string, string>, bool> availableApis = new ConcurrentDictionary<Tuple<string, string>, bool>();
+        private static readonly ConcurrentDictionary<(string libName, string procName), bool> availableApis = new ConcurrentDictionary<(string libName, string procName), bool>();
 
         /// <summary>
         /// Checks if requested API is available in the give library that exist on the machine
@@ -27,7 +27,7 @@ namespace System.Windows.Forms
 
             if (!string.IsNullOrEmpty(libName) && !string.IsNullOrEmpty(procName))
             {
-                var key = new Tuple<string, string>(libName, procName);
+                (string libName, string procName) key = (libName, procName);
 
                 if (availableApis.TryGetValue(key, out isAvailable))
                 {
