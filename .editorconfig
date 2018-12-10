@@ -8,7 +8,6 @@ root = true
 # Use 4 spaces as indentation
 [*]
 indent_style = space
-trim_trailing_whitespace = true
 indent_size = 4
 
 [project.json]
@@ -17,6 +16,7 @@ indent_size = 2
 # C# files
 [*.cs]
 charset = utf-8-bom
+insert_final_newline = true
 # New line preferences
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
