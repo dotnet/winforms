@@ -23,8 +23,7 @@ parameters:
   continueOnError: false
 
 steps:
-  - script: '%BUILD_SOURCESDIRECTORY%\eng\common\msbuild.ps1 %BUILD_SOURCESDIRECTORY%\eng\common\helixpublish.proj /bl:%BUILD_SOURCESDIRECTORY%\artifacts\log\%BuildConfig%\SendToHelix.binlog'
-    displayName: Send job to Helix (Windows)
+  - powershell: 'powershell "$env:BUILD_SOURCESDIRECTORY\eng\common\msbuild.ps1 $env:BUILD_SOURCESDIRECTORY\eng\common\helixpublish.proj /bl:$env:BUILD_SOURCESDIRECTORY\artifacts\log\$env:BuildConfig\SendToHelix.binlog"'    displayName: Send job to Helix (Windows)
     env:
       BuildConfig: $(_BuildConfig)
       HelixSource: ${{ parameters.HelixSource }}

@@ -132,30 +132,29 @@ jobs:
       #     overWrite: true
       #   displayName: Copy xUnit func tests to helix staging dir
 
-      - template: /eng/common/templates/steps/helix-publish.yml
+      - template: /eng/common/templates/steps/send-to-helix.yml
         parameters:
-          HelixSource: $(_HelixSource)
-          HelixType: ̓'tests/functional'
-          HelixTargetQueues: $(_HelixAgentPool)
-          # secret variable set in Azure DevOps build definition
-          # todo: when we go public, get this value from the Helix Anonymous variable group
-          # for internal builds, get this value from the DotNet-HelixApi-Access variable group
-          HelixAccessToken: $(helix-token) 
+          HelixSource: $(_HelixSource)          # required
+          HelixType: 'tests/default/'           # required
+          #HelixBuild: $(Build.BuildNumber)     # required
+          HelixTargetQueues: $(_HelixAgentPool) # required
+          HelixAccessToken: $(helix-token)      # required
           #HelixPreCommands: ''
           #HelixPostCommands: ''
-          WorkItemDirectory: #$(_HelixStagingDir)
-          WorkItemCommand: #'dotnet.exe exec --depsfile System.Windows.Forms.Func.Tests.deps.json --runtimeconfig System.Windows.Forms.Func.Tests.runtimeconfig.json xunit.console.dll System.Windows.Forms.Func.Tests.dll -noautoreporters -xml System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.xml -html System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.html'
+          #WorkItemDirectory: ''
+          #WorkItemCommand: ''
           #CorrelationPayloadDirectory: ''
-          XUnitProjects: '$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj'
+          XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj'
           #XUnitTargetFramework: ''
           #XUnitRunnerVersion: ''
           IncludeDotNetCli: true
           DotNetCliPackageType: 'sdk'
           # We build with '3.0.100-preview-009764' but Helix can't currently use non-publicly-released sdk versions
-          # TODO: Move our SDK version up to match this, and remove this line afterwards
           DotNetCliVersion: '3.0.100-preview-009820'
           EnableXUnitReporter: true
           WaitForWorkItemCompletion: true
+          IsExternal: false
+          #Creator: ''
           condition: succeeded()
           continueOnError: false
 
