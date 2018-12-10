@@ -9,11 +9,10 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System;
     using System.IO;
-    //using System.Security.Permissions;
+    using System.Security.Permissions;
     using System.Security;
     using System.Drawing.Printing;
     using System.Runtime.Versioning;
-    using System.Runtime;
 
     internal static class IntSecurity {
         public static readonly TraceSwitch SecurityDemand = new TraceSwitch("SecurityDemand", "Trace when security demands occur.");
