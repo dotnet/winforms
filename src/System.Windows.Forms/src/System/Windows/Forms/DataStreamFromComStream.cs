@@ -148,7 +148,7 @@ namespace System.Windows.Forms
         /// <param name="count">The number of bytes to write</param>
         public override void Write(byte[] buffer, int index, int count)
         {
-            if (count == 0)
+            if (count <= 0)
                 return;
 
             if (count > 0 && index >= 0 && (count + index) <= buffer.Length)

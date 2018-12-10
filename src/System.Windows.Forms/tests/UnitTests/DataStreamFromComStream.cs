@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Tests
             var sample = Guid.NewGuid();
 
             BinaryFormatter formatter = new BinaryFormatter();
-            using (var memoryStream = new MemoryStream())// SerializeOnStream(sample))
+            using (var memoryStream = new MemoryStream())
             {
                 var istream = (UnsafeNativeMethods.IStream)new UnsafeNativeMethods.ComStreamFromDataStream(memoryStream);
                 Stream stream = new DataStreamFromComStream(istream);
