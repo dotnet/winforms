@@ -967,7 +967,7 @@ namespace System.Windows.Forms
         ///     Saves stream out to handle.
         /// </devdoc>
         /// <internalonly/>
-        private int SaveStreamToHandle(ref IntPtr handle, Stream stream)
+        private unsafe int SaveStreamToHandle(ref IntPtr handle, Stream stream)
         {
             if (handle != IntPtr.Zero)
             {
@@ -986,11 +986,8 @@ namespace System.Windows.Forms
             }
             try
             {
-                unsafe
-                {
-                    var span = new Span<byte>(ptr.ToPointer(), size);
-                    stream.Read(span);
-                }
+                var span = new Span<byte>(ptr.ToPointer(), size);
+                stream.Read(span);
             }
             finally
             {
@@ -1887,11 +1884,8 @@ namespace System.Windows.Forms
                 try
                 {
                     int size = UnsafeNativeMethods.GlobalSize(new HandleRef(null, handle));
-                    unsafe
-                    {
-                        var span = new Span<byte>(ptr.ToPointer(), size);
-                        stringData = Encoding.UTF8.GetString(span);
-                    }
+                    var span = new Span<byte>(ptr.ToPointer(), size);
+                    stringData = Encoding.UTF8.GetString(span);
                 }
                 finally
                 {
