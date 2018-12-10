@@ -31,7 +31,7 @@ jobs:
         - name: _SignArgs
           value: ''
         - name: _Sign
-          vale: true
+          value: true
 
         # needed for darc (dependency flow) publishing
         - name: _PublishType
@@ -92,7 +92,8 @@ jobs:
       steps:
       - checkout: self
         clean: true
-      # Use utility script to run script command dependent on agent OS.
+
+      # Build, test, pack, and sign
       - script: eng\common\cibuild.cmd
           -configuration $(_BuildConfig) 
           -prepareMachine
@@ -100,3 +101,14 @@ jobs:
           $(_SignArgs)
           $(_OfficialBuildIdArgs)
         displayName: Windows Build / Publish
+
+      # Publish the nuget package as a build artifact
+      # Only do this if the build is internal AND the config is released (this ensures package contents are real signed)
+      - ${{ if eq(parameters.runAsPublic, 'false') }}:
+        - task: PublishPipelineArtifact@0
+          inputs:
+            artifactName: 'Package'
+            targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
+          displayName: Publish package to build artifacts
+          continueOnError: true
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
