@@ -1,4 +1,4 @@
-# Using the Classic WinForms Designer to Design WinForms Core Forms
+# Using the Classic WinForms Designer in WinForms Core
 
 At this point, a dedicated WinForms Designer for WinForms Core is not yet available. As a workaround, you can use Visual Studio’s option to work with linked files and use its WinForms Designer for the Classic Framework. 
 
@@ -45,16 +45,16 @@ dotnet build
 2. Save the project in Visual Studio, and with that, also save the Solution file.
 3. Open the context menu of the solution (not the project!) in the Solution Explorer and chose *Add New Project*.
 
-<img src="./image/add-project-to-sln.png" alt="drawing" width="500"/>
+<img src="./images/add-project-to-sln.png" alt="drawing" width="500"/>
 
 4. In the *Installed Templates* section, pick *Visual C#* (this works for Visual Basic equally – see the comments for Visual Basic above, though), *Windows Desktop*, and then click *Windows Forms App (.NET Framework)* from the list of installed templates.
 
-![New WinForms Project Dialog](./image/add-project-to-sln.png)
+<img src="./images/add-project-dialog.png" alt="drawing" width="600"/>
 
 5. Name the new classic Framework project as the Core project, but add “.Designer” to it (so, for example, if your Core project is named “MyWinFormApp”, name the classic Framework App “MyWinFormsApp.Designer”).
 6. In the properties of the Classic Framework App (context menu on the project in the Solution Explorer), rename the default namespace to the Core App’s default namespace.
 
-<img src="./image/edit-namespace.png" alt="drawing"/>
+<img src="./images/edit-namespace.png" alt="drawing" width="650"/>
 
 7. Erase the existing Form files in both projects.
 
@@ -62,11 +62,11 @@ dotnet build
 
 1. In the Classing Framework project, open the project’s context menu, and click *Add New Item*.
 
-<img src="./image/add-new-form.png" alt="drawing"/>
+<img src="./images/add-new-form.png" alt="drawing" width="500"/>
 
 2. In the section list, click on *Windows Forms*, and chose *Windows Form* from the installed templates.
 
-<img src="./image/add-new-form-dialog.png" alt="drawing"/>
+<img src="./images/add-new-form-dialog.png" alt="drawing" width="650"/>
 
 3. Enter the name for the new Form/User Control.
 4. Click *Add*.
@@ -77,7 +77,7 @@ dotnet build
 7. Now, to have the exact same file back in the WinForms Classic Framework Designer, we need to use Visual Studio’s file link option. Remember: We can only use the Classic Designer, but we want to have only one set of files. So, the form files, of course, belong to the Core App. But we want to edit them in the context of the Classic Framework App (thus using the Classic Designer). So, we link the existing Core Form files to the classic app, and to this end, you open the context menu on the classic project in the solution explorer, and pick *Add* and *Existing Item*.
 8. In the File Open Dialog, navigate to the Core app, and find the *Form.cs*, *Form.Designer.cs* and *Form.resx* files. (Replace *Form* by the name of your form.) Select all of them, but DO NOT click *Add* yet!
 
-<img src="./image/add-as-link.png" alt="drawing"/>
+<img src="./images/add-as-link.png" alt="drawing" width="650"/>
 
 9. Open the pulldown menu of the *Add* dropdown button and click *Add as Link*.
 10. Compile the solution to see if the file references got set up correctly.
