@@ -145,11 +145,12 @@ jobs:
           #WorkItemCommand: ''
           #CorrelationPayloadDirectory: ''
           XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj'
-          #XUnitTargetFramework: ''
-          #XUnitRunnerVersion: ''
+          XUnitTargetFramework: netcoreapp3.0 # this defaults to netcoreapp2.1, so this is required
+          #XUnitRunnerVersion: 2.4.1 # specify the version of xUnit runner you wish to use here
           IncludeDotNetCli: true
           DotNetCliPackageType: 'sdk'
           # We build with '3.0.100-preview-009764' but Helix can't currently use non-publicly-released sdk versions
+          # Note that the version you use here MUST be in the official releases at https://dotnet.microsoft.com/download/dotnet-core/3.0
           DotNetCliVersion: '3.0.100-preview-009812'
           EnableXUnitReporter: true
           WaitForWorkItemCompletion: true
