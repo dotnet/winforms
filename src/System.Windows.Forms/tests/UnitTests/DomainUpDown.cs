@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DomainUpDown_Sorted_SelectedIndex()
+        public void DomainUpDown_Sorted_SelectedIndexGetSet()
         {
             var underTest = GetNewDomainUpDown(true);
 
