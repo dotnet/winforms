@@ -104,11 +104,11 @@ jobs:
 
       # Publish the nuget package as a build artifact
       # Only do this if the build is internal AND the config is released (this ensures package contents are real signed)
-      #- ${{ if eq(parameters.runAsPublic, 'false') }}:
-      - task: PublishPipelineArtifact@0
-        inputs:
-          artifactName: 'Package'
-          targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
-        displayName: Publish package to build artifacts
-        continueOnError: true
-        condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+      - ${{ if eq(parameters.runAsPublic, 'false') }}:
+        - task: PublishPipelineArtifact@0
+          inputs:
+            artifactName: 'Package'
+            targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
+          displayName: Publish package to build artifacts
+          continueOnError: true
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
