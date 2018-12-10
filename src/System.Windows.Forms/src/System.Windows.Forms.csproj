@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\Common\src\ApiHelper.cs" Link="Common\ApiHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
       <Namespace>System</Namespace>
