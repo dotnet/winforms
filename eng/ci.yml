@@ -44,8 +44,10 @@ jobs:
           value: ''
 
         # needed for helix jobs
+        # The win10 pool isn't ready for us yet, so using 8.1 in the meantime
+        # When ready, change value to 'Windows.10.Amd64.Open'
         - name: _HelixAgentPool
-          value: 'Windows.10.Amd64.Open'
+          value: 'Windows.81.Amd64.Open'
         # - name: _WinformsControlsTestBinDir
         #   value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
         # - name: _WinformsFuncTestBinDir
@@ -82,8 +84,10 @@ jobs:
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
+          # The win10 pool isn't ready for us yet, so using 8.1 in the meantime
+          # When ready, change value to 'Windows.10.Amd64'
           - name: _HelixAgentPool
-            value: 'Windows.10.Amd64'
+            value: 'Windows.81.Amd64'
 
       strategy:
         matrix:
