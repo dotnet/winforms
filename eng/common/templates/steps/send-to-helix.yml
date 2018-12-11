@@ -10,7 +10,8 @@ parameters:
   WorkItemCommand: ''
   CorrelationPayloadDirectory: ''
   XUnitProjects: ''
-  XUnitTargetFramework: ''
+  XUnitPublishTargetFramework: ''
+  XUnitRuntimeTargetFramework: ''
   XUnitRunnerVersion: ''
   IncludeDotNetCli: false
   DotNetCliPackageType: ''
@@ -38,7 +39,8 @@ steps:
       WorkItemCommand: ${{ parameters.WorkItemCommand }}
       CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
       XUnitProjects: ${{ parameters.XUnitProjects }}
-      XUnitTargetFramework: ${{ parameters.XUnitTargetFramework }}
+      XUnitPublishTargetFramework: ${{ parameters.XUnitPublishTargetFramework }}
+      XUnitRuntimeTargetFramework: ${{ parameters.XUnitRuntimeTargetFramework }}
       XUnitRunnerVersion: ${{ parameters.XUnitRunnerVersion }}
       IncludeDotNetCli: ${{ parameters.IncludeDotNetCli }}
       DotNetCliPackageType: ${{ parameters.DotNetCliPackageType }}
@@ -64,7 +66,8 @@ steps:
       WorkItemCommand: ${{ parameters.WorkItemCommand }}
       CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
       XUnitProjects: ${{ parameters.XUnitProjects }}
-      XUnitTargetFramework: ${{ parameters.XUnitTargetFramework }}
+      XUnitPublishTargetFramework: ${{ parameters.XUnitPublishTargetFramework }}
+      XUnitRuntimeTargetFramework: ${{ parameters.XUnitRuntimeTargetFramework }}
       XUnitRunnerVersion: ${{ parameters.XUnitRunnerVersion }}
       IncludeDotNetCli: ${{ parameters.IncludeDotNetCli }}
       DotNetCliPackageType: ${{ parameters.DotNetCliPackageType }}
