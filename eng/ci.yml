@@ -1,7 +1,7 @@
 parameters:
 
   # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp
+  agentPool: dotnet-external-temp-vs2017
 
   # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
   runAsPublic: true
@@ -30,6 +30,8 @@ jobs:
           value: test
         - name: _SignArgs
           value: ''
+        - name: _Sign
+          value: true
 
         # needed for darc (dependency flow) publishing
         - name: _PublishType
@@ -70,7 +72,7 @@ jobs:
           # until the agent is running on the machine. They can be overridden any time before they are resolved,
           # like in the job matrix below (see Build_Debug)
           - name: _SignArgs
-            value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName)
+            value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
           - name: _PublishArgs
             value: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
               /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
@@ -89,7 +91,13 @@ jobs:
             _BuildConfig: Debug
             # override some variables for debug
             _PublishType: none
-            _SignType: test
+
+            # Test signing is running into sporadic failures on build machines, so disable it for now
+            # TODO: revert this once https://github.com/dotnet/core-eng/issues/4734 is resolved
+            #_SignType: test
+            _SignType: ''
+            _Sign: false
+
             _DotNetPublishToBlobFeed : false
           Build_Release:
             _BuildConfig: Release
@@ -98,7 +106,7 @@ jobs:
       - checkout: self
         clean: true
 
-      # Use utility script to run script command dependent on agent OS.
+      # Build, test, pack, and sign
       - script: eng\common\cibuild.cmd
           -configuration $(_BuildConfig) 
           -prepareMachine
@@ -107,44 +115,55 @@ jobs:
           $(_OfficialBuildIdArgs)
         displayName: Windows Build / Publish
 
-      # Copy files for helix job
-      - task: CopyFiles@2
-        inputs:
-          sourceFolder: $(_WinformsControlsTestBinDir)
-          contents: '**' 
-          targetFolder: $(_HelixStagingDir)
-          cleanTargetFolder: true
-          #overWrite: false # Optional
-        displayName: Copy winforms controls tests to helix staging dir
-      - task: CopyFiles@2
-        inputs:
-          sourceFolder: $(_WinformsFuncTestBinDir)
-          contents: '**' 
-          targetFolder: $(_HelixStagingDir)
-          overWrite: true
-        displayName: Copy xUnit func tests to helix staging dir
+      # # Copy files for helix job
+      # - task: CopyFiles@2
+      #   inputs:
+      #     sourceFolder: $(_WinformsControlsTestBinDir)
+      #     contents: '**' 
+      #     targetFolder: $(_HelixStagingDir)
+      #     cleanTargetFolder: true
+      #     #overWrite: false # Optional
+      #   displayName: Copy winforms controls tests to helix staging dir
+      # - task: CopyFiles@2
+      #   inputs:
+      #     sourceFolder: $(_WinformsFuncTestBinDir)
+      #     contents: '**' 
+      #     targetFolder: $(_HelixStagingDir)
+      #     overWrite: true
+      #   displayName: Copy xUnit func tests to helix staging dir
 
-      - template: /eng/common/templates/steps/helix-publish.yml
-        parameters:
-          HelixSource: $(_HelixSource)
-          HelixType: ̓'tests/functional'
-          HelixTargetQueues: $(_HelixAgentPool)
-          # secret variable set in Azure DevOps build definition
-          # todo: when we go public, get this value from the Helix Anonymous variable group
-          # for internal builds, get this value from the DotNet-HelixApi-Access variable group
-          HelixAccessToken: $(helix-token) 
-          #HelixPreCommands: ''
-          #HelixPostCommands: ''
-          WorkItemDirectory: $(_HelixStagingDir)
-          WorkItemCommand: 'dotnet.exe exec --depsfile System.Windows.Forms.Func.Tests.deps.json --runtimeconfig System.Windows.Forms.Func.Tests.runtimeconfig.json xunit.console.dll System.Windows.Forms.Func.Tests.dll -noautoreporters -xml System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.xml -html System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.html'
-          #CorrelationPayloadDirectory: ''
-          #XUnitProjects: ''
-          #XUnitTargetFramework: ''
-          #XUnitRunnerVersion: ''
-          IncludeDotNetCli: true
-          DotNetCliPackageType: 'sdk'
-          DotNetCliVersion: '3.0.100-preview-009764'
-          EnableXUnitReporter: true
-          WaitForWorkItemCompletion: true
-          condition: succeeded()
-          continueOnError: false
+      # - template: /eng/common/templates/steps/helix-publish.yml
+      #   parameters:
+      #     HelixSource: $(_HelixSource)
+      #     HelixType: ̓'tests/functional'
+      #     HelixTargetQueues: $(_HelixAgentPool)
+      #     # secret variable set in Azure DevOps build definition
+      #     # todo: when we go public, get this value from the Helix Anonymous variable group
+      #     # for internal builds, get this value from the DotNet-HelixApi-Access variable group
+      #     HelixAccessToken: $(helix-token) 
+      #     #HelixPreCommands: ''
+      #     #HelixPostCommands: ''
+      #     WorkItemDirectory: $(_HelixStagingDir)
+      #     WorkItemCommand: 'dotnet.exe exec --depsfile System.Windows.Forms.Func.Tests.deps.json --runtimeconfig System.Windows.Forms.Func.Tests.runtimeconfig.json xunit.console.dll System.Windows.Forms.Func.Tests.dll -noautoreporters -xml System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.xml -html System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.html'
+      #     #CorrelationPayloadDirectory: ''
+      #     #XUnitProjects: ''
+      #     #XUnitTargetFramework: ''
+      #     #XUnitRunnerVersion: ''
+      #     IncludeDotNetCli: true
+      #     DotNetCliPackageType: 'sdk'
+      #     DotNetCliVersion: '3.0.100-preview-009764'
+      #     EnableXUnitReporter: true
+      #     WaitForWorkItemCompletion: true
+      #     condition: succeeded()
+      #     continueOnError: false
+
+      # Publish the nuget package as a build artifact
+      # Only do this if the build is internal AND the config is released (this ensures package contents are real signed)
+      - ${{ if eq(parameters.runAsPublic, 'false') }}:
+        - task: PublishPipelineArtifact@0
+          inputs:
+            artifactName: 'Package'
+            targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
+          displayName: Publish package to build artifacts
+          continueOnError: true
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
