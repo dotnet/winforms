@@ -13,7 +13,7 @@ At present, our primary focus is enabling the following for .NET Core 3.0:
 As we complete those goals, we'll update our roadmap to include additional feature/capability areas we will focus on next.
 
 For general information regarding .NET Core plans, see [.NET Core
-roadmap](https://github.com/dotnet/core/blob/master/roadmap.md).
+roadmap][core-roadmap].
 
 ## Timelines
 
@@ -25,7 +25,7 @@ roadmap](https://github.com/dotnet/core/blob/master/roadmap.md).
 |Designer support in Visual Studio|Update to VS 2019|
 
 If you'd like to contribute to WinForms, please take a look at our [Contributing
-Guide](Documentation/contributing.md).
+Guide][contributing].
 
 ## Shorter-Term Feature Backlog
 
@@ -42,3 +42,8 @@ Guide](Documentation/contributing.md).
 * Add Data Visualization controls
 * Improve accessibility support for some missing UIA interfaces
 * Improve performance of WinForms runtime
+
+[comment]: <> (Links)
+
+[core-roadmap]: https://github.com/dotnet/core/blob/master/roadmap.md
+[contributing]: contributing.md

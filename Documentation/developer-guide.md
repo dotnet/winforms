@@ -1,12 +1,12 @@
 # Developer Guide
 
-The following document describes the setup and workflow that is recommended for working on the Windows Forms project. It assumes that you have read the [contributing doc](contributing.md).
+The following document describes the setup and workflow that is recommended for working on the Windows Forms project. It assumes that you have read the [Contributing Document][contributing].
 
-The [Issue Guide](issue-guide.md) describes our approach to using GitHub issues.
+The [Issue Guide][issue-guide] describes our approach to using GitHub issues.
 
 ## Machine Setup
 
-Follow the [Building CoreFX on Windows](https://github.com/dotnet/corefx/blob/master/Documentation/building/windows-instructions.md) instructions.
+Follow the [Building CoreFX on Windows][corefx-windows-instructions] instructions.
 
 Windows Forms requires the following workloads and components be selected when installing Visual Studio:
 
@@ -19,17 +19,32 @@ Windows Forms requires the following workloads and components be selected when i
 
 ## Workflow
 
-We use the following workflow for building and testing features and fixes.
+We use the following workflow for building as well as testing features and fixes.
 
-You first need to [Fork](https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#fork-the-repository) and [Clone](https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#clone-the-repository) this WinForms repository. This is a one-time task.
+You first need to [Fork][fork] and [Clone][clone] this WinForms repository. This is a one-time task.
 
-1. [Build](building.md) the repo.
-2. [Debug](debugging.md) the change, as needed.
-3. [Test](testing.md) the change, to validate quality.
+1. [Build][building] the repository.
+2. [Debug][debugging] the change, as needed.
+3. [Test][testing] the change, to validate quality.
 
 ## More Information
 
-* [Git commands and workflow](https://github.com/dotnet/corefx/wiki/git-reference)
-* [Coding guidelines](https://github.com/dotnet/corefx/tree/master/Documentation#coding-guidelines)
-* [up-for-grabs WinForms issues](https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs)
-* [easy WinForms issues](https://github.com/dotnet/winforms/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3Aeasy)
+* [Git commands and workflow][git-commands]
+* [Coding guidelines][corefx-coding-guidelines]
+* [up-for-grabs WinForms issues][up-for-grabs]
+* [easy WinForms issues][easy]
+
+[comment]: <> (Links)
+
+[contributing]: contributing.md
+[issue-guide]: issue-guide.md
+[corefx-windows-instructions]: https://github.com/dotnet/corefx/blob/master/Documentation/building/windows-instructions.md
+[fork]: https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#fork-the-repository
+[clone]: https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#clone-the-repository
+[building]: building.md
+[debugging]: debugging.md
+[testing]: testing.md
+[git-commands]: https://github.com/dotnet/corefx/wiki/git-reference
+[corefx-coding-guidelines]: https://github.com/dotnet/corefx/tree/master/Documentation#coding-guidelines
+[up-for-grabs]: https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs
+[easy]: https://github.com/dotnet/winforms/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3Aeasy
