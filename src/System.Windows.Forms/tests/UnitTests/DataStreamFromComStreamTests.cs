@@ -30,7 +30,10 @@ namespace System.Windows.Forms.Tests
             var comStreamMock = new Mock<UnsafeNativeMethods.IStream>();
             var dataStream = new DataStreamFromComStream(comStreamMock.Object);
             dataStream.Write(new byte[bufferSize], index, count);
-        }
 
+            // The mock should never be called in these outlier cases
+            comStreamMock.Verify(s => s.Write(IntPtr.Zero, 0), Times.Never());
+            comStreamMock.VerifyNoOtherCalls();
+        }
     }
 }
