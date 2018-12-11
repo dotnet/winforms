@@ -194,7 +194,7 @@ namespace System.Resources {
                 return result ?? string.Empty;
             }
             set {
-                comment= value;
+                comment = value;
             }
         }
 
@@ -216,10 +216,10 @@ namespace System.Resources {
             ]
             set {
                 if(value == null) {
-                    throw (new ArgumentNullException(nameof(Name)));
+                    throw new ArgumentNullException(nameof(Name));
                 }
                 if(value.Length == 0) {
-                    throw (new ArgumentException(nameof(Name)));
+                    throw new ArgumentException(nameof(Name));
                 }
                 name = value;
             }
@@ -328,8 +328,7 @@ namespace System.Resources {
                 bool fromByteArray = tc.CanConvertFrom(typeof(byte[]));
                 if (toByteArray && fromByteArray) {
                     byte[] data = (byte[])tc.ConvertTo(value, typeof(byte[]));
-                    string text = ToBase64WrappedString(data);
-                    nodeInfo.ValueData = text;
+                    nodeInfo.ValueData = ToBase64WrappedString(data);
                     nodeInfo.MimeType = ResXResourceWriter.ByteArraySerializedObjectMimeType;
                     nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, this.typeNameConverter);
                     return;
