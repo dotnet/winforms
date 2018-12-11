@@ -43,14 +43,8 @@ namespace System.Resources {
         ///     that accepts a System.IO.Stream as a parameter.
         /// </devdoc>
         public ResXFileRef(string fileName, string typeName) {
-            if(fileName == null) {
-                throw (new ArgumentNullException(nameof(fileName)));
-            }
-            if(typeName == null) {
-                throw (new ArgumentNullException(nameof(typeName)));
-            }
-            this.fileName = fileName;
-            this.typeName = typeName;
+            this.fileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+            this.typeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
         }
 
         
