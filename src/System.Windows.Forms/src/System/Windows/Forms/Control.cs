@@ -7352,7 +7352,7 @@ example usage
                                 InvokeMarshaledCallback(current);
                             }
                             catch (Exception t) {
-                                current.exception = t.GetBaseException();
+                                current.exception = t;
                             }
                         }
                     }
