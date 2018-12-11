@@ -227,11 +227,11 @@ namespace System.Resources {
                     }
                     string[] parts = remainingString.Split(';');
                     if(parts.Length > 1) {
-                        result = new[] { fileName, parts[0], parts[1] };
+                        result = new string[] { fileName, parts[0], parts[1] };
                     } else if(parts.Length > 0) {
-                        result = new[] { fileName, parts[0] };
+                        result = new string[] { fileName, parts[0] };
                     } else {
-                        result = new[] { fileName };
+                        result = new string[] { fileName };
                     }
                 }
                 return result;  
