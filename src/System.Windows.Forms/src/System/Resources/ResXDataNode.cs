@@ -346,10 +346,12 @@ namespace System.Resources {
                         };
                     }
 
-                    MemoryStream ms = new MemoryStream();
-                    binaryFormatter.Serialize(ms, value);
-                    string text = ToBase64WrappedString(ms.ToArray());
-                    nodeInfo.ValueData = text;
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        binaryFormatter.Serialize(ms, value);
+                        nodeInfo.ValueData = ToBase64WrappedString(ms.ToArray());
+                    }
+
                     nodeInfo.MimeType = ResXResourceWriter.DefaultSerializedObjectMimeType;
                 }
             }
