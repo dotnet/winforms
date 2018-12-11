@@ -107,7 +107,7 @@ namespace System.Resources {
             int si = -1;
 
             for (i = 0; (i < path1.Length) && (i < path2.Length); ++i) {
-                if ((path1[i] != path2[i]) && (compareCase || (Char.ToLower(path1[i], CultureInfo.InvariantCulture) != Char.ToLower(path2[i], CultureInfo.InvariantCulture))))
+                if ((path1[i] != path2[i]) && (compareCase || (char.ToLower(path1[i], CultureInfo.InvariantCulture) != char.ToLower(path2[i], CultureInfo.InvariantCulture))))
                 {
                     break;
 
@@ -137,7 +137,7 @@ namespace System.Resources {
         
         internal void MakeFilePathRelative(string basePath) {
             
-            if(basePath==null || basePath.Length == 0) {
+            if(string.IsNullOrEmpty(basePath)) {
                 return;
             }
             fileName = PathDifference(basePath, fileName, false);
@@ -145,7 +145,7 @@ namespace System.Resources {
 
         /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.ToString"]/*' />
         public override string ToString() {
-            string result = "";
+            string result = string.Empty;
             
             if(fileName.IndexOf(";") != -1 || fileName.IndexOf("\"") != -1) {
                 result += ("\""+ fileName + "\";");
@@ -209,7 +209,7 @@ namespace System.Resources {
                         fileName = stringValue.Substring(1, lastIndexOfQuote - 1); // remove the quotes in" ..... " 
                         if(lastIndexOfQuote + 2 > stringValue.Length)
                             throw new ArgumentException(nameof(stringValue));
-                        remainingString = stringValue.Substring(lastIndexOfQuote+2);
+                        remainingString = stringValue.Substring(lastIndexOfQuote + 2);
                     } else {
                         int nextSemiColumn = stringValue.IndexOf(";");
                         if(nextSemiColumn == -1)
@@ -217,7 +217,7 @@ namespace System.Resources {
                         fileName = stringValue.Substring(0,nextSemiColumn);
                         if(nextSemiColumn + 1 > stringValue.Length)
                             throw new ArgumentException(nameof(stringValue));
-                        remainingString = stringValue.Substring(nextSemiColumn+1);
+                        remainingString = stringValue.Substring(nextSemiColumn + 1);
                     }
                     string[] parts = remainingString.Split(';');
                     if(parts.Length > 1) {
