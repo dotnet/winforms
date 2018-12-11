@@ -163,7 +163,7 @@ namespace System.Resources {
             Type nodeType = null;
             if(!string.IsNullOrEmpty(nodeInfo.TypeName)) // can be null if we have a string (default for string is TypeName == null)
                 nodeType = internalTypeResolver.GetType(nodeInfo.TypeName, false, true);
-            if(nodeType != null && nodeType == typeof(ResXFileRef)) {
+            if(nodeType != null && nodeType.Equals(typeof(ResXFileRef))) {
                 // we have a fileref, split the value data and populate the fields
                 string[] fileRefDetails = ResXFileRef.Converter.ParseResxFileRefString(nodeInfo.ValueData);
                 if(fileRefDetails != null && fileRefDetails.Length > 1) {
