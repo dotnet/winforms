@@ -25,7 +25,7 @@ In general, try to be specific. Get straight to the main point. Leave additional
 Provide clear description of your suggestion. Explain scenarios in which it would be helpful and why (motivation).
 Ideally, assume that the reader has minimal knowledge and experience with writing apps/libraries that would benefit from the feature.
 
-For API suggestions, check [API review process](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/api-review-process.md), especially [example of good API proposals](https://github.com/dotnet/corefx/issues/271).
+For API suggestions, check [API review process](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/api-review-process.md), especially this [example of a good API proposal](https://github.com/dotnet/corefx/issues/271).
 
 
 
@@ -40,7 +40,7 @@ We use GitHub [labels](https://github.com/dotnet/winforms/labels) on our issues 
 * **Other**:
     * [up-for-grabs](https://github.com/dotnet/winforms/labels/up-for-grabs): Smaller sections of work which we believe are well scoped. These sorts of issues are a good place to start if you are new. Anyone is free to work on these issues.
     * [needs-more-info](https://github.com/dotnet/winforms/labels/needs-more-info): Issues which need more information to be actionable. Usually this will be because we can't reproduce a reported bug. We'll close these issues after a little bit if we haven't gotten actionable information, but we welcome folks who have acquired more information to reopen the issue.
-    * [tenet-compatibility](https://github.com/dotnet/winforms/labels/tenet-compatibility): Incompatibility between relesed versions or with WinForms for .NET Framework.
+    * [tenet-compatibility](https://github.com/dotnet/winforms/labels/tenet-compatibility): Incompatibility between previously released versions or with WinForms for .NET Framework.
 
 
 
@@ -52,7 +52,7 @@ We use [milestones](https://github.com/dotnet/winforms/milestones) to prioritize
     * Bugs which are present on both WinForms platforms (for .NET Core and .NET Framework) will be put into **Future** milestone and will be reviewed and prioritized after 3.0 final release.
     * Requests for new APIs and features will be put into **Future** milestone and will be reviewed and prioritized after 3.0 final release.
 * **Future** milestone tracks all potential future work (which may or may not happen). When we are done with 3.0 release, we will move some of these issues into the next immediate milestone.
-    * Please do not start discussions about next post-3.0 milestone until we are close to final 3.0 release. If you want to express your opinion on prioritization, please [upvote first post of the issue](#upvotes-on-issues) instead.
+    * Please do not start discussions about next post-3.0 milestone until we are close to final 3.0 release. If you want to express your opinion on prioritization, please [upvote the first post of the issue](#upvotes-on-issues) instead.
 
 
 
@@ -66,7 +66,7 @@ If the issue is already assigned to someone, please coordinate with the assignee
 
 ## Upvotes on issues
 
-Upvotes on first post of each issue are useful hint for our prioritization.
+Upvotes on the first post of each issue are a useful hint for our prioritization.
 We can [sort issues by number of upvotes](https://github.com/dotnet/winforms/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc) and we will review the top list on regular basis.
 
 
