@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
             InlineData(1, 1, 1)]
         public void Write_ThrowsInvalidCount(int bufferSize, int index, int count)
         {
-            var comStreamMock = new Mock<UnsafeNativeMethods.IStream>();
+            var comStreamMock = new Mock<UnsafeNativeMethods.IStream>(MockBehavior.Strict);
             var dataStream = new DataStreamFromComStream(comStreamMock.Object);
             Assert.Throws<IOException>(() => dataStream.Write(new byte[bufferSize], index, count));
         }
@@ -27,13 +27,9 @@ namespace System.Windows.Forms.Tests
             InlineData(1, 1, -1)]
         public void Write_DoesNotThrowCountZeroOrLess(int bufferSize, int index, int count)
         {
-            var comStreamMock = new Mock<UnsafeNativeMethods.IStream>();
+            var comStreamMock = new Mock<UnsafeNativeMethods.IStream>(MockBehavior.Strict);
             var dataStream = new DataStreamFromComStream(comStreamMock.Object);
             dataStream.Write(new byte[bufferSize], index, count);
-
-            // The mock should never be called in these outlier cases
-            comStreamMock.Verify(s => s.Write(IntPtr.Zero, 0), Times.Never());
-            comStreamMock.VerifyNoOtherCalls();
         }
     }
 }
