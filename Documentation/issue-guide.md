@@ -23,7 +23,11 @@ In general, try to be specific. Get straight to the main point. Leave additional
 Provide clear description of your suggestion. Explain scenarios in which it would be helpful and why (motivation).
 Ideally, assume that the reader has minimal knowledge and experience with writing apps/libraries that would benefit from the feature.
 
+<<<<<<< HEAD
 For API suggestions, check [API review process][corefx-api-review-process], especially [example of good API proposals][corefx-api-proposal-ex].
+=======
+For API suggestions, check [API review process](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/api-review-process.md), especially this [example of a good API proposal](https://github.com/dotnet/corefx/issues/271).
+>>>>>>> master
 
 ## Labels
 
@@ -34,9 +38,15 @@ We use GitHub [labels][labels] on our issues in order to classify them. We have 
     * Note: WinForms API process is not finalized yet. We may need to add additional UI-specific steps to it (e.g. accessibility review). Expect finalized API review version post-3.0 when we will be ready to take new APIs.
   * [bug][bug], [enhancement][enhancement], [test-bug][test-bug], [test-enhancement][test-enhancement], [question][question], [documentation][documentation]: See [label description][label-description] for details.
 * **Other**:
+<<<<<<< HEAD
   * [up-for-grabs][up-for-grabs]: Smaller sections of work which we believe are well scoped. These sorts of issues are a good place to start if you are new. Anyone is free to work on these issues.
   * [needs-more-info][needs-more-info]: Issues which need more information to be actionable. Usually this will be because we can't reproduce a reported bug. We'll close these issues after a little bit if we haven't gotten actionable information, but we welcome folks who have acquired more information to reopen the issue.
   * [tenet-compatibility][tenet-compatibility]: Incompatibility between released versions or with WinForms for .NET Framework.
+=======
+    * [up-for-grabs](https://github.com/dotnet/winforms/labels/up-for-grabs): Smaller sections of work which we believe are well scoped. These sorts of issues are a good place to start if you are new. Anyone is free to work on these issues.
+    * [needs-more-info](https://github.com/dotnet/winforms/labels/needs-more-info): Issues which need more information to be actionable. Usually this will be because we can't reproduce a reported bug. We'll close these issues after a little bit if we haven't gotten actionable information, but we welcome folks who have acquired more information to reopen the issue.
+    * [tenet-compatibility](https://github.com/dotnet/winforms/labels/tenet-compatibility): Incompatibility between previously released versions or with WinForms for .NET Framework.
+>>>>>>> master
 
 ## Milestones
 
@@ -47,7 +57,11 @@ We use [milestones][milestones] to prioritize work for each upcoming release.
     * Bugs which are present on both WinForms platforms (for .NET Core and .NET Framework)
     * Requests for new APIs and features
 * **Future** milestone tracks all potential future work (which may or may not happen). When we are done with 3.0 release, we will move some of these issues into the next immediate milestone.
+<<<<<<< HEAD
   * Please do not start discussions about next post-3.0 milestone until we are close to final 3.0 release. If you want to express your opinion on prioritization, please [up-vote first post of the issue] instead.
+=======
+    * Please do not start discussions about next post-3.0 milestone until we are close to final 3.0 release. If you want to express your opinion on prioritization, please [upvote the first post of the issue](#upvotes-on-issues) instead.
+>>>>>>> master
 
 ## Assignee
 
@@ -57,8 +71,13 @@ If the issue is already assigned to someone, please coordinate with the assignee
 
 ## Up-votes on issues
 
+<<<<<<< HEAD
 Up-votes on first post of each issue are useful hint for our prioritization.
 We can [sort issues by number of up-votes][up-votes], and we will review the top list on a regular basis.
+=======
+Upvotes on the first post of each issue are a useful hint for our prioritization.
+We can [sort issues by number of upvotes](https://github.com/dotnet/winforms/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc) and we will review the top list on regular basis.
+>>>>>>> master
 
 ## Triage rules
 
