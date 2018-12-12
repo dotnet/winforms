@@ -7,8 +7,7 @@
     <WarningsAsErrors />
 
   </PropertyGroup>
-  <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
-  <Import Project="$(MSBuildThisFileDirectory)eng\ReferenceAssemblies.props" />
+  <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />  
   <Import Project="$(MSBuildThisFileDirectory)eng\FacadeAssemblies.props" />
 
   <!-- Make sure the pdb is a separate file, and not embedded inside the dll (which is the ArcadeSDK default behavior) -->
