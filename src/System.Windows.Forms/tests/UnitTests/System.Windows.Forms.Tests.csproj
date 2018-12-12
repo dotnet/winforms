@@ -19,4 +19,10 @@
     <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="TestResources\Files\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

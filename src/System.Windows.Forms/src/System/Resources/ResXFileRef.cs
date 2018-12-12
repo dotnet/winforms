@@ -214,7 +214,7 @@ namespace System.Resources {
                         int nextSemiColumn = stringValue.IndexOf(";");
                         if(nextSemiColumn == -1)
                             throw new ArgumentException(nameof(stringValue));
-                        fileName = stringValue.Substring(0,nextSemiColumn);
+                        fileName = stringValue.Substring(0, nextSemiColumn);
                         if(nextSemiColumn + 1 > stringValue.Length)
                             throw new ArgumentException(nameof(stringValue));
                         remainingString = stringValue.Substring(nextSemiColumn + 1);

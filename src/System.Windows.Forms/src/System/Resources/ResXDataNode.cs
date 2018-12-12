@@ -135,14 +135,11 @@ namespace System.Resources {
                                                                                                         // So we don't have to localize it.
         ]
         public ResXDataNode(string name, ResXFileRef fileRef, Func<Type, string> typeNameConverter) {
-            if(name == null) {
+            if(string.IsNullOrEmpty(name)) {
                 throw new ArgumentNullException(nameof(name));
             }
             if(fileRef == null) {
                 throw new ArgumentNullException(nameof(fileRef));
-            }
-            if(name.Length == 0) {
-                throw new ArgumentException(nameof(name));
             }
             this.name = name;
             this.fileRef = fileRef;
