@@ -6,7 +6,7 @@
     "version": "3.0.100-preview-009820"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.18611.4",
-    "Microsoft.DotNet.Helix.Sdk": "1.0.0-beta.18611.4"
+    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.18611.14",
+    "Microsoft.DotNet.Helix.Sdk": "1.0.0-beta.18611.14"
   }
 }
