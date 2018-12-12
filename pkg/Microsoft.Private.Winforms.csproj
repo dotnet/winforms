@@ -25,7 +25,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
     <NoWarn>$(NoWarn);NU5125</NoWarn>
-
+    <BinDirectory>$(MSBuildThisFileDirectory)\..\artifacts\bin</BinDirectory>
   </PropertyGroup>
 
   <!-- nuspec properties -->
@@ -55,15 +55,12 @@
     <ProjectReference Include="..\src\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
 
     <!-- Reference and Source System.Windows.Forms includes -->
-    <ProjectReference Include="..\src\System.Windows.Forms\ref\System.Windows.Forms.Ref.csproj" />
     <ProjectReference Include="..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
 
     <!-- Reference and Source System.Windows.Forms.Design includes -->
-    <ProjectReference Include="..\src\System.Windows.Forms.Design\ref\System.Windows.Forms.Design.Ref.csproj" />
     <ProjectReference Include="..\src\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
     
     <!-- Reference and Source System.Windows.Forms.Design.Editors includes -->
-    <ProjectReference Include="..\src\System.Windows.Forms.Design.Editors\ref\System.Windows.Forms.Design.Editors.Ref.csproj" />
     <ProjectReference Include="..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
   </ItemGroup>
 
@@ -83,46 +80,52 @@
 
   <!-- Set package paths for project reference outputs -->
   <Target Name="SetPackagePath" DependsOnTargets="ResolveReferences">
-  
-    <!-- Create booleans for Refs and Facades to use in settting package paths and packaging pdbs -->
+    <!-- Create boolean for Facades to use in settting package paths and packaging pdbs -->
     <ItemGroup>
-      <TfmSpecificPackageFile>
-        <IsReference>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Ref.csproj'))</IsReference>
+      <TfmSpecificPackageFile>        
         <IsFacade>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Facade.csproj'))</IsFacade>
       </TfmSpecificPackageFile>
     </ItemGroup>
 
     <ItemGroup>
-      <TfmSpecificPackageFile>
+      <TfmSpecificPackageFile>        
         <!-- Put everything under lib by default -->
         <PackagePath>lib/$(TargetFramework)</PackagePath>
-        <!-- If the reference ends with Ref.csproj, it's a reference binary, so put it under ref instead -->
-        <PackagePath Condition="'%(TfmSpecificPackageFile.IsReference)' == 'true'">ref/$(TargetFramework)</PackagePath>
         <!-- If the reference ends with Facade.csproj, it's a facade binary, so put it under both lib and ref  -->
         <PackagePath Condition="'%(TfmSpecificPackageFile.IsFacade)' == 'true'">lib/$(TargetFramework);ref/$(TargetFramework)</PackagePath>
       </TfmSpecificPackageFile>
     </ItemGroup>
+
+    <ItemGroup>
+      <!-- Add reference binaries -->
+      <TfmSpecificPackageFile Include="$(BinDirectory)\System.Windows.Forms\$(Configuration)\netcoreapp3.0\ref\System.Windows.Forms.dll">
+        <PackagePath>ref/$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+      <TfmSpecificPackageFile Include="$(BinDirectory)\System.Windows.Forms.Design\$(Configuration)\netcoreapp3.0\ref\System.Windows.Forms.Design.dll">
+        <PackagePath>ref/$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+      <TfmSpecificPackageFile Include="$(BinDirectory)\System.Windows.Forms.Design.Editors\$(Configuration)\netcoreapp3.0\ref\System.Windows.Forms.Design.Editors.dll">
+        <PackagePath>ref/$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+    
   </Target>
   
   <!-- Look next to each file going into the package for companion files (pdb, xml, resources) -->
-  <Target Name="AddRelativePackageFiles"
-          Inputs="%(TfmSpecificPackageFile.Identity);%(TfmSpecificPackageFile.PackagePath)"
-          Outputs="unused">
+  <Target Name="AddRelativePackageFiles" Inputs="%(TfmSpecificPackageFile.Identity);%(TfmSpecificPackageFile.PackagePath)" Outputs="unused">
     
     <!-- Set some variables for the item group below -->
     <PropertyGroup>
       <_baseDirectory>%(TfmSpecificPackageFile.RootDir)%(TfmSpecificPackageFile.Directory)</_baseDirectory>
       <_baseFileName>%(TfmSpecificPackageFile.FileName)</_baseFileName>
       <_packagePath>%(TfmSpecificPackageFile.PackagePath)</_packagePath>
-      <_isReferenceAssembly>%(TfmSpecificPackageFile.IsReference)</_isReferenceAssembly>
       <_isFacadeAssembly>%(TfmSpecificPackageFile.IsFacade)</_isFacadeAssembly>
     </PropertyGroup>
     
     <ItemGroup>
 
       <!-- Get pdbs, but not for neither reference binaries nor facade binaries -->
-      <TfmSpecificPackageFile Include="$(_baseDirectory)$(_baseFileName).pdb" 
-                              Condition="Exists('$(_baseDirectory)$(_baseFileName).pdb') And !$(_isReferenceAssembly) And !$(_isFacadeAssembly)">
+      <TfmSpecificPackageFile Include="$(_baseDirectory)$(_baseFileName).pdb" Condition="Exists('$(_baseDirectory)$(_baseFileName).pdb') And !$(_isFacadeAssembly)">
         <PackagePath>$(_packagePath)</PackagePath>
       </TfmSpecificPackageFile>
 

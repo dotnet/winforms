@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Windows.Forms.Design</AssemblyName>
     <RootNamespace>System.Windows.Forms.Design</RootNamespace>
-    <CLSCompliant>true</CLSCompliant>
+    <CLSCompliant>false</CLSCompliant>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\System.Windows.Forms\ref\System.Windows.Forms.Ref.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
   </ItemGroup>
 
 </Project>
