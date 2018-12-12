@@ -19,7 +19,6 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
     <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
     <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
-    <PackageReference Include="System.Drawing.Primitives" Version="$(SystemDrawingPrimitivesPackageVersion)" />
     <PackageReference Include="System.Media.SoundPlayer" Version="$(SystemMediaSoundPlayerPackageVersion)" />
     <PackageReference Include="System.Security.Cryptography.Cng" Version="$(SystemSecurityCryptographyCngPackageVersion)" />
     <PackageReference Include="System.Security.Permissions" Version="$(SystemSecurityPermissionsPackageVersion)" />
