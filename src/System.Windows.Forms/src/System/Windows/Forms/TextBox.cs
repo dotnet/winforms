@@ -98,6 +98,7 @@ namespace System.Windows.Forms {
         private AutoCompleteStringCollection autoCompleteCustomSource;
         private bool fromHandleCreate = false;
         private StringSource stringSource = null;
+        private string placeholderText;
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.TextBox"]/*' />
         public TextBox(){
@@ -843,9 +844,86 @@ namespace System.Windows.Forms {
                 }
             }
         }
-	
-	//-------------------------------------------------------------------------------------------------
         
+        /// <summary>
+        ///  Gets or sets the text that is displayed when the control has no Text and is not on focus.
+        /// </summary>
+        [
+        Localizable(true),
+        DefaultValue(""),
+        SRDescription(nameof(SR.TextBoxPlaceholderTextDescr)),
+        Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
+        ]
+        public string PlaceholderText
+        {
+            get
+            {
+                return placeholderText;
+            }
+            set
+            {
+                if (placeholderText != value)
+                {
+                    placeholderText = value;
+                    Invalidate();
+                }
+            }
+        }
+
+
+        //-------------------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Draws the PlaceholderText in the client area of the TextBox using the default font and color.
+        /// </summary>
+        private void DrawPlaceholderText(Graphics graphics)
+        {
+            TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top |
+                                    TextFormatFlags.EndEllipsis;
+            Rectangle rectangle = ClientRectangle;
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                flags |= TextFormatFlags.RightToLeft;
+                switch (TextAlign)
+                {
+                    case HorizontalAlignment.Center:
+                        flags = flags | TextFormatFlags.HorizontalCenter;
+                        rectangle.Offset(0, 1);
+                        break;
+                    case HorizontalAlignment.Left:
+                        flags = flags | TextFormatFlags.Right;
+                        rectangle.Offset(1, 1);
+                        break;
+                    case HorizontalAlignment.Right:
+                        flags = flags | TextFormatFlags.Left;
+                        rectangle.Offset(0, 1);
+                        break;
+                }
+            }
+            else
+            {
+                flags &= ~TextFormatFlags.RightToLeft;
+                switch (TextAlign)
+                {
+                    case HorizontalAlignment.Center:
+                        flags = flags | TextFormatFlags.HorizontalCenter;
+                        rectangle.Offset(0, 1);
+                        break;
+                    case HorizontalAlignment.Left:
+                        flags = flags | TextFormatFlags.Left;
+                        rectangle.Offset(1, 1);
+                        break;
+                    case HorizontalAlignment.Right:
+                        flags = flags | TextFormatFlags.Right;
+                        rectangle.Offset(0, 1);
+                        break;
+                }
+            }
+
+            TextRenderer.DrawText(graphics, PlaceholderText, Font, rectangle, SystemColors.GrayText, BackColor, flags);
+        }
+
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.WndProc"]/*' />
         /// <internalonly/>
         /// <devdoc>
@@ -878,8 +956,32 @@ namespace System.Windows.Forms {
                     base.WndProc(ref m);
                     break;
             }
-            
+
+            if ((m.Msg == NativeMethods.WM_PAINT || m.Msg == NativeMethods.WM_KILLFOCUS) &&
+                 !this.GetStyle(ControlStyles.UserPaint) &&
+                   string.IsNullOrEmpty(this.Text) &&
+                   !this.Focused)
+            {
+                using (Graphics g = this.CreateGraphics())
+                {
+                    DrawPlaceholderText(g);
+                }
+            }
         }
-        
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            if (string.IsNullOrEmpty(Text))
+            {
+                AccessibleObject accessibleObject = base.CreateAccessibilityInstance();
+                accessibleObject.Value = PlaceholderText;
+                return accessibleObject;
+            }
+            else
+            {
+                return base.CreateAccessibilityInstance();
+            }
+        }
+
     }
 }
