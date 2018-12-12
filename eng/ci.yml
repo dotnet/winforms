@@ -142,8 +142,10 @@ jobs:
           HelixTargetQueues: $(_HelixAgentPool)
           HelixAccessToken: $(helix-token)
           XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj'
+          # This needs to be whatever tfm will work for our test projects for `dotnet publish`
           XUnitPublishTargetFramework: netcoreapp3.0
-          #XUnitRuntimeTargetFramework: netcoreapp3.0
+          # This controls what tfm to pick from the xunit package, it must exist in that package or the helix job will fail
+          XUnitRuntimeTargetFramework: netcoreapp2.0
           IncludeDotNetCli: true
           DotNetCliPackageType: 'sdk'
           # This version MUST be in the official releases at https://dotnet.microsoft.com/download/dotnet-core/3.0
@@ -151,12 +153,12 @@ jobs:
           DotNetCliVersion: '3.0.100-preview-009812'
           #EnableXUnitReporter: true
           WaitForWorkItemCompletion: true
-          IsExternal: false
+          #IsExternal: false
           condition: succeeded()
           continueOnError: false
 
       # Publish the nuget package as a build artifact
-      # Only do this if the build is internal AND the config is released (this ensures package contents are real signed)
+      # Only do this if the build is internal AND the config is 'Release' (this ensures package contents are real signed)
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
         - task: PublishPipelineArtifact@0
           inputs:
