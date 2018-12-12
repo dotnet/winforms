@@ -6,7 +6,7 @@ The [Issue Guide][issue-guide] describes our approach to using GitHub issues.
 
 ## Machine Setup
 
-Follow the [Building CoreFX on Windows][corefx-windows-instructions] instructions.
+Follow the [Building CoreFX on Windows][corefx-windows-instructions] instructions. However, we recommend Visual Studio 2019 Preview 1.
 
 Windows Forms requires the following workloads and components be selected when installing Visual Studio:
 
@@ -24,7 +24,9 @@ We use the following workflow for building as well as testing features and fixes
 You first need to [Fork][fork] and [Clone][clone] this WinForms repository. This is a one-time task.
 
 1. [Build][building] the repository.
+
 2. [Debug][debugging] the change, as needed.
+
 3. [Test][testing] the change, to validate quality.
 
 ## More Information

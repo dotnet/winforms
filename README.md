@@ -26,9 +26,12 @@ This repository contains WinForms for .NET Core. It does not contain the .NET Fr
 We are in the process of doing four projects with Windows Forms:
 
 1. Port Windows Forms to .NET Core.
-2. Publish source to GitHub.
-3. Publish (and in some cases write) tests to GitHub and enable automated testing infrastructure.
-4. Enable the Visual Studio WinForms designer to work with WinForms running on .NET Core.
+
+1. Publish source to GitHub.
+
+1. Publish (and in some cases write) tests to GitHub and enable automated testing infrastructure.
+
+1. Enable the Visual Studio WinForms designer to work with WinForms running on .NET Core.
 
 The first two tasks are well underway. Most of the source has been published to GitHub although we are still bringing the codebase up to functional and performance parity with .NET Framework.
 

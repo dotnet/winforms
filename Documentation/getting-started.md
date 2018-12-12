@@ -7,7 +7,8 @@ This document describes the experience of using WinForms on .NET Core. The [Deve
 Choose one of these options:
 
 1. [.NET Core 3.0 SDK Preview 1 (recommended)][.net-core-3.0-sdk-preview-1]
-2. [.NET Core 3.0 daily build (latest changes, but less stable)][.net-core-3.0-daily]
+
+1. [.NET Core 3.0 daily build (latest changes, but less stable)][.net-core-3.0-daily]
 
 ## Creating new applications
 

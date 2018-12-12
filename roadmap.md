@@ -17,12 +17,12 @@ roadmap][core-roadmap].
 
 ## Timelines
 
-| Milestone | Date |
-|---|---|
-|Initial launch of WinForms on .NET Core repository |Dec 4, 2018|
-|Functional parity with .NET Framework WinForms |Q1 2019|
-|First version of WinForms on .NET Core |.NET Core 3.0 GA|
-|Designer support in Visual Studio|Update to VS 2019|
+| Milestone                                         | Date              |
+|---                                                |---                |
+|Initial launch of WinForms on .NET Core repository |Dec 4, 2018        |
+|Functional parity with .NET Framework WinForms     |Q1 2019            |
+|First version of WinForms on .NET Core             |.NET Core 3.0 GA   |
+|Designer support in Visual Studio|Update to VS 2019|                   |
 
 If you'd like to contribute to WinForms, please take a look at our [Contributing
 Guide][contributing].
