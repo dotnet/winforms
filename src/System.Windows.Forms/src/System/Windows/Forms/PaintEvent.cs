@@ -43,6 +43,11 @@ namespace System.Windows.Forms {
         private readonly Rectangle clipRect;
         //private Control paletteSource;
 
+        /// <devdoc>
+        ///     Dpi for the painting process.
+        /// </devdoc>
+        private readonly int dpi = (int)DpiHelper.LogicalDpi;
+
 #if DEBUG
         static readonly TraceSwitch PaintEventFinalizationSwitch = new TraceSwitch("PaintEventFinalization", "Tracks the creation and finalization of PaintEvent objects");
         internal static string GetAllocationStack()
@@ -75,6 +80,11 @@ namespace System.Windows.Forms {
             this.clipRect = clipRect;
         }
 
+        public PaintEventArgs(Graphics graphics, Rectangle clipRect, int dpi) : this(graphics, clipRect)
+        {
+            this.dpi = dpi;
+        }
+
         // Internal version of constructor for performance
         // We try to avoid getting the graphics object until needed
         internal PaintEventArgs(IntPtr dc, Rectangle clipRect) {
@@ -82,6 +92,11 @@ namespace System.Windows.Forms {
 
             this.dc = dc;
             this.clipRect = clipRect;
+        }
+
+        internal PaintEventArgs(IntPtr dc, Rectangle clipRect, int dpi) : this(dc, clipRect)
+        {
+            this.dpi = dpi;
         }
 
         /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.Finalize"]/*' />
@@ -99,6 +114,21 @@ namespace System.Windows.Forms {
         public Rectangle ClipRectangle {
             get {
                 return clipRect;
+            }
+        }
+
+        /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.LogicalClipRectangle"]/*' />
+        /// <devdoc>
+        ///    <para>
+        ///       Gets the
+        ///       rectangle in which to paint in logical size.
+        ///    </para>
+        /// </devdoc>
+        public Rectangle LogicalClipRectangle
+        {
+            get
+            {
+                return DpiHelper.DeviceToLogicalUnits(clipRect, dpi);
             }
         }
 
@@ -135,6 +165,17 @@ namespace System.Windows.Forms {
                 }
                 return graphics;
             }
+        }
+
+        /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.ApplyLogicalToDeviceScaling"]/*' />
+        /// <devdoc>
+        ///    <para>
+        ///       Apply logical to device scale transformation to the Graphics object 
+        ///    </para>
+        /// </devdoc>
+        public void ApplyLogicalToDeviceScaling()
+        {
+            Graphics.ScaleTransform((float)dpi / (float)DpiHelper.LogicalDpi, (float)dpi / (float)DpiHelper.LogicalDpi);
         }
 
         // We want a way to dispose the GDI+ Graphics, but we don't want to create one

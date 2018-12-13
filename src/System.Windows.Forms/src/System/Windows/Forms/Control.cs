@@ -427,7 +427,11 @@ namespace System.Windows.Forms {
         private LayoutEventArgs               cachedLayoutEventArgs;
         private Queue                         threadCallbackList;
         internal int                          deviceDpi;
-
+        private bool                          useLogicalPositioning;
+        private int                           logicalX;
+        private int                           logicalY;
+        private int                           logicalWidth;
+        private int                           logicalHeight;
 
         // for keeping track of our ui state for focus and keyboard cues.  using a member variable
         // here because we hit this a lot
@@ -529,6 +533,11 @@ example usage
             Size defaultSize = DefaultSize;
             width = defaultSize.Width;
             height = defaultSize.Height;
+
+            // Set logical sizes = pixel sizes (assume 100% scaling)
+            useLogicalPositioning = false;
+            logicalWidth = width;
+            logicalHeight = height;
 
             // DefaultSize may have hit GetPreferredSize causing a PreferredSize to be cached.  The
             // PreferredSize may change as a result of the current size.  Since a  SetBoundsCore did
@@ -7734,6 +7743,102 @@ example usage
             DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, DeviceDpi);
         }
 
+        public bool LogicalPositioning
+        {
+            get
+            {
+                return useLogicalPositioning;
+            }
+            set
+            {
+                useLogicalPositioning = value;
+            }
+        }
+
+        protected virtual bool UseLogicalControlPositions()
+        {
+           return false;
+        }
+
+        public Rectangle LogicalBounds
+        {            get
+            {                return new Rectangle(logicalX, logicalY, logicalWidth, logicalHeight);            }            set
+            {                SetLogicalBounds(value.X, value.Y, value.Width, value.Height, BoundsSpecified.All);            }        }
+
+        public Point LogicalLocation
+        {
+            get
+            {
+                return new Point(logicalX, logicalY);
+            }
+            set
+            {
+                SetLogicalBounds(value.X, value.Y, logicalWidth, logicalHeight, BoundsSpecified.Location);
+            }
+        }
+
+        public int LogicalWidth
+        {
+            get
+            {
+                return logicalWidth;
+            }
+            set
+            {
+                SetLogicalBounds(logicalX, logicalY, value, logicalHeight, BoundsSpecified.Width);
+            }
+        }
+
+        public int LogicalHeight
+        {
+            get
+            {
+                return logicalHeight;
+            }
+            set
+            {
+                SetLogicalBounds(logicalX, logicalY, logicalWidth, value, BoundsSpecified.Height);
+            }
+        }
+
+
+        public Size LogicalSize
+        {            get
+            {                return new Size(logicalWidth, logicalHeight);            }            set
+            {                SetLogicalBounds(x, y, value.Width, value.Height, BoundsSpecified.Size);            }        }
+
+        public void SetLogicalBounds(int x, int y, int width, int height, BoundsSpecified specified)
+        {
+            if (useLogicalPositioning == false)
+                return;
+
+            if ((specified & BoundsSpecified.X) == BoundsSpecified.None)
+                x = this.logicalX;
+            if ((specified & BoundsSpecified.Y) == BoundsSpecified.None)
+                y = this.logicalY;
+            if ((specified & BoundsSpecified.Width) == BoundsSpecified.None)
+                width = this.logicalWidth;
+            if ((specified & BoundsSpecified.Height) == BoundsSpecified.None)
+                height = this.logicalHeight;
+            if (this.logicalX != x || this.logicalY != y || this.logicalWidth != width ||
+                this.logicalHeight != height)
+            {
+                this.logicalX = x;
+                this.logicalY = y;
+                this.logicalWidth = width;
+                this.logicalHeight = height;
+                SetBounds(LogicalToDeviceUnits(x), LogicalToDeviceUnits(y), LogicalToDeviceUnits(width), LogicalToDeviceUnits(height), specified);
+            }
+        }
+
+        private void LogicalToPhysicalPositions()
+        {
+            if (useLogicalPositioning == false)
+                return;
+
+            SetBounds(LogicalToDeviceUnits(logicalX), LogicalToDeviceUnits(logicalY), LogicalToDeviceUnits(logicalWidth), LogicalToDeviceUnits(logicalHeight), BoundsSpecified.All);
+        }
+
         internal void AdjustWindowRectEx(ref NativeMethods.RECT rect, int style, bool bMenu, int exStyle) {
             if (DpiHelper.IsPerMonitorV2Awareness) {
                 SafeNativeMethods.AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, (uint)deviceDpi);
@@ -8712,6 +8817,7 @@ example usage
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
                     if (old != deviceDpi) {
                         RescaleConstantsForDpi(old, deviceDpi);
+                        LogicalToPhysicalPositions();
                     }
                 }
 
@@ -11381,6 +11487,13 @@ example usage
         ///     the scaling function.
         /// </devdoc>
         internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl) {
+
+            if (useLogicalPositioning)
+            {
+                // Ignore the control scaling and apply the dpi scaled size instead
+                LogicalToPhysicalPositions();
+                return;
+            }
             try {
                 IsCurrentlyBeingScaled = true;
 
@@ -11430,7 +11543,6 @@ example usage
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void ScaleControl(SizeF factor, BoundsSpecified specified) {
-
             CreateParams cp = CreateParams;
             NativeMethods.RECT adornments = new NativeMethods.RECT(0, 0, 0, 0);
             AdjustWindowRectEx(ref adornments, cp.Style, HasMenu, cp.ExStyle);
@@ -13670,12 +13782,12 @@ example usage
                         }
 
                         if (bufferedGraphics != null) {
-                            bufferedGraphics.Graphics.SetClip(clip);
-                            pevent = new PaintEventArgs(bufferedGraphics.Graphics, clip);
+                            bufferedGraphics.Graphics.SetClip(clip);                   
+                            pevent = new PaintEventArgs(bufferedGraphics.Graphics, clip, DeviceDpi);
                             state = pevent.Graphics.Save();
                         }
-                        else {
-                            pevent = new PaintEventArgs(dc, clip);
+                        else {        
+                            pevent = new PaintEventArgs(dc, clip, DeviceDpi);
                         }
 
                         using (pevent) {

@@ -242,6 +242,22 @@ namespace System.Windows.Forms
             return (int)Math.Round(scalingFactor * (double)value);
         }
 
+        // <summary>
+        /// Transforms a horizontal or vertical integer coordinate from device units to logical
+        /// by scaling it up for current DPI and rounding to nearest integer value
+        /// </summary>
+        /// <param name="value">value in logical units</param>
+        /// <returns>value in device units</returns>
+        public static int DeviceToLogicalUnits(int value, int devicePixels = 0)
+        {
+            if (devicePixels == 0)
+            {
+                return (int)Math.Round((double)value / LogicalToDeviceUnitsScalingFactor);
+            }
+            double scalingFactor = LogicalDpi / devicePixels;
+            return (int)Math.Round(scalingFactor * (double)value);
+        }
+
         /// <summary>
         /// Transforms a horizontal integer coordinate from logical to device units
         /// by scaling it up  for current DPI and rounding to nearest integer value
@@ -274,6 +290,20 @@ namespace System.Windows.Forms
         {
             return new Size(LogicalToDeviceUnits(logicalSize.Width, deviceDpi),
                             LogicalToDeviceUnits(logicalSize.Height, deviceDpi));
+        }
+
+        /// <summary>
+        /// Returns a new Rectangle with the input's
+        /// dimensions converted from device units to logical units.
+        /// </summary>
+        /// <param name="logicalSize">Size in logical units</param>
+        /// <returns>Size in device units</returns>
+        public static Rectangle DeviceToLogicalUnits(Rectangle deviceRect, int deviceDpi = 0)
+        {
+            return new Rectangle(DeviceToLogicalUnits(deviceRect.X, deviceDpi),
+                            DeviceToLogicalUnits(deviceRect.Y, deviceDpi),
+                            DeviceToLogicalUnits(deviceRect.Width, deviceDpi),
+                            DeviceToLogicalUnits(deviceRect.Height, deviceDpi));
         }
 
         /// <summary>
