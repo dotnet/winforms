@@ -7756,9 +7756,18 @@ example usage
         }
 
         public Rectangle LogicalBounds
-        {            get
-            {                return new Rectangle(logicalX, logicalY, logicalWidth, logicalHeight);            }            set
-            {                SetLogicalBounds(value.X, value.Y, value.Width, value.Height, BoundsSpecified.All);            }        }
+        {
+            get
+            {
+                return new Rectangle(logicalX, logicalY, logicalWidth, logicalHeight);
+            }
+
+            set
+            {
+                SetLogicalBounds(value.X, value.Y, value.Width, value.Height, BoundsSpecified.All);
+            }
+        }
+
 
         public Point LogicalLocation
         {
@@ -7798,9 +7807,18 @@ example usage
 
 
         public Size LogicalSize
-        {            get
-            {                return new Size(logicalWidth, logicalHeight);            }            set
-            {                SetLogicalBounds(x, y, value.Width, value.Height, BoundsSpecified.Size);            }        }
+        {
+            get
+            {
+                return new Size(logicalWidth, logicalHeight);
+            }
+            set
+            {
+                SetLogicalBounds(x, y, value.Width, value.Height, BoundsSpecified.Size);
+            }
+        }
+
+
 
         public void SetLogicalBounds(int x, int y, int width, int height, BoundsSpecified specified)
         {
