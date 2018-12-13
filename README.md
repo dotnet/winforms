@@ -6,7 +6,7 @@ Windows Forms (WinForms) is a UI framework for building Windows desktop applicat
 
 Windows Forms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
-> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See issue #147][issue-#147].
+> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See here for a workaround invoking the Classic Framework Designer][designer].
 
 To learn about project priorities as well as status and ship dates see the [Windows Forms Roadmap][roadmap].
 
@@ -78,7 +78,7 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 
 [comment]: <> (Links)
 
-[issue-#147]: https://github.com/dotnet/winforms/issues/147
+[designer]: winforms-designer.md
 [roadmap]: roadmap.md
 [wpf]: https://github.com/dotnet/wpf
 [.net-core-3.0-sdk-preview-1]: https://www.microsoft.com/net/download
