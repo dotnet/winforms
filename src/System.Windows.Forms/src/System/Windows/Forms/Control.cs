@@ -11501,7 +11501,8 @@ example usage
         /// </devdoc>
         internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl) {
 
-            if (useLogicalPositioning) {
+            if (useLogicalPositioning)
+            {
                 // Ignore the control scaling and apply the dpi scaled size instead
                 LogicalToPhysicalPositions();
                 return;
