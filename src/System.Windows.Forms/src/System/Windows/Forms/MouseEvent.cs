@@ -49,6 +49,11 @@ namespace System.Windows.Forms {
 
         private readonly int delta;
 
+        /// <devdoc>
+        ///     Dpi of the control where this event occurred.
+        /// </devdoc>
+        private readonly int dpi = (int)DpiHelper.LogicalDpi;
+
         /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.MouseEventArgs"]/*' />
         /// <devdoc>
         ///    <para>
@@ -64,6 +69,11 @@ namespace System.Windows.Forms {
             this.x = x;
             this.y = y;
             this.delta = delta;
+        }
+
+        public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta, int dpi) : this(button, clicks, x, y, delta)
+        {
+            this.dpi = dpi;
         }
 
         /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Button"]/*' />
@@ -117,6 +127,35 @@ namespace System.Windows.Forms {
             }
         }
 
+        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.X"]/*' />
+        /// <devdoc>
+        ///    <para>
+        ///       Gets the logical x-coordinate
+        ///       of a mouse click.
+        ///    </para>
+        /// </devdoc>
+        public int LogicalX
+        {
+            get
+            {
+                return DpiHelper.DeviceToLogicalUnits(x, dpi);
+            }
+        }
+
+        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Y"]/*' />
+        /// <devdoc>
+        ///    <para>
+        ///       Gets the logical y-coordinate of a mouse click.
+        ///    </para>
+        /// </devdoc>
+        public int LogicalY
+        {
+            get
+            {
+                return DpiHelper.DeviceToLogicalUnits(y, dpi);
+            }
+        }
+
         /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Delta"]/*' />
         /// <devdoc>
         ///    <para>
@@ -139,6 +178,20 @@ namespace System.Windows.Forms {
         public Point Location {
             get {
                 return new Point(x,y);
+            }
+        }
+
+        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Location"]/*' />
+        /// <devdoc>
+        ///    <para>
+        ///       Gets the logical location of the mouse during MouseEvent.
+        ///    </para>
+        /// </devdoc>
+        public Point LogicalLocation
+        {
+            get
+            {
+                return new Point(DpiHelper.DeviceToLogicalUnits(x, dpi), DpiHelper.DeviceToLogicalUnits(y, dpi));
             }
         }
     }
