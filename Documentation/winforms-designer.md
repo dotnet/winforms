@@ -12,7 +12,6 @@ Visual Studio does not allow it currently to create a new WinForms Core App from
 
 Open your favorite console, and create a new folder with the application's name. The folder name will later become the project's name as well. Change to that folder.
 
-
 ```cmd
 md MyNewWinFormsProject
 cd MyNewWinFormsProject
