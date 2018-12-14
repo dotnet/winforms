@@ -45,6 +45,7 @@ namespace WinformsControlsTest
             for (int i = 0; i < styles.Length; i++)
             {
                 b = new Button();
+                b.LogicalPositioning = true;
                 b.Location = new System.Drawing.Point(220, 20 + 60 * i);
                 b.AutoSize = false;
                 b.Size = new System.Drawing.Size(100, 20);

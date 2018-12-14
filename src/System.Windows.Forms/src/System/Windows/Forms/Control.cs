@@ -427,6 +427,7 @@ namespace System.Windows.Forms {
         private LayoutEventArgs               cachedLayoutEventArgs;
         private Queue                         threadCallbackList;
         internal int                          deviceDpi;
+        internal int                          lastScaleDpi;
         private bool                          useLogicalPositioning;
         private int                           logicalX;
         private int                           logicalY;
@@ -8828,9 +8829,20 @@ example usage
                 if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(this.GetType()))) {
                     int old = deviceDpi;
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
-                    if (old != deviceDpi) {
-                        RescaleConstantsForDpi(old, deviceDpi);
-                        LogicalToPhysicalPositions();
+                    if (useLogicalPositioning)
+                    {
+                        if (lastScaleDpi != deviceDpi)
+                        {
+                            RescaleConstantsForDpi(lastScaleDpi, deviceDpi);
+                            ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
+                        }
+                    }
+                    else
+                    {
+                        if (old != deviceDpi)
+                        {
+                            RescaleConstantsForDpi(old, deviceDpi);
+                        }
                     }
                 }
 
@@ -11482,6 +11494,57 @@ example usage
             }
         }
 
+
+        internal void ScaleChildControlsForDpiChange(int oldFormDpi, int newFormDpi, Control requestingControl)
+        {
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+
+            if (controlsCollection != null)
+            {
+                // PERFNOTE: This is more efficient than using Foreach.  Foreach
+                // forces the creation of an array subset enum each time we
+                // enumerate
+                for (int i = 0; i < controlsCollection.Count; i++)
+                {
+                    Control c = controlsCollection[i];
+
+                    c.UpdateWindowFontIfNeeded();
+                    c.ScaleForDpiChange(oldFormDpi, newFormDpi, requestingControl);
+                }
+            }
+        }
+
+        internal virtual void ScaleForDpiChange(int oldFormDpi, int newFormDpi, Control requestingControl)
+        {
+            // When we scale, we are establishing new baselines for the
+            // positions of all controls.  Therefore, we should resume(false).
+            using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
+            {
+                ScaleControlForDpiChange(oldFormDpi, newFormDpi, requestingControl);
+                ScaleChildControlsForDpiChange(oldFormDpi, newFormDpi, requestingControl);
+            }
+            LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
+        }
+
+        internal void ScaleControlForDpiChange(int oldFormDpi, int newFormDpi, Control requestingControl)
+        {
+            float factor;
+            if (useLogicalPositioning == false)
+            {
+                // Scale with the factor corresponding to the forms dpi change
+                factor = (float)newFormDpi / (float)oldFormDpi;
+            }
+            else
+            {
+                // Scaling factor is calculated by the dpi value and the last dpi value when scaling was applied
+                factor = (float)deviceDpi / (float)lastScaleDpi;
+            }
+            SizeF factorSize = new SizeF(factor, factor);
+            Scale(factorSize, factorSize, requestingControl);
+            lastScaleDpi = deviceDpi;
+        }
+
+
         /// <devdoc>
         ///     Scales the children of this control.  The default implementation walks the controls
         ///     collection for the control and calls Scale on each control.
@@ -11500,13 +11563,6 @@ example usage
         ///     the scaling function.
         /// </devdoc>
         internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl) {
-
-            if (useLogicalPositioning)
-            {
-                // Ignore the control scaling and apply the dpi scaled size instead
-                LogicalToPhysicalPositions();
-                return;
-            }
             try {
                 IsCurrentlyBeingScaled = true;
 

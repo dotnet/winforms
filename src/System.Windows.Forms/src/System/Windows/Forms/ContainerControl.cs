@@ -899,15 +899,14 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///   This is called by the top level form to clear the current autoscale cache.
         /// </devdoc>
-        internal void FormDpiChanged(float factor) {
+        internal void FormDpiChanged(int oldDpi, int newDpi) {
             Debug.Assert(this is Form);
 
             currentAutoScaleDimensions = SizeF.Empty;
 
             SuspendAllLayout(this);
-            SizeF factorSize = new SizeF(factor, factor);
             try {
-                ScaleChildControls(factorSize, factorSize, this, true);
+                ScaleChildControlsForDpiChange(oldDpi, newDpi, this);
             }
             finally {
                 ResumeAllLayout(this, false);

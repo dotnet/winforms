@@ -5099,11 +5099,11 @@ namespace System.Windows.Forms {
                         SafeNativeMethods.SetWindowPos(new HandleRef(this, HandleInternal), NativeMethods.NullHandleRef, e.SuggestedRectangle.X, e.SuggestedRectangle.Y, e.SuggestedRectangle.Width, e.SuggestedRectangle.Height, NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
                         if (AutoScaleMode != AutoScaleMode.Font) {
                             Font = new Font(this.Font.FontFamily, this.Font.Size * factor, this.Font.Style);
-                            FormDpiChanged(factor);
+                            FormDpiChanged(e.DeviceDpiOld, e.DeviceDpiNew);
                         }
                         else {
                             ScaleFont(factor);
-                            FormDpiChanged(factor);
+                            FormDpiChanged(e.DeviceDpiOld, e.DeviceDpiNew);
                         }
                     }
                     finally {
