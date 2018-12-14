@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2650,6 +2650,9 @@ namespace System.Windows.Forms {
             public LOGFONT  lfStatusFont = null; 
             [MarshalAs(UnmanagedType.Struct)]
             public LOGFONT  lfMessageFont = null; 
+            // Necessary since Windows Vista. 
+            // Since we are supporting >= Windows 7, this is safe to add.
+            public int iPaddedBorderWidth = 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]

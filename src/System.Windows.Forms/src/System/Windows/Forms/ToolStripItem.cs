@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -174,7 +174,9 @@ namespace System.Windows.Forms {
 
         
         private long lastClickTime = 0;
-     
+        private int deviceDpi = DpiHelper.DeviceDpi;
+        internal Font defaultFont = ToolStripManager.DefaultFont;
+    
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ToolStripItem"]/*' />
         /// <devdoc>
         /// Constructor
@@ -487,6 +489,17 @@ namespace System.Windows.Forms {
             }
         }
 
+        // Every ToolStripItem needs to cache its last/current Parent's DeviceDpi 
+        // for PerMonitorV2 scaling purposes.
+        internal virtual int DeviceDpi {
+            get {
+                return deviceDpi;
+            }
+            set {
+                deviceDpi = value;
+            }
+        }
+
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackgroundImageLayout"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -713,7 +726,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected virtual Size DefaultSize {
             get {
-                return new Size(23, 23);
+                return DpiHelper.IsPerMonitorV2Awareness ?
+                       DpiHelper.LogicalToDeviceUnits(new Size(23, 23), DeviceDpi) :
+                       new Size(23, 23);
             }
         }
 
@@ -1031,8 +1046,10 @@ namespace System.Windows.Forms {
                     return f;
                 }
                 
-                return ToolStripManager.DefaultFont;
-            }
+                return DpiHelper.IsPerMonitorV2Awareness ?
+                       defaultFont :
+                       ToolStripManager.DefaultFont;
+             }
             set {
 
                 Font local = (Font)Properties.GetObject(PropFont);
@@ -3406,7 +3423,20 @@ namespace System.Windows.Forms {
         private void ResetToolTipText() {
             toolTipText = null;
         }
-        
+
+        // This will only be called in PerMonitorV2 scenarios.
+        internal virtual void ToolStrip_RescaleConstants(int oldDpi, int newDpi) {
+            DeviceDpi = newDpi;
+            RescaleConstantsInternal(newDpi);
+            OnFontChanged(EventArgs.Empty);
+        }
+
+        internal void RescaleConstantsInternal(int newDpi) {
+            ToolStripManager.CurrentDpi = newDpi;
+            defaultFont = ToolStripManager.DefaultFont;
+            scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin, deviceDpi);
+            scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(defaultStatusStripMargin, deviceDpi);
+        }
        
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Select"]/*' />
         /// <devdoc>
@@ -3479,8 +3509,6 @@ namespace System.Windows.Forms {
            }
 
         }
-
-
 
         protected virtual void SetVisibleCore(bool visible) {
             if (state[stateVisible] != visible) {

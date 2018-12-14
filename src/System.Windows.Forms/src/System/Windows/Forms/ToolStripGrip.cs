@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -234,6 +234,18 @@ namespace System.Windows.Forms {
             ToolStripPanel.ClearDragFeedback();
             MovingToolStrip = false;
             base.OnMouseUp(mea);
+        }
+
+        internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi) {
+            base.RescaleConstantsInternal(newDpi);
+            scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
+            scaledGripThickness = DpiHelper.LogicalToDeviceUnits(gripThicknessDefault, newDpi);
+            scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnits(gripThicknessVisualStylesEnabled, newDpi);
+            this.Margin = DefaultMargin;
+
+            gripThickness = ToolStripManager.VisualStylesEnabled ? scaledGripThicknessVisualStylesEnabled : scaledGripThickness;
+
+            OnFontChanged(EventArgs.Empty);
         }
 
         private static void SetCursor(Control control, Cursor cursor) {

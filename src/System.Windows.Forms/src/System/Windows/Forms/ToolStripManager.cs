@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,6 +8,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.VisualStyles;
     using System.ComponentModel;
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -31,6 +32,7 @@ namespace System.Windows.Forms {
         private static bool initialized;
 
         private static Font defaultFont;
+        private static ConcurrentDictionary<int, Font> defaultFontCache = new ConcurrentDictionary<int, Font>();
 
         // WARNING: When subscribing to static event handlers - make sure you unhook from them
         // otherwise you can leak USER objects on process shutdown.
@@ -41,6 +43,8 @@ namespace System.Windows.Forms {
         private const int staticEventCount = 1;
 
         private static object internalSyncObject = new object();
+
+        private static int currentDpi = DpiHelper.DeviceDpi;
 
         private static void InitalizeThread() {
             if (!initialized) {
@@ -58,37 +62,71 @@ namespace System.Windows.Forms {
         internal static Font DefaultFont {
             get {
                 Font sysFont = null;
-                Font retFont = defaultFont;  // threadsafe local reference
+                
+                // We need to cache the default fonts for the different DPIs.
+                if (DpiHelper.IsPerMonitorV2Awareness) {
+                    int dpi = CurrentDpi;
 
-                if (retFont == null) {
-                    lock (internalSyncObject) {
-                        // double check the defaultFont after the lock.
-                        retFont = defaultFont;
-
-                        if (retFont == null) {
-                            // default to menu font
-                            sysFont = SystemFonts.MenuFont;
-                            if (sysFont == null) {
-                                // ...or to control font if menu font unavailable
-                                sysFont = Control.DefaultFont;
+                    Font retFont = null;
+                    if (defaultFontCache.TryGetValue(dpi, out retFont) == false || retFont == null) {
+                        // default to menu font
+                        sysFont = SystemInformation.GetMenuFontForDpi(dpi);
+                        if (sysFont != null) {
+                            // ensure font is in pixels so it displays properly in the property grid at design time.
+                            if (sysFont.Unit != GraphicsUnit.Point) {
+                                retFont = ControlPaint.FontInPoints(sysFont);
+                                sysFont.Dispose();
                             }
-                            if (sysFont != null) {
-                                // ensure font is in pixels so it displays properly in the property grid at design time.
-                                if (sysFont.Unit != GraphicsUnit.Point) {
-                                    defaultFont = ControlPaint.FontInPoints(sysFont);
-                                    retFont = defaultFont;
-                                    sysFont.Dispose();
-                                }
-                                else {
-                                    defaultFont = sysFont;
-                                    retFont = defaultFont;
-                                }
+                            else {
+                                retFont = sysFont;
                             }
-                            return retFont;
+                            defaultFontCache[dpi] = retFont;
                         }
                     }
+                    return retFont;
                 }
-                return retFont;
+                else {
+                    Font retFont = defaultFont;  // threadsafe local reference
+
+                    if (retFont == null) {
+                        lock (internalSyncObject) {
+                            // double check the defaultFont after the lock.
+                            retFont = defaultFont;
+
+                            if (retFont == null) {
+                                // default to menu font
+                                sysFont = SystemFonts.MenuFont;
+                                if (sysFont == null) {
+                                    // ...or to control font if menu font unavailable
+                                    sysFont = Control.DefaultFont;
+                                }
+                                if (sysFont != null) {
+                                    // ensure font is in pixels so it displays properly in the property grid at design time.
+                                    if (sysFont.Unit != GraphicsUnit.Point) {
+                                        defaultFont = ControlPaint.FontInPoints(sysFont);
+                                        retFont = defaultFont;
+                                        sysFont.Dispose();
+                                    }
+                                    else {
+                                        defaultFont = sysFont;
+                                        retFont = defaultFont;
+                                    }
+                                }
+                                return retFont;
+                            }
+                        }
+                    }
+                    return retFont;
+                }
+            }
+        }
+
+        internal static int CurrentDpi {
+            get {
+                return currentDpi;
+            }
+            set {
+                currentDpi = value;
             }
         }
 
@@ -221,9 +259,6 @@ namespace System.Windows.Forms {
             return (toolStripWeakArrayList != null && (toolStripWeakArrayList.Count > 0));
         }
 
-
-
-
         private static void OnUserPreferenceChanging(object sender, UserPreferenceChangingEventArgs e) {
             // using changing here so that the cache will be cleared by the time the ToolStrip
             // hooks onto the changed event.
@@ -231,8 +266,13 @@ namespace System.Windows.Forms {
             // SPI_SETNONCLIENTMETRICS is put up in WM_SETTINGCHANGE if the Menu font changes.
             // this corresponds to UserPreferenceCategory.Window.
             if (e.Category == UserPreferenceCategory.Window) {
-                lock (internalSyncObject) {
-                    defaultFont = null;
+                if (DpiHelper.IsPerMonitorV2Awareness) {
+                    defaultFontCache.Clear();
+                }
+                else { 
+                    lock (internalSyncObject) {
+                        defaultFont = null;
+                    }
                 }
             }
         }

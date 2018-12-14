@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -74,14 +74,17 @@ namespace System.Windows.Forms {
             get {
                 // MenuStrip control is scaled by Control::ScaleControl()
                 // Ensure grip aligns properly when set visible.
-                return new Padding(2, 2, 0, 2);
-            }
+                return DpiHelper.IsPerMonitorV2Awareness ? 
+                       DpiHelper.LogicalToDeviceUnits(new Padding(2, 2, 0, 2), DeviceDpi) :
+                       new Padding(2, 2, 0, 2);            }
         }
 
         /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.DefaultSize"]/*' />
         protected override Size DefaultSize {
             get {
-                return new Size(200, 24);
+                return DpiHelper.IsPerMonitorV2Awareness ?
+                       DpiHelper.LogicalToDeviceUnits(new Size(200, 24), DeviceDpi) :
+                       new Size(200, 24);
             }
         }
 
@@ -90,10 +93,14 @@ namespace System.Windows.Forms {
                 // MenuStrip control is scaled by Control::ScaleControl()
                 // Scoot the grip over when present
                 if (GripStyle == ToolStripGripStyle.Visible) {
-                    return new Padding(3, 2, 0, 2);
+                    return DpiHelper.IsPerMonitorV2Awareness ? 
+                           DpiHelper.LogicalToDeviceUnits(new Padding(3, 2, 0, 2), DeviceDpi) :
+                           new Padding(3, 2, 0, 2);
                 }
-                return new Padding(6, 2, 0, 2);
-            }
+                return DpiHelper.IsPerMonitorV2Awareness ? 
+                       DpiHelper.LogicalToDeviceUnits(new Padding(6, 2, 0, 2), DeviceDpi) :
+                       new Padding(6, 2, 0, 2);
+             }
         }
 
         [DefaultValue(ToolStripGripStyle.Hidden)]
