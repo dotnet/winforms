@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -174,6 +174,22 @@ namespace System.Windows.Forms {
         protected override bool DefaultAutoToolTip {
             get { 
                 return true; 
+            }
+        }
+
+        internal override int DeviceDpi {
+            get {
+                return base.DeviceDpi;
+            }
+
+            // This gets called via ToolStripItem.RescaleConstantsForDpi.
+            // It's practically calling Initialize on DpiChanging with the new Dpi value.
+            // ToolStripItem.RescaleConstantsForDpi is already behind quirks.
+            set {
+                if (base.DeviceDpi != value) {
+                    base.DeviceDpi = value;
+                    standardButtonWidth = DpiHelper.LogicalToDeviceUnits(STANDARD_BUTTON_WIDTH, DeviceDpi);
+                }
             }
         }
 

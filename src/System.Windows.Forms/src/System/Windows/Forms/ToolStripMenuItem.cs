@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -193,10 +193,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override Size DefaultSize {
             get {
-                return new Size(32, 19);
+                return DpiHelper.IsPerMonitorV2Awareness ?
+                      DpiHelper.LogicalToDeviceUnits(new Size(32, 19), DeviceDpi) :
+                      new Size(32, 19);
             }
         }
-
 
         /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultMargin"]/*' />
         protected internal override Padding DefaultMargin {
@@ -662,6 +663,24 @@ namespace System.Windows.Forms {
             }
             return menuItem;
        }
+
+        internal override int DeviceDpi
+        {
+            get
+            {
+                return base.DeviceDpi;
+            }
+
+            // This gets called via ToolStripItem.RescaleConstantsForDpi.
+            // It's practically calling Initialize on DpiChanging with the new Dpi value.
+            set
+            {
+                base.DeviceDpi = value;
+                scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, value);
+                scaledDefaultDropDownPadding = DpiHelper.LogicalToDeviceUnits(defaultDropDownPadding, value);
+                scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(checkMarkBitmapSize, value);
+            }
+        }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {

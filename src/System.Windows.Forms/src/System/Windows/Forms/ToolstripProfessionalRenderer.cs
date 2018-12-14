@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -135,8 +135,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderOverflowButton"]/*' />
         protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e) {
-            ScaleObjectSizesIfNeeded(); 
-            
+            ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
+
             if (RendererOverride != null) {
                 base.OnRenderOverflowButtonBackground(e);
                 return;
@@ -409,7 +409,7 @@ namespace System.Windows.Forms {
                             edging = new Rectangle(3, bounds.Height -1, bounds.Width -3, bounds.Height - 1);
 
                         }
-                        ScaleObjectSizesIfNeeded();
+                        ScaleObjectSizesIfNeeded(toolStrip.DeviceDpi);
                         FillWithDoubleGradient(ColorTable.OverflowButtonGradientBegin, ColorTable.OverflowButtonGradientMiddle, ColorTable.OverflowButtonGradientEnd, e.Graphics, edging, iconWellGradientWidth, iconWellGradientWidth, LinearGradientMode.Vertical, /*flipHorizontal=*/false);
                         RenderToolStripCurve(e);
                     }
@@ -424,7 +424,7 @@ namespace System.Windows.Forms {
                 return;
             }
 
-            ScaleObjectSizesIfNeeded();
+            ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
             Graphics g = e.Graphics;
             Rectangle bounds = e.GripBounds;
@@ -499,8 +499,8 @@ namespace System.Windows.Forms {
 
 
             if (item.IsOnDropDown) {
-                ScaleObjectSizesIfNeeded();
-                
+                ScaleObjectSizesIfNeeded(item.DeviceDpi);
+
                 bounds = LayoutUtils.DeflateRect(bounds, scaledDropDownMenuItemPaintPadding);
 
                 if (item.Selected) {
@@ -603,7 +603,7 @@ namespace System.Windows.Forms {
                 return;
             }
 
-            ScaleObjectSizesIfNeeded();
+            ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
             Graphics g = e.Graphics;
             Rectangle bounds = e.AffectedBounds;
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms {
 
 
         private void RenderToolStripBackgroundInternal(ToolStripRenderEventArgs e) {
-            ScaleObjectSizesIfNeeded();
+            ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
             ToolStrip toolStrip = e.ToolStrip;
             Graphics g = e.Graphics;
@@ -1047,7 +1047,7 @@ namespace System.Windows.Forms {
         }
 
         private void RenderOverflowBackground(ToolStripItemRenderEventArgs e, bool rightToLeft) {
-            ScaleObjectSizesIfNeeded();
+            ScaleObjectSizesIfNeeded(e.Item.DeviceDpi);
 
             Graphics g = e.Graphics;
             ToolStripOverflowButton item = e.Item as ToolStripOverflowButton;
@@ -1396,24 +1396,47 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void ScaleObjectSizesIfNeeded() {
-            if (isScalingInitialized) {
+        private void ScaleObjectSizesIfNeeded(int currentDeviceDpi)
+        {
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
+                if (previousDeviceDpi != currentDeviceDpi)
+                {
+                    ToolStripRenderer.ScaleArrowOffsetsIfNeeded(currentDeviceDpi);
+                    overflowButtonWidth = DpiHelper.LogicalToDeviceUnits(OVERFLOW_BUTTON_WIDTH, currentDeviceDpi);
+                    overflowArrowWidth = DpiHelper.LogicalToDeviceUnits(OVERFLOW_ARROW_WIDTH, currentDeviceDpi);
+                    overflowArrowHeight = DpiHelper.LogicalToDeviceUnits(OVERFLOW_ARROW_HEIGHT, currentDeviceDpi);
+                    overflowArrowOffsetY = DpiHelper.LogicalToDeviceUnits(OVERFLOW_ARROW_OFFSETY, currentDeviceDpi);
+
+                    gripPadding = DpiHelper.LogicalToDeviceUnits(GRIP_PADDING, currentDeviceDpi);
+                    iconWellGradientWidth = DpiHelper.LogicalToDeviceUnits(ICON_WELL_GRADIENT_WIDTH, currentDeviceDpi);
+                    int scaledSize = DpiHelper.LogicalToDeviceUnits(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE, currentDeviceDpi);
+                    scaledDropDownMenuItemPaintPadding = new Padding(scaledSize + 1, 0, scaledSize, 0);
+                    previousDeviceDpi = currentDeviceDpi;
+                    isScalingInitialized = true;
+                    return;
+                }
+            }
+
+            if (isScalingInitialized)
+            {
                 return;
-            }          
-            if (DpiHelper.IsScalingRequired) {
+            }
+
+            if (DpiHelper.IsScalingRequired)
+            {
                 ToolStripRenderer.ScaleArrowOffsetsIfNeeded();
                 overflowButtonWidth = DpiHelper.LogicalToDeviceUnitsX(OVERFLOW_BUTTON_WIDTH);
                 overflowArrowWidth = DpiHelper.LogicalToDeviceUnitsX(OVERFLOW_ARROW_WIDTH);
                 overflowArrowHeight = DpiHelper.LogicalToDeviceUnitsY(OVERFLOW_ARROW_HEIGHT);
                 overflowArrowOffsetY = DpiHelper.LogicalToDeviceUnitsY(OVERFLOW_ARROW_OFFSETY);
 
-                if (DpiHelper.IsScalingRequirementMet) {
-                    gripPadding = DpiHelper.LogicalToDeviceUnitsY(GRIP_PADDING);
-                    iconWellGradientWidth = DpiHelper.LogicalToDeviceUnitsX(ICON_WELL_GRADIENT_WIDTH);
-                    int scaledSize = DpiHelper.LogicalToDeviceUnitsX(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE);
-                    scaledDropDownMenuItemPaintPadding = new Padding(scaledSize + 1, 0, scaledSize, 0);
-                }
+                gripPadding = DpiHelper.LogicalToDeviceUnitsY(GRIP_PADDING);
+                iconWellGradientWidth = DpiHelper.LogicalToDeviceUnitsX(ICON_WELL_GRADIENT_WIDTH);
+                int scaledSize = DpiHelper.LogicalToDeviceUnitsX(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE);
+                scaledDropDownMenuItemPaintPadding = new Padding(scaledSize + 1, 0, scaledSize, 0);
             }
+
             isScalingInitialized = true;
         }
 
