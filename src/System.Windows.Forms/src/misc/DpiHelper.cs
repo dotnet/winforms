@@ -294,6 +294,32 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Returns a new Rectangle with the input's
+        /// dimensions converted from logical units to device units.
+        /// </summary>
+        /// <param name="logicalSize">Size in logical units</param>
+        /// <returns>Size in device units</returns>
+        public static Rectangle LogicalToDeviceUnits(Rectangle logicalRect, int deviceDpi = 0)
+        {
+            return new Rectangle(LogicalToDeviceUnits(logicalRect.X, deviceDpi),
+                            LogicalToDeviceUnits(logicalRect.Y, deviceDpi),
+                            LogicalToDeviceUnits(logicalRect.Width, deviceDpi),
+                            LogicalToDeviceUnits(logicalRect.Height, deviceDpi));
+        }
+
+        /// <summary>
+        /// Returns a new Size with the input's
+        /// dimensions converted from device to logical units.
+        /// </summary>
+        /// <param name="logicalSize">Size in logical units</param>
+        /// <returns>Size in device units</returns>
+        public static Size DeviceToLogicalUnits(Size deviceSize, int deviceDpi = 0)
+        {
+            return new Size(DeviceToLogicalUnits(deviceSize.Width, deviceDpi),
+                            DeviceToLogicalUnits(deviceSize.Height, deviceDpi));
+        }
+
+        /// <summary>
+        /// Returns a new Rectangle with the input's
         /// dimensions converted from device units to logical units.
         /// </summary>
         /// <param name="logicalSize">Size in logical units</param>

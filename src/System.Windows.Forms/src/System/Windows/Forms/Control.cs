@@ -429,10 +429,10 @@ namespace System.Windows.Forms {
         internal int                          deviceDpi;
         internal int                          lastScaleDpi;
         private bool                          useLogicalPositioning;
-        private int                           logicalX;
+        /*private int                           logicalX;
         private int                           logicalY;
         private int                           logicalWidth;
-        private int                           logicalHeight;
+        private int                           logicalHeight;*/
 
         // for keeping track of our ui state for focus and keyboard cues.  using a member variable
         // here because we hit this a lot
@@ -495,6 +495,7 @@ example usage
             DpiHelper.InitializeDpiHelperForWinforms();
             // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
             deviceDpi = DpiHelper.DeviceDpi;
+            lastScaleDpi = (int)DpiHelper.LogicalDpi; // Assume 96dpi at creation
 
             window = new ControlNativeWindow(this);
             RequiredScalingEnabled = true;
@@ -537,8 +538,8 @@ example usage
 
             // Set logical sizes = pixel sizes (assume 100% scaling)
             useLogicalPositioning = false;
-            logicalWidth = width;
-            logicalHeight = height;
+            /*logicalWidth = width;
+            logicalHeight = height;*/
 
             // DefaultSize may have hit GetPreferredSize causing a PreferredSize to be cached.  The
             // PreferredSize may change as a result of the current size.  Since a  SetBoundsCore did
@@ -7760,12 +7761,12 @@ example usage
         {
             get
             {
-                return new Rectangle(logicalX, logicalY, logicalWidth, logicalHeight);
+                return DpiHelper.DeviceToLogicalUnits(Bounds, lastScaleDpi);
             }
 
             set
             {
-                SetLogicalBounds(value.X, value.Y, value.Width, value.Height, BoundsSpecified.All);
+                Bounds = DpiHelper.LogicalToDeviceUnits(Bounds, lastScaleDpi);
             }
         }
 
@@ -7774,11 +7775,11 @@ example usage
         {
             get
             {
-                return new Point(logicalX, logicalY);
+                return new Point(DpiHelper.DeviceToLogicalUnits(Location.X, lastScaleDpi), DpiHelper.DeviceToLogicalUnits(Location.Y, lastScaleDpi));
             }
             set
             {
-                SetLogicalBounds(value.X, value.Y, logicalWidth, logicalHeight, BoundsSpecified.Location);
+                Location = new Point(DpiHelper.LogicalToDeviceUnits(value.X, lastScaleDpi), DpiHelper.LogicalToDeviceUnits(value.Y, lastScaleDpi));
             }
         }
 
@@ -7786,11 +7787,11 @@ example usage
         {
             get
             {
-                return logicalWidth;
+                return DpiHelper.DeviceToLogicalUnits(Width, lastScaleDpi);
             }
             set
             {
-                SetLogicalBounds(logicalX, logicalY, value, logicalHeight, BoundsSpecified.Width);
+                Width = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
             }
         }
 
@@ -7798,11 +7799,11 @@ example usage
         {
             get
             {
-                return logicalHeight;
+                return DpiHelper.DeviceToLogicalUnits(Height, lastScaleDpi);
             }
             set
             {
-                SetLogicalBounds(logicalX, logicalY, logicalWidth, value, BoundsSpecified.Height);
+                Height = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
             }
         }
 
@@ -7811,46 +7812,12 @@ example usage
         {
             get
             {
-                return new Size(logicalWidth, logicalHeight);
+                return DpiHelper.DeviceToLogicalUnits(Size, lastScaleDpi);
             }
             set
             {
-                SetLogicalBounds(x, y, value.Width, value.Height, BoundsSpecified.Size);
+                Size = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
             }
-        }
-
-
-
-        public void SetLogicalBounds(int x, int y, int width, int height, BoundsSpecified specified)
-        {
-            if (useLogicalPositioning == false)
-                return;
-
-            if ((specified & BoundsSpecified.X) == BoundsSpecified.None)
-                x = this.logicalX;
-            if ((specified & BoundsSpecified.Y) == BoundsSpecified.None)
-                y = this.logicalY;
-            if ((specified & BoundsSpecified.Width) == BoundsSpecified.None)
-                width = this.logicalWidth;
-            if ((specified & BoundsSpecified.Height) == BoundsSpecified.None)
-                height = this.logicalHeight;
-            if (this.logicalX != x || this.logicalY != y || this.logicalWidth != width ||
-                this.logicalHeight != height)
-            {
-                this.logicalX = x;
-                this.logicalY = y;
-                this.logicalWidth = width;
-                this.logicalHeight = height;
-                SetBounds(LogicalToDeviceUnits(x), LogicalToDeviceUnits(y), LogicalToDeviceUnits(width), LogicalToDeviceUnits(height), specified);
-            }
-        }
-
-        private void LogicalToPhysicalPositions()
-        {
-            if (useLogicalPositioning == false)
-                return;
-
-            SetBounds(LogicalToDeviceUnits(logicalX), LogicalToDeviceUnits(logicalY), LogicalToDeviceUnits(logicalWidth), LogicalToDeviceUnits(logicalHeight), BoundsSpecified.All);
         }
 
         internal void AdjustWindowRectEx(ref NativeMethods.RECT rect, int style, bool bMenu, int exStyle) {
@@ -8826,6 +8793,7 @@ example usage
                     SetWindowFont();
                 }
 
+                // Why is this not called for forms? Its DeviceDpi property will always use the system dpi value
                 if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(this.GetType()))) {
                     int old = deviceDpi;
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
@@ -11393,7 +11361,7 @@ example usage
             // when someone calls this method, they really do want to do some sort of 
             // zooming feature, as opposed to AutoScale.
             using (new LayoutTransaction(this, this, PropertyNames.Bounds, false)) {
-                ScaleControl(factor, factor, this);
+                ScaleControl(factor, factor, this, false);
                 if (ScaleChildren) {
                     ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
                     if (controlsCollection != null) {
@@ -11429,12 +11397,12 @@ example usage
         ///     The requestingControl property indicates which control has requested
         ///     the scaling function.
         /// </devdoc>
-        internal virtual void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl) {
+        internal virtual void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool isDpiAutoScale) {
             // When we scale, we are establishing new baselines for the
             // positions of all controls.  Therefore, we should resume(false).
-            using (new LayoutTransaction(this, this, PropertyNames.Bounds, false)) {
-                ScaleControl(includedFactor, excludedFactor, requestingControl);
-                ScaleChildControls(includedFactor, excludedFactor, requestingControl);
+            using (new LayoutTransaction(this, this, PropertyNames.Bounds, false)) {          
+                ScaleControl(includedFactor, excludedFactor, requestingControl, isDpiAutoScale);
+                ScaleChildControls(includedFactor, excludedFactor, requestingControl, false, isDpiAutoScale);
             }
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
         }
@@ -11461,7 +11429,7 @@ example usage
         ///     font for controls that need it, i.e. controls using default or inherited font,
         ///     that are also not user-painted.
         /// </devdoc>
-        internal void ScaleChildControls(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool updateWindowFontIfNeeded = false) {
+        internal void ScaleChildControls(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool updateWindowFontIfNeeded = false, bool isDpiAutoScale = false) {
 
             if (ScaleChildren) {
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
@@ -11478,7 +11446,7 @@ example usage
                             c.UpdateWindowFontIfNeeded();
                         }
 
-                        c.Scale(includedFactor, excludedFactor, requestingControl);
+                        c.Scale(includedFactor, excludedFactor, requestingControl, isDpiAutoScale);
                     }
                 }
             }
@@ -11540,7 +11508,7 @@ example usage
                 factor = (float)deviceDpi / (float)lastScaleDpi;
             }
             SizeF factorSize = new SizeF(factor, factor);
-            Scale(factorSize, factorSize, requestingControl);
+            ScaleControl(factorSize, factorSize, requestingControl, false);
             lastScaleDpi = deviceDpi;
         }
 
@@ -11561,8 +11529,14 @@ example usage
         ///
         ///     The requestingControl property indicates which control has requested
         ///     the scaling function.
+        ///     
+        ///     If isDpAutoiScale is true, then controls with logical positioning enabled
+        ///     will be skipped.
         /// </devdoc>
-        internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl) {
+        internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool isDpiAutoScale) {
+            if (isDpiAutoScale == true && useLogicalPositioning == true) {
+                return;
+            }
             try {
                 IsCurrentlyBeingScaled = true;
 

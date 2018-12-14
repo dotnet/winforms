@@ -847,7 +847,7 @@ namespace System.Windows.Forms {
             if (!state[stateScalingChild] && !performLayout && AutoScaleMode != AutoScaleMode.None && AutoScaleMode != AutoScaleMode.Inherit && state[stateScalingNeededOnLayout]) {
                 state[stateScalingChild] = true;
                 try {
-                    child.Scale(AutoScaleFactor, SizeF.Empty, this);
+                    child.Scale(AutoScaleFactor, SizeF.Empty, this, false);
                 }
                 finally {
                     state[stateScalingChild] = false;
@@ -992,7 +992,7 @@ namespace System.Windows.Forms {
                     if (includedBounds) included = AutoScaleFactor;
                     if (excludedBounds) excluded = AutoScaleFactor;
 
-                    Scale(included, excluded, this);
+                    Scale(included, excluded, this, AutoScaleMode == AutoScaleMode.Dpi);
                     autoScaleDimensions = CurrentAutoScaleDimensions;
                 }
             }
@@ -1060,12 +1060,11 @@ namespace System.Windows.Forms {
         ///     according to the container control's AutoScaleFactor.  Any changed controls are
         ///     scaled according to the provided scaling factor.
         /// </devdoc>
-        internal override void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl) {
-
+        internal override void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool isDpiAutoScale) {
             // If we're inhieriting our scaling from our parent, Scale is really easy:  just do the
             // base class implementation.
             if (AutoScaleMode == AutoScaleMode.Inherit) {
-                base.Scale(includedFactor, excludedFactor, requestingControl);
+                base.Scale(includedFactor, excludedFactor, requestingControl, isDpiAutoScale);
             }
             else {
                 // We scale our controls based on our own auto scaling
@@ -1121,8 +1120,8 @@ namespace System.Windows.Forms {
                         }
                     }
 
-                    ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl);
-                    ScaleChildControls(childIncludedFactor, ourExcludedFactor, requestingControl);
+                    ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl, isDpiAutoScale);
+                    ScaleChildControls(childIncludedFactor, ourExcludedFactor, requestingControl, false, isDpiAutoScale);
                 }
             }
         }
