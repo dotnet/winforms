@@ -850,9 +850,8 @@ namespace System.Windows.Forms {
         /// </summary>
         [
         Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.TextBoxPlaceholderTextDescr)),
-        Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
+        DefaultValue(null),
+        SRDescription(nameof(SR.TextBoxPlaceholderTextDescr))
         ]
         public string PlaceholderText
         {
