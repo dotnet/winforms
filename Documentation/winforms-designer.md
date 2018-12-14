@@ -12,6 +12,7 @@ Visual Studio does not allow it currently to create a new WinForms Core App from
 
 Open your favorite console, and create a new folder with the application's name. The folder name will later become the project's name as well. Change to that folder.
 
+
 ```cmd
 md MyNewWinFormsProject
 cd MyNewWinFormsProject
@@ -23,9 +24,9 @@ Now, create a new WinForms application with the `dotnet new` command, using the 
 dotnet new winforms
 ```
 
-**TIP:** You can have the folder name different from the project's name. Use the option `-n` (or `name`) for that when using `dotnet new`.
+**TIP:** You can have the folder name different from the project's name. Use the option `-n` (or `-name`) for that when using `dotnet new`.
 
-**NOTE:** Templates for **Visual Basic** are currently in development (so `dotnet new winforms lang VB` will eventually work!), but they are not available yet. Visual Basic, however, is already supported; as a workaround for the time being, you can create an empty Core Console VB app, and rename and patch the project files accordingly (just copy those definitions over from a C# app). Also note that the Application Framework in Visual Basic is not supported in this version.
+**NOTE:** Templates for **Visual Basic** are currently in development (so `dotnet new winforms -lang VB` will eventually work!), but they are not available yet. Visual Basic, however, is already supported; as a workaround for the time being, you can create an empty Core Console VB app, and rename and patch the project files accordingly (just copy those definitions over from a C# app). Also note that the Application Framework in Visual Basic is not supported in this version.
 
 After creating it, you can test the application directly by starting it with
 
