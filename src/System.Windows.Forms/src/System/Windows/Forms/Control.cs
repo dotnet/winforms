@@ -8827,18 +8827,11 @@ example usage
                         {
                             RescaleConstantsForDpi(old, deviceDpi);
                         }
-                    }
+                    }                
                 }
 
-                // If logical positions are used, always scale up to the current dpi
-                if (useLogicalPositioning && !(typeof(Form).IsAssignableFrom(this.GetType())))
-                {
-                    if (lastScaleDpi != deviceDpi)
-                    {
-                        RescaleConstantsForDpi(lastScaleDpi, deviceDpi);
-                        ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
-                    }
-                }
+                // Rescale control if logical positioning is enabled
+                UpdateControlDpiScaling();
 
                 // Restore dragdrop status. Ole Initialize happens
                 // when the ThreadContext in Application is created
@@ -11530,7 +11523,7 @@ example usage
             }
             else
             {
-                // Scaling factor is calculated by the dpi value and the last dpi value when scaling was applied
+                // Scaling factor is calculated by the curent dpi value and the last dpi value when scaling was applied
                 factor = (float)deviceDpi / (float)lastScaleDpi;
             }
             SizeF factorSize = new SizeF(factor, factor);
@@ -11538,6 +11531,20 @@ example usage
             ScaleControl(factorSize, factorSize, requestingControl, false);
         }
 
+        internal void UpdateControlDpiScaling()
+        {
+            // If logical positions are used, check if the dpi has changed compared to the last scale operation
+            // Update the dpi value before
+            if (IsHandleCreated && useLogicalPositioning && !(typeof(Form).IsAssignableFrom(this.GetType())))
+            {
+                deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+                if (lastScaleDpi != deviceDpi)
+                {
+                    RescaleConstantsForDpi(lastScaleDpi, deviceDpi);
+                    ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
+                }
+            }
+        }
 
         /// <devdoc>
         ///     Scales the children of this control.  The default implementation walks the controls
@@ -12134,6 +12141,8 @@ example usage
                             if (parent != null) {
                                 parent.UpdateChildZOrder(this);
                             }
+                            // The window the control belongs to might have a different dpi value, so update it here
+                            UpdateControlDpiScaling();
                             Application.UnparkHandle(new HandleRef(window, Handle), window.DpiAwarenessContext);
                         }
                     }
