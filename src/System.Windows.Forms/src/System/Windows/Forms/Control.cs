@@ -8828,14 +8828,11 @@ example usage
                 if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(this.GetType()))) {
                     int old = deviceDpi;
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
-                  
-                    if(useLogicalPositioning == false)
+
+                    if (old != deviceDpi)
                     {
-                        if (old != deviceDpi)
-                        {
-                            RescaleConstantsForDpi(old, deviceDpi);
-                        }
-                    }                
+                        RescaleConstantsForDpi(old, deviceDpi);
+                    }
                 }
 
                 // Rescale control if logical positioning is enabled
@@ -11524,34 +11521,35 @@ example usage
         internal void ScaleControlForDpiChange(int oldFormDpi, int newFormDpi, Control requestingControl)
         {
             float factor;
-            if (useLogicalPositioning == false)
+            if (useLogicalPositioning == false || DpiHelper.IsPerMonitorV2Awareness == false)
             {
                 // Scale with the factor corresponding to the forms dpi change
+                // Also use this code path if Per Monitor V2 awareness is not enabled and, thus, deviceDpi is not updated
                 factor = (float)newFormDpi / (float)oldFormDpi;
+                lastScaleDpi = newFormDpi;
             }
             else
             {
-                // Scaling factor is calculated by the curent dpi value and the last dpi value when scaling was applied
+                // Scaling factor is calculated using the curent dpi value and the last dpi value when scaling was applied
                 factor = (float)deviceDpi / (float)lastScaleDpi;
+                lastScaleDpi = deviceDpi;
             }
             SizeF factorSize = new SizeF(factor, factor);
-            lastScaleDpi = deviceDpi;
             ScaleControl(factorSize, factorSize, requestingControl, false);
         }
 
         internal void UpdateControlDpiScaling()
         {
             // If logical positions are used, check if the dpi has changed compared to the last scale operation
-            // Update the dpi value before if possible
             if (IsHandleCreated && useLogicalPositioning && !(typeof(Form).IsAssignableFrom(this.GetType())))
             {
-                if(DpiHelper.IsPerMonitorV2Awareness) {
+                // Update the dpi value if possible as the parent control might have changed
+                if (DpiHelper.IsPerMonitorV2Awareness) {
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
                 }
                 
                 if (lastScaleDpi != deviceDpi)
                 {
-                    RescaleConstantsForDpi(lastScaleDpi, deviceDpi);
                     ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
                 }
             }
