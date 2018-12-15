@@ -13563,15 +13563,16 @@ example usage
 
             if (IsHandleCreated) {
                 int deviceDpiOld = deviceDpi;
+                int oldDpi = useLogicalPositioning == true ? lastScaleDpi : deviceDpiOld;
                 deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
 
                 // Controls are by default font scaled. 
                 // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.
-                if (deviceDpiOld != deviceDpi) {
+                if (oldDpi != deviceDpi) {
                     // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
                     Font local = (Font)Properties.GetObject(PropFont);
                     if (local != null) {
-                        var factor = (float)deviceDpi / deviceDpiOld;
+                        var factor = (float)deviceDpi / oldDpi;
                         this.Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
                     }
 
