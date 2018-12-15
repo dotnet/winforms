@@ -7723,7 +7723,7 @@ example usage
         /// by scaling it for the current DPI and rounding down to the nearest integer value.
         /// </devdoc>
         public int LogicalToDeviceUnits(int value) {
-            return DpiHelper.LogicalToDeviceUnits(value, useLogicalPositioning == true ? lastScaleDpi : DeviceDpi);
+            return DpiHelper.LogicalToDeviceUnits(value, CurrentDpi);
         }
 
         /// <summary>
@@ -7733,7 +7733,7 @@ example usage
         /// <param name="value"> size to be scaled</param>
         /// <returns> scaled size</returns>
         public Size LogicalToDeviceUnits(Size value) {
-            return DpiHelper.LogicalToDeviceUnits(value, useLogicalPositioning == true ? lastScaleDpi : DeviceDpi);
+            return DpiHelper.LogicalToDeviceUnits(value, CurrentDpi);
         }
 
         /// <summary>
@@ -7742,7 +7742,7 @@ example usage
         /// </summary>
         /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
         public void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap) {
-            DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, useLogicalPositioning == true ? lastScaleDpi : DeviceDpi);
+            DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, CurrentDpi);
         }
 
         public bool LogicalPositioning
@@ -7754,6 +7754,14 @@ example usage
             set
             {
                 useLogicalPositioning = value;
+            }
+        }
+
+        public int CurrentDpi
+        {
+            get
+            {
+                return (useLogicalPositioning == true ? lastScaleDpi : DeviceDpi);
             }
         }
 
