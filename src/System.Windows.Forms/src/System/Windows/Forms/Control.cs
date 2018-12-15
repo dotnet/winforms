@@ -11530,7 +11530,8 @@ example usage
             }
             else
             {
-                // Scaling factor is calculated using the curent dpi value and the last dpi value when scaling was applied
+                // Scaling factor is calculated using the curent dpi value (which will have been updated before)
+                // and the last dpi value when scaling was applied
                 factor = (float)deviceDpi / (float)lastScaleDpi;
                 lastScaleDpi = deviceDpi;
             }
@@ -11541,17 +11542,34 @@ example usage
         internal void UpdateControlDpiScaling()
         {
             // If logical positions are used, check if the dpi has changed compared to the last scale operation
-            if (IsHandleCreated && useLogicalPositioning && !(typeof(Form).IsAssignableFrom(this.GetType())))
+            if (IsHandleCreated && useLogicalPositioning)
             {
-                // Update the dpi value if possible as the parent control might have changed
-                if (DpiHelper.IsPerMonitorV2Awareness) {
-                    deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
-                }
-                
-                if (lastScaleDpi != deviceDpi)
+                if((typeof(Form).IsAssignableFrom(this.GetType())))
                 {
-                    ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
+                    // For forms only update the current Dpi scale value
+                    // TODO: The deviceDpi value is not updated in OnHandleCreated() for form controls. Find out why
+                    if (DpiHelper.IsPerMonitorV2Awareness)
+                    {
+                        lastScaleDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+                    }
+                    else
+                    {
+                        lastScaleDpi = deviceDpi;
+                    }
                 }
+                else
+                {
+                    // Update the dpi value if possible as the parent control might have changed
+                    if (DpiHelper.IsPerMonitorV2Awareness)
+                    {
+                        deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+                    }
+
+                    if (lastScaleDpi != deviceDpi)
+                    {
+                        ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
+                    }
+                }          
             }
         }
 

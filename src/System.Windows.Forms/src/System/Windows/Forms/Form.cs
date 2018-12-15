@@ -5136,8 +5136,9 @@ namespace System.Windows.Forms {
         private void WmDpiChanged(ref Message m) {
             DefWndProc(ref m);
 
-            DpiChangedEventArgs e = new DpiChangedEventArgs(deviceDpi, m);
+            DpiChangedEventArgs e = new DpiChangedEventArgs(CurrentDpi, m);
             deviceDpi = e.DeviceDpiNew;
+            lastScaleDpi = deviceDpi;
             
             OnDpiChanged(e);
         }
