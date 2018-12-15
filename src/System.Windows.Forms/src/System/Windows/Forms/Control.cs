@@ -11511,8 +11511,8 @@ example usage
                 factor = (float)deviceDpi / (float)lastScaleDpi;
             }
             SizeF factorSize = new SizeF(factor, factor);
-            ScaleControl(factorSize, factorSize, requestingControl, false);
             lastScaleDpi = deviceDpi;
+            ScaleControl(factorSize, factorSize, requestingControl, false);
         }
 
 

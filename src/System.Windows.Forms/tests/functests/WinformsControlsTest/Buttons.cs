@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest
@@ -17,6 +18,7 @@ namespace WinformsControlsTest
         private FlatStyle[] styles = { FlatStyle.Flat, FlatStyle.Popup, FlatStyle.Standard, FlatStyle.System };
         private void Test1_Load(object sender, EventArgs e)
         {
+            
             RadioButton r;
             for (int i = 0; i < styles.Length; i++)
             {
@@ -46,12 +48,17 @@ namespace WinformsControlsTest
             {
                 b = new Button();
                 b.LogicalPositioning = true;
-                b.Location = new System.Drawing.Point(220, 20 + 60 * i);
+                b.LogicalLocation = new System.Drawing.Point(220, 20 + 60 * i);
                 b.AutoSize = false;
-                b.Size = new System.Drawing.Size(100, 20);
+                b.LogicalSize = new System.Drawing.Size(100, 20);
                 b.Text = styles[i].ToString();
                 Controls.Add(b);
             }
+
+            int nowDpi = this.Controls[0].DeviceDpi;
+            float fontFactor = (float)nowDpi / (float)this.DeviceDpi;
+            this.Font = new Font("Arial", 8 * fontFactor);
+
         }
     }
 }

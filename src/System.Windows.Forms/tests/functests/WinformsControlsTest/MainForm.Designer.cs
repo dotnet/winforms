@@ -53,9 +53,11 @@ namespace WinformsControlsTest
             // 
             // buttonsButton
             // 
-            this.buttonsButton.Location = new System.Drawing.Point(13, 33);
+            this.buttonsButton.LogicalPositioning = true;
+            this.buttonsButton.LogicalLocation = new System.Drawing.Point(13, 33);
+
             this.buttonsButton.Name = "buttonsButton";
-            this.buttonsButton.Size = new System.Drawing.Size(259, 23);
+            this.buttonsButton.LogicalSize = new System.Drawing.Size(259, 23);
             this.buttonsButton.TabIndex = 0;
             this.buttonsButton.Text = "Buttons";
             this.buttonsButton.UseVisualStyleBackColor = true;
