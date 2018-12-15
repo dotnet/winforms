@@ -7827,7 +7827,7 @@ example usage
                 Size = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
             }
         }
-        public Padding logicalMargin
+        public Padding LogicalMargin
         {
             get
             {
@@ -7839,7 +7839,7 @@ example usage
             }
         }
 
-        public Padding logicalPadding
+        public Padding LogicalPadding
         {
             get
             {

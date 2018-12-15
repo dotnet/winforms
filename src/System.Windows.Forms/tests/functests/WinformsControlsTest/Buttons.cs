@@ -49,7 +49,7 @@ namespace WinformsControlsTest
                 b = new Button();
                 b.LogicalPositioning = true;
                 b.LogicalLocation = new System.Drawing.Point(220, 20 + 60 * i);
-                b.logicalMargin = new Padding(6, 6, 0, 0);
+                b.LogicalMargin = new Padding(6, 6, 0, 0);
                 b.AutoSize = false;
                 b.LogicalSize = new System.Drawing.Size(100, 20);
                 b.Text = styles[i].ToString();
