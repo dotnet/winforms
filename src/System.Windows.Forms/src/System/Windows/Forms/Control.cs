@@ -427,7 +427,7 @@ namespace System.Windows.Forms {
         private LayoutEventArgs               cachedLayoutEventArgs;
         private Queue                         threadCallbackList;
         internal int                          deviceDpi;
-        internal int                          lastScaleDpi;
+        internal int                          lastScaleDpi;           // Dpi value for which this control was last scaled. Will be set to DpiHelper.LogicalDpi (=96) in the constructor
         private bool                          useLogicalPositioning;
         /*private int                           logicalX;
         private int                           logicalY;
@@ -7723,7 +7723,7 @@ example usage
         /// by scaling it for the current DPI and rounding down to the nearest integer value.
         /// </devdoc>
         public int LogicalToDeviceUnits(int value) {
-            return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
+            return DpiHelper.LogicalToDeviceUnits(value, useLogicalPositioning == true ? lastScaleDpi : DeviceDpi);
         }
 
         /// <summary>
@@ -7733,7 +7733,7 @@ example usage
         /// <param name="value"> size to be scaled</param>
         /// <returns> scaled size</returns>
         public Size LogicalToDeviceUnits(Size value) {
-            return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
+            return DpiHelper.LogicalToDeviceUnits(value, useLogicalPositioning == true ? lastScaleDpi : DeviceDpi);
         }
 
         /// <summary>
@@ -7742,7 +7742,7 @@ example usage
         /// </summary>
         /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
         public void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap) {
-            DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, DeviceDpi);
+            DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, useLogicalPositioning == true ? lastScaleDpi : DeviceDpi);
         }
 
         public bool LogicalPositioning
@@ -8793,24 +8793,27 @@ example usage
                     SetWindowFont();
                 }
 
-                // Why is this not called for forms? Its DeviceDpi property will always use the system dpi value
+                // Why is this not called for forms? Its DeviceDpi property will always use the system dpi value...
                 if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(this.GetType()))) {
                     int old = deviceDpi;
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
-                    if (useLogicalPositioning)
-                    {
-                        if (lastScaleDpi != deviceDpi)
-                        {
-                            RescaleConstantsForDpi(lastScaleDpi, deviceDpi);
-                            ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
-                        }
-                    }
-                    else
+                  
+                    if(useLogicalPositioning == false)
                     {
                         if (old != deviceDpi)
                         {
                             RescaleConstantsForDpi(old, deviceDpi);
                         }
+                    }
+                }
+
+                // If logical positions are used, always scale up to the current dpi
+                if (useLogicalPositioning && !(typeof(Form).IsAssignableFrom(this.GetType())))
+                {
+                    if (lastScaleDpi != deviceDpi)
+                    {
+                        RescaleConstantsForDpi(lastScaleDpi, deviceDpi);
+                        ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
                     }
                 }
 
@@ -13484,7 +13487,7 @@ example usage
             // control should be enabled when this method is entered, but may have become
             // disabled during its lifetime (e.g. through a Click or Focus listener)
             if (Enabled) {
-                OnMouseDown(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, DeviceDpi));
+                OnMouseDown(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, lastScaleDpi));
             }
         }
 
@@ -13568,7 +13571,7 @@ example usage
             if (!GetStyle(ControlStyles.UserMouse)) {
                 DefWndProc(ref m);
             }
-            OnMouseMove(new MouseEventArgs(MouseButtons, 0, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, DeviceDpi));
+            OnMouseMove(new MouseEventArgs(MouseButtons, 0, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, lastScaleDpi));
         }
 
         /// <devdoc>
@@ -13611,20 +13614,20 @@ example usage
                     if (!GetState(STATE_DOUBLECLICKFIRED)) {
                         //OnClick(EventArgs.Empty);
                         //In Whidbey .. if the click in by MOUSE then pass the MouseEventArgs...
-                        OnClick(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, DeviceDpi));
-                        OnMouseClick(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, DeviceDpi));
+                        OnClick(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, lastScaleDpi));
+                        OnMouseClick(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, lastScaleDpi));
 
                     }
 
                     else {
                         //OnDoubleClick(EventArgs.Empty);
-                        OnDoubleClick(new MouseEventArgs(button, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, DeviceDpi));
-                        OnMouseDoubleClick(new MouseEventArgs(button, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, DeviceDpi));
+                        OnDoubleClick(new MouseEventArgs(button, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, lastScaleDpi));
+                        OnMouseDoubleClick(new MouseEventArgs(button, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, lastScaleDpi));
                     }
 
                 }
                 //call the MouseUp Finally...
-                OnMouseUp(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, DeviceDpi));
+                OnMouseUp(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0, lastScaleDpi));
             }
             finally {
                 //Always Reset the STATE_DOUBLECLICKFIRED in UP.. Since we get UP - DOWN - DBLCLK - UP sequqnce
@@ -13826,11 +13829,11 @@ example usage
 
                         if (bufferedGraphics != null) {
                             bufferedGraphics.Graphics.SetClip(clip);                   
-                            pevent = new PaintEventArgs(bufferedGraphics.Graphics, clip, DeviceDpi);
+                            pevent = new PaintEventArgs(bufferedGraphics.Graphics, clip, lastScaleDpi);
                             state = pevent.Graphics.Save();
                         }
                         else {        
-                            pevent = new PaintEventArgs(dc, clip, DeviceDpi);
+                            pevent = new PaintEventArgs(dc, clip, lastScaleDpi);
                         }
 
                         using (pevent) {
