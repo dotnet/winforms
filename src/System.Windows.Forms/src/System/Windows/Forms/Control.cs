@@ -11544,32 +11544,16 @@ example usage
             // If logical positions are used, check if the dpi has changed compared to the last scale operation
             if (IsHandleCreated && useLogicalPositioning)
             {
-                if((typeof(Form).IsAssignableFrom(this.GetType())))
+                // Update the dpi value if possible as the parent control might have changed
+                if (DpiHelper.IsPerMonitorV2Awareness)
                 {
-                    // For forms only update the current Dpi scale value
-                    // TODO: The deviceDpi value is not updated in OnHandleCreated() for form controls. Find out why
-                    if (DpiHelper.IsPerMonitorV2Awareness)
-                    {
-                        lastScaleDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
-                    }
-                    else
-                    {
-                        lastScaleDpi = deviceDpi;
-                    }
+                    deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
                 }
-                else
-                {
-                    // Update the dpi value if possible as the parent control might have changed
-                    if (DpiHelper.IsPerMonitorV2Awareness)
-                    {
-                        deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
-                    }
 
-                    if (lastScaleDpi != deviceDpi)
-                    {
-                        ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
-                    }
-                }          
+                if (lastScaleDpi != deviceDpi)
+                {
+                    ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
+                }
             }
         }
 
