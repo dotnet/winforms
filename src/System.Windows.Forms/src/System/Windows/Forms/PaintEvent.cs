@@ -175,7 +175,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void ApplyLogicalToDeviceScaling()
         {
-            Graphics.ScaleTransform((float)dpi / (float)DpiHelper.LogicalDpi, (float)dpi / (float)DpiHelper.LogicalDpi);
+            Graphics.PageUnit = GraphicsUnit.Pixel;
+            Graphics.PageScale = (float)dpi / (float)DpiHelper.LogicalDpi;
         }
 
         // We want a way to dispose the GDI+ Graphics, but we don't want to create one
