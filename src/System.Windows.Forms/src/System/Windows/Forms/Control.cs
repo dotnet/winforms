@@ -7819,6 +7819,29 @@ example usage
                 Size = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
             }
         }
+        public Padding logicalMargin
+        {
+            get
+            {
+                return DpiHelper.DeviceToLogicalUnits(Margin);
+            }
+            set
+            {
+                Margin = DpiHelper.LogicalToDeviceUnits(value);
+            }
+        }
+
+        public Padding logicalPadding
+        {
+            get
+            {
+                return DpiHelper.DeviceToLogicalUnits(Padding);
+            }
+            set
+            {
+                Padding = DpiHelper.LogicalToDeviceUnits(value);
+            }
+        }
 
         internal void AdjustWindowRectEx(ref NativeMethods.RECT rect, int style, bool bMenu, int exStyle) {
             if (DpiHelper.IsPerMonitorV2Awareness) {

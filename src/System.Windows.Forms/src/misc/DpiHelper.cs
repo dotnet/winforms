@@ -333,6 +333,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Returns a new Padding with the input's
+        /// dimensions converted from device units to logical units.
+        /// </summary>
+        /// <param name="logicalPadding">Padding in logical units</param>
+        /// <returns>Size in device units</returns>
+        public static Padding DeviceToLogicalUnits(Padding devicePadding, int deviceDpi = 0)
+        {
+            return new Padding(DeviceToLogicalUnits(devicePadding.Left, deviceDpi),
+                            DeviceToLogicalUnits(devicePadding.Top, deviceDpi),
+                            DeviceToLogicalUnits(devicePadding.Right, deviceDpi),
+                            DeviceToLogicalUnits(devicePadding.Bottom, deviceDpi));
+        }
+
+        /// <summary>
         /// Create and return a new bitmap scaled to the specified size.
         /// </summary>
         /// <param name="logicalImage">The image to scale from logical units to device units</param>
