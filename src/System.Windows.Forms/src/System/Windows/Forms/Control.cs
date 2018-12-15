@@ -11419,7 +11419,7 @@ example usage
         internal virtual void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool isDpiAutoScale) {
             // When we scale, we are establishing new baselines for the
             // positions of all controls.  Therefore, we should resume(false).
-            using (new LayoutTransaction(this, this, PropertyNames.Bounds, false)) {          
+            using (new LayoutTransaction(this, this, PropertyNames.Bounds, false)) {
                 ScaleControl(includedFactor, excludedFactor, requestingControl, isDpiAutoScale);
                 ScaleChildControls(includedFactor, excludedFactor, requestingControl, false, isDpiAutoScale);
             }
@@ -11534,10 +11534,13 @@ example usage
         internal void UpdateControlDpiScaling()
         {
             // If logical positions are used, check if the dpi has changed compared to the last scale operation
-            // Update the dpi value before
+            // Update the dpi value before if possible
             if (IsHandleCreated && useLogicalPositioning && !(typeof(Form).IsAssignableFrom(this.GetType())))
             {
-                deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+                if(DpiHelper.IsPerMonitorV2Awareness) {
+                    deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+                }
+                
                 if (lastScaleDpi != deviceDpi)
                 {
                     RescaleConstantsForDpi(lastScaleDpi, deviceDpi);

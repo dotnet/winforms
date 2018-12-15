@@ -49,15 +49,17 @@ namespace WinformsControlsTest
                 b = new Button();
                 b.LogicalPositioning = true;
                 b.LogicalLocation = new System.Drawing.Point(220, 20 + 60 * i);
+                b.logicalMargin = new Padding(6, 6, 0, 0);
                 b.AutoSize = false;
                 b.LogicalSize = new System.Drawing.Size(100, 20);
                 b.Text = styles[i].ToString();
+                b.CreateControl();
                 Controls.Add(b);
             }
 
             int nowDpi = this.Controls[0].DeviceDpi;
             float fontFactor = (float)nowDpi / (float)this.DeviceDpi;
-            this.Font = new Font("Arial", 8 * fontFactor);
+            this.Font = new Font("Arial", 12 * (float)nowDpi / 96.0f, GraphicsUnit.Pixel);
 
         }
     }
