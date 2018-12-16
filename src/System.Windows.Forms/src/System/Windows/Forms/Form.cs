@@ -5137,6 +5137,8 @@ namespace System.Windows.Forms {
             DefWndProc(ref m);
 
             DpiChangedEventArgs e = new DpiChangedEventArgs(CurrentDpi, m);
+            // Update dpi values here because the form will not receive the dpi changed before parent event
+            // and the Scale method is only called for its children
             deviceDpi = e.DeviceDpiNew;
             lastScaleDpi = deviceDpi;
             

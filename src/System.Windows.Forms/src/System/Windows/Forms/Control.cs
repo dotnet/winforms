@@ -11552,6 +11552,14 @@ example usage
 
                 if (lastScaleDpi != deviceDpi)
                 {
+                    // Scale font size. The same code is also present in WmDpiChangedBeforeParent
+                    Font local = (Font)Properties.GetObject(PropFont);
+                    if (local != null)
+                    {
+                        var factor = (float)deviceDpi / lastScaleDpi;
+                        this.Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
+                    }
+
                     ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
                 }
             }
