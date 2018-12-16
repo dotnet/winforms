@@ -428,11 +428,7 @@ namespace System.Windows.Forms {
         private Queue                         threadCallbackList;
         internal int                          deviceDpi;
         internal int                          lastScaleDpi;           // Dpi value for which this control was last scaled. Will be set to DpiHelper.LogicalDpi (=96) in the constructor
-        private bool                          useLogicalPositioning;
-        /*private int                           logicalX;
-        private int                           logicalY;
-        private int                           logicalWidth;
-        private int                           logicalHeight;*/
+        private bool                          useLogicalDpiScaling;
 
         // for keeping track of our ui state for focus and keyboard cues.  using a member variable
         // here because we hit this a lot
@@ -535,11 +531,6 @@ example usage
             Size defaultSize = DefaultSize;
             width = defaultSize.Width;
             height = defaultSize.Height;
-
-            // Set logical sizes = pixel sizes (assume 100% scaling)
-            useLogicalPositioning = false;
-            /*logicalWidth = width;
-            logicalHeight = height;*/
 
             // DefaultSize may have hit GetPreferredSize causing a PreferredSize to be cached.  The
             // PreferredSize may change as a result of the current size.  Since a  SetBoundsCore did
@@ -7745,15 +7736,15 @@ example usage
             DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, CurrentDpi);
         }
 
-        public bool LogicalPositioning
+        public bool LogicalDpiScaling
         {
             get
             {
-                return useLogicalPositioning;
+                return useLogicalDpiScaling;
             }
             set
             {
-                useLogicalPositioning = value;
+                useLogicalDpiScaling = value;
             }
         }
 
@@ -7761,7 +7752,7 @@ example usage
         {
             get
             {
-                return (useLogicalPositioning == true ? lastScaleDpi : DeviceDpi);
+                return (useLogicalDpiScaling == true ? lastScaleDpi : DeviceDpi);
             }
         }
 
@@ -11521,7 +11512,7 @@ example usage
         internal void ScaleControlForDpiChange(int oldFormDpi, int newFormDpi, Control requestingControl)
         {
             float factor;
-            if (useLogicalPositioning == false || DpiHelper.IsPerMonitorV2Awareness == false)
+            if (useLogicalDpiScaling == false || DpiHelper.IsPerMonitorV2Awareness == false)
             {
                 // Scale with the factor corresponding to the forms dpi change
                 // Also use this code path if Per Monitor V2 awareness is not enabled and, thus, deviceDpi is not updated
@@ -11542,7 +11533,7 @@ example usage
         internal void UpdateControlDpiScaling()
         {
             // If logical positions are used, check if the dpi has changed compared to the last scale operation
-            if (IsHandleCreated && useLogicalPositioning)
+            if (IsHandleCreated && useLogicalDpiScaling)
             {
                 // Update the dpi value if possible as the parent control might have changed
                 if (DpiHelper.IsPerMonitorV2Awareness)
@@ -11586,7 +11577,7 @@ example usage
         ///     will be skipped.
         /// </devdoc>
         internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool isDpiAutoScale) {
-            if (isDpiAutoScale == true && useLogicalPositioning == true) {
+            if (isDpiAutoScale == true && useLogicalDpiScaling == true) {
                 return;
             }
             try {
@@ -13571,7 +13562,7 @@ example usage
 
             if (IsHandleCreated) {
                 int deviceDpiOld = deviceDpi;
-                int oldDpi = useLogicalPositioning == true ? lastScaleDpi : deviceDpiOld;
+                int oldDpi = useLogicalDpiScaling == true ? lastScaleDpi : deviceDpiOld;
                 deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
 
                 // Controls are by default font scaled. 
