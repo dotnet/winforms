@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#define DEBUG_PREFERREDSIZE
+//#define DEBUG_PREFERREDSIZE
 
 
 
@@ -328,6 +328,8 @@ namespace System.Windows.Forms {
 
         private static Font defaultFont;
 
+        private static bool useLogicalDpiScalingByDefault = false; // for testing
+
         // Property store keys for properties.  The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
         // likely they are going to be used in a group.
@@ -490,8 +492,9 @@ example usage
 
             DpiHelper.InitializeDpiHelperForWinforms();
             // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
-            deviceDpi = DpiHelper.DeviceDpi;
-            lastScaleDpi = (int)DpiHelper.LogicalDpi; // Assume 96dpi at creation
+            deviceDpi = DpiHelper.DeviceDpi; // System dpi at creation, will be updated later if per monitor dpi is enabled
+            lastScaleDpi = (int)DpiHelper.LogicalDpi; // Assume 96dpi at creation, will be updated later if per monitor dpi is enabled
+            useLogicalDpiScaling = useLogicalDpiScalingByDefault;
 
             window = new ControlNativeWindow(this);
             RequiredScalingEnabled = true;
@@ -7736,6 +7739,30 @@ example usage
             DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, CurrentDpi);
         }
 
+        // For testing
+        static public bool LogicalDpiScalingByDefault
+        {
+            get
+            {
+                return LogicalDpiScalingByDefault;
+            }
+            set
+            {
+                LogicalDpiScalingByDefault = value;
+            }
+        }
+
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalDpiScaling"]/*' />
+        /// <devdoc>
+        ///     Controls if logical dpi scaling is enabled. If enabled, all pixel based size and positioning values will be assumed
+        ///     to refer to 96dpi before the handle of the control is created. Afterwards, they will refer to the current dpi value of
+        ///     the control. The logical size and positioning APIs can be used safely after this property is enabled.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
         public bool LogicalDpiScaling
         {
             get
@@ -7748,6 +7775,15 @@ example usage
             }
         }
 
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DeviceDpi"]/*' />
+        /// <devdoc>
+        ///  The current dpi this control is scaled to if logical dpi scaling is enabled. Otherwise it
+        ///  will return the DeviceDpi.
+        /// </devdoc>
+        [
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
         public int CurrentDpi
         {
             get
@@ -7756,6 +7792,15 @@ example usage
             }
         }
 
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalBounds"]/*' />
+        /// <devdoc>
+        ///     The bounds of this control in logical units.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
         public Rectangle LogicalBounds
         {
             get
@@ -7769,7 +7814,15 @@ example usage
             }
         }
 
-
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicaLocation"]/*' />
+        /// <devdoc>
+        ///     The location of this control in logical units.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
         public Point LogicalLocation
         {
             get
@@ -7782,6 +7835,15 @@ example usage
             }
         }
 
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalWidth"]/*' />
+        /// <devdoc>
+        ///     The width of this control in logical units.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
         public int LogicalWidth
         {
             get
@@ -7794,6 +7856,15 @@ example usage
             }
         }
 
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalWidth"]/*' />
+        /// <devdoc>
+        ///     The width of this control in logical units.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
         public int LogicalHeight
         {
             get
@@ -7806,7 +7877,15 @@ example usage
             }
         }
 
-
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalHeight"]/*' />
+        /// <devdoc>
+        ///     The height of this control in logical units.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
         public Size LogicalSize
         {
             get
@@ -7818,6 +7897,16 @@ example usage
                 Size = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
             }
         }
+
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalMargin"]/*' />
+        /// <devdoc>
+        ///     The margin of this control in logical units.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
         public Padding LogicalMargin
         {
             get
@@ -7830,6 +7919,15 @@ example usage
             }
         }
 
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalPadding"]/*' />
+        /// <devdoc>
+        ///     The padding of this control in logical units.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
         public Padding LogicalPadding
         {
             get
@@ -11411,6 +11509,9 @@ example usage
         ///
         ///     The requestingControl property indicates which control has requested
         ///     the scaling function.
+        ///        
+        ///     The isDpiAutoScale is set to true by the ContainControl if the 
+        ///     scale operation is dpi related.
         /// </devdoc>
         internal virtual void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool isDpiAutoScale) {
             // When we scale, we are establishing new baselines for the
@@ -11443,6 +11544,9 @@ example usage
         ///     The updateWindowFontIfNeeded parameter indicates if we need to update Window
         ///     font for controls that need it, i.e. controls using default or inherited font,
         ///     that are also not user-painted.
+        ///           
+        ///     The isDpiAutoScale is set to true by the ContainControl if the 
+        ///     scale operation is dpi related.
         /// </devdoc>
         internal void ScaleChildControls(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool updateWindowFontIfNeeded = false, bool isDpiAutoScale = false) {
 
@@ -11484,7 +11588,7 @@ example usage
 
             if (controlsCollection != null)
             {
-                // PERFNOTE: This is more efficient than using Foreach.  Foreach
+                // Copied PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
                 // enumerate
                 for (int i = 0; i < controlsCollection.Count; i++)
@@ -11509,6 +11613,12 @@ example usage
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
         }
 
+        /// <devdoc>
+        ///     Scale the control to a new dpi value. If logical dpi scaling is not enabled,
+        ///     the scaling factor is determined by the old and new dpi value of the form control.
+        ///     Otherwise, use the new dpi value (updated before) and compare it with the last known
+        ///     value the control is scaled to.
+        /// </devdoc>
         internal void ScaleControlForDpiChange(int oldFormDpi, int newFormDpi, Control requestingControl)
         {
             float factor;
@@ -11530,6 +11640,11 @@ example usage
             ScaleControl(factorSize, factorSize, requestingControl, false);
         }
 
+        /// <devdoc>
+        ///     This method is called after the handle is created or if the parent of the control has changed.
+        ///     If logical dpi scaling is enabled, compare the current dpi value with the current one and 
+        ///     scale the control sizes and the font if necessary.
+        /// </devdoc>
         internal void UpdateControlDpiScaling()
         {
             // If logical positions are used, check if the dpi has changed compared to the last scale operation
@@ -11573,7 +11688,7 @@ example usage
         ///     The requestingControl property indicates which control has requested
         ///     the scaling function.
         ///     
-        ///     If isDpAutoiScale is true, then controls with logical positioning enabled
+        ///     If isDpiAutoScale is true, then controls with logical positioning enabled
         ///     will be skipped.
         /// </devdoc>
         internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool isDpiAutoScale) {
@@ -13561,6 +13676,10 @@ example usage
             DefWndProc(ref m);
 
             if (IsHandleCreated) {
+                // the values of deviceDpi and lastScaleDpi might not be the same as deviceDpi is set to the system dpi value
+                // at control instantiation and lastScaleDpi defaults to 96
+                // Make sure to select the right value here and always pass the old value of deviceDpi to the RescaleConstantsForDpi()
+                // function to avoid compatibility issues
                 int deviceDpiOld = deviceDpi;
                 int oldDpi = useLogicalDpiScaling == true ? lastScaleDpi : deviceDpiOld;
                 deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
