@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-//#define DEBUG_PREFERREDSIZE
+#define DEBUG_PREFERREDSIZE
 
 
 
@@ -492,7 +492,7 @@ example usage
 
             DpiHelper.InitializeDpiHelperForWinforms();
             // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
-            deviceDpi = DpiHelper.DeviceDpi; // System dpi at creation, will be updated later if per monitor dpi is enabled
+            deviceDpi = DpiHelper.DeviceDpi; // Set to system dpi here, will be updated later if per monitor dpi is enabled
             lastScaleDpi = (int)DpiHelper.LogicalDpi; // Assume 96dpi at creation, will be updated later if per monitor dpi is enabled
             useLogicalDpiScaling = useLogicalDpiScalingByDefault;
 
