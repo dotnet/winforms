@@ -7744,11 +7744,11 @@ example usage
         {
             get
             {
-                return LogicalDpiScalingByDefault;
+                return useLogicalDpiScalingByDefault;
             }
             set
             {
-                LogicalDpiScalingByDefault = value;
+                useLogicalDpiScalingByDefault = value;
             }
         }
 
