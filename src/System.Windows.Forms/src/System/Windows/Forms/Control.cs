@@ -13677,9 +13677,9 @@ example usage
 
             if (IsHandleCreated) {
                 // the values of deviceDpi and lastScaleDpi might not be the same as deviceDpi is set to the system dpi value
-                // at control instantiation and lastScaleDpi defaults to 96
+                // at control instantiation and lastScaleDpi defaults to 96.
                 // Make sure to select the right value here and always pass the old value of deviceDpi to the RescaleConstantsForDpi()
-                // function to avoid compatibility issues
+                // method to avoid compatibility issues.
                 int deviceDpiOld = deviceDpi;
                 int oldDpi = useLogicalDpiScaling == true ? lastScaleDpi : deviceDpiOld;
                 deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
