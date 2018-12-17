@@ -35,6 +35,9 @@
     <Compile Update="ListViewTest.Designer.cs">
       <DependentUpon>ListViewTest.cs</DependentUpon>
     </Compile>
+    <Compile Update="LogicalDpi.Designercs">
+      <DependentUpon>LogicalDpi.cs</DependentUpon>
+    </Compile>
     <Compile Update="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
@@ -85,7 +88,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Buttons.resx">
       <DependentUpon>Buttons.cs</DependentUpon>

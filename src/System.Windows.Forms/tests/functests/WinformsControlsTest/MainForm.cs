@@ -106,5 +106,10 @@ namespace WinformsControlsTest
             var dialog = new FolderBrowserDialog();
             dialog.ShowDialog();
         }
+
+        private void logicalDpiButton_Click(object sender, EventArgs e)
+        {
+            (new LogicalDpi()).Show();
+        }
     }
 }

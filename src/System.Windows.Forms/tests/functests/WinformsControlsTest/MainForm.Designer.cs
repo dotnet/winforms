@@ -49,12 +49,12 @@ namespace WinformsControlsTest
             this.listViewButton = new System.Windows.Forms.Button();
             this.DateTimePickerButton = new System.Windows.Forms.Button();
             this.FolderBrowserDialogButton = new System.Windows.Forms.Button();
+            this.logicalDpiButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonsButton
             // 
-            this.buttonsButton.LogicalPositioning = true;
-            this.buttonsButton.LogicalLocation = new System.Drawing.Point(13, 33);
+            this.buttonsButton.Location = new System.Drawing.Point(13, 33);
 
             this.buttonsButton.Name = "buttonsButton";
             this.buttonsButton.LogicalSize = new System.Drawing.Size(259, 23);
@@ -223,11 +223,22 @@ namespace WinformsControlsTest
             this.FolderBrowserDialogButton.UseVisualStyleBackColor = true;
             this.FolderBrowserDialogButton.Click += new System.EventHandler(this.folderBrowserDialogButton_Click);
             // 
+            // LogicalDpiButton
+            // 
+            this.logicalDpiButton.Location = new System.Drawing.Point(13, 261);
+            this.logicalDpiButton.Name = "LogicalDpiButton";
+            this.logicalDpiButton.Size = new System.Drawing.Size(259, 23);
+            this.logicalDpiButton.TabIndex = 18;
+            this.logicalDpiButton.Text = "Logical DPI scaling";
+            this.logicalDpiButton.UseVisualStyleBackColor = true;
+            this.logicalDpiButton.Click += new System.EventHandler(this.logicalDpiButton_Click);
+            // 
             // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(578, 402);
+            this.Controls.Add(this.logicalDpiButton);
             this.Controls.Add(this.FolderBrowserDialogButton);
             this.Controls.Add(this.DateTimePickerButton);
             this.Controls.Add(this.listViewButton);
@@ -273,6 +284,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button listViewButton;
         private System.Windows.Forms.Button DateTimePickerButton;
         private System.Windows.Forms.Button FolderBrowserDialogButton;
+        private System.Windows.Forms.Button logicalDpiButton;
     }
 }
 
