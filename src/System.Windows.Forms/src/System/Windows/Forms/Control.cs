@@ -493,7 +493,7 @@ example usage
             DpiHelper.InitializeDpiHelperForWinforms();
             // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
             deviceDpi = DpiHelper.DeviceDpi; // Set to system dpi here, will be updated later if per monitor dpi is enabled
-            lastScaleDpi = (int)DpiHelper.LogicalDpi; // Assume 96dpi at creation, will be updated later if per monitor dpi is enabled
+            lastScaleDpi = (int)DpiHelper.LogicalDpi; // Assume 96dpi by default, will be updated later if per monitor dpi is enabled
             useLogicalDpiScaling = useLogicalDpiScalingByDefault;
 
             window = new ControlNativeWindow(this);
@@ -8918,13 +8918,12 @@ example usage
                     int old = deviceDpi;
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
 
-                    if (old != deviceDpi)
-                    {
+                    if (old != deviceDpi) {
                         RescaleConstantsForDpi(old, deviceDpi);
                     }
                 }
 
-                // Rescale control if logical positioning is enabled
+                // Rescale control if logical dpi scaling is enabled
                 UpdateControlDpiScaling();
 
                 // Restore dragdrop status. Ole Initialize happens
@@ -11510,7 +11509,7 @@ example usage
         ///     The requestingControl property indicates which control has requested
         ///     the scaling function.
         ///        
-        ///     The isDpiAutoScale is set to true by the ContainControl if the 
+        ///     The isDpiAutoScale is set to true by the ContainerControl if the 
         ///     scale operation is dpi related.
         /// </devdoc>
         internal virtual void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool isDpiAutoScale) {
@@ -11545,7 +11544,7 @@ example usage
         ///     font for controls that need it, i.e. controls using default or inherited font,
         ///     that are also not user-painted.
         ///           
-        ///     The isDpiAutoScale is set to true by the ContainControl if the 
+        ///     The isDpiAutoScale is set to true by the ContainerControl if the 
         ///     scale operation is dpi related.
         /// </devdoc>
         internal void ScaleChildControls(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool updateWindowFontIfNeeded = false, bool isDpiAutoScale = false) {
@@ -11647,7 +11646,7 @@ example usage
         /// </devdoc>
         internal void UpdateControlDpiScaling()
         {
-            // If logical positions are used, check if the dpi has changed compared to the last scale operation
+            // If logical dpi scaling is used, check if the dpi has changed compared to the last scale operation
             if (IsHandleCreated && useLogicalDpiScaling)
             {
                 // Update the dpi value if possible as the parent control might have changed
@@ -11688,7 +11687,7 @@ example usage
         ///     The requestingControl property indicates which control has requested
         ///     the scaling function.
         ///     
-        ///     If isDpiAutoScale is true, then controls with logical positioning enabled
+        ///     If isDpiAutoScale is true, then controls with logical dpi scaling enabled
         ///     will be skipped.
         /// </devdoc>
         internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool isDpiAutoScale) {
@@ -13990,11 +13989,11 @@ example usage
                         }
 
                         if (bufferedGraphics != null) {
-                            bufferedGraphics.Graphics.SetClip(clip);                   
+                            bufferedGraphics.Graphics.SetClip(clip);
                             pevent = new PaintEventArgs(bufferedGraphics.Graphics, clip, lastScaleDpi);
                             state = pevent.Graphics.Save();
                         }
-                        else {        
+                        else {
                             pevent = new PaintEventArgs(dc, clip, lastScaleDpi);
                         }
 

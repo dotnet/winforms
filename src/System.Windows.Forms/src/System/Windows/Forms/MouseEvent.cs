@@ -127,7 +127,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.X"]/*' />
+        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.LogicalX"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the logical x-coordinate
@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Y"]/*' />
+        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.LogicalY"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the logical y-coordinate of a mouse click.
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Location"]/*' />
+        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.LogicalLocation"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the logical location of the mouse during MouseEvent.

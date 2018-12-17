@@ -120,8 +120,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.LogicalClipRectangle"]/*' />
         /// <devdoc>
         ///    <para>
-        ///       Gets the
-        ///       rectangle in which to paint in logical size.
+        ///       Gets the rectangle in which to paint in logical units.
         ///    </para>
         /// </devdoc>
         public Rectangle LogicalClipRectangle
@@ -170,7 +169,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.ApplyLogicalToDeviceScaling"]/*' />
         /// <devdoc>
         ///    <para>
-        ///       Apply logical to device scale transformation to the Graphics object 
+        ///       Apply the logical to device scale transformation to the Graphics object.
         ///    </para>
         /// </devdoc>
         public void ApplyLogicalToDeviceScaling()

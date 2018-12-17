@@ -57,7 +57,7 @@ namespace WinformsControlsTest
             this.buttonsButton.Location = new System.Drawing.Point(13, 33);
 
             this.buttonsButton.Name = "buttonsButton";
-            this.buttonsButton.LogicalSize = new System.Drawing.Size(259, 23);
+            this.buttonsButton.Size = new System.Drawing.Size(259, 23);
             this.buttonsButton.TabIndex = 0;
             this.buttonsButton.Text = "Buttons";
             this.buttonsButton.UseVisualStyleBackColor = true;
