@@ -1,8 +1,8 @@
 # Developer Guide
 
-The following document describes the setup and workflow that is recommended for working on the Windows Forms project. It assumes that you have read the [Contributing Document][contributing].
+The following document describes the setup and workflow that is recommended for working on the Windows Forms project. It assumes that you have read the [Contributing Document](contributing.md).
 
-The [Issue Guide][issue-guide] describes our approach to using GitHub issues.
+The [Issue Guide](issue-guide.md) describes our approach to using GitHub issues.
 
 ## Machine Setup
 
@@ -23,11 +23,11 @@ We use the following workflow for building as well as testing features and fixes
 
 You first need to [Fork][fork] and [Clone][clone] this WinForms repository. This is a one-time task.
 
-1. [Build][building] the repository.
+1. [Build](building.md) the repository.
 
-2. [Debug][debugging] the change, as needed.
+2. [Debug](debugging.md) the change, as needed.
 
-3. [Test][testing] the change, to validate quality.
+3. [Test](testing.md)the change, to validate quality.
 
 ## More Information
 
@@ -36,16 +36,11 @@ You first need to [Fork][fork] and [Clone][clone] this WinForms repository. This
 * [up-for-grabs WinForms issues][up-for-grabs]
 * [easy WinForms issues][easy]
 
-[comment]: <> (Links)
+[comment]: <> (URI Links)
 
-[contributing]: contributing.md
-[issue-guide]: issue-guide.md
 [corefx-windows-instructions]: https://github.com/dotnet/corefx/blob/master/Documentation/building/windows-instructions.md
 [fork]: https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#fork-the-repository
 [clone]: https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#clone-the-repository
-[building]: building.md
-[debugging]: debugging.md
-[testing]: testing.md
 [git-commands]: https://github.com/dotnet/corefx/wiki/git-reference
 [corefx-coding-guidelines]: https://github.com/dotnet/corefx/tree/master/Documentation#coding-guidelines
 [up-for-grabs]: https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs

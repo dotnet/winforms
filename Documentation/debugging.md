@@ -34,7 +34,7 @@ Add references to the binary(-ies) to your project ported to Core. For example, 
 
 where **[Drive]** is the drive you have our repository in and **[path-to-repo]** is the additional path to our repository from the base drive (this may be nothing). Note netcoreapp3.0 may change.
 
-[comment]: <> (Links)
+[comment]: <> (URI Links)
 
 [corefx-building]: https://github.com/dotnet/corefx/blob/master/Documentation/building.md
 [dotnet-core-repos]: https://github.com/dotnet/core

@@ -106,7 +106,7 @@ differences:
 System.PlatformNotSupportedException: 'Configuration files are not supported.'
 ```
 
-[comment]: <> (Links)
+[comment]: <> (URI Links)
 
 [api-port]: https://blogs.msdn.microsoft.com/dotnet/2018/08/08/are-your-windows-forms-and-wpf-applications-ready-for-net-core-3-0/
 [pkg-config]: https://docs.microsoft.com/en-us/nuget/reference/migrate-packages-config-to-package-reference

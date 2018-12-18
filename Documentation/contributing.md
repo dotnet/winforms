@@ -1,6 +1,6 @@
 # Contributing Guide
 
-The primary focus of .NET Core 3.0 release for Windows Forms is to achieve parity with .NET Framework. Priority will be given to changes that align with that goal. See the [roadmap][roadmap] to understand project goals.
+The primary focus of .NET Core 3.0 release for Windows Forms is to achieve parity with .NET Framework. Priority will be given to changes that align with that goal. See the [roadmap](roadmap.md) to understand project goals.
 
 We need the most help with the following types of changes:
 
@@ -9,7 +9,7 @@ We need the most help with the following types of changes:
 
 Please [file an issue][issues] for any larger change you would like to propose.
 
-See [Developer Guide][developer-guide] to learn how to develop changes for this repository.
+See [Developer Guide](developer-guide.md) to learn how to develop changes for this repository.
 
 This project follows the general [.NET Core Contribution Guidelines][corefx-contribution-guidelines]. Please read it before submitting PRs.
 
@@ -25,9 +25,7 @@ Most .NET Core components are cross-platform and we appreciate contributions tha
 
 Contributions must also satisfy the other published guidelines defined in this document.
 
-[comment]: <> (Links)
+[comment]: <> (URI Links)
 
-[roadmap]: roadmap.md
 [issues]: https://github.com/dotnet/winforms/issues
-[developer-guide]: developer-guide.md
 [corefx-contribution-guidelines]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md

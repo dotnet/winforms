@@ -114,7 +114,7 @@ Each PR has to have reviewer approval from at least one WinForms team member who
 
 1. Link PR to related issue via [auto-closing][auto-closing] (add "Fixes #12345" into your PR description).
 
-[comment]: <> (Links)
+[comment]: <> (URI Links)
 
 [corefx-api-review-process]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/api-review-process.md
 [corefx-api-proposal-ex]: https://github.com/dotnet/corefx/issues/271

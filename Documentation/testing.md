@@ -2,7 +2,7 @@
 
 This document describes our approach to unit testing.
 
-We are _still working on_ a scalable solution for functional testing. For now, see [Functional Testing][functional-testing] and the [issue #183][issue-#183].
+We are _still working on_ a scalable solution for functional testing. For now, see [Functional Testing](testing.md#functional-testing) and the [issue #183][issue-#183].
 
 ## Building tests
 
@@ -118,7 +118,7 @@ In the console, run the following command from the base of the repository:
 .\.dotnet\dotnet.exe .\artifacts\bin\WinformsControlsTest\Debug\netcoreapp3.0\WinformsControlsTest.dll
 ```
 
-**Note:** that this will fail if the WinformsControlsTest is not built. See [Build][building] for more information on how to build from source.
+**Note:** that this will fail if the WinformsControlsTest is not built. See [Build](building.md) for more information on how to build from source.
 
 ### The test runner
 
@@ -158,9 +158,7 @@ The execution of that command will return a 0 if all tests passed and a -1 if ev
 12/6/2018 9:42 AM: FolderBrowserDialogButton passed.
 ```
 
-[comment]: <> (Links)
+[comment]: <> (URI Links)
 
-[functional-testing]: (testing.md#functional-testing)
 [issue-#183]: https://github.com/dotnet/winforms/issues/183
 [moq]: (https://github.com/Moq/moq4/wiki/Quickstart)
-[building]: (building.md)

@@ -45,7 +45,7 @@ Note that this does **not** build using your machine-wide installed version of t
 
 To create the Microsoft.Private.Winforms package, run `.\build -pack`
 
-[comment]: <> (Links)
+[comment]: <> (URI Links)
 
 [corefx-windows-instructions]: https://github.com/dotnet/corefx/blob/master/Documentation/building/windows-instructions.md
 [latest-core-build]: https://github.com/dotnet/core/blob/master/daily-builds.md

@@ -6,9 +6,9 @@ Windows Forms (WinForms) is a UI framework for building Windows desktop applicat
 
 Windows Forms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
-> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See here for a workaround invoking the Classic Framework Designer][designer].
+> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See here for a workaround invoking the Classic Framework Designer](winforms-designer.md).
 
-To learn about project priorities as well as status and ship dates see the [Windows Forms Roadmap][roadmap].
+To learn about project priorities as well as status and ship dates see the [Windows Forms Roadmap](roadmap.md).
 
 This repository contains WinForms for .NET Core. It does not contain the .NET Framework variant of WinForms.
 
@@ -44,7 +44,7 @@ The Visual Studio WinForms designer is not yet available and will be part of a V
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
 * The [contributing guidelines][contributing]and the more general [.NET Core contributing guide][corefx-contributing] define contributing rules.
-* The [Developer Guide][developer-guide] defines the setup and workflow for working on this repository.
+* The [Developer Guide](developer-guide.md) defines the setup and workflow for working on this repository.
 * If you have a question or have found a bug, [file an issue][issue-new].
 * Use [daily builds][getting-started] if you want to contribute and stay up to date with the team.
 
@@ -68,7 +68,7 @@ This project uses the [.NET Foundation Code of Conduct][dotnet-code-of-conduct] 
 
 ## License
 
-.NET Core (including the Windows Forms repository) is licensed under the [MIT license][license].
+.NET Core (including the Windows Forms repository) is licensed under the [MIT license](LICENSE.TXT).
 
 ## .NET Foundation
 
@@ -76,17 +76,17 @@ This project uses the [.NET Foundation Code of Conduct][dotnet-code-of-conduct] 
 
 See the [.NET home repository][dotnet-home] to find other .NET-related projects.
 
-[comment]: <> (Links)
+[comment]: <> (Multi-use Internal Links)
 
-[designer]: winforms-designer.md
-[roadmap]: roadmap.md
-[wpf]: https://github.com/dotnet/wpf
-[.net-core-3.0-sdk-preview-1]: https://www.microsoft.com/net/download
 [getting-started]: getting-started.md
 [contributing]: contributing.md
 [porting-guidelines]: porting-guidelines.md
+
+[comment]: <> (URI Links)
+
+[wpf]: https://github.com/dotnet/wpf
+[.net-core-3.0-sdk-preview-1]: https://www.microsoft.com/net/download
 [corefx-contributing]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md
-[developer-guide]: developer-guide.md
 [issue-new]: https://github.com/dotnet/winforms/issues/new
 [developer-community]: https://developercommunity.visualstudio.com/spaces/61/index.html
 [product-support]: https://support.microsoft.com/en-us/contactus?ws=support
@@ -94,6 +94,5 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [bounty-dot-net-core]: https://www.microsoft.com/msrc/bounty-dot-net-core
 [update-on-net-core-3-0-and-net-framework-4-8]: https://blogs.msdn.microsoft.com/dotnet/2018/10/04/update-on-net-core-3-0-and-net-framework-4-8/
 [dotnet-code-of-conduct]: https://dotnetfoundation.org/code-of-conduct
-[license]: LICENSE.TXT
 [.net-foundation]: https://www.dotnetfoundation.org/projects
 [dotnet-home]: https://github.com/Microsoft/dotnet
