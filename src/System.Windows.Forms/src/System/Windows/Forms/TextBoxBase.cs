@@ -228,10 +228,29 @@ namespace System.Windows.Forms {
 
             if (!this.ReadOnly && (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back))) {
                 if (this.SelectionLength != 0) {
-                    this.SelectedText = "";
+                    // effectively send Ctrl+Delete, deleting the selection
+                    SendKeydownMessage(msg.HWnd, Keys.Delete, 0x530001);
                 }
                 else {
-                    DeletePrecedingWord();
+                    var state = new byte[256];
+                    UnsafeNativeMethods.GetKeyboardState(state);
+                    bool shiftDown = state[(int)Keys.ShiftKey] >> 7 == 1;
+                    if (!shiftDown)
+                    {
+                        // low-order bit for non-toggle key indicates key is pressed
+                        state[(int)Keys.ShiftKey] = state[(int)Keys.LShiftKey] = 0b10000000;
+                        UnsafeNativeMethods.SetKeyboardState(state);
+                    }
+                    // effecitvely send Ctrl+Shift+Left, creating a selection
+                    SendKeydownMessage(msg.HWnd, Keys.Left, 0x14B0001);
+                    if (!shiftDown)
+                    {
+                        // "unpress" shift if user is not actually pressing it
+                        state[(int)Keys.ShiftKey] = state[(int)Keys.LShiftKey] = 0;
+                        UnsafeNativeMethods.SetKeyboardState(state);
+                    }
+                    // effectively send Ctrl+Delete, deleting the selection
+                    SendKeydownMessage(msg.HWnd, Keys.Delete, 0x530001);
                 }
                 return true;
             }
@@ -239,37 +258,26 @@ namespace System.Windows.Forms {
             return returnedValue;
         }
 
-        /// <devdoc>
-        ///     Send Ctrl+Shift+Left, Delete to delete the word preceding the cursor.
-        ///     This is called when Ctrl+Backspace is pressed, so the Ctrl key is always active.
-        /// </devdoc>
-        /// <internalonly/>
-        private void DeletePrecedingWord() {
-            var inputs = new NativeMethods.INPUT[6];
-
-            inputs[0].type = NativeMethods.INPUT_KEYBOARD;
-            inputs[0].inputUnion.ki.wVk = (short)Keys.ShiftKey;
-
-            inputs[1].type = NativeMethods.INPUT_KEYBOARD;
-            inputs[1].inputUnion.ki.wVk = (short)Keys.Left;
-            inputs[1].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_EXTENDEDKEY;
-
-            inputs[2].type = NativeMethods.INPUT_KEYBOARD;
-            inputs[2].inputUnion.ki.wVk = (short)Keys.Left;
-            inputs[2].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP;
-
-            inputs[3].type = NativeMethods.INPUT_KEYBOARD;
-            inputs[3].inputUnion.ki.wVk = (short)Keys.ShiftKey;
-            inputs[3].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_KEYUP;
-
-            inputs[4].type = NativeMethods.INPUT_KEYBOARD;
-            inputs[4].inputUnion.ki.wVk = (short)Keys.Delete;
-
-            inputs[5].type = NativeMethods.INPUT_KEYBOARD;
-            inputs[5].inputUnion.ki.wVk = (short)Keys.Delete;
-            inputs[5].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_KEYUP;
-
-            UnsafeNativeMethods.SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
+        private void SendKeydownMessage(IntPtr hwnd, Keys keys, int lparam)
+        {
+            bool unicodeWindow = false;
+            if (hwnd != IntPtr.Zero && SafeNativeMethods.IsWindowUnicode(new HandleRef(null, hwnd)))
+            {
+                unicodeWindow = true;
+            }
+            var msg = new NativeMethods.MSG();
+            msg.hwnd = hwnd;
+            msg.message = NativeMethods.WM_KEYDOWN;
+            msg.wParam = (IntPtr)keys;
+            msg.lParam = (IntPtr)lparam;
+            if (unicodeWindow)
+            {
+                UnsafeNativeMethods.DispatchMessageW(ref msg);
+            }
+            else
+            {
+                UnsafeNativeMethods.DispatchMessageA(ref msg);
+            }
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AutoSize"]/*' />
