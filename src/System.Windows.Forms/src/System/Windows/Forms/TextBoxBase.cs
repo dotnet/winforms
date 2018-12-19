@@ -228,8 +228,7 @@ namespace System.Windows.Forms {
 
             if (!this.ReadOnly && (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back))) {
                 if (this.SelectionLength != 0) {
-                    // effectively send Ctrl+Delete, deleting the selection
-                    SendKeydownMessage(msg.HWnd, Keys.Delete);
+                    this.SetSelectedTextInternal("", false);
                 }
                 else {
                     var state = new byte[256];
