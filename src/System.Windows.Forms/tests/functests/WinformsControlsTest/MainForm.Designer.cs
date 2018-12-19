@@ -227,7 +227,7 @@ namespace WinformsControlsTest
             this.logicalDpiButton.Location = new System.Drawing.Point(13, 261);
             this.logicalDpiButton.Name = "LogicalDpiButton";
             this.logicalDpiButton.Size = new System.Drawing.Size(259, 23);
-            this.logicalDpiButton.TabIndex = 18;
+            this.logicalDpiButton.TabIndex = 19;
             this.logicalDpiButton.Text = "Logical DPI scaling";
             this.logicalDpiButton.UseVisualStyleBackColor = true;
             this.logicalDpiButton.Click += new System.EventHandler(this.logicalDpiButton_Click);
