@@ -8913,11 +8913,11 @@ example usage
                     SetWindowFont();
                 }
 
-                // Why is this not called for forms? Its DeviceDpi property will always use the system dpi value...
+                // Why is this not called for form controls? The DeviceDpi property will still return the system dpi value
+                // which might differ from the real dpi value at this point
                 if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(this.GetType()))) {
                     int old = deviceDpi;
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
-
                     if (old != deviceDpi) {
                         RescaleConstantsForDpi(old, deviceDpi);
                     }
