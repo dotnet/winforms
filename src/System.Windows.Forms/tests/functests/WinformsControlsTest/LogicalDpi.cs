@@ -36,9 +36,8 @@ namespace WinformsControlsTest
             base.OnPaint(e);
 
             // Apply graphics scaling 
-            e.ApplyLogicalToDeviceScaling();
+            Graphics g = e.ApplyLogicalToDeviceScaling();
 
-            Graphics g = e.Graphics;
             using (SolidBrush redBrush = new SolidBrush(Color.Red))
             {
                 using (Pen bluePen = new Pen(Color.Blue))
