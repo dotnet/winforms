@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
             if (!this.ReadOnly && (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back))) {
                 if (this.SelectionLength != 0) {
                     // effectively send Ctrl+Delete, deleting the selection
-                    SendKeydownMessage(msg.HWnd, Keys.Delete, 0x530001);
+                    SendKeydownMessage(msg.HWnd, Keys.Delete);
                 }
                 else {
                     var state = new byte[256];
@@ -242,7 +242,7 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.SetKeyboardState(state);
                     }
                     // effecitvely send Ctrl+Shift+Left, creating a selection
-                    SendKeydownMessage(msg.HWnd, Keys.Left, 0x14B0001);
+                    SendKeydownMessage(msg.HWnd, Keys.Left);
                     if (!shiftDown)
                     {
                         // "unpress" shift if user is not actually pressing it
@@ -250,7 +250,7 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.SetKeyboardState(state);
                     }
                     // effectively send Ctrl+Delete, deleting the selection
-                    SendKeydownMessage(msg.HWnd, Keys.Delete, 0x530001);
+                    SendKeydownMessage(msg.HWnd, Keys.Delete);
                 }
                 return true;
             }
@@ -258,7 +258,7 @@ namespace System.Windows.Forms {
             return returnedValue;
         }
 
-        private void SendKeydownMessage(IntPtr hwnd, Keys keys, int lparam)
+        private void SendKeydownMessage(IntPtr hwnd, Keys keys)
         {
             bool unicodeWindow = false;
             if (hwnd != IntPtr.Zero && SafeNativeMethods.IsWindowUnicode(new HandleRef(null, hwnd)))
@@ -269,7 +269,9 @@ namespace System.Windows.Forms {
             msg.hwnd = hwnd;
             msg.message = NativeMethods.WM_KEYDOWN;
             msg.wParam = (IntPtr)keys;
-            msg.lParam = (IntPtr)lparam;
+            // the key's scan code and extended flag can be omitted from lParam as long as wParam has the VK code.
+            // the 1 we're passing is just the repeat count (occupying bits 0-15).
+            msg.lParam = (IntPtr)1;
             if (unicodeWindow)
             {
                 UnsafeNativeMethods.DispatchMessageW(ref msg);
