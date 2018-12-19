@@ -230,7 +230,7 @@ namespace System.Windows.Forms {
                 if (this.SelectionLength != 0) {
                     this.SetSelectedTextInternal("", false);
                 }
-                else {
+                else if (this.SelectionStart != 0) {
                     var state = new byte[256];
                     UnsafeNativeMethods.GetKeyboardState(state);
                     bool shiftDown = state[(int)Keys.ShiftKey] >> 7 == 1;
@@ -240,7 +240,7 @@ namespace System.Windows.Forms {
                         state[(int)Keys.ShiftKey] = state[(int)Keys.LShiftKey] = 0b10000000;
                         UnsafeNativeMethods.SetKeyboardState(state);
                     }
-                    // effecitvely send Ctrl+Shift+Left, creating a selection
+                    // effectively send Ctrl+Shift+Left, creating a selection
                     SendKeydownMessage(msg.HWnd, Keys.Left);
                     if (!shiftDown)
                     {
