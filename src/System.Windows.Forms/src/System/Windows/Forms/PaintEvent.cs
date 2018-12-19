@@ -169,13 +169,14 @@ namespace System.Windows.Forms {
         /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.ApplyLogicalToDeviceScaling"]/*' />
         /// <devdoc>
         ///    <para>
-        ///       Apply the logical to device scale transformation to the Graphics object.
+        ///       Apply the logical to device scale transformation to the Graphics object and return it.
         ///    </para>
         /// </devdoc>
-        public void ApplyLogicalToDeviceScaling()
+        public Graphics ApplyLogicalToDeviceScaling()
         {
             Graphics.PageUnit = GraphicsUnit.Pixel;
             Graphics.PageScale = (float)dpi / (float)DpiHelper.LogicalDpi;
+            return (Graphics);
         }
 
         // We want a way to dispose the GDI+ Graphics, but we don't want to create one

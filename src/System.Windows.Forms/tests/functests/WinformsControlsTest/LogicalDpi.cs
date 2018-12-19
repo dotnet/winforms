@@ -24,8 +24,7 @@ namespace WinformsControlsTest
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
-            Graphics g = pevent.Graphics;
-            pevent.ApplyLogicalToDeviceScaling();
+            Graphics g = pevent.ApplyLogicalToDeviceScaling();
             using (SolidBrush whiteBrush = new SolidBrush(Color.White))
             {
                 g.FillRectangle(whiteBrush, pevent.LogicalClipRectangle);
