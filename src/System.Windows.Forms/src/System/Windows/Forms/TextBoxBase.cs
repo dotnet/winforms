@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -226,7 +226,50 @@ namespace System.Windows.Forms {
                 }
             }
 
+            if (!this.ReadOnly && (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back))) {
+                if (this.SelectionLength != 0) {
+                    this.SelectedText = "";
+                }
+                else {
+                    DeletePrecedingWord();
+                }
+                return true;
+            }
+
             return returnedValue;
+        }
+
+        /// <devdoc>
+        ///     Send Ctrl+Shift+Left, Delete to delete the word preceding the cursor.
+        ///     This is called when Ctrl+Backspace is pressed, so the Ctrl key is always active.
+        /// </devdoc>
+        /// <internalonly/>
+        private void DeletePrecedingWord() {
+            var inputs = new NativeMethods.INPUT[6];
+
+            inputs[0].type = NativeMethods.INPUT_KEYBOARD;
+            inputs[0].inputUnion.ki.wVk = (short)Keys.ShiftKey;
+
+            inputs[1].type = NativeMethods.INPUT_KEYBOARD;
+            inputs[1].inputUnion.ki.wVk = (short)Keys.Left;
+            inputs[1].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_EXTENDEDKEY;
+
+            inputs[2].type = NativeMethods.INPUT_KEYBOARD;
+            inputs[2].inputUnion.ki.wVk = (short)Keys.Left;
+            inputs[2].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP;
+
+            inputs[3].type = NativeMethods.INPUT_KEYBOARD;
+            inputs[3].inputUnion.ki.wVk = (short)Keys.ShiftKey;
+            inputs[3].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_KEYUP;
+
+            inputs[4].type = NativeMethods.INPUT_KEYBOARD;
+            inputs[4].inputUnion.ki.wVk = (short)Keys.Delete;
+
+            inputs[5].type = NativeMethods.INPUT_KEYBOARD;
+            inputs[5].inputUnion.ki.wVk = (short)Keys.Delete;
+            inputs[5].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_KEYUP;
+
+            UnsafeNativeMethods.SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AutoSize"]/*' />
