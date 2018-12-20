@@ -1,11 +1,12 @@
 # Windows Forms
-[![Build Status](https://dnceng.visualstudio.com/public/_apis/build/status/dotnet/winforms/dotnet-winforms%20CI)](https://dnceng.visualstudio.com/public/_build/latest?definitionId=267&branch=master)
+[![Build Status](https://dnceng.visualstudio.com/public/_apis/build/status/dotnet/winforms/dotnet-winforms%20CI)](https://dnceng.visualstudio.com/public/_build/latest?definitionId=267&branch=master) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/dotnet/winforms/blob/master/LICENSE.TXT)
 
 Windows Forms (WinForms) is a UI framework for building Windows desktop applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms.
 
 WinForms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
-> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See issue #147](https://github.com/dotnet/winforms/issues/147).
+> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See here for a workaround invoking the Classic Framework Designer](Documentation/winforms-designer.md).
 
 See the [Windows Forms Roadmap](roadmap.md) to learn about project priorities, status and ship dates.
 
