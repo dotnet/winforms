@@ -22,17 +22,11 @@ namespace System.Windows.Forms {
         readonly ListViewItem item;
 
         /// <include file='doc\ItemMouseHoverEvent.uex' path='docs/doc[@for="ListViewItemMouseHoverEventArgs.ItemMouseHoverEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItemMouseHoverEventArgs(ListViewItem item) {
             this.item = item;
         }
         
         /// <include file='doc\ItemMouseHoverEvent.uex' path='docs/doc[@for="ListViewItemMouseHoverEventArgs.Item"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ListViewItem Item {
             get { return item; }
         }

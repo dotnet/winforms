@@ -210,9 +210,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AutoValidateChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -751,7 +748,7 @@ namespace System.Windows.Forms {
 
                 try {
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
-                    SafeNativeMethods.GetTextMetrics(hdc, ref tm);
+                    SafeNativeMethods.GetTextMetricsW(hdc, ref tm);
 
                     retval.Height = tm.tmHeight;
 
@@ -1340,9 +1337,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.Select"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void Select(bool directed, bool forward) {
             bool correctParentActiveControl = true;
             if (ParentInternal != null)

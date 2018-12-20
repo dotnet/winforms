@@ -26,9 +26,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\MeasureItemEvent.uex' path='docs/doc[@for="MeasureItemEventArgs.MeasureItemEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public MeasureItemEventArgs(Graphics graphics, int index, int itemHeight) {
             this.graphics = graphics;
             this.index = index;
@@ -37,9 +34,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MeasureItemEvent.uex' path='docs/doc[@for="MeasureItemEventArgs.MeasureItemEventArgs1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public MeasureItemEventArgs(Graphics graphics, int index) {
             this.graphics = graphics;
             this.index = index;

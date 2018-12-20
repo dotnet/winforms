@@ -77,9 +77,6 @@ namespace System.Windows.Forms {
         public DataGridTextBoxColumn(PropertyDescriptor prop, string format) : this(prop, format, false){}
 
         /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn3"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
@@ -94,9 +91,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn4"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
@@ -187,9 +181,6 @@ namespace System.Windows.Forms {
         // add the corresponding value Editor: rip one from the valueEditor for the DisplayMember in the 
         // format object
         /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Format"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [DefaultValue(null), Editor("System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))]
         public string Format {
             get {
@@ -215,9 +206,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.FormatInfo"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public IFormatProvider FormatInfo {
             get {
@@ -230,9 +218,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.ReadOnly"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override bool ReadOnly {
             get {
                 return base.ReadOnly;
@@ -300,9 +285,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.UpdateUI"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected internal override void UpdateUI(CurrencyManager source, int rowNum, string displayText)
         {
             edit.Text = GetText(GetColumnValueAtRow(source, rowNum));

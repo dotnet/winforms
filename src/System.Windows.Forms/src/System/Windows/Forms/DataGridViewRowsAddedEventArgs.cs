@@ -8,9 +8,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
 
     /// <include file='doc\DataGridViewRowsAddedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsAddedEventArgs"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class DataGridViewRowsAddedEventArgs : EventArgs
     {
         private int rowIndex, rowCount;
@@ -25,9 +22,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewRowsAddedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsAddedEventArgs.RowIndex"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int RowIndex
         {
             get
@@ -37,9 +31,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewRowsAddedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsAddedEventArgs.RowCount"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public int RowCount
         {
             get

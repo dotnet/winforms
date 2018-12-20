@@ -25,27 +25,18 @@ namespace System.Windows.Forms {
         private bool cancelEdit = false;
 
         /// <include file='doc\NodeLabelEditEvent.uex' path='docs/doc[@for="NodeLabelEditEventArgs.NodeLabelEditEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public NodeLabelEditEventArgs(TreeNode node) {
             this.node = node;
             this.label = null;
         }
 
         /// <include file='doc\NodeLabelEditEvent.uex' path='docs/doc[@for="NodeLabelEditEventArgs.NodeLabelEditEventArgs1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public NodeLabelEditEventArgs(TreeNode node, string label) {
             this.node = node;
             this.label = label;
         }
 
         /// <include file='doc\NodeLabelEditEvent.uex' path='docs/doc[@for="NodeLabelEditEventArgs.CancelEdit"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool CancelEdit {
             get {
                 return cancelEdit;
@@ -56,9 +47,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NodeLabelEditEvent.uex' path='docs/doc[@for="NodeLabelEditEventArgs.Label"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string Label {
             get {
                 return label;
@@ -66,9 +54,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NodeLabelEditEvent.uex' path='docs/doc[@for="NodeLabelEditEventArgs.Node"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeNode Node {
             get {
                 return node;

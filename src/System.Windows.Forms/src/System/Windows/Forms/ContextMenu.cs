@@ -65,9 +65,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Popup"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup {
             add {

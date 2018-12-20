@@ -34,7 +34,7 @@ The migration process includes two steps: **preparing your project for porting**
    is leaner and easier to read. To be able to simply copy-paste your references
    from the old project to the new one, you first need to migrate your old
    project file to SDK-style so both project are in the same format. You can
-   either do it by hand or use a third-party tool [CsprojToVs2017][pkg-config].
+   either do it by hand or use a third-party tool [CsprojToVs2017][sdk-tool].
 
    After using the tool you still might need to delete some reference by hand,
    for example:

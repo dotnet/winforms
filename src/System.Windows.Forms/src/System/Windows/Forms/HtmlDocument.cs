@@ -19,9 +19,6 @@ using System.Security.Permissions;
 namespace System.Windows.Forms
 {
     /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [PermissionSetAttribute(SecurityAction.LinkDemand, Name = "FullTrust")]
     public sealed class HtmlDocument
     {
@@ -84,9 +81,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.ActiveElement"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement ActiveElement
         {
             get
@@ -97,9 +91,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Body"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement Body
         {
             get
@@ -110,9 +101,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Domain"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string Domain
         {
             get
@@ -134,9 +122,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Title"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string Title
         {
             get
@@ -150,9 +135,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Location"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Uri Url
         {
             get
@@ -164,9 +146,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Window"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlWindow Window
         {
             get
@@ -177,9 +156,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.BackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Color BackColor
         {
             get
@@ -206,9 +182,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Color ForeColor
         {
             get
@@ -235,9 +208,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.LinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Color LinkColor
         {
             get
@@ -264,9 +234,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.ActiveLinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Color ActiveLinkColor
         {
             get
@@ -293,9 +260,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.VisitedLinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Color VisitedLinkColor
         {
             get
@@ -322,9 +286,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Focused"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool Focused
         {
             get
@@ -334,9 +295,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.DomDocument"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object DomDocument
         {
             get
@@ -346,9 +304,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Cookie"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string Cookie
         {
             get
@@ -362,9 +317,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.RightToLeft"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool RightToLeft
         {
             get
@@ -377,9 +329,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string Encoding
         {
             get
@@ -392,9 +341,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public string DefaultEncoding
         {
             get
@@ -404,9 +350,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.All"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElementCollection All
         {
             get
@@ -417,9 +360,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Links"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElementCollection Links
         {
             get
@@ -430,9 +370,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Images"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElementCollection Images
         {
             get
@@ -443,9 +380,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Forms"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElementCollection Forms
         {
             get
@@ -456,9 +390,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Write"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void Write(string text)
         {
             object[] strs = new object[] { (object)text };
@@ -474,9 +405,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Focus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void Focus()
         {
@@ -486,9 +414,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.GetElementById"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement GetElementById(string id)
         {
             UnsafeNativeMethods.IHTMLElement iHTMLElement = ((UnsafeNativeMethods.IHTMLDocument3)this.NativeHtmlDocument2).GetElementById(id);
@@ -496,9 +421,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.GetElementFromPoint"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement GetElementFromPoint(Point point)
         {
             UnsafeNativeMethods.IHTMLElement iHTMLElement = this.NativeHtmlDocument2.ElementFromPoint(point.X, point.Y);
@@ -506,9 +428,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.GetElementsByTagName"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElementCollection GetElementsByTagName(string tagName)
         {
             UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = ((UnsafeNativeMethods.IHTMLDocument3)this.NativeHtmlDocument2).GetElementsByTagName(tagName);
@@ -516,9 +435,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.OpenNew"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlDocument OpenNew(bool replaceInHistory)
         {
             object name = (object)(replaceInHistory ? "replace" : "");
@@ -529,9 +445,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.CreateElement"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlElement CreateElement(string elementTag)
         {
             UnsafeNativeMethods.IHTMLElement iHTMLElement = this.NativeHtmlDocument2.CreateElement(elementTag);
@@ -539,9 +452,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.InvokeScript"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object InvokeScript(string scriptName, object[] args)
         {
             object retVal = null;
@@ -599,9 +509,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.InvokeScript1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public object InvokeScript(string scriptName)
         {
             return InvokeScript(scriptName, null);
@@ -609,9 +516,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.AttachEventHandler"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
@@ -622,9 +526,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.DetachEventHandler"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
@@ -635,9 +536,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Click"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Click
         {
             add
@@ -651,9 +549,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.ContextMenuShowing"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler ContextMenuShowing
         {
             add
@@ -667,9 +562,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Focusing"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Focusing
         {
             add
@@ -683,9 +575,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.LosingFocus"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler LosingFocus
         {
             add
@@ -699,9 +588,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseDown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler MouseDown
         {
             add
@@ -731,9 +617,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseMove"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler MouseMove
         {
             add
@@ -747,9 +630,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseOver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler MouseOver
         {
             add
@@ -764,9 +644,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseUp"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler MouseUp
         {
             add
@@ -780,9 +657,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Stop"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public event HtmlElementEventHandler Stop
         {
             add

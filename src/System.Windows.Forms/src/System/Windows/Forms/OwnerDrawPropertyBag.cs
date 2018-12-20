@@ -53,9 +53,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.Font"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Font Font {
             get { 
                 return font;
@@ -66,9 +63,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.ForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Color ForeColor {
             get {
                 return foreColor;
@@ -79,9 +73,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.BackColor"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public Color BackColor {
             get {
                 return backColor;

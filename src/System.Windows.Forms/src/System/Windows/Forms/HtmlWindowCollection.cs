@@ -17,9 +17,6 @@ using System.Collections;
 
 namespace System.Windows.Forms {
     /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class HtmlWindowCollection : ICollection {
         private UnsafeNativeMethods.IHTMLFramesCollection2 htmlFramesCollection2;
         private HtmlShimManager shimManager;
@@ -39,9 +36,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.this]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlWindow this[int index] {
             get {
                 if (index < 0 || index >= this.Count) {
@@ -56,9 +50,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.this1]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public HtmlWindow this[string windowId] {
             get {
                 object oWindowId = (object)windowId;

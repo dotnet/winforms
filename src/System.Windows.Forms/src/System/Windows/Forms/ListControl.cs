@@ -24,9 +24,6 @@ namespace System.Windows.Forms {
     using System.Text;
 
     /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -99,9 +96,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.DataSourceChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlOnDataSourceChangedDescr))]
         public event EventHandler DataSourceChanged {
             add {
@@ -146,9 +140,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.DisplayMemberChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlOnDisplayMemberChangedDescr))]
         public event EventHandler DisplayMemberChanged {
             add {
@@ -321,9 +312,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.ValueMember"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatData)),
         DefaultValue(""),
@@ -359,9 +347,6 @@ namespace System.Windows.Forms {
         }        
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.ValueMemberChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlOnValueMemberChangedDescr))]
         public event EventHandler ValueMemberChanged {
             add {
@@ -383,18 +368,12 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SelectedIndex"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public abstract int SelectedIndex {
             get;
             set;
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SelectedValue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
@@ -428,9 +407,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SelectedValueChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListControlOnSelectedValueChangedDescr))]
         public event EventHandler SelectedValueChanged {
             add {
@@ -466,18 +442,12 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FilterItemOnProperty"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected object FilterItemOnProperty(object item) {
             return FilterItemOnProperty(item, displayMember.BindingField);
         }
         
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.FilterItemOnProperty1"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected object FilterItemOnProperty(object item, string field) {
             if (item != null && field.Length > 0) {
                 try {
@@ -615,9 +585,6 @@ namespace System.Windows.Forms {
         }
   
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnBindingContextChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnBindingContextChanged(EventArgs e) {
             SetDataConnection(dataSource, displayMember, true);
             
@@ -626,9 +593,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnDataSourceChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnDataSourceChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_DATASOURCECHANGED] as EventHandler;
             if (eh != null) {
@@ -637,9 +601,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnDisplayMemberChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnDisplayMemberChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_DISPLAYMEMBERCHANGED] as EventHandler;
             if (eh != null) {
@@ -688,9 +649,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnValueMemberChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnValueMemberChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_VALUEMEMBERCHANGED] as EventHandler;
             if (eh != null) {
@@ -699,9 +657,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.OnSelectedValueChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void OnSelectedValueChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_SELECTEDVALUECHANGED] as EventHandler;
             if (eh != null) {
@@ -710,15 +665,9 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.RefreshItem"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected abstract void RefreshItem(int index);
         
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.RefreshItems"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected virtual void RefreshItems() {
         }
         
@@ -859,9 +808,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SetItemsCore"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected abstract void SetItemsCore(IList items);
 
         /// <include file='doc\ListControl.uex' path='docs/doc[@for="ListControl.SetItemCore"]/*' />

@@ -34,9 +34,6 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public bool AutoArrange
         {
             get => throw new NotImplementedException(SR.NotImplementedByDesign);
@@ -180,9 +177,6 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         [CLSCompliant(false)]
         public void CreateComponentFromTool(ToolboxItem tool)
         {
@@ -268,9 +262,6 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
@@ -364,9 +355,6 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         protected override void OnPaint(PaintEventArgs pe)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);

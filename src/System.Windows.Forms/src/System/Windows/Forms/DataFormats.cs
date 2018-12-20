@@ -302,22 +302,6 @@ namespace System.Windows.Forms {
         private static void EnsurePredefined() {
 
             if (0 == formatCount) {
-
-                /* not used
-                int standardText;
-
-                // We must handle text differently for Win 95 and NT.  We should put
-                // UnicodeText on the clipboard for NT, and Text for Win 95.
-                // So, we figure it out here theh first time someone asks for format info
-                //
-                if (1 == Marshal.SystemDefaultCharSize) {
-                    standardText = NativeMethods.CF_TEXT;
-                }
-                else {
-                    standardText = NativeMethods.CF_UNICODETEXT;
-                }
-                */
-
                 formatList = new Format [] {
                     //         Text name        Win32 format ID      Data stored as a Win32 handle?
                     new Format(UnicodeText,  NativeMethods.CF_UNICODETEXT),

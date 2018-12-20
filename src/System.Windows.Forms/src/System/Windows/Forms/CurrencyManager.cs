@@ -292,9 +292,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.AddNew"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override void AddNew() {
             IBindingList ibl = list as IBindingList;
             if (ibl != null) {
@@ -443,9 +440,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.RemoveAt"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public override void RemoveAt(int index) {
             list.RemoveAt(index);
         }
@@ -948,9 +942,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.UpdateIsBinding"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void UpdateIsBinding() {
             UpdateIsBinding(true);
         }

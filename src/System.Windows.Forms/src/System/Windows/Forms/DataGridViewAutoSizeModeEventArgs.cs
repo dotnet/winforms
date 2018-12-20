@@ -8,9 +8,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
 
     /// <include file='doc\DataGridViewAutoSizeModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeModeEventArgs"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public class DataGridViewAutoSizeModeEventArgs : EventArgs
     {
         private bool previousModeAutoSized;
@@ -22,9 +19,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewAutoSizeModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeModeEventArgs.PreviousModeAutoSized"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public bool PreviousModeAutoSized
         {
             get

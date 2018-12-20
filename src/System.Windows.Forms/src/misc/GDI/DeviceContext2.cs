@@ -270,14 +270,11 @@ namespace System.Experimental.Gdi
             // the measurement DC always leaves fonts selected for pref reasons.
             // in this case, we need to diposse the font since the original 
             // creator didn't fully dispose.
-            if (previousFont != null) {                
-#if DEBUG       
-                //Debug.Assert(previousFont.Hfont != IntPtr.Zero, "A font has been disposed before it was unselected from the DC.  This will leak a GDI handle on Win9x! Call ResetFont()");
-#endif 
+            if (previousFont != null) {
                 if (MeasurementDCInfo.IsMeasurementDC(this)) {
                     previousFont.Dispose();
                 }
-            }       
+            }
             
 #if OPTIMIZED_MEASUREMENTDC
             // once we've changed the font, update the last used font.

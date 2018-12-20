@@ -22,17 +22,11 @@ namespace System.Windows.Forms {
         readonly TreeNode node;
 
         /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs.TreeNodeMouseHoverEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeNodeMouseHoverEventArgs(TreeNode node) {
             this.node = node;
         }
         
         /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs.Node"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public TreeNode Node {
             get { return node; }
         }

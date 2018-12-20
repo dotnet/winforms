@@ -88,183 +88,78 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private static readonly Guid guidVSStd2K = new Guid("{1496A755-94DE-11D0-8C3F-00C04FC2AAE2}");
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID SelectionMenu = new CommandID(wfMenuGroup, mnuidSelection);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID ContainerMenu = new CommandID(wfMenuGroup, mnuidContainer);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID TraySelectionMenu = new CommandID(wfMenuGroup, mnuidTraySelection);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID ComponentTrayMenu = new CommandID(wfMenuGroup, mnuidComponentTray);
 
         // Windows Forms commands
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID DesignerProperties = new CommandID(wfCommandSet, cmdidDesignerProperties);
 
         // Windows Forms Key commands        
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyCancel = new CommandID(guidVSStd2K, ECMD_CANCEL);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyReverseCancel = new CommandID(wfCommandSet, cmdidReverseCancel);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyInvokeSmartTag = new CommandID(guidVSStd2K, ECMD_INVOKESMARTTAG);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyDefaultAction = new CommandID(guidVSStd2K, ECMD_RETURN);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyMoveUp = new CommandID(guidVSStd2K, ECMD_UP);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyMoveDown = new CommandID(guidVSStd2K, ECMD_DOWN);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyMoveLeft = new CommandID(guidVSStd2K, ECMD_LEFT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyMoveRight = new CommandID(guidVSStd2K, ECMD_RIGHT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyNudgeUp = new CommandID(guidVSStd2K, ECMD_CTLMOVEUP);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyNudgeDown = new CommandID(guidVSStd2K, ECMD_CTLMOVEDOWN);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyNudgeLeft = new CommandID(guidVSStd2K, ECMD_CTLMOVELEFT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyNudgeRight = new CommandID(guidVSStd2K, ECMD_CTLMOVERIGHT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeySizeWidthIncrease = new CommandID(guidVSStd2K, ECMD_RIGHT_EXT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeySizeHeightIncrease = new CommandID(guidVSStd2K, ECMD_UP_EXT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeySizeWidthDecrease = new CommandID(guidVSStd2K, ECMD_LEFT_EXT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeySizeHeightDecrease = new CommandID(guidVSStd2K, ECMD_DOWN_EXT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyNudgeWidthIncrease = new CommandID(guidVSStd2K, ECMD_CTLSIZERIGHT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyNudgeHeightIncrease = new CommandID(guidVSStd2K, ECMD_CTLSIZEDOWN);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyNudgeWidthDecrease = new CommandID(guidVSStd2K, ECMD_CTLSIZELEFT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyNudgeHeightDecrease = new CommandID(guidVSStd2K, ECMD_CTLSIZEUP);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeySelectNext = new CommandID(guidVSStd2K, ECMD_TAB);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeySelectPrevious = new CommandID(guidVSStd2K, ECMD_BACKTAB);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyTabOrderSelect = new CommandID(wfCommandSet, cmdidSpace);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID EditLabel = new CommandID(VSStandardCommandSet97, cmdidEditLabel);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyHome = new CommandID(guidVSStd2K, ECMD_HOME);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyEnd = new CommandID(guidVSStd2K, ECMD_END);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyShiftHome = new CommandID(guidVSStd2K, ECMD_HOME_EXT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID KeyShiftEnd = new CommandID(guidVSStd2K, ECMD_END_EXT);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID SetStatusText = new CommandID(wfCommandSet, cmdidSetStatusText);
 
-        /// <summary>
-        ///     <para>[To be supplied.]</para>
-        /// </summary>
         public static readonly CommandID SetStatusRectangle = new CommandID(wfCommandSet, cmdidSetStatusRectangle);
     }
 }

@@ -298,45 +298,30 @@ namespace System.Windows.Forms
         // <-- WHIDBEY ADDITIONS 
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsAudio"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual bool ContainsAudio()
         {
             return GetDataPresent(DataFormats.WaveAudio, false);
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsFileDropList"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual bool ContainsFileDropList()
         {
             return GetDataPresent(DataFormats.FileDrop, true);
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual bool ContainsImage()
         {
             return GetDataPresent(DataFormats.Bitmap, true);
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsText"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual bool ContainsText()
         {
             return ContainsText(TextDataFormat.UnicodeText);
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.ContainsText1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual bool ContainsText(TextDataFormat format)
         {
             //valid values are 0x0 to 0x4
@@ -349,18 +334,12 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetAudioStream"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual Stream GetAudioStream()
         {
             return GetData(DataFormats.WaveAudio, false) as Stream;
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetFileDropList"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual StringCollection GetFileDropList()
         {
             StringCollection retVal = new StringCollection();
@@ -373,27 +352,18 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual Image GetImage()
         {
             return GetData(DataFormats.Bitmap, true) as Image;
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetText"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual string GetText()
         {
             return GetText(TextDataFormat.UnicodeText);
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.GetText1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual string GetText(TextDataFormat format)
         {
             //valid values are 0x0 to 0x4
@@ -412,9 +382,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetAudio"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void SetAudio(byte[] audioBytes)
         {
             if (audioBytes == null)
@@ -425,9 +392,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetAudio1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void SetAudio(Stream audioStream)
         {
             if (audioStream == null)
@@ -438,9 +402,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetFileDropList"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void SetFileDropList(StringCollection filePaths)
         {
             if (filePaths == null)
@@ -453,9 +414,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void SetImage(Image image)
         {
             if (image == null)
@@ -466,18 +424,12 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetText"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void SetText(string textData)
         {
             SetText(textData, TextDataFormat.UnicodeText);
         }
 
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.SetText1"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public virtual void SetText(string textData, TextDataFormat format)
         {
             if (string.IsNullOrEmpty(textData))
@@ -1066,31 +1018,16 @@ namespace System.Windows.Forms
                 return (NativeMethods.E_INVALIDARG);
             }
 
-
-            bool unicode = (Marshal.SystemDefaultCharSize != 1);
-
             IntPtr currentPtr = IntPtr.Zero;
             int baseStructSize = 4 + 8 + 4 + 4;
             int sizeInBytes = baseStructSize;
 
             // First determine the size of the array
-            //
-            if (unicode)
+            for (int i = 0; i < files.Length; i++)
             {
-                for (int i = 0; i < files.Length; i++)
-                {
-                    sizeInBytes += (files[i].Length + 1) * 2;
-                }
-                sizeInBytes += 2;
+                sizeInBytes += (files[i].Length + 1) * 2;
             }
-            else
-            {
-                for (int i = 0; i < files.Length; i++)
-                {
-                    sizeInBytes += NativeMethods.Util.GetPInvokeStringLength(files[i]) + 1;
-                }
-                sizeInBytes++;
-            }
+            sizeInBytes += 2;
 
             // Alloc the Win32 memory
             //
@@ -1112,10 +1049,7 @@ namespace System.Windows.Forms
             //
             int[] structData = new int[] { baseStructSize, 0, 0, 0, 0 };
 
-            if (unicode)
-            {
-                structData[4] = unchecked((int)0xFFFFFFFF);
-            }
+            structData[4] = unchecked((int)0xFFFFFFFF);
             Marshal.Copy(structData, 0, currentPtr, structData.Length);
             currentPtr = (IntPtr)((long)currentPtr + baseStructSize);
 
@@ -1123,35 +1057,15 @@ namespace System.Windows.Forms
             //
             for (int i = 0; i < files.Length; i++)
             {
-                if (unicode)
-                {
-
-                    // NOTE: DllLib.copy(char[]...) converts to ANSI on Windows 95...
-                    UnsafeNativeMethods.CopyMemoryW(currentPtr, files[i], files[i].Length * 2);
-                    currentPtr = (IntPtr)((long)currentPtr + (files[i].Length * 2));
-                    Marshal.Copy(new byte[] { 0, 0 }, 0, currentPtr, 2);
-                    currentPtr = (IntPtr)((long)currentPtr + 2);
-                }
-                else
-                {
-                    int pinvokeLen = NativeMethods.Util.GetPInvokeStringLength(files[i]);
-                    UnsafeNativeMethods.CopyMemoryA(currentPtr, files[i], pinvokeLen);
-                    currentPtr = (IntPtr)((long)currentPtr + pinvokeLen);
-                    Marshal.Copy(new byte[] { 0 }, 0, currentPtr, 1);
-                    currentPtr = (IntPtr)((long)currentPtr + 1);
-                }
-            }
-
-            if (unicode)
-            {
-                Marshal.Copy(new char[] { '\0' }, 0, currentPtr, 1);
+                // NOTE: DllLib.copy(char[]...) converts to ANSI on Windows 95...
+                UnsafeNativeMethods.CopyMemoryW(currentPtr, files[i], files[i].Length * 2);
+                currentPtr = (IntPtr)((long)currentPtr + (files[i].Length * 2));
+                Marshal.Copy(new byte[] { 0, 0 }, 0, currentPtr, 2);
                 currentPtr = (IntPtr)((long)currentPtr + 2);
             }
-            else
-            {
-                Marshal.Copy(new byte[] { 0 }, 0, currentPtr, 1);
-                currentPtr = (IntPtr)((long)currentPtr + 1);
-            }
+
+            Marshal.Copy(new char[] { '\0' }, 0, currentPtr, 1);
+            currentPtr = (IntPtr)((long)currentPtr + 2);
 
             UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, newHandle));
             return NativeMethods.S_OK;

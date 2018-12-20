@@ -27,9 +27,6 @@ namespace System.Windows.Forms {
         readonly CheckState currentValue;
 
         /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs.ItemCheckEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         public ItemCheckEventArgs(int index, CheckState newCheckValue, CheckState currentValue) {
             this.index = index;
             this.newValue = newCheckValue;

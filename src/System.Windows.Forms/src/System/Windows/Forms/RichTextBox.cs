@@ -235,9 +235,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -261,9 +258,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -349,9 +343,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.CreateParams"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override CreateParams CreateParams {
             [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
@@ -393,12 +384,7 @@ namespace System.Windows.Forms {
                 }
 
                 CreateParams cp = base.CreateParams;
-                if (Marshal.SystemDefaultCharSize == 1) {
-                    cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITA : RichTextBoxConstants.WC_RICHEDITA_41;
-                }
-                else {
-                    cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITW : RichTextBoxConstants.WC_RICHEDITW_41;
-                }
+                cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITW : RichTextBoxConstants.WC_RICHEDITW_41;
 
                 if (Multiline) {
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_HORIZ) != 0 && !WordWrap) {
@@ -629,9 +615,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Multiline"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [DefaultValue(true)]
         public override bool Multiline {
             get {
@@ -1224,16 +1207,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        ///     Specifies whether the control uses unicode to set/get text selection information (WM_GESEL/WM_SETSEL)
-        ///     in Win9x.
-        /// </devdoc>
-        internal override bool SelectionUsesDbcsOffsetsInWin9x {
-            get {
-                return false; // false for RichEdit, true for Edit.
-            }
-        }
-
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectedRtf"]/*' />
         /// <devdoc>
         ///     The currently selected text of a RichTextBox control, including
@@ -1428,9 +1401,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         Localizable(true),
         RefreshProperties(RefreshProperties.All)
@@ -1498,22 +1468,15 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.TextLength"]/*' />
         [Browsable(false)]
         public override int TextLength {
-            get 
+            get
             {
-                NativeMethods.GETTEXTLENGTHEX gtl = new NativeMethods.GETTEXTLENGTHEX();
-
-                gtl.flags = RichTextBoxConstants.GTL_NUMCHARS;
-
-                if (Marshal.SystemDefaultCharSize == 1 /*ANSI*/)
+                NativeMethods.GETTEXTLENGTHEX gtl = new NativeMethods.GETTEXTLENGTHEX
                 {
-                    gtl.codepage = 0;  /* CP_ANSI */;
-                }
-                else
-                {
-                    gtl.codepage = 1200; /* CP_UNICODE */
-                }
+                    flags = RichTextBoxConstants.GTL_NUMCHARS,
+                    codepage = 1200 /* CP_UNICODE */
+                };
 
-                return unchecked( (int) (long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETTEXTLENGTHEX, gtl, 0 /*ignored*/)); 
+                return unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETTEXTLENGTHEX, gtl, 0 /*ignored*/));
             }
         }
 
@@ -1600,9 +1563,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ContentsResized"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxContentsResized))]
         public event ContentsResizedEventHandler ContentsResized {
             add {
@@ -1645,9 +1605,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragLeave"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DragLeave {
             add {
@@ -1659,9 +1616,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragOver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DragEventHandler DragOver {
             add {
@@ -1673,9 +1627,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GiveFeedback"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event GiveFeedbackEventHandler GiveFeedback {
             add {
@@ -1687,9 +1638,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.QueryContinueDrag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event QueryContinueDragEventHandler QueryContinueDrag {
             add {
@@ -1701,9 +1649,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.HScroll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxHScroll))]
         public event EventHandler HScroll {
             add {
@@ -1715,9 +1660,6 @@ namespace System.Windows.Forms {
         }        
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.LinkClicked"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxLinkClick))]
         public event LinkClickedEventHandler LinkClicked {
             add {
@@ -1730,9 +1672,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ImeChange"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxIMEChange))]
         public event EventHandler ImeChange {
             add {
@@ -1745,9 +1684,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Protected"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxProtected))]
         public event EventHandler Protected {
             add {
@@ -1760,9 +1696,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxSelChange))]
         public event EventHandler SelectionChanged {
             add {
@@ -1775,9 +1708,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.VScroll"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxVScroll))]
         public event EventHandler VScroll {
             add {
@@ -2453,9 +2383,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnBackColorChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnBackColorChanged(EventArgs e) {
             if (IsHandleCreated)
             {
@@ -2472,9 +2399,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnRightToLeftChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
             // When the RTL property is changed, here's what happens. Let's assume that we change from
@@ -2521,9 +2445,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnHandleCreated"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
             // base.OnHandleCreated is called somewhere in the middle of this
 
@@ -2614,9 +2535,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnHandleDestroyed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         protected override void OnHandleDestroyed(EventArgs e) {
             base.OnHandleDestroyed(e);
             
@@ -2894,37 +2812,19 @@ namespace System.Windows.Forms {
             if (value.Strikeout) dwEffects |= RichTextBoxConstants.CFE_STRIKEOUT;
             if (value.Underline) dwEffects |= RichTextBoxConstants.CFE_UNDERLINE;
 
-            if (Marshal.SystemDefaultCharSize == 1)            
-            {
-                bytesFaceName = Encoding.Default.GetBytes(logfont.lfFaceName);
+            bytesFaceName = Encoding.Unicode.GetBytes(logfont.lfFaceName);
 
-                NativeMethods.CHARFORMATA cfA = new NativeMethods.CHARFORMATA();
-                for (int i=0; i<bytesFaceName.Length; i++) cfA.szFaceName[i] = bytesFaceName[i];
-                cfA.dwMask = dwMask;
-                cfA.dwEffects = dwEffects;
-                cfA.yHeight = (int) (value.SizeInPoints * 20);
-                cfA.bCharSet = logfont.lfCharSet;
-                cfA.bPitchAndFamily = logfont.lfPitchAndFamily;
+            NativeMethods.CHARFORMATW cfW = new NativeMethods.CHARFORMATW();
+            for (int i=0; i<bytesFaceName.Length; i++) cfW.szFaceName[i] = bytesFaceName[i];
+            cfW.dwMask = dwMask;
+            cfW.dwEffects = dwEffects;
+            cfW.yHeight = (int) (value.SizeInPoints * 20);
+            cfW.bCharSet = logfont.lfCharSet;
+            cfW.bPitchAndFamily = logfont.lfPitchAndFamily;
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfA);
-            }
-            else
-            {
-                bytesFaceName = Encoding.Unicode.GetBytes(logfont.lfFaceName);
-
-                NativeMethods.CHARFORMATW cfW = new NativeMethods.CHARFORMATW();
-                for (int i=0; i<bytesFaceName.Length; i++) cfW.szFaceName[i] = bytesFaceName[i];
-                cfW.dwMask = dwMask;
-                cfW.dwEffects = dwEffects;
-                cfW.yHeight = (int) (value.SizeInPoints * 20);
-                cfW.bCharSet = logfont.lfCharSet;
-                cfW.bPitchAndFamily = logfont.lfPitchAndFamily;
-
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfW);
-            }
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfW);
         }
 
-        
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.FontToLogFont"]/*' />
         /// <devdoc>
         /// This is just here as a minor perf improvement, so we don't have to call expensive RevertAssert.
@@ -3659,9 +3559,6 @@ namespace System.Windows.Forms {
         // </doc>
         //
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WndProc"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
@@ -3716,7 +3613,7 @@ namespace System.Windows.Forms {
                     // the WM_GETOBJECT+OBJID_QUERYCLASSNAMEIDX message. But RICHEDIT20 doesn't do that - so we must do it ourselves.
                     // Otherwise OLEACC will treat rich edit controls as custom controls, so the accessible Role and Value will be wrong.
                     if (unchecked((int)(long)m.LParam) == NativeMethods.OBJID_QUERYCLASSNAMEIDX) {
-                        m.Result = (IntPtr) ((Marshal.SystemDefaultCharSize == 1) ? (65536+29) : (65536+30));
+                        m.Result = (IntPtr)(65536+30);
                     }
                     break;
 

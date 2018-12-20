@@ -5,9 +5,6 @@
 namespace System.Windows.Forms {
 
     /// <include file='doc\HtmlElementEventHandler.uex' path='docs/doc[@for="HtmlElementEventHandler"]/*' />
-    /// <devdoc>
-    ///    <para>[To be supplied.]</para>
-    /// </devdoc>
     public delegate void HtmlElementEventHandler(object sender, HtmlElementEventArgs e);
 
 }

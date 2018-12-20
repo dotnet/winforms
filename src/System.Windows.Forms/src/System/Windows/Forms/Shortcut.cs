@@ -439,9 +439,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         F7 = Keys.F7,
         /// <include file='doc\Shortcut.uex' path='docs/doc[@for="Shortcut.F8"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         F8 = Keys.F8,
         /// <include file='doc\Shortcut.uex' path='docs/doc[@for="Shortcut.F9"]/*' />
         /// <devdoc>

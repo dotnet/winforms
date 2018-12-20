@@ -217,9 +217,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImage"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
@@ -245,9 +242,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImageLayout"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
@@ -951,11 +945,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Padding"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///    <para>[To be supplied.]</para>
-        ///    </para>
-        /// </devdoc>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1006,9 +995,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Scrollable"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -1289,9 +1275,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Text"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
             get {
@@ -1376,9 +1359,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeLabelEdit"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeEditDescr))]
         public event NodeLabelEditEventHandler BeforeLabelEdit {
             add {
@@ -1391,9 +1371,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterLabelEdit"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterEditDescr))]
         public event NodeLabelEditEventHandler AfterLabelEdit {
             add {
@@ -1406,9 +1383,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeCheck"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCheckDescr))]
         public event TreeViewCancelEventHandler BeforeCheck {
             add {
@@ -1421,9 +1395,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterCheck"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCheckDescr))]
         public event TreeViewEventHandler AfterCheck {
             add {
@@ -1436,9 +1407,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeCollapse"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCollapseDescr))]
         public event TreeViewCancelEventHandler BeforeCollapse {
             add {
@@ -1451,9 +1419,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterCollapse"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCollapseDescr))]
         public event TreeViewEventHandler AfterCollapse {
             add {
@@ -1466,9 +1431,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeExpand"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeExpandDescr))]
         public event TreeViewCancelEventHandler BeforeExpand {
             add {
@@ -1481,9 +1443,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterExpand"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterExpandDescr))]
         public event TreeViewEventHandler AfterExpand {
             add {
@@ -1509,9 +1468,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ItemDrag"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemDragDescr))]
         public event ItemDragEventHandler ItemDrag {
             add {
@@ -1523,9 +1479,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeMouseHover"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TreeViewNodeMouseHoverDescr))]
         public event TreeNodeMouseHoverEventHandler NodeMouseHover  {
             add {
@@ -1539,9 +1492,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeSelect"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeSelectDescr))]
         public event TreeViewCancelEventHandler BeforeSelect {
             add {
@@ -1554,9 +1504,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterSelect"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterSelectDescr))]
         public event TreeViewEventHandler AfterSelect {
             add {
@@ -1583,9 +1530,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeMouseClick"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewNodeMouseClickDescr))]
         public event TreeNodeMouseClickEventHandler NodeMouseClick {
             add {
@@ -1597,9 +1541,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeMouseDoubleClick"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewNodeMouseDoubleClickDescr))]
         public event TreeNodeMouseClickEventHandler NodeMouseDoubleClick {
             add {
@@ -1611,9 +1552,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.RightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -2355,9 +2293,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -2968,36 +2903,28 @@ namespace System.Windows.Forms {
                 NativeMethods.NMTREEVIEW* nmtv = (NativeMethods.NMTREEVIEW*)m.LParam;
 
                 switch (nmtv->nmhdr.code) {
-                    case NativeMethods.TVN_ITEMEXPANDINGA:
-                    case NativeMethods.TVN_ITEMEXPANDINGW:
+                    case NativeMethods.TVN_ITEMEXPANDING:
                         m.Result = TvnExpanding(nmtv);
                         break;
-                    case NativeMethods.TVN_ITEMEXPANDEDA:
-                    case NativeMethods.TVN_ITEMEXPANDEDW:
+                    case NativeMethods.TVN_ITEMEXPANDED:
                         TvnExpanded(nmtv);
                         break;
-                    case NativeMethods.TVN_SELCHANGINGA:
-                    case NativeMethods.TVN_SELCHANGINGW:
+                    case NativeMethods.TVN_SELCHANGING:
                         m.Result = TvnSelecting(nmtv);
                         break;
-                    case NativeMethods.TVN_SELCHANGEDA:
-                    case NativeMethods.TVN_SELCHANGEDW:
+                    case NativeMethods.TVN_SELCHANGED:
                         TvnSelected(nmtv);
                         break;
-                    case NativeMethods.TVN_BEGINDRAGA:
-                    case NativeMethods.TVN_BEGINDRAGW:
+                    case NativeMethods.TVN_BEGINDRAG:
                         TvnBeginDrag(MouseButtons.Left, nmtv);
                         break;
-                    case NativeMethods.TVN_BEGINRDRAGA:
-                    case NativeMethods.TVN_BEGINRDRAGW:
+                    case NativeMethods.TVN_BEGINRDRAG:
                         TvnBeginDrag(MouseButtons.Right, nmtv);
                         break;
-                    case NativeMethods.TVN_BEGINLABELEDITA:
-                    case NativeMethods.TVN_BEGINLABELEDITW:
+                    case NativeMethods.TVN_BEGINLABELEDIT:
                         m.Result = TvnBeginLabelEdit((NativeMethods.NMTVDISPINFO)m.GetLParam(typeof(NativeMethods.NMTVDISPINFO)));
                         break;
-                    case NativeMethods.TVN_ENDLABELEDITA:
-                    case NativeMethods.TVN_ENDLABELEDITW:
+                    case NativeMethods.TVN_ENDLABELEDIT:
                         m.Result = TvnEndLabelEdit((NativeMethods.NMTVDISPINFO)m.GetLParam(typeof(NativeMethods.NMTVDISPINFO)));
                         break;
                     case NativeMethods.NM_CLICK:
@@ -3165,8 +3092,7 @@ namespace System.Windows.Forms {
         case NativeMethods.WM_PRINT:
             WmPrint(ref m);
             break;
-                case NativeMethods.TVM_SETITEMA:
-                case NativeMethods.TVM_SETITEMW:
+                case NativeMethods.TVM_SETITEM:
                     base.WndProc(ref m);
                     if (this.CheckBoxes) {
                         NativeMethods.TV_ITEM item = (NativeMethods.TV_ITEM) m.GetLParam(typeof(NativeMethods.TV_ITEM));
@@ -3186,8 +3112,7 @@ namespace System.Windows.Forms {
                 case NativeMethods.WM_NOTIFY:
                     NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (nmhdr.code) {
-                        case NativeMethods.TTN_GETDISPINFOA:
-                        case NativeMethods.TTN_GETDISPINFOW:
+                        case NativeMethods.TTN_GETDISPINFO:
                             // MSDN:
                             // Setting the max width has the added benefit of enabling multiline
                             // tool tips!
@@ -3196,7 +3121,7 @@ namespace System.Windows.Forms {
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
-						case NativeMethods.TTN_SHOW:
+                        case NativeMethods.TTN_SHOW:
                             if (WmShowToolTip(ref m))
                             {
                                 m.Result = (IntPtr)1;
@@ -3392,7 +3317,6 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-
 
                 default:
                     base.WndProc(ref m);
