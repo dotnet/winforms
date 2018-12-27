@@ -2610,7 +2610,7 @@ example usage
                     {
                         if (value.Unit == GraphicsUnit.Point)
                         {
-                            // Fonts with sizes in point units are already scaled with the system dpi
+                            // Fonts with sizes in point units are scaled with the system dpi when rendered
                             // Additionally, render transforms do not work correctly with fonts in point units
                             // Create a new font rescaled to 96dpi in pixel units as the local version
                             newLocal = new Font(value.FontFamily, value.SizeInPoints * (float)DpiHelper.LogicalDpi / 72, value.Style, GraphicsUnit.Pixel, value.GdiCharSet, value.GdiVerticalFont);
@@ -7763,7 +7763,7 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DeviceDpi"]/*' />
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CurrentDpi"]/*' />
         /// <devdoc>
         ///  The current dpi this control is scaled to if logical dpi scaling is enabled. Otherwise it
         ///  will return the DeviceDpi.
@@ -11505,7 +11505,7 @@ example usage
         }
 
         /// <devdoc>
-        ///     This method is called from the WmDpiChanged() in the Form class to raise dpi change
+        ///     This method is called from the WmDpiChanged() method in the Form class to raise dpi change
         ///     events for the controls if per monitor dpi awareness v1 is enabled. This emulates
         ///     the behavior of the v2 events which are automatically raised.
         ///     
@@ -11532,7 +11532,7 @@ example usage
         }
 
         /// <devdoc>
-        ///     This method is called from the WmDpiChanged() in the Form class to raise dpi change
+        ///     This method is called from the WmDpiChanged() method in the Form class to raise dpi change
         ///     events for the controls if per monitor dpi awareness v1 is enabled. This emulates
         ///     the behavior of the v2 events which are automatically raised.
         ///     
