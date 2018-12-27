@@ -11,14 +11,10 @@ namespace WinformsControlsTest
     public class UserPaintControl : Control
     {
         private Point mousePosition;
-        private Font drawingFont;
 
         public UserPaintControl()
         {
             this.LogicalDpiScaling = true;
-            // Font needs to be set to a pixel size to avoid scaling issues
-            // We can assume 96dpi here if logical dpi scaling is enabled
-            this.drawingFont = new Font("Arial", (int)(11f * 96 / 72), GraphicsUnit.Pixel);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
         }
 
@@ -43,8 +39,8 @@ namespace WinformsControlsTest
                 using (Pen bluePen = new Pen(Color.Blue))
                 {
                     g.DrawRectangle(bluePen, 0, 0, this.LogicalWidth - 1, this.LogicalHeight - 1);
-                    g.DrawString("Current dpi: " + this.CurrentDpi, drawingFont, redBrush, 0, 0);
-                    g.DrawString("Mouse: " + mousePosition.ToString(), drawingFont, redBrush, 0, 20);
+                    g.DrawString("Current dpi: " + this.CurrentDpi, this.FontWithLogicalSize, redBrush, 0, 0);
+                    g.DrawString("Mouse: " + mousePosition.ToString(), this.FontWithLogicalSize, redBrush, 0, 20);
 
                     g.FillRectangle(redBrush, this.LogicalWidth - 51, this.LogicalHeight - 51, 50, 50);
                 }
@@ -72,10 +68,10 @@ namespace WinformsControlsTest
     {
         public LogicalDpi()
         {
-            InitializeComponent();
+            // Set the font here based on the default font
+            this.FontWithLogicalSize = this.Font;
 
-            // Set the font here in pixel size as a baseline for further scaling
-            this.Font = new Font(this.Font.FontFamily, this.LogicalToDeviceUnits((int)(8.25f * 96 / 72)), this.Font.Style, GraphicsUnit.Pixel);
+            InitializeComponent();
 
             // Add some buttons
             Button b;

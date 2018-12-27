@@ -379,6 +379,7 @@ namespace System.Windows.Forms {
         private static readonly int PropCacheTextCount                      = PropertyStore.CreateKey();
         private static readonly int PropCacheTextField                      = PropertyStore.CreateKey();
         private static readonly int PropAmbientPropertiesService            = PropertyStore.CreateKey();
+        private static readonly int PropFontWithLogicalSize                 = PropertyStore.CreateKey();
 
         private static bool needToLoadComCtl = true;
 
@@ -2547,6 +2548,93 @@ example usage
             }
         }
 
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontWithLogicalSize"]/*' />
+        /// <devdoc>
+        ///     Gets or sets the font with its size related to 96dpi. This will also update
+        ///     the Font object with a correctly scaled copy of the font.
+        /// </devdoc>
+        ///
+        [
+        SRCategory(nameof(SR.CatAppearance)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
+        public virtual Font FontWithLogicalSize
+        {
+            get
+            {
+                Font font = (Font)Properties.GetObject(PropFontWithLogicalSize);
+                if (font != null)
+                {
+                    return font;
+                }
+
+                Font f = GetParentFontWithLogicalSize();
+                if (f != null)
+                {
+                    return f;
+                }
+
+                return null;
+            }
+            set
+            {
+                Font local = (Font)Properties.GetObject(PropFontWithLogicalSize);
+
+                bool localChanged = false;
+                if (value == null)
+                {
+                    if (local != null)
+                    {
+                        localChanged = true;
+                    }
+                }
+                else
+                {
+                    if (local == null)
+                    {
+                        localChanged = true;
+                    }
+                    else
+                    {
+                        localChanged = !value.Equals(local);
+                    }
+                }
+
+                if (localChanged)
+                {
+                    Font newLocal = value;
+                    Font scaledFont = null;
+                    float factor;
+                    if(value != null)
+                    {
+                        if (value.Unit == GraphicsUnit.Point)
+                        {
+                            // Fonts with sizes in point units are already scaled with the system dpi
+                            // Additionally, render transforms do not work correctly with fonts in point units
+                            // Create a new font rescaled to 96dpi in pixel units as the local version
+                            newLocal = new Font(value.FontFamily, value.SizeInPoints * (float)DpiHelper.LogicalDpi / 72, value.Style, GraphicsUnit.Pixel, value.GdiCharSet, value.GdiVerticalFont);
+                        }
+
+                        // Calculate scaling factor to the control dpi
+                        factor = (float)lastScaleDpi / (float)DpiHelper.LogicalDpi;
+                        if(factor == 1.0f)
+                        {
+                            scaledFont = newLocal;
+                        }
+                        else
+                        {
+                            scaledFont = new Font(newLocal.FontFamily, newLocal.Size * factor, newLocal.Style, newLocal.Unit, newLocal.GdiCharSet, newLocal.GdiVerticalFont);
+                        }
+                    }
+
+                    // Store new local value and update Font property with the scaled font
+                    Properties.SetObject(PropFontWithLogicalSize, newLocal);
+                    this.Font = scaledFont;
+                }
+            }
+        }
+
         internal void ScaleFont(float factor) {
             Font local = (Font)Properties.GetObject(PropFont);
             Font resolved = Font;
@@ -2725,6 +2813,14 @@ example usage
         private Font GetParentFont() {
             if (ParentInternal != null && ParentInternal.CanAccessProperties)
                 return ParentInternal.Font;
+            else
+                return null;
+        }
+
+        private Font GetParentFontWithLogicalSize()
+        {
+            if (ParentInternal != null && ParentInternal.CanAccessProperties)
+                return ParentInternal.FontWithLogicalSize;
             else
                 return null;
         }
