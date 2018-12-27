@@ -5641,6 +5641,14 @@ namespace System.Windows.Forms {
             PROCESS_PER_MONITOR_DPI_AWARE = 2
         }
 
+        public enum MONITOR_DPI_TYPE
+        {
+            MDT_EFFECTIVE_DPI = 0,
+            MDT_ANGULAR_DPI = 1,
+            MDT_RAW_DPI = 2,
+            MDT_DEFAULT = MDT_EFFECTIVE_DPI
+        };
+
         public enum MONTCALENDAR_VIEW_MODE
         {
             MCMV_MONTH = 0,

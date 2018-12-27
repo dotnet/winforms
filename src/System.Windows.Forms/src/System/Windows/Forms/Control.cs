@@ -328,8 +328,6 @@ namespace System.Windows.Forms {
 
         private static Font defaultFont;
 
-        private static bool useLogicalDpiScalingByDefault = false; // for testing
-
         // Property store keys for properties.  The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
         // likely they are going to be used in a group.
@@ -388,6 +386,8 @@ namespace System.Windows.Forms {
         // CheckedListBox, PropertyGrid, GroupBox, Label and LinkLabel, and ButtonBase controls.
         // True means use GDI+, false means use GDI (TextRenderer).
         internal static bool UseCompatibleTextRenderingDefault = true;
+
+        internal static bool UseLogicalDpiScalingDefault = false;
 
         ///////////////////////////////////////////////////////////////////////
         // Control per instance members
@@ -494,7 +494,7 @@ example usage
             // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
             deviceDpi = DpiHelper.DeviceDpi; // Set to system dpi here, will be updated later if per monitor dpi is enabled
             lastScaleDpi = (int)DpiHelper.LogicalDpi; // Assume 96dpi by default, will be updated later if per monitor dpi is enabled
-            useLogicalDpiScaling = useLogicalDpiScalingByDefault;
+            useLogicalDpiScaling = UseLogicalDpiScalingDefault;
 
             window = new ControlNativeWindow(this);
             RequiredScalingEnabled = true;
@@ -2729,11 +2729,29 @@ example usage
                 return null;
         }
 
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetPreferredLogicalSize"]/*' />
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public virtual bool GetPreferredLogicalSize(Size proposedSize, out Size preferredSize)
+        {
+            preferredSize = Size.Empty;
+            return false;
+        }
+
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetPreferredSize"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
         public virtual Size GetPreferredSize(Size proposedSize) {
             Size prefSize;
+
+            // Check if the version of this method using logical units is implemented
+            if(useLogicalDpiScaling)
+            {
+                bool implemented = GetPreferredLogicalSize(proposedSize, out prefSize);
+                if(implemented)
+                {
+                    return DpiHelper.LogicalToDeviceUnits(prefSize, lastScaleDpi);
+                }
+            }
 
             if (GetState(STATE_DISPOSING| STATE_DISPOSED)) {
                 // if someone's asking when we're disposing just return what we last had.
@@ -7198,6 +7216,19 @@ example usage
                 NotifyInvalidate(rc);
             }
         }
+
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvalidateLogicalRect"]/*' />
+        /// <devdoc>
+        ///     Invalidates a rectangular region in logical coordinates of the control and causes a paint message
+        ///     to be sent to the control. This will not force a synchronous paint to
+        ///     occur, calling update after invalidate will force a
+        ///     synchronous paint.
+        /// </devdoc>
+        public void InvalidateLogicalRect(Rectangle rc, bool invalidateChildren = false)
+        {
+            Invalidate(DpiHelper.LogicalToDeviceUnits(rc, lastScaleDpi), invalidateChildren);
+        }
+
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invoke"]/*' />
         /// <devdoc>
         ///     Executes the given delegate on the thread that owns this Control's
@@ -7613,19 +7644,6 @@ example usage
             DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, CurrentDpi);
         }
 
-        // For testing
-        static public bool LogicalDpiScalingByDefault
-        {
-            get
-            {
-                return useLogicalDpiScalingByDefault;
-            }
-            set
-            {
-                useLogicalDpiScalingByDefault = value;
-            }
-        }
-
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalDpiScaling"]/*' />
         /// <devdoc>
         ///     Controls if logical dpi scaling is enabled. If enabled, all pixel based size and positioning values will be assumed
@@ -7730,9 +7748,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalWidth"]/*' />
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalHeight"]/*' />
         /// <devdoc>
-        ///     The width of this control in logical units.
+        ///     The height of this control in logical units.
         /// </devdoc>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -7751,9 +7769,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalHeight"]/*' />
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalSize"]/*' />
         /// <devdoc>
-        ///     The height of this control in logical units.
+        ///     The size of this control in logical units.
         /// </devdoc>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -7769,6 +7787,48 @@ example usage
             set
             {
                 Size = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
+            }
+        }
+
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalMaximumSize"]/*' />
+        /// <devdoc>
+        ///     The maximum size of this control in logical units.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
+        public Size LogicalMaximumSize
+        {
+            get
+            {
+                return DpiHelper.DeviceToLogicalUnits(MaximumSize, lastScaleDpi);
+            }
+            set
+            {
+                MaximumSize = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
+            }
+        }
+
+        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalMinimumSize"]/*' />
+        /// <devdoc>
+        ///     The minimum size of this control in logical units.
+        /// </devdoc>
+        [
+        SRCategory(nameof(SR.CatLayout)),
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
+        public Size LogicalMinimumSize
+        {
+            get
+            {
+                return DpiHelper.DeviceToLogicalUnits(MinimumSize, lastScaleDpi);
+            }
+            set
+            {
+                MinimumSize = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
             }
         }
 
@@ -11267,9 +11327,6 @@ example usage
 
             if (controlsCollection != null)
             {
-                // Copied PERFNOTE: This is more efficient than using Foreach.  Foreach
-                // forces the creation of an array subset enum each time we
-                // enumerate
                 for (int i = 0; i < controlsCollection.Count; i++)
                 {
                     Control c = controlsCollection[i];
@@ -11301,22 +11358,32 @@ example usage
         internal void ScaleControlForDpiChange(int oldFormDpi, int newFormDpi, Control requestingControl)
         {
             float factor;
-            if (useLogicalDpiScaling == false || DpiHelper.IsPerMonitorV2Awareness == false)
+            if (useLogicalDpiScaling == false)
             {
                 // Scale with the factor corresponding to the forms dpi change
-                // Also use this code path if Per Monitor V2 awareness is not enabled and, thus, deviceDpi is not updated
                 factor = (float)newFormDpi / (float)oldFormDpi;
                 lastScaleDpi = newFormDpi;
             }
             else
             {
-                // Scaling factor is calculated using the curent dpi value (which will have been updated before)
+                // Scaling factor is calculated using the curent dpi value
                 // and the last dpi value when scaling was applied
                 factor = (float)deviceDpi / (float)lastScaleDpi;
                 lastScaleDpi = deviceDpi;
             }
             SizeF factorSize = new SizeF(factor, factor);
             ScaleControl(factorSize, factorSize, requestingControl, false);
+        }
+
+        internal void ScaleFontForDpiChange(int oldDpi, int newDpi)
+        {
+            // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
+            Font local = (Font)Properties.GetObject(PropFont);
+            if (local != null)
+            {
+                float factor = (float)newDpi / oldDpi;
+                this.Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
+            }
         }
 
         /// <devdoc>
@@ -11329,25 +11396,70 @@ example usage
             // If logical dpi scaling is used, check if the dpi has changed compared to the last scale operation
             if (IsHandleCreated && useLogicalDpiScaling)
             {
-                // Update the dpi value if possible as the parent control might have changed
-                if (DpiHelper.IsPerMonitorV2Awareness)
-                {
-                    deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
-                }
-
+                // Update the dpi value as the parent control might have changed
+                // Also for per monitor dpi awareness v1 it is not updated during handle creation
+                deviceDpi = DpiHelper.GetDpiValueForHandle(new HandleRef(this, HandleInternal));
+               
                 if (lastScaleDpi != deviceDpi)
                 {
-                    // Scale font size. The same code is also present in WmDpiChangedBeforeParent
-                    Font local = (Font)Properties.GetObject(PropFont);
-                    if (local != null)
-                    {
-                        var factor = (float)deviceDpi / lastScaleDpi;
-                        this.Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
-                    }
-
+                    ScaleFontForDpiChange(lastScaleDpi, deviceDpi);
                     ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
                 }
             }
+        }
+
+        /// <devdoc>
+        ///     This method is called from the WmDpiChanged() in the Form class to raise dpi change
+        ///     events for the controls if per monitor dpi awareness v1 is enabled. This emulates
+        ///     the behavior of the v2 events which are automatically raised.
+        ///     
+        ///     The isForm parameter is used to avoid raising the event for the form itself.
+        /// </devdoc>
+        internal void RaiseDpiChangedBeforeParent(bool isForm)
+        {
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+
+            if (controlsCollection != null)
+            {
+                // Go backwards to correctly emulate the v2 event order
+                for (int i = controlsCollection.Count - 1; i >= 0; i--)
+                {
+                    Control c = controlsCollection[i];
+                    c.RaiseDpiChangedBeforeParent(false);
+                }
+            }
+            if(isForm == false && useLogicalDpiScaling == true)
+            {
+                Message m = new Message { Msg = -1 };
+                WmDpiChangedBeforeParent(ref m);
+            }
+        }
+
+        /// <devdoc>
+        ///     This method is called from the WmDpiChanged() in the Form class to raise dpi change
+        ///     events for the controls if per monitor dpi awareness v1 is enabled. This emulates
+        ///     the behavior of the v2 events which are automatically raised.
+        ///     
+        ///     The isForm parameter is used to avoid raising the event for the form itself.
+        /// </devdoc>
+        internal void RaiseDpiChangedAfterParent(bool isForm)
+        {
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+
+            if (isForm == false && useLogicalDpiScaling == true)
+            {
+                Message m = new Message { Msg = -1 };
+                WmDpiChangedAfterParent(ref m);
+            }
+
+            if (controlsCollection != null)
+            {
+                for (int i = 0; i < controlsCollection.Count; i++)
+                {
+                    Control c = controlsCollection[i];
+                    c.RaiseDpiChangedAfterParent(false);
+                }
+            }    
         }
 
         /// <devdoc>
@@ -13325,7 +13437,10 @@ example usage
         ///     Handles the WM_DPICHANGED_BEFOREPARENT message. This message is not sent to top level windows.
         /// </devdoc>
         private void WmDpiChangedBeforeParent(ref Message m) {
-            DefWndProc(ref m);
+            if(m.Msg == NativeMethods.WM_DPICHANGED_BEFOREPARENT)
+            { 
+                DefWndProc(ref m);
+            }
 
             if (IsHandleCreated) {
                 // the values of deviceDpi and lastScaleDpi might not be the same as deviceDpi is set to the system dpi value
@@ -13334,18 +13449,12 @@ example usage
                 // method to avoid compatibility issues.
                 int deviceDpiOld = deviceDpi;
                 int oldDpi = useLogicalDpiScaling == true ? lastScaleDpi : deviceDpiOld;
-                deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+                deviceDpi = DpiHelper.GetDpiValueForHandle(new HandleRef(this, HandleInternal));
 
                 // Controls are by default font scaled. 
                 // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.
                 if (oldDpi != deviceDpi) {
-                    // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
-                    Font local = (Font)Properties.GetObject(PropFont);
-                    if (local != null) {
-                        var factor = (float)deviceDpi / oldDpi;
-                        this.Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
-                    }
-
+                    ScaleFontForDpiChange(oldDpi, deviceDpi);
                     RescaleConstantsForDpi(deviceDpiOld, deviceDpi);
                 }
             }
@@ -13357,9 +13466,12 @@ example usage
         ///     Handles the WM_DPICHANGED_AFTERPARENT message
         /// </devdoc>
         private void WmDpiChangedAfterParent(ref Message m) {
-            DefWndProc(ref m);
+            if (m.Msg == NativeMethods.WM_DPICHANGED_AFTERPARENT)
+            {
+                DefWndProc(ref m);
+            }
 
-            uint dpi = UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+            uint dpi = (uint)DpiHelper.GetDpiValueForHandle(new HandleRef(this, HandleInternal));
 
             OnDpiChangedAfterParent(EventArgs.Empty);
         }

@@ -48,11 +48,12 @@
   <application xmlns="urn:schemas-microsoft-com:asm.v3">
     <windowsSettings>
       <!-- The combination of below two tags have the following effect :
-      1) Per-Monitor for >= Windows 10 Anniversary Update
-      2) System < Windows 10 Anniversary Update -->
+      1) Per-Monitor V2 for >= Windows 10 Anniversary Update
+      2) Per-Monitor V1 for >= Windows 8.1
+      3) System < Windows 8.1 -->
       <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/PM</dpiAware>
-      <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2, PerMonitor</dpiAwareness>
-    </windowsSettings>
+      <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2, PerMonitor</dpiAwareness>  
+  </windowsSettings>
   </application>
 
 

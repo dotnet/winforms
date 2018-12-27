@@ -1067,6 +1067,20 @@ namespace System.Windows.Forms {
             Debug.Assert(useVisualStyles, "Enable Visual Styles failed");
         }
 
+        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.SetLogicalDpiScalingDefault"]/*' />
+        /// <devdoc>
+        ///     Sets the static UseLogicalDpiScalingDefault field on Control to the value passed in. 
+        ///     This switch determines if controls are instantiated with logical dpi scaling enabled.
+        /// </devdoc>
+        public static void SetLogicalDpiScalingDefault(bool defaultValue)
+        {
+            if (NativeWindow.AnyHandleCreated)
+            {
+                throw new InvalidOperationException(SR.Win32WindowAlreadyCreated);
+            }
+            Control.UseLogicalDpiScalingDefault = defaultValue;
+        }
+
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.EndModalMessageLoop"]/*' />
         /// <devdoc>
         ///     Called immediately after we stop pumping messages for a modal message loop.

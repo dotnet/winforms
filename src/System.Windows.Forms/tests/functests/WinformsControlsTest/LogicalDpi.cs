@@ -56,7 +56,15 @@ namespace WinformsControlsTest
         {
             base.OnMouseMove(e);
             mousePosition = e.LogicalLocation;
-            Invalidate();
+
+            // Invalidate only the rectangle containing the mouse coordinates
+            InvalidateLogicalRect(new Rectangle(0, 20, this.LogicalWidth, 20));
+        }
+
+        public override bool GetPreferredLogicalSize(Size proposedSize, out Size preferredSize)
+        {
+            preferredSize = new Size(200, 200);
+            return true;
         }
     }
 
@@ -85,7 +93,7 @@ namespace WinformsControlsTest
             // Control with custom drawing
             UserPaintControl control = new UserPaintControl();
             control.LogicalLocation = new Point(20, 50);
-            control.LogicalSize = new System.Drawing.Size(200, 200);
+            control.AutoSize = true;
             Controls.Add(control);
         }
     }

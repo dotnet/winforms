@@ -823,6 +823,11 @@ namespace System.Windows.Forms {
         [ResourceExposure(ResourceScope.None)]
         public static extern int GetProcessDpiAwareness(IntPtr processHandle, out NativeMethods.PROCESS_DPI_AWARENESS awareness);
 
+        // for windows 8.1 and above 
+        [DllImport(ExternDll.ShCore, SetLastError = true)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern int GetDpiForMonitor(IntPtr monitorHandle, NativeMethods.MONITOR_DPI_TYPE dpiType, out uint dpiX, out uint dpiY);
+
         // for Windows 10 version RS2 and above
         [DllImport(ExternDll.User32, SetLastError = true)]
         [ResourceExposure(ResourceScope.None)]

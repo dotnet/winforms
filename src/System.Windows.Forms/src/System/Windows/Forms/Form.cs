@@ -5084,6 +5084,11 @@ namespace System.Windows.Forms {
         private void WmDpiChanged(ref Message m) {
             DefWndProc(ref m);
 
+            if(DpiHelper.IsPerMonitorV1Awareness == true) // Emulate per monitor v2 events
+            {
+                RaiseDpiChangedBeforeParent(true);
+            }
+
             DpiChangedEventArgs e = new DpiChangedEventArgs(CurrentDpi, m);
             // Update dpi values here because the form will not receive the dpi changed before parent event
             // and the Scale method is only called for its children
@@ -5091,6 +5096,11 @@ namespace System.Windows.Forms {
             lastScaleDpi = deviceDpi;
             
             OnDpiChanged(e);
+
+            if (DpiHelper.IsPerMonitorV1Awareness == true) // Emulate per monitor v2 events
+            {
+                RaiseDpiChangedAfterParent(true);
+            }
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnGetDpiScaledSize"]/*' />

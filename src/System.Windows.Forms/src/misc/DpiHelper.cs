@@ -36,6 +36,10 @@ namespace System.Windows.Forms
         private static double logicalToDeviceUnitsScalingFactor = 0.0;
         private static InterpolationMode interpolationMode = InterpolationMode.Invalid;
 
+        // Indicates that per monitor dpi scaling v1 is enabled and the OS does not support
+        // the dpi awareness context apis
+        private static bool isPerMonitorV1 = false;
+
         // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
         private static bool doesNeedQueryForPerMonitorV2Awareness = false;
 
@@ -69,30 +73,57 @@ namespace System.Windows.Forms
             // initialize shared fields
             Initialize();
 
-            // We are in Windows 10/1603 or greater when this API is present.
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext)))
-            {
+            NativeMethods.PROCESS_DPI_AWARENESS processDpiAwareness = CAPS.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNINITIALIZED;
 
-                // We are on Windows 10/1603 or greater all right, but we could still be DpiUnaware or SystemAware, so let's find that out...
-                NativeMethods.PROCESS_DPI_AWARENESS processDpiAwareness;
+            // Determine current dpi awareness mode and check for per monitor v1
+            if (ApiHelper.IsApiAvailable(ExternDll.ShCore, nameof(SafeNativeMethods.GetProcessDpiAwareness)))
+            {
                 var currentProcessId = SafeNativeMethods.GetCurrentProcessId();
                 IntPtr hProcess = SafeNativeMethods.OpenProcess(SafeNativeMethods.PROCESS_QUERY_INFORMATION, false, currentProcessId);
                 var result = SafeNativeMethods.GetProcessDpiAwareness(hProcess, out processDpiAwareness);
+                isPerMonitorV1 = processDpiAwareness == CAPS.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE;
+            }
 
+            // We are in Windows 10/1603 or greater when this API is present.
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext)))
+            {
+                // We are on Windows 10/1603 or greater all right, but we could still be DpiUnaware or SystemAware, so let's find that out...
                 // Only if we're not, it makes sense to query for PerMonitorV2 awareness from now on, if needed.
                 if (!(processDpiAwareness == CAPS.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE ||
                       processDpiAwareness == CAPS.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE))
                 {
+                    isPerMonitorV1 = false;
                     doesNeedQueryForPerMonitorV2Awareness = true;
                 }
             }
 
-            if (IsScalingRequired || doesNeedQueryForPerMonitorV2Awareness)
+            if (IsScalingRequired || isPerMonitorV1 || doesNeedQueryForPerMonitorV2Awareness)
             {
                 isScalingRequirementMet = true;
             }
 
             isInitializeDpiHelperForWinforms = true;
+        }
+
+        /// <summary>
+        /// Returns a boolean to specify if the application is set to per monitor dpi v1 awareness
+        /// </summary>
+        internal static bool IsPerMonitorV1Awareness
+        {
+            get
+            {
+                InitializeDpiHelperForWinforms();
+                if (doesNeedQueryForPerMonitorV2Awareness)
+                {
+                    // The OS might be per monitor v2 capable, but the application could still be in per monitor v1 mode
+                    DpiAwarenessContext dpiAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
+                    return CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE);
+                }
+                else
+                {
+                    return isPerMonitorV1;
+                }
+            }
         }
 
         /// <summary>
@@ -129,13 +160,46 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static int DeviceDpi 
+        internal static int DeviceDpi
         {
-            get 
+            get
             {
                 Initialize();
-                return (int)deviceDpi; 
+                return (int)deviceDpi;
             }
+        }
+
+        /// <summary>
+        /// Returns a dpi value for a given handle
+        /// </summary>
+        internal static int GetDpiValueForHandle(HandleRef handle)
+        {
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
+                int dpi = (int)UnsafeNativeMethods.GetDpiForWindow(handle);
+                if (dpi != 0)
+                {
+                    return dpi;
+                }
+            }
+            else if (DpiHelper.IsPerMonitorV1Awareness)
+            {
+                // Get monitor the handle belongs to
+                IntPtr monitor = SafeNativeMethods.MonitorFromWindow(handle, 0);
+                if (monitor != IntPtr.Zero)
+                {
+                    // Get dpi value for this monitor
+                    uint dpiX = 0;
+                    uint dpiY = 0;
+                    if (SafeNativeMethods.GetDpiForMonitor(monitor, CAPS.MONITOR_DPI_TYPE.MDT_DEFAULT, out dpiX, out dpiY) == NativeMethods.S_OK)
+                    {
+                        return (int)dpiX;
+                    }
+                }
+            }
+
+            // Return system dpi by default
+            return (DpiHelper.DeviceDpi);
         }
 
         private static double LogicalToDeviceUnitsScalingFactor
@@ -153,9 +217,9 @@ namespace System.Windows.Forms
 
         private static InterpolationMode InterpolationMode
         {
-            get 
+            get
             {
-                if (interpolationMode == InterpolationMode.Invalid) 
+                if (interpolationMode == InterpolationMode.Invalid)
                 {
                     int dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactor * 100);
 
@@ -165,15 +229,15 @@ namespace System.Windows.Forms
                     // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
                     // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better 
                     // results because it uses less neighboring pixels.
-                    if ((dpiScalePercent % 100) == 0) 
+                    if ((dpiScalePercent % 100) == 0)
                     {
                         interpolationMode = InterpolationMode.NearestNeighbor;
-                    } 
-                    else if (dpiScalePercent < 100) 
+                    }
+                    else if (dpiScalePercent < 100)
                     {
                         interpolationMode = InterpolationMode.HighQualityBilinear;
-                    } 
-                    else 
+                    }
+                    else
                     {
                         interpolationMode = InterpolationMode.HighQualityBicubic;
                     }
@@ -207,7 +271,7 @@ namespace System.Windows.Forms
             return deviceImage;
         }
 
-        private static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0) 
+        private static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0)
         {
             Size deviceImageSize = DpiHelper.LogicalToDeviceUnits(logicalImage.Size, deviceDpi);
             return ScaleBitmapToSize(logicalImage, deviceImageSize);
@@ -216,6 +280,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Returns whether scaling is required when converting between logical-device units,
         /// if the application opted in the automatic scaling in the .config file.
+        /// TODO: Remove this property and update dependent code, because it only considers the system dpi
         /// </summary>
         public static bool IsScalingRequired
         {
@@ -232,9 +297,9 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value">value in logical units</param>
         /// <returns>value in device units</returns>
-        public static int LogicalToDeviceUnits(int value, int devicePixels = 0) 
+        public static int LogicalToDeviceUnits(int value, int devicePixels = 0)
         {
-            if (devicePixels == 0) 
+            if (devicePixels == 0)
             {
                 return (int)Math.Round(LogicalToDeviceUnitsScalingFactor * (double)value);
             }
@@ -264,7 +329,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value">The horizontal value in logical units</param>
         /// <returns>The horizontal value in device units</returns>
-        public static int LogicalToDeviceUnitsX(int value) 
+        public static int LogicalToDeviceUnitsX(int value)
         {
             return LogicalToDeviceUnits(value, 0);
         }
@@ -275,11 +340,11 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value">The vertical value in logical units</param>
         /// <returns>The vertical value in device units</returns>
-        public static int LogicalToDeviceUnitsY(int value) 
+        public static int LogicalToDeviceUnitsY(int value)
         {
             return LogicalToDeviceUnits(value, 0);
         }
-        
+
         /// <summary>
         /// Returns a new Size with the input's
         /// dimensions converted from logical units to device units.
@@ -368,7 +433,7 @@ namespace System.Windows.Forms
         /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
         public static void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap, int deviceDpi = 0)
         {
-            if (logicalBitmap == null) 
+            if (logicalBitmap == null)
             {
                 return;
             }
