@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2612,19 +2612,23 @@ example usage
                         {
                             // Fonts with sizes in point units are scaled with the system dpi when rendered
                             // Additionally, render transforms do not work correctly with fonts in point units
-                            // Create a new font rescaled to 96dpi in pixel units as the local version
+                            // Create a new font rescaled to 96dpi in pixel units as the local unscaled version
                             newLocal = new Font(value.FontFamily, value.SizeInPoints * (float)DpiHelper.LogicalDpi / 72, value.Style, GraphicsUnit.Pixel, value.GdiCharSet, value.GdiVerticalFont);
-                        }
-
-                        // Calculate scaling factor to the control dpi
-                        factor = (float)lastScaleDpi / (float)DpiHelper.LogicalDpi;
-                        if(factor == 1.0f)
-                        {
-                            scaledFont = newLocal;
+                            factor = (float)lastScaleDpi / (float)DpiHelper.DeviceDpi;
                         }
                         else
                         {
-                            scaledFont = new Font(newLocal.FontFamily, newLocal.Size * factor, newLocal.Style, newLocal.Unit, newLocal.GdiCharSet, newLocal.GdiVerticalFont);
+                            // scale from 96dpi to the control dpi
+                            factor = (float)lastScaleDpi / (float)DpiHelper.LogicalDpi;
+                        }
+                       
+                        if(factor == 1.0f)
+                        {
+                            scaledFont = value;
+                        }
+                        else
+                        {
+                            scaledFont = new Font(value.FontFamily, value.Size * factor, value.Style, value.Unit, value.GdiCharSet, value.GdiVerticalFont);
                         }
                     }
 
@@ -7718,7 +7722,7 @@ example usage
         /// by scaling it for the current DPI and rounding down to the nearest integer value.
         /// </devdoc>
         public int LogicalToDeviceUnits(int value) {
-            return DpiHelper.LogicalToDeviceUnits(value, CurrentDpi);
+            return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
         }
 
         /// <summary>
@@ -7728,7 +7732,7 @@ example usage
         /// <param name="value"> size to be scaled</param>
         /// <returns> scaled size</returns>
         public Size LogicalToDeviceUnits(Size value) {
-            return DpiHelper.LogicalToDeviceUnits(value, CurrentDpi);
+            return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
         }
 
         /// <summary>
@@ -7737,7 +7741,7 @@ example usage
         /// </summary>
         /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
         public void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap) {
-            DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, CurrentDpi);
+            DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, DeviceDpi);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalDpiScaling"]/*' />
@@ -11474,10 +11478,10 @@ example usage
         internal void ScaleFontForDpiChange(int oldDpi, int newDpi)
         {
             // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
+            float factor = (float)newDpi / oldDpi;
             Font local = (Font)Properties.GetObject(PropFont);
             if (local != null)
             {
-                float factor = (float)newDpi / oldDpi;
                 this.Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
             }
         }
@@ -11487,19 +11491,73 @@ example usage
         ///     If logical dpi scaling is enabled, compare the current dpi value with the current one and 
         ///     scale the control sizes and the font if necessary.
         /// </devdoc>
-        internal void UpdateControlDpiScaling()
+        internal void UpdateControlDpiScaling(int parentDpi = -1)
         {
             // If logical dpi scaling is used, check if the dpi has changed compared to the last scale operation
-            if (IsHandleCreated && useLogicalDpiScaling)
+            if ((IsHandleCreated || parentDpi > 0) && useLogicalDpiScaling)
             {
-                // Update the dpi value as the parent control might have changed
-                // Also for per monitor dpi awareness v1 it is not updated during handle creation
-                deviceDpi = DpiHelper.GetDpiValueForHandle(new HandleRef(this, HandleInternal));
-               
+                int oldDeviceDpi = deviceDpi;
+
+                if (IsHandleCreated)
+                {
+                    // Update the dpi value as the parent control might have changed
+                    // Also for per monitor dpi awareness v1 it is not updated during handle creation
+                    deviceDpi = DpiHelper.GetDpiValueForHandle(new HandleRef(this, HandleInternal));
+                }
+                else
+                {
+                    // Dpi value is supplied by a parent control
+                    deviceDpi = parentDpi;
+                }
+
+                // For compatibility, also call the RescaleConstantsForDpi() function here if
+                // the deviceDpi value has changed
+                if (oldDeviceDpi != deviceDpi)
+                {
+                    RescaleConstantsForDpi(oldDeviceDpi, deviceDpi);
+                }
+
+                // Finally, rescale the controls. If this is a container control and the dpi
+                // value was determined above, pass this value to the child controls.
+                // This allows us to scale these controls to the current dpi with layout suspended
+                // in one pass, even if the handles have not been created yet.
                 if (lastScaleDpi != deviceDpi)
                 {
-                    ScaleFontForDpiChange(lastScaleDpi, deviceDpi);
-                    ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
+                    ContainerControl container = this as ContainerControl;
+
+                    if (parentDpi == -1 && container != null)
+                    {
+                        container.SuspendAllLayout(this);
+                    }
+                    try
+                    {
+                        using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
+                        {
+                            if (parentDpi > 0 || container != null)
+                            {
+                                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                                if (controlsCollection != null)
+                                {
+                                    for (int i = 0; i < controlsCollection.Count; i++)
+                                    {
+                                        Control c = controlsCollection[i];
+                                        c.UpdateControlDpiScaling(deviceDpi);
+                                    }
+                                }
+                            }
+                            int lastScaleDpiOld = lastScaleDpi; // The following method call will update this value
+                            ScaleControlForDpiChange(lastScaleDpiOld, deviceDpi, this);
+                            ScaleFontForDpiChange(lastScaleDpiOld, deviceDpi);
+                        }
+                        LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
+                    }
+                    finally
+                    {
+                        if (parentDpi == -1 && container != null)
+                        {
+                            container.ResumeAllLayout(this, true);
+                        }
+                    }
                 }
             }
         }
