@@ -2,21 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-
-
-    /// <include file='doc\QueryContinueDragEventHandler.uex' path='docs/doc[@for="QueryContinueDragEventHandler"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Represents the method that will handle the <see cref='System.Windows.Forms.Control.QueryContinueDrag'/>
-    ///       event of a
-    ///    <see cref='System.Windows.Forms.Control'/>.
-    ///    </para>
+    /// Represents the method that will handle the <see cref='System.Windows.Forms.Control.QueryContinueDrag'/>
+    /// event of a <see cref='System.Windows.Forms.Control'/>.
     /// </devdoc>
     public delegate void QueryContinueDragEventHandler(object sender, QueryContinueDragEventArgs e);
 }

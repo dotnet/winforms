@@ -2,16 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-
-    /// <include file='doc\ToolStripLocationCancelEventHandler.uex' path='docs/doc[@for="ToolStripLocationCancelEventHandler"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>Represents the method that will handle the event raised when canceling an
-    ///       OnLocationChanging event for ToolStrips.</para>
+    /// Represents the method that will handle the event raised when canceling an
+    /// OnLocationChanging event for ToolStrips.
     /// </devdoc>
     internal delegate void ToolStripLocationCancelEventHandler(object sender, ToolStripLocationCancelEventArgs e);
 }
-
