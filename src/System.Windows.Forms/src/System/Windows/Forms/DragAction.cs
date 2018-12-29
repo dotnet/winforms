@@ -2,47 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\DragAction.uex' path='docs/doc[@for="DragAction"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies how and if a drag-and-drop operation should continue.
-    ///    </para>
+    /// Specifies how and if a drag-and-drop operation should continue.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public enum DragAction {
-        /// <include file='doc\DragAction.uex' path='docs/doc[@for="DragAction.Continue"]/*' />
+    [ComVisible(true)]
+    public enum DragAction
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The operation will continue.
-        ///    </para>
+        /// The operation will continue.
         /// </devdoc>
         Continue = 0,
-        /// <include file='doc\DragAction.uex' path='docs/doc[@for="DragAction.Drop"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The operation will stop with a drop.
-        ///    </para>
+        /// The operation will stop with a drop.
         /// </devdoc>
         Drop = 1,
-        /// <include file='doc\DragAction.uex' path='docs/doc[@for="DragAction.Cancel"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       The operation is canceled with no
-        ///       drop message.
-        ///       
-        ///    </para>
-        /// </devdoc>
-        Cancel = 2,
 
+        /// <devdoc>
+        /// The operation is canceled with no drop message.
+        /// </devdoc>
+        Cancel = 2
     }
 }
