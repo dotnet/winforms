@@ -7326,7 +7326,7 @@ example usage
         /// </devdoc>
         public void InvalidateLogicalRect(Rectangle rc, bool invalidateChildren = false)
         {
-            Invalidate(DpiHelper.LogicalToDeviceUnits(rc, lastScaleDpi), invalidateChildren);
+            Invalidate(DpiHelper.LogicalToDeviceUnits(rc, lastScaleDpi, true), invalidateChildren);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invoke"]/*' />
@@ -8863,8 +8863,6 @@ example usage
                     SetWindowFont();
                 }
 
-                // Why is this not called for form controls? The DeviceDpi property will still return the system dpi value
-                // which might differ from the real dpi value at this point
                 if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(this.GetType()))) {
                     int old = deviceDpi;
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));

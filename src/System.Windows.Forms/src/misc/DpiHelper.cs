@@ -362,9 +362,19 @@ namespace System.Windows.Forms
         /// dimensions converted from logical units to device units.
         /// </summary>
         /// <param name="logicalSize">Size in logical units</param>
+        /// <param name="extendToPartialPixels">Round down the top left position and round up the bottom right position of the rectangle to the nearest integers</param>
         /// <returns>Size in device units</returns>
-        public static Rectangle LogicalToDeviceUnits(Rectangle logicalRect, int deviceDpi = 0)
+        public static Rectangle LogicalToDeviceUnits(Rectangle logicalRect, int deviceDpi = 0, bool extendToPartialPixels = false)
         {
+            if(extendToPartialPixels)
+            {
+                double scalingFactor = deviceDpi == 0 ? LogicalToDeviceUnitsScalingFactor : (double)deviceDpi / LogicalDpi;
+                Point bottomRight = logicalRect.Location + logicalRect.Size;
+                Point scaledLocation = new Point((int)Math.Floor(scalingFactor * logicalRect.X), (int)Math.Floor(scalingFactor * logicalRect.Y));
+                Point scaledBottomRight = new Point((int)Math.Ceiling(scalingFactor * bottomRight.X), (int)Math.Ceiling(scalingFactor * bottomRight.Y));
+                Size scaledSize = new Size(scaledBottomRight) - new Size(scaledLocation);
+                return new Rectangle(scaledLocation, scaledSize);
+            }
             return new Rectangle(LogicalToDeviceUnits(logicalRect.X, deviceDpi),
                             LogicalToDeviceUnits(logicalRect.Y, deviceDpi),
                             LogicalToDeviceUnits(logicalRect.Width, deviceDpi),
@@ -388,9 +398,19 @@ namespace System.Windows.Forms
         /// dimensions converted from device units to logical units.
         /// </summary>
         /// <param name="logicalSize">Size in logical units</param>
+        /// <param name="extendToPartialPixels">Round down the top left position and round up the bottom right position of the rectangle to the nearest integers</param>
         /// <returns>Size in device units</returns>
-        public static Rectangle DeviceToLogicalUnits(Rectangle deviceRect, int deviceDpi = 0)
+        public static Rectangle DeviceToLogicalUnits(Rectangle deviceRect, int deviceDpi = 0, bool extendToPartialPixels = false)
         {
+            if (extendToPartialPixels)
+            {
+                double scalingFactor = deviceDpi == 0 ? 1 / LogicalToDeviceUnitsScalingFactor : LogicalDpi / deviceDpi;
+                Point bottomRight = deviceRect.Location + deviceRect.Size;
+                Point scaledLocation = new Point((int)Math.Floor(scalingFactor * deviceRect.X), (int)Math.Floor(scalingFactor * deviceRect.Y));
+                Point scaledBottomRight = new Point((int)Math.Ceiling(scalingFactor * bottomRight.X), (int)Math.Ceiling(scalingFactor * bottomRight.Y));
+                Size scaledSize = new Size(scaledBottomRight) - new Size(scaledLocation);
+                return new Rectangle(scaledLocation, scaledSize);
+            }
             return new Rectangle(DeviceToLogicalUnits(deviceRect.X, deviceDpi),
                             DeviceToLogicalUnits(deviceRect.Y, deviceDpi),
                             DeviceToLogicalUnits(deviceRect.Width, deviceDpi),
