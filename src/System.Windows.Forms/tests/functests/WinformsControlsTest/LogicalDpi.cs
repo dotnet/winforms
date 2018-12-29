@@ -15,6 +15,7 @@ namespace WinformsControlsTest
         public UserPaintControl()
         {
             this.LogicalDpiScaling = true;
+            this.FontWithLogicalSize = new Font("Arial", 12);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
         }
 
@@ -68,9 +69,7 @@ namespace WinformsControlsTest
     {
         public LogicalDpi()
         {
-            // Set the font here based on the default font
-            this.FontWithLogicalSize = this.Font;
-
+            FontWithLogicalSize = new Font(Font.FontFamily, 8.25f);
             InitializeComponent();
 
             // Add some buttons
