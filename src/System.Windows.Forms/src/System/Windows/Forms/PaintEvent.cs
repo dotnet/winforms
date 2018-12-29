@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -127,7 +127,14 @@ namespace System.Windows.Forms {
         {
             get
             {
-                return DpiHelper.DeviceToLogicalUnits(clipRect, dpi);
+                // Round down the top left position and round up the bottom right position of the rectangle to the nearest integers
+                // This avoids rendering issues when multiple paint events with adjacent clip rectangles occur
+                double scalingFactor = DpiHelper.LogicalDpi / dpi;
+                Point bottomRight = clipRect.Location + clipRect.Size;
+                Point scaledLocation = new Point((int)Math.Floor(scalingFactor * clipRect.X), (int)Math.Floor(scalingFactor * clipRect.Y));
+                Point scaledBottomRight = new Point((int)Math.Ceiling(scalingFactor * bottomRight.X), (int)Math.Ceiling(scalingFactor * bottomRight.Y));
+                Size scaledSize = new Size(scaledBottomRight) - new Size(scaledLocation);
+                return new Rectangle(scaledLocation, scaledSize);
             }
         }
 

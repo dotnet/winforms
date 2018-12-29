@@ -7945,11 +7945,11 @@ example usage
         {
             get
             {
-                return DpiHelper.DeviceToLogicalUnits(Margin);
+                return DpiHelper.DeviceToLogicalUnits(Margin, lastScaleDpi);
             }
             set
             {
-                Margin = DpiHelper.LogicalToDeviceUnits(value);
+                Margin = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
             }
         }
 
@@ -7966,11 +7966,11 @@ example usage
         {
             get
             {
-                return DpiHelper.DeviceToLogicalUnits(Padding);
+                return DpiHelper.DeviceToLogicalUnits(Padding, lastScaleDpi);
             }
             set
             {
-                Padding = DpiHelper.LogicalToDeviceUnits(value);
+                Padding = DpiHelper.LogicalToDeviceUnits(value, lastScaleDpi);
             }
         }
 
