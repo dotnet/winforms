@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1120,6 +1120,48 @@ namespace System.Windows.Forms {
                     ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl, isDpiAutoScale);
                     ScaleChildControls(childIncludedFactor, ourExcludedFactor, requestingControl, false, isDpiAutoScale);
                 }
+            }
+        }
+
+        /// <devdoc>
+        ///     Overrides the standard method for initial control dpi scaling. This allows to us to suspend the layout
+        ///     of all child controls and scale them in one pass if we have an updated dpi value.
+        /// </devdoc>
+        internal override void UpdateControlDpiScaling(int parentDpi = -1)
+        {
+            if(LogicalDpiScaling == false || (IsHandleCreated == false && parentDpi == -1))
+            {
+                // Logical dpi scaling is disabled or we do not have a valid dpi value
+                base.UpdateControlDpiScaling(parentDpi);
+                return;
+            }
+
+            if (parentDpi == -1)
+            {
+                SuspendAllLayout(this);
+            }
+
+            // Update dpi value and scale this control
+            base.UpdateControlDpiScaling(parentDpi);
+
+            using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
+            {
+                // Scale child controls
+                ControlCollection controlsCollection = this.Controls;
+                if (controlsCollection != null)
+                {
+                    for (int i = 0; i < controlsCollection.Count; i++)
+                    {
+                        Control c = controlsCollection[i];
+                        c.UpdateControlDpiScaling(deviceDpi);
+                    }
+                }
+            }
+            LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
+
+            if (parentDpi == -1)
+            {
+                ResumeAllLayout(this, true);
             }
         }
 

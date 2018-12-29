@@ -11455,7 +11455,7 @@ example usage
         ///     Otherwise, use the new dpi value (updated before) and compare it with the last known
         ///     value the control is scaled to.
         /// </devdoc>
-        internal void ScaleControlForDpiChange(int oldFormDpi, int newFormDpi, Control requestingControl)
+        internal virtual void ScaleControlForDpiChange(int oldFormDpi, int newFormDpi, Control requestingControl)
         {
             float factor;
             if (useLogicalDpiScaling == false)
@@ -11491,7 +11491,7 @@ example usage
         ///     If logical dpi scaling is enabled, compare the current dpi value with the current one and 
         ///     scale the control sizes and the font if necessary.
         /// </devdoc>
-        internal void UpdateControlDpiScaling(int parentDpi = -1)
+        internal virtual void UpdateControlDpiScaling(int parentDpi = -1)
         {
             // If logical dpi scaling is used, check if the dpi has changed compared to the last scale operation
             if ((IsHandleCreated || parentDpi > 0) && useLogicalDpiScaling)
@@ -11510,54 +11510,40 @@ example usage
                     deviceDpi = parentDpi;
                 }
 
-                // For compatibility, also call the RescaleConstantsForDpi() function here if
-                // the deviceDpi value has changed
                 if (oldDeviceDpi != deviceDpi)
                 {
+                    // For compatibility, also call the RescaleConstantsForDpi() function here if
+                    // the deviceDpi value has changed
                     RescaleConstantsForDpi(oldDeviceDpi, deviceDpi);
+
+                    // The ScaleControl() method takes the border size into account when calculating the new size of the form.
+                    // However, the border size might change for different dpi values and the current code only uses the 
+                    // the size for the new dpi. So we adjust the size here to get the right result at the end.
+                    if (DpiHelper.IsPerMonitorV2Awareness)
+                    {
+                        CreateParams cp = CreateParams;
+                        NativeMethods.RECT adornmentsOldDpi = new NativeMethods.RECT(0, 0, 0, 0);
+                        NativeMethods.RECT adornmentsNewDpi = new NativeMethods.RECT(0, 0, 0, 0);
+
+                        SafeNativeMethods.AdjustWindowRectExForDpi(ref adornmentsOldDpi, cp.Style, HasMenu, cp.ExStyle, (uint)oldDeviceDpi);
+                        SafeNativeMethods.AdjustWindowRectExForDpi(ref adornmentsNewDpi, cp.Style, HasMenu, cp.ExStyle, (uint)deviceDpi);
+
+                        if(!(adornmentsNewDpi.Size == adornmentsOldDpi.Size))
+                        {
+                            Size = Size + adornmentsNewDpi.Size - adornmentsOldDpi.Size;
+                        }
+                    }
                 }
 
-                // Finally, rescale the controls. If this is a container control and the dpi
-                // value was determined above, pass this value to the child controls.
-                // This allows us to scale these controls to the current dpi with layout suspended
-                // in one pass, even if the handles have not been created yet.
+                // Finally, rescale the control
                 if (lastScaleDpi != deviceDpi)
                 {
-                    ContainerControl container = this as ContainerControl;
-
-                    if (parentDpi == -1 && container != null)
+                    using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
                     {
-                        container.SuspendAllLayout(this);
+                        ScaleFontForDpiChange(lastScaleDpi, deviceDpi);
+                        ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
                     }
-                    try
-                    {
-                        using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
-                        {
-                            if (parentDpi > 0 || container != null)
-                            {
-                                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
-                                if (controlsCollection != null)
-                                {
-                                    for (int i = 0; i < controlsCollection.Count; i++)
-                                    {
-                                        Control c = controlsCollection[i];
-                                        c.UpdateControlDpiScaling(deviceDpi);
-                                    }
-                                }
-                            }
-                            int lastScaleDpiOld = lastScaleDpi; // The following method call will update this value
-                            ScaleControlForDpiChange(lastScaleDpiOld, deviceDpi, this);
-                            ScaleFontForDpiChange(lastScaleDpiOld, deviceDpi);
-                        }
-                        LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
-                    }
-                    finally
-                    {
-                        if (parentDpi == -1 && container != null)
-                        {
-                            container.ResumeAllLayout(this, true);
-                        }
-                    }
+                    LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
                 }
             }
         }
