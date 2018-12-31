@@ -2212,7 +2212,7 @@ example usage
         ]
         public int DeviceDpi {
             get {
-                if (DpiHelper.IsPerMonitorV2Awareness) {
+                if (DpiHelper.IsPerMonitorV2Awareness || (useLogicalDpiScaling == true && DpiHelper.IsPerMonitorV1Awareness)) {
                     // deviceDpi may change in WmDpiChangedBeforeParent in PmV2 scenarios, so we can't cache statically.
                     return deviceDpi;
                 }
@@ -7755,7 +7755,7 @@ example usage
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
-        public bool LogicalDpiScaling
+        public virtual bool LogicalDpiScaling
         {
             get
             {
@@ -8863,7 +8863,7 @@ example usage
                     SetWindowFont();
                 }
 
-                if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(this.GetType()))) {
+                if (useLogicalDpiScaling == false && DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(this.GetType()))) {
                     int old = deviceDpi;
                     deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
                     if (old != deviceDpi) {
@@ -11441,6 +11441,7 @@ example usage
             // positions of all controls.  Therefore, we should resume(false).
             using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
             {
+                // Font is already scaled in the DpiChangedBeforeParent message handler
                 ScaleControlForDpiChange(oldFormDpi, newFormDpi, requestingControl);
                 ScaleChildControlsForDpiChange(oldFormDpi, newFormDpi, requestingControl);
             }

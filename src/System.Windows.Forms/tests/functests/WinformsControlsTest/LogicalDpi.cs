@@ -69,7 +69,6 @@ namespace WinformsControlsTest
     {
         public LogicalDpi()
         {
-            FontWithLogicalSize = new Font(Font.FontFamily, 8.25f);
             InitializeComponent();
 
             // Add some buttons

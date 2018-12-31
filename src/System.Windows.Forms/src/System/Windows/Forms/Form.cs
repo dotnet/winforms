@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -5023,6 +5023,22 @@ namespace System.Windows.Forms {
             base.OnResize(e);
             if (formState[FormStateRenderSizeGrip] != 0) {
                 Invalidate();
+            }
+        }
+
+        /// <devdoc>
+        ///     Called to update the dpi value and scale the control (except for dynamic changes through the WM_DPICHANGED message).
+        ///     Create a correctly scaled copy of a default font if no font is set.
+        /// </devdoc>
+        internal override void UpdateControlDpiScaling(int parentDpi = -1)
+        {
+            base.UpdateControlDpiScaling(parentDpi);
+
+            if (LogicalDpiScaling == true && this.Font == DefaultFont)
+            {
+                // Unfortunately, we cannot use SystemFonts.DefaultFont here because Windows changes its size
+                // if the "fix blurry apps" setting is enabled.
+                this.FontWithLogicalSize = new Font("Microsoft Sans Serif", 8.25f);
             }
         }
 
