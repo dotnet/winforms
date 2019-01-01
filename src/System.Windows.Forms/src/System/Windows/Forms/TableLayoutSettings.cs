@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
             string stringVal = serializationInfo.GetString("SerializedString");
 
-            if (!String.IsNullOrEmpty(stringVal) && converter != null) {
+            if (!string.IsNullOrEmpty(stringVal)) {
                 TableLayoutSettings tls = converter.ConvertFromInvariantString(stringVal) as TableLayoutSettings;
                 if (tls != null) {
                     this.ApplySettings(tls);
@@ -430,7 +430,7 @@ namespace System.Windows.Forms {
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 		
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
-            string stringVal = (converter != null) ? converter.ConvertToInvariantString(this) : null;
+            string stringVal = converter.ConvertToInvariantString(this);
             
             if (!String.IsNullOrEmpty(stringVal)) {
                 si.AddValue("SerializedString", stringVal);
