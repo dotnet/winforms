@@ -40,8 +40,9 @@ namespace System.Windows.Forms {
     public class NativeWindow : MarshalByRefObject, IWin32Window {
 #if DEBUG
         private static readonly BooleanSwitch AlwaysUseNormalWndProc = new BooleanSwitch("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
-        private static readonly TraceSwitch WndProcChoice = new TraceSwitch("WndProcChoice", "Info about choice of WndProc");
 #endif
+
+        private static readonly TraceSwitch WndProcChoice = new TraceSwitch("WndProcChoice", "Info about choice of WndProc");
 
         /**
          * Table of prime numbers to use as hash table sizes. Each entry is the
@@ -269,7 +270,7 @@ namespace System.Windows.Forms {
                 // so exceptions go to the debugger.
                 //
                 if (intWndProcFlags == 0) {
-                    Trace("Init wndProcFlags");
+                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Init wndProcFlags");
                     Debug.Indent();
 
                     if (userSetProcFlags != 0) {
@@ -280,21 +281,21 @@ namespace System.Windows.Forms {
                     }
                     else if (!Application.CustomThreadExceptionHandlerAttached) {
                         if (Debugger.IsAttached) {
-                            Trace("Debugger is attached, using debuggable WndProc");
+                            Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger is attached, using debuggable WndProc");
                             intWndProcFlags |= UseDebuggableWndProc;
                         }
                         else {
                             intWndProcFlags = AdjustWndProcFlagsFromRegistry(intWndProcFlags);
-                            Trace("After reg check 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
+                            Debug.WriteLineIf(WndProcChoice.TraceVerbose, "After reg check 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
                             if ((intWndProcFlags & DebuggerPresent) != 0) {
-                                Trace("Debugger present");
+                                Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger present");
 
                                 intWndProcFlags = AdjustWndProcFlagsFromMetadata(intWndProcFlags);
 
                                 if ((intWndProcFlags & AssemblyIsDebuggable) != 0) {
                                     if ((intWndProcFlags & LoadConfigSettings) != 0) {
                                         intWndProcFlags = AdjustWndProcFlagsFromConfig(intWndProcFlags);
-                                        Trace("After config check 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
+                                        Debug.WriteLineIf(WndProcChoice.TraceVerbose, "After config check 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
                                     }
                                     else {
                                         intWndProcFlags |= UseDebuggableWndProc;
@@ -302,18 +303,18 @@ namespace System.Windows.Forms {
                                 }
                             }
 
-                            Trace("After config & debugger check 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
+                            Debug.WriteLineIf(WndProcChoice.TraceVerbose, "After config & debugger check 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
                         }
                     }
 
 #if DEBUG
                     if (AlwaysUseNormalWndProc.Enabled) {
-                        Trace("Stripping debuggablewndproc due to AlwaysUseNormalWndProc switch");
+                        Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Stripping debuggablewndproc due to AlwaysUseNormalWndProc switch");
                         intWndProcFlags &= ~UseDebuggableWndProc;
                     }
 #endif
                     intWndProcFlags |= InitializedFlags;
-                    Trace("Final 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
+                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Final 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
                     wndProcFlags = (byte)intWndProcFlags;
                     Debug.Unindent();
                 }
@@ -493,13 +494,13 @@ namespace System.Windows.Forms {
 
                 RegistryKey debugKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework");
                 if (debugKey == null) {
-                    Trace(".NETFramework key not found");
+                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, ".NETFramework key not found");
                     return wndProcFlags;
                 }
                 try {
                     object value = debugKey.GetValue("DbgJITDebugLaunchSetting");
                     if (value != null) {
-                        Trace("DbgJITDebugLaunchSetting value found, debugger is installed");
+                        Debug.WriteLineIf(WndProcChoice.TraceVerbose, "DbgJITDebugLaunchSetting value found, debugger is installed");
                         int dbgJit = 0;
                         try {
                             dbgJit = (int)value;
@@ -540,11 +541,11 @@ namespace System.Windows.Forms {
 
         static int AdjustWndProcFlagsFromMetadata(int wndProcFlags) {
             if ((wndProcFlags & DebuggerPresent) != 0) {
-                Trace("Debugger present, checking for debuggable entry assembly");
+                Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger present, checking for debuggable entry assembly");
                 Assembly entry = Assembly.GetEntryAssembly();
                 if (entry != null) {
                     if (Attribute.IsDefined(entry, typeof(DebuggableAttribute))) {
-                        Trace("Debuggable attribute on assembly");
+                        Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debuggable attribute on assembly");
                         Attribute[] attr = Attribute.GetCustomAttributes(entry, typeof(DebuggableAttribute));
                         if (attr.Length > 0) {
                             DebuggableAttribute dbg = (DebuggableAttribute)attr[0];
@@ -552,7 +553,7 @@ namespace System.Windows.Forms {
                                 // Only if the assembly is really setup for debugging
                                 // does it really make sense to enable the jitDebugging
                                 //
-                                Trace("Entry assembly is debuggable");
+                                Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Entry assembly is debuggable");
                                 wndProcFlags |= AssemblyIsDebuggable;
                             }
                         }
@@ -597,11 +598,11 @@ namespace System.Windows.Forms {
 
 
                 if (WndProcShouldBeDebuggable) {
-                    Trace("Using debuggable wndproc");
+                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Using debuggable wndproc");
                     windowProc = new NativeMethods.WndProc(this.DebuggableCallback);
                 }
                 else {
-                    Trace("Using normal wndproc");
+                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Using normal wndproc");
                     windowProc = new NativeMethods.WndProc(this.Callback);
                 }
 
@@ -1411,14 +1412,6 @@ namespace System.Windows.Forms {
 
         protected virtual void WndProc(ref Message m) {
             DefWndProc(ref m);
-        }
-
-        [Conditional("DEBUG")]
-        private static void Trace(string message)
-        {
-#if DEBUG
-            Debug.WriteLineIf(WndProcChoice.TraceVerbose, message);
-#endif
         }
 
         /// <devdoc>
