@@ -154,9 +154,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PaintEvent.uex' path='docs/doc[@for="PaintEventArgs.Dispose2"]/*' />
         protected virtual void Dispose(bool disposing) {
-#if DEBUG
-            Debug.Assert(disposing, "PaintEvent object should be explicitly disposed. Potential GDI multithreading lock issue. Allocation stack:\r\n" + AllocationSite);
-#endif
            if (disposing) {
                 //only dispose the graphics object if we created it via the dc.
                 if (graphics != null && dc != IntPtr.Zero) {

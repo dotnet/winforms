@@ -15,8 +15,6 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewRowsAddedEventArgs.uex' path='docs/doc[@for="DataGridViewRowsAddedEventArgs.DataGridViewRowsAddedEventArgs"]/*' />
         public DataGridViewRowsAddedEventArgs(int rowIndex, int rowCount)
         {
-            Debug.Assert(rowIndex >= 0);
-            Debug.Assert(rowCount >= 1);
             this.rowIndex = rowIndex;
             this.rowCount = rowCount;
         }

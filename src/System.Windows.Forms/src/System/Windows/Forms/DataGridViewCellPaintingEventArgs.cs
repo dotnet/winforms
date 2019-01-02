@@ -54,8 +54,9 @@ namespace System.Windows.Forms
             }
             if ((paintParts & ~DataGridViewPaintParts.All) != 0)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, "paintParts"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, nameof(paintParts)), nameof(paintParts));
             }
+            this.dataGridView = dataGridView;
             this.graphics = graphics;
             this.clipBounds = clipBounds;
             this.cellBounds = cellBounds;

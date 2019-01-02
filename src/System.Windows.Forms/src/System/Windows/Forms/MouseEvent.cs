@@ -56,9 +56,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta) {
-            Debug.Assert((button & (MouseButtons.Left | MouseButtons.None | MouseButtons.Right | MouseButtons.Middle | MouseButtons.XButton1 | MouseButtons.XButton2)) ==
-                         button, "Invalid information passed into MouseEventArgs constructor!");
-
             this.button = button;
             this.clicks = clicks;
             this.x = x;

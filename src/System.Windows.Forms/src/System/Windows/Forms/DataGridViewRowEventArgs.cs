@@ -19,7 +19,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataGridViewRow));
             }
-            Debug.Assert(dataGridViewRow.Index >= -1);
+
             this.dataGridViewRow = dataGridViewRow;
         }
 
