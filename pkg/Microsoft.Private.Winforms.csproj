@@ -25,7 +25,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
     <NoWarn>$(NoWarn);NU5125</NoWarn>
-    <BinDirectory>$(MSBuildThisFileDirectory)\..\artifacts\bin</BinDirectory>
+    <!--<BinDirectory>$(MSBuildThisFileDirectory)\..\artifacts\bin</BinDirectory>-->
 
     <!-- Disable a VS-specific target that is failing when building this csproj -->
     <GenerateDependencyFile>false</GenerateDependencyFile>
@@ -73,78 +73,14 @@
     <ItemGroup>
       <ProjectReference>
         <OutputItemType>TfmSpecificPackageFile</OutputItemType>
+        <Targets>GetPackageContent</Targets>
       </ProjectReference>
     </ItemGroup>
   </Target>
 
-  <!-- Call custom targets (defined below) when creating the package -->
+  <!-- Call targets when creating the package -->
   <PropertyGroup>
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);SetPackagePath;AddRelativePackageFiles</TargetsForTfmSpecificContentInPackage>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);ResolveReferences</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
-
-  <!-- Set package paths for project reference outputs -->
-  <Target Name="SetPackagePath" DependsOnTargets="ResolveReferences">
-    <!-- Create boolean for Facades to use in settting package paths and packaging pdbs -->
-    <ItemGroup>
-      <TfmSpecificPackageFile>        
-        <IsFacade>$([System.String]::Copy('%(TfmSpecificPackageFile.OriginalItemSpec)').EndsWith('Facade.csproj'))</IsFacade>
-      </TfmSpecificPackageFile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <TfmSpecificPackageFile>        
-        <!-- Put everything under lib by default -->
-        <PackagePath>lib/$(TargetFramework)</PackagePath>
-        <!-- If the reference ends with Facade.csproj, it's a facade binary, so put it under both lib and ref  -->
-        <PackagePath Condition="'%(TfmSpecificPackageFile.IsFacade)' == 'true'">lib/$(TargetFramework);ref/$(TargetFramework)</PackagePath>
-      </TfmSpecificPackageFile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <!-- Add reference binaries -->
-      <TfmSpecificPackageFile Include="$(BinDirectory)\System.Windows.Forms\$(Configuration)\netcoreapp3.0\ref\System.Windows.Forms.dll">
-        <PackagePath>ref/$(TargetFramework)</PackagePath>
-      </TfmSpecificPackageFile>
-      <TfmSpecificPackageFile Include="$(BinDirectory)\System.Windows.Forms.Design\$(Configuration)\netcoreapp3.0\ref\System.Windows.Forms.Design.dll">
-        <PackagePath>ref/$(TargetFramework)</PackagePath>
-      </TfmSpecificPackageFile>
-      <TfmSpecificPackageFile Include="$(BinDirectory)\System.Windows.Forms.Design.Editors\$(Configuration)\netcoreapp3.0\ref\System.Windows.Forms.Design.Editors.dll">
-        <PackagePath>ref/$(TargetFramework)</PackagePath>
-      </TfmSpecificPackageFile>
-    </ItemGroup>
-    
-  </Target>
-  
-  <!-- Look next to each file going into the package for companion files (pdb, xml, resources) -->
-  <Target Name="AddRelativePackageFiles" Inputs="%(TfmSpecificPackageFile.Identity);%(TfmSpecificPackageFile.PackagePath)" Outputs="unused">
-    
-    <!-- Set some variables for the item group below -->
-    <PropertyGroup>
-      <_baseDirectory>%(TfmSpecificPackageFile.RootDir)%(TfmSpecificPackageFile.Directory)</_baseDirectory>
-      <_baseFileName>%(TfmSpecificPackageFile.FileName)</_baseFileName>
-      <_packagePath>%(TfmSpecificPackageFile.PackagePath)</_packagePath>
-      <_isFacadeAssembly>%(TfmSpecificPackageFile.IsFacade)</_isFacadeAssembly>
-    </PropertyGroup>
-    
-    <ItemGroup>
-
-      <!-- Get pdbs, but not for neither reference binaries nor facade binaries -->
-      <TfmSpecificPackageFile Include="$(_baseDirectory)$(_baseFileName).pdb" Condition="Exists('$(_baseDirectory)$(_baseFileName).pdb') And !$(_isFacadeAssembly)">
-        <PackagePath>$(_packagePath)</PackagePath>
-      </TfmSpecificPackageFile>
-
-      <!-- Get xml files -->
-      <TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).xml">
-        <PackagePath>$(_packagePath)%(RecursiveDir)</PackagePath>
-      </TfmSpecificPackageFile>
-
-      <!-- commenting out until we decide to use them in the WindowsDesktop package -->
-      <!-- Get resource dlls -->
-      <!--TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).resources.dll">
-        <PackagePath>$(_packagePath)%(RecursiveDir)</PackagePath>
-      </TfmSpecificPackageFile-->
-
-    </ItemGroup>
-  </Target>
 
 </Project>
