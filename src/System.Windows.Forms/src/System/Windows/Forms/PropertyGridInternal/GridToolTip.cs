@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -24,9 +24,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal GridToolTip(Control[] controls) {
             this.controls = controls;
             SetStyle(ControlStyles.UserPaint, false);
-            this.Font = controls[0].Font;
-            this.toolInfos = new NativeMethods.TOOLINFO_T[controls.Length];
+            if (LogicalDpiScaling == true && controls[0].FontWithLogicalSize != null)
+            {
+                this.FontWithLogicalSize = controls[0].FontWithLogicalSize;
+            }
+            else
+            {
+                this.Font = controls[0].Font;
+            }
             
+            this.toolInfos = new NativeMethods.TOOLINFO_T[controls.Length];
+
             for (int i = 0; i < controls.Length; i++) {
                   controls[i].HandleCreated += new EventHandler(this.OnControlCreateHandle);
                   controls[i].HandleDestroyed += new EventHandler(this.OnControlDestroyHandle);

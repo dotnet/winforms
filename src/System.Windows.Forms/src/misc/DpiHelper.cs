@@ -215,45 +215,47 @@ namespace System.Windows.Forms
             }
         }
 
-        private static InterpolationMode InterpolationMode
+        private static InterpolationMode GetInterpolationMode(int deviceDpi)
         {
-            get
+            int dpiScalePercent;
+            if (deviceDpi == 0)
             {
-                if (interpolationMode == InterpolationMode.Invalid)
-                {
-                    int dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactor * 100);
-
-                    // We will prefer NearestNeighbor algorithm for 200, 300, 400, etc zoom factors, in which each pixel become a 2x2, 3x3, 4x4, etc rectangle. 
-                    // This produces sharp edges in the scaled image and doesn't cause distorsions of the original image.
-                    // For any other scale factors we will prefer a high quality resizing algorith. While that introduces fuzziness in the resulting image, 
-                    // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
-                    // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better 
-                    // results because it uses less neighboring pixels.
-                    if ((dpiScalePercent % 100) == 0)
-                    {
-                        interpolationMode = InterpolationMode.NearestNeighbor;
-                    }
-                    else if (dpiScalePercent < 100)
-                    {
-                        interpolationMode = InterpolationMode.HighQualityBilinear;
-                    }
-                    else
-                    {
-                        interpolationMode = InterpolationMode.HighQualityBicubic;
-                    }
-                }
-                return interpolationMode;
+                dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactor * 100);
             }
+            else
+            {
+                dpiScalePercent = (int)Math.Round((double)deviceDpi / LogicalDpi * 100);
+            }
+
+            // We will prefer NearestNeighbor algorithm for 200, 300, 400, etc zoom factors, in which each pixel become a 2x2, 3x3, 4x4, etc rectangle.
+            // This produces sharp edges in the scaled image and doesn't cause distorsions of the original image.
+            // For any other scale factors we will prefer a high quality resizing algorith. While that introduces fuzziness in the resulting image, 
+            // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
+            // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better 
+            // results because it uses less neighboring pixels.
+            if ((dpiScalePercent % 100) == 0)
+            {
+                interpolationMode = InterpolationMode.NearestNeighbor;
+            }
+            else if (dpiScalePercent < 100)
+            {
+                interpolationMode = InterpolationMode.HighQualityBilinear;
+            }
+            else
+            {
+                interpolationMode = InterpolationMode.HighQualityBicubic;
+            }
+            return interpolationMode;
         }
 
-        private static Bitmap ScaleBitmapToSize(Bitmap logicalImage, Size deviceImageSize)
+        private static Bitmap ScaleBitmapToSize(Bitmap logicalImage, Size deviceImageSize, int deviceDpi)
         {
             Bitmap deviceImage;
             deviceImage = new Bitmap(deviceImageSize.Width, deviceImageSize.Height, logicalImage.PixelFormat);
 
             using (Graphics graphics = Graphics.FromImage(deviceImage))
             {
-                graphics.InterpolationMode = InterpolationMode;
+                graphics.InterpolationMode = GetInterpolationMode(deviceDpi);
 
                 RectangleF sourceRect = new RectangleF(0, 0, logicalImage.Size.Width, logicalImage.Size.Height);
                 RectangleF destRect = new RectangleF(0, 0, deviceImageSize.Width, deviceImageSize.Height);
@@ -274,7 +276,7 @@ namespace System.Windows.Forms
         private static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0)
         {
             Size deviceImageSize = DpiHelper.LogicalToDeviceUnits(logicalImage.Size, deviceDpi);
-            return ScaleBitmapToSize(logicalImage, deviceImageSize);
+            return ScaleBitmapToSize(logicalImage, deviceImageSize, deviceDpi);
         }
 
         /// <summary>
@@ -436,14 +438,14 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="logicalImage">The image to scale from logical units to device units</param>
         /// <param name="targetImageSize">The size to scale image to</param>
-        public static Bitmap CreateResizedBitmap(Bitmap logicalImage, Size targetImageSize)
+        public static Bitmap CreateResizedBitmap(Bitmap logicalImage, Size targetImageSize, int deviceDpi = 0)
         {
             if (logicalImage == null)
             {
                 return null;
             }
 
-            return ScaleBitmapToSize(logicalImage, targetImageSize);
+            return ScaleBitmapToSize(logicalImage, targetImageSize, deviceDpi);
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -174,12 +174,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
         ]
         public PropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
         : base() {
-            if (DpiHelper.IsScalingRequired) {
-                paintWidth = DpiHelper.LogicalToDeviceUnitsX(PAINT_WIDTH);
-                paintIndent = DpiHelper.LogicalToDeviceUnitsX(PAINT_INDENT);
-                outlineSizeExplorerTreeStyle = DpiHelper.LogicalToDeviceUnitsX(OUTLINE_SIZE_EXPLORER_TREE_STYLE);
-                outlineSize = DpiHelper.LogicalToDeviceUnitsX(OUTLINE_SIZE);
-                maxListBoxHeight = DpiHelper.LogicalToDeviceUnitsY(MAX_LISTBOX_HEIGHT);
+            if (DpiHelper.IsScalingRequirementMet)
+            {
+                RescaleConstants();
             }
 
             this.ehValueClick = new EventHandler(this.OnGridEntryValueClick);
@@ -320,14 +317,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         [ResourceExposure(ResourceScope.Machine)]
         [ResourceConsumption(ResourceScope.Machine)]
-        private static Bitmap GetBitmapFromIcon(string iconName, int iconsWidth, int iconsHeight) {
+        private static Bitmap GetBitmapFromIcon(string iconName, int iconsWidth, int iconsHeight, int deviceDpi) {
             Size desiredSize = new Size(iconsWidth, iconsHeight);
             Icon icon = new Icon(BitmapSelector.GetResourceStream(typeof(PropertyGrid), iconName), desiredSize);
             Bitmap b = icon.ToBitmap();
             icon.Dispose();
             
             if ((b.Size.Width != iconsWidth || b.Size.Height != iconsHeight)) {
-                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredSize);
+                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredSize, deviceDpi);
                 if (scaledBitmap != null) {
                     b.Dispose();
                     b = scaledBitmap;
@@ -724,7 +721,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     #endif
                     toolTip = new GridToolTip(new Control[]{this, Edit});
                     toolTip.ToolTip = "";
-                    toolTip.Font = this.Font;
+                    if(LogicalDpiScaling == true && this.FontWithLogicalSize != null)
+                    {
+                        toolTip.FontWithLogicalSize = this.FontWithLogicalSize;
+                    }
+                    else
+                    {
+                        toolTip.Font = this.Font;
+                    }
                 }   
                 return toolTip;
             }
@@ -1048,18 +1052,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
             var scaledIconWidth = width;
             var scaledIconHeight = height;
             try {
-                //scale for per-monitor DPI.
-                if (DpiHelper.IsPerMonitorV2Awareness) {
+                //scale for DPI.
+                if (DpiHelper.IsScalingRequirementMet) {
                     scaledIconWidth = LogicalToDeviceUnits(width);
                     scaledIconHeight = LogicalToDeviceUnits(height);
                 }
-                else if (DpiHelper.IsScalingRequired) {
-                    // only primary monitor scaling.
-                    scaledIconWidth = DpiHelper.LogicalToDeviceUnitsX(width);
-                    scaledIconHeight = DpiHelper.LogicalToDeviceUnitsY(height);
-                }
 
-                bitmap = GetBitmapFromIcon(icon, scaledIconWidth, scaledIconHeight);
+                bitmap = GetBitmapFromIcon(icon, scaledIconWidth, scaledIconHeight, this.deviceDpi);
             }
             catch (Exception e) {
                 Debug.Fail(e.ToString());
@@ -3502,8 +3501,15 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
          
             fontBold = null;    // fontBold is cached based on Font                        
-                        
-            ToolTip.Font = this.Font;
+
+            if (LogicalDpiScaling == true && this.FontWithLogicalSize != null)
+            {
+                ToolTip.FontWithLogicalSize = this.FontWithLogicalSize;
+            }
+            else
+            {
+                ToolTip.Font = this.Font;
+            }
             SetFlag(FlagNeedUpdateUIBasedOnFont, true);
             UpdateUIBasedOnFont(true);
             base.OnFontChanged(e);
@@ -3524,8 +3530,15 @@ namespace System.Windows.Forms.PropertyGridInternal {
                        SelectGridEntry(selectedGridEntry, true);
                  }
                  if (toolTip != null) {
-                     ToolTip.Font = this.Font;
-                 }
+                    if (LogicalDpiScaling == true && this.FontWithLogicalSize != null)
+                    {
+                        ToolTip.FontWithLogicalSize = this.FontWithLogicalSize;
+                    }
+                    else
+                    {
+                        ToolTip.Font = this.Font;
+                    }
+                }
                  
             }
 

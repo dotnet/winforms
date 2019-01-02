@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -119,9 +119,8 @@ namespace System.Windows.Forms {
         private int                          toolStripButtonPaddingY = TOOLSTRIP_BUTTON_PADDING_Y;
         private static readonly Size         DEFAULT_LARGE_BUTTON_SIZE = new Size(32, 32);
         private static readonly Size         DEFAULT_NORMAL_BUTTON_SIZE = new Size(16, 16);
-        private static Size                  largeButtonSize = DEFAULT_LARGE_BUTTON_SIZE;
-        private static Size                  normalButtonSize = DEFAULT_NORMAL_BUTTON_SIZE;
-        private static bool                  isScalingInitialized = false;
+        private Size                         largeButtonSize = DEFAULT_LARGE_BUTTON_SIZE;
+        private Size                         normalButtonSize = DEFAULT_NORMAL_BUTTON_SIZE;
 
         private const ushort                  PropertiesChanged          = 0x0001;
         private const ushort                  GotDesignerEventService    = 0x0002;
@@ -179,19 +178,8 @@ namespace System.Windows.Forms {
             SuspendLayout();
             AutoScaleMode = AutoScaleMode.None;
 
-            // static variables are problem in a child level mixed mode scenario. Changing static variables cause compatibility issue. 
-            // So, recalculate static variables everytime property grid initialized.
-            if (DpiHelper.IsPerMonitorV2Awareness) {
+            if (DpiHelper.IsScalingRequirementMet) {
                 RescaleConstants();
-            }
-            else {
-                if (!isScalingInitialized) {
-                    if (DpiHelper.IsScalingRequired) {
-                        normalButtonSize = LogicalToDeviceUnits(DEFAULT_NORMAL_BUTTON_SIZE);
-                        largeButtonSize = LogicalToDeviceUnits(DEFAULT_LARGE_BUTTON_SIZE);
-                    }
-                    isScalingInitialized = true;
-                }
             }
 
             try
@@ -1541,8 +1529,8 @@ namespace System.Windows.Forms {
             
             image.MakeTransparent();
             // Resize bitmap only if resizing is needed in order to avoid image distortion.
-            if (DpiHelper.IsScalingRequired && (image.Size.Width != normalButtonSize.Width || image.Size.Height != normalButtonSize.Height)) {
-                image = DpiHelper.CreateResizedBitmap(image, normalButtonSize);
+            if (this.deviceDpi != DpiHelper.LogicalDpi && (image.Size.Width != normalButtonSize.Width || image.Size.Height != normalButtonSize.Height)) {
+                image = DpiHelper.CreateResizedBitmap(image, normalButtonSize, this.deviceDpi);
             }
             int result = imageList[NORMAL_BUTTONS].Images.Count;
             imageList[NORMAL_BUTTONS].Images.Add(image);
@@ -2299,7 +2287,7 @@ namespace System.Windows.Forms {
                 this.imageList[LARGE_BUTTONS] = new ImageList();
                 this.imageList[LARGE_BUTTONS].ImageSize = largeButtonSize;
 
-                if (DpiHelper.IsScalingRequired) {
+                if (this.deviceDpi != DpiHelper.LogicalDpi) {
                     AddLargeImage(bmpAlpha);
                     AddLargeImage(bmpCategory);
 
@@ -2331,7 +2319,7 @@ namespace System.Windows.Forms {
             try {
                 Bitmap transparentBitmap = new Bitmap(originalBitmap);
                 transparentBitmap.MakeTransparent();
-                largeBitmap = DpiHelper.CreateResizedBitmap(transparentBitmap, largeButtonSize);
+                largeBitmap = DpiHelper.CreateResizedBitmap(transparentBitmap, largeButtonSize, this.deviceDpi);
                 transparentBitmap.Dispose();
 
                 this.imageList[LARGE_BUTTONS].Images.Add(largeBitmap);
@@ -4146,7 +4134,7 @@ namespace System.Windows.Forms {
    
                if (imageList[NORMAL_BUTTONS] == null || fullRebuild) {
                    imageList[NORMAL_BUTTONS] = new ImageList();
-                   if (DpiHelper.IsScalingRequired) {
+                   if (this.deviceDpi != DpiHelper.LogicalDpi) {
                        imageList[NORMAL_BUTTONS].ImageSize = normalButtonSize;
                    }
                }
@@ -4284,6 +4272,7 @@ namespace System.Windows.Forms {
 
                toolStrip.SuspendLayout();
                toolStrip.Items.Clear();
+               toolStrip.ImageScalingSize = buttonType == NORMAL_BUTTONS ? normalButtonSize : largeButtonSize;
                for (int j = 0; j < buttonList.Count; j++) {
                     toolStrip.Items.Add(buttonList[j] as ToolStripItem);
                }

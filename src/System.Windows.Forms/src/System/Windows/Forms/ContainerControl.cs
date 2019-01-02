@@ -989,7 +989,7 @@ namespace System.Windows.Forms {
                     if (includedBounds) included = AutoScaleFactor;
                     if (excludedBounds) excluded = AutoScaleFactor;
 
-                    Scale(included, excluded, this, AutoScaleMode == AutoScaleMode.Dpi);
+                    Scale(included, excluded, this, true);
                     autoScaleDimensions = CurrentAutoScaleDimensions;
                 }
             }
