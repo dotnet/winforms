@@ -147,8 +147,6 @@ namespace System.Windows.Forms.Layout {
                 if (Int32.TryParse(attributeValue, out result)) {
                     return result;
                 }
-                // dont throw because we should just gracefully fall back to valueIfNotFound;
-                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Failed to parse int: {0}", attributeValue));
             }
             return valueIfNotFound;
         }
@@ -224,7 +222,6 @@ namespace System.Windows.Forms.Layout {
                         string floatString = floatStringBuilder.ToString();
                         float width;
                         if (!float.TryParse(floatString, NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out width)) {
-                            Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Failed to parse float for style: {0}", floatString));
                             width = 0F;
                         }
 

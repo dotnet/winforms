@@ -1011,7 +1011,6 @@ namespace System.Windows.Forms.Layout {
                         default:
                             totalAbsoluteAndAutoSizeAllocatedSpace += strip.MinSize;
                             hasAutoSizeColumn = true;
-                            Debug.Assert(style.SizeType == SizeType.AutoSize, "Unsupported SizeType.");
                             break;
                     }
                 }
@@ -1271,7 +1270,6 @@ namespace System.Windows.Forms.Layout {
 
         internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement container, IArrangedElement child) {
             if (container == null || child == null) {
-                Debug.Fail("Why are we here when child or container is null?");
                 return new TableLayoutPanelCellPosition(-1,-1);
             }
             ArrangedElementCollection children = container.Children;
