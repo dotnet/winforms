@@ -981,7 +981,6 @@ namespace System.Windows.Forms.Layout {
         ///</devdoc>
         private int DistributeStyles(int cellBorderWidth, IList styles, Strip[] strips, int maxSize, bool dontHonorConstraint) {
             int usedSpace = 0;
-            float desiredScaleSpace = 0;
             //first, allocate the minimum space required for each element
 
             float totalPercent = 0;
@@ -1117,13 +1116,7 @@ namespace System.Windows.Forms.Layout {
             //  - usually we only do this if we're not in preferred size (remaingSpace would be < 0)
             //  - and there are no % style columns
             
-            if(/*!dontHonorConstraint && */hasAutoSizeColumn && remainingSpace > 0) {
-                float scaleAdjustment = 1.0f;
-                if(remainingSpace < desiredScaleSpace) {
-                    scaleAdjustment = remainingSpace / desiredScaleSpace;
-                }
-                remainingSpace -= (int) Math.Ceiling(desiredScaleSpace);
-                
+            if(hasAutoSizeColumn && remainingSpace > 0) {                
                 for(int i = 0; i < strips.Length; i++) {                    
                     Strip strip = strips[i];
                     SizeType sizeType = i < styles.Count ? ((TableLayoutStyle)styles[i]).SizeType : SizeType.AutoSize;

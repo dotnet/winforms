@@ -16,8 +16,6 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewRowCancelEventArgs.uex' path='docs/doc[@for="DataGridViewRowCancelEventArgs.DataGridViewRowCancelEventArgs"]/*' />
         public DataGridViewRowCancelEventArgs(DataGridViewRow dataGridViewRow)
         {
-            Debug.Assert(dataGridViewRow != null);
-            Debug.Assert(dataGridViewRow.Index >= 0);
             this.dataGridViewRow = dataGridViewRow;
         }
 

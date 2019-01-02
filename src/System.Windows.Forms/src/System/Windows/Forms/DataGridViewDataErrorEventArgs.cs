@@ -22,7 +22,6 @@ namespace System.Windows.Forms
             int rowIndex,
             DataGridViewDataErrorContexts context) : base(columnIndex, rowIndex)
         {
-            Debug.Assert(rowIndex > -1);
             this.exception = exception;
             this.context = context;
         }
