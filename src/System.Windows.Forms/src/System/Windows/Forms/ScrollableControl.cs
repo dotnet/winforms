@@ -1679,15 +1679,13 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Equals"]/*' />
-            /// <internalonly/>
-            public override bool Equals(object other) {
-                DockPaddingEdges dpeOther = other as DockPaddingEdges;
-
-                if (dpeOther != null) {
-                    return this.owner.Padding.Equals(dpeOther.owner.Padding);
-                }
-                return false;
+            public override bool Equals(object other)
+            {
+                return other is DockPaddingEdges dpeOther &&
+                    Left == dpeOther.Left &&
+                    Top == dpeOther.Top &&
+                    Right == dpeOther.Right &&
+                    Bottom == dpeOther.Bottom;
             }
 
             /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.GetHashCode"]/*' />
