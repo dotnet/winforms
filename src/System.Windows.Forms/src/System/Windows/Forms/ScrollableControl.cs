@@ -1661,7 +1661,7 @@ namespace System.Windows.Forms {
             public int Top {
                  get { 
                     if (owner == null) {
-                        return bottom;
+                        return top;
                     }
                     else {
                         return owner.Padding.Top; 
