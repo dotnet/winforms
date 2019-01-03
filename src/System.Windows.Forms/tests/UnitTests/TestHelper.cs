@@ -97,10 +97,10 @@ namespace System.Windows.Forms.Tests
             foreach (Drawing.Text.GenericFontFamilies genericFontFamily in Enum.GetValues(typeof(Drawing.Text.GenericFontFamilies)))
             {
                 var family = new FontFamily(genericFontFamily);
-                data.Add(new Font(family, System.Single.Epsilon));
+                data.Add(new Font(family, float.Epsilon));
                 data.Add(new Font(family, 10));
                 data.Add(new Font(family, 84));
-                data.Add(new Font(family, System.Single.MaxValue));
+                data.Add(new Font(family, float.MaxValue));
             }
             return data;
         }

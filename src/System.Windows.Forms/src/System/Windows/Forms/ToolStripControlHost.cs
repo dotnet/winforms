@@ -1141,7 +1141,7 @@ namespace System.Windows.Forms {
             ///    <para>When implemented by a class, gets or sets the name of
             ///       the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
             /// </devdoc>
-            String ISite.Name {
+            string ISite.Name {
                 get {
                     return owner.Site.Name;
                 }

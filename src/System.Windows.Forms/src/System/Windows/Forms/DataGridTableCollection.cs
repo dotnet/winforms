@@ -161,7 +161,7 @@ namespace System.Windows.Forms {
                 for (int i = 0; i < itemCount; ++i) {
                     DataGridTableStyle table = (DataGridTableStyle)items[i];
                     // NOTE: case-insensitive
-                    if (String.Equals(table.MappingName, tableName, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(table.MappingName, tableName, StringComparison.OrdinalIgnoreCase))
                         return table;
                 }
                 return null;
@@ -169,7 +169,7 @@ namespace System.Windows.Forms {
         }
 
         internal void CheckForMappingNameDuplicates(DataGridTableStyle table) {
-            if (String.IsNullOrEmpty(table.MappingName))
+            if (string.IsNullOrEmpty(table.MappingName))
                 return;
             for (int i = 0; i < items.Count; i++)
                 if ( ((DataGridTableStyle)items[i]).MappingName.Equals(table.MappingName) && table != items[i])
@@ -254,7 +254,7 @@ namespace System.Windows.Forms {
             for (int i = 0; i < itemCount; ++i) {
                 DataGridTableStyle table = (DataGridTableStyle)items[i];
                 // NOTE: case-insensitive
-                if (String.Compare(table.MappingName, name, true, CultureInfo.InvariantCulture) == 0)
+                if (string.Compare(table.MappingName, name, true, CultureInfo.InvariantCulture) == 0)
                     return true;
             }
             return false;

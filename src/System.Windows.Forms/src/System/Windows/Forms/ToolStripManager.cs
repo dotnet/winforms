@@ -122,7 +122,7 @@ namespace System.Windows.Forms {
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++) {
                 // is this the right string comparaison?
-                if (ToolStrips[i] != null && String.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal)) {
+                if (ToolStrips[i] != null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal)) {
                     result = (ToolStrip)ToolStrips[i];
                     break;
                 }
@@ -141,7 +141,7 @@ namespace System.Windows.Forms {
             for (int i = 0; i < ToolStrips.Count; i++)
             {
                 // is this the right string comparaison?
-                if (ToolStrips[i] != null && String.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
+                if (ToolStrips[i] != null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
                 {
                     result = (ToolStrip)ToolStrips[i];
                     if (result.FindForm() == owningForm) {
@@ -625,7 +625,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(targetForm));
             }
 
-            if (String.IsNullOrEmpty(key)) {
+            if (string.IsNullOrEmpty(key)) {
                 throw new ArgumentNullException(nameof(key));
             }
 
@@ -653,7 +653,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(sourceForm));
             }
 
-            if (String.IsNullOrEmpty(key)) {
+            if (string.IsNullOrEmpty(key)) {
                 throw new ArgumentNullException(nameof(key));
             }
 
@@ -1663,7 +1663,7 @@ namespace System.Windows.Forms {
                         // only activate the menu if there's no win32 menu.  Win32 menus trump menustrips.
                         menuStripToActivate = GetMainMenuStrip(toplevelControl);
                     }
-                    Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
+                    Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
 
                 }
             }

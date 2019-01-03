@@ -35,8 +35,8 @@ namespace System.Windows.Forms
         private static Rectangle rectThemeMargins = new Rectangle(-1, -1, 0, 0);
         private static bool mouseInContentBounds = false;
 
-        private static Type defaultFormattedValueType = typeof(System.String);
-        private static Type defaultValueType = typeof(System.Object);
+        private static Type defaultFormattedValueType = typeof(string);
+        private static Type defaultValueType = typeof(object);
         private static Type cellType = typeof(DataGridViewButtonCell);
 
         /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.DataGridViewButtonCell"]/*' />
@@ -272,7 +272,7 @@ namespace System.Windows.Forms
                 rowIndex < 0 ||
                 this.OwningColumn == null ||
                 !this.DataGridView.ShowCellErrors ||
-                String.IsNullOrEmpty(GetErrorText(rowIndex)))
+                string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
                 return Rectangle.Empty;
             }
@@ -911,7 +911,7 @@ namespace System.Windows.Forms
                 }
                 else if (computeErrorIconBounds)
                 {
-                    if (!String.IsNullOrEmpty(errorText))
+                    if (!string.IsNullOrEmpty(errorText))
                     {
                         resultBounds = ComputeErrorIconBounds(errorBounds);
                     }
@@ -948,7 +948,7 @@ namespace System.Windows.Forms
                                                                                                    cellStyle.ForeColor,
                                                                                                    cellStyle.BackColor,
                                                                                                    this.DataGridView.Enabled).Calculate();
-                            string text = (formattedString != null) ? formattedString : String.Empty;
+                            string text = (formattedString != null) ? formattedString : string.Empty;
 
                             ButtonBaseAdapter.LayoutOptions options = ButtonInternal.ButtonFlatAdapter.PaintFlatLayout(g,
                                                                                                                    true,
@@ -979,7 +979,7 @@ namespace System.Windows.Forms
                             // If we are painting the current cell, then paint the text up.
                             // If we are painting the current cell and the current cell is pressed down, then paint the text down.
                             bool paintUp = (this.ButtonState == ButtonState.Normal);
-                            string text = (formattedString != null) ? formattedString : String.Empty;
+                            string text = (formattedString != null) ? formattedString : string.Empty;
                             ButtonBaseAdapter.LayoutOptions options = ButtonInternal.ButtonPopupAdapter.PaintPopupLayout(g,
                                                                                                                    paintUp,
                                                                                                                    SystemInformation.HighContrast ? 2 : 1,

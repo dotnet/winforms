@@ -671,7 +671,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     keyWord = parentPE.HelpKeyword;
                 }
                 if (keyWord == null) {
-                    keyWord = String.Empty;
+                    keyWord = string.Empty;
                 }
 
                 return keyWord;
@@ -1764,7 +1764,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             if (str == null) {
-                str = String.Empty;
+                str = string.Empty;
             }
             return str;
         }
@@ -1787,9 +1787,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             // These can be null, so workaround giving hashcode = 0 for null objects.
             object label = this.PropertyLabel;
             object type = this.PropertyType;
-            UInt32 h1 = (UInt32)((label == null)  ? 0 : label.GetHashCode());
-            UInt32 h2 = (UInt32)((type == null)   ? 0 : type.GetHashCode());
-            UInt32 h3 = (UInt32)GetType().GetHashCode();
+            uint h1 = (uint)((label == null)  ? 0 : label.GetHashCode());
+            uint h2 = (uint)((type == null)   ? 0 : type.GetHashCode());
+            uint h3 = (uint)GetType().GetHashCode();
 
             return(int)(h1 ^ ((h2 << 13) | (h2 >> 19)) ^ ((h3 << 26) | (h3 >> 6)));
         }
@@ -2802,7 +2802,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return NativeMethods.UIA_ButtonControlTypeId;
                 }
                 else if (propertyID == NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId) {
-                    return (Object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                    return (object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
                 }
 
                 return null;
@@ -3014,7 +3014,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public class DisplayNameSortComparer : IComparer {
             public int Compare(object left, object right) {
 		// review: (Microsoft) Is CurrentCulture correct here?  This was already reviewed as invariant...
-                return String.Compare(((PropertyDescriptor)left).DisplayName, ((PropertyDescriptor)right).DisplayName, true, CultureInfo.CurrentCulture);
+                return string.Compare(((PropertyDescriptor)left).DisplayName, ((PropertyDescriptor)right).DisplayName, true, CultureInfo.CurrentCulture);
             }
         }
     }
@@ -3062,7 +3062,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             else if (a2 == null) {
                 return 1;
             }
-            return String.Compare(AttributeTypeSorter.GetTypeIdString(a1), AttributeTypeSorter.GetTypeIdString(a2), false, CultureInfo.InvariantCulture);
+            return string.Compare(AttributeTypeSorter.GetTypeIdString(a1), AttributeTypeSorter.GetTypeIdString(a2), false, CultureInfo.InvariantCulture);
         }
     }
     

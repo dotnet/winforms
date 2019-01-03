@@ -258,10 +258,10 @@ namespace System.Windows.Forms
                             continue;
                         }
                         if (bConvertToUpperCase) {
-                            mnemonic = Char.ToUpper(text[i+1], CultureInfo.CurrentCulture);
+                            mnemonic = char.ToUpper(text[i+1], CultureInfo.CurrentCulture);
                         }
                         else {
-                            mnemonic = Char.ToLower(text[i+1], CultureInfo.CurrentCulture);
+                            mnemonic = char.ToLower(text[i+1], CultureInfo.CurrentCulture);
                         }
                         break;
                     }
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            return String.Compare(string1, string2, ignoreCase, CultureInfo.InvariantCulture) == 0;
+            return string.Compare(string1, string2, ignoreCase, CultureInfo.InvariantCulture) == 0;
         }
 
         // RotateLeft(0xFF000000, 4) -> 0xF000000F
@@ -545,7 +545,7 @@ namespace System.Windows.Forms
                     throw new NotSupportedException(SR.ReadonlyControlsCollection);
                 }
                 if (!typeOfControl.IsAssignableFrom(value.GetType())) {
-                    throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeOfControl.Name)), value.GetType().Name);
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeOfControl.Name)), value.GetType().Name);
                 }
                 base.Add(value);
             }

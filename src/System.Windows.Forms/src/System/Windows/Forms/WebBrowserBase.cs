@@ -389,7 +389,7 @@ namespace System.Windows.Forms {
                         NativeMethods.MSG msg = new NativeMethods.MSG();
                         msg.hwnd = IntPtr.Zero;
                         msg.message = NativeMethods.WM_SYSKEYDOWN;
-                        msg.wParam = (IntPtr) Char.ToUpper(charCode, CultureInfo.CurrentCulture);
+                        msg.wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture);
                         msg.lParam = (IntPtr) 0x20180001;
                         msg.time = SafeNativeMethods.GetTickCount();
                         NativeMethods.POINT p = new NativeMethods.POINT();
@@ -742,7 +742,7 @@ namespace System.Windows.Forms {
             int hr = this.axOleObject.DoVerb(verb, IntPtr.Zero, this.ActiveXSite, 0, this.Handle,
                     new NativeMethods.COMRECT(this.Bounds));
 
-            Debug.Assert(hr == NativeMethods.S_OK, String.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
+            Debug.Assert(hr == NativeMethods.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
             return hr == NativeMethods.S_OK;
         }
 
@@ -1115,7 +1115,7 @@ namespace System.Windows.Forms {
         //
         // We need to do special stuff (convert window messages to interface calls)
         // during design time when selection changes.
-        private void OnNewSelection(Object sender, EventArgs e) {
+        private void OnNewSelection(object sender, EventArgs e) {
             if (this.DesignMode) {
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
                 if (iss != null) {

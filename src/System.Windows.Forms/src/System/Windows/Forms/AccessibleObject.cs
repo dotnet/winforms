@@ -1175,7 +1175,7 @@ namespace System.Windows.Forms
         /// Perform the default action
         /// </para>
         /// </devdoc>
-        void IAccessible.accDoDefaultAction(Object childID) {
+        void IAccessible.accDoDefaultAction(object childID) {
 
             IntSecurity.UnmanagedCode.Demand();
 
@@ -1220,7 +1220,7 @@ namespace System.Windows.Forms
         /// Perform a hit test
         /// </para>
         /// </devdoc>
-        Object IAccessible.accHitTest(
+        object IAccessible.accHitTest(
                                  int xLeft,
                                  int yTop) {
 
@@ -1260,7 +1260,7 @@ namespace System.Windows.Forms
                                out int pyTop,
                                out int pcxWidth,
                                out int pcyHeight,
-                               Object childID) {
+                               object childID) {
             
             pxLeft = 0;
             pyTop = 0;
@@ -1332,9 +1332,9 @@ namespace System.Windows.Forms
         /// Navigate to another accessible object.
         /// </para>
         /// </devdoc>
-        Object IAccessible.accNavigate(
+        object IAccessible.accNavigate(
                                   int navDir,
-                                  Object childID) {
+                                  object childID) {
 
             IntSecurity.UnmanagedCode.Demand();
 
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
 
             if (systemIAccessible != null) {
                 try {
-                    Object retObject;
+                    object retObject;
                     if (!SysNavigate(navDir, childID, out retObject))
                         retObject = systemIAccessible.accNavigate(navDir, childID);
                     return retObject;
@@ -1384,7 +1384,7 @@ namespace System.Windows.Forms
         /// Select an accessible object.
         /// </para>
         /// </devdoc>
-        void IAccessible.accSelect(int flagsSelect, Object childID) {
+        void IAccessible.accSelect(int flagsSelect, object childID) {
 
             IntSecurity.UnmanagedCode.Demand();
 
@@ -1522,7 +1522,7 @@ namespace System.Windows.Forms
         /// Return the default action
         /// </para>
         /// </devdoc>
-        string IAccessible.get_accDefaultAction(Object childID) {
+        string IAccessible.get_accDefaultAction(object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1562,7 +1562,7 @@ namespace System.Windows.Forms
         /// Return the object or child description
         /// </para>
         /// </devdoc>
-        string IAccessible.get_accDescription(Object childID) {
+        string IAccessible.get_accDescription(object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1647,7 +1647,7 @@ namespace System.Windows.Forms
         /// Return help for this accessible object.
         /// </para>
         /// </devdoc>
-        string IAccessible.get_accHelp(Object childID) {
+        string IAccessible.get_accHelp(object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1684,7 +1684,7 @@ namespace System.Windows.Forms
         /// Return the object or child help topic
         /// </para>
         /// </devdoc>
-        int IAccessible.get_accHelpTopic(out string pszHelpFile, Object childID) {
+        int IAccessible.get_accHelpTopic(out string pszHelpFile, object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1722,11 +1722,11 @@ namespace System.Windows.Forms
         /// Return the object or child keyboard shortcut
         /// </para>
         /// </devdoc>
-        string IAccessible.get_accKeyboardShortcut(Object childID) {
+        string IAccessible.get_accKeyboardShortcut(object childID) {
             return get_accKeyboardShortcutInternal(childID);
         }
 
-        internal virtual string get_accKeyboardShortcutInternal(Object childID) {
+        internal virtual string get_accKeyboardShortcutInternal(object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1975,7 +1975,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </devdoc>
         void IAccessible.set_accName(
-                              Object childID,
+                              object childID,
                               string newName) {
 
             if (IsClientObject) {
@@ -2010,7 +2010,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </devdoc>
         void IAccessible.set_accValue(
-                               Object childID,
+                               object childID,
                                string newValue) {
 
             IntSecurity.UnmanagedCode.Demand();
@@ -2333,7 +2333,7 @@ namespace System.Windows.Forms
         ///     IAccessible.accNavigate on the 'inner' system accessible object.
         /// </devdoc>
         /// <internalonly/>
-        private bool SysNavigate(int navDir, Object childID, out Object retObject) {
+        private bool SysNavigate(int navDir, object childID, out object retObject) {
             retObject = null;
 
             // Only override system navigation relative to ourselves (since we can't interpret OLEACC child ids)
@@ -2366,7 +2366,7 @@ namespace System.Windows.Forms
             else if (childID.Equals(NativeMethods.DISP_E_PARAMNOTFOUND)) {
                 childID = 0;
             }
-            else if (!(childID is Int32)) {
+            else if (!(childID is int)) {
                 // AccExplorer seems to occasionally pass in objects instead of an int ChildID.
                 //
                 childID = 0;
@@ -2614,7 +2614,7 @@ namespace System.Windows.Forms
                     notificationKind,
                     notificationProcessing,
                     notificationText,
-                    String.Empty);
+                    string.Empty);
             }
             catch (EntryPointNotFoundException) {
                 // The UIA Notification event is not available, so don't attempt to raise it again.
@@ -2963,7 +2963,7 @@ namespace System.Windows.Forms
             return AsNativeAccessible(publicIAccessible.accHitTest(xLeft, yTop));
         }
 
-        void UnsafeNativeMethods.IAccessibleInternal.accLocation(out int l, out int t, out int w, out int h, Object childID) {
+        void UnsafeNativeMethods.IAccessibleInternal.accLocation(out int l, out int t, out int w, out int h, object childID) {
             IntSecurity.UnmanagedCode.Assert();
             publicIAccessible.accLocation(out l, out t, out w, out h, childID);
         }
@@ -2973,7 +2973,7 @@ namespace System.Windows.Forms
             return AsNativeAccessible(publicIAccessible.accNavigate(navDir, childID));
         }
 
-        void UnsafeNativeMethods.IAccessibleInternal.accSelect(int flagsSelect, Object childID) {
+        void UnsafeNativeMethods.IAccessibleInternal.accSelect(int flagsSelect, object childID) {
             IntSecurity.UnmanagedCode.Assert();
             publicIAccessible.accSelect(flagsSelect, childID);
         }
@@ -2988,12 +2988,12 @@ namespace System.Windows.Forms
             return publicIAccessible.accChildCount;
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accDefaultAction(Object childID) {
+        string UnsafeNativeMethods.IAccessibleInternal.get_accDefaultAction(object childID) {
             IntSecurity.UnmanagedCode.Assert();
             return publicIAccessible.get_accDefaultAction(childID);
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accDescription(Object childID) {
+        string UnsafeNativeMethods.IAccessibleInternal.get_accDescription(object childID) {
             IntSecurity.UnmanagedCode.Assert();
             return publicIAccessible.get_accDescription(childID);
         }
@@ -3003,22 +3003,22 @@ namespace System.Windows.Forms
             return AsNativeAccessible(publicIAccessible.accFocus);
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accHelp(Object childID) {
+        string UnsafeNativeMethods.IAccessibleInternal.get_accHelp(object childID) {
             IntSecurity.UnmanagedCode.Assert();
             return publicIAccessible.get_accHelp(childID);
         }
 
-        int UnsafeNativeMethods.IAccessibleInternal.get_accHelpTopic(out string pszHelpFile, Object childID) {
+        int UnsafeNativeMethods.IAccessibleInternal.get_accHelpTopic(out string pszHelpFile, object childID) {
             IntSecurity.UnmanagedCode.Assert();
             return publicIAccessible.get_accHelpTopic(out pszHelpFile, childID);
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accKeyboardShortcut(Object childID) {
+        string UnsafeNativeMethods.IAccessibleInternal.get_accKeyboardShortcut(object childID) {
             IntSecurity.UnmanagedCode.Assert();
             return publicIAccessible.get_accKeyboardShortcut(childID);
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accName(Object childID) {
+        string UnsafeNativeMethods.IAccessibleInternal.get_accName(object childID) {
             IntSecurity.UnmanagedCode.Assert();
             return publicIAccessible.get_accName(childID);
         }
@@ -3048,12 +3048,12 @@ namespace System.Windows.Forms
             return publicIAccessible.get_accValue(childID);
         }
 
-        void UnsafeNativeMethods.IAccessibleInternal.set_accName(Object childID, string newName) {
+        void UnsafeNativeMethods.IAccessibleInternal.set_accName(object childID, string newName) {
             IntSecurity.UnmanagedCode.Assert();
             publicIAccessible.set_accName(childID, newName);
         }
 
-        void UnsafeNativeMethods.IAccessibleInternal.set_accValue(Object childID, string newValue) {
+        void UnsafeNativeMethods.IAccessibleInternal.set_accValue(object childID, string newValue) {
             IntSecurity.UnmanagedCode.Assert();
             publicIAccessible.set_accValue(childID, newValue);
         }

@@ -329,7 +329,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static DialogResult Show(string text) {
-            return ShowCore(null, text, String.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
+            return ShowCore(null, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
         /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show6"]/*' />
@@ -391,7 +391,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static DialogResult Show(IWin32Window owner, string text) {
-            return ShowCore(owner, text, String.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
+            return ShowCore(owner, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
         private static DialogResult ShowCore(IWin32Window owner, string text, string caption,   

@@ -881,7 +881,7 @@ namespace System.Windows.Forms
             set
             {
                 string toolTipText = this.ToolTipTextInternal;
-                if (!String.IsNullOrEmpty(value) || this.Properties.ContainsObject(PropCellToolTipText))
+                if (!string.IsNullOrEmpty(value) || this.Properties.ContainsObject(PropCellToolTipText))
                 {
                     this.Properties.SetObject(PropCellToolTipText, value);
                 }
@@ -1556,7 +1556,7 @@ namespace System.Windows.Forms
 
             StringBuilder sb = new StringBuilder(64);
 
-            if (String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
             {
                 if (firstCell)
                 {
@@ -1588,10 +1588,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                bool csv = String.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase);
+                bool csv = string.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase);
                 if (csv ||
-                    String.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
-                    String.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
+                    string.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
                 {
                     if (formattedValue != null)
                     {
@@ -1875,7 +1875,7 @@ namespace System.Windows.Forms
             DataGridViewCellFormattingEventArgs gdvcfe = this.DataGridView.OnCellFormatting(this.ColumnIndex, rowIndex, value, this.FormattedValueType, cellStyle);
             cellStyle = gdvcfe.CellStyle;
             bool formattingApplied = gdvcfe.FormattingApplied;
-            Object formattedValue = gdvcfe.Value;
+            object formattedValue = gdvcfe.Value;
             bool checkFormattedValType = true;
 
             if (!formattingApplied &&
@@ -2823,7 +2823,7 @@ namespace System.Windows.Forms
 
             flags &= textFormatSupportedFlags;
             // Dont use passed in graphics so we can optimze measurement
-            Size requiredSize = TextRenderer.MeasureText(text, font, new Size(maxWidth, System.Int32.MaxValue), flags);
+            Size requiredSize = TextRenderer.MeasureText(text, font, new Size(maxWidth, int.MaxValue), flags);
             widthTruncated = (requiredSize.Width > maxWidth);
             return requiredSize.Height;
         }
@@ -2871,7 +2871,7 @@ namespace System.Windows.Forms
             do
             {
                 // Dont use passed in graphics so we can optimze measurement
-                textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, System.Int32.MaxValue), flags);
+                textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, int.MaxValue), flags);
                 if ((float)(textSize.Width / textSize.Height) <= maxRatio || textSize.Width > (int)maxWidth)
                 {
                     return textSize;
@@ -2906,7 +2906,7 @@ namespace System.Windows.Forms
 
             flags &= textFormatSupportedFlags;
             // Dont use passed in graphics so we can optimze measurement
-            return TextRenderer.MeasureText(text, font, new Size(System.Int32.MaxValue, System.Int32.MaxValue), flags);
+            return TextRenderer.MeasureText(text, font, new Size(int.MaxValue, int.MaxValue), flags);
         }
 
         /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCell.MeasureTextWidth"]/*' />
@@ -3071,7 +3071,7 @@ namespace System.Windows.Forms
             // get the tool tip string
             string toolTipText = GetToolTipText(rowIndex);
 
-            if (String.IsNullOrEmpty(toolTipText))
+            if (string.IsNullOrEmpty(toolTipText))
             {
                 if (this.FormattedValueType == stringType)
                 {
@@ -3137,7 +3137,7 @@ namespace System.Windows.Forms
                 toolTipText = TruncateToolTipText(toolTipText);
             }
 
-            if (!String.IsNullOrEmpty(toolTipText))
+            if (!string.IsNullOrEmpty(toolTipText))
             {
                 this.DataGridView.ActivateToolTip(true /*activate*/, toolTipText, this.ColumnIndex, rowIndex);
             }
@@ -3161,7 +3161,7 @@ namespace System.Windows.Forms
         private void OnCellErrorAreaMouseEnterInternal(int rowIndex)
         {
             string errorText = GetErrorText(rowIndex);
-            Debug.Assert(!String.IsNullOrEmpty(errorText), "if we entered the cell error area then an error was painted, so we should have an error");
+            Debug.Assert(!string.IsNullOrEmpty(errorText), "if we entered the cell error area then an error was painted, so we should have an error");
             this.DataGridView.ActivateToolTip(true /*activate*/, errorText, this.ColumnIndex, rowIndex);
 
             // for debugging
@@ -4736,7 +4736,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -4790,7 +4790,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -4916,7 +4916,7 @@ namespace System.Windows.Forms
 
                     object formattedValue = this.owner.FormattedValue;
                     string formattedValueAsString = formattedValue as string;
-                    if (formattedValue == null || (formattedValueAsString  != null && String.IsNullOrEmpty(formattedValueAsString)))
+                    if (formattedValue == null || (formattedValueAsString  != null && string.IsNullOrEmpty(formattedValueAsString)))
                     {
                         return string.Format(SR.DataGridView_AccNullValue);
                     }
@@ -4938,7 +4938,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
 

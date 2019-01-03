@@ -36,7 +36,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </devdoc>
         private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent) {
-            Object target = sender.TargetObject;
+            object target = sender.TargetObject;
 
             if (target is NativeMethods.IManagedPerPropertyBrowsing) {
                 Attribute[] attrs = GetComponentAttributes((NativeMethods.IManagedPerPropertyBrowsing)target,sender.DISPID);
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             ArrayList attrs = new ArrayList();
 
             string[] attrTypeNames = GetStringsFromPtr(pbstrs, cItems);
-            Object[] varParams = GetVariantsFromPtr(pvars, cItems);
+            object[] varParams = GetVariantsFromPtr(pvars, cItems);
 
             Debug.Assert(attrTypeNames.Length == varParams.Length, "Mismatched parameter and attribute name length");
             if (attrTypeNames.Length != varParams.Length) {
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                         // only if it's static
                         if (fi != null && fi.IsStatic) {
-                            Object fieldValue = fi.GetValue(null);
+                            object fieldValue = fi.GetValue(null);
                             if (fieldValue is Attribute) {
                                 // add it to the list
                                 attrs.Add(fieldValue);
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             // found a one-parameter ctor, use it
                             // try to construct a default one
                             try {
-                                attr = (Attribute)Activator.CreateInstance(t, new Object[]{varParams[i]});
+                                attr = (Attribute)Activator.CreateInstance(t, new object[]{varParams[i]});
                                 attrs.Add(attr);
                             }
                             catch {
@@ -225,9 +225,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        private static Object[] GetVariantsFromPtr(IntPtr ptr, int cVariants) {
+        private static object[] GetVariantsFromPtr(IntPtr ptr, int cVariants) {
             if (ptr != IntPtr.Zero) {
-                Object[] objects = new Object[cVariants];
+                object[] objects = new object[cVariants];
                 IntPtr curVariant;
                 
                 for (int i = 0; i < cVariants; i++) {
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return objects;
             }
             else {
-                return new Object[cVariants];
+                return new object[cVariants];
             }
         }
     }

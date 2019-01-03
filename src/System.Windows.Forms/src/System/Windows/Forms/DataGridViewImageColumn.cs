@@ -332,7 +332,7 @@ namespace System.Windows.Forms
                     defaultCellStyle.Font != null ||
                     !defaultNullValue.Equals(defaultCellStyle.NullValue) ||
                     !defaultCellStyle.IsDataSourceNullValueDefault ||
-                    !String.IsNullOrEmpty(defaultCellStyle.Format) ||
+                    !string.IsNullOrEmpty(defaultCellStyle.Format) ||
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
