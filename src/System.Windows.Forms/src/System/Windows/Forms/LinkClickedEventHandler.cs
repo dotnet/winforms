@@ -5,7 +5,9 @@
 namespace System.Windows.Forms
 {
     /// <devdoc>
-    /// Represents a method that will handle splitter events.
+    /// Represents the method that will handle the <see cref='System.Windows.Forms.RichTextBox.LinkClicked'/>
+    /// event of a <see cref='System.Windows.Forms.RichTextBox'/>.
     /// </devdoc>
-    public delegate void SplitterCancelEventHandler(object sender, SplitterCancelEventArgs e);
+    public delegate void LinkClickedEventHandler(object sender, LinkClickedEventArgs e);
 }
+
