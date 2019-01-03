@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -31,11 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// </devdoc>
     internal class Com2TypeInfoProcessor {
         
-        #if DEBUG
         private static TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
-        #else
-        private static TraceSwitch DbgTypeInfoProcessorSwitch;
-        #endif
         
         private Com2TypeInfoProcessor() {
         }
@@ -196,7 +192,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Object contains the properties and relevant data about them.
         /// </devdoc>
         public static Com2Properties GetProperties(Object obj) {
-            
+
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties");
             
             if (obj == null || !Marshal.IsComObject(obj)) {
@@ -266,7 +262,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                    propList.AddRange(props);
                }
             }
-            
+
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties : returning " + propList.Count.ToString(CultureInfo.InvariantCulture) + " properties");
 
             // done!
