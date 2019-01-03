@@ -2,52 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System.Drawing;
-
-    /// <include file='doc\RightToLeft.uex' path='docs/doc[@for="RightToLeft"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>Specifies a value indicating whether the text appears
-    ///       from right to
-    ///       left, as when using Hebrew or Arabic fonts.</para>
+    /// Specifies a value indicating whether the text appears from right to
+    /// left, as when using Hebrew or Arabic fonts.
     /// </devdoc>
-    public enum RightToLeft {
-
-        /// <include file='doc\RightToLeft.uex' path='docs/doc[@for="RightToLeft.No"]/*' />
+    public enum RightToLeft
+    {
         /// <devdoc>
-        ///    <para>
-        ///       
-        ///       The
-        ///       
-        ///       text reads
-        ///       
-        ///       from left to right. This is the default.
-        ///       
-        ///    </para>
+        /// The text reads from left to right. This is the default.
         /// </devdoc>
         No = 0,
 
-        /// <include file='doc\RightToLeft.uex' path='docs/doc[@for="RightToLeft.Yes"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The text reads from
-        ///       right to left.
-        ///       
-        ///    </para>
+        /// The text reads from right to left.
         /// </devdoc>
         Yes = 1,
 
-        /// <include file='doc\RightToLeft.uex' path='docs/doc[@for="RightToLeft.Inherit"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The direction the
-        ///       text appears in is inherited from the parent control.
-        ///       
-        ///    </para>
+        /// The direction the text appears in is inherited from the parent control.
         /// </devdoc>
         Inherit = 2
     }
