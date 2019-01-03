@@ -25,6 +25,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         /// The operation is canceled with no drop message.
         /// </devdoc>
-        Cancel = 2
+        Cancel = 2,
     }
 }

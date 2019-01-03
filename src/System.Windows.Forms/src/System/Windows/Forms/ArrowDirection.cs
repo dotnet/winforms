@@ -16,6 +16,6 @@ namespace System.Windows.Forms
         Up = 0x00 | (int)Orientation.Vertical,
         Down = 0x10 | (int)Orientation.Vertical,
         Left = 0x00 | (int)Orientation.Horizontal,
-        Right = 0x10 | (int)Orientation.Horizontal
+        Right = 0x10 | (int)Orientation.Horizontal,
     }
 }

@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         /// In the process of shutting down, Windows has closed the application.
         /// </devdoc>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] // Verb: Shut down, not noun Shutdown.
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Justification = "Verb: Shut down, not noun Shutdown.")]
         WindowsShutDown = 1,
 
         /// <devdoc>

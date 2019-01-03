@@ -22,6 +22,6 @@ namespace System.Windows.Forms
         Bottom,
         Left,
         Right,
-        Fill 
+        Fill,
     }
 }
