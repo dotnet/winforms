@@ -187,7 +187,7 @@ namespace System.Experimental.Gdi
 
         public override string ToString()
         {
-            return String.Format( CultureInfo.InvariantCulture, "{0}: Style={1}, Color={2}, Width={3}, Brush={4}", 
+            return string.Format( CultureInfo.InvariantCulture, "{0}: Style={1}, Color={2}, Width={3}, Brush={4}", 
                 this.GetType().Name, 
                 this.style, 
                 this.color, 

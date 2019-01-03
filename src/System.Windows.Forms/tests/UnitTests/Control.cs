@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(10.0f)]
         [InlineData(0.1f)]
-        [InlineData(System.Single.Epsilon)]
+        [InlineData(float.Epsilon)]
         public void Control_ScaleFont(float expected)
         {
             var cont = new Control();

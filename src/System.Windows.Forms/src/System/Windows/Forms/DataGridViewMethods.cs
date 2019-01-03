@@ -1512,7 +1512,7 @@ namespace System.Windows.Forms
             for (i = 0; i < dataGridViewCols.Count; i++)
             {
                 if (this.DataSource != null &&
-                    !String.IsNullOrEmpty(dataGridViewCols[i].DataPropertyName) &&
+                    !string.IsNullOrEmpty(dataGridViewCols[i].DataPropertyName) &&
                     !dataGridViewCols[i].IsDataBound)
                 {
                     MapDataGridViewColumnToDataBoundField(dataGridViewCols[i]);
@@ -1575,7 +1575,7 @@ namespace System.Windows.Forms
                         for (; clonedColIndex < clonedColumnsCount; clonedColIndex ++) 
                         {
                             if (finalClonedColumns[clonedColIndex] != null &&
-                                String.Compare(finalClonedColumns[clonedColIndex].DataPropertyName,
+                                string.Compare(finalClonedColumns[clonedColIndex].DataPropertyName,
                                     boundColumns[j].DataPropertyName,
                                     true /*ignoreCase*/,
                                     CultureInfo.InvariantCulture) == 0)
@@ -2705,7 +2705,7 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Assert(this.editingControl != null);
-                if (String.IsNullOrEmpty(this.editingControl.AccessibleName))
+                if (string.IsNullOrEmpty(this.editingControl.AccessibleName))
                 {
                     this.editingControl.AccessibleName = string.Format(SR.DataGridView_AccEditingControlAccName);
                 }
@@ -3317,7 +3317,7 @@ namespace System.Windows.Forms
                 // This is an external tool tip control which wants to show a tool tip over the DataGridView.
                 // ToolTips from the data Grid view ( the error text, or the formatted text that does not fit in, or the tool tip text from the cell)
                 // and the ShowCellToolTips take precedence over the external tool tip.
-                return String.IsNullOrEmpty(this.toolTipCaption) && this.ShowCellToolTips;
+                return string.IsNullOrEmpty(this.toolTipCaption) && this.ShowCellToolTips;
             }
         }
 
@@ -7466,7 +7466,7 @@ namespace System.Windows.Forms
                             }
                             firstRowIndex = false;
                         }
-                        if (String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                         {
                             System.IO.MemoryStream utf8Stream = null;
                             GetClipboardContentForHtml(sbContent, out utf8Stream);
@@ -7738,7 +7738,7 @@ namespace System.Windows.Forms
                             }
                             firstRowIndex = false;
                         }
-                        if (String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                         {
                             System.IO.MemoryStream utf8Stream = null;
                             GetClipboardContentForHtml(sbContent, out utf8Stream);
@@ -8181,7 +8181,7 @@ namespace System.Windows.Forms
                             rowIndex = nextRowIndex;
                             firstRowIndex = false;
                         }
-                        if (String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                         {
                             System.IO.MemoryStream utf8Stream = null;
                             GetClipboardContentForHtml(sbContent, out utf8Stream);
@@ -11651,7 +11651,7 @@ namespace System.Windows.Forms
                         {
                             // If the DataMember became invalid at DesignTime then set it to String.Empty,
                             // regenerate the column collection and DO NOT send BindingContextChanged event.
-                            this.DataMember = String.Empty;
+                            this.DataMember = string.Empty;
                             RefreshColumnsAndRows();
                             return;
                         }
@@ -14518,8 +14518,8 @@ namespace System.Windows.Forms
             // Check if the column name is used as is in the column header
             DataGridViewColumn dataGridViewColumn = e.Column;
 
-            if (dataGridViewColumn.HasHeaderCell && dataGridViewColumn.HeaderCell.Value is string && 
-                String.Compare((string)dataGridViewColumn.HeaderCell.Value, dataGridViewColumn.Name, false, CultureInfo.InvariantCulture) == 0)
+            if (dataGridViewColumn.HasHeaderCell && dataGridViewColumn.HeaderCell.Value is string &&
+                string.Compare((string)dataGridViewColumn.HeaderCell.Value, dataGridViewColumn.Name, false, CultureInfo.InvariantCulture) == 0)
             {
                 InvalidateCellPrivate(dataGridViewColumn.Index, -1);
 
@@ -17571,7 +17571,7 @@ namespace System.Windows.Forms
                     {
                         if (dataGridViewColumn != this.Columns[i] &&
                             this.Columns[i].SortMode != DataGridViewColumnSortMode.NotSortable &&
-                            String.Compare(dataGridViewColumn.DataPropertyName,
+                            string.Compare(dataGridViewColumn.DataPropertyName,
                                            this.Columns[i].DataPropertyName,
                                            true /*ignoreCase*/,
                                            CultureInfo.InvariantCulture) == 0)
@@ -19487,7 +19487,7 @@ namespace System.Windows.Forms
                         {
                             if (dataGridViewColumn != this.Columns[i] &&
                                 this.Columns[i].SortMode != DataGridViewColumnSortMode.NotSortable &&
-                                String.Compare(dataGridViewColumn.DataPropertyName,
+                                string.Compare(dataGridViewColumn.DataPropertyName,
                                                this.Columns[i].DataPropertyName,
                                                true /*ignoreCase*/,
                                                CultureInfo.InvariantCulture) == 0)
@@ -29899,7 +29899,7 @@ namespace System.Windows.Forms
             {
                 string toolTip = this.ToolTipPrivate;
 
-                if (!String.IsNullOrEmpty(toolTip))
+                if (!string.IsNullOrEmpty(toolTip))
                 {
                     // MSDN: Setting the max width has the added benefit of enabling multiline tool tips!
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);

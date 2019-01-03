@@ -192,7 +192,7 @@ namespace System.Windows.Forms.ButtonInternal {
         #endregion
 
         protected void AdjustFocusRectangle(LayoutData layout) {
-            if (AccessibilityImprovements.Level2 && String.IsNullOrEmpty(Control.Text)) {
+            if (AccessibilityImprovements.Level2 && string.IsNullOrEmpty(Control.Text)) {
                 // When a RadioButton has no text, AutoSize sets the size to zero 
                 // and thus there's no place around which to draw the focus rectangle.
                 // So, when AutoSize == true we want the focus rectangle to be rendered around the circle area.

@@ -81,10 +81,10 @@ namespace WinForms.Common.Tests
             var data = new TheoryData<float>();
             data.Add(float.MaxValue);
             data.Add(float.MinValue);
-            data.Add(Single.Epsilon);
-            data.Add(Single.Epsilon * -1);
-            data.Add(Single.NegativeInfinity); // not sure about these two
-            data.Add(Single.PositiveInfinity); // 2
+            data.Add(float.Epsilon);
+            data.Add(float.Epsilon * -1);
+            data.Add(float.NegativeInfinity); // not sure about these two
+            data.Add(float.PositiveInfinity); // 2
             data.Add(0);
             data.Add(-1);
             data.Add(1);
@@ -97,8 +97,8 @@ namespace WinForms.Common.Tests
         {
             var data = new TheoryData<float>();
             data.Add(float.MaxValue);
-            data.Add(Single.Epsilon);
-            data.Add(Single.PositiveInfinity); // not sure about this one
+            data.Add(float.Epsilon);
+            data.Add(float.PositiveInfinity); // not sure about this one
             data.Add(0);
             data.Add(1);
             data.Add(float.MaxValue / 2);

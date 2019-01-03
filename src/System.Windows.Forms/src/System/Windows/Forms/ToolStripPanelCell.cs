@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(control));
             }
             else if (_wrappedToolStrip == null) {
-               throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
+               throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
             }
             CommonProperties.SetAutoSize(this, true);
              _wrappedToolStrip.LocationChanging += new ToolStripLocationCancelEventHandler(this.OnToolStripLocationChanging);

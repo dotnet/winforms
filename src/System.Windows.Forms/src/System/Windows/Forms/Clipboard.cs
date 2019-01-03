@@ -409,7 +409,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetAudio"]/*' />
@@ -497,7 +497,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetText1"]/*' />
         public static void SetText(string text, TextDataFormat format) {
-            if (String.IsNullOrEmpty(text)) {
+            if (string.IsNullOrEmpty(text)) {
                 throw new ArgumentNullException(nameof(text));
             }
 

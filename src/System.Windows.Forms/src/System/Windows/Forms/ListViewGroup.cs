@@ -275,7 +275,7 @@ namespace System.Windows.Forms {
             info.AddValue("Header", this.Header);
             info.AddValue("HeaderAlignment", this.HeaderAlignment);
             info.AddValue("Tag", this.Tag);
-            if (!String.IsNullOrEmpty(this.Name)) {
+            if (!string.IsNullOrEmpty(this.Name)) {
                 info.AddValue("Name", this.Name);
             }
             if (items != null && items.Count > 0) {
@@ -380,7 +380,7 @@ namespace System.Windows.Forms {
                 }
 
                 for (int i = 0; i < list.Count; i ++) {
-                    if (String.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) == 0) {
+                    if (string.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) == 0) {
                         return this[i];
                     }
                 }
@@ -395,7 +395,7 @@ namespace System.Windows.Forms {
                 }
 
                 for (int i = 0; i < this.list.Count; i ++) {
-                    if (String.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) ==0) {
+                    if (string.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) ==0) {
                         index = i;
                         break;
                     }

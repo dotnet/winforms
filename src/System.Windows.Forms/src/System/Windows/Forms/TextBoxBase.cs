@@ -1739,7 +1739,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void ScrollToCaret() {
             if (IsHandleCreated) {
-                if (String.IsNullOrEmpty(this.WindowText)) {
+                if (string.IsNullOrEmpty(this.WindowText)) {
                     // If there is no text, then there is no place to go.
                     return;
                 }

@@ -1493,7 +1493,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         internal int GetPropertyLocation(string propName, bool getXY, bool rowValue) {
             if (allGridEntries != null && allGridEntries.Count > 0) {
                 for (int i = 0; i < allGridEntries.Count; i++) {
-                    if (0 == String.Compare(propName, allGridEntries.GetEntry(i).PropertyLabel, true, CultureInfo.InvariantCulture)) {
+                    if (0 == string.Compare(propName, allGridEntries.GetEntry(i).PropertyLabel, true, CultureInfo.InvariantCulture)) {
                         if (getXY) {
                             int row = GetRowFromGridEntry(allGridEntries.GetEntry(i));
 
@@ -1652,7 +1652,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 for (int i = 0; i < values.Length; i++) {
                     object valueCur = values[(i + index + 1) % values.Length];
                     string text = gridEntry.GetPropertyTextValue(valueCur);
-                    if (text != null && text.Length > 0 && String.Compare(text.Substring(0,1), letter, true, CultureInfo.InvariantCulture) == 0) {
+                    if (text != null && text.Length > 0 && string.Compare(text.Substring(0,1), letter, true, CultureInfo.InvariantCulture) == 0) {
                         CommitValue(valueCur);
                         if (Edit.Focused) {
                             SelectEdit(false);
@@ -1830,7 +1830,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                         // check real values against string values.
                         itemTextValue = gridEntry.TypeConverter.ConvertToString(curValue);
-                        if (value == curValue || 0 == String.Compare(textValue, itemTextValue, true, CultureInfo.InvariantCulture)) {
+                        if (value == curValue || 0 == string.Compare(textValue, itemTextValue, true, CultureInfo.InvariantCulture)) {
                             stringMatch = i;
                         }
                         // now try .equals if they are both non-null
@@ -2518,7 +2518,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     bool equal = (value == rgvalue) || (value != null && value.Equals(rgvalue));
 
                     if (!equal && value is string && rgvalue != null) {
-                        equal = 0 == String.Compare((string)value, rgvalue.ToString(), true, CultureInfo.CurrentCulture);
+                        equal = 0 == string.Compare((string)value, rgvalue.ToString(), true, CultureInfo.CurrentCulture);
                     }
                     if (equal) {
                         object valueNew = null;
@@ -4633,7 +4633,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             SetCommitError(ERROR_NONE);
 
             string text = ipeCur.GetPropertyTextValue();
-            if (!String.Equals(text, Edit.Text)) {
+            if (!string.Equals(text, Edit.Text)) {
                 Edit.Text = text;
                 Edit.SelectionStart = 0;
                 Edit.SelectionLength = 0;

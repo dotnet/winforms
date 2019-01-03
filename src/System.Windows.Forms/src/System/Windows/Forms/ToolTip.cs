@@ -531,7 +531,7 @@ namespace System.Windows.Forms {
                     toolTipIcon = value;
                     if (toolTipIcon > 0 && GetHandleCreated()) {
                         // If the title is null/empty, the icon won't display.
-                        string title = !String.IsNullOrEmpty(toolTipTitle) ? toolTipTitle : " ";
+                        string title = !string.IsNullOrEmpty(toolTipTitle) ? toolTipTitle : " ";
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTITLE, (int)toolTipIcon, title);
 
                         // Tooltip need to be updated to reflect the changes in the icon because
@@ -928,9 +928,9 @@ namespace System.Windows.Forms {
             if (ForeColor != SystemColors.InfoText) {
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTIPTEXTCOLOR, ColorTranslator.ToWin32(ForeColor), 0);
             }
-            if (toolTipIcon > 0 || !String.IsNullOrEmpty(toolTipTitle)) {
+            if (toolTipIcon > 0 || !string.IsNullOrEmpty(toolTipTitle)) {
                 // If the title is null/empty, the icon won't display.
-                string title = !String.IsNullOrEmpty(toolTipTitle) ? toolTipTitle : " ";
+                string title = !string.IsNullOrEmpty(toolTipTitle) ? toolTipTitle : " ";
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTITLE, (int)toolTipIcon, title);
             }
         }
@@ -1230,7 +1230,7 @@ namespace System.Windows.Forms {
         ]
         public string GetToolTip(Control control) {
             if (control == null) {
-                return String.Empty; 
+                return string.Empty; 
             }
             TipInfo tt = (TipInfo)tools[control];
             if (tt == null || tt.Caption == null) {
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms {
                 exists = true;
             }
 
-            if (info == null || String.IsNullOrEmpty(info.Caption)) {
+            if (info == null || string.IsNullOrEmpty(info.Caption)) {
                 empty = true;
             }
 
@@ -1978,7 +1978,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        private void BaseFormDeactivate(System.Object sender, System.EventArgs e){
+        private void BaseFormDeactivate(object sender, System.EventArgs e){
             HideAllToolTips();
 
             if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {

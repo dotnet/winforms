@@ -590,7 +590,7 @@ namespace System.Windows.Forms {
             if (index <= 0) {
                 return 0;
             }
-            if (String.IsNullOrEmpty(text)) {
+            if (string.IsNullOrEmpty(text)) {
                 Debug.Assert(text != null, "string should not be null"); 
                 //do no conversion, just return the original value passed in
                 return index;
@@ -729,7 +729,7 @@ namespace System.Windows.Forms {
         [ResourceConsumption(ResourceScope.Process)]
         internal override StringFormat CreateStringFormat() {
             StringFormat stringFormat = base.CreateStringFormat();
-            if (String.IsNullOrEmpty(Text)) {
+            if (string.IsNullOrEmpty(Text)) {
                 return stringFormat;
             }
 
@@ -745,7 +745,7 @@ namespace System.Windows.Forms {
         private CharacterRange[] AdjustCharacterRangesForSurrogateChars(){
             string text = Text;
 
-            if (String.IsNullOrEmpty(text)) {
+            if (string.IsNullOrEmpty(text)) {
                 return new CharacterRange[]{};
             }
 
@@ -2193,7 +2193,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int  IndexOfKey(String key) {
+            public virtual int  IndexOfKey(string key) {
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key)){
                     return -1; // we dont support empty or null keys.
@@ -2395,7 +2395,7 @@ namespace System.Windows.Forms {
             public int Length {
                 get { 
                     if (length == -1) {
-                        if (owner != null && !String.IsNullOrEmpty(owner.Text)) {
+                        if (owner != null && !string.IsNullOrEmpty(owner.Text)) {
                             StringInfo stringInfo = new StringInfo(owner.Text);
                             return stringInfo.LengthInTextElements - Start;
                         }

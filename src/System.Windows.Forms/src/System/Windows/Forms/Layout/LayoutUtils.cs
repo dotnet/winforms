@@ -18,10 +18,10 @@ namespace System.Windows.Forms.Layout {
     // namespace, you should probably move them to WindowsFormsUtils.
     internal class LayoutUtils {
 
-        public static readonly Size MaxSize = new Size(Int32.MaxValue, Int32.MaxValue);
-        public static readonly Size InvalidSize = new Size(Int32.MinValue, Int32.MinValue);
+        public static readonly Size MaxSize = new Size(int.MaxValue, int.MaxValue);
+        public static readonly Size InvalidSize = new Size(int.MinValue, int.MinValue);
         
-        public static readonly Rectangle MaxRectangle = new Rectangle(0, 0, Int32.MaxValue, Int32.MaxValue);
+        public static readonly Rectangle MaxRectangle = new Rectangle(0, 0, int.MaxValue, int.MaxValue);
         
         public const ContentAlignment AnyTop = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
         public const ContentAlignment AnyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Layout {
             Size largestSize = Size.Empty;
             if (objects != null) {
                 foreach(object obj in objects) {
-                    Size textSize = TextRenderer.MeasureText(obj.ToString(), font, new Size(Int16.MaxValue, Int16.MaxValue), TextFormatFlags.SingleLine);
+                    Size textSize = TextRenderer.MeasureText(obj.ToString(), font, new Size(short.MaxValue, short.MaxValue), TextFormatFlags.SingleLine);
                     largestSize.Width = Math.Max(largestSize.Width, textSize.Width);
                     largestSize.Height = Math.Max(largestSize.Height, textSize.Height);
                 }
@@ -126,8 +126,8 @@ namespace System.Windows.Forms.Layout {
         }
 
         public static Size ConvertZeroToUnbounded(Size size) {
-            if(size.Width == 0) size.Width = Int32.MaxValue;
-            if(size.Height == 0) size.Height = Int32.MaxValue;
+            if(size.Width == 0) size.Width = int.MaxValue;
+            if(size.Height == 0) size.Height = int.MaxValue;
             return size;
         }
 

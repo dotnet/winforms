@@ -108,7 +108,7 @@ namespace System.Windows.Forms {
         // and ImageKey.  We want to toggle between using keys or indexes.
         // Default is to use the integer index.
         internal class Indexer {
-            private string key = String.Empty;
+            private string key = string.Empty;
             private int index = -1;
             private bool useIntegerIndex = true;
             private ImageList imageList = null;
@@ -122,7 +122,7 @@ namespace System.Windows.Forms {
                 get { return key; }
                 set {
                     index = -1;
-                    key = (value == null ? String.Empty : value);
+                    key = (value == null ? string.Empty : value);
                     useIntegerIndex = false;
                 }
             }
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
             public virtual int Index {
                 get { return index; }
                 set {
-                    key = String.Empty;
+                    key = string.Empty;
                     index = value;
                     useIntegerIndex = true;
                 }
@@ -1438,7 +1438,7 @@ namespace System.Windows.Forms {
            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase,
            ///           if found; otherwise, -1.</para>
            /// </devdoc>
-           public int  IndexOfKey(String key) {
+           public int  IndexOfKey(string key) {
                 // Step 0 - Arg validation
                 if ((key == null) || (key.Length == 0)){
                     return -1; // we dont support empty or null keys.

@@ -98,9 +98,9 @@ namespace System.Windows.Forms {
                                 (!activeFormAdded && (formsAddedToMenu < (maxMenuForms-1)) ||   // save room for active if it's not in yet
                                 (forms[i].Equals(activeMdiChild)))){                            // there's always room for activeMdiChild
                                 string text =  WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);
-                                text = (text == null) ? String.Empty : text;
+                                text = (text == null) ? string.Empty : text;
                                 ToolStripMenuItem windowListItem = new ToolStripMenuItem(mdiParent.MdiChildren[i]);
-                                windowListItem.Text = String.Format(CultureInfo.CurrentCulture, "&{0} {1}", accel, text);
+                                windowListItem.Text = string.Format(CultureInfo.CurrentCulture, "&{0} {1}", accel, text);
                                 windowListItem.MergeAction = MergeAction.Append;
                                 windowListItem.MergeIndex = accel;
                                 windowListItem.Click += new EventHandler(OnWindowListItemClick);

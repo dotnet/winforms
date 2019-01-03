@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
                 }
                 
                 for (int n = 0; n < formatCount; n++) {
-                    if (String.Equals(formatList[n].Name, format, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(formatList[n].Name, format, StringComparison.OrdinalIgnoreCase))
                         return formatList[n];
                 }
         

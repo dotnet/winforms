@@ -1158,7 +1158,7 @@ namespace System.Drawing.Design
             [SuppressMessage("Microsoft.Globalization", "CA130:UseOrdinalStringComparison")]
             public int Compare(object x, object y)
             {
-                return String.Compare(((Color)x).Name, ((Color)y).Name, false, CultureInfo.InvariantCulture);
+                return string.Compare(((Color)x).Name, ((Color)y).Name, false, CultureInfo.InvariantCulture);
             }
         }
 

@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         private byte flags;  // see DATAGRIDVIEWCHECKBOXCELL_ consts above
         private static bool mouseInContentBounds = false;
         private static Type defaultCheckStateType = typeof(System.Windows.Forms.CheckState);
-        private static Type defaultBooleanType = typeof(System.Boolean);
+        private static Type defaultBooleanType = typeof(bool);
         private static Type cellType = typeof(DataGridViewCheckBoxCell);
 
         /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.DataGridViewCheckBoxCell"]/*' />
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                         this.flags = (byte)(this.flags & ~DATAGRIDVIEWCHECKBOXCELL_indeterminate);
                     }
                 }
-                else if (value is System.Boolean)
+                else if (value is bool)
                 {
                     if ((bool)value)
                     {
@@ -593,7 +593,7 @@ namespace System.Windows.Forms
                 rowIndex < 0 ||
                 this.OwningColumn == null ||
                 !this.DataGridView.ShowCellErrors ||
-                String.IsNullOrEmpty(GetErrorText(rowIndex)))
+                string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
                 return Rectangle.Empty;
             }
@@ -1441,7 +1441,7 @@ namespace System.Windows.Forms
                                                                                                                         Padding.Empty,
                                                                                                                         false,
                                                                                                                         cellStyle.Font,
-                                                                                                                        String.Empty,
+                                                                                                                        string.Empty,
                                                                                                                         this.DataGridView.Enabled,
                                                                                                                         DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                                                                                                         this.DataGridView.RightToLeft);
@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms
                                                                                                                         Padding.Empty,
                                                                                                                         false,
                                                                                                                         cellStyle.Font,
-                                                                                                                        String.Empty,
+                                                                                                                        string.Empty,
                                                                                                                         this.DataGridView.Enabled,
                                                                                                                         DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                                                                                                         this.DataGridView.RightToLeft);
@@ -1533,7 +1533,7 @@ namespace System.Windows.Forms
                                                                                                                        Padding.Empty,
                                                                                                                        false,
                                                                                                                        cellStyle.Font,
-                                                                                                                       String.Empty,
+                                                                                                                       string.Empty,
                                                                                                                        this.DataGridView.Enabled,
                                                                                                                        DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                                                                                                        this.DataGridView.RightToLeft);
@@ -1573,7 +1573,7 @@ namespace System.Windows.Forms
             }
             else if (computeErrorIconBounds)
             {
-                if (!String.IsNullOrEmpty(errorText))
+                if (!string.IsNullOrEmpty(errorText))
                 {
                     resultBounds = ComputeErrorIconBounds(errorBounds);
                 }
@@ -1789,9 +1789,9 @@ namespace System.Windows.Forms
                                 return AccessibleStates.Indeterminate | base.State;
                         }
                     }
-                    else if (((DataGridViewCheckBoxCell)Owner).EditedFormattedValue is Boolean)
+                    else if (((DataGridViewCheckBoxCell)Owner).EditedFormattedValue is bool)
                     {
-                        Boolean state = (Boolean)(((DataGridViewCheckBoxCell)Owner).EditedFormattedValue);
+                        bool state = (bool)(((DataGridViewCheckBoxCell)Owner).EditedFormattedValue);
                         if (state)
                         {
                             return AccessibleStates.Checked | base.State;
@@ -1833,7 +1833,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -1910,7 +1910,7 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyID) {
                 if (propertyID == NativeMethods.UIA_IsTogglePatternAvailablePropertyId) {
-                    return (Object)IsPatternSupported(NativeMethods.UIA_TogglePatternId);
+                    return (object)IsPatternSupported(NativeMethods.UIA_TogglePatternId);
                 }
                 else if (propertyID == NativeMethods.UIA_ControlTypePropertyId && AccessibilityImprovements.Level2)
                 {

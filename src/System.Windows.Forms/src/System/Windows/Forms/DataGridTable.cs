@@ -1286,17 +1286,17 @@ namespace System.Windows.Forms {
             else if (dataType.Equals(typeof(DateTime)))
                 ret = new DataGridTextBoxColumn(prop, "d", isDefault);
 
-            else if (dataType.Equals(typeof(Int16)) ||
-                     dataType.Equals(typeof(Int32)) ||
-                     dataType.Equals(typeof(Int64)) ||
-                     dataType.Equals(typeof(UInt16)) ||
-                     dataType.Equals(typeof(UInt32)) ||
-                     dataType.Equals(typeof(UInt64)) ||
-                     dataType.Equals(typeof(Decimal)) ||
-                     dataType.Equals(typeof(Double)) ||
-                     dataType.Equals(typeof(Single)) ||
-                     dataType.Equals(typeof(Byte)) ||
-                     dataType.Equals(typeof(SByte))) {
+            else if (dataType.Equals(typeof(short)) ||
+                     dataType.Equals(typeof(int)) ||
+                     dataType.Equals(typeof(long)) ||
+                     dataType.Equals(typeof(ushort)) ||
+                     dataType.Equals(typeof(uint)) ||
+                     dataType.Equals(typeof(ulong)) ||
+                     dataType.Equals(typeof(decimal)) ||
+                     dataType.Equals(typeof(double)) ||
+                     dataType.Equals(typeof(float)) ||
+                     dataType.Equals(typeof(byte)) ||
+                     dataType.Equals(typeof(sbyte))) {
                 ret = new DataGridTextBoxColumn(prop, "G", isDefault);
             }
             else
