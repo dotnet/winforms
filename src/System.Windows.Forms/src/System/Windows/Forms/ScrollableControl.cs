@@ -1726,10 +1726,9 @@ namespace System.Windows.Forms {
                 this.owner.Padding.Scale(dx, dy);
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.ToString"]/*' />
-            /// <internalonly/>
-            public override string ToString() {
-                return "";      // used to say "(DockPadding)" but that's useless
+            public override string ToString()
+            {
+                return $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
             }
 
             /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="DockPaddingEdges.ICloneable.Clone"]/*' />
