@@ -1688,10 +1688,12 @@ namespace System.Windows.Forms {
                     Bottom == dpeOther.Bottom;
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.GetHashCode"]/*' />
-            /// <internalonly/>
-            public override int GetHashCode() {
-                return base.GetHashCode();
+            public override int GetHashCode()
+            {
+                return Left
+                    ^ WindowsFormsUtils.RotateLeft(Top, 8)
+                    ^ WindowsFormsUtils.RotateLeft(Right, 16)
+                    ^ WindowsFormsUtils.RotateLeft(Bottom, 24);
             }
 
 
