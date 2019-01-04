@@ -312,7 +312,11 @@ namespace System.Windows.Forms.Layout.Tests
 
             public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
             {
-                return Mock.Of<ICustomTypeDescriptor>(c => c.GetProperties() == new PropertyDescriptorCollection(new PropertyDescriptor[0]));
+                var mockDescriptor = new Mock<ICustomTypeDescriptor>(MockBehavior.Strict);
+                mockDescriptor
+                    .Setup(c => c.GetProperties())
+                    .Returns(new PropertyDescriptorCollection(new PropertyDescriptor[0]));
+                return mockDescriptor.Object;
             }
         }
     }

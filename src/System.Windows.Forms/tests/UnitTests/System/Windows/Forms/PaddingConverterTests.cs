@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -134,13 +135,15 @@ namespace System.Windows.Forms.Tests
         public void PaddingConverter_CreateInstance_ValidPropertyValuesAll_ReturnsExpected(Padding instance, int all, Padding result)
         {
             var converter = new PaddingConverter();
+            var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+            mockContext
+                .Setup(c => c.Instance)
+                .Returns(new ClassWithPadding { Padding = instance });
+            mockContext
+                .Setup(c => c.PropertyDescriptor)
+                .Returns(TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]);
             Padding padding = Assert.IsType<Padding>(converter.CreateInstance(
-                Mock.Of<ITypeDescriptorContext>(c =>
-                    c.Instance == new ClassWithPadding
-                    {
-                        Padding = instance
-                    } && c.PropertyDescriptor == TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]
-                ), new Dictionary<string, object>
+                mockContext.Object, new Dictionary<string, object>
                 {
                     {nameof(Padding.All), all},
                     {nameof(Padding.Left), 1},
@@ -163,112 +166,82 @@ namespace System.Windows.Forms.Tests
         public void PaddingConverter_CreateInstance_NullPropertyValue_ThrowsArgumentNullException()
         {
             var converter = new PaddingConverter();
-            Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(Mock.Of<ITypeDescriptorContext>(), null));
+            Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object, null));
         }
 
-        [Fact]
-        public void PaddingConverter_CreateInstance_InvalidAllType_ThrowsInvalidCastException()
+        public static IEnumerable<object[]> CreateInstance_InvalidPropertyValueType_TestData()
         {
-            var converter = new PaddingConverter();
-            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(
-                Mock.Of<ITypeDescriptorContext>(c =>
-                    c.Instance == new ClassWithPadding
-                    {
-                        Padding = new Padding(1)
-                    } && c.PropertyDescriptor == TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]
-                ), new Dictionary<string, object>()
+            yield return new object[]
+            {
+                new Dictionary<string, Object>
                 {
                     {nameof(Padding.All), new object()},
-                    {nameof(Padding.Left), 1},
+                    {nameof(Padding.Left), 2},
                     {nameof(Padding.Top), 2},
                     {nameof(Padding.Right), 3},
                     {nameof(Padding.Bottom), 4}
-                })
-            );
-        }
-
-        [Fact]
-        public void PaddingConverter_CreateInstance_InvalidLeftType_ThrowsInvalidCastException()
-        {
-            var converter = new PaddingConverter();
-            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(
-                Mock.Of<ITypeDescriptorContext>(c =>
-                    c.Instance == new ClassWithPadding
-                    {
-                        Padding = new Padding(1)
-                    } && c.PropertyDescriptor == TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]
-                ), new Dictionary<string, object>()
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, Object>
                 {
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), new object()},
                     {nameof(Padding.Top), 2},
                     {nameof(Padding.Right), 3},
                     {nameof(Padding.Bottom), 4}
-                })
-            );
-        }
-
-        [Fact]
-        public void PaddingConverter_CreateInstance_InvalidTopType_ThrowsInvalidCastException()
-        {
-            var converter = new PaddingConverter();
-            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(
-                Mock.Of<ITypeDescriptorContext>(c =>
-                    c.Instance == new ClassWithPadding
-                    {
-                        Padding = new Padding(1)
-                    } && c.PropertyDescriptor == TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]
-                ), new Dictionary<string, object>()
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, Object>
                 {
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), 2},
                     {nameof(Padding.Top), new object()},
                     {nameof(Padding.Right), 3},
                     {nameof(Padding.Bottom), 4}
-                })
-            );
-        }
-
-        [Fact]
-        public void PaddingConverter_CreateInstance_InvalidRightType_ThrowsInvalidCastException()
-        {
-            var converter = new PaddingConverter();
-            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(
-                Mock.Of<ITypeDescriptorContext>(c =>
-                    c.Instance == new ClassWithPadding
-                    {
-                        Padding = new Padding(1)
-                    } && c.PropertyDescriptor == TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]
-                ), new Dictionary<string, object>()
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, Object>
                 {
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), 2},
                     {nameof(Padding.Top), 2},
                     {nameof(Padding.Right), new object()},
                     {nameof(Padding.Bottom), 4}
-                })
-            );
-        }
-
-        [Fact]
-        public void PaddingConverter_CreateInstance_InvalidBottomType_ThrowsInvalidCastException()
-        {
-            var converter = new PaddingConverter();
-            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(
-                Mock.Of<ITypeDescriptorContext>(c =>
-                    c.Instance == new ClassWithPadding
-                    {
-                        Padding = new Padding(1)
-                    } && c.PropertyDescriptor == TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]
-                ), new Dictionary<string, object>()
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, Object>
                 {
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), 2},
                     {nameof(Padding.Top), 2},
                     {nameof(Padding.Right), 3},
                     {nameof(Padding.Bottom), new object()}
-                })
-            );
+                }
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(CreateInstance_InvalidPropertyValueType_TestData))]
+        public void PaddingConverter_CreateInstance_InvalidPropertyValueType_ThrowsInvalidCastException(IDictionary propertyValues)
+        {
+            var converter = new PaddingConverter();
+            var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+            mockContext
+                .Setup(c => c.Instance)
+                .Returns(new ClassWithPadding { Padding = new Padding(1) });
+            mockContext
+                .Setup(c => c.PropertyDescriptor)
+                .Returns(TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]);
+
+            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(mockContext.Object, propertyValues));
         }
 
         [Fact]
