@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_AutoScroll_Set_GetReturnsExpected(bool value)
         {
             var control = new ScrollableControl()
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_HScroll_Set_GetReturnsExpected(bool value)
         {
             var control = new SubScrollableControl()
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_VScroll_Set_GetReturnsExpected(bool value)
         {
             var control = new SubScrollableControl()

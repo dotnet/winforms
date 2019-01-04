@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class CreateParamsTests
     {
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CreateParams_ClassName_Set_GetReturnsExpected(string value)
         {
             var createParams = new CreateParams
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CreateParams_Caption_Set_GetReturnsExpected(string value)
         {
             var createParams = new CreateParams
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void CreateParams_Style_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void CreateParams_ExStyle_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void CreateParams_ClassStyle_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void CreateParams_X_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void CreateParams_Y_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void CreateParams_Width_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void CreateParams_Height_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetIntPtrTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntPtrTheoryData))]
         public void CreateParams_Parent_Set_GetReturnsExpected(IntPtr value)
         {
             var createParams = new CreateParams
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CreateParams_Param_Set_GetReturnsExpected(string value)
         {
             var createParams = new CreateParams

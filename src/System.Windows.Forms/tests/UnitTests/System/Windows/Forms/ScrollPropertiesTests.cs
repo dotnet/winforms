@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollProperties_Enabled_Set_GetReturnsExpected(bool value)
         {
             var control = new ScrollableControl();
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollProperties_Enabled_SetAutoScrollContainer_Nop(bool value)
         {
             var control = new ScrollableControl()
@@ -364,7 +364,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollProperties_Visible_Set_GetReturnsExpected(bool value)
         {
             var control = new ScrollableControl();
@@ -376,7 +376,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollProperties_Visible_SetAutoScrollContainer_Nop(bool value)
         {
             var control = new ScrollableControl()
@@ -391,7 +391,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollProperties_Visible_SetNullContainer_ThrowsNullReferenceException(bool value)
         {
             var properties = new SubScrollProperties(null);

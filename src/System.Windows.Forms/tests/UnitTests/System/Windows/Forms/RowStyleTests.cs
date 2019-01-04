@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
         public void RowStyle_Height_Set_GetReturnsExpected(float value)
         {
             var style = new RowStyle
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
         public void RowStyle_Height_SetOwned_GetReturnsExpected(float value)
         {
             var panel = new TableLayoutPanel();

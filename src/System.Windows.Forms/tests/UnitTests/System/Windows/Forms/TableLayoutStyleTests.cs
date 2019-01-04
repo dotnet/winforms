@@ -21,8 +21,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SizeType), MemberType = typeof(CommonTestHelper))]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SizeType))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
         public void TableLayoutStyle_SizeType_Set_GetReturnsExpected(SizeType value)
         {
             var style = new SubTableLayoutStyle
@@ -33,8 +33,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SizeType), MemberType = typeof(CommonTestHelper))]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SizeType))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
         public void TableLayoutStyle_SizeType_SetOwned_GetReturnsExpected(SizeType value)
         {
             var panel = new TableLayoutPanel();
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
         public void TableLayoutStyle_ConverterConvertTo_InvalidSizeType_ThrowsNotSupportedException(SizeType sizeType)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutStyle));

@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Panel_AutoSize_Set_GetReturnsExpected(bool value)
         {
             var panel = new Panel();
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         public void Panel_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
             var panel = new Panel
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
         public void Panel_AutoSizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoSizeMode value)
         {
             var panel = new Panel();
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
         public void Panel_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
             var panel = new Panel
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
         public void Panel_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             var panel = new Panel();
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetBoolTheoryData), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Panel_TabStop_Set_GetReturnsExpected(bool value)
         {
             var panel = new Panel();

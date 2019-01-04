@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
         public void TableLayoutPanel_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
             var panel = new TableLayoutPanel
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
         public void TableLayoutPanel_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             var panel = new TableLayoutPanel();
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TableLayoutPanelCellBorderStyle), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TableLayoutPanelCellBorderStyle))]
         public void TableLayoutPanel_CellBorderStyle_Set_GetReturnsExpected(TableLayoutPanelCellBorderStyle value)
         {
             var panel = new TableLayoutPanel
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelCellBorderStyle), MemberType = typeof(CommonTestHelper))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelCellBorderStyle))]
         public void TableLayoutPanel_CellBorderStyle_SetInvalid_ThrowsArgumentException(TableLayoutPanelCellBorderStyle value)
         {
             var panel = new TableLayoutPanel();
