@@ -431,6 +431,7 @@ namespace System.Windows.Forms {
         private Queue                         threadCallbackList;
         internal int                          deviceDpi;
         internal int                          lastScaleDpi;           // Dpi value for which this control was last scaled. Will be set to DpiHelper.LogicalDpi (=96) in the constructor
+        internal int                          lastFontScaleDpi;       // Dpi value the font was last scaled to. During dpi change events, this value might temporally differ from lastScaleDpi
         private bool                          useLogicalDpiScaling;
 
         // for keeping track of our ui state for focus and keyboard cues.  using a member variable
@@ -495,6 +496,7 @@ example usage
             // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
             deviceDpi = DpiHelper.DeviceDpi; // Set to system dpi here, will be updated later if per monitor dpi is enabled
             lastScaleDpi = (int)DpiHelper.LogicalDpi; // Assume 96dpi by default, will be updated later if per monitor dpi is enabled
+            lastFontScaleDpi = lastScaleDpi;
             useLogicalDpiScaling = UseLogicalDpiScalingDefault;
 
             window = new ControlNativeWindow(this);
@@ -2614,12 +2616,12 @@ example usage
                             // Additionally, render transforms do not work correctly with fonts in point units
                             // Create a new font rescaled to 96dpi in pixel units as the local unscaled version
                             newLocal = new Font(value.FontFamily, value.SizeInPoints * (float)DpiHelper.LogicalDpi / 72, value.Style, GraphicsUnit.Pixel, value.GdiCharSet, value.GdiVerticalFont);
-                            factor = (float)lastScaleDpi / (float)DpiHelper.DeviceDpi;
+                            factor = (float)lastFontScaleDpi / (float)DpiHelper.DeviceDpi;
                         }
                         else
                         {
                             // scale from 96dpi to the control dpi
-                            factor = (float)lastScaleDpi / (float)DpiHelper.LogicalDpi;
+                            factor = (float)lastFontScaleDpi / (float)DpiHelper.LogicalDpi;
                         }
                        
                         if(factor == 1.0f)
@@ -11478,6 +11480,7 @@ example usage
         {
             // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
             float factor = (float)newDpi / oldDpi;
+            lastFontScaleDpi = newDpi;
             Font local = (Font)Properties.GetObject(PropFont);
             if (local != null)
             {
@@ -11535,11 +11538,11 @@ example usage
                 }
 
                 // Finally, rescale the control
-                if (lastScaleDpi != deviceDpi)
+                if (lastScaleDpi != deviceDpi || lastFontScaleDpi != deviceDpi)
                 {
                     using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
                     {
-                        ScaleFontForDpiChange(lastScaleDpi, deviceDpi);
+                        ScaleFontForDpiChange(lastFontScaleDpi, deviceDpi);
                         ScaleControlForDpiChange(lastScaleDpi, deviceDpi, this);
                     }
                     LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
@@ -13582,18 +13585,19 @@ example usage
             }
 
             if (IsHandleCreated) {
-                // the values of deviceDpi and lastScaleDpi might not be the same as deviceDpi is set to the system dpi value
-                // at control instantiation and lastScaleDpi defaults to 96.
+                // The values of deviceDpi and lastFontScaleDpi might be different when a control is instantiated
+                // because deviceDpi defaults to the system dpi and lastFontScaleDpi to 96.
+                // However, during handle creation, the dpi value will be updated and both values should then be equal.
+                Debug.Assert(deviceDpi == lastFontScaleDpi);
+
                 // Make sure to select the right value here and always pass the old value of deviceDpi to the RescaleConstantsForDpi()
                 // method to avoid compatibility issues.
                 int deviceDpiOld = deviceDpi;
-                int oldDpi = useLogicalDpiScaling == true ? lastScaleDpi : deviceDpiOld;
                 deviceDpi = DpiHelper.GetDpiValueForHandle(new HandleRef(this, HandleInternal));
 
-                // Controls are by default font scaled. 
-                // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.
-                if (oldDpi != deviceDpi) {
-                    ScaleFontForDpiChange(oldDpi, deviceDpi);
+                // Rescale font and give the control a change to update its contants
+                if (deviceDpi != deviceDpiOld) {
+                    ScaleFontForDpiChange(deviceDpiOld, deviceDpi);
                     RescaleConstantsForDpi(deviceDpiOld, deviceDpi);
                 }
             }

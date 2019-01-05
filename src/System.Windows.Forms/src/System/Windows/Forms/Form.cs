@@ -5110,6 +5110,7 @@ namespace System.Windows.Forms {
             // and the Scale method is only called for its children
             deviceDpi = e.DeviceDpiNew;
             lastScaleDpi = deviceDpi;
+            lastFontScaleDpi = deviceDpi;
             
             OnDpiChanged(e);
 
