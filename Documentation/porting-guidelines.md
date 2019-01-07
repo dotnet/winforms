@@ -18,10 +18,9 @@ The migration process includes two steps: **preparing your project for porting**
       .NET Core supported APIs and another with APIs not supported in .NET Core.
       Migrate only the first project.
 
-2. **Start from a working solution**. Ensure the solution opens, builds, and
-   runs without any issues.
+1. **Start from a working solution**. Ensure the solution opens, builds, and runs without any issues.
 
-3. **Replace `packages.config` with `PackageReference`**. If your project uses
+1. **Replace `packages.config` with `PackageReference`**. If your project uses
    NuGet packages, you will need to add the same NuGet packages to the new .NET
    Core project. .NET Core projects support only `PackageReference` for adding
    NuGet packages. To move your NuGet references from `packages.config` to your
@@ -30,14 +29,9 @@ The migration process includes two steps: **preparing your project for porting**
 
    You can learn more about this migration in our [docs][pkg-config].
 
-4. **Migrate to the SDK-style .csproj file**. The new SDK-style `.csproj` format
-   is leaner and easier to read. To be able to simply copy-paste your references
-   from the old project to the new one, you first need to migrate your old
-   project file to SDK-style so both project are in the same format. You can
-   either do it by hand or use a third-party tool [CsprojToVs2017][sdk-tool].
+1. **Migrate to the SDK-style .csproj file**. The new SDK-style `.csproj` format is leaner and easier to read. To be able to simply copy-paste your references from the old project to the new one, you first need to migrate your old project file to SDK-style so both project are in the same format. You can either do it by hand or use a third-party tool [CsprojToVs2017][sdk-tool].
 
-   After using the tool you still might need to delete some reference by hand,
-   for example:
+   After using the tool you still might need to delete some reference by hand; for example:
 
     ```xml
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,42 +39,27 @@ The migration process includes two steps: **preparing your project for porting**
     <Reference Include="System.Net.Http" />
     ```
 
-   After you've migrated to the new SDK-style format, ensure your project builds
-   and runs successfully.
+   After you've migrated to the new SDK-style format, ensure your project builds and runs successfully.
 
-5. **Configure assembly file generation**. Most existing projects include an
-   `AssemblyInfo.cs` file in the Properties folder. The new project style uses a
-   different approach and generates the same assembly attributes as part of the
-   build process. As a result, you might end up with two `AssemblyInfo.cs` files
-   and your build will fail. There are two ways to resolve this problem. You can
-   either:
-
+1. **Configure assembly file generation**. Most existing projects include an `AssemblyInfo.cs` file in the Properties folder. The new project style uses a different approach and generates the same assembly attributes as part of the build process. As a result, you might end up with two `AssemblyInfo.cs` files and your build will fail. There are two ways to resolve this problem. You can either:
     * Disable `AssemblyInfo.cs` generation on build by setting the property:
+
         ```xml
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         ```
-    * Move the static values from `AssemblyInfo.cs` to properties in the new
-      `.csproj` file.
+    * Move the static values from `AssemblyInfo.cs` to properties in the new `.csproj` file.
 
-    Build and run to make sure you didn't introduce any issues while preparing
-    your project. Now it's time to port it.
+    Build and run to make sure you did not introduce any issues while preparing your project. Now it is time to port it.
 
 ## Port your project
 
-1. **Add .NET Core Windows Forms project**. Add a new .NET Core 3.0 Windows
-   Forms project to the solution.
+1. **Add .NET Core Windows Forms project**. Add a new .NET Core 3.0 Windows Forms project to the solution.
 
-2. **Add `<ProjectReference>`**. Copy the `<ProjectReference>` elements from the
-   `.csproj` file of the original project to the new project's `.csproj` file.
-   Note: The new project format does not use the `Name` and `ProjectGuid`
-   elements, so you can safely delete those.
+1. **Add `<ProjectReference>`**. Copy the `<ProjectReference>` elements from the `.csproj` file of the original project to the new project's `.csproj` file. Note: The new project format does not use the `Name` and `ProjectGuid` elements, so you can safely delete those.
 
-3. **Restore/Build**. At this point, it's a good idea to restore/build to make
-   sure all dependencies are properly configured.
+1. **Restore/Build**. At this point, it's a good idea to restore/build to make sure all dependencies are properly configured.
 
-4. **Link files**. Link all files from your existing .NET Framework WinForms
-   project to the .NET Core 3.0 WinForms project by adding following to the
-   `.csproj` file.
+1. **Link files**. Link all files from your existing .NET Framework WinForms project to the .NET Core 3.0 WinForms project by adding following to the `.csproj` file.
 
     ```xml
     <ItemGroup>
@@ -89,11 +68,7 @@ The migration process includes two steps: **preparing your project for porting**
     </ItemGroup>
     ```
 
-5. **Align default namespace and assembly name**. Since you're linking to
-   designer generated files (for example, `Resources.Designer.cs`) you generally
-   want to make sure that the .NET Core version of your application uses the
-   same namespace and the same assembly name. Copy the following settings from
-   your .NET Framework project:
+1. **Align default namespace and assembly name**. Since you're linking to designer generated files (for example, `Resources.Designer.cs`) you generally want to make sure that the .NET Core version of your application uses the same namespace and the same assembly name. Copy the following settings from your .NET Framework project:
 
     ```xml
     <PropertyGroup>
@@ -102,26 +77,15 @@ The migration process includes two steps: **preparing your project for porting**
     </PropertyGroup>
     ```
 
-6. **Run new project**. Set your new .NET Core project as StartUp Project and
-   run it. Make sure everything works.
+1. **Run new project**. Set your new .NET Core project as StartUp Project and run it. Make sure everything works.
 
-7. **Copy or leave linked**. Now instead of linking the files, you can actually
-   copy them from the old .NET Framework WinForms project to the new .NET Core
-   3.0 WinForms project. After that you can get rid of the old project. However
-   if you'd like to use WinForms designer, it is not available in Visual Studio
-   just yet. So you can stop at the step 8 and perform step 9 when the designer
-   support is available.
+1. **Copy or leave linked**. Now instead of linking the files, you can actually copy them from the old .NET Framework WinForms project to the new .NET Core 3.0 WinForms project. After that you can get rid of the old project. However, if you would like to use the Windows Forms' designer, it is not available in Visual Studio just yet. So you can stop at the step 6 and perform step 7 once designer support is available.
 
 ## Migration tips
 
 ### Include the Windows.Compatibility Pack
 
-Windows applications like Windows Forms and WPF often use APIs that aren't
-referenced by default in .NET Core. The reason is that .NET Core tries to reduce
-the risk that new applications accidentally depend on legacy technologies or on
-APIs that are Windows-only. However, when porting existing Windows applications,
-neither of these two aspects is a concern. To simplify your porting efforts, you
-can just reference the [Windows Compatibility Pack][compat-pack] which will give
+Windows applications like Windows Forms and WPF often use APIs that aren't referenced by default in .NET Core. The reason is that .NET Core tries to reduce the risk that new applications accidentally depend on legacy technologies or on APIs that are Windows-only. However, when porting existing Windows applications, neither of these two aspects is a concern. To simplify your porting efforts, you can simply reference the [Windows Compatibility Pack][compat-pack], which will give
 you access to many more APIs.
 
 ```cmd
@@ -133,16 +97,16 @@ dotnet add package Microsoft.Windows.Compatibility
 .NET Core has its own implementation of `System.ServiceModel` with some
 differences:
 
-* It's available as a set of NuGet packages (also included in the [Windows
+* It is available as a set of NuGet packages (also included in the [Windows
   Compatibility Pack][compat-pack]).
 * There are [unsupported features][wcf-supported] that you should review.
-* The binding and endpoint address must be specified in the service client
-  constructor. Otherwise, if you reuse the `ServiceReference` created by Visual
-  Studio, you may get the following error:
+* The binding and endpoint address must be specified in the service client constructor. Otherwise, if you reuse the `ServiceReference` created by Visual Studio, you may get the following error:
 
-  ```text
-  System.PlatformNotSupportedException: 'Configuration files are not supported.'
-  ```
+```cs
+System.PlatformNotSupportedException: 'Configuration files are not supported.'
+```
+
+[comment]: <> (URI Links)
 
 [api-port]: https://blogs.msdn.microsoft.com/dotnet/2018/08/08/are-your-windows-forms-and-wpf-applications-ready-for-net-core-3-0/
 [pkg-config]: https://docs.microsoft.com/en-us/nuget/reference/migrate-packages-config-to-package-reference
