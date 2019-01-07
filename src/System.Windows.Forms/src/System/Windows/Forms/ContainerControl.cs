@@ -844,7 +844,7 @@ namespace System.Windows.Forms {
             if (!state[stateScalingChild] && !performLayout && AutoScaleMode != AutoScaleMode.None && AutoScaleMode != AutoScaleMode.Inherit && state[stateScalingNeededOnLayout]) {
                 state[stateScalingChild] = true;
                 try {
-                    child.Scale(AutoScaleFactor, SizeF.Empty, this, false);
+                    child.Scale(AutoScaleFactor, SizeF.Empty, this, true);
                 }
                 finally {
                     state[stateScalingChild] = false;
