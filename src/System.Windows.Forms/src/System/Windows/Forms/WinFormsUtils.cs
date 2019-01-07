@@ -118,35 +118,6 @@ namespace System.Windows.Forms
             return bounds; 
         }
 
-#if DEBUG_FOCUS
-        /// <devdoc> 
-        /// FOCUS debugging code.  This is really handy if you stick it in Application.Idle event.
-        /// It will watch when the focus has changed and will print out the new guy who's gotten focus.
-        /// If it is an unmanaged window, it will report the window text.  You'll need to #define DEBUG_FOCUS 
-        /// or use something like /define:DEBUG_FOCUS in the CSC_FLAGS and either sync the 
-        /// Application.Idle event or stick this in Application.FDoIdle.
-        ///
-        /// This can be used in conjunction with the ControlKeyboardRouting trace switch to debug keyboard
-        /// handling problems.  See Control.cs.
-        /// </devdoc>
-        [ThreadStatic]
-        private static IntPtr lastFocusHwnd = IntPtr.Zero;
-        internal static DebugFocus() {
-            IntPtr focusHwnd = UnsafeNativeMethods.GetFocus();
-            if (focusHwnd != lastFocusHwnd) {
-                   lastFocusHwnd = focusHwnd;
-                   if (focusHwnd != IntPtr.Zero) {
-                       Debug.WriteLine("FOCUS watch: new focus: " + focusHwnd.ToString() +GetControlInformation(focusHwnd)  );
-                   }
-                   else {
-                       Debug.WriteLine("FOCUS watch: no one has focus");
-                   }
-            }
-            return false;
-        }
-#endif
-
-        //
         // adds an extra & to to the text so that Fish & Chips can be displayed on a menu item without underlining 
         // anything. This is used in MDIWindowList as we use the MDIChildForm.Text as menu item text. 
         //  Fish & Chips --> Fish && Chips
@@ -224,18 +195,6 @@ namespace System.Windows.Forms
             else {
                 return GetControlInformation(control.Handle);
             }
-        }
-        
-        // Algorithm suggested by Damien Morton
-        internal static int GetCombinedHashCodes(params int[] args)
-        {
-            const int k = -1640531535;
-            int h = -757577119;
-            for (int i = 0; i < args.Length; i++)
-            {
-                h = (args[i] ^ h) * k;
-            }
-            return h;
         }
 
         // Retrieves the mnemonic from a given string, or zero if no mnemonic.
@@ -342,14 +301,6 @@ namespace System.Windows.Forms
             }
 
             return string.Compare(string1, string2, ignoreCase, CultureInfo.InvariantCulture) == 0;
-        }
-
-        // RotateLeft(0xFF000000, 4) -> 0xF000000F
-        public static int RotateLeft(int value, int nBits) {
-            Debug.Assert(Marshal.SizeOf(typeof(int)) == 4, "The impossible has happened.");
-            
-            nBits = nBits % 32;
-            return value << nBits | (value >> (32 - nBits));
         }
 
         public static string GetComponentName(IComponent component, string defaultNameValue) {

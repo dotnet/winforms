@@ -755,7 +755,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.NativeMethods+CHARFORMATW..ctor()")]
 [assembly: SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.NativeMethods+CHOOSECOLOR..ctor()")]
 [assembly: SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.WindowsFormsUtils.CreateMeasurementGraphics():System.Drawing.Graphics")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.WindowsFormsUtils.RotateLeft(System.Int32,System.Int32):System.Int32")]
 [assembly: SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.PaintEventArgs.get_Graphics():System.Drawing.Graphics")]
 [assembly: SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.NativeMethods+NONCLIENTMETRICS..ctor()")]
 [assembly: SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.DataGridView.OnKeyDown(System.Windows.Forms.KeyEventArgs):System.Void")]
