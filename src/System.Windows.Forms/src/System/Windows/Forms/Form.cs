@@ -5061,7 +5061,7 @@ namespace System.Windows.Forms {
                     SuspendAllLayout(this);
                     try {
                         SafeNativeMethods.SetWindowPos(new HandleRef(this, HandleInternal), NativeMethods.NullHandleRef, e.SuggestedRectangle.X, e.SuggestedRectangle.Y, e.SuggestedRectangle.Width, e.SuggestedRectangle.Height, NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
-                        if (AutoScaleMode != AutoScaleMode.Font) {
+                        if (LogicalDpiScaling == true || AutoScaleMode != AutoScaleMode.Font) {
                             Font = new Font(this.Font.FontFamily, this.Font.Size * factor, this.Font.Style, this.Font.Unit, this.Font.GdiCharSet, this.Font.GdiVerticalFont);
                             FormDpiChanged(e.DeviceDpiOld, e.DeviceDpiNew);
                         }
