@@ -252,7 +252,7 @@ namespace System.Windows.Forms.Design {
             }
             selectorWidth += SELECTOR_PADDING;
 
-            string caption = String.Empty;
+            string caption = string.Empty;
             ISite site = component.Site;
             if (site != null) {
                 caption = string.Format(SR.ComponentEditorFormProperties, site.Name);

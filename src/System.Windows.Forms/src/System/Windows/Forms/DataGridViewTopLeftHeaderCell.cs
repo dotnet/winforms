@@ -336,7 +336,7 @@ namespace System.Windows.Forms
             valBounds.Height -= 2 * DATAGRIDVIEWTOPLEFTHEADERCELL_verticalTextMargin;
             if (valBounds.Width > 0 && 
                 valBounds.Height > 0 && 
-                !String.IsNullOrEmpty(formattedValueStr) && 
+                !string.IsNullOrEmpty(formattedValueStr) && 
                 (paint || computeContentBounds))
             {
                 Color textColor;
@@ -371,7 +371,7 @@ namespace System.Windows.Forms
                     resultBounds = DataGridViewUtilities.GetTextBounds(valBounds, formattedValueStr, flags, cellStyle);
                 }
             }
-            else if (computeErrorIconBounds && !String.IsNullOrEmpty(errorText))
+            else if (computeErrorIconBounds && !string.IsNullOrEmpty(errorText))
             {
                 resultBounds = ComputeErrorIconBounds(errorBounds);
             }
@@ -491,7 +491,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -503,15 +503,15 @@ namespace System.Windows.Forms
                 get
                 {
                     object value = this.Owner.Value;
-                    if (value != null && !(value is String))
+                    if (value != null && !(value is string))
                     {
                         // The user set the Value on the DataGridViewTopLeftHeaderCell and it did not set it to a string.
                         // Then the name of the DataGridViewTopLeftHeaderAccessibleObject is String.Empty;
                         //
-                        return String.Empty;
+                        return string.Empty;
                     }
                     string strValue = value as string;
-                    if (String.IsNullOrEmpty(strValue))
+                    if (string.IsNullOrEmpty(strValue))
                     {
                         if (this.Owner.DataGridView != null)
                         {
@@ -526,12 +526,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            return String.Empty;
+                            return string.Empty;
                         }
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -568,7 +568,7 @@ namespace System.Windows.Forms
                 {
                     // We changed DataGridViewTopLeftHeaderCellAccessibleObject::Name to return a string
                     // However, DataGridViewTopLeftHeaderCellAccessibleObject::Value should still return String.Empty.
-                    return String.Empty;
+                    return string.Empty;
                 }
             }
 

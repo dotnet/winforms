@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
                     
                 } 
 
-                if (id == null && !String.IsNullOrEmpty(col.ImageKey)) {
+                if (id == null && !string.IsNullOrEmpty(col.ImageKey)) {
                     ctor = t.GetConstructor(new Type[]{typeof(string)});
                     if (ctor != null) {
                         id = new InstanceDescriptor(ctor, new object[]{col.ImageKey}, false);

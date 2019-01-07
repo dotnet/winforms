@@ -1484,8 +1484,8 @@ namespace System.Windows.Forms {
             pageCounter.Text = "1";
             pageCounter.TextAlign = HorizontalAlignment.Right;
             pageCounter.DecimalPlaces = 0;
-            pageCounter.Minimum = new Decimal(0d);
-            pageCounter.Maximum = new Decimal(1000d);
+            pageCounter.Minimum = new decimal(0d);
+            pageCounter.Maximum = new decimal(1000d);
             pageCounter.ValueChanged += new EventHandler(UpdownMove);
             this.pageCounter.Name = "pageCounter";
 

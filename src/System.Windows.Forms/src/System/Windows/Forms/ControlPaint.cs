@@ -2295,7 +2295,7 @@ namespace System.Windows.Forms {
         ///      Converts an infinite value to "1".
         /// </devdoc>
         private static float InfinityToOne(float value) {
-            if (value == Single.NegativeInfinity || value == Single.PositiveInfinity) {
+            if (value == float.NegativeInfinity || value == float.PositiveInfinity) {
                 return 1.0f;
             }
             return value;

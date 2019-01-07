@@ -233,7 +233,7 @@ namespace System.Windows.Forms
                     defaultCellStyle.Font != null ||
                     !defaultCellStyle.IsNullValueDefault ||
                     !defaultCellStyle.IsDataSourceNullValueDefault ||
-                    !String.IsNullOrEmpty(defaultCellStyle.Format) ||
+                    !string.IsNullOrEmpty(defaultCellStyle.Format) ||
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||

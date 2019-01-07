@@ -67,11 +67,11 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.Current"]/*' />
-        public abstract Object Current {
+        public abstract object Current {
             get;
         }
 
-        internal abstract void SetDataSource(Object dataSource);
+        internal abstract void SetDataSource(object dataSource);
 
         /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.BindingManagerBase"]/*' />
         public BindingManagerBase() { }
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not call SetDataSource
                                                                                                     // it would be a breaking change.
         ]
-        internal BindingManagerBase(Object dataSource) {
+        internal BindingManagerBase(object dataSource) {
             this.SetDataSource(dataSource);
         }
 
@@ -219,7 +219,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal abstract String GetListName();
+        internal abstract string GetListName();
         /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.CancelCurrentEdit"]/*' />
         public abstract void CancelCurrentEdit();
         /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.EndCurrentEdit"]/*' />
@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
         protected abstract void UpdateIsBinding();
 
         /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.GetListName"]/*' />
-        protected internal abstract String GetListName(ArrayList listAccessors);
+        protected internal abstract string GetListName(ArrayList listAccessors);
 
         /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.SuspendBinding"]/*' />
         public abstract void SuspendBinding();

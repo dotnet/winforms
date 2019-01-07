@@ -157,7 +157,7 @@ namespace System.Windows.Forms
 
             Debug.Assert(inFirstRow);
 
-            if (String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
             {
                 if (firstCell)
                 {
@@ -186,10 +186,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                bool csv = String.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase);
+                bool csv = string.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase);
                 if (csv ||
-                    String.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
-                    String.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
+                    string.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
                 {
                     if (val != null)
                     {
@@ -919,7 +919,7 @@ namespace System.Windows.Forms
 
             if (valBounds.Width - DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginLeft - DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginRight > 0 &&
                 valBounds.Height > 0 &&
-                !String.IsNullOrEmpty(formattedValueStr))
+                !string.IsNullOrEmpty(formattedValueStr))
             {
                 valBounds.Offset(DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginLeft, 0);
                 valBounds.Width -= DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginLeft + DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginRight;
@@ -1292,12 +1292,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            return String.Empty;
+                            return string.Empty;
                         }
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -1313,7 +1313,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }

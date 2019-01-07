@@ -1238,7 +1238,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object index) {
-                if (index is Int32) {
+                if (index is int) {
                     return Contains((int)index);
                 }
                 else {
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object index) {
-                if (index is Int32) {
+                if (index is int) {
                     return IndexOf((int)index);
                 }
                 else {

@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
             m_compareInfo = CultureInfo.InvariantCulture.CompareInfo;
         }
   
-        public int Compare(Object a, Object b) {
+        public int Compare(object a, object b) {
             return m_compareInfo.Compare(a.ToString(), b.ToString());
         }
     }

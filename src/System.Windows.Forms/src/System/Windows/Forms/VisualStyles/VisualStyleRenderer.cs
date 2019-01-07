@@ -337,7 +337,7 @@ namespace System.Windows.Forms.VisualStyles {
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges,(UInt32)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal))) {
+            if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges,(uint)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal))) {
                 throw new InvalidEnumArgumentException(nameof(edges), (int)edges, typeof(Edges));
             }
 
@@ -345,7 +345,7 @@ namespace System.Windows.Forms.VisualStyles {
                 throw new InvalidEnumArgumentException(nameof(style), (int)style, typeof(EdgeStyle));
             }
 
-            if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (UInt32)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono))) {
+            if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (uint)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono))) {
                 throw new InvalidEnumArgumentException(nameof(effects), (int)effects, typeof(EdgeEffects));
             }
 
@@ -486,7 +486,7 @@ namespace System.Windows.Forms.VisualStyles {
             
             int disableFlag = drawDisabled?0x1:0;
             
-            if (!String.IsNullOrEmpty(textToDraw)) {
+            if (!string.IsNullOrEmpty(textToDraw)) {
                 using( WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper( dc, AllGraphicsProperties ) ) {
                     HandleRef hdc = new HandleRef( wgr, wgr.WindowsGraphics.DeviceContext.Hdc );
                     lastHResult = SafeNativeMethods.DrawThemeText( new HandleRef( this, Handle ), hdc, part, state, textToDraw, textToDraw.Length, (int) flags, disableFlag, new NativeMethods.COMRECT( bounds ) );
@@ -862,7 +862,7 @@ namespace System.Windows.Forms.VisualStyles {
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            if (String.IsNullOrEmpty(textToDraw)) {
+            if (string.IsNullOrEmpty(textToDraw)) {
                 throw new ArgumentNullException(nameof(textToDraw));
             }
 
@@ -887,7 +887,7 @@ namespace System.Windows.Forms.VisualStyles {
                 throw new ArgumentNullException(nameof(dc));
             }
             
-            if (String.IsNullOrEmpty(textToDraw)) {
+            if (string.IsNullOrEmpty(textToDraw)) {
                 throw new ArgumentNullException(nameof(textToDraw));
             }
 

@@ -54,7 +54,7 @@ namespace System.Windows.Forms {
                 if (text.Equals("AutoColumnResize (-1)"))
                     return -1;
                 else
-                    return Int32.Parse(text, CultureInfo.CurrentCulture);
+                    return int.Parse(text, CultureInfo.CurrentCulture);
             }
             else if (value.GetType() == typeof(int))
             {

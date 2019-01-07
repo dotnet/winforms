@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
             }
             while (sie.MoveNext())
             {
-                if (String.Equals(sie.Name, "Data", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(sie.Name, "Data", StringComparison.OrdinalIgnoreCase))
                 {
 #if DEBUG
                     try {

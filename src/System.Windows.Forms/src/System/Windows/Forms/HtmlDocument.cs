@@ -712,7 +712,7 @@ namespace System.Windows.Forms
             {
                 if (oColor is string)
                 {
-                    string strColor = oColor as String;
+                    string strColor = oColor as string;
                     int index = strColor.IndexOf('#');
                     if (index >= 0)
                     {

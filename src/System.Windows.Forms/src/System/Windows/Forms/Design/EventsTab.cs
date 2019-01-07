@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets a value indicating whether the specified object can be extended.</para>
         /// </devdoc>
-        public override bool CanExtend(Object extendee) {
+        public override bool CanExtend(object extendee) {
             return !Marshal.IsComObject(extendee);
         }
 
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Design {
                          continue;
                     }
 
-                    Object namespaceValue = nsProp.GetValue(component);
+                    object namespaceValue = nsProp.GetValue(component);
                     EventDescriptorCollection namespaceEvents = TypeDescriptor.GetEvents(namespaceValue, attributes);
                     if (namespaceEvents.Count > 0) {
                         if (list == null) {

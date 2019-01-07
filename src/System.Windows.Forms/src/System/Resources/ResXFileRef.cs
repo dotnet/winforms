@@ -113,7 +113,7 @@ namespace System.Resources {
             int si = -1;
 
             for (i = 0; (i < path1.Length) && (i < path2.Length); ++i) {
-                if ((path1[i] != path2[i]) && (compareCase || (Char.ToLower(path1[i], CultureInfo.InvariantCulture) != Char.ToLower(path2[i], CultureInfo.InvariantCulture))))
+                if ((path1[i] != path2[i]) && (compareCase || (char.ToLower(path1[i], CultureInfo.InvariantCulture) != char.ToLower(path2[i], CultureInfo.InvariantCulture))))
                 {
                     break;
 
@@ -126,7 +126,7 @@ namespace System.Resources {
                 return path2;
             }
             if ((i == path1.Length) && (i == path2.Length)) {
-                return String.Empty;
+                return string.Empty;
             }
 
             StringBuilder relPath = new StringBuilder();
@@ -190,11 +190,11 @@ namespace System.Resources {
             }
 
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertTo"]/*' />
-            public override Object ConvertTo(ITypeDescriptorContext context, 
-                                             CultureInfo culture, 
-                                             Object value, 
+            public override object ConvertTo(ITypeDescriptorContext context, 
+                                             CultureInfo culture,
+                                             object value, 
                                              Type destinationType) {
-                Object created = null;
+                object created = null;
                 if (destinationType == typeof(string)) {
                     created = ((ResXFileRef)value).ToString();
                 }
@@ -241,10 +241,10 @@ namespace System.Resources {
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertFrom"]/*' />
             [ResourceExposure(ResourceScope.Machine)]
             [ResourceConsumption(ResourceScope.Machine)]
-            public override Object ConvertFrom(ITypeDescriptorContext context, 
+            public override object ConvertFrom(ITypeDescriptorContext context, 
                                                CultureInfo culture,
-                                               Object value) {
-                Object created = null;
+                                               object value) {
+                object created = null;
                 string stringValue = value as string;
                 if (stringValue != null) {
                     string[] parts = ResXFileRef.Converter.ParseResxFileRefString(stringValue);
@@ -285,7 +285,7 @@ namespace System.Resources {
                                 Icon ico = new Icon(memStream);
                                 created = ico.ToBitmap();
                             } else {
-                                created = Activator.CreateInstance(toCreate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance, null, new Object[] {memStream}, null);
+                                created = Activator.CreateInstance(toCreate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance, null, new object[] {memStream}, null);
                             }
                         }
                     }

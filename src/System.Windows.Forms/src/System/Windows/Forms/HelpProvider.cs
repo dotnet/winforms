@@ -168,7 +168,7 @@ namespace System.Windows.Forms {
                 return false;
             }
             else {
-                return(Boolean) b;
+                return(bool) b;
             }
         }
 

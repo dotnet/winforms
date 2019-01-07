@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Layout {
             string attributeValue = GetAttributeValue(node, attribute);
             if (!string.IsNullOrEmpty(attributeValue)) {
                 int result;
-                if (Int32.TryParse(attributeValue, out result)) {
+                if (int.TryParse(attributeValue, out result)) {
                     return result;
                 }
             }
@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Layout {
 
                         // ---- SizeType Parsing -----------------
                         nextIndex = currentIndex;
-                        while (Char.IsLetter(styleString[nextIndex])) {
+                        while (char.IsLetter(styleString[nextIndex])) {
                             nextIndex++;
                         }
                         SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.Substring(currentIndex, nextIndex - currentIndex), true);

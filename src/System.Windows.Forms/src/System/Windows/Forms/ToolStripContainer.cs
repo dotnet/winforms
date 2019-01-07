@@ -459,7 +459,7 @@ namespace System.Windows.Forms {
 
                 Type controlType = value.GetType();
                 if (!contentPanelType.IsAssignableFrom(controlType) && !panelType.IsAssignableFrom(controlType)) {
-                    throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, contentPanelType.Name, panelType.Name)), value.GetType().Name);
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, contentPanelType.Name, panelType.Name)), value.GetType().Name);
                 }
                 base.Add(value);
             }

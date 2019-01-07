@@ -596,7 +596,7 @@ namespace System.Windows.Forms {
                 cf.hInstance = UnsafeNativeMethods.GetModuleHandle(null);
                 cf.nSizeMin = minSize;
                 if (maxSize == 0) {
-                    cf.nSizeMax = Int32.MaxValue;
+                    cf.nSizeMax = int.MaxValue;
                 }
                 else {
                     cf.nSizeMax = maxSize;
