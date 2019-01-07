@@ -1688,14 +1688,7 @@ namespace System.Windows.Forms {
                     Bottom == dpeOther.Bottom;
             }
 
-            public override int GetHashCode()
-            {
-                return Left
-                    ^ WindowsFormsUtils.RotateLeft(Top, 8)
-                    ^ WindowsFormsUtils.RotateLeft(Right, 16)
-                    ^ WindowsFormsUtils.RotateLeft(Bottom, 24);
-            }
-
+            public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
 
             /// <internalonly/>
             private void ResetAll() {
