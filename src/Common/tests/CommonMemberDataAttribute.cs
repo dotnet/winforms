@@ -14,7 +14,7 @@ namespace WinForms.Common.Tests
     /// We cannot inherit from MemberDataAttribute as it is sealed, so we have to reimplement
     /// ConvertDataItem inheriting from MemberDataAttributeBase.
     /// </summary>
-    public class CommonMemberDataAttribute : MemberDataAttributeBase
+    public sealed class CommonMemberDataAttribute : MemberDataAttributeBase
     {
         public CommonMemberDataAttribute(string memberName, params object[] parameters) : base(memberName, parameters)
         {
