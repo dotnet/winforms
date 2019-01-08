@@ -96,9 +96,15 @@ jobs:
           $(_OfficialBuildIdArgs)
         displayName: Windows Build / Publish
 
-      # Publish the nuget package as a build artifact
-      # Only do this if the build is internal AND the config is released (this ensures package contents are real signed)
+      # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
+
+        # Run component governance detection (only for release)
+        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+          displayName: Component Detection
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+
+        # Publish the nuget package as a build artifact (only for release, ensuring package contents are real-signed)
         - task: PublishPipelineArtifact@0
           inputs:
             artifactName: 'Package'
@@ -106,3 +112,4 @@ jobs:
           displayName: Publish package to build artifacts
           continueOnError: true
           condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+
