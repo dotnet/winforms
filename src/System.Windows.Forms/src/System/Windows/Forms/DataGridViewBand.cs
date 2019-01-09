@@ -657,7 +657,6 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Assert(value == DataGridViewTriState.False, "TriState only supports NotSet, True, False");
                             this.StateInternal = this.State & ~DataGridViewElementStates.Resizable;
                         }
                     }

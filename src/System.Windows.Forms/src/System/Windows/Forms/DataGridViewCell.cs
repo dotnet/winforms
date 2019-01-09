@@ -996,10 +996,6 @@ namespace System.Windows.Forms
         {
             switch (dataGridViewAdvancedBorderStyleInput.All)
             {
-                case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                    Debug.Fail("DataGridViewRow.AdjustCellBorderStyle - Unexpected DataGridViewAdvancedCellBorderStyle.OutsetPartial");
-                    break;
-
                 case DataGridViewAdvancedCellBorderStyle.Single:
                     if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
                     {
@@ -1803,7 +1799,6 @@ namespace System.Windows.Forms
 
         internal Rectangle GetErrorIconBounds(int rowIndex)
         {
-            Debug.Assert(this.DataGridView != null);
             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false /*includeColors*/);
             using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
             {

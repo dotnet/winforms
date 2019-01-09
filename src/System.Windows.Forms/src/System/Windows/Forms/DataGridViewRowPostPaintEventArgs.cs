@@ -260,9 +260,6 @@ namespace System.Windows.Forms
                                     bool isFirstDisplayedRow, 
                                     bool isLastVisibleRow)
         {
-            Debug.Assert(graphics != null);
-            Debug.Assert(inheritedRowStyle != null);
-
             this.graphics = graphics;
             this.clipBounds = clipBounds;
             this.rowBounds = rowBounds;
