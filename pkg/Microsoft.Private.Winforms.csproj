@@ -25,7 +25,6 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
     <NoWarn>$(NoWarn);NU5125</NoWarn>
-    <!--<BinDirectory>$(MSBuildThisFileDirectory)\..\artifacts\bin</BinDirectory>-->
 
     <!-- Disable a VS-specific target that is failing when building this csproj -->
     <GenerateDependencyFile>false</GenerateDependencyFile>
@@ -74,6 +73,7 @@
       <ProjectReference>
         <OutputItemType>TfmSpecificPackageFile</OutputItemType>
         <Targets>GetPackageContent</Targets>
+        <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       </ProjectReference>
     </ItemGroup>
   </Target>
