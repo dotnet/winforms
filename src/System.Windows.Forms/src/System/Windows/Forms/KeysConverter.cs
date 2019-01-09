@@ -136,7 +136,7 @@ namespace System.Windows.Forms {
         ///    <para>Compares two key values for equivalence.</para>
         /// </devdoc>
         public int Compare(object a, object b) {
-            return String.Compare(ConvertToString(a), ConvertToString(b), false, CultureInfo.InvariantCulture);
+            return string.Compare(ConvertToString(a), ConvertToString(b), false, CultureInfo.InvariantCulture);
         }
 
         /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.ConvertFrom"]/*' />

@@ -897,7 +897,7 @@ namespace System.Windows.Forms {
                     //  if the user manually sets Size = (121, 20) in code (usually height gets forced to 21), then he will see Whidey.(1) above
                     //  user usually uses nondefault size and will experience whidbey.(2) above
 
-                    Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(Int16.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
+                    Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
                     prefHeightCache = (short)(textSize.Height + SystemInformation.BorderSize.Height * 8 + Padding.Size.Height);
 
                     return prefHeightCache ;
@@ -907,7 +907,7 @@ namespace System.Windows.Forms {
                     // caching, but in this case we can not because PreferredHeight is used in ApplySizeConstraints
                     // which is used by GetPreferredSize (infinite loop).
                     if (prefHeightCache < 0) {
-                        Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(Int16.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
+                        Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
 
                         // For a "simple" style combobox, the preferred height depends on the
                         // number of items in the combobox.
@@ -1234,8 +1234,8 @@ namespace System.Windows.Forms {
                     //preserve everett behavior if "formatting enabled == false" -- just return selecteditem text.
                     if (FormattingEnabled) {
                         string candidate = GetItemText(SelectedItem);
-                        if (!String.IsNullOrEmpty(candidate)) {
-                            if (String.Compare(candidate, base.Text, true, CultureInfo.CurrentCulture) == 0) {
+                        if (!string.IsNullOrEmpty(candidate)) {
+                            if (string.Compare(candidate, base.Text, true, CultureInfo.CurrentCulture) == 0) {
                                 return candidate;   //for whidbey, if we only differ by case -- return the candidate;
                             }
                         }
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms {
                 return base.Text;
             }
             set {
-                if (DropDownStyle == ComboBoxStyle.DropDownList && !IsHandleCreated && !String.IsNullOrEmpty(value) && FindStringExact(value) == -1)
+                if (DropDownStyle == ComboBoxStyle.DropDownList && !IsHandleCreated && !string.IsNullOrEmpty(value) && FindStringExact(value) == -1)
                     return;
 
                 base.Text = value;
@@ -1262,7 +1262,7 @@ namespace System.Windows.Forms {
                         SelectedIndex = -1;
                     }
                     else if (value != null &&
-                        (selectedItem == null || (String.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0))) {
+                        (selectedItem == null || (string.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0))) {
 
                         int index = FindStringIgnoreCase(value);
 
@@ -2313,7 +2313,7 @@ namespace System.Windows.Forms {
             
             string oldText = WindowText;
             base.RecreateHandleCore();
-            if (!String.IsNullOrEmpty(oldText) && String.IsNullOrEmpty(WindowText)) {
+            if (!string.IsNullOrEmpty(oldText) && string.IsNullOrEmpty(WindowText)) {
                 WindowText = oldText;   //restore the window text
             }
         }
@@ -2796,7 +2796,7 @@ namespace System.Windows.Forms {
             if (Sorted) {
                 if (DataSource != null && Created) {
                     // we will only throw the exception when the control is already on the form.
-                    Debug.Assert(DisplayMember.Equals(String.Empty), "if this list is sorted it means that dataSource was null when Sorted first became true. at that point DisplayMember had to be String.Empty");
+                    Debug.Assert(DisplayMember.Equals(string.Empty), "if this list is sorted it means that dataSource was null when Sorted first became true. at that point DisplayMember had to be String.Empty");
                     DataSource = null;
                     throw new InvalidOperationException(SR.ComboBoxDataSourceWithSort);
                 }
@@ -3095,7 +3095,7 @@ namespace System.Windows.Forms {
         ///     Selects all the text in the editable portion of the ComboBox.
         /// </devdoc>
         public void SelectAll() {
-            Select(0, Int32.MaxValue);
+            Select(0, int.MaxValue);
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetBoundsCore"]/*' />
@@ -3789,8 +3789,8 @@ namespace System.Windows.Forms {
                 if (item2 == null)
                     return 1; //item2 is null, so item 1 is greater
 
-                String itemName1 = comboBox.GetItemText(item1);
-                String itemName2 = comboBox.GetItemText(item2);
+                string itemName1 = comboBox.GetItemText(item1);
+                string itemName2 = comboBox.GetItemText(item2);
 
                 CompareInfo compInfo = (Application.CurrentCulture).CompareInfo;
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
@@ -4161,7 +4161,7 @@ namespace System.Windows.Forms {
                 if (owner.IsHandleCreated) {
                     bool selected = (index == owner.SelectedIndex);
 
-                    if (String.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0) {
+                    if (string.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0) {
                         owner.NativeRemoveAt(index);
                         owner.NativeInsert(index, value);
                         if (selected) {

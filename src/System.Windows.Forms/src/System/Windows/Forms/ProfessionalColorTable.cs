@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
         private Dictionary<KnownColors,Color> professionalRGB = null;
         private bool usingSystemColors  = false;
         private bool useSystemColors    = false;
-        private string lastKnownColorScheme = String.Empty;
+        private string lastKnownColorScheme = string.Empty;
 
 
         private const string oliveColorScheme      =  "HomeStead";

@@ -231,7 +231,7 @@ namespace System.Resources {
                     return null;
                 }
                 if(fileRef == null) {
-                    if(String.IsNullOrEmpty(fileRefTextEncoding)) 
+                    if(string.IsNullOrEmpty(fileRefTextEncoding)) 
                     {
                         fileRef = new ResXFileRef(FileRefFullPath, FileRefType);
                     } else {
@@ -378,9 +378,9 @@ namespace System.Resources {
             string typeName = (dataNodeInfo.TypeName == null || dataNodeInfo.TypeName.Length==0 ? MultitargetUtil.GetAssemblyQualifiedName(typeof(string), this.typeNameConverter) : dataNodeInfo.TypeName);
             
             if (mimeTypeName != null && mimeTypeName.Length > 0) {
-                if (String.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType)
-                    || String.Equals(mimeTypeName, ResXResourceWriter.Beta2CompatSerializedObjectMimeType)
-                    || String.Equals(mimeTypeName, ResXResourceWriter.CompatBinSerializedObjectMimeType)) {
+                if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType)
+                    || string.Equals(mimeTypeName, ResXResourceWriter.Beta2CompatSerializedObjectMimeType)
+                    || string.Equals(mimeTypeName, ResXResourceWriter.CompatBinSerializedObjectMimeType)) {
                     string text = dataNodeInfo.ValueData;
                     byte[] serializedData;
                     serializedData = FromBase64WrappedString(text);
@@ -398,7 +398,7 @@ namespace System.Resources {
                     }
                 }
                 
-                else if (String.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)) {
+                else if (string.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)) {
                     if (typeName != null && typeName.Length > 0) {
                         Type type = ResolveType(typeName, typeResolver);
                         if (type != null) {

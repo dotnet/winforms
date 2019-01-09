@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         public DomainUpDown() : base() {   
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
-            Text = String.Empty;
+            Text = string.Empty;
         }                
                 
         // Properties
@@ -398,7 +398,7 @@ namespace System.Windows.Forms {
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e) {
             if (ReadOnly) {
                 char[] character = new char[] { e.KeyChar };
-                UnicodeCategory uc = Char.GetUnicodeCategory(character[0]);
+                UnicodeCategory uc = char.GetUnicodeCategory(character[0]);
 
                 if (uc == UnicodeCategory.LetterNumber
                     || uc == UnicodeCategory.LowercaseLetter
@@ -693,7 +693,7 @@ namespace System.Windows.Forms {
                     return 0;
                 }
 
-                return String.Compare(p.ToString(), q.ToString(), false, CultureInfo.CurrentCulture);
+                return string.Compare(p.ToString(), q.ToString(), false, CultureInfo.CurrentCulture);
             }
         }
 

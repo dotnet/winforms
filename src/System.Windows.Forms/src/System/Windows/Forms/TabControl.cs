@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         private bool currentlyScaling          = false;
         private int selectedIndex = -1;
         private Size cachedSize = Size.Empty;
-        private string controlTipText = String.Empty;
+        private string controlTipText = string.Empty;
         private bool handleInTable;
 
         //events
@@ -2426,7 +2426,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int  IndexOfKey(String key) {
+            public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key)){
                     return -1; // we dont support empty or null keys.

@@ -874,10 +874,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 handler = TypeConverter.ConvertToString(value);
             }
 
-            if (newHandler == null && !String.IsNullOrEmpty(handler)) {
+            if (newHandler == null && !string.IsNullOrEmpty(handler)) {
                 newHandler = handler;
             }
-            else if (handler == newHandler && !String.IsNullOrEmpty(newHandler)) {
+            else if (handler == newHandler && !string.IsNullOrEmpty(newHandler)) {
                 return true;
             }
             

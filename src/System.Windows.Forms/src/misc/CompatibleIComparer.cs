@@ -33,12 +33,12 @@ namespace System.Collections.Specialized {
             }
         }
 
-        bool IEqualityComparer.Equals(Object a, Object b) {
+        bool IEqualityComparer.Equals(object a, object b) {
             return Object.Equals(a, b);
         }
 
-        public virtual int GetHashCode(Object o) {
-            String obj = o as string;
+        public virtual int GetHashCode(object o) {
+            string obj = o as string;
             if (obj == null) {
                 return o.GetHashCode();
             }

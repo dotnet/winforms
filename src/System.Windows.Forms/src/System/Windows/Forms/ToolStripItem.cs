@@ -2318,7 +2318,7 @@ namespace System.Windows.Forms {
                     string toolText = Text;
                     if (WindowsFormsUtils.ContainsMnemonic(toolText)) {
                        // this shouldnt be called a lot so we can take the perf hit here. 
-                       toolText = String.Join("", toolText.Split('&'));
+                       toolText = string.Join("", toolText.Split('&'));
                     }
                     return toolText;
                 }
@@ -2493,7 +2493,7 @@ namespace System.Windows.Forms {
         /// </devdoc>        
         [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public DragDropEffects DoDragDrop(Object data, DragDropEffects allowedEffects) {
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) {
             int[] finalEffect = new int[] {(int)DragDropEffects.None};
             UnsafeNativeMethods.IOleDropSource dropSource = this.DropSource;
             IComDataObject dataObject = null;
@@ -3417,7 +3417,7 @@ namespace System.Windows.Forms {
 #if DEBUG
     // let's not snap the stack trace unless we're debugging selection.
     if (ToolStrip.SelectionDebug.TraceVerbose) {
-        Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Select: {0} \r\n{1}\r\n", this.ToString(), new StackTrace().ToString().Substring(0,200)));
+        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Select: {0} \r\n{1}\r\n", this.ToString(), new StackTrace().ToString().Substring(0,200)));
     }
 #endif
             if (!CanSelect) {
@@ -3807,7 +3807,7 @@ namespace System.Windows.Forms {
         ///   removes selection bits from item state
         /// </devdoc>
         internal void Unselect() {
-            Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", this.ToString()));
+            Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", this.ToString()));
             if (state[stateSelected]) {
                 state[stateSelected] = false;   
                 if (Available) {
@@ -4035,7 +4035,7 @@ namespace System.Windows.Forms {
                         return Name;
                     }
                     else if (propertyID == NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId) {
-                        return (Object)this.IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                        return (object)this.IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
                     }
                 }
 
@@ -4169,7 +4169,7 @@ namespace System.Windows.Forms {
                     }
 
                     try {
-                        topic = Int32.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
+                        topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
                     }
                     catch {
                     }
@@ -4374,7 +4374,7 @@ namespace System.Windows.Forms {
         private ButtonBaseAdapter.LayoutData layoutData;
         private const int BORDER_WIDTH = 2;
         private const int BORDER_HEIGHT = 3;
-        private readonly static Size INVALID_SIZE = new Size(Int32.MinValue,Int32.MinValue);
+        private readonly static Size INVALID_SIZE = new Size(int.MinValue, int.MinValue);
         
         private Size lastPreferredSize = INVALID_SIZE;
         private ToolStripLayoutData parentLayoutData = null;
@@ -4475,7 +4475,7 @@ namespace System.Windows.Forms {
             layoutOptions.maxFocus           = true;
             layoutOptions.focusOddEvenFixup  = false;
             layoutOptions.font               = ownerItem.Font;
-            layoutOptions.text               = ((Owner.DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) ? Owner.Text : String.Empty;
+            layoutOptions.text               = ((Owner.DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) ? Owner.Text : string.Empty;
             layoutOptions.imageSize          = PreferredImageSize;
             layoutOptions.checkSize          = 0;
             layoutOptions.checkPaddingSize   = 0;

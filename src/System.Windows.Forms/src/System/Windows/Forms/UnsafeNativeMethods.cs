@@ -2188,7 +2188,7 @@ namespace System.Windows.Forms {
             [PreserveSig]
             int GetOptionKeyPath(
                 [Out, MarshalAs(UnmanagedType.LPArray)]
-                String[] pbstrKey,
+                string[] pbstrKey,
                 [In, MarshalAs(UnmanagedType.U4)]
                 int dw);
 
@@ -2407,52 +2407,52 @@ namespace System.Windows.Forms {
             bool QueryCommandIndeterm(string cmdID);
             string QueryCommandText(
                     string cmdID);
-            Object QueryCommandValue(string cmdID);
+            object QueryCommandValue(string cmdID);
             bool ExecCommand(string cmdID,
-                    bool showUI, Object value);
+                    bool showUI, object value);
             bool ExecCommandShowHelp(string cmdID);
             IHTMLElement CreateElement(string eTag);
-            void SetOnhelp(Object p);
-            Object GetOnhelp();
-            void SetOnclick(Object p);
-            Object GetOnclick();
-            void SetOndblclick(Object p);
-            Object GetOndblclick();
-            void SetOnkeyup(Object p);
-            Object GetOnkeyup();
-            void SetOnkeydown(Object p);
-            Object GetOnkeydown();
-            void SetOnkeypress(Object p);
-            Object GetOnkeypress();
-            void SetOnmouseup(Object p);
-            Object GetOnmouseup();
-            void SetOnmousedown(Object p);
-            Object GetOnmousedown();
-            void SetOnmousemove(Object p);
-            Object GetOnmousemove();
-            void SetOnmouseout(Object p);
-            Object GetOnmouseout();
-            void SetOnmouseover(Object p);
-            Object GetOnmouseover();
-            void SetOnreadystatechange(Object p);
-            Object GetOnreadystatechange();
-            void SetOnafterupdate(Object p);
-            Object GetOnafterupdate();
-            void SetOnrowexit(Object p);
-            Object GetOnrowexit();
-            void SetOnrowenter(Object p);
-            Object GetOnrowenter();
-            void SetOndragstart(Object p);
-            Object GetOndragstart();
-            void SetOnselectstart(Object p);
-            Object GetOnselectstart();
+            void SetOnhelp(object p);
+            object GetOnhelp();
+            void SetOnclick(object p);
+            object GetOnclick();
+            void SetOndblclick(object p);
+            object GetOndblclick();
+            void SetOnkeyup(object p);
+            object GetOnkeyup();
+            void SetOnkeydown(object p);
+            object GetOnkeydown();
+            void SetOnkeypress(object p);
+            object GetOnkeypress();
+            void SetOnmouseup(object p);
+            object GetOnmouseup();
+            void SetOnmousedown(object p);
+            object GetOnmousedown();
+            void SetOnmousemove(object p);
+            object GetOnmousemove();
+            void SetOnmouseout(object p);
+            object GetOnmouseout();
+            void SetOnmouseover(object p);
+            object GetOnmouseover();
+            void SetOnreadystatechange(object p);
+            object GetOnreadystatechange();
+            void SetOnafterupdate(object p);
+            object GetOnafterupdate();
+            void SetOnrowexit(object p);
+            object GetOnrowexit();
+            void SetOnrowenter(object p);
+            object GetOnrowenter();
+            void SetOndragstart(object p);
+            object GetOndragstart();
+            void SetOnselectstart(object p);
+            object GetOnselectstart();
             IHTMLElement ElementFromPoint(int x, int y);
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLWindow2 GetParentWindow();
             [return: MarshalAs(UnmanagedType.Interface)] object GetStyleSheets();
-            void SetOnbeforeupdate(Object p);
-            Object GetOnbeforeupdate();
-            void SetOnerrorupdate(Object p);
-            Object GetOnerrorupdate();
+            void SetOnbeforeupdate(object p);
+            object GetOnbeforeupdate();
+            void SetOnerrorupdate(object p);
+            object GetOnerrorupdate();
             string toString();
             [return: MarshalAs(UnmanagedType.Interface)] object CreateStyleSheet(string bstrHref,int lIndex);
         }
@@ -2467,26 +2467,26 @@ namespace System.Windows.Forms {
             string GetUniqueID();
             bool AttachEvent([In] string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
             void DetachEvent([In] string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
-            void SetOnrowsdelete([In] Object p);
-            Object GetOnrowsdelete();
-            void SetOnrowsinserted([In] Object p);
-            Object GetOnrowsinserted();
-            void SetOncellchange([In] Object p);
-            Object GetOncellchange();
-            void SetOndatasetchanged([In] Object p);
-            Object GetOndatasetchanged();
-            void SetOndataavailable([In] Object p);
-            Object GetOndataavailable();
-            void SetOndatasetcomplete([In] Object p);
-            Object GetOndatasetcomplete();
-            void SetOnpropertychange([In] Object p);
-            Object GetOnpropertychange();
+            void SetOnrowsdelete([In] object p);
+            object GetOnrowsdelete();
+            void SetOnrowsinserted([In] object p);
+            object GetOnrowsinserted();
+            void SetOncellchange([In] object p);
+            object GetOncellchange();
+            void SetOndatasetchanged([In] object p);
+            object GetOndatasetchanged();
+            void SetOndataavailable([In] object p);
+            object GetOndataavailable();
+            void SetOndatasetcomplete([In] object p);
+            object GetOndatasetcomplete();
+            void SetOnpropertychange([In] object p);
+            object GetOnpropertychange();
             void SetDir([In] string p);
             string GetDir();
-            void SetOncontextmenu([In] Object p);
-            Object GetOncontextmenu();
-            void SetOnstop([In] Object p);
-            Object GetOnstop();
+            void SetOncontextmenu([In] object p);
+            object GetOncontextmenu();
+            void SetOnstop([In] object p);
+            object GetOnstop();
             object CreateDocumentFragment();
             object GetParentDocument();
             void SetEnableDownload([In] bool p);
@@ -2496,8 +2496,8 @@ namespace System.Windows.Forms {
             [return: MarshalAs(UnmanagedType.IDispatch)] object GetChildNodes();
             void SetInheritStyleSheets([In] bool p);
             bool GetInheritStyleSheets();
-            void SetOnbeforeeditfocus([In] Object p);
-            Object GetOnbeforeeditfocus();
+            void SetOnbeforeeditfocus([In] object p);
+            object GetOnbeforeeditfocus();
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLElementCollection GetElementsByName([In] string v);
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLElement GetElementById([In] string v);
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLElementCollection GetElementsByTagName([In] string v);
@@ -2585,7 +2585,7 @@ namespace System.Windows.Forms {
             string GetDefaultStatus();
             void SetStatus([In] string p);
             string GetStatus();
-            int SetTimeout([In] string expression, [In] int msec, [In] ref Object language);
+            int SetTimeout([In] string expression, [In] int msec, [In] ref object language);
             void ClearTimeout([In] int timerID);
             void Alert([In] string message);
             bool Confirm([In] string message);
@@ -2605,29 +2605,29 @@ namespace System.Windows.Forms {
             object GetTop();
             object GetWindow();
             void Navigate([In] string URL);
-            void SetOnfocus([In] Object p);
-            Object GetOnfocus();
-            void SetOnblur([In] Object p);
-            Object GetOnblur();
-            void SetOnload([In] Object p);
-            Object GetOnload();
-            void SetOnbeforeunload(Object p);
-            Object GetOnbeforeunload();
-            void SetOnunload([In] Object p);
-            Object GetOnunload();
-            void SetOnhelp(Object p);
-            Object GetOnhelp();
-            void SetOnerror([In] Object p);
-            Object GetOnerror();
-            void SetOnresize([In] Object p);
-            Object GetOnresize();
-            void SetOnscroll([In] Object p);
-            Object GetOnscroll();
+            void SetOnfocus([In] object p);
+            object GetOnfocus();
+            void SetOnblur([In] object p);
+            object GetOnblur();
+            void SetOnload([In] object p);
+            object GetOnload();
+            void SetOnbeforeunload(object p);
+            object GetOnbeforeunload();
+            void SetOnunload([In] object p);
+            object GetOnunload();
+            void SetOnhelp(object p);
+            object GetOnhelp();
+            void SetOnerror([In] object p);
+            object GetOnerror();
+            void SetOnresize([In] object p);
+            object GetOnresize();
+            void SetOnscroll([In] object p);
+            object GetOnscroll();
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLDocument2 GetDocument();
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLEventObj GetEvent();
             object Get_newEnum();
-            Object ShowModalDialog([In] string dialog, [In] ref Object varArgIn, [In] ref Object varOptions);
-            void ShowHelp([In] string helpURL, [In] Object helpArg, [In] string features);
+            object ShowModalDialog([In] string dialog, [In] ref object varArgIn, [In] ref object varOptions);
+            void ShowHelp([In] string helpURL, [In] object helpArg, [In] string features);
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLScreen GetScreen();
             object GetOption();
             void Focus();
@@ -2635,11 +2635,11 @@ namespace System.Windows.Forms {
             void Blur();
             void Scroll([In] int x, [In] int y);
             object GetClientInformation();
-            int SetInterval([In] string expression, [In] int msec, [In] ref Object language);
+            int SetInterval([In] string expression, [In] int msec, [In] ref object language);
             void ClearInterval([In] int timerID);
-            void SetOffscreenBuffering([In] Object p);
-            Object GetOffscreenBuffering();
-            [return: MarshalAs(UnmanagedType.Struct)] Object ExecScript([In] string code, [In] string language);
+            void SetOffscreenBuffering([In] object p);
+            object GetOffscreenBuffering();
+            [return: MarshalAs(UnmanagedType.Struct)] object ExecScript([In] string code, [In] string language);
             string toString();
             void ScrollBy([In] int x, [In] int y);
             void ScrollTo([In] int x, [In] int y);
@@ -2749,7 +2749,7 @@ namespace System.Windows.Forms {
             short GetLength();
             void Back();
             void Forward();
-            void Go([In] ref Object pvargdistance);
+            void Go([In] ref object pvargdistance);
         }
 
         [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("FECEAAA5-8405-11CF-8BA1-00AA00476DA6"),
@@ -2897,39 +2897,39 @@ namespace System.Windows.Forms {
             string GetTagName();
             IHTMLElement GetParentElement();
             IHTMLStyle GetStyle();
-            void SetOnhelp(Object p);
-            Object GetOnhelp();
-            void SetOnclick(Object p);
-            Object GetOnclick();
-            void SetOndblclick(Object p);
-            Object GetOndblclick();
-            void SetOnkeydown(Object p);
-            Object GetOnkeydown();
-            void SetOnkeyup(Object p);
-            Object GetOnkeyup();
-            void SetOnkeypress(Object p);
-            Object GetOnkeypress();
-            void SetOnmouseout(Object p);
-            Object GetOnmouseout();
-            void SetOnmouseover(Object p);
-            Object GetOnmouseover();
-            void SetOnmousemove(Object p);
-            Object GetOnmousemove();
-            void SetOnmousedown(Object p);
-            Object GetOnmousedown();
-            void SetOnmouseup(Object p);
-            Object GetOnmouseup();
+            void SetOnhelp(object p);
+            object GetOnhelp();
+            void SetOnclick(object p);
+            object GetOnclick();
+            void SetOndblclick(object p);
+            object GetOndblclick();
+            void SetOnkeydown(object p);
+            object GetOnkeydown();
+            void SetOnkeyup(object p);
+            object GetOnkeyup();
+            void SetOnkeypress(object p);
+            object GetOnkeypress();
+            void SetOnmouseout(object p);
+            object GetOnmouseout();
+            void SetOnmouseover(object p);
+            object GetOnmouseover();
+            void SetOnmousemove(object p);
+            object GetOnmousemove();
+            void SetOnmousedown(object p);
+            object GetOnmousedown();
+            void SetOnmouseup(object p);
+            object GetOnmouseup();
             [return: MarshalAs(UnmanagedType.Interface)] IHTMLDocument2 GetDocument();
             void SetTitle(string p);
             string GetTitle();
             void SetLanguage(string p);
             string GetLanguage();
-            void SetOnselectstart(Object p);
-            Object GetOnselectstart();
+            void SetOnselectstart(object p);
+            object GetOnselectstart();
             void ScrollIntoView(object varargStart);
             bool Contains(IHTMLElement pChild);
             int GetSourceIndex();
-            Object GetRecordNumber();
+            object GetRecordNumber();
             void SetLang(string p);
             string GetLang();
             int GetOffsetLeft();
@@ -2953,27 +2953,27 @@ namespace System.Windows.Forms {
             bool GetIsTextEdit();
             void Click();
             [return: MarshalAs(UnmanagedType.Interface)] object GetFilters();
-            void SetOndragstart(Object p);
-            Object GetOndragstart();
+            void SetOndragstart(object p);
+            object GetOndragstart();
             string toString();
-            void SetOnbeforeupdate(Object p);
-            Object GetOnbeforeupdate();
-            void SetOnafterupdate(Object p);
-            Object GetOnafterupdate();
-            void SetOnerrorupdate(Object p);
-            Object GetOnerrorupdate();
-            void SetOnrowexit(Object p);
-            Object GetOnrowexit();
-            void SetOnrowenter(Object p);
-            Object GetOnrowenter();
-            void SetOndatasetchanged(Object p);
-            Object GetOndatasetchanged();
-            void SetOndataavailable(Object p);
-            Object GetOndataavailable();
-            void SetOndatasetcomplete(Object p);
-            Object GetOndatasetcomplete();
-            void SetOnfilterchange(Object p);
-            Object GetOnfilterchange();
+            void SetOnbeforeupdate(object p);
+            object GetOnbeforeupdate();
+            void SetOnafterupdate(object p);
+            object GetOnafterupdate();
+            void SetOnerrorupdate(object p);
+            object GetOnerrorupdate();
+            void SetOnrowexit(object p);
+            object GetOnrowexit();
+            void SetOnrowenter(object p);
+            object GetOnrowenter();
+            void SetOndatasetchanged(object p);
+            object GetOndatasetchanged();
+            void SetOndataavailable(object p);
+            object GetOndataavailable();
+            void SetOndatasetcomplete(object p);
+            object GetOndatasetcomplete();
+            void SetOnfilterchange(object p);
+            object GetOnfilterchange();
             [return: MarshalAs(UnmanagedType.IDispatch)] object GetChildren();
             [return: MarshalAs(UnmanagedType.IDispatch)] object GetAll();
         }
@@ -6541,7 +6541,7 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        public override String GetString()
+        public override string GetString()
         {
             int i = offset;
             while (i < buffer.Length && buffer[i] != 0) i++;
@@ -7295,10 +7295,10 @@ namespace System.Windows.Forms {
       public int dwAmbientFlags;
 
       [MarshalAs(UnmanagedType.U4)]
-      public UInt32 colorFore;
+      public uint colorFore;
 
       [MarshalAs(UnmanagedType.U4)]
-      public UInt32 colorBack;
+      public uint colorBack;
 
       [MarshalAs(UnmanagedType.Interface)]
       public object pFont;
@@ -8241,7 +8241,7 @@ namespace System.Windows.Forms {
 
         [DllImport(ExternDll.Clr, CharSet=CharSet.Unicode, PreserveSig=false, SetLastError=false, BestFitMapping=false, ExactSpelling=true)]
         [ResourceExposure(ResourceScope.None)]
-        internal static extern void CorLaunchApplication(UInt32 hostType,
+        internal static extern void CorLaunchApplication(uint hostType,
             string applicationFullName,
             int manifestPathsCount,
             string[] manifestPaths,

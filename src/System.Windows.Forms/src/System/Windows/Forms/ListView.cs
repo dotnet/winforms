@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
         private ColumnHeaderStyle headerStyle = ColumnHeaderStyle.Clickable;
         private SortOrder sorting             = SortOrder.None;
         private View viewStyle                = System.Windows.Forms.View.LargeIcon;
-        private string toolTipCaption = String.Empty;
+        private string toolTipCaption = string.Empty;
 
 
         private const int   LISTVIEWSTATE_ownerDraw                           = 0x00000001;
@@ -2783,7 +2783,7 @@ namespace System.Windows.Forms {
         }
 
         private void DeleteFileName(string fileName) {
-            if (!String.IsNullOrEmpty(fileName)) {
+            if (!string.IsNullOrEmpty(fileName)) {
                 // the list view needs the FileIOPermission when the app runs on an UNC share
                 // and the list view creates / destroys temporary files for its background image
                 
@@ -2885,7 +2885,7 @@ namespace System.Windows.Forms {
                     odCacheFontHandleWrapper = null;
                 }
 
-                if (!String.IsNullOrEmpty(this.backgroundImageFileName) || this.bkImgFileNames != null) {
+                if (!string.IsNullOrEmpty(this.backgroundImageFileName) || this.bkImgFileNames != null) {
                     // we need the fileIoPermission when the app runs on an UNC share and
                     // the list view creates/deletes temporary files for its background image
                     
@@ -2896,7 +2896,7 @@ namespace System.Windows.Forms {
 
                     try {
                         System.IO.FileInfo fi;
-                        if (!String.IsNullOrEmpty(this.backgroundImageFileName)) {
+                        if (!string.IsNullOrEmpty(this.backgroundImageFileName)) {
                             fi = new System.IO.FileInfo(this.backgroundImageFileName);
                             Debug.Assert(fi.Exists, "who deleted our temp file?");
                             // 
@@ -2907,7 +2907,7 @@ namespace System.Windows.Forms {
                             try {
                                 fi.Delete();
                             } catch (System.IO.IOException){}
-                            this.backgroundImageFileName = String.Empty;
+                            this.backgroundImageFileName = string.Empty;
                         }
                         for (int i = 0; i <= this.bkImgFileNamesCount; i++) {
                             fi = new System.IO.FileInfo(this.bkImgFileNames[i]);
@@ -3055,7 +3055,7 @@ namespace System.Windows.Forms {
                  }
             }
 
-            return FindItem(false, String.Empty, false, new Point(x, y), searchDirection, -1, false);
+            return FindItem(false, string.Empty, false, new Point(x, y), searchDirection, -1, false);
         }
 
         private ListViewItem FindItem(bool isTextSearch, string text, bool isPrefixSearch, Point pt, SearchDirectionHint dir, int startIndex, bool includeSubItemsInSearch) {
@@ -3107,7 +3107,7 @@ namespace System.Windows.Forms {
                             // ie, use String.Compare(string, string, case sensitive, CultureInfo)
                             // instead of new Whidbey String.Equals overload
                             // String.Equals(string, string, StringComparison.OrdinalIgnoreCase
-                            if (String.Equals(text,lvsi.Text, StringComparison.OrdinalIgnoreCase)) {
+                            if (string.Equals(text,lvsi.Text, StringComparison.OrdinalIgnoreCase)) {
                                 return lvi;
                             } else if (isPrefixSearch && CultureInfo.CurrentCulture.CompareInfo.IsPrefix(lvsi.Text, text, CompareOptions.IgnoreCase)) {
                                 return lvi;
@@ -3368,7 +3368,7 @@ namespace System.Windows.Forms {
 
             // Header
             //
-            String header = group.Header;
+            string header = group.Header;
             lvgroup.pszHeader = Marshal.StringToHGlobalAuto(header);
             lvgroup.cchHeader = header.Length;
 
@@ -4712,12 +4712,12 @@ namespace System.Windows.Forms {
 
             } else {
                 lvbkImage.ulFlags = NativeMethods.LVBKIF_SOURCE_NONE;
-                this.backgroundImageFileName = String.Empty;
+                this.backgroundImageFileName = string.Empty;
             }
 
             UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.LVM_SETBKIMAGE, 0, lvbkImage);
 
-            if (String.IsNullOrEmpty(fileNameToDelete)) {
+            if (string.IsNullOrEmpty(fileNameToDelete)) {
                 return;
             }
 
@@ -6041,7 +6041,7 @@ namespace System.Windows.Forms {
 
                             bool isPrefixSearch = (nmlvif.lvfi.flags & NativeMethods.LVFI_PARTIAL) != 0;
 
-                            string text = String.Empty;
+                            string text = string.Empty;
                             if (isTextSearch) {
                                 text = nmlvif.lvfi.psz;
                             }
@@ -6259,10 +6259,10 @@ namespace System.Windows.Forms {
                 ListViewItem currentItem =  (ListViewItem)obj1;
                 ListViewItem nextItem =  (ListViewItem)obj2;
                 if (sortOrder == SortOrder.Ascending) {
-                    return (String.Compare(currentItem.Text,nextItem.Text, false, CultureInfo.CurrentCulture));
+                    return (string.Compare(currentItem.Text,nextItem.Text, false, CultureInfo.CurrentCulture));
                 }
                 else {
-                    return (String.Compare(nextItem.Text,currentItem.Text, false, CultureInfo.CurrentCulture));
+                    return (string.Compare(nextItem.Text,currentItem.Text, false, CultureInfo.CurrentCulture));
                 }
             }
         }
@@ -6401,7 +6401,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListView.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object checkedIndex) {
-                if (checkedIndex is Int32) {
+                if (checkedIndex is int) {
                     return Contains((int)checkedIndex);
                 }
                 else {
@@ -6423,7 +6423,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListView.uex' path='docs/doc[@for="CheckedIndexCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object checkedIndex) {
-                if (checkedIndex is Int32) {
+                if (checkedIndex is int) {
                     return IndexOf((int)checkedIndex);
                 }
                 else {
@@ -6674,7 +6674,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int IndexOfKey(String key) {
+            public virtual int IndexOfKey(string key) {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
@@ -6928,7 +6928,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListView.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object selectedIndex) {
-                if (selectedIndex is Int32) {
+                if (selectedIndex is int) {
                     return Contains((int)selectedIndex);
                 }
                 else {
@@ -6950,7 +6950,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListView.uex' path='docs/doc[@for="SelectedIndexCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object selectedIndex) {
-                if (selectedIndex is Int32) {
+                if (selectedIndex is int) {
                     return IndexOf((int)selectedIndex);
                 }
                 else {
@@ -7424,7 +7424,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int  IndexOfKey(String key) {
+            public virtual int  IndexOfKey(string key) {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
@@ -7582,7 +7582,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
         /// </devdoc>
-          public virtual int  IndexOfKey(String key) {
+          public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                   if (string.IsNullOrEmpty(key)){
                         return -1; // we dont support empty or null keys.
@@ -8362,7 +8362,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int  IndexOfKey(String key) {
+            public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                   if (string.IsNullOrEmpty(key)){
                         return -1; // we dont support empty or null keys.

@@ -12,17 +12,17 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class NumericUpDownAcceleration
     {
-        private Int32 seconds;      // Ideally we would use UInt32 but it is not CLS-compliant.
-        private Decimal increment;  // Ideally we would use UInt32 but NumericUpDown uses Decimal values.
+        private int seconds;      // Ideally we would use UInt32 but it is not CLS-compliant.
+        private decimal increment;  // Ideally we would use UInt32 but NumericUpDown uses Decimal values.
 
-        public NumericUpDownAcceleration(Int32 seconds, Decimal increment)
+        public NumericUpDownAcceleration(int seconds, decimal increment)
         {
             if (seconds < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(seconds), seconds, SR.NumericUpDownLessThanZeroError);
             }
 
-            if (increment < Decimal.Zero)
+            if (increment < decimal.Zero)
             {
                 throw new ArgumentOutOfRangeException(nameof(increment), increment, SR.NumericUpDownLessThanZeroError);
             }
@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
         ///     Determines the amount of time for the UpDown control to wait to set the increment
         ///     step when holding the up/down button.
         /// </devdoc>
-        public Int32 Seconds
+        public int Seconds
         {
             get
             {
@@ -54,7 +54,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Determines the amount to increment by.
         /// </devdoc>
-        public Decimal Increment {
+        public decimal Increment {
 
             get 
             {
@@ -63,7 +63,7 @@ namespace System.Windows.Forms {
 
             set
             {
-                if (value < Decimal.Zero)
+                if (value < decimal.Zero)
                 {
                     throw new ArgumentOutOfRangeException(nameof(increment), value, SR.NumericUpDownLessThanZeroError);
                 }

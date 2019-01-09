@@ -2,23 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-
-
-    /// <include file='doc\ItemDragEventHandler.uex' path='docs/doc[@for="ItemDragEventHandler"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Represents the method that will handle the <see cref='System.Windows.Forms.ListView.OnItemDrag'/>
-    ///       
-    ///       event of a
-    ///    <see cref='System.Windows.Forms.ListView'/> 
-    ///    .
-    ///    
-    /// </para>
+    /// Represents the method that will handle the <see cref='System.Windows.Forms.ListView.OnItemDrag'/>
+    /// event of a  <see cref='System.Windows.Forms.ListView'/>.
     /// </devdoc>
     public delegate void ItemDragEventHandler(object sender, ItemDragEventArgs e);
 }

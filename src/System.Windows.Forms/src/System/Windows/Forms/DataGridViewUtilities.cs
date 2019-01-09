@@ -182,7 +182,7 @@ namespace System.Windows.Forms
                 case DataGridViewFreeDimension.Width:
                 {
                     int preferredWidth = 0, allowedHeight = constraintSize.Height - borderAndPaddingHeights;
-                    if (!String.IsNullOrEmpty(val))
+                    if (!string.IsNullOrEmpty(val))
                     {
                         int maxHeight = allowedHeight - 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
                         if (maxHeight > 0)
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
                 {
                     int minHeightIcon = 1, minHeightContent = 1;
                     int allowedWidth = constraintSize.Width - borderAndPaddingWidths;
-                    if (!String.IsNullOrEmpty(val))
+                    if (!string.IsNullOrEmpty(val))
                     {
                         if (showGlyph && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
                         {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
                 }
                 default:
                 {
-                    if (!String.IsNullOrEmpty(val))
+                    if (!string.IsNullOrEmpty(val))
                     {
                         if (cellStyle.WrapMode == DataGridViewTriState.True)
                         {
@@ -318,7 +318,7 @@ namespace System.Windows.Forms
         {
             if ((flags & TextFormatFlags.SingleLine) != 0)
             {
-                Size sizeRequired = TextRenderer.MeasureText(text, font, new Size(System.Int32.MaxValue, System.Int32.MaxValue), flags);
+                Size sizeRequired = TextRenderer.MeasureText(text, font, new Size(int.MaxValue, int.MaxValue), flags);
                 if (sizeRequired.Width > cellBounds.Width)
                 {
                     flags |= TextFormatFlags.EndEllipsis;

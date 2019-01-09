@@ -6,8 +6,9 @@ This document describes the experience of using WinForms on .NET Core. The [Deve
 
 Choose one of these options:
 
-1. [.NET Core 3.0 SDK Preview 1 (recommended)](https://www.microsoft.com/net/download)
-2. [.NET Core 3.0 daily build (latest changes, but less stable)](https://github.com/dotnet/core/blob/master/daily-builds.md)
+1. [.NET Core 3.0 SDK Preview 1 (recommended)][.net-core-3.0-sdk-preview-1]
+
+1. [.NET Core 3.0 daily build (latest changes, but less stable)][.net-core-3.0-daily]
 
 ## Creating new applications
 
@@ -25,8 +26,14 @@ WinForms Core does not yet have a dedicated Designer tool. For the time being, y
 
 ## Samples
 
-Check out the [.NET Core 3.0 WinForms samples](https://github.com/dotnet/samples/tree/master/windowsforms) for both basic and advanced scenarios.
+Check out the [.NET Core 3.0 WinForms samples][.net-core-3.0-samples] for both basic and advanced scenarios.
 
 ## Porting existing applications
 
 To port your existing WinForms application from .NET Framework to .NET Core 3.0, refer to our [porting guidelines](porting-guidelines.md).
+
+[comment]: <> (URI Links)
+
+[.net-core-3.0-sdk-preview-1]: https://www.microsoft.com/net/download
+[.net-core-3.0-daily]: https://github.com/dotnet/core/blob/master/daily-builds.md
+[.net-core-3.0-samples]: https://github.com/dotnet/samples/tree/master/windowsforms

@@ -4,13 +4,6 @@
 
 namespace System.Windows.Forms 
 {
-
-    using System.Diagnostics;
-
-    using System;
-
-
-    /// <include file='doc\DrawListViewSubItemEventHandler.uex' path='docs/doc[@for="DrawListViewSubItemEventHandler"]/*' />
     /// <devdoc>
     /// Handler for the ListView's DrawSubItem event. 
     /// </devdoc>

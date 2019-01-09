@@ -2,19 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-
-    /// <include file='doc\GiveFeedbackEventHandler.uex' path='docs/doc[@for="GiveFeedbackEventHandler"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Represents the method that handles the <see cref='System.Windows.Forms.Control.GiveFeedback'/> event
-    ///       of a <see cref='System.Windows.Forms.Control'/>.
-    ///    </para>
+    /// Represents the method that handles the <see cref='System.Windows.Forms.Control.GiveFeedback'/>
+    /// event of a <see cref='System.Windows.Forms.Control'/>.
     /// </devdoc>
     public delegate void GiveFeedbackEventHandler(object sender, GiveFeedbackEventArgs e);
 }

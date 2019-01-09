@@ -20,7 +20,7 @@ namespace System.Windows.Forms
             DataGridView owner = null;
             CurrencyManager currencyManager = null;
             object dataSource = null;
-            string dataMember = String.Empty;
+            string dataMember = string.Empty;
             PropertyDescriptorCollection props = null;
             int lastListCount = -1;
 
@@ -343,7 +343,7 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    if (String.Equals(column.DataPropertyName, sortField.Name, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(column.DataPropertyName, sortField.Name, StringComparison.OrdinalIgnoreCase))
                     {
                         // Set the sorted column on the dataGridView only if the sorted Field is set outside the dataGridView.
                         // If the sortedField is set inside the dataGridView ( either by user clicking on a ColumnHeader or by user calling DGV.Sort(...)
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < this.props.Count; i++)
                 {
-                    if (String.Compare(this.props[i].Name, dataPropertyName, true /*ignoreCase*/, CultureInfo.InvariantCulture) == 0)
+                    if (string.Compare(this.props[i].Name, dataPropertyName, true /*ignoreCase*/, CultureInfo.InvariantCulture) == 0)
                     {
                         ret = i;
                         break;
@@ -414,7 +414,7 @@ namespace System.Windows.Forms
                     return SortOrder.None;
                 }
 
-                if (String.Compare(this.props[boundColumnIndex].Name, sortProperty.Name, true /*ignoreCase*/, CultureInfo.InvariantCulture) == 0)
+                if (string.Compare(this.props[boundColumnIndex].Name, sortProperty.Name, true /*ignoreCase*/, CultureInfo.InvariantCulture) == 0)
                 {
                     return sortOrder;
                 }
@@ -719,7 +719,7 @@ namespace System.Windows.Forms
                                 {
                                     if (!string.IsNullOrEmpty(dataPropertyName))
                                     {
-                                        if (String.Compare(dataGridViewColumn.DataPropertyName, dataPropertyName, true /*ignoreCase*/, CultureInfo.InvariantCulture) == 0)
+                                        if (string.Compare(dataGridViewColumn.DataPropertyName, dataPropertyName, true /*ignoreCase*/, CultureInfo.InvariantCulture) == 0)
                                         {
                                             this.owner.OnCellCommonChange(columnIndex, e.NewIndex);
                                         }
@@ -1039,7 +1039,7 @@ namespace System.Windows.Forms
                     dataGridViewColumn.DataPropertyName = this.props[i].Name;
                     dataGridViewColumn.Name = this.props[i].Name;
                     dataGridViewColumn.BoundColumnConverter = this.props[i].Converter;
-                    dataGridViewColumn.HeaderText = !String.IsNullOrEmpty(this.props[i].DisplayName) ? this.props[i].DisplayName : this.props[i].Name;
+                    dataGridViewColumn.HeaderText = !string.IsNullOrEmpty(this.props[i].DisplayName) ? this.props[i].DisplayName : this.props[i].Name;
                     dataGridViewColumn.ValueType = this.props[i].PropertyType;
 
                     dataGridViewColumn.IsBrowsableInternal = this.props[i].IsBrowsable;
@@ -1128,7 +1128,7 @@ namespace System.Windows.Forms
 
                 if (dataMember == null)
                 {
-                    dataMember = String.Empty;
+                    dataMember = string.Empty;
                 }
 
                 ISupportInitializeNotification dsInit = this.dataSource as ISupportInitializeNotification;
@@ -1233,7 +1233,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
             }
 
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
             }
 

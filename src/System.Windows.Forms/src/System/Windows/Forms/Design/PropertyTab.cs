@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design {
     [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     public abstract class PropertyTab : IExtenderProvider {
 
-        private Object[] components; 
+        private object[] components; 
         private Bitmap   bitmap;
         private bool     checkedBmp;
 
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets or sets the array of components the property tab is associated with.</para>
         /// </devdoc>
-        public virtual Object[] Components {
+        public virtual object[] Components {
             get {
                 return components;
             }
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets a value indicating whether the specified object be can extended.</para>
         /// </devdoc>
-        public virtual bool CanExtend(Object extendee) {
+        public virtual bool CanExtend(object extendee) {
             return true;
         }
 
@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets the default property of the specified component.</para>
         /// </devdoc>
-        public virtual PropertyDescriptor GetDefaultProperty(Object component) {
+        public virtual PropertyDescriptor GetDefaultProperty(object component) {
             return TypeDescriptor.GetDefaultProperty(component);
         }
 
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets the properties of the specified component.</para>
         /// </devdoc>
-        public virtual PropertyDescriptorCollection GetProperties(Object component) {
+        public virtual PropertyDescriptorCollection GetProperties(object component) {
             return GetProperties(component, null);
         }
 

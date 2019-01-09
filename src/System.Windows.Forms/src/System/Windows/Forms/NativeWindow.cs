@@ -736,8 +736,8 @@ namespace System.Windows.Forms {
                             //We need to check the length of the string we're passing into CreateWindowEx().  
                             //If it exceeds the max, we should take the substring....
 
-                            if (cp.Caption != null && cp.Caption.Length > Int16.MaxValue) {
-                                cp.Caption = cp.Caption.Substring(0, Int16.MaxValue);
+                            if (cp.Caption != null && cp.Caption.Length > short.MaxValue) {
+                                cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                             }
 
                             createResult = UnsafeNativeMethods.CreateWindowEx(cp.ExStyle, windowClass.windowClassName,
@@ -941,7 +941,7 @@ namespace System.Windows.Forms {
             }
             //outside of our predefined table. 
             //compute the hard way. 
-            for (int j = ((minSize - 2) | 1); j < Int32.MaxValue; j += 2) {
+            for (int j = ((minSize - 2) | 1); j < int.MaxValue; j += 2) {
                 bool prime = true;
 
                 if ((j & 1) != 0) {
@@ -1536,7 +1536,7 @@ namespace System.Windows.Forms {
                 b.Append(".app.");
                 b.Append(domainQualifier);
                 b.Append('.');
-                String appDomain = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
+                string appDomain = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
                 b.Append(VersioningHelper.MakeVersionSafeName(appDomain, ResourceScope.Process, ResourceScope.AppDomain));
                 return b.ToString();
             }

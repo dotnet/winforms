@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private DialogResult dialogResult;
 
-        private const int InvalidDimensionValue = Int32.MinValue;
+        private const int InvalidDimensionValue = int.MinValue;
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.dialogResult"]/*' />
         /// <devdoc>

@@ -1193,7 +1193,7 @@ namespace System.Windows.Forms {
                 return shortcutKeyDisplayString;
             }
             else if (shortcutKeys == Keys.None) {
-                return String.Empty;
+                return string.Empty;
             }
             else {
                 return TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(shortcutKeys);

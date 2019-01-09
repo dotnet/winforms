@@ -35,7 +35,7 @@ namespace System.Experimental.Gdi
     {
         // Flag used by TextRenderer to clear the TextRenderer specific flags.
         public const int GdiUnsupportedFlagMask = (unchecked((int)0xFF000000));
-        public static readonly Size MaxSize = new Size(Int32.MaxValue, Int32.MaxValue);
+        public static readonly Size MaxSize = new Size(int.MaxValue, int.MaxValue);
 
         // The value of the ItalicPaddingFactor comes from several tests using different fonts & drawing
         // flags and some benchmarking with GDI+.
@@ -162,7 +162,7 @@ namespace System.Experimental.Gdi
         /// </devdoc>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor, IntTextFormatFlags flags)
         {
-            Rectangle bounds = new Rectangle( pt.X, pt.Y, Int32.MaxValue, Int32.MaxValue );
+            Rectangle bounds = new Rectangle( pt.X, pt.Y, int.MaxValue, int.MaxValue );
             DrawText( text, font, bounds, foreColor, backColor, flags );
         }
 

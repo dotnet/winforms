@@ -73,7 +73,7 @@ namespace System.Windows.Forms
 
         /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.Send"]/*' />
         // This is never called because we decide whether to Send or Post and we always post
-        public override void Send(SendOrPostCallback d, Object state) {
+        public override void Send(SendOrPostCallback d, object state) {
             Thread destinationThread = DestinationThread;
             if (destinationThread == null || !destinationThread.IsAlive) {
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.Post"]/*' />
-        public override void Post(SendOrPostCallback d, Object state) {
+        public override void Post(SendOrPostCallback d, object state) {
             Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");
 
             if (controlToSendTo != null) {

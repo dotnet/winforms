@@ -65,12 +65,7 @@ namespace System.Windows.Forms {
             return  Column.ToString(CultureInfo.CurrentCulture) + "," + Row.ToString(CultureInfo.CurrentCulture);
         }
         
-        public override int GetHashCode() {
-            // Structs should implement GetHashCode for perf
-           return WindowsFormsUtils.GetCombinedHashCodes(
-                                                        this.row,
-                                                        this.column);
-        }
+        public override int GetHashCode() => HashCode.Combine(row, column);
     }
     
     internal class TableLayoutPanelCellPositionTypeConverter : TypeConverter {

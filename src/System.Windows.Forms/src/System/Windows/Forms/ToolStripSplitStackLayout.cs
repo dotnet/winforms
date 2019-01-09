@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
                     // if we have something set to overflow always we need to show an overflow button
                     if (item.Overflow == ToolStripItemOverflow.Always) {
 #if DEBUG
-                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to alaways overflow: {0} ", item)); }
+                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to alaways overflow: {0} ", item)); }
 #endif                        
                         OverflowRequired = true;
                     }
@@ -161,7 +161,7 @@ namespace System.Windows.Forms {
                     if (item.Overflow == ToolStripItemOverflow.Always) {
                         OverflowRequired = true;
 #if DEBUG
-                        if (DebugLayoutTraceSwitch.TraceVerbose) Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to always overflow: {0} ", item));                        
+                        if (DebugLayoutTraceSwitch.TraceVerbose) Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to always overflow: {0} ", item));                        
 #endif                        
                     }
 
@@ -172,11 +172,11 @@ namespace System.Windows.Forms {
 
                         currentHeight += itemSize.Height + item.Margin.Vertical;
 #if DEBUG                        
-                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "Adding {0} Size {1} to currentHeight = {2}", item.ToString(), itemSize, currentHeight)); }
+                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Adding {0} Size {1} to currentHeight = {2}", item.ToString(), itemSize, currentHeight)); }
 #endif                        
                         if (currentHeight > displayRectangle.Height - overflowWidth) {
 #if DEBUG                       
-                            if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "Got to {0} and realized that currentHeight = {1} is larger than displayRect {2} minus overflow {3}", item.ToString(), currentHeight, displayRectangle, overflowWidth)); }
+                            if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Got to {0} and realized that currentHeight = {1} is larger than displayRect {2} minus overflow {3}", item.ToString(), currentHeight, displayRectangle, overflowWidth)); }
 #endif                            
                             int spaceRecovered = SendNextItemToOverflow(currentHeight - displayRectangle.Height, false);
 
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
                 // main.
                 if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow)) {
 #if DEBUG
-                    if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item)); }
+                    if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item)); }
 #endif                    
                     item.SetPlacement(ToolStripItemPlacement.Main);
                 }
@@ -373,7 +373,7 @@ namespace System.Windows.Forms {
                     item.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
                 }
 #if DEBUG
-                if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString())); }                
+                if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString())); }                
 #endif
             }
             // 
@@ -440,7 +440,7 @@ namespace System.Windows.Forms {
                 // main.
                 if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow)) {
 #if DEBUG
-                    if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item)); }
+                    if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item)); }
 #endif                    
                     item.SetPlacement(ToolStripItemPlacement.Main);
                 }
@@ -498,7 +498,7 @@ namespace System.Windows.Forms {
                     item.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
                 }
 #if DEBUG                
-                if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString())); }
+                if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString())); }
 #endif                
             }
 
@@ -521,7 +521,7 @@ namespace System.Windows.Forms {
                     if ((itemBounds.Right > displayRectangle.Right)
                         || (itemBounds.Left < displayRectangle.Left)) {
 #if DEBUG 
-                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit horizontally within the DRect", item)); }
+                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit horizontally within the DRect", item)); }
 #endif                        
                         itemLocation = noMansLand;
                         item.SetPlacement(ToolStripItemPlacement.None);
@@ -532,7 +532,7 @@ namespace System.Windows.Forms {
                   if ((itemBounds.Bottom > displayRectangle.Bottom)
                       || (itemBounds.Top < displayRectangle.Top)) {
 #if DEBUG
-                      if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit verticallu within the DRect", item)); }
+                      if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit verticallu within the DRect", item)); }
 #endif                      
                           
                       itemLocation = noMansLand;
@@ -580,7 +580,7 @@ namespace System.Windows.Forms {
         // need to free up "X" amount of space to be able to fit an item onto the winbar.
         private int SendNextItemToOverflow(int spaceNeeded, bool horizontal) {
 #if DEBUG
-            if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "SendNextItemToOverflow attempting to free {0}", spaceNeeded)); }
+            if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "SendNextItemToOverflow attempting to free {0}", spaceNeeded)); }
 #endif            
             Debug.Indent();
 
@@ -601,7 +601,7 @@ namespace System.Windows.Forms {
                 // not looking at ones that Always overflow - as the forward walker already skips these.
                 if (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement != ToolStripItemPlacement.Overflow) {
 #if DEBUG
-                    if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "Found candidate for sending to overflow {0}", item.ToString())); }
+                    if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Found candidate for sending to overflow {0}", item.ToString())); }
 #endif                    
 
                     // since we havent parented the item yet - the auto size wont have reset the size yet.
@@ -613,7 +613,7 @@ namespace System.Windows.Forms {
                         // to the overflow.
                         freedSpace += (horizontal) ? itemSize.Width + itemMargin.Horizontal : itemSize.Height + itemMargin.Vertical;
 #if DEBUG
-                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "Sweet! {0} FreedSpace - which is now {1}", itemSize, freedSpace.ToString(CultureInfo.InvariantCulture))); }
+                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Sweet! {0} FreedSpace - which is now {1}", itemSize, freedSpace.ToString(CultureInfo.InvariantCulture))); }
 #endif                        
                     }
 
@@ -624,7 +624,7 @@ namespace System.Windows.Forms {
                         // we now need to account for the width or height of the overflow button      
                         spaceNeeded += (horizontal) ? OverflowButtonSize.Width : OverflowButtonSize.Height;
 #if DEBUG
-                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "Turns out we now need an overflow button, space needed now: {0}", spaceNeeded.ToString(CultureInfo.InvariantCulture))); }
+                        if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Turns out we now need an overflow button, space needed now: {0}", spaceNeeded.ToString(CultureInfo.InvariantCulture))); }
 #endif                        
                         this.OverflowRequired = true;
                     }

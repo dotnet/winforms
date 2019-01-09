@@ -2,27 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Diagnostics.CodeAnalysis;
 
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
- 
-    // this enum is tightly coupled to Orientation so you can determine quickly 
-    // an orientation from a direction.  (direction & Orientation.Vertical == Orientation.Vertical)    
-    /// <include file='doc\Direction.uex' path='docs/doc[@for="ArrowDirection"]/*' />    
+namespace System.Windows.Forms
+{
+    /// <devdoc>
+    // this enum is tightly coupled to Orientation so you can determine quickly
+    // an orientation from a direction. (direction & Orientation.Vertical == Orientation.Vertical)
+    /// </devdoc>
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
-    public enum ArrowDirection {
-        /// <include file='doc\ArrowDirection.uex' path='docs/doc[@for="ArrowDirection.Up"]/*' />
-        Up = 0x00   | (int)Orientation.Vertical,
-        /// <include file='doc\ArrowDirection.uex' path='docs/doc[@for="ArrowDirection.Down"]/*' />
+    public enum ArrowDirection
+    {
+        Up = 0x00 | (int)Orientation.Vertical,
         Down = 0x10 | (int)Orientation.Vertical,
-        /// <include file='doc\ArrowDirection.uex' path='docs/doc[@for="ArrowDirection.Left"]/*' />
         Left = 0x00 | (int)Orientation.Horizontal,
-        /// <include file='doc\ArrowDirection.uex' path='docs/doc[@for="ArrowDirection.Right"]/*' />
-        Right =0x10 | (int)Orientation.Horizontal,
+        Right = 0x10 | (int)Orientation.Horizontal,
     }
 }
