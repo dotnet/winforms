@@ -56,7 +56,7 @@ jobs:
           - group: DotNet-Blob-Feed
           - group: DotNet-Symbol-Server-Pats
           - name: _PublishBlobFeedUrl
-            value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
+            value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
           # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
           # until the agent is running on the machine. They can be overridden any time before they are resolved,
