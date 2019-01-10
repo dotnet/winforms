@@ -1,0 +1,1 @@
+powershell -Command "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; eng\PublishHash.ps1"
