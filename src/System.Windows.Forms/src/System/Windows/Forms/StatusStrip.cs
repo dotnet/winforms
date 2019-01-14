@@ -302,10 +302,10 @@ namespace System.Windows.Forms {
             if (LayoutStyle == ToolStripLayoutStyle.Table) {
                 
                 if (proposedSize.Width == 1) {
-                    proposedSize.Width = Int32.MaxValue;
+                    proposedSize.Width = int.MaxValue;
                 }
                 if (proposedSize.Height == 1) {
-                    proposedSize.Height = Int32.MaxValue;
+                    proposedSize.Height = int.MaxValue;
                 }
                 if (Orientation == Orientation.Horizontal) {
                     return GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size;

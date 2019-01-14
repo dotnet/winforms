@@ -499,7 +499,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
-                        if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
+                        if (this.DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
@@ -520,7 +520,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
-                        if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
+                        if (this.DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
@@ -541,7 +541,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
-                        if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
+                        if (this.DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         }

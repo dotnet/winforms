@@ -62,7 +62,7 @@ namespace System.Experimental.Gdi
 
         public override string ToString()
         {
-            return String.Format( CultureInfo.InvariantCulture, "{0}: Color={1}", this.GetType().Name,  this.Color );
+            return string.Format( CultureInfo.InvariantCulture, "{0}: Color={1}", this.GetType().Name,  this.Color );
         }
     }
 }

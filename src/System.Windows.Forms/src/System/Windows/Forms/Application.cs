@@ -366,7 +366,7 @@ namespace System.Windows.Forms {
                         executablePath = IntSecurity.UnsafeGetFullPath(sb.ToString());
                     }
                     else {
-                        String cb = asm.CodeBase;
+                        string cb = asm.CodeBase;
                         Uri codeBase = new Uri(cb);
                         if (codeBase.IsFile) {
                             executablePath = codeBase.LocalPath + Uri.UnescapeDataString(codeBase.Fragment); ;
@@ -1256,7 +1256,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [ResourceExposure(ResourceScope.Machine)]
         [ResourceConsumption(ResourceScope.Machine)]
-        private static string GetDataPath(String basePath) {
+        private static string GetDataPath(string basePath) {
             string template = @"{0}\{1}\{2}\{3}";
 
             string company = CompanyName;
@@ -1404,7 +1404,7 @@ namespace System.Windows.Forms {
 
             Process process = Process.GetCurrentProcess();
             Debug.Assert(process != null);
-            if (String.Equals(process.MainModule.ModuleName, IEEXEC, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(process.MainModule.ModuleName, IEEXEC, StringComparison.OrdinalIgnoreCase))
             {
                 string clrPath = string.Empty;
 
@@ -1420,7 +1420,7 @@ namespace System.Windows.Forms {
                 {
                     CodeAccessPermission.RevertAssert();
                 }
-                if (String.Equals(clrPath + "\\" + IEEXEC, process.MainModule.FileName, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(clrPath + "\\" + IEEXEC, process.MainModule.FileName, StringComparison.OrdinalIgnoreCase))
                 {
                     // HRef exe case
                     hrefExeCase = true;
@@ -1448,7 +1448,7 @@ namespace System.Windows.Forms {
 #endif
                 {
                     // Regular app case
-                    String[] arguments = Environment.GetCommandLineArgs();
+                    string[] arguments = Environment.GetCommandLineArgs();
                     Debug.Assert(arguments != null && arguments.Length > 0);
                     StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
                     for (int argumentIndex = 1; argumentIndex < arguments.Length - 1; argumentIndex++)

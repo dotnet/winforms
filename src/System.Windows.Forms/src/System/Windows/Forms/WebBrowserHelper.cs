@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
         internal static ISelectionService GetSelectionService(Control ctl) {
             ISite site = ctl.Site;
             if (site != null) {
-                Object o = site.GetService(typeof(ISelectionService));
+                object o = site.GetService(typeof(ISelectionService));
                 Debug.Assert(o == null || o is ISelectionService, "service must implement ISelectionService");
                 if (o is ISelectionService) {
                     return(ISelectionService) o;

@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
         private int       height;
         // protected DataRow   dataRow;
         private IntPtr       tooltipID = new IntPtr(-1);
-        private string    tooltip = String.Empty;
+        private string    tooltip = string.Empty;
         AccessibleObject  accessibleObject;
 
         // for accessibility...
@@ -621,17 +621,17 @@ namespace System.Windows.Forms {
 
             string errString = ((IDataErrorInfo) errorInfo).Error;
             if (errString == null)
-                errString = String.Empty;
+                errString = string.Empty;
 
             if (tooltip != errString) {
-                if (!String.IsNullOrEmpty(tooltip)) {
+                if (!string.IsNullOrEmpty(tooltip)) {
                     DataGrid.ToolTipProvider.RemoveToolTip(tooltipID);
-                    tooltip = String.Empty;
+                    tooltip = string.Empty;
                     tooltipID = new IntPtr(-1);
                 }
             }
 
-            if (String.IsNullOrEmpty(errString))
+            if (string.IsNullOrEmpty(errString))
                 return;
 
             // we now have an error string: paint the errorIcon and add the tooltip

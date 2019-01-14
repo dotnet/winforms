@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
         public override bool Equals(object otherObject) {
             if (otherObject is BindingMemberInfo) {
                 BindingMemberInfo otherMember = (BindingMemberInfo) otherObject;
-                return (String.Equals(this.BindingMember, otherMember.BindingMember, StringComparison.OrdinalIgnoreCase));
+                return (string.Equals(this.BindingMember, otherMember.BindingMember, StringComparison.OrdinalIgnoreCase));
             }
             return false;
         }

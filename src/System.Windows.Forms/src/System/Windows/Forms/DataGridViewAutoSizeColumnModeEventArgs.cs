@@ -16,7 +16,6 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewAutoSizeColumnModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeColumnModeEventArgs.DataGridViewAutoSizeColumnModeEventArgs"]/*' />
         public DataGridViewAutoSizeColumnModeEventArgs(DataGridViewColumn dataGridViewColumn, DataGridViewAutoSizeColumnMode previousMode)
         {
-            Debug.Assert(dataGridViewColumn != null);
             this.dataGridViewColumn = dataGridViewColumn;
             this.previousMode = previousMode;
         }

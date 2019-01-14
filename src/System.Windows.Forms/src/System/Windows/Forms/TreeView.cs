@@ -599,7 +599,7 @@ namespace System.Windows.Forms {
             set {
                 if (ImageIndexer.Key != value) {
                     ImageIndexer.Key = value;
-                    if (String.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
+                    if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
                         ImageIndex = (ImageList != null) ? 0:-1;
                     }
                     if (IsHandleCreated) {
@@ -796,8 +796,8 @@ namespace System.Windows.Forms {
                     if (value < 1) {
                         throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidLowBoundArgumentEx, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                     }
-                    if (value >= Int16.MaxValue) {
-                        throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidHighBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), Int16.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                    if (value >= short.MaxValue) {
+                        throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidHighBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), short.MaxValue.ToString(CultureInfo.CurrentCulture)));
                     }
                     itemHeight = value;
                     if (IsHandleCreated) {
@@ -1080,7 +1080,7 @@ namespace System.Windows.Forms {
                 if (SelectedImageIndexer.Key != value) {
                     SelectedImageIndexer.Key = value;
 
-                    if (String.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
+                    if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
                         SelectedImageIndex = (ImageList != null) ? 0 : -1;
                     }
                     if (IsHandleCreated) {
@@ -1973,7 +1973,7 @@ namespace System.Windows.Forms {
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
                 oldSize = this.Width;
                 int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle), NativeMethods.NullHandleRef, this.Left, this.Top, Int32.MaxValue, this.Height, flags);
+                SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle), NativeMethods.NullHandleRef, this.Left, this.Top, int.MaxValue, this.Height, flags);
 
                 root.Realize(false);
 

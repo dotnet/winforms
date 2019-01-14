@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
         public Binding this[string propertyName] {
             get {
                 foreach (Binding binding in this) {
-                    if (String.Equals(binding.PropertyName, propertyName, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(binding.PropertyName, propertyName, StringComparison.OrdinalIgnoreCase))
                     {
                         return binding;
                     }
@@ -78,22 +78,22 @@ namespace System.Windows.Forms {
         /// Fires the CollectionChangedEvent.
         /// </devdoc>
         public Binding Add(string propertyName, object dataSource, string dataMember) {
-            return Add(propertyName, dataSource, dataMember, false, this.DefaultDataSourceUpdateMode, null, String.Empty, null);
+            return Add(propertyName, dataSource, dataMember, false, this.DefaultDataSourceUpdateMode, null, string.Empty, null);
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add6"]/*' />
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled) {
-            return Add(propertyName, dataSource, dataMember, formattingEnabled, this.DefaultDataSourceUpdateMode, null, String.Empty, null);
+            return Add(propertyName, dataSource, dataMember, formattingEnabled, this.DefaultDataSourceUpdateMode, null, string.Empty, null);
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add2"]/*' />
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode) {
-            return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, null, String.Empty, null);
+            return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, null, string.Empty, null);
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add3"]/*' />
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue) {
-            return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, String.Empty, null);
+            return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, string.Empty, null);
         }
 
         /// <include file='doc\ControlBindingsCollection.uex' path='docs/doc[@for="ControlBindingsCollection.Add5"]/*' />
@@ -138,7 +138,7 @@ namespace System.Windows.Forms {
             }
             for (int i = 0; i < Count; i++) {
                 if (binding != this[i] && this[i].PropertyName.Length > 0 &&
-                    (String.Compare(binding.PropertyName, this[i].PropertyName, false, CultureInfo.InvariantCulture) == 0)) {
+                    (string.Compare(binding.PropertyName, this[i].PropertyName, false, CultureInfo.InvariantCulture) == 0)) {
                     throw new ArgumentException(SR.BindingsCollectionDup, "binding");
                 }
             }

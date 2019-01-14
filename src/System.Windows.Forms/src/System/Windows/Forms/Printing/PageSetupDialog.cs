@@ -371,7 +371,7 @@ namespace System.Windows.Forms {
                 StringBuilder sb = new StringBuilder(2);
                 int result = UnsafeNativeMethods.GetLocaleInfo(NativeMethods.LOCALE_USER_DEFAULT,NativeMethods.LOCALE_IMEASURE, sb,sb.Capacity);
                 
-                if (result > 0 && Int32.Parse(sb.ToString(), CultureInfo.InvariantCulture) == 0) {
+                if (result > 0 && int.Parse(sb.ToString(), CultureInfo.InvariantCulture) == 0) {
                     toUnit = PrinterUnit.HundredthsOfAMillimeter;
                 }
             }

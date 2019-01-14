@@ -709,21 +709,22 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.GetHashCode"]/*' />
         public override int GetHashCode()
         {
-            return WindowsFormsUtils.GetCombinedHashCodes((int) this.Alignment,
-                                                              (int) this.WrapMode,
-                                                              this.Padding.GetHashCode(),
-                                                              this.Format.GetHashCode(),
-                                                              this.BackColor.GetHashCode(),
-                                                              this.ForeColor.GetHashCode(),
-                                                              this.SelectionBackColor.GetHashCode(),
-                                                              this.SelectionForeColor.GetHashCode(),
-                                                              (this.Font == null ? 1 : this.Font.GetHashCode()),
-                                                              (this.NullValue == null ? 1 : this.NullValue.GetHashCode()),
-                                                              (this.DataSourceNullValue == null ? 1 : this.DataSourceNullValue.GetHashCode()),
-                                                              (this.Tag == null ? 1 : this.Tag.GetHashCode()));
+            var hash = new HashCode();
+            hash.Add(Alignment);
+            hash.Add(WrapMode);
+            hash.Add(Padding);
+            hash.Add(Format);
+            hash.Add(BackColor);
+            hash.Add(ForeColor);
+            hash.Add(SelectionBackColor);
+            hash.Add(SelectionForeColor);
+            hash.Add(Font);
+            hash.Add(NullValue);
+            hash.Add(DataSourceNullValue);
+            hash.Add(Tag);
+            return hash.ToHashCode();
         }
 
         private void OnPropertyChanged(DataGridViewCellStylePropertyInternal property)

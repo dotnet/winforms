@@ -37,7 +37,7 @@ namespace System.Windows.Forms
             {
                 if (string.IsNullOrEmpty(this._path))
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
                 return this._path;
             }
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                this._path = String.Empty;
+                this._path = string.Empty;
                 this._knownFolderGuid = value;
             }
         }

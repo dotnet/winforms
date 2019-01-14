@@ -186,7 +186,7 @@ namespace System.Experimental.Gdi
         /// </devdoc>
         public Rectangle ToRectangle() {            
             if( this.IsInfinite ) {
-                return new Rectangle( -Int32.MaxValue, -Int32.MaxValue, Int32.MaxValue, Int32.MaxValue );
+                return new Rectangle( -int.MaxValue, -int.MaxValue, int.MaxValue, int.MaxValue );
             }
 
             IntNativeMethods.RECT rect = new IntNativeMethods.RECT();

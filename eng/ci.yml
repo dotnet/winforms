@@ -66,7 +66,7 @@ jobs:
           - group: DotNet-Blob-Feed
           - group: DotNet-Symbol-Server-Pats
           - name: _PublishBlobFeedUrl
-            value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
+            value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
           # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
           # until the agent is running on the machine. They can be overridden any time before they are resolved,
@@ -91,13 +91,7 @@ jobs:
             _BuildConfig: Debug
             # override some variables for debug
             _PublishType: none
-
-            # Test signing is running into sporadic failures on build machines, so disable it for now
-            # TODO: revert this once https://github.com/dotnet/core-eng/issues/4734 is resolved
-            #_SignType: test
-            _SignType: ''
-            _Sign: false
-
+            _SignType: test
             _DotNetPublishToBlobFeed : false
           Build_Release:
             _BuildConfig: Release
@@ -157,9 +151,15 @@ jobs:
       #     condition: succeeded()
       #     continueOnError: false
 
-      # Publish the nuget package as a build artifact
-      # Only do this if the build is internal AND the config is released (this ensures package contents are real signed)
+      # Run component governance detection (only for release)
+      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+        displayName: Component Governance Detection
+        condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+
+      # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
+
+        # Publish the nuget package as a build artifact (only for release, ensuring package contents are real-signed)
         - task: PublishPipelineArtifact@0
           inputs:
             artifactName: 'Package'

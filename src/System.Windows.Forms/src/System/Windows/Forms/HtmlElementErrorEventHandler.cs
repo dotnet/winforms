@@ -2,15 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-
-namespace System.Windows.Forms {
-
-    /// <include file='doc\HtmlElementErrorEventHandler.uex' path='docs/doc[@for="HtmlElementErrorEventHandler"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>EventHandler for HtmlElementErrorEventArgs</para>
+    /// EventHandler for HtmlElementErrorEventArgs
     /// </devdoc>
     public delegate void HtmlElementErrorEventHandler(object sender, HtmlElementErrorEventArgs e);
-
 }
-

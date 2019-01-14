@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
                 string toolStripPanelName = toolStripPanel.Name;
 
                 // Handle the ToolStripPanels inside a ToolStripContainer
-                if (String.IsNullOrEmpty(toolStripPanelName) && toolStripPanel.Parent is ToolStripContainer && !String.IsNullOrEmpty(toolStripPanel.Parent.Name)) {
+                if (string.IsNullOrEmpty(toolStripPanelName) && toolStripPanel.Parent is ToolStripContainer && !string.IsNullOrEmpty(toolStripPanel.Parent.Name)) {
                     toolStripPanelName = toolStripPanel.Parent.Name + "." + toolStripPanel.Dock.ToString();
                 }
                 toolStripPanel.BeginInit();
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
                 return formKey + "." + toolStrip.Name;
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         private void ResumeAllLayout(Control start, bool performLayout) {
@@ -370,19 +370,19 @@ namespace System.Windows.Forms {
             public string   Name;
 
             public SettingsStub(ToolStrip toolStrip) {
-                this.ToolStripPanelName = String.Empty;
+                this.ToolStripPanelName = string.Empty;
                 ToolStripPanel parentPanel = toolStrip.Parent as ToolStripPanel;
 
                 if (parentPanel != null) {
-                    if (!String.IsNullOrEmpty(parentPanel.Name)) {
+                    if (!string.IsNullOrEmpty(parentPanel.Name)) {
                         this.ToolStripPanelName = parentPanel.Name;
                     }
-                    else if (parentPanel.Parent is ToolStripContainer && !String.IsNullOrEmpty(parentPanel.Parent.Name)) {
+                    else if (parentPanel.Parent is ToolStripContainer && !string.IsNullOrEmpty(parentPanel.Parent.Name)) {
                         // Handle the case when the ToolStripPanel belongs to a ToolStripContainer.
                         this.ToolStripPanelName = parentPanel.Parent.Name + "." + parentPanel.Dock.ToString();
                     }
 
-                    Debug.Assert(!String.IsNullOrEmpty(this.ToolStripPanelName), "ToolStrip was parented to a panel, but we couldn't figure out its name.");
+                    Debug.Assert(!string.IsNullOrEmpty(this.ToolStripPanelName), "ToolStrip was parented to a panel, but we couldn't figure out its name.");
                 }
 
                 this.Visible = toolStrip.Visible;

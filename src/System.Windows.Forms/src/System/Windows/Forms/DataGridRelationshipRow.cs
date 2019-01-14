@@ -557,13 +557,13 @@ namespace System.Windows.Forms {
 
             // painting the error..
             //
-            string errString = String.Empty;
+            string errString = string.Empty;
             Rectangle bounds = cellBounds;
             object errInfo = DataGrid.ListManager[this.number];
             if (errInfo is IDataErrorInfo)
                 errString = ((IDataErrorInfo) errInfo)[column.PropertyDescriptor.Name];
 
-            if (!String.IsNullOrEmpty(errString)) {
+            if (!string.IsNullOrEmpty(errString)) {
                 Bitmap bmp = GetErrorBitmap();
                 Rectangle errRect;
                 lock (bmp) {

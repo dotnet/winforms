@@ -625,7 +625,7 @@ namespace System.Windows.Forms {
             if (menu == null)
                 return;
 
-            char menuKey = Char.ToUpper((char) NativeMethods.Util.LOWORD(m.WParam), CultureInfo.CurrentCulture);
+            char menuKey = char.ToUpper((char) NativeMethods.Util.LOWORD(m.WParam), CultureInfo.CurrentCulture);
 
             m.Result = menu.WmMenuCharInternal(menuKey);
         }
@@ -662,7 +662,7 @@ namespace System.Windows.Forms {
             return mi.OwnerDraw &&
                    mi.Mnemonic == 0 &&
                    mi.Text.Length > 0 &&
-                   Char.ToUpper(mi.Text[0], CultureInfo.CurrentCulture) == key;
+                   char.ToUpper(mi.Text[0], CultureInfo.CurrentCulture) == key;
         }
 
         /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection"]/*' />
@@ -997,7 +997,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int  IndexOfKey(String key) {
+            public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                   if (string.IsNullOrEmpty(key)){
                         return -1; // we dont support empty or null keys.
