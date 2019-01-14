@@ -14,8 +14,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void SystemInformation_CompareDeviceToLogicalValues()
         {
-            Assert.Equal(SystemInformation.VerticalScrollBarArrowHeightForDpi(LogicalDpi), SystemInformation.VerticalScrollBarArrowHeight);
-            Assert.Equal(SystemInformation.GetHorizontalScrollBarArrowWidthForDpi(LogicalDpi), SystemInformation.HorizontalScrollBarArrowWidth);
+            Assert.Equal(SystemInformation.VerticalScrollBarArrowHeight, SystemInformation.VerticalScrollBarArrowHeightForDpi(LogicalDpi));
+            Assert.Equal(SystemInformation.HorizontalScrollBarArrowWidth, SystemInformation.GetHorizontalScrollBarArrowWidthForDpi(LogicalDpi));
         }
     }
 }
