@@ -228,7 +228,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                if (this.DataGridView != null && this.RowIndex >= 0 && this.ColumnIndex >= 0)
+                if (this.RowIndex >= 0 && this.ColumnIndex >= 0)
                 {
                     Debug.Assert(this.DataGridView.Rows.GetRowState(this.RowIndex) == this.DataGridView.Rows.SharedRow(this.RowIndex).State);
                     return this.owningColumn.Displayed && this.owningRow.Displayed;
