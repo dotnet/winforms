@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -496,8 +496,9 @@ namespace System.Windows.Forms {
         /// <param name="dpi"></param>
         /// <returns></returns>
         public static int VerticalScrollBarArrowHeightForDpi(int dpi) {
-                return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CXHSCROLL, (uint)dpi);
+            return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CYVSCROLL, (uint)dpi);
         }
+
         /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarArrowWidth"]/*' />
         /// <devdoc>
         ///    <para>
