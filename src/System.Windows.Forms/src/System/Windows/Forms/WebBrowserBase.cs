@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -120,7 +120,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ActiveXInstance"]/*' />
         /// <devdoc>
         ///     <para>
-        /// Returns the native webbrowser object that this control wraps. Needs FullTrust to access.
+        /// Returns the native webbrowser object that this control wraps.
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -134,7 +134,6 @@ namespace System.Windows.Forms {
         // Virtual methods:
         //
         // The following are virtual methods that derived-classes can override
-        // (only in full-trust though).
         //
         
         //

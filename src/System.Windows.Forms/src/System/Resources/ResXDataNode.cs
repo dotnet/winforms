@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -687,8 +687,6 @@ namespace System.Resources {
         /// <devdoc>
         ///    Get the value contained in this datanode
         /// </devdoc>        
-        // NOTE: No LinkDemand for SerializationFormatter necessary here, since this class already  
-        // has a FullTrust LinkDemand.
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             DataNodeInfo nodeInfo = GetDataNodeInfo();
             si.AddValue("Name", nodeInfo.Name, typeof(string));

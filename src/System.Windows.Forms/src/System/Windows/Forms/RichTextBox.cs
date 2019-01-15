@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2764,7 +2764,7 @@ namespace System.Windows.Forms {
             ForceHandleCreate();
             NativeMethods.LOGFONT logfont = new NativeMethods.LOGFONT();
 
-            FontToLogFont(value, logfont);
+            value.ToLogFont(logfont);
 
             byte[] bytesFaceName;
 
@@ -2790,17 +2790,6 @@ namespace System.Windows.Forms {
 
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfW);
         }
-
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.FontToLogFont"]/*' />
-        /// <devdoc>
-        /// This is just here as a minor perf improvement, so we don't have to call expensive RevertAssert.
-        /// When the method exits, we effectively revert the assert.
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
-        static private void FontToLogFont(Font value, NativeMethods.LOGFONT logfont) {
-            value.ToLogFont(logfont);
-        }
-
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SetupLogPixels"]/*' />
         /// <devdoc>
