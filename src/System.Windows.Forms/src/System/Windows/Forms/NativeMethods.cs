@@ -668,6 +668,7 @@ namespace System.Windows.Forms {
         IDC_SIZENS = 32645,
         IDC_UPARROW = 32516,
         IDC_NO = 32648,
+        IDC_HAND = 32649,
         IDC_APPSTARTING = 32650,
         IDC_HELP = 32651,
         IMAGE_ICON = 1,
