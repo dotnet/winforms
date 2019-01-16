@@ -1,8 +1,8 @@
 # Developer Guide
 
-The following document describes the setup and workflow that is recommended for working on the Windows Forms project. It assumes that you have read the [Contributing Document](contributing.md).
+The following document describes the setup and workflow that is recommended for working on the Windows Forms project. It assumes that you have read the [Contributing Document](Documentation/contributing.md).
 
-The [Issue Guide](issue-guide.md) describes our approach to using GitHub issues.
+The [Issue Guide](Documentation/issue-guide.md) describes our approach to using GitHub issues.
 
 ## Machine Setup
 
@@ -23,11 +23,11 @@ We use the following workflow for building as well as testing features and fixes
 
 You first need to [Fork][fork] and [Clone][clone] this WinForms repository. This is a one-time task.
 
-1. [Build](building.md) the repository.
+1. [Build](Documentation/building.md) the repository.
 
-2. [Debug](debugging.md) the change, as needed.
+2. [Debug](Documentation/debugging.md) the change, as needed.
 
-3. [Test](testing.md)the change, to validate quality.
+3. [Test](Documentation/testing.md)the change, to validate quality.
 
 ## More Information
 

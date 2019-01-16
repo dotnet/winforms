@@ -2,7 +2,7 @@
 
 This document describes our approach to unit testing.
 
-We are _still working on_ a scalable solution for functional testing. For now, see [Functional Testing](testing.md#functional-testing) and the [issue #183][issue-#183].
+We are _still working on_ a scalable solution for functional testing. For now, see [Functional Testing](Documentation/testing.md#functional-testing) and the [issue #183][issue-#183].
 
 ## Building tests
 
@@ -118,7 +118,7 @@ In the console, run the following command from the base of the repository:
 .\.dotnet\dotnet.exe .\artifacts\bin\WinformsControlsTest\Debug\netcoreapp3.0\WinformsControlsTest.dll
 ```
 
-**Note:** that this will fail if the WinformsControlsTest is not built. See [Build](building.md) for more information on how to build from source.
+**Note:** that this will fail if the WinformsControlsTest is not built. See [Build](Documentation/building.md) for more information on how to build from source.
 
 ### The test runner
 

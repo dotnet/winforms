@@ -1,6 +1,6 @@
 # Getting started with WinForms for .NET Core
 
-This document describes the experience of using WinForms on .NET Core. The [Developer Guide](developer-guide.md) describes how to develop features and fixes for Windows Forms.
+This document describes the experience of using WinForms on .NET Core. The [Developer Guide](Documentation/developer-guide.md) describes how to develop features and fixes for Windows Forms.
 
 ## Installation
 
@@ -22,7 +22,7 @@ dotnet run
 
 ## Designing Forms
 
-WinForms Core does not yet have a dedicated Designer tool. For the time being, you can use [this workaround](winforms-designer.md).
+WinForms Core does not yet have a dedicated Designer tool. For the time being, you can use [this workaround](Documentation/winforms-designer.md).
 
 ## Samples
 
@@ -30,7 +30,7 @@ Check out the [.NET Core 3.0 WinForms samples][.net-core-3.0-samples] for both b
 
 ## Porting existing applications
 
-To port your existing WinForms application from .NET Framework to .NET Core 3.0, refer to our [porting guidelines](porting-guidelines.md).
+To port your existing WinForms application from .NET Framework to .NET Core 3.0, refer to our [porting guidelines](Documentation/porting-guidelines.md).
 
 [comment]: <> (URI Links)
 

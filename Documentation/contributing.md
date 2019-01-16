@@ -9,7 +9,7 @@ We need the most help with the following types of changes:
 
 Please [file an issue][issues] for any larger change you would like to propose.
 
-See [Developer Guide](developer-guide.md) to learn how to develop changes for this repository.
+See [Developer Guide](Documentation/developer-guide.md) to learn how to develop changes for this repository.
 
 This project follows the general [.NET Core Contribution Guidelines][corefx-contribution-guidelines]. Please read it before submitting PRs.
 
