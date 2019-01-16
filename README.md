@@ -79,14 +79,10 @@ This project uses the [.NET Foundation Code of Conduct][dotnet-code-of-conduct] 
 
 See the [.NET home repository][dotnet-home] to find other .NET-related projects.
 
-[comment]: <> (Internal Links)
-
-[getting-started]: https://github.com/dotnet/winforms/blob/master/Documentation/getting-started.md
-[contributing]: https://github.com/dotnet/winforms/blob/master/Documentation/contributing.md
-[porting-guidelines]: https://github.com/dotnet/winforms/blob/master/Documentation/porting-guidelines.md
-[developing]: https://github.com/dotnet/winforms/blob/master/Documentation/developer-guide.md
-
-[comment]: <> (URI Links)
+[getting-started]: Documentation/getting-started.md
+[contributing]: Documentation/contributing.md
+[porting-guidelines]: Documentation/porting-guidelines.md
+[developing]: Documentation/developer-guide.md
 
 [wpf]: https://github.com/dotnet/wpf
 [.net-core-3.0-sdk-preview-1]: https://www.microsoft.com/net/download
