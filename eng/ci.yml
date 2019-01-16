@@ -23,6 +23,10 @@ jobs:
 
       variables:
 
+        # needed for testing
+        - name: _TestArgs
+          value: -test
+
         # needed for signing
         - name: _TeamName
           value: DotNetCore
@@ -80,6 +84,7 @@ jobs:
             _PublishType: none
             _SignType: test
             _DotNetPublishToBlobFeed : false
+            _TestArgs: ''
           Build_Release:
             _BuildConfig: Release
 
@@ -88,12 +93,13 @@ jobs:
         clean: true
 
       # Build, test, pack, and sign
-      - script: eng\common\cibuild.cmd
-          -configuration $(_BuildConfig) 
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
           -prepareMachine
           $(_PublishArgs)
           $(_SignArgs)
           $(_OfficialBuildIdArgs)
+          $(_TestArgs)
         displayName: Windows Build / Publish
 
       # Run component governance detection (only for release)
