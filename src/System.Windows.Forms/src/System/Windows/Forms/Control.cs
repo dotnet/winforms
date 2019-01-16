@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13039,8 +13039,6 @@ example usage
         /// </devdoc>
         private void WmDpiChangedAfterParent(ref Message m) {
             DefWndProc(ref m);
-
-            uint dpi = UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
 
             OnDpiChangedAfterParent(EventArgs.Empty);
         }
