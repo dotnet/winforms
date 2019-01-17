@@ -54,13 +54,13 @@ namespace System.Windows.Forms {
             }
             for (; sie.MoveNext();) {
                 // Dont catch any exceptions while Deserialising objects from stream.
-                if (String.Equals(sie.Name, "CursorData", StringComparison.OrdinalIgnoreCase) ){
+                if (string.Equals(sie.Name, "CursorData", StringComparison.OrdinalIgnoreCase) ){
                     cursorData = (byte[])sie.Value;
                     if (cursorData != null) {
                         LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)));
                     }
                 }
-                else if (String.Compare(sie.Name, "CursorResourceId", true, CultureInfo.InvariantCulture) == 0) {
+                else if (string.Compare(sie.Name, "CursorResourceId", true, CultureInfo.InvariantCulture) == 0) {
                     LoadFromResourceId((int)sie.Value);
                 }
             }

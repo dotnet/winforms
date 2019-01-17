@@ -1,10 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Dependencies>
-  <ProductDependencies></ProductDependencies>
+  <ProductDependencies>
+    <Dependency Name="Microsoft.Win32.Registry" Version="4.6.0-preview.19066.2">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>536ef01e18d6b3b2e7ef74057d0772c3daf893fa</Sha>
+    </Dependency>
+    <Dependency Name="System.Configuration.ConfigurationManager" Version="4.6.0-preview.19066.2">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>536ef01e18d6b3b2e7ef74057d0772c3daf893fa</Sha>
+    </Dependency>
+    <Dependency Name="System.Drawing.Common" Version="4.6.0-preview.19066.2">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>536ef01e18d6b3b2e7ef74057d0772c3daf893fa</Sha>
+    </Dependency>
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="4.6.0-preview.19066.2">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>536ef01e18d6b3b2e7ef74057d0772c3daf893fa</Sha>
+    </Dependency>
+    <Dependency Name="System.Security.Cryptography.Cng" Version="4.6.0-preview.19066.2">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>536ef01e18d6b3b2e7ef74057d0772c3daf893fa</Sha>
+    </Dependency>
+    <Dependency Name="System.CodeDom" Version="4.6.0-preview.19066.2">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>536ef01e18d6b3b2e7ef74057d0772c3daf893fa</Sha>
+    </Dependency>
+    <Dependency Name="System.Security.Permissions" Version="4.6.0-preview.19066.2">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>536ef01e18d6b3b2e7ef74057d0772c3daf893fa</Sha>
+    </Dependency>
+  </ProductDependencies>
   <ToolsetDependencies>
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.18606.9">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19066.1">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>fe25f076bdd44568aa6334d4266e6553719cf91d</Sha>
+      <Sha>0fb5fc58347f42121ddc9c0b361e84b8acbffb12</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>

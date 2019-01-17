@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -3343,7 +3343,7 @@ example usage
         public string Name {
             get {
                 string name = (string)Properties.GetObject(PropName);
-                if (String.IsNullOrEmpty(name)) {
+                if (string.IsNullOrEmpty(name)) {
                     if (Site != null) {
                         name = Site.Name;
                     }
@@ -3356,7 +3356,7 @@ example usage
                 return name;
             }
             set {
-                if (String.IsNullOrEmpty(value)) {
+                if (string.IsNullOrEmpty(value)) {
                     Properties.SetObject(PropName, null);
                 }
                 else {
@@ -5453,7 +5453,7 @@ example usage
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]        
         [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        public IAsyncResult BeginInvoke(Delegate method, params Object[] args) {
+        public IAsyncResult BeginInvoke(Delegate method, params object[] args) {
             using (new MultithreadSafeCallScope()) {
                 Control marshaler = FindMarshalingControl();
                 return(IAsyncResult)marshaler.MarshaledInvoke(this, method, args, false);
@@ -5963,7 +5963,7 @@ example usage
         ///     implements System.Windows.Forms.IDataObject.
         /// </devdoc>
         [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
-        public DragDropEffects DoDragDrop(Object data, DragDropEffects allowedEffects) {            
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) {            
             int[] finalEffect = new int[] {(int)DragDropEffects.None};
             UnsafeNativeMethods.IOleDropSource dropSource = new DropSource( this );
             IComDataObject dataObject = null;
@@ -6058,7 +6058,7 @@ example usage
         ///     block until the result is available.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Object EndInvoke(IAsyncResult asyncResult) {
+        public object EndInvoke(IAsyncResult asyncResult) {
             using (new MultithreadSafeCallScope())
             {
                 if (asyncResult == null) {
@@ -6555,7 +6555,7 @@ example usage
             else {
                 Command cmd = Command.GetCommandFromID(id);
                 if (cmd != null) {
-                    Object reference = cmd.Target;
+                    object reference = cmd.Target;
                     if (reference != null && reference is MenuItem.MenuItemData) {
                         mi = ((MenuItem.MenuItemData)reference).baseItem;
                     }
@@ -6641,7 +6641,7 @@ example usage
         ///      Used to sort controls based on tab index and z-order.
         /// </devdoc>
         private class ControlTabOrderComparer : IComparer {
-            int IComparer.Compare(Object x, Object y) {
+            int IComparer.Compare(object x, object y) {
                 ControlTabOrderHolder hx = (ControlTabOrderHolder) x;
                 ControlTabOrderHolder hy = (ControlTabOrderHolder) y;
 
@@ -7208,7 +7208,7 @@ example usage
         ///     For all other method calls, you should use one of the invoke methods to marshal
         ///     the call to the control's thread.
         /// </devdoc>
-        public Object Invoke(Delegate method) {
+        public object Invoke(Delegate method) {
             return Invoke(method, null);
         }
 
@@ -7227,7 +7227,7 @@ example usage
         ///     For all other method calls, you should use one of the invoke methods to marshal
         ///     the call to the control's thread.
         /// </devdoc>
-        public Object Invoke(Delegate method, params Object[] args) {
+        public object Invoke(Delegate method, params object[] args) {
             using (new MultithreadSafeCallScope()) {
                 Control marshaler = FindMarshalingControl();
                 return marshaler.MarshaledInvoke(this, method, args, true);
@@ -7547,16 +7547,16 @@ example usage
 
             if (text != null) {
                 int pos = -1; // start with -1 to handle double &'s
-                char c2 = Char.ToUpper(charCode, CultureInfo.CurrentCulture);
+                char c2 = char.ToUpper(charCode, CultureInfo.CurrentCulture);
                 for (;;) {
                     if (pos + 1 >= text.Length)
                         break;
                     pos = text.IndexOf('&', pos + 1) + 1;
                     if (pos <= 0 || pos >= text.Length)
                         break;
-                    char c1 = Char.ToUpper(text[pos], CultureInfo.CurrentCulture);
+                    char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
                     Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...& found... char=" + c1.ToString());
-                    if (c1 == c2 || Char.ToLower(c1, CultureInfo.CurrentCulture) == Char.ToLower(c2, CultureInfo.CurrentCulture)) {
+                    if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture)) {
                         Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...returning true");
                         return true;
                     }
@@ -7617,7 +7617,7 @@ example usage
             }
         }
 
-        private Object MarshaledInvoke(Control caller, Delegate method, Object[] args, bool synchronous) {
+        private object MarshaledInvoke(Control caller, Delegate method, object[] args, bool synchronous) {
 
             // Marshaling an invoke occurs in three steps:
             //
@@ -10492,7 +10492,7 @@ example usage
         ///     e and a sender of this control.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected void RaiseDragEvent(Object key, DragEventArgs e) {
+        protected void RaiseDragEvent(object key, DragEventArgs e) {
             DragEventHandler handler = (DragEventHandler)Events[key];
             if (handler != null) handler(this, e);
         }
@@ -10503,7 +10503,7 @@ example usage
         ///     e and a sender of this control.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected void RaisePaintEvent(Object key, PaintEventArgs e) {
+        protected void RaisePaintEvent(object key, PaintEventArgs e) {
             PaintEventHandler handler = (PaintEventHandler)Events[EventPaint];
             if (handler != null) handler(this, e);
         }
@@ -10778,7 +10778,7 @@ example usage
         ///     Resets the text to it's default value.
         /// </devdoc>
         public virtual void ResetText() {
-            Text = String.Empty;
+            Text = string.Empty;
         }
 
         private void ResetVisible() {
@@ -11477,7 +11477,7 @@ example usage
         protected virtual void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
 #if DEBUG        
             if (CompModSwitches.SetBounds.TraceInfo) {
-                Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "{0}::SetBoundsCore(x={1} y={2} width={3} height={4} specified={5}", Name, x, y, width, height, specified));
+                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "{0}::SetBoundsCore(x={1} y={2} width={3} height={4} specified={5}", Name, x, y, width, height, specified));
             }
 #endif
             // SetWindowPos below sends a WmWindowPositionChanged (not posts) so we immediately
@@ -12158,9 +12158,9 @@ example usage
         protected void UpdateBounds(int x, int y, int width, int height, int clientWidth, int clientHeight) {
 #if DEBUG
             if (CompModSwitches.SetBounds.TraceVerbose){
-               Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "{0}::UpdateBounds(", Name));
+               Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "{0}::UpdateBounds(", Name));
                Debug.Indent();
-               Debug.WriteLine(String.Format(
+               Debug.WriteLine(string.Format(
                     CultureInfo.CurrentCulture, "oldBounds={{x={0} y={1} width={2} height={3} clientWidth={4} clientHeight={5}}}",
                     this.x, this.y, this.width, this.height, this.clientWidth, this.clientHeight));
             }
@@ -12185,7 +12185,7 @@ example usage
                 OnLocationChanged(EventArgs.Empty);
 #if DEBUG
                 if (this.Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning) {
-                    Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnLocationChanged()\r\nbefore={0} after={1}", originalBounds, this.Bounds));
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnLocationChanged()\r\nbefore={0} after={1}", originalBounds, this.Bounds));
                 }
 #endif 
             }
@@ -12202,7 +12202,7 @@ example usage
 
 #if DEBUG
                 if (this.Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning) {
-                    Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnSizeChanged()\r\nbefore={0} after={1}", originalBounds, this.Bounds));
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnSizeChanged()\r\nbefore={0} after={1}", originalBounds, this.Bounds));
                 }
 #endif 
             }
@@ -12210,7 +12210,7 @@ example usage
            
 #if DEBUG
             if (CompModSwitches.SetBounds.TraceVerbose) {
-                Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "newBounds={{x={0} y={1} width={2} height={3} clientWidth={4} clientHeight={5}}}",x, y, width, height, clientWidth, clientHeight));
+                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "newBounds={{x={0} y={1} width={2} height={3} clientWidth={4} clientHeight={5}}}",x, y, width, height, clientWidth, clientHeight));
                 Debug.Unindent();
             }
 #endif 
@@ -12834,7 +12834,7 @@ example usage
             else if ((flags & NativeMethods.MF_POPUP) == 0) {
                 Command cmd = Command.GetCommandFromID(item);
                 if (cmd != null) {
-                    Object reference = cmd.Target;
+                    object reference = cmd.Target;
                     if (reference != null && reference is MenuItem.MenuItemData) {
                         mi = ((MenuItem.MenuItemData)reference).baseItem;
                     }
@@ -13039,8 +13039,6 @@ example usage
         /// </devdoc>
         private void WmDpiChangedAfterParent(ref Message m) {
             DefWndProc(ref m);
-
-            uint dpi = UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
 
             OnDpiChangedAfterParent(EventArgs.Empty);
         }
@@ -14475,7 +14473,7 @@ example usage
             ///     </para>
             /// </devdoc>
             public Control[] Find(string key, bool searchAllChildren) {
-                if (String.IsNullOrEmpty(key)) {
+                if (string.IsNullOrEmpty(key)) {
                    throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
@@ -14549,9 +14547,9 @@ example usage
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int IndexOfKey(String key) {
+            public virtual int IndexOfKey(string key) {
                 // Step 0 - Arg validation
-                if (String.IsNullOrEmpty(key)) {
+                if (string.IsNullOrEmpty(key)) {
                     return -1; // we dont support empty or null keys.
                 }
 
@@ -14678,7 +14676,7 @@ example usage
             public virtual Control this[string key] {
                 get {
                     // We do not support null and empty string as valid keys.
-                    if (String.IsNullOrEmpty(key)) {
+                    if (string.IsNullOrEmpty(key)) {
                         return null;
                     }
 
@@ -15065,7 +15063,7 @@ example usage
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        int UnsafeNativeMethods.IOleObject.SetMoniker(int dwWhichMoniker, Object pmk) {
+        int UnsafeNativeMethods.IOleObject.SetMoniker(int dwWhichMoniker, object pmk) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetMoniker");
             return NativeMethods.E_NOTIMPL;
         }
@@ -15074,7 +15072,7 @@ example usage
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        int UnsafeNativeMethods.IOleObject.GetMoniker(int dwAssign, int dwWhichMoniker, out Object moniker) {
+        int UnsafeNativeMethods.IOleObject.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMoniker");
             moniker = null;
             return NativeMethods.E_NOTIMPL;
@@ -15897,7 +15895,7 @@ example usage
                     AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
 
                     if (prop.Empty) {
-                        Object obj = null;
+                        object obj = null;
                         if (GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR, ref obj)) {
                             if (obj != null) {
                                 try {
@@ -15935,7 +15933,7 @@ example usage
                     AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
 
                     if (prop.Empty) {
-                        Object obj = null;
+                        object obj = null;
                         if (GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_FONT, ref obj)) {
                             try {
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object font type=" + obj.GetType().FullName);
@@ -15979,7 +15977,7 @@ example usage
                     AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
 
                     if (prop.Empty) {
-                        Object obj = null;
+                        object obj = null;
                         if (GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR, ref obj)) {
                             if (obj != null) {
                                 try {
@@ -16385,7 +16383,7 @@ example usage
             ///      Helper function to retrieve an ambient property.  Returns false if the
             ///      property wasn't found.
             /// </devdoc>
-            private bool GetAmbientProperty(int dispid, ref Object obj) {
+            private bool GetAmbientProperty(int dispid, ref object obj) {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
                 Debug.Indent();
 
@@ -16393,7 +16391,7 @@ example usage
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
                     UnsafeNativeMethods.IDispatch disp = (UnsafeNativeMethods.IDispatch)clientSite;
-                    Object[] pvt = new Object[1];
+                    object[] pvt = new object[1];
                     Guid g = Guid.Empty;
                     int hr = NativeMethods.E_FAIL;
 
@@ -16413,7 +16411,7 @@ example usage
                         return true;
                     }
                     else {
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + String.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + string.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
                     }
                 }
 
@@ -16895,7 +16893,7 @@ example usage
                             Debug.Indent();
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Property was in bag");
 
-                            String errorString = null;
+                            string errorString = null;
                             int errorCode = 0;
 
                             try {
@@ -17094,7 +17092,7 @@ example usage
 
                     // Special properties that we care about
                     //
-                    Object obj = new Object();
+                    object obj = new object();
 
                     switch (dispID) {
                         case NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD:
@@ -17748,7 +17746,7 @@ example usage
 
                 // Get the ambient properties that effect us...
                 //
-                Object obj = new Object();
+                object obj = new object();
                 if (GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD, ref obj)) {
                     activeXState[uiDead] = (bool)obj;
                 }
@@ -18423,7 +18421,7 @@ example usage
                 }
             }
 
-            public Object GetService(Type service) {
+            public object GetService(Type service) {
                 object retVal = null;
 
                 if (service == typeof(HtmlDocument)) {
@@ -18474,7 +18472,7 @@ example usage
             /**
              * The name of the component.
              */
-            public String Name {
+            public string Name {
                 get { return name;}
                 set {
                     if (value == null || name == null) {
@@ -18711,7 +18709,7 @@ example usage
         private class AmbientProperty {
             private string name;
             private int dispID;
-            private Object value;
+            private object value;
             private bool empty;
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.AmbientProperty"]/*' />
@@ -18759,7 +18757,7 @@ example usage
             /// <devdoc>
             ///      The current value of the property.
             /// </devdoc>
-            internal Object Value {
+            internal object Value {
                 get {
                     return value;
                 }
@@ -19383,12 +19381,12 @@ example usage
                     handler(Owner, args);
 
                     fileName = args.HelpNamespace;
-                    if (!String.IsNullOrEmpty(fileName)) {
+                    if (!string.IsNullOrEmpty(fileName)) {
                         IntSecurity.DemandFileIO(FileIOPermissionAccess.PathDiscovery, fileName);
                     }
 
                     try {
-                        topic = Int32.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
+                        topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
                     }
                     catch (Exception e) {
                         if (ClientUtils.IsSecurityOrCriticalException(e)) {
@@ -19564,8 +19562,8 @@ example usage
             internal Control   caller;
             internal Control   marshaler;
             internal Delegate  method;
-            internal Object[] args;
-            internal Object    retVal;
+            internal object[] args;
+            internal object retVal;
             internal Exception exception;
             internal bool   synchronous;
             private bool isCompleted;
@@ -19582,7 +19580,7 @@ example usage
             //
             internal SynchronizationContext syncContext = null;
 
-            internal ThreadMethodEntry(Control caller, Control marshaler, Delegate method, Object[] args, bool synchronous, ExecutionContext executionContext) {
+            internal ThreadMethodEntry(Control caller, Control marshaler, Delegate method, object[] args, bool synchronous, ExecutionContext executionContext) {
                 this.caller = caller;
                 this.marshaler = marshaler;
                 this.method = method;
@@ -19603,7 +19601,7 @@ example usage
                 }
             }
 
-            public  Object AsyncState {
+            public object AsyncState {
                 get {
                     return null;
                 }
@@ -19690,7 +19688,7 @@ example usage
                             string ns = owner.GetType().Namespace;
 
                             if (ns == null) {
-                                ns = String.Empty;
+                                ns = string.Empty;
                             }
 
                             int firstDot = ns.IndexOf("/");
@@ -19732,7 +19730,7 @@ example usage
                             string ns = owner.GetType().Namespace;
 
                             if (ns == null) {
-                                ns = String.Empty;
+                                ns = string.Empty;
                             }
                             int firstDot = ns.IndexOf(".");
                             if (firstDot != -1) {

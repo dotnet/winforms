@@ -467,7 +467,7 @@ namespace System.Windows.Forms {
             if (disposing) {
                 if (window != null) {
                     this.icon = null;
-                    this.Text = String.Empty;
+                    this.Text = string.Empty;
                     UpdateIcon(false);
                     window.DestroyHandle();
                     window = null;

@@ -415,7 +415,7 @@ namespace System.Resources {
             ResXFileRef fileRef = nodeClone.FileRef;
             string modifiedBasePath = BasePath;
             
-            if (!String.IsNullOrEmpty(modifiedBasePath)) {
+            if (!string.IsNullOrEmpty(modifiedBasePath)) {
                 if (!modifiedBasePath.EndsWith("\\"))
                 {
                     modifiedBasePath += "\\";

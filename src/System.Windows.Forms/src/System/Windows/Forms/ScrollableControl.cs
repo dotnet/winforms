@@ -1661,7 +1661,7 @@ namespace System.Windows.Forms {
             public int Top {
                  get { 
                     if (owner == null) {
-                        return bottom;
+                        return top;
                     }
                     else {
                         return owner.Padding.Top; 
@@ -1679,23 +1679,16 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Equals"]/*' />
-            /// <internalonly/>
-            public override bool Equals(object other) {
-                DockPaddingEdges dpeOther = other as DockPaddingEdges;
-
-                if (dpeOther != null) {
-                    return this.owner.Padding.Equals(dpeOther.owner.Padding);
-                }
-                return false;
+            public override bool Equals(object other)
+            {
+                return other is DockPaddingEdges dpeOther &&
+                    Left == dpeOther.Left &&
+                    Top == dpeOther.Top &&
+                    Right == dpeOther.Right &&
+                    Bottom == dpeOther.Bottom;
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.GetHashCode"]/*' />
-            /// <internalonly/>
-            public override int GetHashCode() {
-                return base.GetHashCode();
-            }
-
+            public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
 
             /// <internalonly/>
             private void ResetAll() {
@@ -1726,10 +1719,9 @@ namespace System.Windows.Forms {
                 this.owner.Padding.Scale(dx, dy);
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.ToString"]/*' />
-            /// <internalonly/>
-            public override string ToString() {
-                return "";      // used to say "(DockPadding)" but that's useless
+            public override string ToString()
+            {
+                return $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
             }
 
             /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="DockPaddingEdges.ICloneable.Clone"]/*' />

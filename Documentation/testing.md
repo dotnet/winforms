@@ -2,11 +2,11 @@
 
 This document describes our approach to unit testing.
 
-We are _still working on_ a scalable solution for functional testing. For now, see [Functional Testing](testing.md#functional-testing) and the [issue #183](https://github.com/dotnet/winforms/issues/183).
+We are _still working on_ a scalable solution for functional testing. For now, see [Functional Testing](testing.md#functional-testing) and the [issue #183][issue-#183].
 
 ## Building tests
 
-Tests are automatically built when running `.\build` since all test projects are referenced in `Winforms.sln` at the repo root.
+Tests are automatically built when running `.\build` since all test projects are referenced in `Winforms.sln` at the repository root.
 
 ## Running tests
 
@@ -49,19 +49,17 @@ To test from Visual Studio, open Winforms.sln in Visual Studio and test how you 
 * When testing from Visual Studio, test errors show up as normal in the test explorer.
 * To troubleshoot, debug the selected test and set breakpoints as you normally would.
 
-## Unit Testing
-
-### Adding new unit tests
+## Adding new tests
 
 Tests are built and executed by file name convention
 
-* Every WinForms binary has its own folder under src in the repo root (src\System.Windows.Forms, for example)
+* Every WinForms binary has its own folder under src in the repository root (src\System.Windows.Forms, for example)
 * Each of those folders has a tests folder under it (src\System.Windows.Forms\tests, for example)
 * Each tests folder contains an xUnit test project (System.Windows.Forms.Tests.csproj)
   * These test projects automatically build when running .\build
   * The tests from these projects automatically execute when running .\build -test
 
-#### Therefore, you just need to put your tests in the right place in order for them to run
+### Therefore, you just need to put your tests in the right place in order for them to run
 
 * Browse to the tests folder for the binary you are testing
 * There should be one file per class being tested, and the file name should match the class name.
@@ -85,19 +83,28 @@ Tests are built and executed by file name convention
 
 #### Strategy
 
-* **Unit tests should be part of the same PR as code changes**
-  * Unit tests must be added for any change to public APIs. We will accept unit tests for internal methods as well. 
-* **Code Coverage**
-  * In Visual Studio Test Explorer, select all tests, right click and execute 'Analyze code coverage for selected tests' command. This will run all tests and give a summary of blocks covered in 'Code Coverage Results' window. The summary can be drilled down to method level.   
-  * Any code change accompanied with unit tests is expected to increase code coverage for the code modified. 
-* Avoid duplicating tests just for different inputs
-  * Use `[Theory]` for this, followed by either `[InlineData]` or `[MemberData]`. See existing tests for examples on how to use these attributes
-  * The exception to this is if the code behavior is fundamentally different based on the inputs. For example, if a method throws an ArgumentException for invalid inputs, that should be a separate test.
-* One test (or test data) per code path please
-  * The most common exception to this is when testing a property, most people test get/set together
-* Whenever possible, mock up dependencies to run tests in isolation
-  * For example, if your method accepts an abstraction, use Moq to mock it up
-  * Search for Mock in the existing tests for examples, and see [Moq](https://github.com/Moq/moq4/wiki/Quickstart) for details on how to use Moq.
+##### Unit tests should be part of the same PR as code changes
+
+* Unit tests must be added for any change to public APIs. We will accept unit tests for internal methods as well.
+
+##### Code Coverage
+
+* In Visual Studio Test Explorer, select all tests, right click and execute 'Analyze code coverage for selected tests' command. This will run all tests and give a summary of blocks covered in 'Code Coverage Results' window. The summary can be drilled down to method level.
+* Any code change accompanied with unit tests is expected to increase code coverage for the code modified.
+
+##### Avoid duplicating tests just for different inputs
+
+* Use `[Theory]` for this, followed by either `[InlineData]` or `[MemberData]`. See existing tests for examples on how to use these attributes
+* The exception to this is if the code behavior is fundamentally different based on the inputs. For example, if a method throws an ArgumentException for invalid inputs, that should be a separate test.
+
+##### One test (or test data) per code path please
+
+* The most common exception to this is when testing a property, most people test get/set together
+
+##### Whenever possible, mock up dependencies to run tests in isolation
+  
+* For example, if your method accepts an abstraction, use Moq to mock it up
+* Search for Mock in the existing tests for examples, and see [Moq][moq] for details on how to use Moq.
 
 ## Functional Testing
 
@@ -111,7 +118,7 @@ In the console, run the following command from the base of the repository:
 .\.dotnet\dotnet.exe .\artifacts\bin\WinformsControlsTest\Debug\netcoreapp3.0\WinformsControlsTest.dll
 ```
 
-**Note:** that this will fail if the WinformsControlsTest is not built. See [Build](testing.md) for more information on how to build from source.
+**Note:** that this will fail if the WinformsControlsTest is not built. See [Build](building.md) for more information on how to build from source.
 
 ### The test runner
 
@@ -150,3 +157,8 @@ The execution of that command will return a 0 if all tests passed and a -1 if ev
 12/6/2018 9:42 AM: DateTimePickerButton passed.
 12/6/2018 9:42 AM: FolderBrowserDialogButton passed.
 ```
+
+[comment]: <> (URI Links)
+
+[issue-#183]: https://github.com/dotnet/winforms/issues/183
+[moq]: (https://github.com/Moq/moq4/wiki/Quickstart)

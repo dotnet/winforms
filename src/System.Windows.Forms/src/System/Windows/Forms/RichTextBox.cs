@@ -1341,7 +1341,7 @@ namespace System.Windows.Forms {
             get {
                 ForceHandleCreate();
 
-                String text = StreamOut(RichTextBoxConstants.SFF_SELECTION | RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
+                string text = StreamOut(RichTextBoxConstants.SFF_SELECTION | RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
                 return text;
             }
             set {
@@ -2954,7 +2954,7 @@ namespace System.Windows.Forms {
                 // gives us TextBox compatible behavior, programatic text change shouldn't
                 // be limited...
                 //
-                SendMessage(RichTextBoxConstants.EM_EXLIMITTEXT, 0, Int32.MaxValue);
+                SendMessage(RichTextBoxConstants.EM_EXLIMITTEXT, 0, int.MaxValue);
 
 
         
@@ -3019,7 +3019,7 @@ namespace System.Windows.Forms {
                 }
                 // workaround ??? for 
 
-                if(!String.IsNullOrEmpty(result) && (result[result.Length-1] == '\0')) {
+                if(!string.IsNullOrEmpty(result) && (result[result.Length-1] == '\0')) {
                     result = result.Substring(0, result.Length-1);
                 }
             }

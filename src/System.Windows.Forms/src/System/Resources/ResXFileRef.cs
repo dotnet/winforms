@@ -184,7 +184,7 @@ namespace System.Resources {
 
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertTo"]/*' />
             public override object ConvertTo(ITypeDescriptorContext context, 
-                                             CultureInfo culture, 
+                                             CultureInfo culture,
                                              object value, 
                                              Type destinationType) {
                 object created = null;

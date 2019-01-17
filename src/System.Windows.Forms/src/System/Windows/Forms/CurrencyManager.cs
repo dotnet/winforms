@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class CurrencyManager : BindingManagerBase {
 
-        private Object dataSource;
+        private object dataSource;
         private IList list;
         
         private bool bound = false;
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
                                                                                                     // it would be a breaking change.
         ]
-        internal CurrencyManager(Object dataSource) {
+        internal CurrencyManager(object dataSource) {
             SetDataSource(dataSource);
         }
 
@@ -153,7 +153,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets the current item in the list.</para>
         /// </devdoc>
-        public override Object Current {
+        public override object Current {
             get {
                 return this[Position];
             }
@@ -168,20 +168,20 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets the data source of the list.</para>
         /// </devdoc>
-        internal override Object DataSource {
+        internal override object DataSource {
             get {
                 return dataSource;
             }
         }
 
-        internal override void SetDataSource(Object dataSource) {
+        internal override void SetDataSource(object dataSource) {
             if (this.dataSource != dataSource) {
                 Release();
                 this.dataSource = dataSource;
                 this.list = null;
                 this.finalType = null;
-                
-                Object tempList = dataSource;
+
+                object tempList = dataSource;
                 if (tempList is Array) {
                     finalType = tempList.GetType();
                     tempList = (Array)tempList;
@@ -276,7 +276,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets or sets the object at the specified index.</para>
         /// </devdoc>
-        internal Object this[int index] {
+        internal object this[int index] {
             get {
                 if (index < 0 || index >= list.Count) {
                     throw new IndexOutOfRangeException(string.Format(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
@@ -312,7 +312,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public override void CancelCurrentEdit() {
             if (Count > 0) {
-                Object item = (Position >= 0 && Position < list.Count) ? list[Position] : null;
+                object item = (Position >= 0 && Position < list.Count) ? list[Position] : null;
 
                 // onItemChangedCalled = false;
 
@@ -453,7 +453,7 @@ namespace System.Windows.Forms {
                 bool success = CurrencyManager_PullData();
 
                 if (success) {
-                    Object item = (Position >= 0 && Position < list.Count) ? list[Position] : null;
+                    object item = (Position >= 0 && Position < list.Count) ? list[Position] : null;
 
                     IEditableObject iEditableItem = item as IEditableObject;
                     if (iEditableItem != null) {
@@ -520,7 +520,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Find the position of a desired list item.</para>
         /// </devdoc>
-        internal int Find(PropertyDescriptor property, Object key, bool keepIndex) {
+        internal int Find(PropertyDescriptor property, object key, bool keepIndex) {
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
 
@@ -583,7 +583,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for the specified list.</para>
         /// </devdoc>
-        private void List_ListChanged(Object sender, System.ComponentModel.ListChangedEventArgs e) {
+        private void List_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
             // If you change the assert below, better change the 
             // code in the OnCurrentChanged that deals w/ firing the OnCurrentChanged event
             Debug.Assert(lastGoodKnownRow == -1 || lastGoodKnownRow == listposition, "if we have a valid lastGoodKnownRow, then it should equal the position in the list");
@@ -783,7 +783,7 @@ namespace System.Windows.Forms {
                 if (!suspendPushDataInCurrentChanged)
                     positionChanged = CurrencyManager_PushData();
                 if (Count > 0) {
-                    Object item = list[Position];
+                    object item = list[Position];
                     if (item is IEditableObject) {
                         ((IEditableObject)item).BeginEdit();
                     }

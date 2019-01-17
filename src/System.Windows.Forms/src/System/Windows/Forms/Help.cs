@@ -250,7 +250,7 @@ namespace System.Windows.Forms {
             else if (param is NativeMethods.HH_POPUP) {
                 SafeNativeMethods.HtmlHelp(handle, pathAndFileName, HH_DISPLAY_TEXT_POPUP, (NativeMethods.HH_POPUP)param);
             }
-            else if (param.GetType() == typeof(Int32)) {
+            else if (param.GetType() == typeof(int)) {
                 throw new ArgumentException(string.Format(SR.InvalidArgument, "param", "Integer"));
             }
         }
@@ -427,7 +427,7 @@ namespace System.Windows.Forms {
         private static int MapCommandToHTMLCommand(HelpNavigator command, string param, out object htmlParam) {
             htmlParam = param;
 
-            if ((String.IsNullOrEmpty(param)) &&
+            if ((string.IsNullOrEmpty(param)) &&
                 (command == HelpNavigator.AssociateIndex || command == HelpNavigator.KeywordIndex)) {
                 return HH_DISPLAY_INDEX;
             }

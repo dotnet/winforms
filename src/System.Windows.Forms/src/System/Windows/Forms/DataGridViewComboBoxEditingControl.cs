@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                 if (valueStr != null)
                 {
                     this.Text = valueStr;
-                    if (String.Compare(valueStr, this.Text, true, CultureInfo.CurrentCulture) != 0)
+                    if (string.Compare(valueStr, this.Text, true, CultureInfo.CurrentCulture) != 0)
                     {
                         this.SelectedIndex = -1;
                     }

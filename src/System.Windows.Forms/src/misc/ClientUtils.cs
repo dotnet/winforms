@@ -99,7 +99,7 @@
         //
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider")]
-        public static bool IsEnumValid_Masked(Enum enumValue, int value, UInt32 mask) {
+        public static bool IsEnumValid_Masked(Enum enumValue, int value, uint mask) {
             bool valid = ((value & mask) == value);
 
 #if DEBUG
@@ -146,8 +146,8 @@
         private class SequentialEnumInfo {
             [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public SequentialEnumInfo(Type t) {
-                int actualMinimum = Int32.MaxValue;
-                int actualMaximum = Int32.MinValue;
+                int actualMinimum = int.MaxValue;
+                int actualMaximum = int.MinValue;
                 int countEnumVals = 0;
    
                 foreach (int iVal in Enum.GetValues(t)){
@@ -209,11 +209,11 @@
 
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider")]
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        private static void Debug_ValidateMask(System.Enum value, UInt32 mask) {
+        private static void Debug_ValidateMask(System.Enum value, uint mask) {
             Type t = value.GetType();
-            UInt32 newmask = 0;
+            uint newmask = 0;
             foreach (int iVal in Enum.GetValues(t)){
-                newmask = newmask | (UInt32)iVal;
+                newmask = newmask | (uint)iVal;
             }
             System.Diagnostics.Debug.Assert(newmask == mask, "Mask not valid in IsEnumValid!");
         }
@@ -223,8 +223,8 @@
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         private static void Debug_NonSequentialEnumIsDefinedCheck(System.Enum value, int minVal, int maxVal, int maxBitsOn, bool isValid) {
                Type t = value.GetType();
-               int actualMinimum = Int32.MaxValue;
-               int actualMaximum = Int32.MinValue;
+               int actualMinimum = int.MaxValue;
+               int actualMaximum = int.MinValue;
                int checkedValue = Convert.ToInt32(value, CultureInfo.InvariantCulture);
                int maxBitsFound = 0;
                bool foundValue = false;
@@ -249,7 +249,7 @@
                    System.Diagnostics.Debug.Fail("Incorrect usage of IsEnumValid function. The bits set to 1 in this enum was found to be: " + maxBitsFound.ToString(CultureInfo.InvariantCulture) + "this does not match what's passed in: " + maxBitsOn.ToString(CultureInfo.InvariantCulture));
                }
                if (foundValue != isValid) {
-                    System.Diagnostics.Debug.Fail(String.Format(CultureInfo.InvariantCulture, "Returning {0} but we actually {1} found the value in the enum! Consider using a different overload to IsValidEnum.", isValid, ((foundValue) ? "have" : "have not")));            
+                    System.Diagnostics.Debug.Fail(string.Format(CultureInfo.InvariantCulture, "Returning {0} but we actually {1} found the value in the enum! Consider using a different overload to IsValidEnum.", isValid, ((foundValue) ? "have" : "have not")));            
                }
 
            }
@@ -273,7 +273,7 @@
         /// </devdoc>        
 #if WINFORMS_NAMESPACE || WINFORMS_PUBLIC_GRAPHICS_LIBRARY || DRAWING_NAMESPACE
         internal class WeakRefCollection : IList {
-            private int refCheckThreshold = Int32.MaxValue; // this means this is disabled by default.
+            private int refCheckThreshold = int.MaxValue; // this means this is disabled by default.
             private ArrayList _innerList;
 
             internal WeakRefCollection() {

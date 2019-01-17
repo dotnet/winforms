@@ -1089,7 +1089,7 @@ namespace System.Windows.Forms {
 
                     int cnt = Items.Count;
                     for (int index=0; index < cnt; ++index) {
-                        if (String.Compare(value, GetItemText(Items[index]), true, CultureInfo.CurrentCulture) == 0) {
+                        if (string.Compare(value, GetItemText(Items[index]), true, CultureInfo.CurrentCulture) == 0) {
                             SelectedIndex = index;
                             return;
                         }
@@ -2780,8 +2780,8 @@ namespace System.Windows.Forms {
                     item2 = ((Entry)item2).item;
                 }
 
-                String itemName1 = listControl.GetItemText(item1);
-                String itemName2 = listControl.GetItemText(item2);
+                string itemName1 = listControl.GetItemText(item1);
+                string itemName2 = listControl.GetItemText(item2);
 
                 CompareInfo compInfo = (Application.CurrentCulture).CompareInfo;
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
@@ -3299,7 +3299,7 @@ namespace System.Windows.Forms {
                 // is different to the current text in the native list item, recreate the native list item...
                 if (owner.IsHandleCreated) {
                     bool selected = (owner.SelectedIndex == index);
-                    if (String.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0) {
+                    if (string.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0) {
                         owner.NativeRemoveAt(index);
                         owner.SelectedItems.SetSelected(index, false);
                         owner.NativeInsert(index, value);
@@ -3382,7 +3382,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object item) {
-                if (item is Int32) {
+                if (item is int) {
                     return Contains((int)item);
                 }
                 else {
@@ -3418,7 +3418,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object item) {
-                if (item is Int32) {
+                if (item is int) {
                     return IndexOf((int)item);
                 }
                 else {
@@ -3773,7 +3773,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object selectedIndex) {
-                if (selectedIndex is Int32) {
+                if (selectedIndex is int) {
                     return Contains((int)selectedIndex);
                 }
                 else {
@@ -3801,7 +3801,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object selectedIndex) {
-                if (selectedIndex is Int32) {
+                if (selectedIndex is int) {
                     return IndexOf((int)selectedIndex);
                 }
                 else {

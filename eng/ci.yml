@@ -1,7 +1,7 @@
 parameters:
 
   # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp
+  agentPool: dotnet-external-temp-vs2019
 
   # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
   runAsPublic: true
@@ -30,6 +30,8 @@ jobs:
           value: test
         - name: _SignArgs
           value: ''
+        - name: _Sign
+          value: true
 
         # needed for darc (dependency flow) publishing
         - name: _PublishType
@@ -54,13 +56,13 @@ jobs:
           - group: DotNet-Blob-Feed
           - group: DotNet-Symbol-Server-Pats
           - name: _PublishBlobFeedUrl
-            value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
+            value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
           # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
           # until the agent is running on the machine. They can be overridden any time before they are resolved,
           # like in the job matrix below (see Build_Debug)
           - name: _SignArgs
-            value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName)
+            value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
           - name: _PublishArgs
             value: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
               /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
@@ -84,7 +86,8 @@ jobs:
       steps:
       - checkout: self
         clean: true
-      # Use utility script to run script command dependent on agent OS.
+
+      # Build, test, pack, and sign
       - script: eng\common\cibuild.cmd
           -configuration $(_BuildConfig) 
           -prepareMachine
@@ -92,3 +95,20 @@ jobs:
           $(_SignArgs)
           $(_OfficialBuildIdArgs)
         displayName: Windows Build / Publish
+
+      # Run component governance detection (only for release)
+      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+        displayName: Component Governance Detection
+        condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+
+      # Perform some internal-build-only tasks
+      - ${{ if eq(parameters.runAsPublic, 'false') }}:
+
+        # Publish the nuget package as a build artifact (only for release, ensuring package contents are real-signed)
+        - task: PublishPipelineArtifact@0
+          inputs:
+            artifactName: 'Package'
+            targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
+          displayName: Publish package to build artifacts
+          continueOnError: true
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))

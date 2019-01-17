@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    /// <include file='doc\FormClosedEventHandler.uex' path='docs/doc[@for="FormClosedEventHandler"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Represents a method that will handle Form closed event.
-    ///    </para>
+    /// Represents a method that will handle Form closed event.
     /// </devdoc>
     public delegate void FormClosedEventHandler(object sender, FormClosedEventArgs e);
 }

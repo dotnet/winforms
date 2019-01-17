@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
+    <Compile Include="..\..\..\Common\tests\CommonMemberDataAttribute.cs" Link="Common\CommonMemberDataAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup>

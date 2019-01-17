@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
             string stringVal = serializationInfo.GetString("SerializedString");
 
-            if (!String.IsNullOrEmpty(stringVal) && converter != null) {
+            if (!string.IsNullOrEmpty(stringVal)) {
                 TableLayoutSettings tls = converter.ConvertFromInvariantString(stringVal) as TableLayoutSettings;
                 if (tls != null) {
                     this.ApplySettings(tls);
@@ -208,7 +208,6 @@ namespace System.Windows.Forms {
         internal bool IsStub {
             get {
                 if ( _stub != null) {
-                    Debug.Assert( _stub.IsValid, "seems like we're still partying on an object that's given over its rows and columns, that's a nono.");
                     return true;
                 }
                 return false;
@@ -430,9 +429,9 @@ namespace System.Windows.Forms {
         [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 		
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
-            string stringVal = (converter != null) ? converter.ConvertToInvariantString(this) : null;
+            string stringVal = converter.ConvertToInvariantString(this);
             
-            if (!String.IsNullOrEmpty(stringVal)) {
+            if (!string.IsNullOrEmpty(stringVal)) {
                 si.AddValue("SerializedString", stringVal);
             }
         }
@@ -454,9 +453,6 @@ namespace System.Windows.Forms {
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(c)["Name"];
                         if (prop != null && prop.PropertyType == typeof(string)) {
                             controlInfo.Name = prop.GetValue(c);
-                        }
-                        else {
-                            Debug.Fail("Name property missing on control");
                         }
 
                         controlInfo.Row = GetRow(c);
@@ -532,9 +528,7 @@ namespace System.Windows.Forms {
                                 if (prop != null && prop.PropertyType == typeof(string)) {
                                     name = prop.GetValue(tableControl) as string;
                                 }
-                                else {
-                                    Debug.Fail("Name property missing on control");
-                                }
+
                                 if (WindowsFormsUtils.SafeCompareStrings(name, controlName as string, /* ignoreCase = */ false)) {
                                     settings.SetRow(tableControl, controlInfo.Row);
                                     settings.SetColumn(tableControl, controlInfo.Column);
@@ -693,7 +687,6 @@ namespace System.Windows.Forms {
                                 style.GetType().GetConstructor(new Type[] {typeof(SizeType), typeof(int)}),
                                 new object[] {style.SizeType, style.Size});
                         default:
-                            Debug.Fail("Unsupported SizeType.");
                             break;
                     }
                 }

@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         public DomainUpDown() : base() {   
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
-            Text = String.Empty;
+            Text = string.Empty;
         }                
                 
         // Properties
@@ -292,26 +292,18 @@ namespace System.Windows.Forms {
                 matchIndex = MatchIndex(Text, false, domainIndex);
             }
             if (matchIndex != -1) {
-
                 // Found a match, so select this value
-                //
                 if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling) {
                     domainIndex = matchIndex;
                 }
-                else {
-                    SelectIndex(matchIndex);
-                    return;
+                SelectIndex(matchIndex);
+            } else {
+                // Otherwise, get the next string in the domain list
+                if (domainIndex < domainItems.Count - 1) {
+                    SelectIndex(domainIndex + 1);
+                } else if (Wrap) {
+                    SelectIndex(0);
                 }
-            }
-
-            // Otherwise, get the next string in the domain list
-            //
-            
-            if (domainIndex < domainItems.Count - 1) {
-                SelectIndex(domainIndex + 1);
-            }
-            else if (Wrap) {
-                SelectIndex(0);
             }
                         
         }
@@ -406,7 +398,7 @@ namespace System.Windows.Forms {
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e) {
             if (ReadOnly) {
                 char[] character = new char[] { e.KeyChar };
-                UnicodeCategory uc = Char.GetUnicodeCategory(character[0]);
+                UnicodeCategory uc = char.GetUnicodeCategory(character[0]);
 
                 if (uc == UnicodeCategory.LetterNumber
                     || uc == UnicodeCategory.LowercaseLetter
@@ -553,27 +545,21 @@ namespace System.Windows.Forms {
                 matchIndex = MatchIndex(Text, false, domainIndex);
             }
             if (matchIndex != -1) {
-
                 // Found a match, so set the domain index accordingly
                 //In legacy (.NET framework 4.7.1 and below), we were just updating selected index but no actualy change in the spinner.
                 //with new runtime, we update the selected index and perform spinner action.
-                 if(!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling) {
-                     domainIndex = matchIndex;                                      
-                 }
-                 else {
-                     SelectIndex(matchIndex);
-                     return;
-                 }
+                if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling) {
+                    domainIndex = matchIndex;
+                }
+                SelectIndex(matchIndex);
+            } else {
+                // Otherwise, get the previous string in the domain list            
+                if (domainIndex > 0) {
+                    SelectIndex(domainIndex - 1);
+                } else if (Wrap) {
+                    SelectIndex(domainItems.Count - 1);
+                }
             }
-
-            // Otherwise, get the previous string in the domain list            
-
-            if (domainIndex > 0) {
-                SelectIndex(domainIndex - 1);
-            }
-            else if (Wrap) {
-                SelectIndex(domainItems.Count - 1);
-            }            
         }
        
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.UpdateEditText"]/*' />
@@ -707,7 +693,7 @@ namespace System.Windows.Forms {
                     return 0;
                 }
 
-                return String.Compare(p.ToString(), q.ToString(), false, CultureInfo.CurrentCulture);
+                return string.Compare(p.ToString(), q.ToString(), false, CultureInfo.CurrentCulture);
             }
         }
 

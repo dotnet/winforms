@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
         ///     Given a component, this retrieves the tab page that it's parented to, or
         /// null if it's not parented to any tab page.
         /// </devdoc>
-        public static TabPage GetTabPageOfComponent (Object comp) {
+        public static TabPage GetTabPageOfComponent (object comp) {
             if (!(comp is Control)) {
                 return null;
             }

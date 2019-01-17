@@ -898,8 +898,8 @@ namespace System.Windows.Forms {
     
                     int newCol = value.ColumnNumber;
                     int newRow = value.RowNumber;
-    
-                    String errorMessage = null;
+
+                string errorMessage = null;
 
                     try {
                         int columnCount = myGridTable.GridColumnStyles.Count;
@@ -3520,7 +3520,7 @@ namespace System.Windows.Forms {
                 int currentRowSaved = currentRow;
                 int currentColSaved = currentCol;
 
-                String errorMessage = null;
+            string errorMessage = null;
 
                 try {
                     listManager.EndCurrentEdit();
@@ -3598,7 +3598,7 @@ namespace System.Windows.Forms {
     
                         ResetParentRows();
     
-                        Set_ListManager(null, String.Empty, true);
+                        Set_ListManager(null, string.Empty, true);
                         if (this.Visible) EndUpdateInternal();
                 }
                 base.OnBindingContextChanged(e);
@@ -4283,7 +4283,7 @@ namespace System.Windows.Forms {
     
                         ResetParentRows();
     
-                        Set_ListManager(null, String.Empty, true);
+                        Set_ListManager(null, string.Empty, true);
                     } finally {
                         gridState[GRIDSTATE_exceptionInPaint] = false;
                         if (this.Visible) EndUpdateInternal();
@@ -5536,7 +5536,7 @@ namespace System.Windows.Forms {
                 DataGridState dgs = new DataGridState();
     
                 string newDataMember;
-                if (String.IsNullOrEmpty(this.DataMember))
+                if (string.IsNullOrEmpty(this.DataMember))
                 {
                     newDataMember = relationName;
                 }
@@ -6798,7 +6798,7 @@ namespace System.Windows.Forms {
             ///       name.
             ///    </para>
             /// </devdoc>
-            public void NavigateTo(int rowNumber, String relationName) {
+            public void NavigateTo(int rowNumber, string relationName) {
                 // do not navigate if AllowNavigation is set to false
                 if (!AllowNavigation)
                     return;
@@ -8552,7 +8552,7 @@ namespace System.Windows.Forms {
                 GridColumnStylesCollection gridCols = gridTable.GridColumnStyles;
     
                 // ]it is possible to have a dataTable w/ an empty string for a name.
-                if (!gridTable.IsDefault && String.Compare(lm.GetListName(), gridTable.MappingName, true, CultureInfo.InvariantCulture) == 0) {
+                if (!gridTable.IsDefault && string.Compare(lm.GetListName(), gridTable.MappingName, true, CultureInfo.InvariantCulture) == 0) {
                     // we will force column creation only at runtime
                     if (gridTable.GridColumnStyles.Count == 0 && !DesignMode) {
                         // we have to create some default columns for each of the propertyDescriptors

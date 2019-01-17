@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
         /// </devdoc>
-        public virtual int IndexOfKey(String key) {
+        public virtual int IndexOfKey(string key) {
             // Step 0 - Arg validation
             if ((key == null) || (key.Length == 0)){
                 return -1; // we dont support empty or null keys.

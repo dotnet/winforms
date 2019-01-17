@@ -1516,7 +1516,7 @@ namespace System.Windows.Forms {
 
             if (treeView.CheckBoxes && treeView.StateImageList != null) {
 
-               if (!String.IsNullOrEmpty(this.StateImageKey)) {
+               if (!string.IsNullOrEmpty(this.StateImageKey)) {
                   this.StateImageIndex = (this.Checked) ? 1 : 0;
                   this.StateImageKey = treeView.StateImageList.Images.Keys[this.StateImageIndex];
                }

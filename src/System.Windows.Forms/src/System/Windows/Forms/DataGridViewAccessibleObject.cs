@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string name = this.Owner.AccessibleName;
-                    if (!String.IsNullOrEmpty(name))
+                    if (!string.IsNullOrEmpty(name))
                     {
                         return name;
                     }

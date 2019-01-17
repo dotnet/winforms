@@ -366,9 +366,9 @@ namespace System.Resources {
                     : dataNodeInfo.TypeName;
             
             if (!string.IsNullOrEmpty(mimeTypeName)) {
-                if (String.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType)
-                    || String.Equals(mimeTypeName, ResXResourceWriter.Beta2CompatSerializedObjectMimeType)
-                    || String.Equals(mimeTypeName, ResXResourceWriter.CompatBinSerializedObjectMimeType)) {
+                if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType)
+                    || string.Equals(mimeTypeName, ResXResourceWriter.Beta2CompatSerializedObjectMimeType)
+                    || string.Equals(mimeTypeName, ResXResourceWriter.CompatBinSerializedObjectMimeType)) {
                     string text = dataNodeInfo.ValueData;
                     byte[] serializedData = FromBase64WrappedString(text);
 
@@ -387,7 +387,7 @@ namespace System.Resources {
                     }
                 }
                 
-                else if (String.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)) {
+                else if (string.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)) {
                     if (!string.IsNullOrEmpty(typeName)) {
                         Type type = ResolveType(typeName, typeResolver);
                         if (type != null) {
