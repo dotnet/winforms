@@ -9,8 +9,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
     using System;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Collections;
     using System.IO;
     using System.Text;
@@ -20,7 +18,6 @@ namespace System.Windows.Forms {
 
     using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
-    [SuppressUnmanagedCodeSecurity]
     internal static class SafeNativeMethods {
 
         [DllImport("shlwapi.dll")]

@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    using System.Security.Permissions;
     using System.ComponentModel;
     using System.Drawing;
     using Microsoft.Win32;
@@ -154,7 +153,6 @@ namespace System.Windows.Forms {
         ///    filled up with the basic info.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;

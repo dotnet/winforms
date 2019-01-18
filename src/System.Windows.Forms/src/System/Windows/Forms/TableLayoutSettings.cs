@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Reflection;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     
     /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings"]/*' />
     /// <devdoc>this is a wrapper class to expose interesting properties of TableLayout</devdoc>
@@ -426,7 +425,6 @@ namespace System.Windows.Forms {
         
         #endregion
         
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 		
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
             string stringVal = converter.ConvertToInvariantString(this);

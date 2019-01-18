@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Windows.Forms.Design;
     using System.Windows.Forms.Internal;    
-    using System.Security.Permissions;
     using System.Runtime.Versioning;
 
     /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider"]/*' />
@@ -193,8 +192,6 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ErrorProviderContainerControlDescr))
         ]
         public ContainerControl ContainerControl {
-            [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
-            [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
             get {
                 return parentControl;
             }

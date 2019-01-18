@@ -236,13 +236,6 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         /// <param name=accept></param>	
         private void SetAcceptDrops(bool accept) {
-             if (owner.AllowDrop && accept) {
-                // if the owner has set AllowDrop to true then demand Clipboard permissions.
-                // else its us, and we can assert them.
-                IntSecurity.ClipboardRead.Demand();
-             }
-                
-            
              if (accept && owner.IsHandleCreated) {
                  try
                  {
@@ -264,23 +257,15 @@ namespace System.Windows.Forms {
                      }
                      else
                      {
-                         IntSecurity.ClipboardRead.Assert();
-                         try
-                         {
-                             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Revoking drop target: " + owner.Handle.ToString());
+                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Revoking drop target: " + owner.Handle.ToString());
 
-                             // Revoke
-                             int n = UnsafeNativeMethods.RevokeDragDrop(new HandleRef(owner, owner.Handle));
-                             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
-                             if (n != 0 && n != NativeMethods.DRAGDROP_E_NOTREGISTERED)
-                             {
-                                 throw new Win32Exception(n);
-                             }
-                         }
-                         finally
-                         {
-                             CodeAccessPermission.RevertAssert();
-                         }
+                        // Revoke
+                        int n = UnsafeNativeMethods.RevokeDragDrop(new HandleRef(owner, owner.Handle));
+                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
+                        if (n != 0 && n != NativeMethods.DRAGDROP_E_NOTREGISTERED)
+                        {
+                            throw new Win32Exception(n);
+                        }
                      }
                  }
                  catch (Exception e)

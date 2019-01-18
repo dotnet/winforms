@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security;
-    using System.Security.Permissions;
 
     using System;
     using System.Drawing.Design;    
@@ -1121,9 +1119,6 @@ namespace System.Windows.Forms {
         ///     Returns a TreeNode object for the given HTREEITEM handle
         /// </devdoc>
         public static TreeNode FromHandle(TreeView tree, IntPtr handle) {
-            // 
-
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return tree.NodeFromHandle(handle);
         }
 
@@ -1829,8 +1824,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// Review: Changing this would break VB users. so suppresing this message.
         /// 
-     	[SecurityPermissionAttribute(SecurityAction.Demand, Flags=SecurityPermissionFlag.SerializationFormatter), 		
-         SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.SerializationFormatter)]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected virtual void Serialize(SerializationInfo si, StreamingContext context) {
             if (propBag != null) {
@@ -1952,7 +1945,6 @@ namespace System.Windows.Forms {
         /// ISerializable private implementation
         /// </devdoc>
         /// <internalonly/>
-    	[SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 		
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
              Serialize(si, context);
         }

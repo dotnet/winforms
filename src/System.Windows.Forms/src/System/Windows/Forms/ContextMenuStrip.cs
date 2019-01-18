@@ -8,8 +8,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Security.Permissions;
     /// <devdoc/> this class is just a conceptual wrapper around ToolStripDropDownMenu. </devdoc>
     [
     ComVisible(true),
@@ -43,7 +41,6 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ContextMenuStripSourceControlDescr))
         ]
         public Control SourceControl {
-            [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
             get {
                 return SourceControlInternal;
             }

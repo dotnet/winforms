@@ -10,8 +10,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.ComponentModel;
     using System.Drawing.Printing;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog"]/*' />
     public class PrintControllerWithStatusDialog : PrintController {
@@ -161,10 +159,6 @@ namespace System.Windows.Forms {
             }
 
             // on correct thread
-            [
-                UIPermission(SecurityAction.Assert, Window=UIPermissionWindow.AllWindows),
-                SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode),
-            ] 
             private void Run() {
                 // 
 

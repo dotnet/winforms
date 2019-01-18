@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.ComponentModel.Design;    
     using System.Drawing;
@@ -18,7 +17,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Collections.Specialized;
     using System.Drawing.Design;
-    using System.Security;
     using System.Windows.Forms.VisualStyles;
     
     /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox"]/*' />
@@ -192,13 +190,6 @@ namespace System.Windows.Forms {
                     throw new NotSupportedException(SR.TextBoxAutoCompleteSourceNoItems);
                 }
 
-                if (value != AutoCompleteSource.None && value != AutoCompleteSource.CustomSource)
-                {
-                    FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
-                    fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-                    fiop.Demand();
-                }
-
                 autoCompleteSource = value;
                 SetAutoComplete(false);
             }
@@ -310,7 +301,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 switch (characterCasing) {
@@ -692,7 +682,6 @@ namespace System.Windows.Forms {
         /// keyData - bitmask containing one or more keys
         /// </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
             bool returnValue = base.ProcessCmdKey(ref m, keyData);
             if (!returnValue && this.Multiline && !LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBox 
@@ -797,7 +786,7 @@ namespace System.Windows.Forms {
                             int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle) , (int)AutoCompleteSource | mode);
                         }
                     }
-                    catch (SecurityException) {
+                    catch (System.Security.SecurityException) {
                         // If we don't have full trust, degrade gracefully. Allow the control to
                         // function without auto-complete. Allow the app to continue running.
                     }
@@ -827,19 +816,13 @@ namespace System.Windows.Forms {
         private void WmPrint(ref Message m) {
             base.WndProc(ref m);
             if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D) {
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    using (Graphics g = Graphics.FromHdc(m.WParam)) {
-                        Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
-                        using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
-                            g.DrawRectangle(pen, rect);
-                        }
-                        rect.Inflate(-1, -1);
-                        g.DrawRectangle(SystemPens.Window, rect);
+                using (Graphics g = Graphics.FromHdc(m.WParam)) {
+                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
+                        g.DrawRectangle(pen, rect);
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                    rect.Inflate(-1, -1);
+                    g.DrawRectangle(SystemPens.Window, rect);
                 }
             }
         }
@@ -853,7 +836,6 @@ namespace System.Windows.Forms {
         ///    to add extra functionality, but should not forget to call
         ///    base.wndProc(m); to ensure the combo continues to function properly.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 // Work around a very obscure Windows issue.

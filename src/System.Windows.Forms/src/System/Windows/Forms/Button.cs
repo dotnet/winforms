@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    using System.Security.Permissions;
     using System.Windows.Forms.ButtonInternal;
     using System.ComponentModel.Design;
     using System.ComponentModel;
@@ -146,7 +145,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "BUTTON";                
@@ -363,7 +361,6 @@ namespace System.Windows.Forms {
         ///
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && CanProcessMnemonic() && IsMnemonic(charCode, Text)) {
                 PerformClick();
@@ -393,7 +390,6 @@ namespace System.Windows.Forms {
         ///     base.wndProc(m); to ensure the button continues to function properly.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:

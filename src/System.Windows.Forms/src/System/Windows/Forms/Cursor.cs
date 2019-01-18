@@ -10,14 +10,11 @@ namespace System.Windows.Forms {
     using System;
     using System.Drawing;
     using System.Drawing.Design;
-    using CodeAccessPermission = System.Security.CodeAccessPermission;
-    using System.Security.Permissions;  
     using System.ComponentModel;
     using System.IO;
     using Microsoft.Win32;
     using System.Runtime.Serialization;
     using System.Globalization;
-    using System.Security;
 
 
     /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor"]/*' />
@@ -97,7 +94,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public Cursor(IntPtr handle) {
-            IntSecurity.UnmanagedCode.Demand();
             if (handle == IntPtr.Zero) {
                 throw new ArgumentException(string.Format(SR.InvalidGDIHandle, (typeof(Cursor)).Name));
             }
@@ -164,10 +160,6 @@ namespace System.Windows.Forms {
                 return ClipInternal;
             }
             set {
-                if (!value.IsEmpty) {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AdjustCursorClip Demanded");
-                    IntSecurity.AdjustCursorClip.Demand();
-                }
                 ClipInternal = value;
             }
         }
@@ -207,8 +199,6 @@ namespace System.Windows.Forms {
             }
 
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyCursor Demanded");
-                IntSecurity.ModifyCursor.Demand();
                 CurrentInternal = value;
             }
         }
@@ -217,11 +207,7 @@ namespace System.Windows.Forms {
             get {
                 IntPtr curHandle = SafeNativeMethods.GetCursor();
 
-                // 
-
-                IntSecurity.UnmanagedCode.Assert();
                 return Cursors.KnownCursorFromHCursor( curHandle );
-                // 
             }
             set {
                 IntPtr handle = (value == null) ? IntPtr.Zero : value.handle;
@@ -259,17 +245,7 @@ namespace System.Windows.Forms {
                 NativeMethods.ICONINFO info = new NativeMethods.ICONINFO();
                 Icon currentIcon = null;
 
-                // 
-
-                IntSecurity.ObjectFromWin32Handle.Assert();    
-                try
-                {
-                    currentIcon = Icon.FromHandle(this.Handle);
-                }
-                finally
-                {
-                    CodeAccessPermission.RevertAssert();
-                }
+                currentIcon = Icon.FromHandle(this.Handle);
 
                 try {
                     SafeNativeMethods.GetIconInfo(new HandleRef(this, currentIcon.Handle), info);
@@ -310,7 +286,6 @@ namespace System.Windows.Forms {
                 return new Point(p.x, p.y);
             }
             set {
-                IntSecurity.AdjustCursorPosition.Demand();
                 UnsafeNativeMethods.SetCursorPos(value.X, value.Y);
             }
         }
@@ -537,7 +512,6 @@ namespace System.Windows.Forms {
         /// ISerializable private implementation
         /// </devdoc>
         /// <internalonly/>
-    	[SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 		
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             if (cursorData != null) {
                 si.AddValue("CursorData", cursorData, typeof(byte[]));
@@ -559,9 +533,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static void Hide() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AdjustCursorClip Demanded");
-            IntSecurity.AdjustCursorClip.Demand();
-
             UnsafeNativeMethods.ShowCursor(false);
         }
 
@@ -619,9 +590,7 @@ namespace System.Windows.Forms {
             try {
                 Guid g = typeof(UnsafeNativeMethods.IPicture).GUID;
                 UnsafeNativeMethods.IPicture picture = null;
-
-                new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
-                
+               
                 try {
                     picture = UnsafeNativeMethods.OleCreateIPictureIndirect(null, ref g, true);
                     UnsafeNativeMethods.IPersistStream ipictureAsIPersist = (UnsafeNativeMethods.IPersistStream)picture;
@@ -645,7 +614,6 @@ namespace System.Windows.Forms {
                     }
                 }
                 finally {
-                    CodeAccessPermission.RevertAssert();
                     // destroy the picture...
                     if(picture != null) {
                         Marshal.ReleaseComObject(picture);
@@ -671,7 +639,7 @@ namespace System.Windows.Forms {
             try {
                 stream.Write(cursorData, 0, cursorData.Length);
             }
-            catch (SecurityException) {
+            catch (System.Security.SecurityException) {
                 // dont eat security exceptions.
                 throw;
             }

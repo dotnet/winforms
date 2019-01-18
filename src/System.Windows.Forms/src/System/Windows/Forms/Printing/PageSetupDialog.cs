@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Drawing.Printing;
     using System.Runtime.InteropServices;
-    using System.Security;
     using System.Text;
     using System.Globalization;
     
@@ -315,18 +314,10 @@ namespace System.Windows.Forms {
         private static void UpdateSettings(NativeMethods.PAGESETUPDLG data, PageSettings pageSettings,
                                            PrinterSettings printerSettings) {
             // SetHDevMode demands AllPrintingAndUnmanagedCode Permission : Since we are calling that function we should Assert the permision,
-            IntSecurity.AllPrintingAndUnmanagedCode.Assert();
-            try
-            {
-                pageSettings.SetHdevmode(data.hDevMode);
-                if (printerSettings != null) {
-                    printerSettings.SetHdevmode(data.hDevMode);
-                    printerSettings.SetHdevnames(data.hDevNames);
-                }
-            }
-            finally
-            {
-                CodeAccessPermission.RevertAssert();
+            pageSettings.SetHdevmode(data.hDevMode);
+            if (printerSettings != null) {
+                printerSettings.SetHdevmode(data.hDevMode);
+                printerSettings.SetHdevnames(data.hDevNames);
             }
 
             Margins newMargins = new Margins();
@@ -348,7 +339,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override bool RunDialog(IntPtr hwndOwner) {
-            IntSecurity.SafePrinting.Demand();
 
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
             if (pageSettings == null)
@@ -402,15 +392,8 @@ namespace System.Windows.Forms {
 
             PrinterSettings printer = (printerSettings == null) ? pageSettings.PrinterSettings : printerSettings;
 
-            // GetHDevmode demands AllPrintingAndUnmanagedCode Permission : Since we are calling that function we should Assert the permision,
-            IntSecurity.AllPrintingAndUnmanagedCode.Assert();
-            try {
-                data.hDevMode = printer.GetHdevmode(pageSettings);
-                data.hDevNames = printer.GetHdevnames();
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
-            }
+            data.hDevMode = printer.GetHdevmode(pageSettings);
+            data.hDevNames = printer.GetHdevnames();
 
             try {
                 bool status = UnsafeNativeMethods.PageSetupDlg(data);

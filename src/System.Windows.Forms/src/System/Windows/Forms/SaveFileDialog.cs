@@ -7,11 +7,9 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    using CodeAccessPermission = System.Security.CodeAccessPermission;
     using System.IO;
     using System.Drawing;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security.Permissions;
     using System.ComponentModel;
     using System.Windows.Forms;
     using Microsoft.Win32;
@@ -48,8 +46,6 @@ namespace System.Windows.Forms {
                 return GetOption(NativeMethods.OFN_CREATEPROMPT);
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
                 SetOption(NativeMethods.OFN_CREATEPROMPT, value);
             }
         }
@@ -71,8 +67,6 @@ namespace System.Windows.Forms {
                 return GetOption(NativeMethods.OFN_OVERWRITEPROMPT);
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogCustomization Demanded");
-                IntSecurity.FileDialogCustomization.Demand();
                 SetOption(NativeMethods.OFN_OVERWRITEPROMPT, value);
             }
         }
@@ -92,28 +86,12 @@ namespace System.Windows.Forms {
         [ResourceExposure(ResourceScope.Machine)]
         [ResourceConsumption(ResourceScope.Machine)]
         public Stream OpenFile() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogSaveFile Demanded");
-            IntSecurity.FileDialogSaveFile.Demand();
-
             string filename = FileNamesInternal[0];
 
             if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException( "FileName" );
                 
-            Stream s = null;
-            
-            // 
-
-
-
-            new FileIOPermission(FileIOPermissionAccess.AllAccess, IntSecurity.UnsafeGetFullPath(filename)).Assert();
-            try {
-                s = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
-            }
-            return s;
+            return new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
         }
 
         /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.PromptFileCreate"]/*' />
@@ -183,21 +161,11 @@ namespace System.Windows.Forms {
             SetOption(NativeMethods.OFN_OVERWRITEPROMPT, true);
         }
 
-        internal override void EnsureFileDialogPermission()
-        {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogSaveFile Demanded in SaveFileDialog.RunFileDialog");
-            IntSecurity.FileDialogSaveFile.Demand();
-        }
-
         /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.RunFileDialog"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
         internal override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
-            //We have already done the demand in EnsureFileDialogPermission but it doesn't hurt to do it again
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogSaveFile Demanded in SaveFileDialog.RunFileDialog");
-            IntSecurity.FileDialogSaveFile.Demand();
-
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);
 
             if (!result) {

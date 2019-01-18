@@ -351,8 +351,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static Screen FromHandle(IntPtr hwnd) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ObjectFromWin32Handle Demanded");
-            IntSecurity.ObjectFromWin32Handle.Demand();
             return FromHandleInternal(hwnd);
         }
 

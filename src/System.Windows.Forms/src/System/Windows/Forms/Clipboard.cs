@@ -13,11 +13,9 @@ namespace System.Windows.Forms {
     using System.IO;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
-    using System.Security;
 
     using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
     using System.Globalization;
-    using System.Security.Permissions;
     using System.Collections;
     
     /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard"]/*' />
@@ -103,7 +101,6 @@ namespace System.Windows.Forms {
         ///    should remain on the <see cref='System.Windows.Forms.Clipboard'/>
         ///    after the application exits.</para>
         /// </devdoc>
-        [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         public static void SetDataObject(object data, bool copy, int retryTimes, int retryDelay) {
             if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
                 throw new System.Threading.ThreadStateException(SR.ThreadMustBeSTA);
@@ -127,51 +124,34 @@ namespace System.Windows.Forms {
                 dataObject = new DataObject(data);
             }
 
-            bool restrictedFormats = false;
-
-            // If the caller doesnt have AllClipBoard permission then we allow only restricted formats.
-            // These formats are TEXT, UNICODETEXT,String and CSV
-            try 
-            {
-                IntSecurity.ClipboardRead.Demand();
-            }
-            catch (SecurityException)
-            {
-                // We dont have allClipBoard so we can set only data in the following formats
-                // TEXT, UNICODETEXT, and CSV.
-                restrictedFormats = true;
-            }
-
             // Compute the format of the "data" passed in iff setText == true;
             
-            if (restrictedFormats)
-            {
-                if (dataObject == null)
-                {
-                    dataObject = data as DataObject;
-                }
-                if (!IsFormatValid(dataObject))
-                {
-                    throw new SecurityException(SR.ClipboardSecurityException);
-                }
-            }
-
             if (dataObject != null) {
-                dataObject.RestrictedFormats = restrictedFormats;
+                dataObject.RestrictedFormats = false;
             }
             int hr, retry = retryTimes;
             
-            IntSecurity.UnmanagedCode.Assert();
+            do {
+                if (data is IComDataObject) {
+                    hr = UnsafeNativeMethods.OleSetClipboard((IComDataObject)data);
+                }
+                else {
+                    hr = UnsafeNativeMethods.OleSetClipboard(dataObject);
+                }
+                if (hr != 0) {
+                    if (retry == 0) {
+                        ThrowIfFailed(hr);
+                    }
+                    retry--;
+                    System.Threading.Thread.Sleep(retryDelay /*ms*/);
+                }
+            }
+            while (hr != 0);
 
-            try
-            {
+            if (copy) {
+                retry = retryTimes;
                 do {
-                    if (data is IComDataObject) {
-                        hr = UnsafeNativeMethods.OleSetClipboard((IComDataObject)data);
-                    }
-                    else {
-                        hr = UnsafeNativeMethods.OleSetClipboard(dataObject);
-                    }
+                    hr = UnsafeNativeMethods.OleFlushClipboard();
                     if (hr != 0) {
                         if (retry == 0) {
                             ThrowIfFailed(hr);
@@ -181,25 +161,6 @@ namespace System.Windows.Forms {
                     }
                 }
                 while (hr != 0);
-
-                if (copy) {
-                    retry = retryTimes;
-                    do {
-                        hr = UnsafeNativeMethods.OleFlushClipboard();
-                        if (hr != 0) {
-                            if (retry == 0) {
-                                ThrowIfFailed(hr);
-                            }
-                            retry--;
-                            System.Threading.Thread.Sleep(retryDelay /*ms*/);
-                        }
-                    }
-                    while (hr != 0);
-                }
-            }
-            finally
-            {
-                CodeAccessPermission.RevertAssert();   
             }
         }
 
@@ -209,9 +170,6 @@ namespace System.Windows.Forms {
         ///    <see cref='System.Windows.Forms.Clipboard'/>.</para>
         /// </devdoc>
         public static IDataObject GetDataObject() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ClipboardRead Demanded");
-            IntSecurity.ClipboardRead.Demand();
-
             if (Application.OleRequired() != System.Threading.ApartmentState.STA) {
 
                 // only throw if a message loop was started. This makes the case of trying

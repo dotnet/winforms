@@ -8,7 +8,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Globalization;
-using System.Security.Permissions;
 
     internal class LinkUtilities {
 
@@ -29,53 +28,42 @@ using System.Security.Permissions;
         ///     of this file of the valid names to retrieve.
         /// </devdoc>
         private static Color GetIEColor(string name) {
-            // 
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(IESettingsRegPath);
 
+            if (key != null) {
 
+                // Since this comes from the registry, be very careful about its contents.
+                //
+                string s = (string)key.GetValue(name);
+                key.Close();
 
+                if (s != null) {
+                    string[] rgbs = s.Split(new char[] {','});
+                    int[] rgb = new int[3];
 
-            new RegistryPermission(PermissionState.Unrestricted).Assert();
-            try {
-                RegistryKey key = Registry.CurrentUser.OpenSubKey(IESettingsRegPath);
+                    int nMax = Math.Min(rgb.Length, rgbs.Length);
 
-                if (key != null) {
-
-                    // Since this comes from the registry, be very careful about its contents.
-                    //
-                    string s = (string)key.GetValue(name);
-                    key.Close();
-
-                    if (s != null) {
-                        string[] rgbs = s.Split(new char[] {','});
-                        int[] rgb = new int[3];
-
-                        int nMax = Math.Min(rgb.Length, rgbs.Length);
-
-                        //NOTE: if we can't parse rgbs[i], rgb[i] will be set to 0.
-                        for (int i = 0; i < nMax; i++)
-                        {
-                            int.TryParse(rgbs[i], out rgb[i]);
-                        }
-
-                        return Color.FromArgb(rgb[0], rgb[1], rgb[2]);
+                    //NOTE: if we can't parse rgbs[i], rgb[i] will be set to 0.
+                    for (int i = 0; i < nMax; i++)
+                    {
+                        int.TryParse(rgbs[i], out rgb[i]);
                     }
-                }
 
-                if (string.Equals(name, IEAnchorColor, StringComparison.OrdinalIgnoreCase)) {
-                    return Color.Blue;
-                }
-                else if (string.Equals(name, IEAnchorColorVisited, StringComparison.OrdinalIgnoreCase)) {
-                    return Color.Purple;
-                }
-                else if (string.Equals(name, IEAnchorColorHover, StringComparison.OrdinalIgnoreCase)) {
-                    return Color.Red;
-                }
-                else {
-                    return Color.Red;
+                    return Color.FromArgb(rgb[0], rgb[1], rgb[2]);
                 }
             }
-            finally {
-                System.Security.CodeAccessPermission.RevertAssert();
+
+            if (string.Equals(name, IEAnchorColor, StringComparison.OrdinalIgnoreCase)) {
+                return Color.Blue;
+            }
+            else if (string.Equals(name, IEAnchorColorVisited, StringComparison.OrdinalIgnoreCase)) {
+                return Color.Purple;
+            }
+            else if (string.Equals(name, IEAnchorColorHover, StringComparison.OrdinalIgnoreCase)) {
+                return Color.Red;
+            }
+            else {
+                return Color.Red;
             }
 
         }
@@ -121,39 +109,28 @@ using System.Security.Permissions;
         ///     Retrieves the IE settings for link behavior from the registry.
         /// </devdoc>
         public static LinkBehavior GetIELinkBehavior() {
-            // 
-
-
-
-
-            new RegistryPermission(PermissionState.Unrestricted).Assert();
+            RegistryKey key = null;
             try {
-                RegistryKey key = null;
-                try {
-                    key = Registry.CurrentUser.OpenSubKey(IEMainRegPath);
-                }
-                catch (System.Security.SecurityException) {
-                    // User does not have right to access Registry path HKCU\\Software\\Microsoft\\Internet Explorer\\Main.
-                    // Catch SecurityException silently and let the return value fallback to AlwaysUnderline.
-                }
-
-                if (key != null) {
-                    string s = (string)key.GetValue("Anchor Underline");
-                    key.Close();
-
-                    if (s != null && string.Compare(s, "no", true, CultureInfo.InvariantCulture) == 0) {
-                        return LinkBehavior.NeverUnderline;
-                    }
-                    if (s != null && string.Compare(s, "hover", true, CultureInfo.InvariantCulture) == 0) {
-                        return LinkBehavior.HoverUnderline;
-                    }
-                    else {
-                        return LinkBehavior.AlwaysUnderline;
-                    }
-                }
+                key = Registry.CurrentUser.OpenSubKey(IEMainRegPath);
             }
-            finally {
-                System.Security.CodeAccessPermission.RevertAssert();
+            catch (System.Security.SecurityException) {
+                // User does not have right to access Registry path HKCU\\Software\\Microsoft\\Internet Explorer\\Main.
+                // Catch SecurityException silently and let the return value fallback to AlwaysUnderline.
+            }
+
+            if (key != null) {
+                string s = (string)key.GetValue("Anchor Underline");
+                key.Close();
+
+                if (s != null && string.Compare(s, "no", true, CultureInfo.InvariantCulture) == 0) {
+                    return LinkBehavior.NeverUnderline;
+                }
+                if (s != null && string.Compare(s, "hover", true, CultureInfo.InvariantCulture) == 0) {
+                    return LinkBehavior.HoverUnderline;
+                }
+                else {
+                    return LinkBehavior.AlwaysUnderline;
+                }
             }
 
             return LinkBehavior.AlwaysUnderline;

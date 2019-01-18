@@ -15,8 +15,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
     ///     This class contains the set of menu commands our property browser
     ///     uses.
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class PropertyGridCommands{
 
         /// <include file='doc\MenuCommands.uex' path='docs/doc[@for="MenuCommands.wfcMenuGroup"]/*' />

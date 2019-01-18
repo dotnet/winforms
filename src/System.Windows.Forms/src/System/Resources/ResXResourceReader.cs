@@ -26,8 +26,6 @@ namespace System.Resources {
     /// <devdoc>
     ///     ResX resource reader.
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class ResXResourceReader : IResourceReader {
         string fileName = null;
         TextReader reader = null;

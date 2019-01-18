@@ -10,8 +10,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Collections;
     using System.Windows.Forms;
     using System.Windows.Forms.Design;
@@ -2837,15 +2835,7 @@ namespace System.Windows.Forms
             {
                 if (this.editingPanelAccessibleObject == null)
                 {
-                    IntSecurity.UnmanagedCode.Assert();
-                    try
-                    {
-                        editingPanelAccessibleObject = new DataGridViewEditingPanelAccessibleObject(this, this.EditingPanel);
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    editingPanelAccessibleObject = new DataGridViewEditingPanelAccessibleObject(this, this.EditingPanel);
                 }
 
                 return editingPanelAccessibleObject;
@@ -3692,20 +3682,6 @@ namespace System.Windows.Forms
                 if (!this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestrictedChecked])
                 {
                     this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted] = false;
-                    try
-                    {
-                        IntSecurity.AllWindows.Demand();
-                    }
-                    catch (SecurityException)
-                    {
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted] = true;
-                    }
-                    catch
-                    {
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted] = true; // To be on the safe side
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestrictedChecked] = true;
-                        throw;
-                    }
                     this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestrictedChecked] = true;
                 }
                 return this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted];

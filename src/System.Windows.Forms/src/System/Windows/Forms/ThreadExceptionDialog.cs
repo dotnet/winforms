@@ -11,8 +11,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing;
     using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Runtime.InteropServices;
     using System.Globalization;
 
@@ -26,10 +24,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [
         ComVisible(true),
-        ClassInterface(ClassInterfaceType.AutoDispatch),
-        SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        UIPermission(SecurityAction.Assert, Window=UIPermissionWindow.AllWindows)]
+        ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ThreadExceptionDialog : Form {
 
         private const string DownBitmapName = "down.bmp";
@@ -139,7 +134,7 @@ namespace System.Windows.Forms {
                 detailAnchor = true;
                 
                 if (Application.AllowQuit) {
-                    if (t is SecurityException) {
+                    if (t is System.Security.SecurityException) {
                         messageRes = "ExDlgSecurityErrorText";
                     }
                     else {
@@ -148,7 +143,7 @@ namespace System.Windows.Forms {
                     buttons = new Button[] {detailsButton, continueButton, quitButton};
                 }
                 else {
-                    if (t is SecurityException) {
+                    if (t is System.Security.SecurityException) {
                         messageRes = "ExDlgSecurityContinueErrorText";
                     }
                     else {
@@ -161,7 +156,7 @@ namespace System.Windows.Forms {
             if (messageText.Length == 0) {
                 messageText = t.GetType().Name;
             }
-            if (t is SecurityException) {
+            if (t is System.Security.SecurityException) {
                 messageText = string.Format(messageRes, t.GetType().Name, Trim(messageText));
             }
             else {
@@ -183,35 +178,24 @@ namespace System.Windows.Forms {
             detailsTextBuilder.Append(newline);
             detailsTextBuilder.Append(newline);
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgLoadedAssembliesSection));
-            new FileIOPermission(PermissionState.Unrestricted).Assert();
-            try {
-                foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies()) {
-                    AssemblyName name = asm.GetName();
-                    string fileVer = SR.NotAvailable;
 
-                    try {
+            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies()) {
+                AssemblyName name = asm.GetName();
+                string fileVer = SR.NotAvailable;
+
+                try {
                         
-                        // 
-
-
-
-
-
-                        if (name.EscapedCodeBase != null && name.EscapedCodeBase.Length > 0) {
-                            Uri codeBase = new Uri(name.EscapedCodeBase);
-                            if (codeBase.Scheme == "file") {
-                                fileVer = FileVersionInfo.GetVersionInfo(NativeMethods.GetLocalPath(name.EscapedCodeBase)).FileVersion;
-                            }
+                    if (name.EscapedCodeBase != null && name.EscapedCodeBase.Length > 0) {
+                        Uri codeBase = new Uri(name.EscapedCodeBase);
+                        if (codeBase.Scheme == "file") {
+                            fileVer = FileVersionInfo.GetVersionInfo(NativeMethods.GetLocalPath(name.EscapedCodeBase)).FileVersion;
                         }
                     }
-                    catch(System.IO.FileNotFoundException){
-                    }
-                    detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
-                    detailsTextBuilder.Append(separator);
                 }
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
+                catch(System.IO.FileNotFoundException){
+                }
+                detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
+                detailsTextBuilder.Append(separator);
             }
             
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgJITDebuggingSection));
@@ -249,22 +233,14 @@ namespace System.Windows.Forms {
             int width = textSize.Width + scaledPaddingWidth;
             int buttonTop = Math.Max(textSize.Height, scaledMaxTextHeight) + scaledPaddingHeight;
 
-            // 
-
-
-            IntSecurity.GetParent.Assert();
-            try {
-                Form activeForm = Form.ActiveForm;
-                if (activeForm == null || activeForm.Text.Length == 0) {
-                    Text = SR.ExDlgCaption;
-                }
-                else {
-                    Text = string.Format(SR.ExDlgCaption2, activeForm.Text);
-                }
+            Form activeForm = Form.ActiveForm;
+            if (activeForm == null || activeForm.Text.Length == 0) {
+                Text = SR.ExDlgCaption;
             }
-            finally {
-                CodeAccessPermission.RevertAssert();
+            else {
+                Text = string.Format(SR.ExDlgCaption2, activeForm.Text);
             }
+
             AcceptButton = continueButton;
             CancelButton = continueButton;
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -278,7 +254,7 @@ namespace System.Windows.Forms {
             pictureBox.Location = new Point(scaledPictureWidth/8, scaledPictureHeight/8);
             pictureBox.Size = new Size(scaledPictureWidth*3/4, scaledPictureHeight*3/4);
             pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            if (t is SecurityException) {
+            if (t is System.Security.SecurityException) {
                 pictureBox.Image = SystemIcons.Information.ToBitmap();
             }
             else {
