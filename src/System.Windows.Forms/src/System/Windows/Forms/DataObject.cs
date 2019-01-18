@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -953,7 +953,7 @@ namespace System.Windows.Forms
         ///     Saves stream out to handle.
         /// </devdoc>
         /// <internalonly/>
-        private int SaveStreamToHandle(ref IntPtr handle, Stream stream)
+        private unsafe int SaveStreamToHandle(ref IntPtr handle, Stream stream)
         {
             if (handle != IntPtr.Zero)
             {
@@ -972,10 +972,8 @@ namespace System.Windows.Forms
             }
             try
             {
-                byte[] bytes = new byte[size];
-                stream.Position = 0;
-                stream.Read(bytes, 0, size);
-                Marshal.Copy(bytes, 0, ptr, size);
+                var span = new Span<byte>(ptr.ToPointer(), size);
+                stream.Read(span);
             }
             finally
             {
@@ -1837,9 +1835,7 @@ namespace System.Windows.Forms
                 try
                 {
                     int size = UnsafeNativeMethods.GlobalSize(new HandleRef(null, handle));
-                    byte[] bytes = new byte[size];
-                    Marshal.Copy(ptr, bytes, 0, size);
-                    stringData = Encoding.UTF8.GetString(bytes);
+                    stringData = Encoding.UTF8.GetString((byte*)ptr, size);
                 }
                 finally
                 {
