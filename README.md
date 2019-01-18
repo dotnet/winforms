@@ -45,7 +45,7 @@ The Visual Studio WinForms designer is not yet available and will be part of a V
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
 * The [contributing guidelines][contributing]and the more general [.NET Core contributing guide][corefx-contributing] define contributing rules.
-* The [Developer Guide](developer-guide.md) defines the setup and workflow for working on this repository.
+* The [Developer Guide][developing] defines the setup and workflow for working on this repository.
 * If you have a question or have found a bug, [file an issue][issue-new].
 * Use [daily builds][getting-started] if you want to contribute and stay up to date with the team.
 
@@ -55,7 +55,9 @@ Issues with .NET Framework, including WinForms, should be filed on [VS developer
 
 ### Reporting security issues
 
-Security issues and bugs should be reported privately via email to the Microsoft Security Response Center (MSRC) <secure@microsoft.com>. You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message. Further information, including the MSRC PGP key, can be found in the [Security TechCenter][faqs-report-an-issue]. Also see info about related [Microsoft .NET Core and ASP.NET Core Bug Bounty Program][bounty-dot-net-core].
+Security issues and bugs should be reported privately via email to the Microsoft Security Response Center 
+
+MSRC) <secure@microsoft.com>. You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message. Further information, including the MSRC PGP key, can be found in the [Security TechCenter][faqs-report-an-issue]. Also see info about related [Microsoft .NET Core and ASP.NET Core Bug Bounty Program][bounty-dot-net-core].
 
 ## Relationship to .NET Framework
 
@@ -77,13 +79,10 @@ This project uses the [.NET Foundation Code of Conduct][dotnet-code-of-conduct] 
 
 See the [.NET home repository][dotnet-home] to find other .NET-related projects.
 
-[comment]: <> (Multi-use Internal Links)
-
-[getting-started]: getting-started.md
-[contributing]: contributing.md
-[porting-guidelines]: porting-guidelines.md
-
-[comment]: <> (URI Links)
+[getting-started]: Documentation/getting-started.md
+[contributing]: Documentation/contributing.md
+[porting-guidelines]: Documentation/porting-guidelines.md
+[developing]: Documentation/developer-guide.md
 
 [wpf]: https://github.com/dotnet/wpf
 [.net-core-3.0-sdk-preview-1]: https://www.microsoft.com/net/download
