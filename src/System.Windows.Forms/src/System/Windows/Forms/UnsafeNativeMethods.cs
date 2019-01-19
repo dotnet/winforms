@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -755,7 +755,6 @@ namespace System.Windows.Forms {
 
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
-        [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         public static extern bool IsZoomed(HandleRef hWnd);
         
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
@@ -1492,7 +1491,6 @@ namespace System.Windows.Forms {
         [ResourceExposure(ResourceScope.None)]
         public static extern bool GetClientRect(HandleRef hWnd, IntPtr rect);
     
-        [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         [DllImport(ExternDll.User32, EntryPoint="WindowFromPoint", ExactSpelling=true, CharSet=CharSet.Auto)]
         [ResourceExposure(ResourceScope.Process)]
         private static extern IntPtr _WindowFromPoint(POINTSTRUCT pt);
@@ -6038,7 +6036,6 @@ namespace System.Windows.Forms {
         [ComImport(), Guid("0000010C-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IPersist {
 
-            [ System.Security.SuppressUnmanagedCodeSecurityAttribute()]
             void GetClassID(
                            [Out] 
                            out Guid pClassID);
@@ -7153,31 +7150,26 @@ namespace System.Windows.Forms {
      InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IErrorInfo {
 
-        [ System.Security.SuppressUnmanagedCodeSecurityAttribute()]
         [PreserveSig]
         int GetGUID(
                    [Out]
                    out Guid pguid);
 
-        [ System.Security.SuppressUnmanagedCodeSecurityAttribute()]
         [PreserveSig]
         int GetSource(
                      [In, Out, MarshalAs(UnmanagedType.BStr)] 
                      ref string pBstrSource);
 
-        [ System.Security.SuppressUnmanagedCodeSecurityAttribute()]
         [PreserveSig]
         int GetDescription(
                           [In, Out, MarshalAs(UnmanagedType.BStr)] 
                           ref string pBstrDescription);
 
-        [ System.Security.SuppressUnmanagedCodeSecurityAttribute()]
         [PreserveSig]
         int GetHelpFile(
                        [In, Out, MarshalAs(UnmanagedType.BStr)] 
                        ref string pBstrHelpFile);
 
-        [ System.Security.SuppressUnmanagedCodeSecurityAttribute()]
         [PreserveSig]
         int GetHelpContext(
                           [In, Out, MarshalAs(UnmanagedType.U4)] 
@@ -8097,10 +8089,7 @@ namespace System.Windows.Forms {
         }
 
         // ClickOnce related interop
-        [
-            StructLayout(LayoutKind.Sequential),
-            System.Security.SuppressUnmanagedCodeSecurityAttribute()
-        ]
+        [StructLayout(LayoutKind.Sequential)]
         internal class PROCESS_INFORMATION
         {
             [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]

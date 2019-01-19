@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1404,7 +1404,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
-        [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         protected override void OnMouseLeave(EventArgs e) {
             if (!controlToolTip && textToolTip != null && textToolTip.GetHandleCreated()) {
                 textToolTip.RemoveAll();
@@ -1438,7 +1437,6 @@ namespace System.Windows.Forms {
 
         
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
-        [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         protected override void OnHandleDestroyed(EventArgs e) {
             base.OnHandleDestroyed(e);
             if (textToolTip != null && textToolTip.GetHandleCreated())
