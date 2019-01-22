@@ -641,6 +641,11 @@ namespace System.Windows.Forms
             }
             set
             {
+                if (!Enum.IsDefined(typeof(DataGridViewTriState), value))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewTriState));
+                }
+
                 DataGridViewTriState oldResizable = this.Resizable;
                 if (value == DataGridViewTriState.NotSet)
                 {

@@ -279,6 +279,8 @@ namespace System.Windows.Forms
                                     bool isFirstDisplayedRow, 
                                     bool isLastVisibleRow)
         {
+            Debug.Assert(graphics != null);
+
             this.graphics = graphics;
             this.clipBounds = clipBounds;
             this.rowBounds = rowBounds;

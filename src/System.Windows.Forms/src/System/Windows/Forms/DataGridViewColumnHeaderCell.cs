@@ -309,6 +309,10 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewColumnHeaderCell.uex' path='docs/doc[@for="DataGridViewColumnHeaderCell.GetInheritedStyle"]/*' />
         public override DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors)
         {
+            if (DataGridView == null)
+            {
+                throw new InvalidOperationException(SR.DataGridView_CellNeedsDataGridViewForInheritedStyle);
+            }
             if (rowIndex != -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));

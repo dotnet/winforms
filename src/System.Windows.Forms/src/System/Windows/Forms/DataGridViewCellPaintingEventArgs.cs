@@ -275,6 +275,8 @@ namespace System.Windows.Forms
                                     DataGridViewAdvancedBorderStyle advancedBorderStyle,
                                     DataGridViewPaintParts paintParts)
         {
+            Debug.Assert(graphics != null);
+
             this.graphics = graphics;
             this.clipBounds = clipBounds;
             this.cellBounds = cellBounds;
