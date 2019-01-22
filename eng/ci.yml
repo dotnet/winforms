@@ -94,7 +94,7 @@ jobs:
           $(_OfficialBuildIdArgs)
           -restore
           -build
-        displayName: Build
+        displayName: Restore and Build
 
       # Run unit tests
       - script: eng\cibuild.cmd
