@@ -87,14 +87,30 @@ jobs:
       - checkout: self
         clean: true
 
-      # Build, test, pack, and sign
-      - script: eng\common\cibuild.cmd
-          -configuration $(_BuildConfig) 
+      # Restore and build
+      - script: eng\cibuild.cmd
           -prepareMachine
-          $(_PublishArgs)
-          $(_SignArgs)
+          -configuration $(_BuildConfig) 
           $(_OfficialBuildIdArgs)
-        displayName: Windows Build / Publish
+          -restore
+          -build
+        displayName: Build
+
+      # Run unit tests
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig) 
+          $(_OfficialBuildIdArgs)
+          -test
+        displayName: Unit tests
+
+      # Create Nuget package, sign, and publish
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig) 
+          $(_OfficialBuildIdArgs)
+          -pack
+          -sign $(_SignArgs)
+          -publish $(_PublishArgs)
+        displayName: Pack, Sign, and Publish
 
       # Run component governance detection (only for release)
       - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
