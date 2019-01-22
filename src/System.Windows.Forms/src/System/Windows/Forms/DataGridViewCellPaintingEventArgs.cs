@@ -276,7 +276,6 @@ namespace System.Windows.Forms
                                     DataGridViewPaintParts paintParts)
         {
             Debug.Assert(graphics != null);
-            Debug.Assert(cellStyle != null);
 
             this.graphics = graphics;
             this.clipBounds = clipBounds;

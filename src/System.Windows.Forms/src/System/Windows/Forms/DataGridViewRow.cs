@@ -1518,6 +1518,11 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
             }
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
+
             DataGridView dataGridView = this.DataGridView;
             Rectangle updatedClipBounds = clipBounds;
             DataGridViewRow sharedRow = dataGridView.Rows.SharedRow(rowIndex);
@@ -1592,6 +1597,10 @@ namespace System.Windows.Forms
             if (this.DataGridView == null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+            }
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
             }
             if ((int) paintParts < (int) DataGridViewPaintParts.None || (int) paintParts > (int) DataGridViewPaintParts.All)
             {
@@ -1781,13 +1790,15 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
             }
-            
-            // not using ClientUtils.IsValidEnum here because this is a flags enum.  
-            // everything is valid between 0x0 and 0x7F.
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
             if ((int) paintParts < (int) DataGridViewPaintParts.None || (int) paintParts > (int) DataGridViewPaintParts.All)
             {
                 throw new InvalidEnumArgumentException(nameof(paintParts), (int)paintParts, typeof(DataGridViewPaintParts));
             }
+
             DataGridView dataGridView = this.DataGridView;
             if (dataGridView.RowHeadersVisible)
             {
