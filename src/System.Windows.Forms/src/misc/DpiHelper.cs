@@ -70,7 +70,7 @@ namespace System.Windows.Forms
             Initialize();
 
             // We are in Windows 10/1603 or greater when this API is present.
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext)))
+            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SafeNativeMethods.GetProcessDpiAwareness)))
             {
 
                 // We are on Windows 10/1603 or greater all right, but we could still be DpiUnaware or SystemAware, so let's find that out...
@@ -107,8 +107,8 @@ namespace System.Windows.Forms
                 {
                     // We can't cache this value because different top level windows can have different DPI awareness context
                     // for mixed mode applications.
-                    DpiAwarenessContext dpiAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
-                    return CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+                    DpiAwarenessContext dpiAwareness = DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext();
+                    return DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
                 }
                 else
                 {

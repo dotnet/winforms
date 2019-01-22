@@ -488,7 +488,7 @@ namespace System.Windows.Forms {
                     if (this.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive) {
                         IntPtr hwndInPlaceObject;
                         if (NativeMethods.Succeeded(this.AXInPlaceObject.GetWindow(out hwndInPlaceObject))) {
-                            Application.ParkHandle(new HandleRef(this.AXInPlaceObject, hwndInPlaceObject));
+                            this.ApplicationParkHandleWithWindowContext(new HandleRef(this.AXInPlaceObject, hwndInPlaceObject));
                         }
                     }
 

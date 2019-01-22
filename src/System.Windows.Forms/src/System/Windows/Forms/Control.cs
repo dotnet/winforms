@@ -5682,7 +5682,7 @@ example usage
                 //
                 if (cp.Parent == IntPtr.Zero && (cp.Style & NativeMethods.WS_CHILD) != 0) {
                     Debug.Assert((cp.ExStyle & NativeMethods.WS_EX_MDICHILD) == 0, "Can't put MDI child forms on the parking form");
-                    Application.ParkHandle(cp);
+                    Application.ParkHandle(cp, window.DpiAwarenessContext);
                 }
 
                 window.CreateHandle(cp);
@@ -5701,6 +5701,11 @@ example usage
             if (this.Bounds != originalBounds) {
                 LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Bounds);
             }
+        }
+
+        protected void ApplicationParkHandleWithWindowContext(HandleRef handle)
+        {
+            Application.ParkHandle(handle, window.DpiAwarenessContext);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateControl"]/*' />
@@ -8226,7 +8231,7 @@ example usage
 
             // use SetParent directly so as to not raise ParentChanged events
             if (IsHandleCreated) {
-                Application.ParkHandle(new HandleRef(this, this.Handle));
+                Application.ParkHandle(new HandleRef(this, this.Handle), window.DpiAwarenessContext);
             }
         }
 
@@ -11622,7 +11627,7 @@ example usage
                     }
                     if (!GetTopLevel()) {
                         if (value == IntPtr.Zero) {
-                            Application.ParkHandle(new HandleRef(window, Handle));
+                            Application.ParkHandle(new HandleRef(window, Handle), window.DpiAwarenessContext);
                             UpdateRoot();
                         }
                         else {

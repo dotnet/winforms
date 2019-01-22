@@ -54,16 +54,19 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    if (!CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(awareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
+                    if (!DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(awareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)) 
                     {
-                        originalAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
+                        originalAwareness = DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext();
 
-                        // If current process dpiawareness is SYSTEM_UNAWARE or SYSTEM_AWARE (must be equal to awareness), calling this method will be a no-op.
-                        if (!CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(originalAwareness, awareness) &&
-                            !CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(originalAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE))
+                        // If desired awareness is not equal to current awareness
+                        if (!DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(originalAwareness, awareness))
                         {
-                            originalAwareness = CommonUnsafeNativeMethods.SetThreadDpiAwarenessContext(awareness);
-                            dpiAwarenessScopeIsSet = true;
+                            // Unaware is allowed to open Unaware only; System Aware may open System and Unaware; etc...
+                            if (CanContextAParentContextB(originalAwareness, awareness))
+                            {
+                                originalAwareness = DpiUnsafeNativeMethods.TrySetThreadDpiAwarenessContext(awareness);
+                                dpiAwarenessScopeIsSet = true;
+                            }
                         }
                     }
                 }
@@ -71,6 +74,43 @@ namespace System.Windows.Forms
                 {
                     dpiAwarenessScopeIsSet = false;
                 }
+            }
+
+            /// <summary>
+            /// Returns whether or not a window in context A should be allowed to open a window in context B
+            /// Unaware windows may only open children in unaware mode; System Aware windows may open children in System Aware and Unaware;
+            /// PMV1 windows may open children in PMV1, System Aware, and Unaware; finally PMV2 windows may open children in PMV2, PMV1, System Aware, and Unaware
+            /// </summary>
+            /// <param name="dpiAwarenessContextA"></param>
+            /// <param name="dpiAwarenessContextB"></param>
+            /// <returns></returns>
+            /// <remarks>If a new member of the enumeration is added, this code will also have to change</remarks>
+            /// <remarks>It would be better if there was a way to convert from the bit-masked dpi awareness to our own enumeration and compare the magnitude</remarks>
+            private bool CanContextAParentContextB(DpiAwarenessContext dpiAwarenessContextA, DpiAwarenessContext dpiAwarenessContextB)
+            {
+                if (DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextA, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+                {
+                    return DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) ||
+                        DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE) ||
+                        DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE) ||
+                        DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE);
+                }
+                else if (DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextA, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE))
+                {
+                    return DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE) ||
+                        DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE) ||
+                        DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE);
+                }
+                else if (DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextA, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+                {
+                    return DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE) ||
+                        DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE);
+                }
+                else if (DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextA, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE))
+                {
+                    return DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE);
+                }
+                return false;
             }
 
             /// <summary>
@@ -88,7 +128,7 @@ namespace System.Windows.Forms
             {
                 if (dpiAwarenessScopeIsSet)
                 {
-                    CommonUnsafeNativeMethods.TrySetThreadDpiAwarenessContext(originalAwareness);
+                    DpiUnsafeNativeMethods.TrySetThreadDpiAwarenessContext(originalAwareness);
                     dpiAwarenessScopeIsSet = false;
                 }
             }

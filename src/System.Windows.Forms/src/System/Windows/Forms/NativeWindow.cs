@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
         NativeWindow nextWindow;
         WeakReference weakThisPtr;
         private DpiAwarenessContext windowDpiAwarenessContext = DpiHelper.IsScalingRequirementMet ?
-                                                                  CommonUnsafeNativeMethods.TryGetThreadDpiAwarenessContext() :
+                                                                  DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext() :
                                                                   DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
 
         static NativeWindow() {
