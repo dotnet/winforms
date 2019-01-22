@@ -100,61 +100,30 @@ jobs:
       - checkout: self
         clean: true
 
-      # Build, test, pack, and sign
-      - script: eng\common\cibuild.cmd
-          -configuration $(_BuildConfig) 
+      # Restore and build
+      - script: eng\cibuild.cmd
           -prepareMachine
-          $(_PublishArgs)
-          $(_SignArgs)
+          -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
-        displayName: Windows Build / Publish
+          -restore
+          -build
+        displayName: Restore and Build
 
-      # # Copy files for helix job
-      # - task: CopyFiles@2
-      #   inputs:
-      #     sourceFolder: $(_WinformsControlsTestBinDir)
-      #     contents: '**' 
-      #     targetFolder: $(_HelixStagingDir)
-      #     cleanTargetFolder: true
-      #     #overWrite: false # Optional
-      #   displayName: Copy winforms controls tests to helix staging dir
-      # - task: CopyFiles@2
-      #   inputs:
-      #     sourceFolder: $(_WinformsFuncTestBinDir)
-      #     contents: '**' 
-      #     targetFolder: $(_HelixStagingDir)
-      #     overWrite: true
-      #   displayName: Copy xUnit func tests to helix staging dir
+      # Run unit tests
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -test
+        displayName: Run Unit Tests
 
-      # - template: /eng/common/templates/steps/helix-publish.yml
-      #   parameters:
-      #     HelixSource: $(_HelixSource)
-      #     HelixType: ̓'tests/functional'
-      #     HelixTargetQueues: $(_HelixAgentPool)
-      #     # secret variable set in Azure DevOps build definition
-      #     # todo: when we go public, get this value from the Helix Anonymous variable group
-      #     # for internal builds, get this value from the DotNet-HelixApi-Access variable group
-      #     HelixAccessToken: $(helix-token) 
-      #     #HelixPreCommands: ''
-      #     #HelixPostCommands: ''
-      #     WorkItemDirectory: $(_HelixStagingDir)
-      #     WorkItemCommand: 'dotnet.exe exec --depsfile System.Windows.Forms.Func.Tests.deps.json --runtimeconfig System.Windows.Forms.Func.Tests.runtimeconfig.json xunit.console.dll System.Windows.Forms.Func.Tests.dll -noautoreporters -xml System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.xml -html System.Windows.Forms.Func.Tests_netcoreapp3.0_x64.html'
-      #     #CorrelationPayloadDirectory: ''
-      #     #XUnitProjects: ''
-      #     #XUnitTargetFramework: ''
-      #     #XUnitRunnerVersion: ''
-      #     IncludeDotNetCli: true
-      #     DotNetCliPackageType: 'sdk'
-      #     DotNetCliVersion: '3.0.100-preview-009764'
-      #     EnableXUnitReporter: true
-      #     WaitForWorkItemCompletion: true
-      #     condition: succeeded()
-      #     continueOnError: false
-
-      # Run component governance detection (only for release)
-      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-        displayName: Component Governance Detection
-        condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+      # Create Nuget package, sign, and publish
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -pack
+          -sign $(_SignArgs)
+          -publish $(_PublishArgs)
+        displayName: Pack, Sign, and Publish
 
       # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
