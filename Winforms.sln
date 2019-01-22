@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Ref", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Tests", "src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj", "{AB38E262-F206-4820-8F29-23C5F72A4A16}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\tests\functests\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\tests\IntegrationTests\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Private.Winforms", "pkg\Microsoft.Private.Winforms.csproj", "{F133342A-3040-4005-A2F0-7685AA7CB82D}"
 EndProject
@@ -43,7 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{583F1292-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "func", "func", "{680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Func.Tests", "src\System.Windows.Forms\tests\FuncTests\System.Windows.Forms.Func.Tests\System.Windows.Forms.Func.Tests.csproj", "{238195CE-7CCE-4469-ACD8-EA00E88D947A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Func.Tests", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.Func.Tests\System.Windows.Forms.Func.Tests.csproj", "{238195CE-7CCE-4469-ACD8-EA00E88D947A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

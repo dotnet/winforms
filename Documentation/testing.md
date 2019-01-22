@@ -128,7 +128,7 @@ This runner will open the application and all single-depth dialogs with the Send
 
 The runner batch (`run_individual_exe.bat`) and accompanying powershell (`run_individual_exe.ps1`) script can be found in:
 
-`...\winforms\src\System.Windows.Forms\tests\FuncTests\Runner_WinformsControlsTest`
+`...\winforms\src\System.Windows.Forms\tests\IntegrationTests\Runner_WinformsControlsTest`
 
 To run them, execute the following command the Runner_WinformsControlsTest directory:
 

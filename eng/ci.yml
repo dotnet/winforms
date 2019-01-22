@@ -116,6 +116,13 @@ jobs:
           -test
         displayName: Run Unit Tests
 
+      # Run integration tests
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -integrationTest
+        displayName: Run Unit Tests
+
       # Create Nuget package, sign, and publish
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
