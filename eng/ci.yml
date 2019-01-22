@@ -93,7 +93,7 @@ jobs:
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -build
-        displayName: Restore and Build
+        displayName: Build
 
       # Run unit tests
       - script: eng\cibuild.cmd
