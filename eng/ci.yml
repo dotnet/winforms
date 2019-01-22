@@ -92,7 +92,6 @@ jobs:
           -prepareMachine
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
-          -restore
           -build
         displayName: Build
 
