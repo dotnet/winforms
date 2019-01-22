@@ -82,33 +82,30 @@ namespace System.Windows.Forms {
             ArrayList list = new ArrayList();
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            new ReflectionPermission(PermissionState.Unrestricted).Assert();
-            try {
-                foreach (Assembly assembly in assemblies) {
-                    Module[] modules = assembly.GetLoadedModules();
+            foreach (Assembly assembly in assemblies) {
+                Module[] modules = assembly.GetLoadedModules();
 
-                    foreach (Module module in modules) {
+                foreach (Module module in modules) {
 
-                        if (module != null) {
-                            foreach (Type type in module.GetTypes()) {
+                    if (module != null) {
+                        foreach (Type type in module.GetTypes()) {
 
-                                if (type != null) {
-                                    MemberInfo[] members = type.FindMembers(MemberTypes.Field, 
-                                                                            BindingFlags.Static 
-                                                                            | BindingFlags.Public 
-                                                                            | BindingFlags.NonPublic, 
-                                                                            new MemberFilter(Filter), 
-                                                                            null);
+                            if (type != null) {
+                                MemberInfo[] members = type.FindMembers(MemberTypes.Field, 
+                                                                        BindingFlags.Static 
+                                                                        | BindingFlags.Public 
+                                                                        | BindingFlags.NonPublic, 
+                                                                        new MemberFilter(Filter), 
+                                                                        null);
 
-                                    foreach (MemberInfo member in members) {
+                                foreach (MemberInfo member in members) {
 
-                                        if (member != null) {
-                                            FieldInfo field = member as FieldInfo;
-                                            if (field != null) {
-                                                object value = field.GetValue(null);
-                                                if (value != null)
-                                                    list.Add(value);
-                                            }
+                                    if (member != null) {
+                                        FieldInfo field = member as FieldInfo;
+                                        if (field != null) {
+                                            object value = field.GetValue(null);
+                                            if (value != null)
+                                                list.Add(value);
                                         }
                                     }
                                 }
@@ -116,9 +113,6 @@ namespace System.Windows.Forms {
                         }
                     }
                 }
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
             }
             return(Switch[]) list.ToArray(typeof(Switch));
         }
@@ -365,13 +359,7 @@ namespace System.Windows.Forms {
             this.switchLabel = new Label();
             this.bugReportPanel = new Panel();
 
-            new PermissionSet(PermissionState.Unrestricted).Assert();
-            try {
-                this.appProps = new PropertyGrid();
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
-            }
+            this.appProps = new PropertyGrid();
 
             //@design this.TrayLargeIcon = false;
             //@design this.TrayAutoArrange = true;

@@ -19,7 +19,6 @@ namespace System.Windows.Forms.Design {
     ///       of <see cref='System.ComponentModel.IComponent'/>
     ///       objects.</para>
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     public abstract class WindowsFormsComponentEditor : ComponentEditor {
         
         /// <include file='doc\WinFormsComponentEditor.uex' path='docs/doc[@for="WindowsFormsComponentEditor.EditComponent"]/*' />

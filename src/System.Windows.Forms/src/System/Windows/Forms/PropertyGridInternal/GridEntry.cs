@@ -5,7 +5,6 @@
 //#define PBRS_PAINT_DEBUG
 
 namespace System.Windows.Forms.PropertyGridInternal {
-    using System.Security.Permissions;
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
@@ -2843,7 +2842,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             #endregion
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 owner.OnOutlineClick(EventArgs.Empty);
             }
@@ -2855,7 +2853,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return((Control)this.owner.GridEntryHost).AccessibilityObject;
                 }
@@ -2927,12 +2924,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return owner.GetPropertyTextValue();
                 }
 
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 set {
                     owner.SetPropertyTextValue(value);
                 }                
@@ -2958,7 +2953,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
 
                 PropertyGridView.PropertyGridViewAccessibleObject parent =
@@ -2986,7 +2980,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
 
                 // make sure we're on the right thread.

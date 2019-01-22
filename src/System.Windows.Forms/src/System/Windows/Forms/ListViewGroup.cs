@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Win32;
 using System.Globalization;
-using System.Security.Permissions;
 
 namespace System.Windows.Forms {
                                
@@ -270,7 +269,6 @@ namespace System.Windows.Forms {
         }                
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.GetObjectData"]/*' />
-        [SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
             info.AddValue("Header", this.Header);
             info.AddValue("HeaderAlignment", this.HeaderAlignment);

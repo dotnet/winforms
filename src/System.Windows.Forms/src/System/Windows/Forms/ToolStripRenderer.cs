@@ -11,8 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Imaging;
     using System.ComponentModel;
     using System.Windows.Forms.Layout;
-    using System.Security;
-    using System.Security.Permissions;
     
     /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer"]/*' />
     public abstract class ToolStripRenderer {
@@ -376,12 +374,10 @@ namespace System.Windows.Forms {
 
 
 
-       [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
        private void AddHandler(object key, Delegate value) {
             Events.AddHandler(key, value);
        }
 
-       [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
        private void RemoveHandler(object key, Delegate value) {
             Events.RemoveHandler(key, value);
        }

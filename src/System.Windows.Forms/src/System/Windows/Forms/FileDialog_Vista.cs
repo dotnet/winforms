@@ -10,8 +10,6 @@ namespace System.Windows.Forms
     using System.Collections.Generic;
     using System.IO;
     using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Threading;
     using System.Diagnostics.CodeAnalysis;
 
@@ -36,17 +34,7 @@ namespace System.Windows.Forms
             {
                 if (UnsafeNativeMethods.IsVista && this._autoUpgradeEnabled && SettingsSupportVistaDialog)
                 {
-                    // 
-
-                    new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                    try
-                    {
-                        return SystemInformation.BootMode == BootMode.Normal;
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    return SystemInformation.BootMode == BootMode.Normal;
                 }
 
                 return false;
@@ -56,7 +44,6 @@ namespace System.Windows.Forms
         internal abstract FileDialogNative.IFileDialog CreateVistaDialog();
 
         [
-            SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode),
             SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")
         ]
         private bool RunDialogVista(IntPtr hWndOwner)
@@ -154,12 +141,10 @@ namespace System.Windows.Forms
             int saveOptions = options;
             int saveFilterIndex = filterIndex;
             string[] saveFileNames = fileNames;
-            bool saveSecurityCheckFileNames = securityCheckFileNames;
             bool ok = false;
 
             try
             {
-                securityCheckFileNames = true;
                 Thread.MemoryBarrier();
                 uint filterIndexTemp;
                 dialog.GetFileTypeIndex(out filterIndexTemp);
@@ -191,8 +176,6 @@ namespace System.Windows.Forms
             {
                 if (!ok)
                 {
-                    //Order here is important.  We don't want a window where securityCheckFileNames is false, but the temporary fileNames is still in place
-                    securityCheckFileNames = saveSecurityCheckFileNames;
                     Thread.MemoryBarrier();
                     fileNames = saveFileNames;
 

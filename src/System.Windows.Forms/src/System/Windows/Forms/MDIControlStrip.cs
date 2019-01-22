@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
     using System;
-    using System.Security;
     using System.ComponentModel;
     using System.Drawing;
     using System.Windows.Forms;
@@ -126,19 +125,13 @@ namespace System.Windows.Forms {
             private Image GetTargetWindowIcon() {
                 Image systemIcon = null;
                 IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), NativeMethods.WM_GETICON, NativeMethods.ICON_SMALL, 0);
-                IntSecurity.ObjectFromWin32Handle.Assert();
-                try {
-                    Icon icon =  (hIcon != IntPtr.Zero) ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
-                    Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
+                Icon icon =  (hIcon != IntPtr.Zero) ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
+                Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
-                    systemIcon = smallIcon.ToBitmap();
-                    smallIcon.Dispose();
-                } finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                systemIcon = smallIcon.ToBitmap();
+                smallIcon.Dispose();
 
-                return systemIcon;
-                
+                return systemIcon;                
             }
             
             protected internal override void OnItemAdded(ToolStripItemEventArgs e) {

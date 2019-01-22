@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Windows.Forms.Layout;
 
     /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip"]/*' />
@@ -224,7 +223,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
 
             if (ToolStripManager.ModalMenuFilter.InMenuMode) {
@@ -252,7 +250,6 @@ namespace System.Windows.Forms {
         /// Summary of WndProc.
         /// </devdoc>
         /// <param name=m></param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             if (m.Msg == NativeMethods.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0)) {
