@@ -14266,6 +14266,11 @@ namespace System.Windows.Forms
         public TextBox() { }
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool AcceptsReturn { get { throw null; } set { } }
+        [System.ComponentModel.LocalizableAttribute(true)]
+        [System.ComponentModel.DefaultValueAttribute("")]
+        [System.ComponentModel.BrowsableAttribute(true)]
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Always)]
+        public string PlaceholderText { get { throw null; } set { } }
         [System.ComponentModel.BrowsableAttribute(true)]
         [System.ComponentModel.DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Content)]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Always)]
