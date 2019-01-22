@@ -90,7 +90,7 @@ jobs:
       # Restore and build
       - script: eng\cibuild.cmd
           -prepareMachine
-          -configuration $(_BuildConfig) 
+          -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -restore
           -build
@@ -98,14 +98,14 @@ jobs:
 
       # Run unit tests
       - script: eng\cibuild.cmd
-          -configuration $(_BuildConfig) 
+          -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
         displayName: Unit tests
 
       # Create Nuget package, sign, and publish
       - script: eng\cibuild.cmd
-          -configuration $(_BuildConfig) 
+          -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -pack
           -sign $(_SignArgs)
