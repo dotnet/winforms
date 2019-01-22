@@ -101,7 +101,7 @@ jobs:
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
-        displayName: Run unit tests
+        displayName: Run Unit Tests
 
       # Create Nuget package, sign, and publish
       - script: eng\cibuild.cmd
