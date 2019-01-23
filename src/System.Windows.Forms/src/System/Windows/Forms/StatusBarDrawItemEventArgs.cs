@@ -2,61 +2,42 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Drawing;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-    /// <include file='doc\StatusBarDrawItemEvent.uex' path='docs/doc[@for="StatusBarDrawItemEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.StatusBar.OnDrawItem'/>
-    ///       event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.StatusBar.OnDrawItem'/>
+    /// event.
     /// </devdoc>
-    public class StatusBarDrawItemEventArgs : DrawItemEventArgs {
-        readonly StatusBarPanel panel;
-
-        /// <include file='doc\StatusBarDrawItemEvent.uex' path='docs/doc[@for="StatusBarDrawItemEventArgs.StatusBarDrawItemEventArgs"]/*' />
+    public class StatusBarDrawItemEventArgs : DrawItemEventArgs
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
-        ///       class.
-        ///    </para>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
+        /// class.
         /// </devdoc>
-        public StatusBarDrawItemEventArgs(System.Drawing.Graphics g, Font font, Rectangle r, int itemId,
-            DrawItemState itemState, StatusBarPanel panel) : base(g, font, r, itemId, itemState) {
-            this.panel = panel;
+        public StatusBarDrawItemEventArgs(Graphics g, Font font, Rectangle r, int itemId,
+                                          DrawItemState itemState, StatusBarPanel panel)
+            : base(g, font, r, itemId, itemState)
+        {
+            Panel = panel;
         }
 
-        /// <include file='doc\StatusBarDrawItemEvent.uex' path='docs/doc[@for="StatusBarDrawItemEventArgs.StatusBarDrawItemEventArgs1"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
-        ///       class using the Forecolor and Backcolor.
-        ///    </para>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
+        /// class using the Forecolor and Backcolor.
         /// </devdoc>
-        public StatusBarDrawItemEventArgs(System.Drawing.Graphics g, Font font, Rectangle r, int itemId,
-            DrawItemState itemState, StatusBarPanel panel, Color foreColor, Color backColor) : base(g, font, r, itemId, itemState, foreColor, backColor) {
-            this.panel = panel;
+        public StatusBarDrawItemEventArgs(Graphics g, Font font, Rectangle r, int itemId,
+                                          DrawItemState itemState, StatusBarPanel panel,
+                                          Color foreColor, Color backColor)
+            : base(g, font, r, itemId, itemState, foreColor, backColor)
+        {
+            Panel = panel;
         }
 
-        /// <include file='doc\StatusBarDrawItemEvent.uex' path='docs/doc[@for="StatusBarDrawItemEventArgs.Panel"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Specifies the <see cref='System.Windows.Forms.StatusBarPanel'/>
-        ///       to
-        ///       draw.
-        ///    </para>
+        /// Specifies the <see cref='System.Windows.Forms.StatusBarPanel'/> to draw.
         /// </devdoc>
-        public StatusBarPanel Panel {
-            get {
-                return panel;
-            }
-        }
-
+        public StatusBarPanel Panel { get; }
     }
 }

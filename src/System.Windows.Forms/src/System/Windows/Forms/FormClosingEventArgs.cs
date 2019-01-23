@@ -2,44 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.ComponentModel;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\FormClosingEvent.uex' path='docs/doc[@for="FormClosingEvent"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///    Provides data for the <see cref='System.Windows.Forms.Form.OnClosing'/>,
-    ///    <see cref='System.Windows.Forms.Form.OnClosing'/>
-    ///    event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.Form.OnClosing'/> event.
     /// </devdoc>
-    public class FormClosingEventArgs : CancelEventArgs {
-        private CloseReason closeReason;
-        
-        /// <include file='doc\FormClosingEvent.uex' path='docs/doc[@for="FormClosingEventArgs.FormClosingEventArgs"]/*' />
-        public FormClosingEventArgs(CloseReason closeReason, bool cancel)
-        : base(cancel) {
-            this.closeReason = closeReason;                                           
+    public class FormClosingEventArgs : CancelEventArgs
+    {
+        public FormClosingEventArgs(CloseReason closeReason, bool cancel) : base(cancel)
+        {
+            CloseReason = closeReason;                                           
         }
 
-        /// <include file='doc\FormClosingEvent.uex' path='docs/doc[@for="FormClosingEvent.CloseReason"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Provides the reason for the Form close.
-        ///    </para>
+        /// Provides the reason for the Form close.
         /// </devdoc>
-        public CloseReason CloseReason {
-            get {
-                return closeReason;
-            }
-        }
+        public CloseReason CloseReason { get; }
     }
 }
-

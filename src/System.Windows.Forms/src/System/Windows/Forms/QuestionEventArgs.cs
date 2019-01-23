@@ -4,47 +4,17 @@
 
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.ComponentModel;
-
-    /// <include file='doc\QuestionEventArgs.uex' path='docs/doc[@for="QuestionEventArgs"]/*' />
-    /// <devdoc>
-    /// </devdoc>
     public class QuestionEventArgs : EventArgs
     {
-        private bool response;
-
-        /// <include file='doc\QuestionEventArgs.uex' path='docs/doc[@for="QuestionEventArgs.QuestionEventArgs1"]/*' />
-        /// <devdoc>
-        /// </devdoc>
         public QuestionEventArgs()
         {
-            this.response = false;
         }
 
-        /// <include file='doc\QuestionEventArgs.uex' path='docs/doc[@for="QuestionEventArgs.QuestionEventArgs2"]/*' />
-        /// <devdoc>
-        /// </devdoc>
         public QuestionEventArgs(bool response)
         {
-            this.response = response;
+            Response = response;
         }
 
-        /// <include file='doc\QuestionEventArgs.uex' path='docs/doc[@for="QuestionEventArgs.Reponse"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        public bool Response
-        {
-            get
-            {
-                return this.response;
-            }
-            set
-            {
-                this.response = value;
-            }
-        }
+        public bool Response { get; set; }
     }
 }
-
