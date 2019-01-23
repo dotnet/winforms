@@ -7360,7 +7360,7 @@
     <value>Sorted descending by {0}.</value>
   </data>
   <data name="PropertyGridPropertyValueSelectedFormat" xml:space="preserve">
-    <value> {0} selected.</value>
+    <value>{0} selected.</value>
   </data>
   <data name="KeyboardToolTipDisplayBehaviorRequiresAccessibilityImprovementsLevel3" xml:space="preserve">
     <value>ToolTips display on keyboard focus requires the following AppContextSwitchOverrides: 'Switch.UseLegacyAccessibilityFeatures.3' and 'Switch.System.Windows.Forms.UseLegacyToolTipDisplay'</value>
@@ -7369,7 +7369,10 @@
     <value>Enable or disable automatic scaling of this control when dpi changes.</value>
   </data>
   <data name="DataGridViewEditingPanelUiaProviderDescription" xml:space="preserve">
-    <value>DataGridView EditingPanel UIA Provider</value>
+    <value>DataGridView EditingPanel UI Automation provider</value>
+  </data>
+  <data name="ComboBoxValueSelectedFormat" xml:space="preserve">
+    <value>{0} selected</value>
   </data>
   <data name="UnexpectedClipboardType" xml:space="preserve">
     <value>Clipboard contains an unexpected type.</value>

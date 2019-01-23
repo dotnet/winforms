@@ -10633,6 +10633,18 @@ example usage
             Update();
         }
 
+        /// <summary>
+        /// /Releases UI Automation provinder for specified window.
+        /// </summary>
+        /// <param name="handle">The window handle.</param>
+        internal virtual void ReleaseUiaProvider(IntPtr handle) {
+            // When a window that previously returned providers has been destroyed, 
+            // you should notify UI Automation by calling the UiaReturnRawElementProvider 
+            // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells 
+            // UI Automation that it can safely remove all map entries that refer to the specified window.
+            UnsafeNativeMethods.UiaReturnRawElementProvider(new HandleRef(this, handle), new IntPtr(0), new IntPtr(0), null);
+        }
+
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetMouseEventArgs"]/*' />
         /// <devdoc>
         ///     Resets the mouse leave listeners.
@@ -12725,6 +12737,11 @@ example usage
                 // when a modal dialog is discarded.
                 OnMouseLeave(EventArgs.Empty);
                 UnhookMouseEvent();
+            }
+
+            if (SupportsUiaProviders)
+            {
+                ReleaseUiaProvider(Handle);
             }
 
             OnHandleDestroyed(EventArgs.Empty);

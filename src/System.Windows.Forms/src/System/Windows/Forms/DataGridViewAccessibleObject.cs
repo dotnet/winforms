@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                         case NativeMethods.UIA_NamePropertyId:
                             return this.Name;
                         case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return owner.Focused;
+                            return false; // Only inner cell should be announced as focused by Narrator but not entire DGV.
                         case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
                             return owner.CanFocus;
                         case NativeMethods.UIA_IsEnabledPropertyId:
@@ -518,7 +518,12 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UnsafeNativeMethods.NavigateDirection.Parent:
-                        return dataGridView.CurrentCell.AccessibilityObject;
+                        var currentCell = dataGridView.CurrentCell;
+                        if (currentCell != null && dataGridView.IsCurrentCellInEditMode)
+                        {
+                            return currentCell.AccessibilityObject;
+                        }
+                        break;
                     case UnsafeNativeMethods.NavigateDirection.FirstChild:
                     case UnsafeNativeMethods.NavigateDirection.LastChild:
                         return dataGridView.EditingControlAccessibleObject;

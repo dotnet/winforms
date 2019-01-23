@@ -39,7 +39,11 @@ namespace System.Windows.Forms
                                     UnsafeNativeMethods.IGridItemProvider,
                                     UnsafeNativeMethods.IEnumVariant,
                                     UnsafeNativeMethods.IOleWindow,
-                                    UnsafeNativeMethods.ILegacyIAccessibleProvider {
+                                    UnsafeNativeMethods.ILegacyIAccessibleProvider,
+                                    UnsafeNativeMethods.ISelectionProvider,
+                                    UnsafeNativeMethods.ISelectionItemProvider,
+                                    UnsafeNativeMethods.IRawElementProviderHwndOverride,
+                                    UnsafeNativeMethods.IScrollItemProvider {
 
         // Member variables
 
@@ -783,6 +787,14 @@ namespace System.Windows.Forms
         }
 
         //
+        // Overridable methods for IRawElementProviderHwndOverride interface
+        //
+
+        internal virtual UnsafeNativeMethods.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd) {
+            return null;
+        }
+
+        //
         // Overridable methods for IRangeValueProvider pattern interface
         //
 
@@ -817,6 +829,67 @@ namespace System.Windows.Forms
             get {
                 return double.NaN;
             }
+        }
+
+        //
+        // Overridable methods for ISelectionProvider interface
+        //
+
+        internal virtual UnsafeNativeMethods.IRawElementProviderSimple[] GetSelection() {
+            return null;
+        }
+
+        internal virtual bool CanSelectMultiple {
+            get {
+                return false;
+            }
+        }
+
+        internal virtual bool IsSelectionRequired {
+            get {
+                return false;
+            }
+        }
+
+        //
+        // Overridable methods for ISelectionItemProvider interface
+        //
+
+        internal virtual void SelectItem() {
+        }
+
+        internal virtual void AddToSelection() {
+        }
+
+        internal virtual void RemoveFromSelection() {
+        }
+
+        internal virtual bool IsItemSelected {
+            get {
+                return false;
+            }
+        }
+
+        internal virtual UnsafeNativeMethods.IRawElementProviderSimple ItemSelectionContainer {
+            get {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+        /// </summary>
+        /// <param name="parent">The parent accessible object.</param>
+        internal virtual void SetParent(AccessibleObject parent)
+        {
+        }
+
+        /// <summary>
+        /// Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
+        /// </summary>
+        /// <param name="child">The child accessible object.</param>
+        internal virtual void SetDetachableChild(AccessibleObject child)
+        {
         }
 
         int UnsafeNativeMethods.IServiceProvider.QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObject) {
@@ -2516,6 +2589,10 @@ namespace System.Windows.Forms
             }
         }
 
+        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd) {
+            return GetOverrideProviderForHwnd(hwnd);
+        }
+
         bool UnsafeNativeMethods.IRangeValueProvider.IsReadOnly {
             get {
                 return IsReadOnly;
@@ -2554,6 +2631,46 @@ namespace System.Windows.Forms
 
         void UnsafeNativeMethods.IRangeValueProvider.SetValue(double value) {
             SetValue(value);
+        }
+
+        object[] UnsafeNativeMethods.ISelectionProvider.GetSelection() {
+            return GetSelection();
+        }
+
+        bool UnsafeNativeMethods.ISelectionProvider.CanSelectMultiple {
+            get {
+                return CanSelectMultiple;
+            }
+        }
+
+        bool UnsafeNativeMethods.ISelectionProvider.IsSelectionRequired {
+            get {
+                return IsSelectionRequired;
+            }
+        }
+
+        void UnsafeNativeMethods.ISelectionItemProvider.Select() {
+            SelectItem();
+        }
+
+        void UnsafeNativeMethods.ISelectionItemProvider.AddToSelection() {
+            AddToSelection();
+        }
+
+        void UnsafeNativeMethods.ISelectionItemProvider.RemoveFromSelection() {
+            RemoveFromSelection();
+        }
+
+        bool UnsafeNativeMethods.ISelectionItemProvider.IsSelected {
+            get {
+                return IsItemSelected;
+            }
+        }
+
+        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.ISelectionItemProvider.SelectionContainer {
+            get {
+                return ItemSelectionContainer;
+            }
         }
 
         /// <summary>
@@ -2612,6 +2729,36 @@ namespace System.Windows.Forms
 
             return false;
         }
+
+        internal bool RaiseAutomationPropertyChangedEvent(int propertyId, object oldValue, object newValue) {
+            if (UnsafeNativeMethods.UiaClientsAreListening()) {
+                int result = UnsafeNativeMethods.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
+                return result == NativeMethods.S_OK;
+            }
+
+            return false;
+        }
+
+        internal bool RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType structureChangeType, int[] runtimeId) {
+            if (UnsafeNativeMethods.UiaClientsAreListening()) {
+                int result = UnsafeNativeMethods.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId == null ? 0 : runtimeId.Length);
+                return result == NativeMethods.S_OK;
+            }
+
+            return false;
+        }
+
+        #region IScrollItemProvider implementation
+
+        void UnsafeNativeMethods.IScrollItemProvider.ScrollIntoView() {
+            ScrollIntoView();
+        }
+
+        internal virtual void ScrollIntoView() {
+            Debug.Fail($"{nameof(this.ScrollIntoView)}() is not overriden");
+        }
+
+        #endregion
 
         private class EnumVariantObject : UnsafeNativeMethods.IEnumVariant {
         
@@ -2804,7 +2951,10 @@ namespace System.Windows.Forms
                                     UnsafeNativeMethods.IGridItemProvider,
                                     UnsafeNativeMethods.IEnumVariant,
                                     UnsafeNativeMethods.IOleWindow,
-                                    UnsafeNativeMethods.ILegacyIAccessibleProvider {
+                                    UnsafeNativeMethods.ILegacyIAccessibleProvider,
+                                    UnsafeNativeMethods.ISelectionProvider,
+                                    UnsafeNativeMethods.ISelectionItemProvider,
+                                    UnsafeNativeMethods.IRawElementProviderHwndOverride {
 
         private IAccessible publicIAccessible;                       // AccessibleObject as IAccessible
         private UnsafeNativeMethods.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
@@ -2828,6 +2978,9 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IGridProvider publicIGridProvider;                            // AccessibleObject as IGridProvider
         private UnsafeNativeMethods.IGridItemProvider publicIGridItemProvider;                    // AccessibleObject as IGridItemProvider
         private UnsafeNativeMethods.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;   // AccessibleObject as ILegayAccessibleProvider
+        private UnsafeNativeMethods.ISelectionProvider publicISelectionProvider;                  // AccessibleObject as ISelectionProvider
+        private UnsafeNativeMethods.ISelectionItemProvider publicISelectionItemProvider;          // AccessibleObject as ISelectionItemProvider
+        private UnsafeNativeMethods.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
         ///     Create a new wrapper. Protect this with UnmanagedCode Permission
@@ -2853,6 +3006,9 @@ namespace System.Windows.Forms
             publicIGridProvider = (UnsafeNativeMethods.IGridProvider)accessibleImplemention;
             publicIGridItemProvider = (UnsafeNativeMethods.IGridItemProvider)accessibleImplemention;
             publicILegacyIAccessibleProvider = (UnsafeNativeMethods.ILegacyIAccessibleProvider)accessibleImplemention;
+            publicISelectionProvider = (UnsafeNativeMethods.ISelectionProvider)accessibleImplemention;
+            publicISelectionItemProvider = (UnsafeNativeMethods.ISelectionItemProvider)accessibleImplemention;
+            publicIRawElementProviderHwndOverride = (UnsafeNativeMethods.IRawElementProviderHwndOverride)accessibleImplemention;
             // Note: Deliberately not holding onto AccessibleObject to enforce all access through the interfaces
         }
 
@@ -3145,6 +3301,12 @@ namespace System.Windows.Forms
                 }
                 else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_LegacyIAccessiblePatternId) {
                     return (UnsafeNativeMethods.ILegacyIAccessibleProvider)this;
+                }
+                else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_SelectionPatternId) {
+                    return (UnsafeNativeMethods.ISelectionProvider)this;
+                }
+                else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_SelectionItemPatternId) {
+                    return (UnsafeNativeMethods.ISelectionItemProvider)this;
                 }
                 else {
                     return null;
@@ -3476,6 +3638,109 @@ namespace System.Windows.Forms
 
                 return AsNativeAccessible(publicIGridItemProvider.ContainingGrid) as UnsafeNativeMethods.IRawElementProviderSimple;
             }
+        }
+
+        //
+        // ISelectionProvider implementation
+        //
+
+        /// <summary>
+        /// Get the currently selected elements
+        /// </summary>
+        /// <returns>An AutomationElement array containing the currently selected elements</returns>
+        object[] UnsafeNativeMethods.ISelectionProvider.GetSelection() {
+            IntSecurity.UnmanagedCode.Assert();
+            return publicISelectionProvider.GetSelection();
+        }
+
+        /// <summary>
+        /// Indicates whether the control allows more than one element to be selected
+        /// </summary>
+        /// <returns>Boolean indicating whether the control allows more than one element to be selected</returns>
+        /// <remarks>If this is false, then the control is a single-select ccntrol</remarks>
+        bool UnsafeNativeMethods.ISelectionProvider.CanSelectMultiple {
+            get {
+                IntSecurity.UnmanagedCode.Assert();
+                return publicISelectionProvider.CanSelectMultiple;
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the control requires at least one element to be selected
+        /// </summary>
+        /// <returns>Boolean indicating whether the control requires at least one element to be selected</returns>
+        /// <remarks>If this is false, then the control allows all elements to be unselected</remarks>
+        bool UnsafeNativeMethods.ISelectionProvider.IsSelectionRequired {
+            get {
+                IntSecurity.UnmanagedCode.Assert();
+                return publicISelectionProvider.IsSelectionRequired;
+            }
+        }
+
+        //
+        // ISelectionItemProvider implementation
+        //
+
+        /// <summary>
+        /// Sets the current element as the selection
+        /// This clears the selection from other elements in the container.
+        /// </summary>
+        void UnsafeNativeMethods.ISelectionItemProvider.Select() {
+            IntSecurity.UnmanagedCode.Assert();
+            publicISelectionItemProvider.Select();
+        }
+
+        /// <summary>
+        /// Adds current element to selection.
+        /// </summary>
+        void UnsafeNativeMethods.ISelectionItemProvider.AddToSelection() {
+            IntSecurity.UnmanagedCode.Assert();
+            publicISelectionItemProvider.AddToSelection();
+        }
+
+        /// <summary>
+        /// Removes current element from selection.
+        /// </summary>
+        void UnsafeNativeMethods.ISelectionItemProvider.RemoveFromSelection() {
+            IntSecurity.UnmanagedCode.Assert();
+            publicISelectionItemProvider.RemoveFromSelection();
+        }
+
+        /// <summary>
+        /// Check whether an element is selected.
+        /// </summary>
+        /// <returns>Returns true if the element is selected.</returns>
+        bool UnsafeNativeMethods.ISelectionItemProvider.IsSelected {
+            get {
+                IntSecurity.UnmanagedCode.Assert();
+                return publicISelectionItemProvider.IsSelected;
+            }
+        }
+
+        /// <summary>
+        /// The logical element that supports the SelectionPattern for this Item.
+        /// </summary>
+        /// <returns>Returns a IRawElementProviderSimple.</returns>
+        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.ISelectionItemProvider.SelectionContainer {
+            get {
+                IntSecurity.UnmanagedCode.Assert();
+                return publicISelectionItemProvider.SelectionContainer;
+            }
+        }
+
+        //
+        // IRawElementProviderHwndOverride implementation
+        //
+
+        /// <summary>
+        /// Request a provider for the specified component. The returned provider can supply additional
+        /// properties or override properties of the specified component.
+        /// </summary>
+        /// <param name="hwnd">The window handle of the component.</param>
+        /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
+        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd) {
+            IntSecurity.UnmanagedCode.Assert();
+            return publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
         }
 
     } // end class InternalAccessibleObject

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8167,6 +8167,9 @@ namespace System.Windows.Forms {
         internal static extern int UiaRaiseAutomationEvent(IRawElementProviderSimple provider, int id);
 
         [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern int UiaRaiseAutomationPropertyChangedEvent(IRawElementProviderSimple provider, int id, object oldValue, object newValue);
+
+        [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern int UiaRaiseNotificationEvent(
             IRawElementProviderSimple provider,
             Automation.AutomationNotificationKind notificationKind,
@@ -8174,8 +8177,32 @@ namespace System.Windows.Forms {
             string notificationText,
             string activityId);
 
+        [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode)]
+        internal static extern int UiaRaiseStructureChangedEvent(IRawElementProviderSimple provider, StructureChangeType structureChangeType, int[] runtimeId, int runtimeIdLen);
+
         // UIAutomation interfaces and enums
         // obtained from UIAutomation source code
+
+        /// <summary>
+        /// Logical structure change flags
+        /// </summary>
+        [ComVisible(true)]
+        [Guid("e4cfef41-071d-472c-a65c-c14f59ea81eb")]
+        public enum StructureChangeType
+        {
+            /// <summary>Logical child added</summary>
+            ChildAdded,
+            /// <summary>Logical child removed</summary>
+            ChildRemoved,
+            /// <summary>Logical children invalidated</summary>
+            ChildrenInvalidated,
+            /// <summary>Logical children were bulk added</summary>
+            ChildrenBulkAdded,
+            /// <summary>Logical children were bulk removed</summary>
+            ChildrenBulkRemoved,
+            /// <summary>The order of the children below their parent has changed.</summary>
+            ChildrenReordered,
+        }
 
         [ComVisible(true)]
         [Guid("76d12d7e-b227-4417-9ce2-42642ffa896a")]
@@ -8214,6 +8241,106 @@ namespace System.Windows.Forms {
         }
 
         public static readonly Guid guid_IAccessibleEx = new Guid("{F8B80ADA-2C44-48D0-89BE-5FF23C9CD875}");
+
+        /// <summary>
+        /// The interface representing containers that manage selection.
+        /// </summary>
+        /// <remarks>
+        /// Client code uses this public interface; server implementers implent the
+        /// ISelectionProvider public interface instead.
+        /// </remarks>
+        [SecurityCritical(SecurityCriticalScope.Everything)]
+        [ComImport()]
+        [ComVisible(true)]
+        [Guid("fb8b03af-3bdf-48d4-bd36-1a65793be168")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface ISelectionProvider {
+            /// <summary>
+            /// Get the currently selected elements
+            /// </summary>
+            /// <returns>An AutomationElement array containing the currently selected elements</returns>
+            [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
+            /* IRawElementProviderSimple */ object[] GetSelection();
+
+            /// <summary>
+            /// Indicates whether the control allows more than one element to be selected
+            /// </summary>
+            /// <returns>Boolean indicating whether the control allows more than one element to be selected</returns>
+            /// <remarks>If this is false, then the control is a single-select ccntrol</remarks>
+            bool CanSelectMultiple {
+                [return: MarshalAs(UnmanagedType.Bool)]
+                get;
+            }
+
+            /// <summary>
+            /// Indicates whether the control requires at least one element to be selected
+            /// </summary>
+            /// <returns>Boolean indicating whether the control requires at least one element to be selected</returns>
+            /// <remarks>If this is false, then the control allows all elements to be unselected</remarks>
+            bool IsSelectionRequired {
+                [return: MarshalAs(UnmanagedType.Bool)]
+                get;
+            }
+        }
+
+        /// <summary>
+        /// Define a Selectable Item (only supported on logical elements that are a 
+        /// child of an Element that supports SelectionPattern and is itself selectable).  
+        /// This allows for manipulation of Selection from the element itself.
+        /// </summary>
+        [SecurityCritical(SecurityCriticalScope.Everything)]
+        [ComImport()]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComVisible(true)]
+        [Guid("2acad808-b2d4-452d-a407-91ff1ad167b2")]
+        public interface ISelectionItemProvider
+        {
+            /// <summary>
+            /// Sets the current element as the selection
+            /// This clears the selection from other elements in the container.
+            /// </summary>
+            void Select();
+
+            /// <summary>
+            /// Adds current element to selection.
+            /// </summary>
+            void AddToSelection();
+
+            /// <summary>
+            /// Removes current element from selection.
+            /// </summary>
+            void RemoveFromSelection();
+
+            /// <summary>
+            /// Check whether an element is selected.
+            /// </summary>
+            /// <returns>Returns true if the element is selected.</returns>
+            bool IsSelected { [return: MarshalAs(UnmanagedType.Bool)] get; }
+
+            /// <summary>
+            /// The logical element that supports the SelectionPattern for this Item.
+            /// </summary>
+            /// <returns>Returns a IRawElementProviderSimple.</returns>
+            IRawElementProviderSimple SelectionContainer { [return: MarshalAs(UnmanagedType.Interface)] get; }
+        }
+
+        /// <summary>
+        /// Implemented by providers which want to provide information about or want to
+        /// reposition contained HWND-based elements.
+        /// </summary>
+        [ComVisible(true)]
+        [Guid("1d5df27c-8947-4425-b8d9-79787bb460b8")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IRawElementProviderHwndOverride : IRawElementProviderSimple {
+            /// <summary>
+            /// Request a provider for the specified component. The returned provider can supply additional
+            /// properties or override properties of the specified component.
+            /// </summary>
+            /// <param name="hwnd">The window handle of the component.</param>
+            /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
+            [return: MarshalAs(UnmanagedType.Interface)]
+            IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd);
+        }
 
         /// <SecurityNote>
         ///     Critical:Elevates to Unmanaged code permission
@@ -8656,6 +8783,25 @@ namespace System.Windows.Forms {
             /// anything happened at all.
             /// </summary>
             void Invoke();
+        }
+
+        /// <summary>
+        /// Implemented by objects in a known Scrollable context, such as ListItems, ListViewItems, TreeViewItems, and Tabs.
+        /// This allows them to be scrolled into view using known API's based on the control in question.
+        /// </summary>
+        [SecurityCritical(SecurityCriticalScope.Everything)]
+        [ComImport()]
+        [ComVisible(true)]
+        [Guid("2360c714-4bf1-4b26-ba65-9b21316127eb")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [CLSCompliant(false)]
+        public interface IScrollItemProvider {
+            /// <summary>
+            /// Scrolls the windows containing this automation element to make this element visible.
+            /// InvalidOperationException should be thrown if item becomes unable to be scrolled. Makes
+            /// no guarantees about where the item will be in the scrolled window.
+            /// </summary>
+            void ScrollIntoView();
         }
 
         public static IntPtr LoadLibraryFromSystemPathIfAvailable(string libraryName) {

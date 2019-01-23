@@ -1112,6 +1112,11 @@
         <target state="new">Controls the appearance and functionality of the combo box.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxValueSelectedFormat">
+        <source>{0} selected</source>
+        <target state="new">{0} selected</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="new">New command ID cannot be allocated.</target>
@@ -2848,8 +2853,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
-        <source>DataGridView EditingPanel UIA Provider</source>
-        <target state="new">DataGridView EditingPanel UIA Provider</target>
+        <source>DataGridView EditingPanel UI Automation provider</source>
+        <target state="new">DataGridView EditingPanel UI Automation provider</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange">
@@ -8743,8 +8748,8 @@
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridPropertyValueSelectedFormat">
-        <source> {0} selected.</source>
-        <target state="new"> {0} selected.</target>
+        <source>{0} selected.</source>
+        <target state="new">{0} selected.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridRemotedObject">
