@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms.VisualStyles;
     using System.ComponentModel;
     using System.Windows.Forms.Internal;
-    using System.Security.Permissions;
 
     /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCell"]/*' />
     /// <devdoc>
@@ -563,7 +562,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.Value"]/*' />
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     // We changed DataGridViewTopLeftHeaderCellAccessibleObject::Name to return a string
@@ -573,14 +571,12 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 this.Owner.DataGridView.SelectAll();
             }
 
             /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 Debug.Assert(this.Owner.DataGridView.RowHeadersVisible, "if the row headers are not visible how did you get the top left header cell acc object?");
@@ -625,7 +621,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewTopLeftHeaderCell.uex' path='docs/doc[@for="DataGridViewTopLeftHeaderCellAccessibleObject.Select"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags)
             {
                 if (this.Owner == null)

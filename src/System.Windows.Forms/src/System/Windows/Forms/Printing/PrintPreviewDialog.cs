@@ -15,8 +15,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Windows.Forms.Design;
     using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Runtime.Versioning;
 
     /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog"]/*' />
@@ -1602,7 +1600,6 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
 
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
            if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None) {
                 Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -1623,7 +1620,6 @@ namespace System.Windows.Forms {
         ///       This is breaking from Everett.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessTabKey(bool forward) {
             if (this.ActiveControl == this.previewControl)
             {

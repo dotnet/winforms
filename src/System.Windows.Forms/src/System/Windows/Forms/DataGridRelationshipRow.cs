@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
 
     using System;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     
     using System.Windows.Forms;
     using System.ComponentModel;
@@ -867,7 +866,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 if (RelationshipRow.dgTable.RelationsList.Count > 0) {
                     ((DataGridRelationshipRow)Owner).Expanded = !((DataGridRelationshipRow)Owner).Expanded;
@@ -926,7 +924,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return owner.AccessibleObject;
                 }
@@ -988,7 +985,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 ((DataGridRelationshipRow)Owner).Expanded = true;
                 owner.FocusedRelation = -1;
@@ -1006,7 +1002,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Right:
@@ -1029,7 +1024,6 @@ namespace System.Windows.Forms {
 
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
                 // Focus the PropertyGridView window
                 //

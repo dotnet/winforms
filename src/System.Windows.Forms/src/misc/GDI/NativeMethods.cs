@@ -12,7 +12,6 @@ namespace System.Experimental.Gdi
 {
     using System;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Collections;
     using System.Text;
     using System.Drawing;

@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
-    using System.Security.Permissions;    
     using System.Collections;
     using System.Windows.Forms.Design;
     using System.Drawing;
@@ -94,7 +93,6 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MenuIsParentDescr))
         ]
         public virtual bool IsParent {
-            [System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)]
             get {
                 return null != items && ItemCount > 0;
             }
@@ -244,7 +242,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         [ResourceExposure(ResourceScope.Process)]
         [ResourceConsumption(ResourceScope.Process)]
         protected virtual IntPtr CreateMenuHandle() {
@@ -318,8 +315,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         public MenuItem FindMenuItem(int type, IntPtr value) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ControlFromHandleOrLocation Demanded");
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return FindMenuItemInternal(type, value);
         }
 
@@ -575,10 +570,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [
-            System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode),
-            System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData) {
             MenuItem item = FindMenuItemInternal(FindShortcut, (IntPtr)(int)keyData);
             return item != null? item.ShortcutClick(): false;

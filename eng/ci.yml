@@ -1,7 +1,7 @@
 parameters:
 
   # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp
+  agentPool: dotnet-external-temp-vs2019
 
   # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
   runAsPublic: true
@@ -87,19 +87,29 @@ jobs:
       - checkout: self
         clean: true
 
-      # Build, test, pack, and sign
-      - script: eng\common\cibuild.cmd
-          -configuration $(_BuildConfig) 
+      # Restore and build
+      - script: eng\cibuild.cmd
           -prepareMachine
-          $(_PublishArgs)
-          $(_SignArgs)
+          -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
-        displayName: Windows Build / Publish
+          -build
+        displayName: Build
 
-      # Run component governance detection (only for release)
-      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-        displayName: Component Governance Detection
-        condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+      # Run unit tests
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -test
+        displayName: Run Unit Tests
+
+      # Create Nuget package, sign, and publish
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -pack
+          -sign $(_SignArgs)
+          -publish $(_PublishArgs)
+        displayName: Pack, Sign, and Publish
 
       # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:

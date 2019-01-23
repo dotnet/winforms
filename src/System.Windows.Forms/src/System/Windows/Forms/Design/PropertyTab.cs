@@ -16,7 +16,6 @@ namespace System.Windows.Forms.Design {
     /// <devdoc>
     ///    <para>Provides a base class for property tabs.</para>
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     public abstract class PropertyTab : IExtenderProvider {
 
         private object[] components; 

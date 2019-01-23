@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing;
     using Microsoft.Win32;
-    using System.Security.Permissions;
 
     /// <include file='doc\DataGridState.uex' path='docs/doc[@for="DataGridState"]/*' />
     /// <devdoc>
@@ -172,7 +171,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return owner.LinkingRow.DataGrid.ParentRowsAccessibleObject;
                 }
@@ -185,7 +183,6 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     StringBuilder sb = new StringBuilder();
 
@@ -216,7 +213,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 DataGridParentRows.DataGridParentRowsAccessibleObject parentAcc = (DataGridParentRows.DataGridParentRowsAccessibleObject)Parent;
 

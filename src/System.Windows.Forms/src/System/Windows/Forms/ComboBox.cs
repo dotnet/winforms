@@ -13,8 +13,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Runtime.Versioning;
     using System.Globalization;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms.Layout;
     using System.Windows.Forms.ComponentModel;
     using System.ComponentModel;
@@ -239,15 +237,6 @@ namespace System.Windows.Forms {
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
 
-                if (value != AutoCompleteSource.None && 
-                    value != AutoCompleteSource.CustomSource && 
-                    value != AutoCompleteSource.ListItems)
-                {
-                    FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
-                    fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-                    fiop.Demand();
-                }
-
                 autoCompleteSource = value;
                 SetAutoComplete(false, true);
             }
@@ -384,7 +373,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "COMBOBOX";
@@ -2843,9 +2831,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ProcessKeyEventArgs"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        ]
         protected override bool ProcessKeyEventArgs(ref Message m) {
             if (this.AutoCompleteMode != AutoCompleteMode.None &&
                 this.AutoCompleteSource == AutoCompleteSource.ListItems &&
@@ -3058,7 +3043,7 @@ namespace System.Windows.Forms {
                         }
                         int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), (int)AutoCompleteSource | mode);
                     }
-                    catch (SecurityException) {
+                    catch (System.Security.SecurityException) {
                         // If we don't have full trust, degrade gracefully. Allow the control to
                         // function without auto-complete. Allow the app to continue running.
                     }
@@ -3457,7 +3442,6 @@ namespace System.Windows.Forms {
         ///     base.wndProc(m); to ensure the combo continues to function properly.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 // We don't want to fire the focus events twice -
@@ -3700,16 +3684,7 @@ namespace System.Windows.Forms {
 
                     // If the requested object identifier is UiaRootObjectId, 
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    InternalAccessibleObject internalAccessibleObject;
-                    IntSecurity.UnmanagedCode.Assert();
-                    try
-                    {
-                        internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    InternalAccessibleObject internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
                     m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
                         new HandleRef(this, Handle),
                         m.WParam,
@@ -3735,16 +3710,10 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.IAccessibleInternal iacc = null;
 
                         if (_accessibilityObject == null) {
-                            IntSecurity.UnmanagedCode.Assert();
-                            try {
-                                wfAccessibleObject = AccessibilityImprovements.Level3
-                                    ? GetChildAccessibleObject(_childWindowType)
-                                    : new ChildAccessibleObject(_owner, Handle);
-                                _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
-                            }
-                            finally {
-                                CodeAccessPermission.RevertAssert();
-                            }
+                            wfAccessibleObject = AccessibilityImprovements.Level3
+                                ? GetChildAccessibleObject(_childWindowType)
+                                : new ChildAccessibleObject(_owner, Handle);
+                            _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
                         }
                         iacc = (UnsafeNativeMethods.IAccessibleInternal)_accessibilityObject;
 
@@ -3752,12 +3721,10 @@ namespace System.Windows.Forms {
                         //
                         punkAcc = Marshal.GetIUnknownForObject(iacc);
 
-                        IntSecurity.UnmanagedCode.Assert();
                         try {
                             m.Result = UnsafeNativeMethods.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(this, punkAcc));
                         }
                         finally {
-                            CodeAccessPermission.RevertAssert();
                             Marshal.Release(punkAcc);
                         }
                     }
@@ -4194,7 +4161,6 @@ namespace System.Windows.Forms {
             ComboBox owner;
 
             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ChildAccessibleObject.ChildAccessibleObject"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public ChildAccessibleObject(ComboBox owner, IntPtr handle) {
                 Debug.Assert(owner != null && owner.Handle != IntPtr.Zero, "ComboBox's handle hasn't been created");
 

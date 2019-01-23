@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing;
     using Microsoft.Win32;
-    using System.Security.Permissions;
     using System.Runtime.Versioning;
 
     /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu"]/*' />
@@ -153,7 +152,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Indicates which form in which we are currently residing [if any]
         /// </devdoc>
-        [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
         public Form GetForm() {
             return form;
         }

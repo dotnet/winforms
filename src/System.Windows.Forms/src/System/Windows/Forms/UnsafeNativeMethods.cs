@@ -66,89 +66,6 @@ using System.Runtime.Versioning;
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods..ctor()")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods+SMsoComponentManager..ctor()")]
 
-// Verified that current call stacks that use these don't expose them in an unsafe fashion.
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.ClipCursor(System.Windows.Forms.NativeMethods+COMRECT):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.ClipCursor(System.Windows.Forms.NativeMethods+RECT&):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetClientRect(System.Runtime.InteropServices.HandleRef,System.IntPtr):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetProcAddress(System.Runtime.InteropServices.HandleRef,System.String):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetRegionData(System.Runtime.InteropServices.HandleRef,System.Int32,System.IntPtr):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GlobalFree(System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GlobalLock(System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GlobalUnlock(System.Runtime.InteropServices.HandleRef):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.IsChild(System.Runtime.InteropServices.HandleRef,System.Runtime.InteropServices.HandleRef):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+HDLAYOUT&):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.ImmNotifyIME(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Int32):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetAncestor(System.Runtime.InteropServices.HandleRef,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetFocus():System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SetFocus(System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.CoCreateInstance(System.Guid&,System.Object,System.Int32,System.Guid&):System.Object")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.CoRegisterMessageFilter(System.Runtime.InteropServices.HandleRef,System.IntPtr&):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(System.Windows.Forms.NativeMethods+MSG&):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.EnableScrollBar(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.EnumThreadWindows(System.Int32,System.Windows.Forms.NativeMethods+EnumThreadWindowsCallback,System.Runtime.InteropServices.HandleRef):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetForegroundWindow():System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetMenu(System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetMenuItemInfo(System.Runtime.InteropServices.HandleRef,System.Int32,System.Boolean,System.Windows.Forms.NativeMethods+MENUITEMINFO_T_RW):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetMessageA(System.Windows.Forms.NativeMethods+MSG&,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetMessageW(System.Windows.Forms.NativeMethods+MSG&,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetObject(System.Runtime.InteropServices.HandleRef,System.Int32,System.Windows.Forms.NativeMethods+BITMAP):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetShortPathName(System.String,System.String,System.UInt32):System.UInt32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetSystemPowerStatus(System.Windows.Forms.NativeMethods+SYSTEM_POWER_STATUS&):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetTempFileName(System.String,System.String,System.Int32,System.Text.StringBuilder):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetWindowText(System.Runtime.InteropServices.HandleRef,System.Text.StringBuilder,System.Int32):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.IntCloseHandle(System.Runtime.InteropServices.HandleRef):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.IntCreateCompatibleDC(System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.IntCreateIC(System.String,System.String,System.String,System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.IntDuplicateHandle(System.Runtime.InteropServices.HandleRef,System.Runtime.InteropServices.HandleRef,System.Runtime.InteropServices.HandleRef,System.IntPtr&,System.Int32,System.Boolean,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.IntOleInitialize(System.Int32):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.IsDialogMessage(System.Runtime.InteropServices.HandleRef,System.Windows.Forms.NativeMethods+MSG&):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.OleUninitialize():System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.PostThreadMessage(System.Int32,System.Int32,System.IntPtr,System.IntPtr):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Object&):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+CHARFORMAT2A):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+EDITSTREAM64):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+LVBKIMAGE):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+LVGROUP):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+LVINSERTMARK):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+LVTILEVIEWINFO):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+TOOLINFO_TOOLTIP):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Windows.Forms.NativeMethods+GETTEXTLENGTHEX,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Windows.Forms.NativeMethods+POINT,System.Windows.Forms.NativeMethods+LVINSERTMARK):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SystemParametersInfo(System.Int32,System.Int32,System.IntPtr[],System.Int32):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.TranslateMessage(System.Windows.Forms.NativeMethods+MSG&):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.WaitMessage():System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetShortPathName(System.String,System.Text.StringBuilder,System.UInt32):System.UInt32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetWindowLong32(System.Runtime.InteropServices.HandleRef,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GetWindowLongPtr64(System.Runtime.InteropServices.HandleRef,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.OleCreateIPictureIndirect(System.Object,System.Guid&,System.Boolean):System.Windows.Forms.UnsafeNativeMethods+IPicture")]
-
-// Verified that current call stacks that use this seem to be safe.
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods+ThemingScope.GetCurrentActCtx(System.IntPtr&):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods+ThemingScope.ActivateActCtx(System.IntPtr,System.IntPtr&):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods+ThemingScope.CreateActCtx(System.Windows.Forms.UnsafeNativeMethods+ThemingScope+ACTCTX&):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods+ThemingScope.DeactivateActCtx(System.Int32,System.IntPtr):System.Boolean")]
-
-// SEC 
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.CopyMemory(System.Runtime.InteropServices.HandleRef,System.Runtime.InteropServices.HandleRef,System.Int32):System.Void")]
-
-// SEC 
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GlobalAlloc(System.Int32,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.GlobalReAlloc(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.CopyMemoryW(System.IntPtr,System.String,System.Int32):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.CopyMemoryW(System.IntPtr,System.Char[],System.Int32):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.CopyMemoryA(System.IntPtr,System.String,System.Int32):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.CopyMemory(System.IntPtr,System.Byte[],System.Int32):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.WideCharToMultiByte(System.Int32,System.Int32,System.String,System.Int32,System.Byte[],System.Int32,System.IntPtr,System.IntPtr):System.Int32")]
-
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SetWindowLongPtr64(System.Runtime.InteropServices.HandleRef,System.Int32,System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SetWindowLongPtr32(System.Runtime.InteropServices.HandleRef,System.Int32,System.Runtime.InteropServices.HandleRef):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SHLoadIndirectString(System.String,System.Text.StringBuilder,System.UInt32,System.IntPtr):System.UInt32")]
-
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods+Shell32.SHCreateShellItem(System.IntPtr,System.IntPtr,System.IntPtr,System.Windows.Forms.FileDialogNative+IShellItem&):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods+Shell32.SHGetFolderPathExPrivate(System.Guid&,System.UInt32,System.IntPtr,System.Text.StringBuilder,System.UInt32):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods+Shell32.SHILCreateFromPath(System.String,System.IntPtr&,System.UInt32&):System.Int32")]
-
 namespace System.Windows.Forms {
 
     using Accessibility;
@@ -156,20 +73,15 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices.ComTypes;
     using System.Runtime.ConstrainedExecution;
     using System;
-    using System.Security.Permissions;
     using System.Collections;
     using System.IO;
     using System.Text;
-    using System.Security;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
 
     using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
-    [
-    SuppressUnmanagedCodeSecurity()
-    ]
     internal static class UnsafeNativeMethods {
 
         [DllImport(ExternDll.Shlwapi, CharSet=CharSet.Unicode, ExactSpelling=true)]
@@ -2219,7 +2131,7 @@ namespace System.Windows.Forms {
                 out IComDataObject ppDORet);
         }
 
-        [SuppressUnmanagedCodeSecurity, ComImport(), Guid("D30C1661-CDAF-11d0-8A3E-00C04FC9E26E"),
+        [ComImport(), Guid("D30C1661-CDAF-11d0-8A3E-00C04FC9E26E"),
         TypeLibType(TypeLibTypeFlags.FHidden | TypeLibTypeFlags.FDual | TypeLibTypeFlags.FOleAutomation)]
         public interface IWebBrowser2 {
             //
@@ -2331,13 +2243,13 @@ namespace System.Windows.Forms {
             [DispId(272)] void PrivacyImpactedStateChange([In] bool bImpacted);
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("626FC520-A41E-11cf-A731-00A0C9082637"),
+        [ComVisible(true), Guid("626FC520-A41E-11cf-A731-00A0C9082637"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLDocument {
             [return: MarshalAs(UnmanagedType.IDispatch)] object GetScript();
         }
         
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("332C4425-26CB-11D0-B483-00C04FD90119"),
+        [ComVisible(true), Guid("332C4425-26CB-11D0-B483-00C04FD90119"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLDocument2 {
             [return: MarshalAs(UnmanagedType.IDispatch)] object GetScript();
@@ -2453,7 +2365,7 @@ namespace System.Windows.Forms {
             [return: MarshalAs(UnmanagedType.Interface)] object CreateStyleSheet(string bstrHref,int lIndex);
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050F485-98B5-11CF-BB82-00AA00BDCE0B"),
+        [ComVisible(true), Guid("3050F485-98B5-11CF-BB82-00AA00BDCE0B"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLDocument3 {
             void ReleaseCapture();
@@ -2499,7 +2411,7 @@ namespace System.Windows.Forms {
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLElementCollection GetElementsByTagName([In] string v);
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050F69A-98B5-11CF-BB82-00AA00BDCE0B"),
+        [ComVisible(true), Guid("3050F69A-98B5-11CF-BB82-00AA00BDCE0B"),
         InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLDocument4 {
             void Focus();
@@ -2564,14 +2476,14 @@ namespace System.Windows.Forms {
         }
 
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("332C4426-26CB-11D0-B483-00C04FD90119"),
+        [ComVisible(true), Guid("332C4426-26CB-11D0-B483-00C04FD90119"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLFramesCollection2 {
             object Item(ref object idOrName);
             int GetLength();
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("332C4427-26CB-11D0-B483-00C04FD90119"),
+        [ComVisible(true), Guid("332C4427-26CB-11D0-B483-00C04FD90119"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLWindow2 {
             [return: MarshalAs(UnmanagedType.IDispatch)] object Item([In] ref object pvarIndex);
@@ -2646,7 +2558,7 @@ namespace System.Windows.Forms {
             object GetExternal();
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050f4ae-98b5-11cf-bb82-00aa00bdce0b"),
+        [ComVisible(true), Guid("3050f4ae-98b5-11cf-bb82-00aa00bdce0b"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLWindow3 {
             int GetScreenLeft();
@@ -2664,7 +2576,7 @@ namespace System.Windows.Forms {
             object ShowModelessDialog(string url, object varArgIn, object options);
         }
         
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050f6cf-98b5-11cf-bb82-00aa00bdce0b"),
+        [ComVisible(true), Guid("3050f6cf-98b5-11cf-bb82-00aa00bdce0b"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLWindow4 {
             [return: MarshalAs(UnmanagedType.IDispatch)] object CreatePopup([In] ref object reserved);
@@ -2690,7 +2602,7 @@ namespace System.Windows.Forms {
         }
 
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050f666-98b5-11cf-bb82-00aa00bdce0b"),
+        [ComVisible(true), Guid("3050f666-98b5-11cf-bb82-00aa00bdce0b"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLPopup {
             void show(int x, int y, int w, int h, ref object element);
@@ -2699,7 +2611,7 @@ namespace System.Windows.Forms {
             bool IsOpen();
         }
         
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050f35c-98b5-11cf-bb82-00aa00bdce0b"),
+        [ComVisible(true), Guid("3050f35c-98b5-11cf-bb82-00aa00bdce0b"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLScreen {
             int GetColorDepth();
@@ -2715,7 +2627,7 @@ namespace System.Windows.Forms {
         }
 
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("163BB1E0-6E00-11CF-837A-48DC04C10000"),
+        [ComVisible(true), Guid("163BB1E0-6E00-11CF-837A-48DC04C10000"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLLocation {
             void SetHref([In] string p);
@@ -2739,7 +2651,7 @@ namespace System.Windows.Forms {
             void Assign([In] string bstr);
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("FECEAAA2-8405-11CF-8BA1-00AA00476DA6"),
+        [ComVisible(true), Guid("FECEAAA2-8405-11CF-8BA1-00AA00476DA6"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IOmHistory {
             short GetLength();
@@ -2748,7 +2660,7 @@ namespace System.Windows.Forms {
             void Go([In] ref object pvargdistance);
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("FECEAAA5-8405-11CF-8BA1-00AA00476DA6"),
+        [ComVisible(true), Guid("FECEAAA5-8405-11CF-8BA1-00AA00476DA6"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IOmNavigator {
             string GetAppCodeName();
@@ -2772,7 +2684,7 @@ namespace System.Windows.Forms {
             object GetUserProfile();
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050F32D-98B5-11CF-BB82-00AA00BDCE0B"),
+        [ComVisible(true), Guid("3050F32D-98B5-11CF-BB82-00AA00BDCE0B"),
         InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLEventObj {
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLElement GetSrcElement();
@@ -2802,7 +2714,7 @@ namespace System.Windows.Forms {
             object GetSrcFilter();
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050f48B-98b5-11cf-bb82-00aa00bdce0b"),
+        [ComVisible(true), Guid("3050f48B-98b5-11cf-bb82-00aa00bdce0b"),
         InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLEventObj2 {
             void SetAttribute(string attributeName, object attributeValue, int lFlags);
@@ -2863,13 +2775,13 @@ namespace System.Windows.Forms {
             object GetDataTransfer();
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050f814-98b5-11cf-bb82-00aa00bdce0b"),
+        [ComVisible(true), Guid("3050f814-98b5-11cf-bb82-00aa00bdce0b"),
         InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLEventObj4 {
             int GetWheelDelta();
         };
         
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050F21F-98B5-11CF-BB82-00AA00BDCE0B"),
+        [ComVisible(true), Guid("3050F21F-98B5-11CF-BB82-00AA00BDCE0B"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLElementCollection {
             string toString();
@@ -2880,7 +2792,7 @@ namespace System.Windows.Forms {
             [return: MarshalAs(UnmanagedType.Interface)] object Tags(object tagName);
         }
         
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050F1FF-98B5-11CF-BB82-00AA00BDCE0B"),
+        [ComVisible(true), Guid("3050F1FF-98B5-11CF-BB82-00AA00BDCE0B"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLElement {
             void SetAttribute(string attributeName, object attributeValue, int lFlags);
@@ -2975,7 +2887,7 @@ namespace System.Windows.Forms {
         }
         
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050f434-98b5-11cf-bb82-00aa00bdce0b"),
+        [ComVisible(true), Guid("3050f434-98b5-11cf-bb82-00aa00bdce0b"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLElement2 {
             string ScopeName();
@@ -3082,7 +2994,7 @@ namespace System.Windows.Forms {
             [return: MarshalAs(UnmanagedType.Interface)] UnsafeNativeMethods.IHTMLElementCollection GetElementsByTagName(string v);
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050f673-98b5-11cf-bb82-00aa00bdce0b"),
+        [ComVisible(true), Guid("3050f673-98b5-11cf-bb82-00aa00bdce0b"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLElement3 {
             void MergeAttributes(object mergeThis, object pvarFlags);
@@ -3130,7 +3042,7 @@ namespace System.Windows.Forms {
             int GlyphMode();
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050f5da-98b5-11cf-bb82-00aa00bdce0b"),
+        [ComVisible(true), Guid("3050f5da-98b5-11cf-bb82-00aa00bdce0b"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         public interface IHTMLDOMNode {
             long GetNodeType();
@@ -4614,7 +4526,7 @@ namespace System.Windows.Forms {
             [DispId(1002)]void onerror(UnsafeNativeMethods.IHTMLEventObj evtObj);
         }
 
-        [SuppressUnmanagedCodeSecurity, ComVisible(true), Guid("3050F25E-98B5-11CF-BB82-00AA00BDCE0B"),
+        [ComVisible(true), Guid("3050F25E-98B5-11CF-BB82-00AA00BDCE0B"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         internal interface IHTMLStyle {
             void SetFontFamily(string p);
@@ -5405,8 +5317,7 @@ namespace System.Windows.Forms {
         }
 
         [ComVisible(true), Guid("8CC497C0-A1DF-11ce-8098-00AA0047BE5D"),
-        InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual),
-        SuppressUnmanagedCodeSecurity()]
+        InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         public interface ITextDocument {
             string GetName();
             object GetSelection();
@@ -5430,8 +5341,7 @@ namespace System.Windows.Forms {
         };
 
         [ComVisible(true), Guid("8CC497C2-A1DF-11ce-8098-00AA0047BE5D"),
-        InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual),
-        SuppressUnmanagedCodeSecurity()]
+        InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
         public interface ITextRange {
             string GetText();
             void SetText(string text);
@@ -5555,7 +5465,7 @@ namespace System.Windows.Forms {
 
 
         }
-        [SuppressUnmanagedCodeSecurity, ComImport(),
+        [ComImport(),
         Guid("00000117-0000-0000-C000-000000000046"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleInPlaceActiveObject {
@@ -5611,7 +5521,7 @@ namespace System.Windows.Forms {
                      
                      int fEnterMode);
         }
-        [SuppressUnmanagedCodeSecurity, ComImport(),
+        [ComImport(),
         Guid("00000113-0000-0000-C000-000000000046"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleInPlaceObject {
@@ -5643,7 +5553,7 @@ namespace System.Windows.Forms {
 
 
         }
-        [SuppressUnmanagedCodeSecurity, ComImport(),
+        [ComImport(),
         Guid("00000112-0000-0000-C000-000000000046"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleObject {
@@ -5917,7 +5827,7 @@ namespace System.Windows.Forms {
         };
 
         
-        [SuppressUnmanagedCodeSecurity, ComImport(),
+        [ComImport(),
         Guid("B196B288-BAB4-101A-B69C-00AA00341D07"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleControl {
@@ -6242,7 +6152,7 @@ namespace System.Windows.Forms {
 
     }
 
-    [SuppressUnmanagedCodeSecurity, ComImport(),
+    [ComImport(),
     Guid("7FD52380-4E07-101B-AE2D-08002B2EC713"),
     InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IPersistStreamInit {
@@ -6277,7 +6187,7 @@ namespace System.Windows.Forms {
 
     }
 
-    [SuppressUnmanagedCodeSecurity, ComImport(),
+    [ComImport(),
     Guid("B196B286-BAB4-101A-B69C-00AA00341D07"),
     InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IConnectionPoint {
@@ -6402,7 +6312,7 @@ namespace System.Windows.Forms {
     // This function enables or disables the AutoComplete functionality.
     //-------------------------------------------------------------------------
     
-    [SuppressUnmanagedCodeSecurity, ComImport(), Guid("00bb2762-6a77-11d0-a535-00c04fd7d062"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport(), Guid("00bb2762-6a77-11d0-a535-00c04fd7d062"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IAutoComplete
     {
         
@@ -6416,7 +6326,7 @@ namespace System.Windows.Forms {
     }
     
     
-    [SuppressUnmanagedCodeSecurity, ComImport(), Guid("EAC04BC0-3791-11d2-BB95-0060977B464C"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport(), Guid("EAC04BC0-3791-11d2-BB95-0060977B464C"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     
     public interface IAutoComplete2 
     {
@@ -6432,7 +6342,7 @@ namespace System.Windows.Forms {
         void GetOptions([Out] IntPtr pdwFlag);
     }
 
-    [SuppressUnmanagedCodeSecurity, ComImport(), Guid("0000000C-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport(), Guid("0000000C-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IStream {
 
          int Read(
@@ -6902,7 +6812,7 @@ namespace System.Windows.Forms {
                 [Out, MarshalAs(UnmanagedType.Interface)]
                   out object ppVal);
     }
-    [SuppressUnmanagedCodeSecurity, ComImport(),
+    [ComImport(),
     Guid("B196B284-BAB4-101A-B69C-00AA00341D07"),
     InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IConnectionPointContainer {
@@ -7442,8 +7352,7 @@ namespace System.Windows.Forms {
 
     }
 
-    [StructLayout(LayoutKind.Sequential),
-        SuppressUnmanagedCodeSecurity()]
+    [StructLayout(LayoutKind.Sequential)]
     public class OFNOTIFY
     {
         // hdr was a by-value NMHDR structure
@@ -7465,12 +7374,10 @@ namespace System.Windows.Forms {
         return Marshal.ReleaseComObject(objToRelease);
     }
             
-    [ReflectionPermission(SecurityAction.Assert, Unrestricted=true)]
     public static object PtrToStructure(IntPtr lparam, Type cls) {
         return Marshal.PtrToStructure(lparam, cls);
     }
     
-    [ReflectionPermission(SecurityAction.Assert, Unrestricted=true)]
     public static void PtrToStructure(IntPtr lparam, object data) {
         Marshal.PtrToStructure(lparam, data);
     }
@@ -7519,8 +7426,7 @@ namespace System.Windows.Forms {
             public int iImage; //int iImage; // output var: where to return the Image index.
         }
 
-        [SuppressUnmanagedCodeSecurity(), 
-            SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+        [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         internal class Shell32 
         {
             [DllImport(ExternDll.Shell32)]
@@ -7602,9 +7508,7 @@ namespace System.Windows.Forms {
         [
         ComImport(), 
         Guid("00000002-0000-0000-c000-000000000046"), 
-        System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsIUnknown),
-        SuppressUnmanagedCodeSecurity()
-        ]
+        System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsIUnknown)]
         public interface IMalloc 
         {
             [PreserveSig]
@@ -8059,7 +7963,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// This class provides static methods to create, activate and deactivate the theming scope.
         /// </devdoc>
-        [SuppressUnmanagedCodeSecurity]
         internal class ThemingScope
         {
             private static ACTCTX enableThemingActivationContext;
@@ -8318,7 +8221,6 @@ namespace System.Windows.Forms {
             ///<SecurityNote>
             /// Critical elevates via a SUC.
             ///</SecurityNote>
-            [SuppressUnmanagedCodeSecurity]
             [PreserveSig]
             int QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObj);
         }

@@ -23,8 +23,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Text;
     using System.Drawing.Imaging;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Threading;
 
@@ -1788,24 +1786,15 @@ namespace System.Windows.Forms {
 
             public override void OnClick(EventArgs e) {
                 if (boundIndex != -1) {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        Form[] forms = parent.FindMdiForms();
-                        Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
+                    Form[] forms = parent.FindMdiForms();
+                    Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
                         
-                        if (forms != null && forms.Length > boundIndex) {
-                            Form boundForm = forms[boundIndex];                            
-                            boundForm.Activate();
-                            if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused) {
-                                boundForm.ActiveControl.Focus();
-                            }
+                    if (forms != null && forms.Length > boundIndex) {
+                        Form boundForm = forms[boundIndex];                            
+                        boundForm.Activate();
+                        if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused) {
+                            boundForm.ActiveControl.Focus();
                         }
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
                     }
                 }
             }
@@ -1825,30 +1814,18 @@ namespace System.Windows.Forms {
                 Form active = parent.GetMainMenu().GetFormUnsafe().ActiveMdiChild;                
                 Debug.Assert(active != null, "Didn't get the active MDI child");
                 if (forms != null && forms.Length > 0 && active != null) {
+                    using (MdiWindowDialog dialog = new MdiWindowDialog()) {
+                        dialog.SetItems(active, forms);
+                        DialogResult result = dialog.ShowDialog();
+                        if (result == DialogResult.OK) {
 
-
-                    
-                    // 
-
-
-                    IntSecurity.AllWindows.Assert();
-                    try {
-                        using (MdiWindowDialog dialog = new MdiWindowDialog()) {
-                            dialog.SetItems(active, forms);
-                            DialogResult result = dialog.ShowDialog();
-                            if (result == DialogResult.OK) {
-
-                                // AllWindows Assert above allows this...
-                                //
-                                dialog.ActiveChildForm.Activate();
-                                if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused) {
-                                    dialog.ActiveChildForm.ActiveControl.Focus();
-                                }
+                            // AllWindows Assert above allows this...
+                            //
+                            dialog.ActiveChildForm.Activate();
+                            if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused) {
+                                dialog.ActiveChildForm.ActiveControl.Focus();
                             }
                         }
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
                     }
                 }
             }

@@ -9,7 +9,6 @@ namespace System.Windows.Forms.Design {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.Windows.Forms.Internal;
     using System.Drawing;
@@ -27,8 +26,6 @@ namespace System.Windows.Forms.Design {
      ClassInterface(ClassInterfaceType.AutoDispatch)
     ]
     [ToolboxItem(false)]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class ComponentEditorForm : Form {
         private IComponent component;
         private Type[] pageTypes;
@@ -437,7 +434,6 @@ namespace System.Windows.Forms.Design {
         ///    <para>Provides a method to override in order to pre-process input messages before 
         ///       they are dispatched.</para>
         /// </devdoc>        
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         public override bool PreProcessMessage(ref Message msg) {
             if (null != pageSites && pageSites[activePage].GetPageControl().IsPageMessage(ref msg))
                 return true;
@@ -550,7 +546,7 @@ namespace System.Windows.Forms.Design {
                 this.form = form;
 
                 try {
-                    pageControl = (ComponentEditorPage)SecurityUtils.SecureCreateInstance(pageClass);
+                    pageControl = (ComponentEditorPage)Activator.CreateInstance(pageClass);
                 }
                 catch (TargetInvocationException e) {
                     Debug.Fail(e.ToString());
@@ -665,7 +661,6 @@ namespace System.Windows.Forms.Design {
 
 
             protected override CreateParams CreateParams {
-                [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     CreateParams cp = base.CreateParams;
 
@@ -843,7 +838,6 @@ namespace System.Windows.Forms.Design {
                 }
             }
 
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             protected override void WndProc(ref Message m) {
                 if (m.Msg == NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY) {
                     NativeMethods.NMHDR nmh = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));

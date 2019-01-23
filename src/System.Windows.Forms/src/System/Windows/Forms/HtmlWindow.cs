@@ -11,13 +11,10 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Security.Permissions;
 
 namespace System.Windows.Forms
 {
     /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow"]/*' />
-    [PermissionSetAttribute(SecurityAction.LinkDemand, Name = "FullTrust")]
     public sealed class HtmlWindow
     {
         internal static readonly object EventError = new object();
@@ -31,7 +28,6 @@ namespace System.Windows.Forms
         private HtmlShimManager shimManager;
         private UnsafeNativeMethods.IHTMLWindow2 htmlWindow2;
 
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         internal HtmlWindow(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLWindow2 win)
         {
             this.htmlWindow2 = win;

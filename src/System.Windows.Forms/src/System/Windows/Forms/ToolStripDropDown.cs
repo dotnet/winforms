@@ -9,8 +9,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.Windows.Forms.Layout;
     using System.Runtime.InteropServices;
@@ -311,7 +309,6 @@ namespace System.Windows.Forms {
         /// </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-           [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
 
@@ -591,26 +588,12 @@ namespace System.Windows.Forms {
                 if (!state[stateIsRestrictedWindowChecked]) {
                     state[stateIsRestrictedWindowChecked] = true;
                     state[stateIsRestrictedWindow] = false;
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Checking for restricted window...");
-                    Debug.Indent();
 #if DEBUG
                     if (AlwaysRestrictWindows.Enabled) {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Always restricted switch is on...");
                         state[stateIsRestrictedWindow] = true;
-                        Debug.Unindent();
                         return true;
                     }
 #endif                    
-
-                    try {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "WindowAdornmentModification Demanded");
-                        IntSecurity.WindowAdornmentModification.Demand();
-                    }
-                    catch {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Caught exception, we are restricted...");
-                        state[stateIsRestrictedWindow] = true;
-                    }
-                    Debug.Unindent();
                 }
 
                 return state[stateIsRestrictedWindow];
@@ -1568,7 +1551,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.ProcessDialogKey"]/*' />
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             if (this.OwnerItem != null && this.OwnerItem.IsInDesignMode) {
                 return false;
@@ -1600,7 +1582,6 @@ namespace System.Windows.Forms {
 
 
           [EditorBrowsable(EditorBrowsableState.Advanced)]
-          [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
           protected override bool ProcessDialogChar(char charCode) {
   #if DEBUG        
               Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ToolStripDropDown.ProcessDialogChar [" + charCode.ToString() + "]");
@@ -1615,7 +1596,6 @@ namespace System.Windows.Forms {
               return base.ProcessDialogChar(charCode);
           }
           
-          [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
           protected internal override bool ProcessMnemonic(char charCode) {
               if (!CanProcessMnemonic()) {
                   return false; // here for security see CanProcessMnemonic.
@@ -2100,7 +2080,6 @@ namespace System.Windows.Forms {
             countDropDownItemsAssignedTo = Math.Max(--countDropDownItemsAssignedTo, 0);
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
            if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST && IsRestrictedWindow) {

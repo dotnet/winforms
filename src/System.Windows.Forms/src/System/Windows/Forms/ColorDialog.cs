@@ -16,8 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
 
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog"]/*' />
     /// <devdoc>
@@ -175,10 +173,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected virtual IntPtr Instance {
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-                SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             [ResourceExposure(ResourceScope.Process)]
             [ResourceConsumption(ResourceScope.Process)]
             get { return UnsafeNativeMethods.GetModuleHandle(null);}

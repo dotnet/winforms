@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
 
     using System;
     using System.IO;
-    using System.Security.Permissions;
     using System.Drawing;
     using System.Net;
     using System.ComponentModel;
@@ -237,7 +236,6 @@ namespace System.Windows.Forms {
         ///       filled up with the basic info.</para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
 

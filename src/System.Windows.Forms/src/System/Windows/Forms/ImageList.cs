@@ -20,8 +20,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
 
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Globalization;
 
     /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList"]/*' />
@@ -698,7 +696,6 @@ namespace System.Windows.Forms {
                     Bitmap tmpBitmap = null;
                     BitmapData bmpData = null;
                     BitmapData targetData = null;
-                    IntSecurity.ObjectFromWin32Handle.Assert();
                     try {
                         tmpBitmap = Bitmap.FromHbitmap(imageInfo.hbmImage);
                         // 
@@ -716,7 +713,6 @@ namespace System.Windows.Forms {
                             CopyBitmapData(bmpData, targetData);
                         }                        
                     } finally {
-                        CodeAccessPermission.RevertAssert();
                         if(tmpBitmap != null) {
                             if(bmpData != null) {
                                 tmpBitmap.UnlockBits(bmpData);
@@ -904,13 +900,7 @@ namespace System.Windows.Forms {
             internal NativeImageList(IntPtr himl) {
                 this.himl = himl;
 #if DEBUG
-                new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                try {
-                    callStack = Environment.StackTrace;
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                callStack = Environment.StackTrace;
 #endif
             }
 

@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Tests
             data.Add(Color.Black);
             return data;
         }
-        
+
         // helper method to generate invalid theory data Color value(s)
         public static TheoryData<Color> GetColorTheoryDataInvalid()
         {
