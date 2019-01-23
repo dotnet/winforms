@@ -2,40 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-    using System.Windows.Forms.Design;
-
-    /// <include file='doc\PropertyTabChangedEvent.uex' path='docs/doc[@for="PropertyTabChangedEventArgs"]/*' />
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class PropertyTabChangedEventArgs : EventArgs{
-        
-        private PropertyTab oldTab;
-        private PropertyTab newTab;
-
-        /// <include file='doc\PropertyTabChangedEvent.uex' path='docs/doc[@for="PropertyTabChangedEventArgs.PropertyTabChangedEventArgs"]/*' />
-        public PropertyTabChangedEventArgs(PropertyTab oldTab, PropertyTab newTab) {
-            this.oldTab = oldTab;
-            this.newTab = newTab;
+namespace System.Windows.Forms
+{
+    [ComVisible(true)]
+    public class PropertyTabChangedEventArgs : EventArgs
+    {
+        public PropertyTabChangedEventArgs(PropertyTab oldTab, PropertyTab newTab)
+        {
+            OldTab = oldTab;
+            NewTab = newTab;
         }
         
-        /// <include file='doc\PropertyTabChangedEvent.uex' path='docs/doc[@for="PropertyTabChangedEventArgs.OldTab"]/*' />
-        public PropertyTab OldTab {
-            get {
-                return oldTab;
-            }
-        }
+        public PropertyTab OldTab { get; }
         
-        /// <include file='doc\PropertyTabChangedEvent.uex' path='docs/doc[@for="PropertyTabChangedEventArgs.NewTab"]/*' />
-        public PropertyTab NewTab {
-            get {
-                return newTab;
-            }
-        }
+        public PropertyTab NewTab { get; }
     }
 }

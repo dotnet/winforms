@@ -2,33 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnNodeMouseHover'/> event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.TreeView.OnAfterCheck'/>,
+    /// <see cref='System.Windows.Forms.TreeView.AfterCollapse'/>, <see cref='System.Windows.Forms.TreeView.AfterExpand'/>,
+    /// or <see cref='System.Windows.Forms.TreeView.AfterSelect'/> event.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class TreeNodeMouseHoverEventArgs : EventArgs {
-        readonly TreeNode node;
+    public class TreeViewEventArgs : EventArgs
+    {
+        public TreeViewEventArgs(TreeNode node) : this(node, TreeViewAction.Unknown)
+        {
+        }
 
-        /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs.TreeNodeMouseHoverEventArgs"]/*' />
-        public TreeNodeMouseHoverEventArgs(TreeNode node) {
-            this.node = node;
+        public TreeViewEventArgs(TreeNode node, TreeViewAction action)
+        {
+            Node = node;
+            Action = action;
         }
-        
-        /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs.Node"]/*' />
-        public TreeNode Node {
-            get { return node; }
-        }
+
+        public TreeNode Node { get; }
+
+        /// <devdoc>
+        /// An event specific action-flag.
+        /// </devdoc>
+        public TreeViewAction Action { get; }
     }
 }
