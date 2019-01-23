@@ -64,21 +64,20 @@ namespace System.Windows.Forms.Func.Tests
         }
 
 
-        // [Fact]
-        // Commenting out until this gets fixed
-        // public void WinformsControlsTest_TreeViewAndImageListTest()
-        // {
-        //     var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-        //     TestHelpers.PressTabsOnProcess(process, 2);
-        //     TestHelpers.PressEnterOnProcess(process);
+        [Fact]
+        public void WinformsControlsTest_TreeViewAndImageListTest()
+        {
+            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            TestHelpers.PressTabsOnProcess(process, 2);
+            TestHelpers.PressEnterOnProcess(process);
 
-        //     Assert.False(process.HasExited);
+            Assert.False(process.HasExited);
 
-        //     process.Kill();
-        //     process.WaitForExit();
+            process.Kill();
+            process.WaitForExit();
 
-        //     Assert.True(process.HasExited);
-        // }
+            Assert.True(process.HasExited);
+        }
 
         [Fact]
         public void WinformsControlsTest_ContentAlignmentTest()
@@ -215,21 +214,20 @@ namespace System.Windows.Forms.Func.Tests
             Assert.True(process.HasExited);
         }
 
-        // [Fact]
-        // Commenting this out until this is fixed
-        // public void WinformsControlsTest_ListViewTest()
-        // {
-        //     var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-        //     TestHelpers.PressTabsOnProcess(process, 12);
-        //     TestHelpers.PressEnterOnProcess(process);
+        [Fact]
+        public void WinformsControlsTest_ListViewTest()
+        {
+            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            TestHelpers.PressTabsOnProcess(process, 12);
+            TestHelpers.PressEnterOnProcess(process);
 
-        //     Assert.False(process.HasExited);
+            Assert.False(process.HasExited);
 
-        //     process.Kill();
-        //     process.WaitForExit();
+            process.Kill();
+            process.WaitForExit();
 
-        //     Assert.True(process.HasExited);
-        // }
+            Assert.True(process.HasExited);
+        }
 
         [Fact]
         public void WinformsControlsTest_DateTimePickerTest()
