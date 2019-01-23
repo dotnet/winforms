@@ -2,74 +2,58 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Globalization;
-
-    /// <include file='doc\DataGridViewRowHeightInfoNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowHeightInfoNeededEventArgs"]/*' />
     public class DataGridViewRowHeightInfoNeededEventArgs : EventArgs
     {
-        private int rowIndex;
-        private int height;
-        private int minimumHeight;
+        private int _height;
+        private int _minimumHeight;
 
         internal DataGridViewRowHeightInfoNeededEventArgs()
         {
-            this.rowIndex = -1;
-            this.height = -1;
-            this.minimumHeight = -1;
+            RowIndex = -1;
+            _height = -1;
+            _minimumHeight = -1;
         }
 
-        /// <include file='doc\DataGridViewRowHeightInfoNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowHeightInfoNeededEventArgs.Height"]/*' />
+        public int RowIndex { get; private set; }
+
         public int Height
         {
-            get
-            {
-                return this.height;
-            }
+            get => _height;
             set
             {
-                if (value < this.minimumHeight)
+                if (value < _minimumHeight)
                 {
-                    value = this.minimumHeight;
+                    value = _minimumHeight;
                 }
                 if (value > DataGridViewBand.maxBandThickness)
                 {
                     throw new ArgumentOutOfRangeException(nameof(Height), string.Format(SR.InvalidHighBoundArgumentEx, "Height", (value).ToString(CultureInfo.CurrentCulture), (DataGridViewBand.maxBandThickness).ToString(CultureInfo.CurrentCulture)));
                 }
-                this.height = value;
+
+                _height = value;
             }
         }
 
-        /// <include file='doc\DataGridViewRowHeightInfoNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowHeightInfoNeededEventArgs.MinimumHeight"]/*' />
         public int MinimumHeight
         {
-            get
-            {
-                return this.minimumHeight;
-            }
+            get => _minimumHeight;
             set
             {
                 if (value < DataGridViewBand.minBandThickness)
                 {
                     throw new ArgumentOutOfRangeException(nameof(MinimumHeight), value, string.Format(SR.DataGridViewBand_MinimumHeightSmallerThanOne, (DataGridViewBand.minBandThickness).ToString(CultureInfo.CurrentCulture)));
                 }
-                if (this.height < value)
-                {
-                    this.height = value;
-                }
-                this.minimumHeight = value;
-            }
-        }
 
-        /// <include file='doc\DataGridViewRowHeightInfoNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowHeightInfoNeededEventArgs.RowIndex"]/*' />
-        public int RowIndex
-        {
-            get
-            {
-                return this.rowIndex;
+                if (_height < value)
+                {
+                    _height = value;
+                }
+                _minimumHeight = value;
             }
         }
 
@@ -79,9 +63,9 @@ namespace System.Windows.Forms
             Debug.Assert(height > 0);
             Debug.Assert(minimumHeight > 0);
             Debug.Assert(height >= minimumHeight);
-            this.rowIndex = rowIndex;
-            this.height = height;
-            this.minimumHeight = minimumHeight;
+            RowIndex = rowIndex;
+            _height = height;
+            _minimumHeight = minimumHeight;
         }
     }
 }
