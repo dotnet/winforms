@@ -2,19 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using Diagnostics;
-    using Drawing;
-    using System;
-    using System.ComponentModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
 
-    /// <include file='doc\DpiChangedEventArgs.uex' path='docs/doc[@for="DpiChangedEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///     Provides information about a DpiChanged event.
+    /// Provides information about a DpiChanged event.
     /// </devdoc>
-    public sealed class DpiChangedEventArgs : CancelEventArgs {
-        // Parameter units are pixels(dots) per inch. 
-        internal DpiChangedEventArgs(int old, Message m) {
+    public sealed class DpiChangedEventArgs : CancelEventArgs
+    {
+        internal DpiChangedEventArgs(int old, Message m)
+        {
+            // Parameter units are pixels(dots) per inch.
             DeviceDpiOld = old;
             DeviceDpiNew = NativeMethods.Util.SignedLOWORD(m.WParam);
             Debug.Assert(NativeMethods.Util.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");
@@ -22,32 +23,12 @@ namespace System.Windows.Forms {
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }
 
-        /// <include file='doc\DpiChangedEventArgs.uex' path='docs/doc[@for="DpiChangedEventArgs.DeviceDpiXOld"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        public int DeviceDpiOld {
-            get;
-            private set;
-        }
+        public int DeviceDpiOld { get; }
 
-        /// <include file='doc\DpiChangedEventArgs.uex' path='docs/doc[@for="DpiChangedEventArgs.DeviceDpiXNew"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        public int DeviceDpiNew {
-            get;
-            private set;
-        }
+        public int DeviceDpiNew { get; }
 
-        /// <include file='doc\DpiChangedEventArgs.uex' path='docs/doc[@for="DpiChangedEventArgs.SuggestedRectangle"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        public Rectangle SuggestedRectangle {
-            get;
-            private set;
-        }
+        public Rectangle SuggestedRectangle { get; }
 
-        public override string ToString() {
-            return $"was: {DeviceDpiOld}, now: {DeviceDpiNew}";
-        }
+        public override string ToString() => $"was: {DeviceDpiOld}, now: {DeviceDpiNew}";
     }
 }
