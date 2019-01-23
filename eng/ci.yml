@@ -105,9 +105,8 @@ jobs:
           -prepareMachine
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
-          -restore
           -build
-        displayName: Restore and Build
+        displayName: Build
 
       # Run unit tests
       - script: eng\cibuild.cmd
