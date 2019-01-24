@@ -2539,7 +2539,7 @@ namespace System.Windows.Forms
                         }
                         focusBounds.Width++;
                         focusBounds.Y--;
-                        focusBounds.Height+=2;
+                        focusBounds.Height += 2;
                         ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, br.Color);
                     }
                     else if (paintPostXPThemes)

@@ -933,8 +933,8 @@ namespace System.Windows.Forms {
 
             if (BorderStyle == BorderStyle.FixedSingle) {
                 // Bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
-                bordersAndPadding.Width +=2;
-                bordersAndPadding.Height +=2;
+                bordersAndPadding.Width += 2;
+                bordersAndPadding.Height += 2;
             }
             // Reduce constraints by border/padding size
             proposedConstraints -= bordersAndPadding;

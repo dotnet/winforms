@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
             
             // Ok, we passed the magic header test.
             
-            for (idx = HEADER_MAGIC.Length; idx < input.Length; idx+=2) {
+            for (idx = HEADER_MAGIC.Length; idx < input.Length; idx += 2) {
                 finalLength += input[idx];
             }
             

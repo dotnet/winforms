@@ -845,7 +845,7 @@ namespace System.Windows.Forms {
             if (imageRect != Rectangle.Empty && image != null) {
                 bool disposeImage = false;
                 if (e.ShiftOnPress && e.Item.Pressed) {
-                   imageRect.X +=1;
+                   imageRect.X++;
                 }
                 if (!e.Item.Enabled) {
                     image = CreateDisabledImage(image, e.ImageAttributes);

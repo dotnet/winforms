@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
                       offset.X = this.Width;
                       if (!IsOnDropDown) {
                           // overlap the toplevel toolstrip
-                          offset.X -=1;
+                          offset.X--;
                       }
                       break;
    

@@ -568,9 +568,8 @@ namespace System.Windows.Forms.ButtonInternal {
                 graphics.Clip = newClip;
             }
             else {
-                // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
-                imageBounds.Width += 1;
-                imageBounds.Height +=1;
+                imageBounds.Width++;
+                imageBounds.Height++;
                 imageBounds.X = imageStart.X + 1;
                 imageBounds.Y = imageStart.Y + 1;
             }

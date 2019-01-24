@@ -112,7 +112,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    resultBounds.X +=4;
+                    resultBounds.X += 4;
                     resultBounds.Width -= 4;
                 }
 
