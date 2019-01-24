@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Globalization;
 
 namespace System.Windows.Forms
 {

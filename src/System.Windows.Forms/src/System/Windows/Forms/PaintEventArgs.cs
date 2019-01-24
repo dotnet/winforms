@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         /// Gets the rectangle in which to paint.
         /// </devdoc>
-        public Rectangle ClipRectangle { get; set; }
+        public Rectangle ClipRectangle { get; }
 
         /// <devdoc>
         /// Gets the HDC this paint event is connected to.  If there is no associated

@@ -13,9 +13,11 @@ namespace System.Windows.Forms
     /// </devdoc>
     public sealed class DpiChangedEventArgs : CancelEventArgs
     {
+        /// <devdov>
+        /// Parameter units are pixels(dots) per inch.
+        /// </devdoc>
         internal DpiChangedEventArgs(int old, Message m)
         {
-            // Parameter units are pixels(dots) per inch.
             DeviceDpiOld = old;
             DeviceDpiNew = NativeMethods.Util.SignedLOWORD(m.WParam);
             Debug.Assert(NativeMethods.Util.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");

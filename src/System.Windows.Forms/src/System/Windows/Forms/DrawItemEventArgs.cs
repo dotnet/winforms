@@ -55,18 +55,6 @@ namespace System.Windows.Forms
             _backColor = backColor;
         }
 
-        public Color BackColor
-        {
-            get
-            {
-                if ((State & DrawItemState.Selected) == DrawItemState.Selected)
-                {
-                    return SystemColors.Highlight;
-                }
-
-                return _backColor;
-            }
-        }
         /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Graphics"]/*' />
         /// <devdoc>
         /// Graphics object with which painting should be done.
@@ -109,8 +97,19 @@ namespace System.Windows.Forms
                 {
                     return SystemColors.HighlightText;
                 }
-
                 return _foreColor;
+            }
+        }
+
+        public Color BackColor
+        {
+            get
+            {
+                if ((State & DrawItemState.Selected) == DrawItemState.Selected)
+                {
+                    return SystemColors.Highlight;
+                }
+                return _backColor;
             }
         }
 
@@ -120,7 +119,7 @@ namespace System.Windows.Forms
         public virtual void DrawBackground()
         {
             Brush backBrush = new SolidBrush(BackColor);
-            Graphics.FillRectangle(backBrush, rect);
+            Graphics.FillRectangle(backBrush, Bounds);
             backBrush.Dispose();
         }
 
@@ -129,10 +128,10 @@ namespace System.Windows.Forms
         /// </devdoc>
         public virtual void DrawFocusRectangle()
         {
-            if ((State & DrawItemState.Focus) == DrawItemState.Focus
-                && (State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
+            if ((State & DrawItemState.Focus) == DrawItemState.Focus &&
+                (State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
             {
-                ControlPaint.DrawFocusRectangle(Graphics, rect, ForeColor, BackColor);
+                ControlPaint.DrawFocusRectangle(Graphics, Bounds, ForeColor, BackColor);
             }
         }
     }

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
@@ -18,9 +19,9 @@ namespace System.Windows.Forms
         /// <devdoc>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.KeyEventArgs'/> class.
         /// </devdoc>
-        public KeyEventArgs(Keys KeyData)
+        public KeyEventArgs(Keys keyData)
         {
-            KeyData = KeyData;
+            KeyData = keyData;
         }
 
         /// <devdoc>
@@ -54,7 +55,6 @@ namespace System.Windows.Forms
                 {
                     return Keys.None;
                 }
-                
                 return keyGenerated;
             }
         }
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
             set
             {
                 _suppressKeyPress = value;
-                handled = value;
+                Handled = value;
             }
         }
     }
