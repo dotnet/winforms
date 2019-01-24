@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     {
         public NavigateEventArgs(bool isForward)
         {
-            IsForward = isForward;
+            Forward = isForward;
         }
 
         public bool Forward { get; }
