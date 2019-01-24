@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.CodeDom" Version="$(SystemCodeDomPackageVersion)" />
-    <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

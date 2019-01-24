@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28222.4001
+# Visual Studio 15
+VisualStudioVersion = 15.0.28016.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src\System.Windows.Forms\src\System.Windows.Forms.csproj", "{0D23A41B-2626-4703-9E4A-87C07F69B0B2}"
 EndProject
@@ -44,6 +44,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration", "{680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests\System.Windows.Forms.IntegrationTests.csproj", "{238195CE-7CCE-4469-ACD8-EA00E88D947A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Drawing.Facade", "src\System.Drawing\src\System.Drawing.Facade.csproj", "{F1B0790A-1A40-4487-A607-36D21D827E44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,6 +109,10 @@ Global
 		{238195CE-7CCE-4469-ACD8-EA00E88D947A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{238195CE-7CCE-4469-ACD8-EA00E88D947A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{238195CE-7CCE-4469-ACD8-EA00E88D947A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1B0790A-1A40-4487-A607-36D21D827E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1B0790A-1A40-4487-A607-36D21D827E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1B0790A-1A40-4487-A607-36D21D827E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1B0790A-1A40-4487-A607-36D21D827E44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,6 +134,7 @@ Global
 		{583F1292-AE8D-4511-B8D8-A81FE4642DDC} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{238195CE-7CCE-4469-ACD8-EA00E88D947A} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
+		{F1B0790A-1A40-4487-A607-36D21D827E44} = {434C00C3-E498-4BA7-9764-9F0FC8CFE457}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

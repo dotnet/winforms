@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
-    <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
