@@ -3703,7 +3703,6 @@ namespace System.Windows.Forms {
             // finally if the handle is created, do the actual add into the real list view
             //
             if (IsHandleCreated) {
-                Debug.Assert(listItemsArray == null, "listItemsArray not null, even though handle created");
                 InsertItemsNative(displayIndex, items);
             }
 
@@ -4619,9 +4618,7 @@ namespace System.Windows.Forms {
         // does the job of telling win32 listView to remove this group
         private void RemoveGroupNative(ListViewGroup group) {
                Debug.Assert(IsHandleCreated,"RemoveGroupNative precondition: list-view handle must be created");
-               Debug.Assert(ComctlSupportsVisualStyles, "we should have checked this already");
                int retval = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.LVM_REMOVEGROUP, group.ID, IntPtr.Zero);
-               Debug.Assert(retval != -1,"Failed to remove group");
 
                // it is the job of whoever deletes this group to also turn off grouping if this was the last
                // group deleted
@@ -5151,7 +5148,6 @@ namespace System.Windows.Forms {
 
         internal void UpdateGroupNative(ListViewGroup group) {
             Debug.Assert(IsHandleCreated,"UpdateGroupNative precondition: list-view handle must be created");
-            Debug.Assert(ComctlSupportsVisualStyles, "we should have checked this already");
 
             NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP();
             try {
@@ -8497,7 +8493,6 @@ namespace System.Windows.Forms {
                             throw new ArgumentOutOfRangeException(nameof(displayIndex), string.Format(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
 
                         if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed) {
-                            Debug.Assert(owner.listItemsArray == null, "listItemsArray not null, even though handle created");
                             return (ListViewItem)owner.listItemsTable[DisplayIndexToID(displayIndex)];
                         }
                         else {
@@ -8698,7 +8693,6 @@ namespace System.Windows.Forms {
 
                 owner.ApplyUpdateCachedItems();
                 if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed) {
-                    Debug.Assert(owner.listItemsArray == null, "listItemsArray not null, even though handle created");
                     return owner.listItemsTable[item.ID] == item;
                 }
                 else {
