@@ -86,6 +86,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Management" Version="4.5.0-preview1-25914-04" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Buttons.resx">
       <DependentUpon>Buttons.cs</DependentUpon>
     </EmbeddedResource>
