@@ -29,6 +29,10 @@
       <Uri>https://github.com/dotnet/corefx</Uri>
       <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
     </Dependency>
+    <Dependency Name="System.Windows.Extensions" Version="4.6.0-preview.19073.11">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
+    </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
     <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19073.5">
