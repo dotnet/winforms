@@ -6802,6 +6802,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Отображает линии сетки вокруг элементов и подэлементов. Действует только в представлении Details.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">По умолчанию</target>

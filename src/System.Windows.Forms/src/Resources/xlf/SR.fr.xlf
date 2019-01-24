@@ -6801,6 +6801,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Affiche un quadrillage autour des éléments et des SubItems. Affichage uniquement en mode Détails.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">Par défaut</target>

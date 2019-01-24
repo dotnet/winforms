@@ -6801,6 +6801,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Wyświetla linie siatki wokół elementów i podelementów. Pokazywany tylko w widoku Details.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">Domyślnie</target>

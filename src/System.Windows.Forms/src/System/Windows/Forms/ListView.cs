@@ -7413,7 +7413,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.ColumnHeaderCollection"]/*' />
             public ColumnHeaderCollection(ListView owner) {
-                this.owner = owner;
+                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.this"]/*' />
@@ -7654,7 +7654,11 @@ namespace System.Windows.Forms {
                 int [] indices = new int[values.Length];
 
                 for (int i=0; i<values.Length; i++) {
-                    
+                    if (values[i] == null)
+                    {
+                        throw new ArgumentNullException(nameof(values));
+                    }
+
                     if (values[i].DisplayIndex == -1) {
                         values[i].DisplayIndexInternal = i;
                     }
@@ -7679,7 +7683,7 @@ namespace System.Windows.Forms {
                     return Add((ColumnHeader)value);
                 }
                 else {
-                    throw new ArgumentException(SR.ColumnHeaderCollectionInvalidArgument);
+                    throw new ArgumentException(SR.ColumnHeaderCollectionInvalidArgument, nameof(value));
                 }
             }
 
@@ -7849,7 +7853,7 @@ namespace System.Windows.Forms {
             ///     removes a column from the ListView
             /// </devdoc>
             public virtual void RemoveAt(int index) {
-                if (index < 0 || index >= owner.columnHeaders.Length)
+                if (owner.columnHeaders == null || index < 0 || index >= owner.columnHeaders.Length)
                     throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                 int w = owner.columnHeaders[index].Width; // Update width before detaching from ListView

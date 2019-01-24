@@ -6801,6 +6801,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">アイテムとサブアイテムの周りのグリッド線を表示します。詳細ビューでのみ表示されます。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">既定</target>

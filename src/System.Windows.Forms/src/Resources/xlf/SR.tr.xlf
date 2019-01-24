@@ -6801,6 +6801,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Öğelerin ve SubItem'ların etrafında kılavuz çizgileri görüntüler. Yalnızca Ayrıntı görünümünde gösterilir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">Varsayılan</target>
