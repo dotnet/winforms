@@ -9352,8 +9352,8 @@ example usage
             Rectangle borderRectangle = ClientRectangle;
             borderRectangle.X++;
             borderRectangle.Y++;
-            borderRectangle.Width -=2;
-            borderRectangle.Height-=2;
+            borderRectangle.Width -= 2;
+            borderRectangle.Height-= 2;
 
             Rectangle imageRect = new Rectangle(marginX, marginY, glyphSize.Width, glyphSize.Height);
 

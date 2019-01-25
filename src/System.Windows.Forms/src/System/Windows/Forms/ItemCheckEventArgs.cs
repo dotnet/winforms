@@ -2,60 +2,36 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-    /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.CheckedListBox.ItemCheck'/>
-    ///       event.
-    ///
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.CheckedListBox.ItemCheck'/> event.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class ItemCheckEventArgs : EventArgs {
-
-        readonly int index;
-        CheckState newValue;
-        readonly CheckState currentValue;
-
-        /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs.ItemCheckEventArgs"]/*' />
-        public ItemCheckEventArgs(int index, CheckState newCheckValue, CheckState currentValue) {
-            this.index = index;
-            this.newValue = newCheckValue;
-            this.currentValue = currentValue;
+    [ComVisible(true)]
+    public class ItemCheckEventArgs : EventArgs
+    {
+        public ItemCheckEventArgs(int index, CheckState newCheckValue, CheckState currentValue)
+        {
+            Index = index;
+            NewValue = newCheckValue;
+            CurrentValue = currentValue;
         }
-        /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs.Index"]/*' />
+
         /// <devdoc>
-        ///     The index of the item that is about to change.
+        /// The index of the item that is about to change.
         /// </devdoc>
-        public int Index {
-            get { return index; }
-        }
+        public int Index { get; }
 
-        /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs.NewValue"]/*' />
         /// <devdoc>
-        ///     The proposed new value of the CheckBox.
+        /// The proposed new value of the CheckBox.
         /// </devdoc>
-        public CheckState NewValue {
-            get { return newValue; }
-            set { newValue = value; }
-        }
+        public CheckState NewValue { get; set; }
 
-        /// <include file='doc\ItemCheckEvent.uex' path='docs/doc[@for="ItemCheckEventArgs.CurrentValue"]/*' />
         /// <devdoc>
-        ///     The current state of the CheckBox.
+        /// The current state of the CheckBox.
         /// </devdoc>
-        public CheckState CurrentValue {
-            get { return currentValue; }
-        }
-
+        public CheckState CurrentValue { get; }
     }
 }

@@ -2,33 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\ListViewMouseHoverEvent.uex' path='docs/doc[@for="ListViewMouseHoverEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.ListView.OnItemMouseHover'/> event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.ListView.OnItemMouseHover'/> event.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class ListViewItemMouseHoverEventArgs : EventArgs {
-        readonly ListViewItem item;
-
-        /// <include file='doc\ItemMouseHoverEvent.uex' path='docs/doc[@for="ListViewItemMouseHoverEventArgs.ItemMouseHoverEventArgs"]/*' />
-        public ListViewItemMouseHoverEventArgs(ListViewItem item) {
-            this.item = item;
+    [ComVisible(true)]
+    public class ListViewItemMouseHoverEventArgs : EventArgs
+    {
+        public ListViewItemMouseHoverEventArgs(ListViewItem item)
+        {
+            Item = item;
         }
         
-        /// <include file='doc\ItemMouseHoverEvent.uex' path='docs/doc[@for="ListViewItemMouseHoverEventArgs.Item"]/*' />
-        public ListViewItem Item {
-            get { return item; }
-        }
+        public ListViewItem Item { get; }
     }
 }
