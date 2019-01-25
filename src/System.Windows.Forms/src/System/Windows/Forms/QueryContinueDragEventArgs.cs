@@ -2,81 +2,39 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-    /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.Control.QueryContinueDrag'/>
-    ///       event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.Control.QueryContinueDrag'/> event.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class QueryContinueDragEventArgs : EventArgs {
-
-        private readonly int keyState;
-        private readonly bool escapePressed;
-        private DragAction action;
-
-        /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs.QueryContinueDragEventArgs"]/*' />
+    [ComVisible(true)]
+    public class QueryContinueDragEventArgs : EventArgs
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.QueryContinueDragEventArgs'/> class.
-        ///    </para>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.QueryContinueDragEventArgs'/> class.
         /// </devdoc>
-        public QueryContinueDragEventArgs(int keyState, bool escapePressed, DragAction action) {
-            this.keyState = keyState;
-            this.escapePressed = escapePressed;
-            this.action = action;
+        public QueryContinueDragEventArgs(int keyState, bool escapePressed, DragAction action)
+        {
+            KeyState = keyState;
+            EscapePressed = escapePressed;
+            Action = action;
         }
 
-        /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs.KeyState"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating
-        ///       the current state of the SHIFT, CTRL, and ALT keys.
-        ///  </para>
+        /// Gets a value indicating the current state of the SHIFT, CTRL, and ALT keys.
         /// </devdoc>
-        public int KeyState {
-            get {
-                return keyState;
-            }
-        }
+        public int KeyState { get; }
 
-        /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs.EscapePressed"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the user pressed the ESC key.
-        ///    </para>
+        /// Gets a value indicating whether the user pressed the ESC key.
         /// </devdoc>
-        public bool EscapePressed {
-            get {
-                return escapePressed;
-            }
-        }
+        public bool EscapePressed { get; }
 
-        /// <include file='doc\QueryContinueDragEvent.uex' path='docs/doc[@for="QueryContinueDragEventArgs.Action"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       or sets the status of a drag-and-drop operation.
-        ///    </para>
+        /// Gets or sets the status of a drag-and-drop operation.
         /// </devdoc>
-        public DragAction Action {
-            get {
-                return action;
-            }
-            set {
-                action = value;
-            }
-        }
+        public DragAction Action { get; set; }
     }
 }

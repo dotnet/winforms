@@ -2,54 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Drawing;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-
-    /// <include file='doc\InvalidateEvent.uex' path='docs/doc[@for="InvalidateEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.Control.Invalidate'/>
-    ///       event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.Control.Invalidate'/> event.
     /// </devdoc>
-    public class InvalidateEventArgs : EventArgs {
-
-        /// <include file='doc\InvalidateEvent.uex' path='docs/doc[@for="InvalidateEventArgs.invalidRect"]/*' />
+    public class InvalidateEventArgs : EventArgs
+    {
         /// <devdoc>
-        ///     Rectangle that bounds the window area which has been invalidated.
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.InvalidateEventArgs'/>
+        /// class.
         /// </devdoc>
-        private readonly Rectangle invalidRect;
-
-        /// <include file='doc\InvalidateEvent.uex' path='docs/doc[@for="InvalidateEventArgs.InvalidateEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.InvalidateEventArgs'/>
-        ///       class.
-        ///    </para>
-        /// </devdoc>
-        public InvalidateEventArgs(Rectangle invalidRect) {
-            this.invalidRect = invalidRect;
+        public InvalidateEventArgs(Rectangle invalidRect)
+        {
+            InvalidRect = invalidRect;
         }
 
-        /// <include file='doc\InvalidateEvent.uex' path='docs/doc[@for="InvalidateEventArgs.InvalidRect"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets a value
-        ///       indicating the <see cref='System.Drawing.Rectangle'/>
-        ///       that contains the invalidated window area.
-        ///    </para>
+        /// Gets a value indicating the <see cref='System.Drawing.Rectangle'/> that contains the
+        /// invalidated window area.
         /// </devdoc>
-        public Rectangle InvalidRect {
-            get {
-                return invalidRect;
-            }
-        }
+        public Rectangle InvalidRect { get; }
     }
 }

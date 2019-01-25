@@ -2,40 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-
-
-    /// <include file='doc\ControlEvent.uex' path='docs/doc[@for="ControlEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///      A ControlEventArgs is an event that has a control
-    ///      as a property.
+    /// A ControlEventArgs is an event that has a control as a property.
     /// </devdoc>
-    public class ControlEventArgs : EventArgs {
-        private Control control;
-
-        /// <include file='doc\ControlEvent.uex' path='docs/doc[@for="ControlEventArgs.Control"]/*' />
+    public class ControlEventArgs : EventArgs
+    {
         /// <devdoc>
-        ///      Retrieves the control object stored in this event.
+        /// Creates a new ControlEventArgs.
         /// </devdoc>
-        public Control Control {
-            get {
-                return control;
-            }
+        public ControlEventArgs(Control control)
+        {
+            Control = control;
         }
 
-        /// <include file='doc\ControlEvent.uex' path='docs/doc[@for="ControlEventArgs.ControlEventArgs"]/*' />
         /// <devdoc>
-        ///      Creates a new ControlEventArgs.
+        /// Retrieves the control object stored in this event.
         /// </devdoc>
-        public ControlEventArgs(Control control) {
-            this.control = control;
-        }
+        public Control Control { get; }
     }
 }
-

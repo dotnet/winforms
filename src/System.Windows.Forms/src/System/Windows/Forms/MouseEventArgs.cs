@@ -2,141 +2,58 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Drawing;
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-    /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see langword='MouseUp'/>,
-    ///    <see langword='MouseDown'/>, and <see langword='MouseMove '/>
-    ///    events.
-    /// </para>
+    /// Provides data for the <see langword='MouseUp'/>, <see langword='MouseDown'/>, and
+    /// <see langword='MouseMove '/> events.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class MouseEventArgs : EventArgs {
-
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.button"]/*' />
+    [ComVisible(true)]
+    public class MouseEventArgs : EventArgs
+    {
         /// <devdoc>
-        ///     Which button generated this event [if applicable]
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.MouseEventArgs'/> class.
         /// </devdoc>
-        private readonly MouseButtons button;
-
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.clicks"]/*' />
-        /// <devdoc>
-        ///     If the user has clicked the mouse more than once, this contains the
-        ///     count of clicks so far.
-        /// </devdoc>
-        private readonly int clicks;
-
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.x"]/*' />
-        /// <devdoc>
-        ///     The x portion of the coordinate where this event occurred.
-        /// </devdoc>
-        private readonly int x;
-
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.y"]/*' />
-        /// <devdoc>
-        ///     The y portion of the coordinate where this event occurred.
-        /// </devdoc>
-        private readonly int y;
-
-        private readonly int delta;
-
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.MouseEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.MouseEventArgs'/> class.
-        ///    </para>
-        /// </devdoc>
-        public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta) {
-            this.button = button;
-            this.clicks = clicks;
-            this.x = x;
-            this.y = y;
-            this.delta = delta;
+        public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta)
+        {
+            Button = button;
+            Clicks = clicks;
+            X = x;
+            Y = y;
+            Delta = delta;
         }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Button"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets which mouse button was pressed.
-        ///    </para>
+        /// Gets which mouse button was pressed.
         /// </devdoc>
-        public MouseButtons Button {
-            get {
-                return button;
-            }
-        }
+        public MouseButtons Button { get; }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Clicks"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the
-        ///       number of times the mouse
-        ///       button was pressed and released.
-        ///    </para>
+        /// Gets the number of times the mouse button was pressed and released.
         /// </devdoc>
-        public int Clicks {
-            get {
-                return clicks;
-            }
-        }
+        public int Clicks { get; }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.X"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the x-coordinate
-        ///       of a mouse click.
-        ///    </para>
+        /// Gets the x-coordinate of a mouse click.
         /// </devdoc>
-        public int X {
-            get {
-                return x;
-            }
-        }
+        public int X { get; }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Y"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the y-coordinate of a mouse click.
-        ///    </para>
+        /// Gets the y-coordinate of a mouse click.
         /// </devdoc>
-        public int Y {
-            get {
-                return y;
-            }
-        }
+        public int Y { get; }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Delta"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       a signed count of the number of detents the mouse wheel has rotated.
-        ///    </para>
+        /// Gets a signed count of the number of detents the mouse wheel has rotated.
         /// </devdoc>
-        public int Delta {
-            get {
-                return delta;
-            }
-        }
+        public int Delta { get; }
 
-        /// <include file='doc\MouseEvent.uex' path='docs/doc[@for="MouseEventArgs.Location"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the location of the mouse during MouseEvent.
-        ///    </para>
+        /// Gets the location of the mouse during MouseEvent.
         /// </devdoc>
-        public Point Location {
-            get {
-                return new Point(x,y);
-            }
-        }
+        public Point Location => new Point(X, Y);
     }
 }
