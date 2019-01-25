@@ -3154,8 +3154,6 @@ namespace System.Windows.Forms {
 
             ApplyUpdateCachedItems();
             if (IsHandleCreated && !ListViewHandleDestroyed) {
-                Debug.Assert(listItemsArray == null, "listItemsArray not null, even though handle created");
-
                 NativeMethods.LVFINDINFO info = new NativeMethods.LVFINDINFO();
                 info.lParam = (IntPtr) item.ID;
                 info.flags = NativeMethods.LVFI_PARAM;
