@@ -225,6 +225,11 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Shipped as is in Everett
         ]
         protected internal void CloneMenu(Menu menuSrc) {
+            if (menuSrc == null)
+            {
+                throw new ArgumentNullException(nameof(menuSrc));
+            }
+
             MenuItem[] newItems = null;
             if (menuSrc.items != null) {
                 int count = menuSrc.MenuItems.Count;
@@ -492,12 +497,18 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Shipped as is in Everett
         ]
         public virtual void MergeMenu(Menu menuSrc) {
+            if (menuSrc == null)
+            {
+                throw new ArgumentNullException(nameof(menuSrc));
+            }
+            if (menuSrc == this)
+            {
+                throw new ArgumentException(SR.MenuMergeWithSelf, nameof(menuSrc));
+            }
+
             int i, j;
             MenuItem item;
             MenuItem itemDst;
-
-            if (menuSrc == this)
-                throw new ArgumentException(SR.MenuMergeWithSelf, "menuSrc");
 
             if (menuSrc.items != null && items == null) {
                 MenuItems.Clear();                
@@ -804,6 +815,10 @@ namespace System.Windows.Forms {
             ///     more than once to the same menu.
             /// </devdoc>
             public virtual int Add(int index, MenuItem item) {
+                if (item == null)
+                {
+                    throw new ArgumentNullException(nameof(item));
+                }
                 
                 // MenuItems can only belong to one menu at a time
                 if (item.Menu != null) {
