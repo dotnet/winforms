@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PaddingConverter_CreateInstance_NullPropertyValue_ThrowsArgumentNullException()
+        public void PaddingConverter_CreateInstance_NullPropertyValues_ThrowsArgumentNullException()
         {
             var converter = new PaddingConverter();
             Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object, null));

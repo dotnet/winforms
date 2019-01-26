@@ -552,34 +552,30 @@ namespace System.Windows.Forms {
         #endregion 
     }
 
-    #region ControlCollection
-    /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutControlCollection"]/*' />
     /// <devdoc>
-    /// <para>Represents a collection of controls on the TableLayoutPanel.</para>
+    /// Represents a collection of controls on the TableLayoutPanel.
     /// </devdoc>
     [ListBindable(false)]
     [DesignerSerializer("System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
-    public class TableLayoutControlCollection : Control.ControlCollection {
-        private TableLayoutPanel _container;
-        
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutControlCollection.TableLayoutControlCollection"]/*' />
-        public TableLayoutControlCollection(TableLayoutPanel container) : base(container) {
-            _container = (TableLayoutPanel)container;
+    public class TableLayoutControlCollection : Control.ControlCollection
+    {
+        public TableLayoutControlCollection(TableLayoutPanel container) : base(container)
+        {
+            Container = container ?? throw new ArgumentNullException(nameof(container));
         }
 
         //the container of this TableLayoutControlCollection
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutControlCollection.Container"]/*' />
-        public TableLayoutPanel Container {
-            get { return _container; }
-        }
+        public TableLayoutPanel Container { get; }
 
-        //Add control to cell (x, y) on the table. The control becomes absolutely positioned if neither x nor y is equal to -1
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutControlCollection.Add"]/*' />
-        public virtual void Add(Control control, int column, int row) {
+        /// <summary>
+        /// Add control to cell (x, y) on the table. The control becomes absolutely positioned if neither x nor y is equal to -1
+        /// </summary>
+        public virtual void Add(Control control, int column, int row)
+        {
             base.Add(control);
-            _container.SetColumn(control, column);
-            _container.SetRow(control, row);
+            Container.SetColumn(control, column);
+            Container.SetRow(control, row);
         }
     }
-    #endregion
 }   

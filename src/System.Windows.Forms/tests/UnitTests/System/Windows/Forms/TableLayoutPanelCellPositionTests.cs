@@ -215,10 +215,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TableLayoutPanelCellPosition_ConverterCreateInstance_NullPropertyValue_ThrowsNullReferenceException()
+        public void TableLayoutPanelCellPosition_ConverterCreateInstance_NullPropertyValues_ThrowsArgumentNullException()
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
-            Assert.Throws<NullReferenceException>(() => converter.CreateInstance(null, null));
+            Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(null, null));
         }
 
         [Fact]
