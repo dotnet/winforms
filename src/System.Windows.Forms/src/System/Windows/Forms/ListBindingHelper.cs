@@ -99,7 +99,8 @@ namespace System.Windows.Forms {
             else {
                 Type type;
                 // We always resolve via type in this case (not an instance)
-                if ((null == listAccessors) || (listAccessors.Length == 0)) {
+                if (listAccessors == null || listAccessors.Length == 0 || listAccessors[0] == null)
+                {
                     if (list is Type listAsType)
                     {
                         type = listAsType;
@@ -211,6 +212,11 @@ namespace System.Windows.Forms {
             }
 
             list = GetList(list);
+            if (list == null)
+            {
+                return null;
+            }
+
             Type listType = (list is Type) ? (list as Type) : list.GetType();
             object listInstance = (list is Type) ? null : list;
 
@@ -293,7 +299,16 @@ namespace System.Windows.Forms {
 
             if (typeof(Array).IsAssignableFrom(type)) {
                 // If the type is Customers[], this will return "Customers"
-                name = type.GetElementType().Name;
+                Type elementType = type.GetElementType();
+                if (elementType != null)
+                {
+                    name = elementType.Name;
+                }
+                else
+                {
+                    // Fallback to type name
+                    name = type.Name;
+                }
             }
             else if (typeof(IList).IsAssignableFrom(type)) {
                 // If the type is BindingList<T>, TCollection, TList (or equiv), this will return "T"
@@ -317,6 +332,11 @@ namespace System.Windows.Forms {
 
         private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type, PropertyDescriptor[] listAccessors, int startIndex) {
             PropertyDescriptorCollection pdc = null;
+            if (listAccessors[startIndex] == null)
+            {
+                return new PropertyDescriptorCollection(null);
+            }
+
             Type subType = listAccessors[startIndex].PropertyType;
             // subType is the property type - which is not to be confused with the item type.
             // For example, if a class Customer has a property of type Orders[], then Given:
@@ -410,6 +430,11 @@ namespace System.Windows.Forms {
             // Get the value of the first listAccessor
             if (listAccessors.Length > startIndex)
             {
+                if (listAccessors[startIndex] == null)
+                {
+                    return new PropertyDescriptorCollection(null);
+                }
+
                 // Get the value (e.g. given Foo with property Bar, this gets Foo.Bar)
                 object value = listAccessors[startIndex].GetValue(target);
 
@@ -597,6 +622,10 @@ namespace System.Windows.Forms {
                 // Otherwise use the enumerator to get the first item...
                 try {
                     IEnumerator listEnumerator = enumerable.GetEnumerator();
+                    if (listEnumerator == null)
+                    {
+                        return null;
+                    }
 
                     listEnumerator.Reset();
 
