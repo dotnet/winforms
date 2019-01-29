@@ -379,7 +379,7 @@ namespace System.Windows.Forms
             }
 
             // For operating systems windows 8.1 to Windows 10 redstone 1 version.
-            else if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SafeNativeMethods.GetProcessDpiAwareness)))
+            else if (ApiHelper.IsApiAvailable(ExternDll.ShCore, nameof(SafeNativeMethods.GetProcessDpiAwareness)))
             {
                 CAPS.PROCESS_DPI_AWARENESS processDpiAwareness;
 
@@ -398,14 +398,9 @@ namespace System.Windows.Forms
             // For operating systems windows 7 to windows 8
             else if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SafeNativeMethods.IsProcessDPIAware)))
             {
-                if (SafeNativeMethods.IsProcessDPIAware())
-                {
-                    return HighDpiMode.SystemAware;
-                }
-                else
-                {
-                    return HighDpiMode.DpiUnaware;
-                }
+                return SafeNativeMethods.IsProcessDPIAware() ?
+                       HighDpiMode.SystemAware :
+                       HighDpiMode.DpiUnaware;
             }
 
             // We should never get here, except someone ported this with force to < Windows 7.
@@ -437,22 +432,18 @@ namespace System.Windows.Forms
                         break;
                     case HighDpiMode.DpiUnawareGdiScaled:
                         rs2AndAboveDpiFlag = NativeMethods.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED;
+                        // Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
+                        rs2AndAboveDpiFlag = SafeNativeMethods.IsValidDpiAwarenessContext(rs2AndAboveDpiFlag) ?
+                                             NativeMethods.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED :
+                                             NativeMethods.DPI_AWARENESS_CONTEXT_UNAWARE;
                         break;
                     default:
                         rs2AndAboveDpiFlag = NativeMethods.DPI_AWARENESS_CONTEXT_UNAWARE;
                         break;
                 }
-
-                // Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
-                if (SafeNativeMethods.IsValidDpiAwarenessContext(rs2AndAboveDpiFlag))
-                {
-                    return SafeNativeMethods.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag);
-                }
-                else
-                {
-                    return false;
-                }
+                return SafeNativeMethods.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag);
             }
+
             // For operating systems Windows 8.1 to Windows 10 RS1 version.
             else if (ApiHelper.IsApiAvailable(ExternDll.ShCore, nameof(SafeNativeMethods.SetProcessDpiAwareness)))
             {
@@ -484,7 +475,7 @@ namespace System.Windows.Forms
                 {
                     case HighDpiMode.DpiUnaware:
                     case HighDpiMode.DpiUnawareGdiScaled:
-                        dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE;
+                        // We can return, there is nothing to set if we assume we're already in DpiUnaware.
                         return true;
                     case HighDpiMode.SystemAware:
                     case HighDpiMode.PerMonitor:
