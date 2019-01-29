@@ -6,7 +6,6 @@ namespace System.Windows.Forms
 {
     using System;
     using System.Drawing;
-    using System.Security.Permissions;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
 
@@ -271,9 +270,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.ProcessKeyEventArgs"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        ]
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
             switch ((Keys)(int) m.WParam)

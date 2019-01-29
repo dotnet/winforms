@@ -17,7 +17,6 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.ComponentModel;
     using System.Windows.Forms.Internal;
-    using System.Security.Permissions;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
@@ -228,7 +227,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                if (this.DataGridView != null && this.RowIndex >= 0 && this.ColumnIndex >= 0)
+                if (this.RowIndex >= 0 && this.ColumnIndex >= 0)
                 {
                     Debug.Assert(this.DataGridView.Rows.GetRowState(this.RowIndex) == this.DataGridView.Rows.SharedRow(this.RowIndex).State);
                     return this.owningColumn.Displayed && this.owningRow.Displayed;
@@ -881,7 +880,7 @@ namespace System.Windows.Forms
             set
             {
                 string toolTipText = this.ToolTipTextInternal;
-                if (!String.IsNullOrEmpty(value) || this.Properties.ContainsObject(PropCellToolTipText))
+                if (!string.IsNullOrEmpty(value) || this.Properties.ContainsObject(PropCellToolTipText))
                 {
                     this.Properties.SetObject(PropCellToolTipText, value);
                 }
@@ -996,10 +995,6 @@ namespace System.Windows.Forms
         {
             switch (dataGridViewAdvancedBorderStyleInput.All)
             {
-                case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                    Debug.Fail("DataGridViewRow.AdjustCellBorderStyle - Unexpected DataGridViewAdvancedCellBorderStyle.OutsetPartial");
-                    break;
-
                 case DataGridViewAdvancedCellBorderStyle.Single:
                     if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
                     {
@@ -1556,7 +1551,7 @@ namespace System.Windows.Forms
 
             StringBuilder sb = new StringBuilder(64);
 
-            if (String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
             {
                 if (firstCell)
                 {
@@ -1588,10 +1583,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                bool csv = String.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase);
+                bool csv = string.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase);
                 if (csv ||
-                    String.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
-                    String.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
+                    string.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
                 {
                     if (formattedValue != null)
                     {
@@ -1803,7 +1798,6 @@ namespace System.Windows.Forms
 
         internal Rectangle GetErrorIconBounds(int rowIndex)
         {
-            Debug.Assert(this.DataGridView != null);
             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false /*includeColors*/);
             using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
             {
@@ -1875,7 +1869,7 @@ namespace System.Windows.Forms
             DataGridViewCellFormattingEventArgs gdvcfe = this.DataGridView.OnCellFormatting(this.ColumnIndex, rowIndex, value, this.FormattedValueType, cellStyle);
             cellStyle = gdvcfe.CellStyle;
             bool formattingApplied = gdvcfe.FormattingApplied;
-            Object formattedValue = gdvcfe.Value;
+            object formattedValue = gdvcfe.Value;
             bool checkFormattedValType = true;
 
             if (!formattingApplied &&
@@ -2132,7 +2126,7 @@ namespace System.Windows.Forms
         {
             if (this.DataGridView == null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CellNeedsDataGridViewForInheritedStyle));
+                throw new InvalidOperationException(SR.DataGridView_CellNeedsDataGridViewForInheritedStyle);
             }
             if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
             {
@@ -2823,7 +2817,7 @@ namespace System.Windows.Forms
 
             flags &= textFormatSupportedFlags;
             // Dont use passed in graphics so we can optimze measurement
-            Size requiredSize = TextRenderer.MeasureText(text, font, new Size(maxWidth, System.Int32.MaxValue), flags);
+            Size requiredSize = TextRenderer.MeasureText(text, font, new Size(maxWidth, int.MaxValue), flags);
             widthTruncated = (requiredSize.Width > maxWidth);
             return requiredSize.Height;
         }
@@ -2871,7 +2865,7 @@ namespace System.Windows.Forms
             do
             {
                 // Dont use passed in graphics so we can optimze measurement
-                textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, System.Int32.MaxValue), flags);
+                textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, int.MaxValue), flags);
                 if ((float)(textSize.Width / textSize.Height) <= maxRatio || textSize.Width > (int)maxWidth)
                 {
                     return textSize;
@@ -2906,7 +2900,7 @@ namespace System.Windows.Forms
 
             flags &= textFormatSupportedFlags;
             // Dont use passed in graphics so we can optimze measurement
-            return TextRenderer.MeasureText(text, font, new Size(System.Int32.MaxValue, System.Int32.MaxValue), flags);
+            return TextRenderer.MeasureText(text, font, new Size(int.MaxValue, int.MaxValue), flags);
         }
 
         /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCell.MeasureTextWidth"]/*' />
@@ -3071,7 +3065,7 @@ namespace System.Windows.Forms
             // get the tool tip string
             string toolTipText = GetToolTipText(rowIndex);
 
-            if (String.IsNullOrEmpty(toolTipText))
+            if (string.IsNullOrEmpty(toolTipText))
             {
                 if (this.FormattedValueType == stringType)
                 {
@@ -3137,7 +3131,7 @@ namespace System.Windows.Forms
                 toolTipText = TruncateToolTipText(toolTipText);
             }
 
-            if (!String.IsNullOrEmpty(toolTipText))
+            if (!string.IsNullOrEmpty(toolTipText))
             {
                 this.DataGridView.ActivateToolTip(true /*activate*/, toolTipText, this.ColumnIndex, rowIndex);
             }
@@ -3161,7 +3155,7 @@ namespace System.Windows.Forms
         private void OnCellErrorAreaMouseEnterInternal(int rowIndex)
         {
             string errorText = GetErrorText(rowIndex);
-            Debug.Assert(!String.IsNullOrEmpty(errorText), "if we entered the cell error area then an error was painted, so we should have an error");
+            Debug.Assert(!string.IsNullOrEmpty(errorText), "if we entered the cell error area then an error was painted, so we should have an error");
             this.DataGridView.ActivateToolTip(true /*activate*/, errorText, this.ColumnIndex, rowIndex);
 
             // for debugging
@@ -4736,7 +4730,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -4790,7 +4784,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -4815,7 +4809,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCellAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.ParentPrivate;
@@ -4906,7 +4899,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCellAccessibleObject.Value"]/*' />
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     if (this.owner == null)
@@ -4916,7 +4908,7 @@ namespace System.Windows.Forms
 
                     object formattedValue = this.owner.FormattedValue;
                     string formattedValueAsString = formattedValue as string;
-                    if (formattedValue == null || (formattedValueAsString  != null && String.IsNullOrEmpty(formattedValueAsString)))
+                    if (formattedValue == null || (formattedValueAsString  != null && string.IsNullOrEmpty(formattedValueAsString)))
                     {
                         return string.Format(SR.DataGridView_AccNullValue);
                     }
@@ -4938,11 +4930,10 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
 
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 set
                 {
                     if (this.owner is DataGridViewHeaderCell)
@@ -4985,7 +4976,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 if (this.owner == null)
@@ -5188,7 +5178,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCellAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 if (this.owner == null)
@@ -5340,7 +5329,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCellAccessibleObject.Select"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags)
             {
                 if (this.owner == null)
@@ -5511,7 +5499,6 @@ namespace System.Windows.Forms
 
             #endregion
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetRowHeaderItems()
             {
                 if (this.owner.DataGridView.RowHeadersVisible && this.owner.OwningRow.HasHeaderCell)
@@ -5522,7 +5509,6 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetColumnHeaderItems()
             {
                 if (this.owner.DataGridView.ColumnHeadersVisible && this.owner.OwningColumn.HasHeaderCell)
@@ -5535,7 +5521,6 @@ namespace System.Windows.Forms
 
             internal override int Row
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.owner.OwningRow != null ? this.owner.OwningRow.Index : -1;
@@ -5544,7 +5529,6 @@ namespace System.Windows.Forms
 
             internal override int Column
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.owner.OwningColumn != null ? this.owner.OwningColumn.Index : -1;
@@ -5553,7 +5537,6 @@ namespace System.Windows.Forms
 
             internal override UnsafeNativeMethods.IRawElementProviderSimple ContainingGrid
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.owner.DataGridView.AccessibilityObject;

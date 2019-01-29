@@ -8,8 +8,6 @@ namespace System.Windows.Forms {
         using System.Runtime.InteropServices;
         using System.Runtime.Remoting;
         using System.ComponentModel;
-        using System.Security;
-        using System.Security.Permissions;
         using System;
         using System.Collections;
         using System.Windows.Forms;
@@ -898,8 +896,8 @@ namespace System.Windows.Forms {
     
                     int newCol = value.ColumnNumber;
                     int newRow = value.RowNumber;
-    
-                    String errorMessage = null;
+
+                string errorMessage = null;
 
                     try {
                         int columnCount = myGridTable.GridColumnStyles.Count;
@@ -3520,7 +3518,7 @@ namespace System.Windows.Forms {
                 int currentRowSaved = currentRow;
                 int currentColSaved = currentCol;
 
-                String errorMessage = null;
+            string errorMessage = null;
 
                 try {
                     listManager.EndCurrentEdit();
@@ -3598,7 +3596,7 @@ namespace System.Windows.Forms {
     
                         ResetParentRows();
     
-                        Set_ListManager(null, String.Empty, true);
+                        Set_ListManager(null, string.Empty, true);
                         if (this.Visible) EndUpdateInternal();
                 }
                 base.OnBindingContextChanged(e);
@@ -4283,7 +4281,7 @@ namespace System.Windows.Forms {
     
                         ResetParentRows();
     
-                        Set_ListManager(null, String.Empty, true);
+                        Set_ListManager(null, string.Empty, true);
                     } finally {
                         gridState[GRIDSTATE_exceptionInPaint] = false;
                         if (this.Visible) EndUpdateInternal();
@@ -5536,7 +5534,7 @@ namespace System.Windows.Forms {
                 DataGridState dgs = new DataGridState();
     
                 string newDataMember;
-                if (String.IsNullOrEmpty(this.DataMember))
+                if (string.IsNullOrEmpty(this.DataMember))
                 {
                     newDataMember = relationName;
                 }
@@ -5618,14 +5616,7 @@ namespace System.Windows.Forms {
                         if (handle != IntPtr.Zero) {
                             cachedScrollableRegion = UnsafeNativeMethods.GetRectsFromRegion(handle);
 
-                            // 
-
-                            IntSecurity.ObjectFromWin32Handle.Assert();
-                            try {
-                                region.ReleaseHrgn(handle);
-                            } finally {
-                                CodeAccessPermission.RevertAssert();
-                            }
+                            region.ReleaseHrgn(handle);
                         }
                     }
                 }
@@ -6798,7 +6789,7 @@ namespace System.Windows.Forms {
             ///       name.
             ///    </para>
             /// </devdoc>
-            public void NavigateTo(int rowNumber, String relationName) {
+            public void NavigateTo(int rowNumber, string relationName) {
                 // do not navigate if AllowNavigation is set to false
                 if (!AllowNavigation)
                     return;
@@ -7300,7 +7291,6 @@ namespace System.Windows.Forms {
             ///       further.
             ///    </para>
             /// </devdoc>
-            [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
             protected override bool ProcessDialogKey(Keys keyData) {
                 Debug.WriteLineIf(CompModSwitches.DataGridKeys.TraceVerbose, "DataGridKeys: ProcessDialogKey " + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(keyData));
                 DataGridRow[] localGridRows = DataGridRows;
@@ -7481,9 +7471,6 @@ namespace System.Windows.Forms {
             ///       Processes keys for grid navigation.
             ///    </para>
             /// </devdoc>
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
             // 
             protected bool ProcessGridKey(KeyEventArgs ke) {
@@ -8035,9 +8022,6 @@ namespace System.Windows.Forms {
             ///    <para>Previews a keyboard message and returns a value indicating if the key was
             ///       consumed.</para>
             /// </devdoc>
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             protected override bool ProcessKeyPreview(ref Message m) {
                 if (m.Msg == NativeMethods.WM_KEYDOWN) {
                     KeyEventArgs ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
@@ -8080,7 +8064,6 @@ namespace System.Windows.Forms {
             ///       Gets a value indicating whether the Tab key should be processed.
             ///    </para>
             /// </devdoc>
-            [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
             protected bool ProcessTabKey(Keys keyData) {
                 if (this.listManager == null || myGridTable == null)
                     return false;
@@ -8116,18 +8099,7 @@ namespace System.Windows.Forms {
                         gridState[GRIDSTATE_editControlChanging] = false;
                     }
     
-                    bool ret = false;
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        ret = base.ProcessDialogKey(ke);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-                    return ret;
+                    return base.ProcessDialogKey(ke);
                 }
     
                 // see if the child relationships can use this TAB key
@@ -8141,21 +8113,7 @@ namespace System.Windows.Forms {
                 if (localRows.Length == 0) {
                     EndEdit();
     
-                    bool ret = false;
-    
-                    // 
-
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        ret = base.ProcessDialogKey(keyData);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-    
-                    return ret;
+                    return base.ProcessDialogKey(keyData);
                 }
     
                 for (int i = 0; i < cols.Count; i ++) {
@@ -8194,21 +8152,7 @@ namespace System.Windows.Forms {
                     if ((this.currentRow == this.DataGridRowsLength -1) && ((keyData & Keys.Shift) == 0)) {
     
                         EndEdit();
-                        bool ret = false;
-    
-                        // 
-
-
-
-                        IntSecurity.ModifyFocus.Assert();
-                        try {
-                            ret = base.ProcessDialogKey(keyData);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
-    
-                        return ret;
+                        return base.ProcessDialogKey(keyData);
                     }
                 }
     
@@ -8249,21 +8193,7 @@ namespace System.Windows.Forms {
                     // then shift - tab should move to the next control on the form
                     if (this.currentRow == 0 && ((keyData & Keys.Shift) == Keys.Shift)) {
                         EndEdit();
-                        bool ret = false;
-    
-                        // 
-
-
-
-                        IntSecurity.ModifyFocus.Assert();
-                        try {
-                            ret = base.ProcessDialogKey(keyData);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
-    
-                        return ret;
+                        return base.ProcessDialogKey(keyData);
                     }
                 }
     
@@ -8552,7 +8482,7 @@ namespace System.Windows.Forms {
                 GridColumnStylesCollection gridCols = gridTable.GridColumnStyles;
     
                 // ]it is possible to have a dataTable w/ an empty string for a name.
-                if (!gridTable.IsDefault && String.Compare(lm.GetListName(), gridTable.MappingName, true, CultureInfo.InvariantCulture) == 0) {
+                if (!gridTable.IsDefault && string.Compare(lm.GetListName(), gridTable.MappingName, true, CultureInfo.InvariantCulture) == 0) {
                     // we will force column creation only at runtime
                     if (gridTable.GridColumnStyles.Count == 0 && !DesignMode) {
                         // we have to create some default columns for each of the propertyDescriptors
@@ -9035,7 +8965,6 @@ namespace System.Windows.Forms {
                     return null;
                 }
 
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                     // We're only handling FirstChild and LastChild here
                     if (GetChildCount() > 0) {

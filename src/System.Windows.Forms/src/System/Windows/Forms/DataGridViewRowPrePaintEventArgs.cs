@@ -136,7 +136,7 @@ namespace System.Windows.Forms
             {
                 if ((value & ~DataGridViewPaintParts.All) != 0)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, "value"));
+                    throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, nameof(value)), nameof(value));
                 }
                 this.paintParts = value;
             }
@@ -280,7 +280,6 @@ namespace System.Windows.Forms
                                     bool isLastVisibleRow)
         {
             Debug.Assert(graphics != null);
-            Debug.Assert(inheritedRowStyle != null);
 
             this.graphics = graphics;
             this.clipBounds = clipBounds;

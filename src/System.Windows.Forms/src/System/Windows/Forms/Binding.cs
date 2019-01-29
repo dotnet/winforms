@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.Collections;
     using System.Globalization;
-    using System.Security.Permissions;
-    using System.Security;
 
     /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding"]/*' />
     /// <devdoc>
@@ -49,7 +47,7 @@ namespace System.Windows.Forms {
         private bool inOnBindingComplete = false;
 
         // formatting stuff
-        private string formatString = String.Empty;
+        private string formatString = string.Empty;
         private IFormatProvider formatInfo = null;
         private object nullValue = null;
         private object dsNullValue = Formatter.GetDefaultDataSourceNullValue(null);
@@ -67,30 +65,30 @@ namespace System.Windows.Forms {
         ///     Initializes a new instance of the <see cref='System.Windows.Forms.Binding'/> class
         ///     that binds a property on the owning control to a property on a data source.
         /// </devdoc>
-        public Binding(string propertyName, Object dataSource, string dataMember) : this(propertyName, dataSource, dataMember, false, 0, null, String.Empty, null) {
+        public Binding(string propertyName, object dataSource, string dataMember) : this(propertyName, dataSource, dataMember, false, 0, null, string.Empty, null) {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding6"]/*' />
-        public Binding(string propertyName, Object dataSource, string dataMember, bool formattingEnabled) : this(propertyName, dataSource, dataMember, formattingEnabled, 0, null, String.Empty, null) {
+        public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled) : this(propertyName, dataSource, dataMember, formattingEnabled, 0, null, string.Empty, null) {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding2"]/*' />
-        public Binding(string propertyName, Object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, null, String.Empty, null) {
+        public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, null, string.Empty, null) {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding3"]/*' />
-        public Binding(string propertyName, Object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, String.Empty, null) {
+        public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, string.Empty, null) {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding5"]/*' />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'formatString' is an appropriate name, since its a string passed to the Format method
-        public Binding(string propertyName, Object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString, null) {
+        public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString, null) {
         }
 
         /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding4"]/*' />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")] // By design (no-one should be subclassing this class)
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'formatString' is an appropriate name, since its a string passed to the Format method
-        public Binding(string propertyName, Object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo) {
+        public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo) {
             this.bindToObject = new BindToObject(this, dataSource, dataMember);
 
             this.propertyName = propertyName;
@@ -143,9 +141,6 @@ namespace System.Windows.Forms {
         DefaultValue(null)
         ]
         public IBindableComponent BindableComponent {
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             get {
                 return this.control;
             }
@@ -161,9 +156,6 @@ namespace System.Windows.Forms {
         DefaultValue(null)
         ]
         public Control Control {
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             get {
                 return this.control as Control;
             }
@@ -351,7 +343,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null)
-                    value = String.Empty;
+                    value = string.Empty;
                 if (!value.Equals(formatString)) {
                     this.formatString = value;
                     if (IsBinding) {
@@ -513,12 +505,12 @@ namespace System.Windows.Forms {
                 }
                 
                 for (int i = 0; i < propInfos.Count; i++) {
-                    if(tempPropInfo==null && String.Equals (propInfos[i].Name, propertyName, StringComparison.OrdinalIgnoreCase)) {
+                    if(tempPropInfo==null && string.Equals (propInfos[i].Name, propertyName, StringComparison.OrdinalIgnoreCase)) {
                         tempPropInfo = propInfos[i];
                         if (tempPropIsNullInfo != null)
                             break;
                     }
-                    if(tempPropIsNullInfo == null && String.Equals (propInfos[i].Name, propertyNameIsNull, StringComparison.OrdinalIgnoreCase)) {
+                    if(tempPropIsNullInfo == null && string.Equals (propInfos[i].Name, propertyNameIsNull, StringComparison.OrdinalIgnoreCase)) {
                         tempPropIsNullInfo = propInfos[i];
                         if (tempPropInfo != null)
                             break;
@@ -544,7 +536,7 @@ namespace System.Windows.Forms {
                 string validateName = "Validating";
                 EventDescriptorCollection eventInfos = TypeDescriptor.GetEvents(control);
                 for (int i = 0; i < eventInfos.Count; i++) {
-                    if(tempValidateInfo==null && String.Equals (eventInfos[i].Name, validateName, StringComparison.OrdinalIgnoreCase)) {
+                    if(tempValidateInfo==null && string.Equals (eventInfos[i].Name, validateName, StringComparison.OrdinalIgnoreCase)) {
                         tempValidateInfo = eventInfos[i];
                         break;
                     }
@@ -577,12 +569,12 @@ namespace System.Windows.Forms {
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")] // Perfectly acceptible when dealing with PropertyDescriptors
-        private Object GetPropValue() {
+        private object GetPropValue() {
             bool isNull = false;
             if (propIsNullInfo != null) {
                 isNull = (bool) propIsNullInfo.GetValue(control);
             }
-            Object value;
+            object value;
             if (isNull) {
                 value = DataSourceNullValue;
             }
@@ -600,7 +592,7 @@ namespace System.Windows.Forms {
 
         private BindingCompleteEventArgs CreateBindingCompleteEventArgs(BindingCompleteContext context, Exception ex) {
             bool cancel = false;
-            string errorText = String.Empty;
+            string errorText = string.Empty;
             BindingCompleteState state = BindingCompleteState.Success;
 
             if (ex != null) {
@@ -614,7 +606,7 @@ namespace System.Windows.Forms {
                 errorText = this.BindToObject.DataErrorText;
 
                 // We should not cancel with an IDataErrorInfo error - we didn't in Everett
-                if (!String.IsNullOrEmpty(errorText)) {
+                if (!string.IsNullOrEmpty(errorText)) {
                     state = BindingCompleteState.DataError;
                 }
             }
@@ -714,7 +706,7 @@ namespace System.Windows.Forms {
                 if (e.Value != null && (e.Value.GetType().IsSubclassOf(type) || e.Value.GetType() == type || e.Value is System.DBNull))
                     return e.Value;
                 // second try: use the TypeConverter
-                TypeConverter typeConverter = TypeDescriptor.GetConverter(value != null ? value.GetType() : typeof(Object));
+                TypeConverter typeConverter = TypeDescriptor.GetConverter(value != null ? value.GetType() : typeof(object));
                 if (typeConverter != null && typeConverter.CanConvertTo(type)) {
                     return typeConverter.ConvertTo(value, type);
                 }
@@ -780,7 +772,7 @@ namespace System.Windows.Forms {
                 if (ret != null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
                     return ret;
                 // second try: use type converter for the desiredType
-                TypeConverter typeConverter = TypeDescriptor.GetConverter(value != null ? value.GetType() : typeof(Object));
+                TypeConverter typeConverter = TypeDescriptor.GetConverter(value != null ? value.GetType() : typeof(object));
                 if (typeConverter != null && typeConverter.CanConvertTo(type)) {
                     ret = typeConverter.ConvertTo(value, type);
                     return ret;
@@ -854,7 +846,7 @@ namespace System.Windows.Forms {
             inPushOrPull = true;
 
             // Get the value from the bound control property
-            Object value = GetPropValue();
+            object value = GetPropValue();
 
             // Attempt to parse the property value into a format suitable for the data source
             try {
@@ -951,7 +943,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool PushData(bool force) {
-            Object dataSourceValue = null;
+            object dataSourceValue = null;
             Exception lastException = null;
 
             // Don't push if update mode is 'Never' (unless caller is FORCING us to push)
@@ -1026,7 +1018,7 @@ namespace System.Windows.Forms {
             PullData(/*reformat:*/ true, /*force:*/ true);
         }
 
-        private void SetPropValue(Object value) {
+        private void SetPropValue(object value) {
             // we will not pull the data from the back end into the control
             // when the control is in design time. this is because if we bind a boolean property on a control
             // to a row that is full of DBNulls then we cause problems in the shell.
@@ -1073,7 +1065,7 @@ namespace System.Windows.Forms {
             return this.dsNullValueSet && this.dsNullValue != Formatter.GetDefaultDataSourceNullValue(null);
         }
 
-        private void Target_PropertyChanged(Object sender, EventArgs e) {
+        private void Target_PropertyChanged(object sender, EventArgs e) {
             if (inSetPropValue)
                 return;
 
@@ -1102,7 +1094,7 @@ namespace System.Windows.Forms {
         // NOTE: If no error occurs, we MUST leave e.Cancel alone, to respect any value put in there
         // by event handlers high up the event chain.
         //
-        private void Target_Validate(Object sender, CancelEventArgs e) {
+        private void Target_Validate(object sender, CancelEventArgs e) {
             try {
                 if (PullData(true)) {
                     e.Cancel = true;

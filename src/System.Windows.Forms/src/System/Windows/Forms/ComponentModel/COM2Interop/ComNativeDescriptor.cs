@@ -86,7 +86,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return new ComTypeDescriptor(this, instance);
         }
 
-        internal string GetClassName(Object component) {
+        internal string GetClassName(object component) {
 
             string name = null;
 
@@ -123,15 +123,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return "";
         }
         
-        internal TypeConverter GetConverter(Object component) {
+        internal TypeConverter GetConverter(object component) {
             return TypeDescriptor.GetConverter(typeof(IComponent));
         }
         
-        internal Object GetEditor(Object component, Type baseEditorType) {
+        internal object GetEditor(object component, Type baseEditorType) {
             return TypeDescriptor.GetEditor(component.GetType(), baseEditorType);
         }
 
-        internal string GetName(Object component) {
+        internal string GetName(object component) {
 
             if (!(component is UnsafeNativeMethods.IDispatch)) {
                 return "";
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return "";
         }
 
-        internal Object GetPropertyValue(Object component, string propertyName, ref bool succeeded) {
+        internal object GetPropertyValue(object component, string propertyName, ref bool succeeded) {
 
             if (!(component is UnsafeNativeMethods.IDispatch)) {
                 return null;
@@ -173,11 +173,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return GetPropertyValue(component, dispid[0], ref succeeded);
         }
 
-        internal Object GetPropertyValue(Object component, int dispid, ref bool succeeded) {
+        internal object GetPropertyValue(object component, int dispid, ref bool succeeded) {
             if (!(component is UnsafeNativeMethods.IDispatch)) {
                 return null;
             }
-            Object[] pVarResult = new Object[1];
+            object[] pVarResult = new object[1];
             if (GetPropertyValue(component, dispid, pVarResult) == NativeMethods.S_OK) {
                 succeeded = true;
                 return pVarResult[0];
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        internal int GetPropertyValue(Object component, int dispid, Object[] retval) {
+        internal int GetPropertyValue(object component, int dispid, object[] retval) {
             if (!(component is UnsafeNativeMethods.IDispatch)) {
                 return NativeMethods.E_NOINTERFACE;
             }
@@ -233,7 +233,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Checks if the given dispid matches the dispid that the Object would like to specify
         /// as its identification proeprty (Name, ID, etc).
         /// </devdoc>
-        internal bool IsNameDispId(Object obj, int dispid) {
+        internal bool IsNameDispId(object obj, int dispid) {
             if (obj == null || !obj.GetType().IsCOMObject) {
                 return false;
             }
@@ -244,7 +244,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         /// Checks all our property manages to see if any have become invalid.
         /// </devdoc>
-        private void CheckClear(Object component) {
+        private void CheckClear(object component) {
             
             // walk the list every so many calls
             if ((++clearCount % CLEAR_INTERVAL) == 0) {
@@ -293,7 +293,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         /// Gets the properties manager for an Object.
         /// </devdoc>
-        private Com2Properties GetPropsInfo(Object component) {
+        private Com2Properties GetPropsInfo(object component) {
             // check caches if necessary
             //
             CheckClear(component);
@@ -319,12 +319,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         /// Got attributes?
         /// </devdoc>
-        internal AttributeCollection GetAttributes(Object component) {
+        internal AttributeCollection GetAttributes(object component) {
 
             ArrayList attrs = new ArrayList();
 
             if (component is NativeMethods.IManagedPerPropertyBrowsing) {
-                Object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((NativeMethods.IManagedPerPropertyBrowsing)component, NativeMethods.MEMBERID_NIL);
+                object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((NativeMethods.IManagedPerPropertyBrowsing)component, NativeMethods.MEMBERID_NIL);
                 for (int i = 0; i < temp.Length; ++i) {
                     attrs.Add(temp[i]);
                 }
@@ -349,7 +349,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         /// Default Property, please
         /// </devdoc>
-        internal PropertyDescriptor GetDefaultProperty(Object component) {
+        internal PropertyDescriptor GetDefaultProperty(object component) {
             CheckClear(component);
 
             Com2Properties propsInfo = GetPropsInfo(component);
@@ -359,15 +359,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return null;
         }
 
-        internal EventDescriptorCollection GetEvents(Object component) {
+        internal EventDescriptorCollection GetEvents(object component) {
             return new EventDescriptorCollection(null);
         }
 
-        internal EventDescriptorCollection GetEvents(Object component, Attribute[] attributes) {
+        internal EventDescriptorCollection GetEvents(object component, Attribute[] attributes) {
             return new EventDescriptorCollection(null);
         }
 
-        internal EventDescriptor GetDefaultEvent(Object component) {
+        internal EventDescriptor GetDefaultEvent(object component) {
             return null;
         }
 
@@ -375,7 +375,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Props!
         /// </devdoc>
         [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
-        internal PropertyDescriptorCollection GetProperties(Object component, Attribute[] attributes) {
+        internal PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) {
             
             Com2Properties propsInfo = GetPropsInfo(component);
 
@@ -437,16 +437,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Looks at at value's type and creates an editor based on that.  We use this to decide which editor to use
         /// for a generic variant.
         /// </devdoc>
-        internal static void ResolveVariantTypeConverterAndTypeEditor(Object propertyValue, ref TypeConverter currentConverter, Type editorType, ref Object currentEditor) {
+        internal static void ResolveVariantTypeConverterAndTypeEditor(object propertyValue, ref TypeConverter currentConverter, Type editorType, ref object currentEditor) {
 
-            Object curValue = propertyValue;
+            object curValue = propertyValue;
             if (curValue != null && curValue != null && !Convert.IsDBNull(curValue)){
                   Type t = curValue.GetType();
                   TypeConverter subConverter = TypeDescriptor.GetConverter(t);
                   if (subConverter != null && subConverter.GetType() != typeof(TypeConverter)){
                      currentConverter = subConverter;
                   }
-                  Object subEditor = TypeDescriptor.GetEditor(t, editorType);
+                object subEditor = TypeDescriptor.GetEditor(t, editorType);
                   if (subEditor != null) {
                      currentEditor = subEditor;
                   }

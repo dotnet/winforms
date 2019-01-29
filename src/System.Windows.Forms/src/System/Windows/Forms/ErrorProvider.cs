@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Windows.Forms.Design;
     using System.Windows.Forms.Internal;    
-    using System.Security.Permissions;
     using System.Runtime.Versioning;
 
     /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider"]/*' />
@@ -193,8 +192,6 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ErrorProviderContainerControlDescr))
         ]
         public ContainerControl ContainerControl {
-            [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
-            [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
             get {
                 return parentControl;
             }
@@ -338,7 +335,7 @@ namespace System.Windows.Forms {
                 return dataSource;
             }
             set {
-                if (parentControl != null && value != null && !String.IsNullOrEmpty(this.dataMember)) {
+                if (parentControl != null && value != null && !string.IsNullOrEmpty(this.dataMember)) {
                     // Let's check if the datamember exists in the new data source
                     try {
                         errorManager = parentControl.BindingContext[value, this.dataMember];
@@ -420,7 +417,7 @@ namespace System.Windows.Forms {
             Binding binding = e.Binding;
 
             if (binding != null && binding.Control != null) {
-                SetError(binding.Control, (e.ErrorText == null ? String.Empty : e.ErrorText));
+                SetError(binding.Control, (e.ErrorText == null ? string.Empty : e.ErrorText));
             }
         }
 
@@ -507,7 +504,7 @@ namespace System.Windows.Forms {
                     outputError = (string) controlError[errBindings[j].Control];
 
                 // Utilize the error string without including the field name.
-                if (String.IsNullOrEmpty(outputError)) {
+                if (string.IsNullOrEmpty(outputError)) {
                     outputError = error;
                 } else {
                     outputError = string.Concat(outputError, "\r\n", error);
@@ -916,7 +913,7 @@ namespace System.Windows.Forms {
                         return false;
                     }
                     CreateParams cparams = new CreateParams();
-                    cparams.Caption = String.Empty;
+                    cparams.Caption = string.Empty;
                     cparams.Style = NativeMethods.WS_VISIBLE | NativeMethods.WS_CHILD;
                     cparams.ClassStyle = NativeMethods.CS_DBLCLKS;
                     cparams.X = 0;
@@ -1061,7 +1058,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     This is called when an error icon is flashing, and the view needs to be updatd.
             /// </devdoc>
-            void OnTimer(Object sender, EventArgs e) {
+            void OnTimer(object sender, EventArgs e) {
                 int blinkPhase = 0;
                 for (int i = 0; i < items.Count; i++) {
                     blinkPhase += ((ControlItem)items[i]).BlinkPhase;
@@ -1310,7 +1307,7 @@ namespace System.Windows.Forms {
             public ControlItem(ErrorProvider provider, Control control, IntPtr id) {
                 this.toolTipShown = false;
                 this.iconAlignment = defaultIconAlignment;
-                this.error = String.Empty;
+                this.error = string.Empty;
                 this.id = id;
                 this.control = control;
                 this.provider = provider;
@@ -1583,11 +1580,11 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     This is called when a property on the control is changed.
             /// </devdoc>
-            void OnBoundsChanged(Object sender, EventArgs e) {
+            void OnBoundsChanged(object sender, EventArgs e) {
                 UpdateWindow();
             }
 
-            void OnParentVisibleChanged(Object sender, EventArgs e) {
+            void OnParentVisibleChanged(object sender, EventArgs e) {
                 this.BlinkPhase = 0;
                 RemoveFromWindow();
                 AddToWindow();
@@ -1597,7 +1594,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     This is called when the control's handle is created.
             /// </devdoc>
-            void OnCreateHandle(Object sender, EventArgs e) {
+            void OnCreateHandle(object sender, EventArgs e) {
                 AddToWindow();
             }
 
@@ -1605,7 +1602,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     This is called when the control's handle is destroyed.
             /// </devdoc>
-            void OnDestroyHandle(Object sender, EventArgs e) {
+            void OnDestroyHandle(object sender, EventArgs e) {
                 RemoveFromWindow();
             }
         }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,8 +10,6 @@ using System.Drawing;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Printing;
 using System.Windows.Forms;
-using System.Security.Permissions;
-using System.Security;
 using System.Runtime.InteropServices;
 using System.Net;
 using System.Text;
@@ -27,8 +25,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust"),
-    PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust"),
     DefaultProperty(nameof(Url)), DefaultEvent(nameof(DocumentCompleted)),
     Docking(DockingBehavior.AutoDock),
     SRDescription(nameof(SR.DescriptionWebBrowser)),
@@ -70,7 +66,6 @@ namespace System.Windows.Forms {
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser'/> control.
         ///     </para>
         /// </devdoc>
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public WebBrowser() : base("8856f961-340a-11d0-a96b-00c04fd705a2") {
                 CheckIfCreatedInIE();
     
@@ -607,7 +602,7 @@ namespace System.Windows.Forms {
         public Uri Url {
             get {
                 string urlString = this.AxIWebBrowser2.LocationURL;
-                //NOTE: If we weren't going to require FullTrust, we'd need to require permissions here
+
                 if (string.IsNullOrEmpty(urlString))
                 {
                     return null;
@@ -845,8 +840,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void Print() {
-            IntSecurity.DefaultPrinting.Demand();
-
             object nullObjectArray = null;
             try
             {
@@ -947,8 +940,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowPageSetupDialog() {
-            IntSecurity.SafePrinting.Demand();
-
             object nullObjectArray = null;
             try {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PAGESETUP, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
@@ -968,8 +959,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowPrintDialog() {
-            IntSecurity.SafePrinting.Demand();
-
             object nullObjectArray = null;
             
             try {
@@ -989,8 +978,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowPrintPreviewDialog() {
-            IntSecurity.SafePrinting.Demand();
-
             object nullObjectArray = null;
             
             try {
@@ -1031,8 +1018,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowSaveAsDialog() {
-            IntSecurity.FileDialogSaveFile.Demand();
-
             object nullObjectArray = null;
             
             try {
@@ -1685,8 +1670,7 @@ namespace System.Windows.Forms {
         /// method in the WebBrowser class. 
         ///     </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         ComVisible(false)]
+        [ComVisible(false)]
         protected class WebBrowserSite : WebBrowserSiteBase, UnsafeNativeMethods.IDocHostUIHandler
         {
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.WebBrowserSite"]/*' />
@@ -1695,7 +1679,6 @@ namespace System.Windows.Forms {
             /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser.WebBrowserSite'/> class.
             ///     </para>
             /// </devdoc>
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             public WebBrowserSite(WebBrowser host) : base(host) {
             }
 

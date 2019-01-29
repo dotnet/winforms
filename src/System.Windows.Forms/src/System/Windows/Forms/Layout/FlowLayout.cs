@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Layout {
             if(!wrapContents) {
                 // pretend that the container is infinitely wide to prevent wrapping.
                 // DisplayRectangle.Right is Width + X - subtract X to prevent overflow.
-                displayRect.Width = Int32.MaxValue - displayRect.X;
+                displayRect.Width = int.MaxValue - displayRect.X;
             }
 
             for(int i = 0; i < container.Children.Count;) {
@@ -180,7 +180,7 @@ namespace System.Windows.Forms.Layout {
                 //
                 Size prefSize;
                 if(elementProxy.AutoSize) {
-                    Size elementConstraints = new Size(Int32.MaxValue, rowBounds.Height - elementProxy.Margin.Size.Height);
+                    Size elementConstraints = new Size(int.MaxValue, rowBounds.Height - elementProxy.Margin.Size.Height);
                     if(i == startIndex) {
                         // If the element is the first in the row, attempt to pack it to the row width.  (If its not 1st, it will wrap
                         // to the first on the next row if its too long and then be packed if needed by the next call to xLayoutRow).

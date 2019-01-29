@@ -5,7 +5,6 @@
 namespace System.Windows.Forms{
     using System.Runtime.Remoting;
     using System;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Drawing;
@@ -45,7 +44,6 @@ namespace System.Windows.Forms{
         }
 
         /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.WndProc"]/*' />
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             // but what if we get a CtrlV?
             // what about deleting from the menu?
@@ -88,7 +86,6 @@ namespace System.Windows.Forms{
         }
 
         /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.ProcessKeyMessage"]/*' />
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected internal override bool ProcessKeyMessage(ref Message m)
         {
             Keys key = (Keys)unchecked((int)(long)m.WParam);

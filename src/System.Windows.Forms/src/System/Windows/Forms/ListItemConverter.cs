@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
                 //
                 for(int i=1; i < item.SubItems.Count; ++i) {
                     if (item.SubItems[i].CustomStyle) {
-                        if (!String.IsNullOrEmpty(item.ImageKey)) {
+                        if (!string.IsNullOrEmpty(item.ImageKey)) {
                             ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string)});
                             if (ctor != null) {
                                 ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
                 // ForeColor, BackColor or ItemFont set
                 //
                 if (item.SubItems[0].CustomStyle) {
-                    if (!String.IsNullOrEmpty(item.ImageKey)) {
+                    if (!string.IsNullOrEmpty(item.ImageKey)) {
                         ctor = typeof(ListViewItem).GetConstructor(new Type[] {
                             typeof(string[]),
                             typeof(string),
@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
 
                 // Text
                 //
-                if (item.ImageIndex == -1 && String.IsNullOrEmpty(item.ImageKey) && item.SubItems.Count <= 1) {
+                if (item.ImageIndex == -1 && string.IsNullOrEmpty(item.ImageKey) && item.SubItems.Count <= 1) {
                     ctor = typeof(ListViewItem).GetConstructor(new Type[] {typeof(string)});
                     if (ctor != null) {
                         return new InstanceDescriptor(ctor, new object[] {item.Text}, false);
@@ -139,7 +139,7 @@ namespace System.Windows.Forms {
                 // Text and Image
                 //
                 if (item.SubItems.Count <= 1) {
-                    if (!String.IsNullOrEmpty(item.ImageKey)) {
+                    if (!string.IsNullOrEmpty(item.ImageKey)) {
                         ctor = typeof(ListViewItem).GetConstructor(new Type[] {
                             typeof(string),
                             typeof(string)});
@@ -158,7 +158,7 @@ namespace System.Windows.Forms {
 
                 // Text, Image and SubItems
                 //
-                if (!String.IsNullOrEmpty(item.ImageKey)) {
+                if (!string.IsNullOrEmpty(item.ImageKey)) {
                     ctor = typeof(ListViewItem).GetConstructor(new Type[] {
                         typeof(string[]),
                         typeof(string)});

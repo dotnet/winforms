@@ -290,7 +290,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         PropertyDescriptor[] pdList = (PropertyDescriptor[])sortedMergedEntries[start + offset];
                         PropertyDescriptor pd = pdList[0];
                         string sortString = pd.Name + " " + pd.PropertyType.FullName;
-                        int result = String.Compare(entryName, sortString, false, CultureInfo.InvariantCulture);
+                        int result = string.Compare(entryName, sortString, false, CultureInfo.InvariantCulture);
                         if (result == 0) {
                             mergedEntryList = pdList;
                             break;
@@ -332,11 +332,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return 1;
                 }
 
-                int result = String.Compare(a1.Name, a2.Name, false, CultureInfo.InvariantCulture);
+                int result = string.Compare(a1.Name, a2.Name, false, CultureInfo.InvariantCulture);
 
                 if (result == 0) {
                     // 
-                    result = String.Compare(a1.PropertyType.FullName, a2.PropertyType.FullName, true, System.Globalization.CultureInfo.CurrentCulture);
+                    result = string.Compare(a1.PropertyType.FullName, a2.PropertyType.FullName, true, System.Globalization.CultureInfo.CurrentCulture);
                 }
                 return result;
             }

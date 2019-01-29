@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -17,8 +17,6 @@ namespace System.Windows.Forms.VisualStyles {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\visualStyleRenderer.uex' path='docs/doc[@for="visualStyleRenderer"]/*' />
     /// <devdoc>
@@ -47,6 +45,15 @@ namespace System.Windows.Forms.VisualStyles {
             SystemEvents.UserPreferenceChanging += new UserPreferenceChangingEventHandler(OnUserPreferenceChanging);
         }
 
+        /// <summary>
+        /// Check if visual styles is supported for client area.
+        /// </summary>
+        private static bool AreClientAreaVisualStylesSupported {
+            get {
+                return (VisualStyleInformation.IsEnabledByUser &&
+                   ((Application.VisualStyleState & VisualStyleState.ClientAreaEnabled) == VisualStyleState.ClientAreaEnabled));
+            }
+        }
 
         /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.IsSupported"]/*' />
         /// <devdoc>
@@ -59,11 +66,8 @@ namespace System.Windows.Forms.VisualStyles {
         /// </devdoc>
         public static bool IsSupported {
             get {
-                bool supported =  (VisualStyleInformation.IsEnabledByUser &&
-                   (Application.VisualStyleState == VisualStyleState.ClientAreaEnabled ||
-                    Application.VisualStyleState == VisualStyleState.ClientAndNonClientAreasEnabled));
+                bool supported = AreClientAreaVisualStylesSupported;
 
-                
                 if (supported) {
                     // In some cases, this check isn't enough, since the theme handle creation
                     // could fail for some other reason. Try creating a theme handle here - if successful, return true,
@@ -337,7 +341,7 @@ namespace System.Windows.Forms.VisualStyles {
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges,(UInt32)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal))) {
+            if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges,(uint)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal))) {
                 throw new InvalidEnumArgumentException(nameof(edges), (int)edges, typeof(Edges));
             }
 
@@ -345,7 +349,7 @@ namespace System.Windows.Forms.VisualStyles {
                 throw new InvalidEnumArgumentException(nameof(style), (int)style, typeof(EdgeStyle));
             }
 
-            if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (UInt32)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono))) {
+            if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (uint)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono))) {
                 throw new InvalidEnumArgumentException(nameof(effects), (int)effects, typeof(EdgeEffects));
             }
 
@@ -486,7 +490,7 @@ namespace System.Windows.Forms.VisualStyles {
             
             int disableFlag = drawDisabled?0x1:0;
             
-            if (!String.IsNullOrEmpty(textToDraw)) {
+            if (!string.IsNullOrEmpty(textToDraw)) {
                 using( WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper( dc, AllGraphicsProperties ) ) {
                     HandleRef hdc = new HandleRef( wgr, wgr.WindowsGraphics.DeviceContext.Hdc );
                     lastHResult = SafeNativeMethods.DrawThemeText( new HandleRef( this, Handle ), hdc, part, state, textToDraw, textToDraw.Length, (int) flags, disableFlag, new NativeMethods.COMRECT( bounds ) );
@@ -550,8 +554,6 @@ namespace System.Windows.Forms.VisualStyles {
         ///       [See win32 equivalent.]
         ///    </para>
         /// </devdoc>
-        [SuppressUnmanagedCodeSecurity, 
-         SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         public Region GetBackgroundRegion(IDeviceContext dc, Rectangle bounds) {
             if (dc == null) {
                 throw new ArgumentNullException(nameof(dc));
@@ -683,12 +685,6 @@ namespace System.Windows.Forms.VisualStyles {
 
             //check for a failed HR.
             if (NativeMethods.Succeeded(lastHResult)) {
-
-
-                // 
-
-
-                IntSecurity.ObjectFromWin32Handle.Assert();
                 try {
                     font = Font.FromLogFont(logfont);
                 }
@@ -862,7 +858,7 @@ namespace System.Windows.Forms.VisualStyles {
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            if (String.IsNullOrEmpty(textToDraw)) {
+            if (string.IsNullOrEmpty(textToDraw)) {
                 throw new ArgumentNullException(nameof(textToDraw));
             }
 
@@ -887,7 +883,7 @@ namespace System.Windows.Forms.VisualStyles {
                 throw new ArgumentNullException(nameof(dc));
             }
             
-            if (String.IsNullOrEmpty(textToDraw)) {
+            if (string.IsNullOrEmpty(textToDraw)) {
                 throw new ArgumentNullException(nameof(textToDraw));
             }
 
@@ -1051,12 +1047,6 @@ namespace System.Windows.Forms.VisualStyles {
             if (themeHandles != null) {
                 string[] classNames = new string[themeHandles.Keys.Count];
                 themeHandles.Keys.CopyTo(classNames, 0);
-
-                // We don't call IsSupported here, since that could cause RefreshCache to be called again,
-                // leading to stack overflow.
-                bool isSupported = (VisualStyleInformation.IsEnabledByUser &&
-                   (Application.VisualStyleState == VisualStyleState.ClientAreaEnabled ||
-                    Application.VisualStyleState == VisualStyleState.ClientAndNonClientAreasEnabled));
                 
                 foreach (string className in classNames) {
                     tHandle = (ThemeHandle) themeHandles[className];
@@ -1064,7 +1054,9 @@ namespace System.Windows.Forms.VisualStyles {
                         tHandle.Dispose();
                     }
 
-                    if (isSupported) {
+                    // We don't call IsSupported here, since that could cause RefreshCache to be called again,
+                    // leading to stack overflow.
+                    if (AreClientAreaVisualStylesSupported) {
                         tHandle = ThemeHandle.Create(className, false);
                         if (tHandle != null) {
                             themeHandles[className] = tHandle;

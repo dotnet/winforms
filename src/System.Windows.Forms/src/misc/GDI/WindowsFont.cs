@@ -18,7 +18,6 @@ namespace System.Experimental.Gdi
     using System.Drawing;
     using System.Drawing.Text;
     using System.Security;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Runtime.Versioning;
 
@@ -363,9 +362,9 @@ namespace System.Experimental.Gdi
         public override int GetHashCode() 
         {
             // similar to Font.GetHashCode().
-            return (int)((((UInt32)this.Style   << 13) | ((UInt32)this.Style   >> 19)) ^
-                         (((UInt32)this.CharSet << 26) | ((UInt32)this.CharSet >>  6)) ^
-                         (((UInt32)this.Size    <<  7) | ((UInt32)this.Size    >> 25)));
+            return (int)((((uint)this.Style   << 13) | ((uint)this.Style   >> 19)) ^
+                         (((uint)this.CharSet << 26) | ((uint)this.CharSet >>  6)) ^
+                         (((uint)this.Size    <<  7) | ((uint)this.Size    >> 25)));
         }
 
         /// <devdoc>

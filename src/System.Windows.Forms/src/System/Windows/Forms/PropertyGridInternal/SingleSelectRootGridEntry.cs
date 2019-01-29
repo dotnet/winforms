@@ -20,7 +20,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
     internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry {
         protected object             objValue;
-        protected String             objValueClassName;
+        protected string objValueClassName;
         protected GridEntry          propDefault;
         protected IDesignerHost      host;
         protected IServiceProvider baseProvider = null;

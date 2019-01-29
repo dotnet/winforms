@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Dependencies>
-  <ProductDependencies></ProductDependencies>
+  <ProductDependencies>
+    <Dependency Name="Microsoft.Win32.Registry" Version="4.6.0-preview.19073.11">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
+    </Dependency>
+    <Dependency Name="System.Configuration.ConfigurationManager" Version="4.6.0-preview.19073.11">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
+    </Dependency>
+    <Dependency Name="System.Drawing.Common" Version="4.6.0-preview.19073.11">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
+    </Dependency>
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="4.6.0-preview.19073.11">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
+    </Dependency>
+    <Dependency Name="System.Security.Cryptography.Cng" Version="4.6.0-preview.19073.11">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
+    </Dependency>
+    <Dependency Name="System.CodeDom" Version="4.6.0-preview.19073.11">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
+    </Dependency>
+    <Dependency Name="System.Security.Permissions" Version="4.6.0-preview.19073.11">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
+    </Dependency>
+    <Dependency Name="System.Windows.Extensions" Version="4.6.0-preview.19073.11">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>351ca391579740ae8af8a5405cffa16d152ad6b2</Sha>
+    </Dependency>
+  </ProductDependencies>
   <ToolsetDependencies>
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.18630.2">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19073.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>96c87ddd97d9c562ef77f1e4606a0dbb000ab644</Sha>
+      <Sha>af8ab7d7ca13d5f129c31cfa7aeda19f6d168e6e</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>

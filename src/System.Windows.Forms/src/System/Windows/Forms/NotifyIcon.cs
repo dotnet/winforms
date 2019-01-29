@@ -467,7 +467,7 @@ namespace System.Windows.Forms {
             if (disposing) {
                 if (window != null) {
                     this.icon = null;
-                    this.Text = String.Empty;
+                    this.Text = string.Empty;
                     UpdateIcon(false);
                     window.DestroyHandle();
                     window = null;
@@ -686,7 +686,6 @@ namespace System.Windows.Forms {
                 if (DesignMode) {
                    return;
                 }
-                IntSecurity.UnrestrictedWindows.Demand();
 
                 NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA();
                 if (window.Handle == IntPtr.Zero) {
@@ -758,8 +757,6 @@ namespace System.Windows.Forms {
                 if (DesignMode) {
                     return;
                 }
-
-                IntSecurity.UnrestrictedWindows.Demand();
 
                 window.LockReference(showIconInTray);
 

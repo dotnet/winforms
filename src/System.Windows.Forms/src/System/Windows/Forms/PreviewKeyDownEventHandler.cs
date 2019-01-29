@@ -2,21 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-
-
-    /// <include file='doc\PreviewKeyDownEventHandler.uex' path='docs/doc[@for="PreviewKeyDownEventHandler"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Represents the method that will handle PreviewKeyDown events.
-    ///    </para>
+    /// Represents the method that will handle PreviewKeyDown events.
     /// </devdoc>
     public delegate void PreviewKeyDownEventHandler(object sender, PreviewKeyDownEventArgs e);
 }
-

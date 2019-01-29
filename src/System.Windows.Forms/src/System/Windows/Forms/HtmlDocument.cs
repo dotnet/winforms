@@ -13,13 +13,11 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Permissions;
 
 
 namespace System.Windows.Forms
 {
     /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument"]/*' />
-    [PermissionSetAttribute(SecurityAction.LinkDemand, Name = "FullTrust")]
     public sealed class HtmlDocument
     {
         internal static object EventClick = new object();
@@ -36,7 +34,6 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IHTMLDocument2 htmlDocument2;
         private HtmlShimManager shimManager;
 
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         internal HtmlDocument(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLDocument doc)
         {
             this.htmlDocument2 = (UnsafeNativeMethods.IHTMLDocument2)doc;
@@ -712,7 +709,7 @@ namespace System.Windows.Forms
             {
                 if (oColor is string)
                 {
-                    string strColor = oColor as String;
+                    string strColor = oColor as string;
                     int index = strColor.IndexOf('#');
                     if (index >= 0)
                     {

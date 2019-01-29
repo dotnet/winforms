@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
-    using System.Security.Permissions;
     using System.Drawing;
     using System.Collections;
     using Microsoft.Win32;
@@ -210,7 +209,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_STATUSBAR;
@@ -1152,7 +1150,6 @@ namespace System.Windows.Forms {
         ///       for any messages that they don't handle.
         ///    </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_NCHITTEST:
@@ -1430,7 +1427,7 @@ namespace System.Windows.Forms {
            /// <devdoc>
            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
            /// </devdoc>
-           public virtual int  IndexOfKey(String key) {
+           public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                   if (string.IsNullOrEmpty(key)){
                         return -1; // we dont support empty or null keys.
@@ -1626,7 +1623,6 @@ namespace System.Windows.Forms {
         ///     this control binds to rectangular regions, instead of
         ///     full controls.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         private class ControlToolTip {
 
             /// <include file='doc\StatusBar.uex' path='docs/doc[@for="Tool"]/*' />

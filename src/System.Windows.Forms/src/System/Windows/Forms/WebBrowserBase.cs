@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,7 +14,6 @@ using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Reflection;
 using System.Globalization;
-using System.Security.Permissions;
 using Microsoft.Win32;
 using System.Collections.Specialized;
 using System.IO;
@@ -46,8 +45,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    PermissionSetAttribute(SecurityAction.LinkDemand, Name="FullTrust"),
-    PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust"),
     DefaultProperty(nameof(Name)), DefaultEvent(nameof(Enter)),
     Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
     public class WebBrowserBase : Control {
@@ -123,7 +120,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ActiveXInstance"]/*' />
         /// <devdoc>
         ///     <para>
-        /// Returns the native webbrowser object that this control wraps. Needs FullTrust to access.
+        /// Returns the native webbrowser object that this control wraps.
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -137,7 +134,6 @@ namespace System.Windows.Forms {
         // Virtual methods:
         //
         // The following are virtual methods that derived-classes can override
-        // (only in full-trust though).
         //
         
         //
@@ -264,7 +260,6 @@ namespace System.Windows.Forms {
         }
 
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [UIPermission(SecurityAction.LinkDemand, Window = UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
@@ -373,7 +368,6 @@ namespace System.Windows.Forms {
         //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ProcessMnemonic"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             bool processed = false;
 
@@ -389,7 +383,7 @@ namespace System.Windows.Forms {
                         NativeMethods.MSG msg = new NativeMethods.MSG();
                         msg.hwnd = IntPtr.Zero;
                         msg.message = NativeMethods.WM_SYSKEYDOWN;
-                        msg.wParam = (IntPtr) Char.ToUpper(charCode, CultureInfo.CurrentCulture);
+                        msg.wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture);
                         msg.lParam = (IntPtr) 0x20180001;
                         msg.time = SafeNativeMethods.GetTickCount();
                         NativeMethods.POINT p = new NativeMethods.POINT();
@@ -418,9 +412,6 @@ namespace System.Windows.Forms {
         // others are first processed by the wndproc of Control
         //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.WndProc"]/*' />
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         PermissionSetAttribute(SecurityAction.LinkDemand, Name="FullTrust"),
-         PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust")]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 //
@@ -742,7 +733,7 @@ namespace System.Windows.Forms {
             int hr = this.axOleObject.DoVerb(verb, IntPtr.Zero, this.ActiveXSite, 0, this.Handle,
                     new NativeMethods.COMRECT(this.Bounds));
 
-            Debug.Assert(hr == NativeMethods.S_OK, String.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
+            Debug.Assert(hr == NativeMethods.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
             return hr == NativeMethods.S_OK;
         }
 
@@ -1115,7 +1106,7 @@ namespace System.Windows.Forms {
         //
         // We need to do special stuff (convert window messages to interface calls)
         // during design time when selection changes.
-        private void OnNewSelection(Object sender, EventArgs e) {
+        private void OnNewSelection(object sender, EventArgs e) {
             if (this.DesignMode) {
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
                 if (iss != null) {

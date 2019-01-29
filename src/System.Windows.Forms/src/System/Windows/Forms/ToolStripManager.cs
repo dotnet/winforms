@@ -15,8 +15,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
     using System.Globalization;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager"]/*' />
     public sealed class ToolStripManager {
@@ -117,12 +115,11 @@ namespace System.Windows.Forms {
         /// <devdoc> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </devdoc>        
-        [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
         public static ToolStrip FindToolStrip(string toolStripName) {
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++) {
                 // is this the right string comparaison?
-                if (ToolStrips[i] != null && String.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal)) {
+                if (ToolStrips[i] != null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal)) {
                     result = (ToolStrip)ToolStrips[i];
                     break;
                 }
@@ -134,14 +131,13 @@ namespace System.Windows.Forms {
         /// <devdoc> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </devdoc>        
-        [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
         internal static ToolStrip FindToolStrip(Form owningForm, string toolStripName)
         {
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++)
             {
                 // is this the right string comparaison?
-                if (ToolStrips[i] != null && String.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
+                if (ToolStrips[i] != null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
                 {
                     result = (ToolStrip)ToolStrips[i];
                     if (result.FindForm() == owningForm) {
@@ -435,7 +431,6 @@ namespace System.Windows.Forms {
                 }
                 return defaultRenderer;
             }
-            [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
             set {
                 /// 
 
@@ -491,7 +486,6 @@ namespace System.Windows.Forms {
                 }
                 return ToolStripManagerRenderMode.Custom;
             }
-            [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
             set {
 
                 /// 
@@ -520,7 +514,6 @@ namespace System.Windows.Forms {
             get {
                 return visualStylesEnabledIfPossible && Application.RenderWithVisualStyles;
             }
-            [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
             set {
                 bool oldVis = VisualStylesEnabled;
                 visualStylesEnabledIfPossible = value;
@@ -625,7 +618,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(targetForm));
             }
 
-            if (String.IsNullOrEmpty(key)) {
+            if (string.IsNullOrEmpty(key)) {
                 throw new ArgumentNullException(nameof(key));
             }
 
@@ -653,7 +646,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(sourceForm));
             }
 
-            if (String.IsNullOrEmpty(key)) {
+            if (string.IsNullOrEmpty(key)) {
                 throw new ArgumentNullException(nameof(key));
             }
 
@@ -1327,7 +1320,7 @@ namespace System.Windows.Forms {
                        try {
                            callingStack = Environment.StackTrace;
                        }
-                       catch (SecurityException) {
+                       catch (System.Security.SecurityException) {
                        }
 #endif
                 }
@@ -1663,7 +1656,7 @@ namespace System.Windows.Forms {
                         // only activate the menu if there's no win32 menu.  Win32 menus trump menustrips.
                         menuStripToActivate = GetMainMenuStrip(toplevelControl);
                     }
-                    Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
+                    Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
 
                 }
             }

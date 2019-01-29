@@ -4,13 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\ListViewItemSelectionChangedEventHandler.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventHandler"]/*' />
     /// <devdoc>
-    ///    <para>
-    ///       Represents the method that will
-    ///       handle the <see langword='ItemSelectionChanged'/> event of a
-    ///       <see cref='System.Windows.Forms.ListView'/>.
-    ///    </para>
+    /// Represents the method that will handle the <see langword='ItemSelectionChanged'/>
+    /// event of a <see cref='System.Windows.Forms.ListView'/>.
     /// </devdoc>
     public delegate void ListViewItemSelectionChangedEventHandler(object sender, ListViewItemSelectionChangedEventArgs e);
 }

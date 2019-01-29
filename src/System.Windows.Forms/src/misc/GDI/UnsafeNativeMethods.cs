@@ -13,7 +13,6 @@ namespace System.Experimental.Gdi
     using System;
     using System.Internal;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Collections;
     using System.IO;
     using System.Text;
@@ -21,9 +20,6 @@ namespace System.Experimental.Gdi
     using System.Drawing;
     using System.Diagnostics;
     using System.Runtime.Versioning;
-    [
-    System.Security.SuppressUnmanagedCodeSecurityAttribute()
-    ]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -77,7 +73,7 @@ namespace System.Experimental.Gdi
         public static extern IntPtr IntCreateDC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData);
         [ResourceExposure(ResourceScope.Process)]
         [ResourceConsumption(ResourceScope.Process)]
-        public static IntPtr CreateDC(String lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) 
+        public static IntPtr CreateDC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) 
         {
             IntPtr hdc = System.Internal.HandleCollector.Add(IntCreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), IntSafeNativeMethods.CommonHandles.HDC);
             DbgUtil.AssertWin32(hdc != IntPtr.Zero, "CreateDC([driverName={0}], [deviceName={1}], [fileName={2}], [devMode={3}]) failed.", lpszDriverName, lpszDeviceName, lpszOutput, lpInitData.Handle);

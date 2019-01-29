@@ -7,14 +7,12 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Security.Permissions;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
     ///     Provides an editor for setting the ToolStripStatusLabel BorderSides property..
     /// </summary>
-    [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
     [CLSCompliant(false)]
     public class BorderSidesEditor : UITypeEditor
     {

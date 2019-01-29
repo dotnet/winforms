@@ -17,7 +17,6 @@ namespace System.Windows.Forms
         
         public MaskInputRejectedEventArgs(int position, MaskedTextResultHint rejectionHint)
         {
-            Debug.Assert(!MaskedTextProvider.GetOperationResultFromHint(rejectionHint), "Rejection hint is not on a failure.");
             this.position = position;
             this.hint     = rejectionHint;
         }

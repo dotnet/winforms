@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
 
     using System;
     using System.IO;
-    using System.Security.Permissions;
     using System.Drawing;
     using System.Net;
     using System.ComponentModel;
@@ -237,7 +236,6 @@ namespace System.Windows.Forms {
         ///       filled up with the basic info.</para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
 
@@ -618,7 +616,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxLoad1Descr)),
         SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings") // PM review done
         ]
-        public void Load(String url)
+        public void Load(string url)
         {
             this.ImageLocation = url;
             this.Load();
@@ -841,7 +839,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxLoadAsync1Descr)),
         SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings") // PM review done
         ]
-        public void LoadAsync(String url)
+        public void LoadAsync(string url)
         {
             this.ImageLocation = url;
             this.LoadAsync();

@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using Microsoft.Win32;
     using System.Globalization;
-    using System.Security.Permissions;
 
     /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer"]/*' />
     /// <devdoc>
@@ -47,7 +46,7 @@ namespace System.Windows.Forms {
             }
             while (sie.MoveNext())
             {
-                if (String.Equals(sie.Name, "Data", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(sie.Name, "Data", StringComparison.OrdinalIgnoreCase))
                 {
 #if DEBUG
                     try {
@@ -175,7 +174,7 @@ namespace System.Windows.Forms {
             
             // Ok, we passed the magic header test.
             
-            for (idx = HEADER_MAGIC.Length; idx < input.Length; idx+=2) {
+            for (idx = HEADER_MAGIC.Length; idx < input.Length; idx += 2) {
                 finalLength += input[idx];
             }
             
@@ -201,7 +200,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer.GetObjectData"]/*' />
-        [SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 
         public void /*cpr: ISerializable*/GetObjectData(SerializationInfo si, StreamingContext context) {
             MemoryStream stream = new MemoryStream();
 

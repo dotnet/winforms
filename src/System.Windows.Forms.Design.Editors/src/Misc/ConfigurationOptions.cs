@@ -60,10 +60,10 @@ namespace System.Windows.Forms
                     try
                     {
                         var targetFrameworkName= AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
-                        if (!String.IsNullOrEmpty(targetFrameworkName))
+                        if (!string.IsNullOrEmpty(targetFrameworkName))
                         {
                             var frameworkName = new FrameworkName(targetFrameworkName);
-                            if (String.Equals(frameworkName.Identifier, ".NETFramework"))
+                            if (string.Equals(frameworkName.Identifier, ".NETFramework"))
                                 netFrameworkVersion = frameworkName.Version;
                         }
                     }

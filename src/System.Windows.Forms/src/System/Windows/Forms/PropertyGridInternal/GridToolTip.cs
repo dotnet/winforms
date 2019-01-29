@@ -42,7 +42,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                return toolTipText;
             }
             set {
-                  if (this.IsHandleCreated || !String.IsNullOrEmpty(value)) {
+                  if (this.IsHandleCreated || !string.IsNullOrEmpty(value)) {
                       this.Reset();
                   }
 

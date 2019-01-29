@@ -10,8 +10,6 @@ namespace System.Windows.Forms
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
-    using CodeAccessPermission = System.Security.CodeAccessPermission;
-    using System.Security.Permissions;
     using System.IO;
     using System.ComponentModel;
     using Microsoft.Win32;
@@ -139,30 +137,12 @@ namespace System.Windows.Forms
         [ResourceConsumption(ResourceScope.Machine)]
         public Stream OpenFile()
         {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogOpenFile Demanded");
-            IntSecurity.FileDialogOpenFile.Demand();
-
             string filename = FileNamesInternal[0];
 
             if (filename == null || (filename.Length == 0))
                 throw new ArgumentNullException(nameof(FileName));
 
-            Stream s = null;
-
-            // 
-
-
-
-            new FileIOPermission(FileIOPermissionAccess.Read, IntSecurity.UnsafeGetFullPath(filename)).Assert();
-            try
-            {
-                s = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
-            }
-            finally
-            {
-                CodeAccessPermission.RevertAssert();
-            }
-            return s;
+            return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
         /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.Reset"]/*' />
@@ -177,12 +157,6 @@ namespace System.Windows.Forms
             SetOption(NativeMethods.OFN_FILEMUSTEXIST, true);
         }
 
-        internal override void EnsureFileDialogPermission()
-        {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogOpenFile Demanded in OpenFileDialog.RunFileDialog");
-            IntSecurity.FileDialogOpenFile.Demand();
-        }
-
         /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.RunFileDialog"]/*' />
         /// <devdoc>
         ///     Displays a file open dialog.
@@ -190,10 +164,6 @@ namespace System.Windows.Forms
         /// <internalonly/>
         internal override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
         {
-            //We have already done the demand in EnsureFileDialogPermission but it doesn't hurt to do it again
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileDialogOpenFile Demanded in OpenFileDialog.RunFileDialog");
-            IntSecurity.FileDialogOpenFile.Demand();
-
             bool result = UnsafeNativeMethods.GetOpenFileName(ofn);
             if (!result)
             {
@@ -255,9 +225,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                new FileIOPermission(PermissionState.Unrestricted).Assert();
                 string fullPath = FileName;
-                CodeAccessPermission.RevertAssert();
                 if (string.IsNullOrEmpty(fullPath))
                 {
                     return "";
@@ -283,9 +251,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                new FileIOPermission(PermissionState.Unrestricted).Assert();
                 string[] fullPaths = FileNames;
-                CodeAccessPermission.RevertAssert();
                 if (null == fullPaths || 0 == fullPaths.Length)
                 { return new string[0]; }
                 string[] safePaths = new string[fullPaths.Length];
