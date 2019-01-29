@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -827,6 +827,11 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.ShCore, SetLastError = true)]
         [ResourceExposure(ResourceScope.None)]
         public static extern int GetProcessDpiAwareness(IntPtr processHandle, out NativeMethods.PROCESS_DPI_AWARENESS awareness);
+
+        // for Windows 10 version RS2 and above
+        [DllImport(ExternDll.User32, SetLastError = true)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool IsValidDpiAwarenessContext(int dpiFlag);
 
         // for Windows 10 version RS2 and above
         [DllImport(ExternDll.User32, SetLastError = true)]

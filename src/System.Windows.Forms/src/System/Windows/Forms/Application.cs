@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -385,6 +385,9 @@ namespace System.Windows.Forms {
             }
         }
 
+        /// <summary>
+        /// Gets the current HighDpi mode for the process.
+        /// </summary>
         public static HighDpiMode HighDpiMode
         {
             get
@@ -393,6 +396,11 @@ namespace System.Windows.Forms {
             }
         }
 
+        /// <summary>
+        /// Sets the HighDpi mode for process.
+        /// </summary>
+        /// <param name="highDpiMode">The HighDpi mode to set.</param>
+        /// <returns></returns>
         public static bool SetHighDpiMode(HighDpiMode highDpiMode)
         {
             if (DpiHelper.FirstParkingWindowCreated)
@@ -4386,7 +4394,6 @@ namespace System.Windows.Forms {
                 context.EnableWindowsForModalLoop(onlyWinForms, this);                
             }
 
-
             protected override void ExitThreadCore() {
                 // do nothing... modal dialogs exit by setting dialog result
             }
@@ -4394,13 +4401,35 @@ namespace System.Windows.Forms {
 
     }
 
+    /// <summary>
+    /// Specifies the HighDpi mode.
+    /// </summary>
     public enum HighDpiMode
     {
-        Uninitialized,
+        /// <summary>
+        /// The window does not scale for DPI changes and always assumes a scale factor of 100%.
+        /// </summary>
         DpiUnaware,
+
+        /// <summary>
+        /// The window will query for the DPI of the primary monitor once and use this for the process on all monitors. 
+        /// </summary>
         SystemAware,
+
+        /// <summary>
+        /// The Window checks for DPI when it's created and adjusts scale factor when the DPI changes.
+        /// </summary>
         PerMonitor,
-        PerMonitorV2
+
+        /// <summary>
+        /// Similar to PerMonitor, but enables Child window DPI change notification, improved scaling of comctl32 controls and dialog scaling.
+        /// </summary>
+        PerMonitorV2,
+
+        /// <summary>
+        /// Similar to DpiUnaware, but improves the quality of GDI/GDI+ based content.
+        /// </summary>
+        DpiUnawareGdiScaled
     }
 }
 
