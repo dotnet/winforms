@@ -25,4 +25,8 @@
     <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.18570.9</MicrosoftDotNetGenFacadesPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <MicrosoftDotNetXUnitExtensionsPackage>2.4.0-beta.18414.1</MicrosoftDotNetXUnitExtensionsPackage>
+  </PropertyGroup>
+
 </Project>

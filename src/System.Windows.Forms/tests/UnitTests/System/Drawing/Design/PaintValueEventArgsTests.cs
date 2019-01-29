@@ -12,8 +12,9 @@
         public void Ctor_Throws_ArgumentNullException()	
         {	
             AssertExtensions.Throws<ArgumentNullException>("graphics", () => new PaintValueEventArgs(null, new object(), null, Rectangle.Empty));	
-        }	
+        }
 
+        [Fact]
         public void Ctor_PropertiesAssignedCorrectly()	
         {	
             using (var bm = new Bitmap(20, 20))	
