@@ -454,7 +454,7 @@ namespace System.Windows.Forms
                 }
             }
             // For operating systems Windows 8.1 to Windows 10 RS1 version.
-            else if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SafeNativeMethods.SetProcessDpiAwareness)))
+            else if (ApiHelper.IsApiAvailable(ExternDll.ShCore, nameof(SafeNativeMethods.SetProcessDpiAwareness)))
             {
                 switch (highDpiMode)
                 {
@@ -485,13 +485,10 @@ namespace System.Windows.Forms
                     case HighDpiMode.DpiUnaware:
                     case HighDpiMode.DpiUnawareGdiScaled:
                         dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE;
-                        break;
+                        return true;
                     case HighDpiMode.SystemAware:
                     case HighDpiMode.PerMonitor:
                     case HighDpiMode.PerMonitorV2:
-                        dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
-                        break;
-                    default:
                         dpiFlag = NativeMethods.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
                         break;
                 }
