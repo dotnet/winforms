@@ -1305,7 +1305,7 @@ namespace System.Windows.Forms {
         ///     "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///     be parked.
         /// </devdoc>
-        internal static void ParkHandle(HandleRef handle, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED) {
+        internal static void ParkHandle(HandleRef handle, DpiAwarenessContext? dpiAwarenessContext = null) {
             Debug.Assert(UnsafeNativeMethods.IsWindow(handle), "Handle being parked is not a valid window handle");
             Debug.Assert(((int)UnsafeNativeMethods.GetWindowLong(handle, NativeMethods.GWL_STYLE) & NativeMethods.WS_CHILD) != 0, "Only WS_CHILD windows should be parked.");
 
@@ -1320,7 +1320,7 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
         /// <param name="dpiContext"> dpi awareness</param>
-        internal static void ParkHandle(CreateParams cp, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED) {
+        internal static void ParkHandle(CreateParams cp, DpiAwarenessContext? dpiAwarenessContext = null) {
 
             ThreadContext cxt = ThreadContext.FromCurrent();
             if (cxt != null) {
@@ -1352,7 +1352,7 @@ namespace System.Windows.Forms {
         ///     "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///     be parked.
         /// </devdoc>
-        internal static void UnparkHandle(HandleRef handle, DpiAwarenessContext context) {
+        internal static void UnparkHandle(HandleRef handle, DpiAwarenessContext? context) {
             ThreadContext cxt = GetContextForHandle(handle);
             if (cxt != null) {
                 cxt.GetParkingWindow(context).UnparkHandle(handle);
@@ -2581,7 +2581,7 @@ namespace System.Windows.Forms {
             ///     if it needs to.
             /// </devdoc>
             /// <internalonly/>
-            internal ParkingWindow GetParkingWindow(DpiAwarenessContext context) {
+            internal ParkingWindow GetParkingWindow(DpiAwarenessContext? context) {
 
                 // Locking 'this' here is ok since this is an internal class.
                 lock(this) {
@@ -2595,11 +2595,6 @@ namespace System.Windows.Forms {
                             Debug.WriteLine(CoreSwitches.PerfTrack.Enabled, Environment.StackTrace);
                         }
 #endif
-
-
-
-
-
                         IntSecurity.ManipulateWndProcAndHandles.Assert();
                         try {
                             using (DpiHelper.EnterDpiAwarenessScope(context)) {
@@ -2620,7 +2615,7 @@ namespace System.Windows.Forms {
             /// Returns parking window that matches dpi awareness context. return null if not found.
             /// </summary>
             /// <returns>return matching parking window from list. returns null if not found</returns>
-            internal ParkingWindow GetParkingWindowForContext(DpiAwarenessContext context) {
+            internal ParkingWindow GetParkingWindowForContext(DpiAwarenessContext? context) {
 
                 if (parkingWindows.Count == 0) {
                     return null;
@@ -2629,7 +2624,7 @@ namespace System.Windows.Forms {
                 // Legacy OS/target framework scenario where ControlDpiContext is set to DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNSPECIFIED
                 // because of 'ThreadContextDpiAwareness' API unavailability or this feature is not enabled.
 
-                if (!DpiHelper.IsScalingRequirementMet || DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(context, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)) {
+                if (!DpiHelper.IsScalingRequirementMet || DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(context, null)) {
 
                     Debug.Assert(parkingWindows.Count == 1, "parkingWindows count can not be > 1 for legacy OS/target framework versions");
                     return parkingWindows[0];

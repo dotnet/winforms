@@ -589,7 +589,7 @@ example usage
         /// <summary>
         /// gets or sets control Dpi awareness context value.
         /// </summary>
-        internal DpiAwarenessContext DpiAwarenessContext {
+        internal DpiAwarenessContext? DpiAwarenessContext {
             get {
                 return window.DpiAwarenessContext;
             }

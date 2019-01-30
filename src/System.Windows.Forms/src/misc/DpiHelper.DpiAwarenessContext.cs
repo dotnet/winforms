@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         /// <param name="awareness">The new DPI awareness for the current thread</param>
         /// <returns>An object that, when disposed, will reset the current thread's
         /// DPI awareness to the value it had when the object was created.</returns>
-        public static IDisposable EnterDpiAwarenessScope(DpiAwarenessContext awareness)
+        public static IDisposable EnterDpiAwarenessScope(DpiAwarenessContext? awareness)
         {
             return new DpiAwarenessScope(awareness);
         }
@@ -45,16 +45,16 @@ namespace System.Windows.Forms
         private class DpiAwarenessScope : IDisposable
         {
             private bool dpiAwarenessScopeIsSet = false;
-            private DpiAwarenessContext originalAwareness = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+            private DpiAwarenessContext? originalAwareness = null;
 
             /// <summary>
             /// Enters given Dpi awareness scope
             /// </summary>
-            public DpiAwarenessScope(DpiAwarenessContext awareness)
+            public DpiAwarenessScope(DpiAwarenessContext? awareness)
             {
                 try
                 {
-                    if (!DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(awareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)) 
+                    if (!DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(awareness, null)) 
                     {
                         originalAwareness = DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext();
 
@@ -86,9 +86,13 @@ namespace System.Windows.Forms
             /// <returns></returns>
             /// <remarks>If a new member of the enumeration is added, this code will also have to change</remarks>
             /// <remarks>It would be better if there was a way to convert from the bit-masked dpi awareness to our own enumeration and compare the magnitude</remarks>
-            private bool CanContextAParentContextB(DpiAwarenessContext dpiAwarenessContextA, DpiAwarenessContext dpiAwarenessContextB)
+            private bool CanContextAParentContextB(DpiAwarenessContext? dpiAwarenessContextA, DpiAwarenessContext? dpiAwarenessContextB)
             {
-                if (DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextA, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+                if(dpiAwarenessContextA == null || dpiAwarenessContextB == null)
+                {
+                    return false; // null indicates unspecified, which Windows will not understand
+                }
+                else if (DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextA, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
                 {
                     return DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) ||
                         DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwarenessContextB, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE) ||

@@ -101,9 +101,9 @@ namespace System.Windows.Forms {
         NativeWindow previousWindow; // doubly linked list of subclasses.
         NativeWindow nextWindow;
         WeakReference weakThisPtr;
-        private DpiAwarenessContext windowDpiAwarenessContext = DpiHelper.IsScalingRequirementMet ?
-                                                                  DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext() :
-                                                                  DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+        private DpiAwarenessContext? windowDpiAwarenessContext = DpiHelper.IsScalingRequirementMet ?
+                                                                  (DpiAwarenessContext?)DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext() :
+                                                                  null;
 
         static NativeWindow() {
             EventHandler shutdownHandler = new EventHandler(OnShutdown);
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// Cache window DpiContext awareness information that helps to create handle with right context at the later time.
         /// </summary>
-        internal DpiAwarenessContext DpiAwarenessContext {
+        internal DpiAwarenessContext? DpiAwarenessContext {
             get {
                 return windowDpiAwarenessContext;
             }

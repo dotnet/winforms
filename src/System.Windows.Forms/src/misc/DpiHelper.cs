@@ -105,9 +105,9 @@ namespace System.Windows.Forms
                 InitializeDpiHelperForWinforms();
                 if (doesNeedQueryForPerMonitorV2Awareness)
                 {
-                    // We can't cache this value because different top level windows can have different DPI awareness context
-                    // for mixed mode applications.
-                    DpiAwarenessContext dpiAwareness = DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext();
+                    // We can't cache this value because different top level windows can 
+                    // have different DPI awareness context for mixed mode applications.
+                    DpiAwarenessContext? dpiAwareness = DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext();
                     return DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
                 }
                 else
@@ -340,7 +340,6 @@ namespace System.Windows.Forms
 
     internal enum DpiAwarenessContext
     {
-        DPI_AWARENESS_CONTEXT_UNSPECIFIED = 0,
         DPI_AWARENESS_CONTEXT_UNAWARE = -1,
         DPI_AWARENESS_CONTEXT_SYSTEM_AWARE = -2,
         DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = -3,
