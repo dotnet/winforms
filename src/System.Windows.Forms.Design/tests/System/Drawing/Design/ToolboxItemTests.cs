@@ -10,18 +10,9 @@
     {	
         [Fact]
         public void TestToolBoxItem_Non_Default_Throw_NotImplemented_Exception()
-        {	
+        {
             var type = typeof(Bitmap);
-            bool rightExceptionThrown = false;
-            try
-            {
-                var unitUnderTest = new ToolboxItem(type);
-            }
-            catch (System.NotImplementedException)
-            {
-                rightExceptionThrown = true;
-            }
-             Assert.True(rightExceptionThrown);
+            Assert.Throws<System.NotImplementedException>(() => new ToolboxItem(type));
         }	
     }	
 }
