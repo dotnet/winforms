@@ -8,27 +8,20 @@
 {	
     public class ToolboxItemTests	
     {	
-
-        public void Ctor_DefaultsAssignedCorrectly()	
+        [Fact]
+        public void TestToolBoxItem_Non_Default_Throw_NotImplemented_Exception()
         {	
-            var type = typeof(Bitmap);	
-            var unitUnderTest = new ToolboxItem(type);	
-
-             Assert.Equal(type.FullName, unitUnderTest.TypeName);	
-            Assert.Equal(type.Name, unitUnderTest.DisplayName);	
-            Assert.Equal(type.Assembly.GetName(true).ToString(), unitUnderTest.AssemblyName.ToString());	
-            Assert.NotNull(unitUnderTest.DependentAssemblies);	
-            Assert.Equal( "",unitUnderTest.Description);	
-            Assert.NotEqual(0, unitUnderTest.Filter.Count);	
-        }	
-	
-        public void ToString_StateUnderTest_ExpectedBehavior()	
-        {	
-            var type = typeof(Bitmap);	
-            var unitUnderTest = new ToolboxItem(type);	
-            var result = unitUnderTest.ToString();	
-
-             Assert.Equal(type.Name, result);	
+            var type = typeof(Bitmap);
+            bool rightExceptionThrown = false;
+            try
+            {
+                var unitUnderTest = new ToolboxItem(type);
+            }
+            catch (System.NotImplementedException)
+            {
+                rightExceptionThrown = true;
+            }
+             Assert.True(rightExceptionThrown);
         }	
     }	
 }
