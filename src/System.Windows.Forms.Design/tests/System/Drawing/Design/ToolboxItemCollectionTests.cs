@@ -18,17 +18,7 @@
         [Fact]
         public void TestToolboxItemCollection_Throw_NotImplemented_Exception()
         {
-            bool rightExceptionThrown = false;
-            try
-            {
-                var unitUnderTest = CreateToolboxItemCollection();
-            }
-            catch (System.NotImplementedException)
-            {
-                rightExceptionThrown = true;
-            }
-
-             Assert.True(rightExceptionThrown);
+            Assert.Throws<System.NotImplementedException>(() => CreateToolboxItemCollection());         
         }
     }	
 }
