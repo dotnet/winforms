@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1272,10 +1272,6 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto, SetLastError=true, BestFitMapping=false)]
         [ResourceExposure(ResourceScope.Machine)]
         private static extern IntPtr LoadLibraryEx(string lpModuleName, IntPtr hFile, uint dwFlags);
-
-        [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto, SetLastError=true)]
-        [ResourceExposure(ResourceScope.None)]
-        public static extern bool FreeLibrary(HandleRef hModule);
 
         //GetWindowLong won't work correctly for 64-bit: we should use GetWindowLongPtr instead.  On
         //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should 
