@@ -355,7 +355,6 @@ namespace System.Windows.Forms
 
         public override AccessibleObject Parent
         {
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get
             {
                 return _parentAccessibleObject;

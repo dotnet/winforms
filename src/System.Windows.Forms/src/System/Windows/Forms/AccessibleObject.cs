@@ -3649,7 +3649,6 @@ namespace System.Windows.Forms
         /// </summary>
         /// <returns>An AutomationElement array containing the currently selected elements</returns>
         object[] UnsafeNativeMethods.ISelectionProvider.GetSelection() {
-            IntSecurity.UnmanagedCode.Assert();
             return publicISelectionProvider.GetSelection();
         }
 
@@ -3660,7 +3659,6 @@ namespace System.Windows.Forms
         /// <remarks>If this is false, then the control is a single-select ccntrol</remarks>
         bool UnsafeNativeMethods.ISelectionProvider.CanSelectMultiple {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicISelectionProvider.CanSelectMultiple;
             }
         }
@@ -3672,7 +3670,6 @@ namespace System.Windows.Forms
         /// <remarks>If this is false, then the control allows all elements to be unselected</remarks>
         bool UnsafeNativeMethods.ISelectionProvider.IsSelectionRequired {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicISelectionProvider.IsSelectionRequired;
             }
         }
@@ -3686,7 +3683,6 @@ namespace System.Windows.Forms
         /// This clears the selection from other elements in the container.
         /// </summary>
         void UnsafeNativeMethods.ISelectionItemProvider.Select() {
-            IntSecurity.UnmanagedCode.Assert();
             publicISelectionItemProvider.Select();
         }
 
@@ -3694,7 +3690,6 @@ namespace System.Windows.Forms
         /// Adds current element to selection.
         /// </summary>
         void UnsafeNativeMethods.ISelectionItemProvider.AddToSelection() {
-            IntSecurity.UnmanagedCode.Assert();
             publicISelectionItemProvider.AddToSelection();
         }
 
@@ -3702,7 +3697,6 @@ namespace System.Windows.Forms
         /// Removes current element from selection.
         /// </summary>
         void UnsafeNativeMethods.ISelectionItemProvider.RemoveFromSelection() {
-            IntSecurity.UnmanagedCode.Assert();
             publicISelectionItemProvider.RemoveFromSelection();
         }
 
@@ -3712,7 +3706,6 @@ namespace System.Windows.Forms
         /// <returns>Returns true if the element is selected.</returns>
         bool UnsafeNativeMethods.ISelectionItemProvider.IsSelected {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicISelectionItemProvider.IsSelected;
             }
         }
@@ -3723,7 +3716,6 @@ namespace System.Windows.Forms
         /// <returns>Returns a IRawElementProviderSimple.</returns>
         UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.ISelectionItemProvider.SelectionContainer {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicISelectionItemProvider.SelectionContainer;
             }
         }
@@ -3739,7 +3731,6 @@ namespace System.Windows.Forms
         /// <param name="hwnd">The window handle of the component.</param>
         /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
         UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd) {
-            IntSecurity.UnmanagedCode.Assert();
             return publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
         }
 

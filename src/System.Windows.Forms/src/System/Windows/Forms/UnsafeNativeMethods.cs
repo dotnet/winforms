@@ -8249,7 +8249,6 @@ namespace System.Windows.Forms {
         /// Client code uses this public interface; server implementers implent the
         /// ISelectionProvider public interface instead.
         /// </remarks>
-        [SecurityCritical(SecurityCriticalScope.Everything)]
         [ComImport()]
         [ComVisible(true)]
         [Guid("fb8b03af-3bdf-48d4-bd36-1a65793be168")]
@@ -8288,7 +8287,6 @@ namespace System.Windows.Forms {
         /// child of an Element that supports SelectionPattern and is itself selectable).  
         /// This allows for manipulation of Selection from the element itself.
         /// </summary>
-        [SecurityCritical(SecurityCriticalScope.Everything)]
         [ComImport()]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [ComVisible(true)]
@@ -8789,7 +8787,6 @@ namespace System.Windows.Forms {
         /// Implemented by objects in a known Scrollable context, such as ListItems, ListViewItems, TreeViewItems, and Tabs.
         /// This allows them to be scrolled into view using known API's based on the control in question.
         /// </summary>
-        [SecurityCritical(SecurityCriticalScope.Everything)]
         [ComImport()]
         [ComVisible(true)]
         [Guid("2360c714-4bf1-4b26-ba65-9b21316127eb")]
