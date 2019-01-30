@@ -82,7 +82,7 @@ namespace System.Windows.Forms
             {
                 if (dpiContext == null)
                 {
-                    throw new ArgumentException(nameof(dpiContext), dpiContext.ToString());
+                    throw new ArgumentNullException();
                 }
                 return SetThreadDpiAwarenessContext((DpiAwarenessContext)dpiContext);
             }

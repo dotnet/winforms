@@ -9,28 +9,34 @@ namespace System.Windows.Forms.Tests
 {
     public class DpiUnsafeNativeMethodsTests
     {
-        
-
-        /*/// <summary>
+        /// <summary>
         /// Data for the TryFindDpiAwarenessContextsEqual test
         /// </summary>
         public static TheoryData TryFindDpiAwarenessContextsEqualData =>
             CommonTestHelper.GetEnumTheoryData<DpiAwarenessContext>();
         
 
-        Theory]
+        [Theory]
         [MemberData(nameof(TryFindDpiAwarenessContextsEqualData))]
         internal void DpiUnsafeNativeMethods_TryFindDpiAwarenessContextsEqual(DpiAwarenessContext item)
         { 
             Assert.True(DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(item, item));
         }
-    
+
+        [Theory]
+        [MemberData(nameof(TryFindDpiAwarenessContextsEqualData))]
+        internal void DpiUnsafeNativeMethods_TryFindDpiAwarenessContextsEqual_CompareToNull(DpiAwarenessContext item)
+        { 
+            Assert.False(DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(item, null));
+            Assert.False(DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(null, item));
+        }
 
         [Fact]
-        public void DpiUnsafeNativeMethods_AreDpiAwarenessContextsEqualNotForUnspecified()
-        {
-            Assert.False(DpiUnsafeNativeMethods.AreDpiAwarenessContextsEqual(DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED));
+        internal void DpiUnsafeNativeMethods_TryFindDpiAwarenessContextsEqual_BothNull()
+        { 
+            Assert.True(DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(null, null));
         }
+    
 
         /// <summary>
         /// Data for the TrySetThreadDpiAwarenessContextGetSet test
@@ -42,18 +48,16 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TrySetThreadDpiAwarenessContextGetSetData))]
         internal void DpiUnsafeNativeMethods_TrySetThreadDpiAwarenessContextGetSet(DpiAwarenessContext item)
         {
-            if (item != DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
-            {
-                DpiUnsafeNativeMethods.TrySetThreadDpiAwarenessContext(item);
+            DpiUnsafeNativeMethods.TrySetThreadDpiAwarenessContext(item);
 
-                Assert.True(DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(item, DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext()));
-            }
-            else
-            {
-                var ex = Assert.Throws<ArgumentException>(() => DpiUnsafeNativeMethods.TrySetThreadDpiAwarenessContext(DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED));
-                Assert.Equal(DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED.ToString(), ex.ParamName);
-            }
-        }*/
+            Assert.True(DpiUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(item, DpiUnsafeNativeMethods.TryGetThreadDpiAwarenessContext()));           
+        }
+
+        [Fact]
+        internal void DPiUnsafeNativeMethods_TrySetThreadDpiAwarenessContext_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() => DpiUnsafeNativeMethods.TrySetThreadDpiAwarenessContext(null));
+        }
 
     }
 }
