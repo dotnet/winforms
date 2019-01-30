@@ -2,90 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Windows.Forms.Design;
-    using System.ComponentModel.Design;
-    using System.Drawing;
-    using Microsoft.Win32;
+using System.Drawing;
 
-    /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides ambient property values to top-level controls.
-    ///    </para>
+    /// Provides ambient property values to top-level controls.
+    /// NOTE: internally, this class does double duty as storage for
+    /// Control's inherited properties.
     /// </devdoc>
-    //
-    // NOTE: internally, this class does double duty as storage for Control's inherited properties.
-    public sealed class AmbientProperties {
-    
-        // Public ambient properties
-        private Color    backColor; 
-        private Color    foreColor;
-        private Cursor   cursor;
-        private Font     font;
-        
-        /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties.BackColor"]/*' />
+    public sealed class AmbientProperties
+    {        
         /// <devdoc>
-        ///    <para>
-        ///       Gets the ambient BackColor, or Color.Empty if there is none.
-        ///    </para>
+        /// Gets the ambient BackColor, or Color.Empty if there is none.
         /// </devdoc>
-        public Color BackColor {
-            get {
-                return backColor;
-            }
-            set {
-                backColor = value;
-            }
-        }
+        public Color BackColor { get; set; }
 
-        /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties.Cursor"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the ambient BackColor, or null if there is none.
-        ///    </para>
+        /// Gets the ambient BackColor, or null if there is none.
         /// </devdoc>
-        public Cursor Cursor {
-            get {
-                return cursor;
-            }
-            set {
-                cursor = value;
-            }
-        }
+        public Cursor Cursor { get; set; }
 
-        /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties.Font"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the ambient Font, or null if there is none.
-        ///    </para>
+        /// Gets the ambient Font, or null if there is none.
         /// </devdoc>
-        public Font Font {
-            get {
-                return font;
-            }
-            set {
-                font = value;
-            }
-        }
+        public Font Font { get; set; }
         
-        /// <include file='doc\AmbientProperties.uex' path='docs/doc[@for="AmbientProperties.ForeColor"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the ambient ForeColor, or Color.Empty if there is none.
-        ///    </para>
+        /// Gets the ambient ForeColor, or Color.Empty if there is none.
         /// </devdoc>
-        public Color ForeColor {
-            get {
-                return foreColor;
-            }
-            set {
-                foreColor = value;
-            }
-        }
+        public Color ForeColor { get; set; }
     }
 }
-
