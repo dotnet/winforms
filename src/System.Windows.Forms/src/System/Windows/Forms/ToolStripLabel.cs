@@ -10,8 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Forms.ButtonInternal;
-    using System.Security.Permissions;
-    using System.Security;
     using System.Windows.Forms.Design;    
 
     /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel"]/*' />
@@ -335,7 +333,6 @@ namespace System.Windows.Forms {
         }
         
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             // checking IsMnemonic is not necessary - toolstrip does this for us.
             if (ParentInternal != null) {

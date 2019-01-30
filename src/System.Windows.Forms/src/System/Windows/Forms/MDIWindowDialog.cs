@@ -15,9 +15,6 @@ namespace System.Windows.Forms {
     /// <devdoc>
     /// </devdoc>
     /// <internalonly/>
-    [
-        System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-    ]
     internal sealed class MdiWindowDialog : Form {
         private System.Windows.Forms.ListBox itemList;
         private System.Windows.Forms.Button okButton;

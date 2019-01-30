@@ -2,70 +2,33 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-
-    //=--------------------------------------------------------------------------=
-    // GiveFeedbackEventArgs.cs
-    //=--------------------------------------------------------------------------=
-
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\GiveFeedbackEvent.uex' path='docs/doc[@for="GiveFeedbackEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.Control.GiveFeedback'/>
-    ///       event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.Control.GiveFeedback'/> event.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class GiveFeedbackEventArgs : EventArgs {
-        private readonly DragDropEffects effect;
-        private bool useDefaultCursors;
-
-        /// <include file='doc\GiveFeedbackEvent.uex' path='docs/doc[@for="GiveFeedbackEventArgs.GiveFeedbackEventArgs"]/*' />
+    [ComVisible(true)]
+    public class GiveFeedbackEventArgs : EventArgs
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.GiveFeedbackEventArgs'/> class.
-        ///    </para>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.GiveFeedbackEventArgs'/> class.
         /// </devdoc>
-        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors) {
-            this.effect = effect;
-            this.useDefaultCursors = useDefaultCursors;
+        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors)
+        {
+            Effect = effect;
+            UseDefaultCursors = useDefaultCursors;
         }
 
-        /// <include file='doc\GiveFeedbackEvent.uex' path='docs/doc[@for="GiveFeedbackEventArgs.Effect"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the type of drag-and-drop operation.
-        ///    </para>
+        /// Gets the type of drag-and-drop operation.
         /// </devdoc>
-        public DragDropEffects Effect {
-            get {
-                return effect;
-            }
-        }
+        public DragDropEffects Effect { get; }
 
-        /// <include file='doc\GiveFeedbackEvent.uex' path='docs/doc[@for="GiveFeedbackEventArgs.UseDefaultCursors"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a
-        ///       value
-        ///       indicating whether a default pointer is used.
-        ///    </para>
+        /// Gets or sets a value indicating whether a default pointer is used.
         /// </devdoc>
-        public bool UseDefaultCursors {
-            get {
-                return useDefaultCursors;
-            }
-            set {
-                useDefaultCursors = value;
-            }
-        }
+        public bool UseDefaultCursors { get; set; }
     }
 }

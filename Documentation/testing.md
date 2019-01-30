@@ -1,6 +1,6 @@
-# Windows Forms Unit Testing
+# Windows Forms Testing
 
-This document describes our approach to unit testing.
+This document describes our approach to testing.
 
 We are _still working on_ a scalable solution for functional testing. For now, see [Functional Testing](testing.md#functional-testing) and the [issue #183][issue-#183].
 
@@ -8,9 +8,9 @@ We are _still working on_ a scalable solution for functional testing. For now, s
 
 Tests are automatically built when running `.\build` since all test projects are referenced in `Winforms.sln` at the repository root.
 
-## Running tests
+## Running unit tests
 
-### Testing from the command line
+### Unit testing from the command line
 
 To execute unit tests, run `.\build -test`
 
@@ -25,7 +25,7 @@ Build succeeded.
     0 Error(s)
 ```
 
-### Troubleshooting command-line test errors
+### Troubleshooting command-line unit test errors
 
 When testing from the command line, a failed test should look something like this:
 
@@ -40,16 +40,16 @@ Build FAILED.
 * The test summary can be found under artifacts\log
 * To see the actual test(s) that failed, along with their error message(s), open the .html file that is displayed in the error message (which is always under `artifacts\TestResults`)
 
-### Testing from Visual Studio
+### Unit testing from Visual Studio
 
 To test from Visual Studio, open Winforms.sln in Visual Studio and test how you normally would (using the Test Explorer, for example)
 
-### Troubleshooting Visual Studio test errors
+### Troubleshooting Visual Studio unit test errors
 
 * When testing from Visual Studio, test errors show up as normal in the test explorer.
 * To troubleshoot, debug the selected test and set breakpoints as you normally would.
 
-## Adding new tests
+## Adding new unit tests
 
 Tests are built and executed by file name convention
 
@@ -108,57 +108,55 @@ Tests are built and executed by file name convention
 
 ## Functional Testing
 
-Currently, there is a single functional test in the repository: the WinformsControlsTest
+Currently, there is a single functional test suite in the repository: the WinformsControlsTest. There is an xUnit project that executes various commands against this binary.
 
-### Running the application
+### Functional testing from the command line
 
-In the console, run the following command from the base of the repository:
+To execute functional tests, run `.\build -integrationTest`
 
-```cmd
-.\.dotnet\dotnet.exe .\artifacts\bin\WinformsControlsTest\Debug\netcoreapp3.0\WinformsControlsTest.dll
-```
+You will see various windows open and close very quickly. If all the tests are successful, you should see something like this:
 
-**Note:** that this will fail if the WinformsControlsTest is not built. See [Build](building.md) for more information on how to build from source.
+```console
+  Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\netcoreapp3.0\System.Windows.Forms.IntegrationTests.dll [netcoreapp3.0|x64]
+  Tests succeeded: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\netcoreapp3.0\System.Windows.Forms.IntegrationTests.dll [netcoreapp3.0|x64]
 
-### The test runner
-
-This runner will open the application and all single-depth dialogs with the SendKeys API; reporting whether or not it was possible to do so.
-
-#### Running
-
-The runner batch (`run_individual_exe.bat`) and accompanying powershell (`run_individual_exe.ps1`) script can be found in:
-
-`...\winforms\src\System.Windows.Forms\tests\FuncTests\Runner_WinformsControlsTest`
-
-To run them, execute the following command the Runner_WinformsControlsTest directory:
-
-`run_individual_exe.bat`
-
-#### Interpreting results
-
-The execution of that command will return a 0 if all tests passed and a -1 if even one test failed. To look at _slightly_ more in-depth results, see the `results.log` file generated alongside the .bat and .ps1 files. An example set of entries in that file follows:
-
-```txt
-12/6/2018 9:41 AM: ***************************
-12/6/2018 9:41 AM: Overall Form Open passed.
-12/6/2018 9:41 AM: Buttons passed.
-12/6/2018 9:41 AM: Calendar passed.
-12/6/2018 9:41 AM: TreeView, ImageList failed.
-12/6/2018 9:41 AM: Content alignment passed.
-12/6/2018 9:41 AM: Multiple controls passed.
-12/6/2018 9:41 AM: DataGridView passed.
-12/6/2018 9:41 AM: Menus failed.
-12/6/2018 9:41 AM: Panels passed.
-12/6/2018 9:42 AM: Splitter passed.
-12/6/2018 9:42 AM: ComboBoxes passed.
-12/6/2018 9:42 AM: MDI Parent failed.
-12/6/2018 9:42 AM: Property Grid passed.
-12/6/2018 9:42 AM: ListView failed.
-12/6/2018 9:42 AM: DateTimePickerButton passed.
-12/6/2018 9:42 AM: FolderBrowserDialogButton passed.
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
 ```
 
 [comment]: <> (URI Links)
 
 [issue-#183]: https://github.com/dotnet/winforms/issues/183
 [moq]: (https://github.com/Moq/moq4/wiki/Quickstart)
+
+### Troubleshooting command-line functional test errors
+
+Since these run in xUnit, functional test errors can be examined in the same way as unit test failures.
+
+### Functional testing from Visual Studio
+
+To test from Visual Studio, open Winforms.sln in Visual Studio and test how you normally would (using the Test Explorer, for example)
+
+### Troubleshooting Visual Studio functional test errors
+
+* When testing from Visual Studio, test errors show up as normal in the test explorer.
+* To troubleshoot, debug the selected test and set breakpoints as you normally would.
+
+## Adding new functional tests
+
+Functional tests are built and executed by file name convention
+
+* Every WinForms binary has its own folder under src in the repository root (src\System.Windows.Forms, for example)
+* Each of those folders has a tests folder under it (src\System.Windows.Forms\tests, for example), each of which may contain an IntegrationTests folder
+* Each of these folders contains an IntegrationTest xUnit project (System.Windows.Forms.IntegrationTests.csproj)
+  * These test projects automatically build when running .\build
+  * The tests from these projects automatically execute when running .\build -integrationTest
+
+### Therefore, you just need to put your tests in the right place in order for them to run
+
+* Browse to the tests folder for the binary you are testing
+* There should be one file per class being tested, and the file name should match the class name.
+  * For example, if I wanted to test the Button class in System.Windows.Forms.dll, I would look for a Button.cs under src\System.Windows.Forms\tests
+* If the file exists, add your tests there. If it doesn't exist, feel free to create it.
+  * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included

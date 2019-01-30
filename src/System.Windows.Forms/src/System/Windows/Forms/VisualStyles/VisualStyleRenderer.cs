@@ -17,8 +17,6 @@ namespace System.Windows.Forms.VisualStyles {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\visualStyleRenderer.uex' path='docs/doc[@for="visualStyleRenderer"]/*' />
     /// <devdoc>
@@ -556,8 +554,6 @@ namespace System.Windows.Forms.VisualStyles {
         ///       [See win32 equivalent.]
         ///    </para>
         /// </devdoc>
-        [SuppressUnmanagedCodeSecurity, 
-         SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         public Region GetBackgroundRegion(IDeviceContext dc, Rectangle bounds) {
             if (dc == null) {
                 throw new ArgumentNullException(nameof(dc));
@@ -689,12 +685,6 @@ namespace System.Windows.Forms.VisualStyles {
 
             //check for a failed HR.
             if (NativeMethods.Succeeded(lastHResult)) {
-
-
-                // 
-
-
-                IntSecurity.ObjectFromWin32Handle.Assert();
                 try {
                     font = Font.FromLogFont(logfont);
                 }

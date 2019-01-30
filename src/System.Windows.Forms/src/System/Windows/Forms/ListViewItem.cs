@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Security; 
-    using System.Security.Permissions;
     using System;
     using System.Drawing;
     using System.Drawing.Design;
@@ -1220,8 +1219,6 @@ namespace System.Windows.Forms {
         ///     Saves this ListViewItem object to the given data stream.
         /// </devdoc>
         /// 
-       	[SecurityPermissionAttribute(SecurityAction.Demand, Flags=SecurityPermissionFlag.SerializationFormatter), 		
-         SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.SerializationFormatter)]
         protected virtual void Serialize(SerializationInfo info, StreamingContext context) {
             info.AddValue("Text", Text);
             info.AddValue("ImageIndex", ImageIndexer.Index);  
@@ -1301,7 +1298,6 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ISerializable.GetObjectData"]/*' />
         /// <internalonly/>        
-        [SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)]       
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
             Serialize(info, context);
         }

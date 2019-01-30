@@ -17,8 +17,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Windows.Forms.Internal;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl"]/*' />
     /// <devdoc>
@@ -287,7 +285,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.CreateParams"]/*' />
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
@@ -345,8 +342,6 @@ namespace System.Windows.Forms {
         ]
         public Form ParentForm {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
                 return ParentFormInternal;
             }
         }
@@ -373,9 +368,6 @@ namespace System.Windows.Forms {
         /// <para>Activates the specified control.</para>
         /// </devdoc>
         bool IContainerControl.ActivateControl(Control control) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
-
             return ActivateControlInternal(control, true);
         }
 
@@ -460,19 +452,8 @@ namespace System.Windows.Forms {
             Debug.Assert(control != null);
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::AfterControlRemoved(" + control.Name + ") - " + this.Name);
             if (control == activeControl || control.Contains(activeControl)) {
-                bool selected;
-                // 
+                bool selected = SelectNextControl(control, true, true, true, true);
 
-
-                IntSecurity.ModifyFocus.Assert ();
-                try
-                {
-                    selected = SelectNextControl(control, true, true, true, true);
-                }
-                finally
-                {
-                    CodeAccessPermission.RevertAssert ();
-                }
                 if (selected && this.activeControl != control)
                 {
                     // Add the check. If it is set to true, do not call into FocusActiveControlInternal().
@@ -498,16 +479,7 @@ namespace System.Windows.Forms {
                     Form f = FindFormInternal();
                     if (f != null)
                     {
-                        // 
-                        IntSecurity.ModifyFocus.Assert ();
-                        try
-                        {
-                            f.SelectNextControl(this, true, true, true, true);
-                        }
-                        finally
-                        {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        f.SelectNextControl(this, true, true, true, true);
                     }
                 }
             }
@@ -810,16 +782,10 @@ namespace System.Windows.Forms {
         
         internal override void OnFrameWindowActivate(bool fActivate) {
           if (fActivate) {
-              IntSecurity.ModifyFocus.Assert();
-              try {
-                  if (ActiveControl == null) {
-                      SelectNextControl(null, true, true, true, false);
-                  }
-                  InnerMostActiveContainerControl.FocusActiveControlInternal();
-              }
-              finally {
-                  CodeAccessPermission.RevertAssert();
-              }
+                if (ActiveControl == null) {
+                    SelectNextControl(null, true, true, true, false);
+                }
+                InnerMostActiveContainerControl.FocusActiveControlInternal();
           }
       }
 
@@ -1148,7 +1114,6 @@ namespace System.Windows.Forms {
         ///    called.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogChar(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogChar [" + charCode.ToString() + "]");
@@ -1171,7 +1136,6 @@ namespace System.Windows.Forms {
         ///    on the form. For the arrow keys,
         ///    !!!
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogKey [" + keyData.ToString() + "]");
@@ -1197,9 +1161,6 @@ namespace System.Windows.Forms {
 
          /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessCmdKey"]/*' />
          /// <internalonly/>
-         [
-             SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-         ]
          protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessCmdKey " + msg.ToString());
 
@@ -1220,7 +1181,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessMnemonic"]/*' />
         /// <internalonly/>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessMnemonic [" + charCode.ToString() + "]");
@@ -1308,7 +1268,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Selects the next available control and makes it the active control.</para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool ProcessTabKey(bool forward) {
             if (SelectNextControl(activeControl, forward, true, true, false)) return true;
             return false;
@@ -1894,17 +1853,7 @@ namespace System.Windows.Forms {
                                 succeeded = knowncontainer.ActivateControlInternal(this);
                             }
                             else {
-
-                                // 
-
-
-                                IntSecurity.ModifyFocus.Assert();
-                                try {
-                                    succeeded = c.ActivateControl(this);
-                                }
-                                finally {
-                                    CodeAccessPermission.RevertAssert();
-                                }
+                                succeeded = c.ActivateControl(this);
                             }
                             if (!succeeded) {
                                 return;
@@ -1924,7 +1873,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_SETFOCUS:

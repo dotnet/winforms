@@ -43,6 +43,16 @@ jobs:
         - name: _OfficialBuildIdArgs
           value: ''
 
+        # needed for helix jobs
+        - name: _HelixAgentPool
+          value: 'Windows.10.Amd64.Open'
+        - name: _WinformsControlsTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
+        - name: _WinformsFuncTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
+        - name: _HelixStagingDir
+          value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+
         # Override some values if we're building internally
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
@@ -72,6 +82,9 @@ jobs:
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
+          - name: _HelixAgentPool
+            value: 'Windows.10.Amd64'
+
       strategy:
         matrix:
           Build_Debug:
@@ -87,19 +100,36 @@ jobs:
       - checkout: self
         clean: true
 
-      # Build, test, pack, and sign
-      - script: eng\common\cibuild.cmd
-          -configuration $(_BuildConfig) 
+      # Restore and build
+      - script: eng\cibuild.cmd
           -prepareMachine
-          $(_PublishArgs)
-          $(_SignArgs)
+          -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
-        displayName: Windows Build / Publish
+          -build
+        displayName: Build
 
-      # Run component governance detection (only for release)
-      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-        displayName: Component Governance Detection
-        condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+      # Run unit tests
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -test
+        displayName: Run Unit Tests
+
+      # Run integration tests
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -integrationTest
+        displayName: Run Integration Tests
+
+      # Create Nuget package, sign, and publish
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -pack
+          -sign $(_SignArgs)
+          -publish $(_PublishArgs)
+        displayName: Pack, Sign, and Publish
 
       # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:

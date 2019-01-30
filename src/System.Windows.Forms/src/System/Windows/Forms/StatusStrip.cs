@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Collections.Specialized;    
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Layout;
-    using System.Security.Permissions;
-    using System.Security;
     
     /// <include file='doc\StatusStrip.uex' path='docs/doc[@for="StatusStrip"]/*' />
     [ComVisible(true),
@@ -545,7 +543,6 @@ namespace System.Windows.Forms {
           }
       }
 
-      [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
       protected override void  WndProc(ref Message m)            {                
           if ((m.Msg == NativeMethods.WM_NCHITTEST) && SizingGrip) {
             // if we're within the grip bounds tell windows
@@ -601,14 +598,12 @@ namespace System.Windows.Forms {
                 this.BackColor = Color.Transparent;
             }            
             protected override CreateParams CreateParams {
-               [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     CreateParams cp = base.CreateParams;
                     cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
                     return cp;            
                 }
             }
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             protected override void WndProc(ref Message m) {
                  if (m.Msg == NativeMethods.WM_NCHITTEST) {
                     int x = NativeMethods.Util.LOWORD(m.LParam);

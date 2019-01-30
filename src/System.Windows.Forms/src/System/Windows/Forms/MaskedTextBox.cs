@@ -9,8 +9,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Runtime.InteropServices;
     using System.Globalization;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Diagnostics;
     using System.Collections;
     using System.Collections.Specialized;
@@ -338,7 +336,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected override CreateParams CreateParams 
         {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get 
             {
                 CreateParams cp = base.CreateParams;
@@ -1679,7 +1676,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Advanced),
-        UIPermission(SecurityAction.InheritanceDemand, Window = UIPermissionWindow.AllWindows)
         ]
         protected override void CreateHandle()
         {
@@ -2673,7 +2669,6 @@ namespace System.Windows.Forms
         /// 
         ///     Implements the handling of Ctrl+A (select all). Note: Code copied from TextBox.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             //
@@ -2700,7 +2695,6 @@ namespace System.Windows.Forms
         ///     to DefWndProc (the characters would be displayed in the text box always).
         ///     
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected internal override bool ProcessKeyMessage(ref Message m)
         {
             // call base's method so the WM_CHAR and other messages are processed; this gives Control the 
@@ -2996,13 +2990,6 @@ namespace System.Windows.Forms
 
             try
             {
-                // 
-
-
-
-
-                IntSecurity.ClipboardWrite.Assert();
-
                 if (text.Length == 0)
                 {
                     Clipboard.Clear();
@@ -3154,7 +3141,6 @@ namespace System.Windows.Forms
 
             try
             {
-                IntSecurity.ClipboardRead.Assert();
                 text = Clipboard.GetText();
             }
             catch (Exception ex)
@@ -3173,19 +3159,13 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m) {
             base.WndProc(ref m);
             if ((NativeMethods.PRF_NONCLIENT & unchecked( (int) (long)m.LParam)) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D) {
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    using (Graphics g = Graphics.FromHdc(m.WParam)) {
-                        Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
-                        using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
-                            g.DrawRectangle(pen, rect);
-                        }
-                        rect.Inflate(-1, -1);
-                        g.DrawRectangle(SystemPens.Window, rect);
+                using (Graphics g = Graphics.FromHdc(m.WParam)) {
+                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
+                        g.DrawRectangle(pen, rect);
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                    rect.Inflate(-1, -1);
+                    g.DrawRectangle(SystemPens.Window, rect);
                 }
             }
         }
@@ -3194,7 +3174,6 @@ namespace System.Windows.Forms
         ///     We need to override the WndProc method to have full control over what characters can be
         ///     displayed in the text box; particularly, we have special handling when IME is turned on.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m)
         {
             // Handle messages for special cases (unsupported operations or cases where mask doesn not matter).

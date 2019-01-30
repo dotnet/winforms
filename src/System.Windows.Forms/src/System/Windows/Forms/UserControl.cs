@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Drawing;    
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.Security.Permissions;
     using System.Windows.Forms.Design;
     using System.Windows.Forms.Layout;
 
@@ -188,7 +187,6 @@ namespace System.Windows.Forms {
         ///    styles for appropriate BorderStyle that is set by the user.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
@@ -338,14 +336,8 @@ namespace System.Windows.Forms {
 
         private void WmSetFocus(ref Message m) {
             if (!HostedInWin32DialogManager) {
-                IntSecurity.ModifyFocus.Assert();
-                try {
-                    if (ActiveControl == null)
-                        SelectNextControl(null, true, true, true, false);
-                }
-                finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
-                }
+                if (ActiveControl == null)
+                    SelectNextControl(null, true, true, true, false);
             }
             if (!ValidationCancelled) {
                 base.WndProc(ref m);
@@ -355,7 +347,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.WndProc"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_SETFOCUS:

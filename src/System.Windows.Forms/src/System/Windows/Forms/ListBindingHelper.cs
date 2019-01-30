@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
             Exception instanceException = null;
 
             try {
-                instancedObject = SecurityUtils.SecureCreateInstance(type);
+                instancedObject = Activator.CreateInstance(type);
             }
             catch (TargetInvocationException ex) {
                 instanceException = ex; // Default ctor threw an exception

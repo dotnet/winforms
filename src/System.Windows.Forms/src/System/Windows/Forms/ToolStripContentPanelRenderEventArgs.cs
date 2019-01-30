@@ -2,51 +2,31 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Drawing;
 
-    using System.Drawing;
-
-    
-    /// <devdoc>
-    ///   ToolStripContentPanelRenderEventArgs
-    /// </devdoc>
-    public class ToolStripContentPanelRenderEventArgs : EventArgs {
-
-        private ToolStripContentPanel      contentPanel         = null;
-        private Graphics                   graphics                 = null;
-        private bool handled = false;
-
+namespace System.Windows.Forms
+{
+    public class ToolStripContentPanelRenderEventArgs : EventArgs
+    {
         /// <devdoc>
-        ///  This class represents all the information to render the toolStrip
+        /// This class represents all the information to render the toolStrip
         /// </devdoc>        
-        public ToolStripContentPanelRenderEventArgs(Graphics g, ToolStripContentPanel contentPanel) {
-            this.contentPanel = contentPanel;
-            this.graphics = g;
-        }
-
-
-        /// <devdoc>
-        ///  the graphics object to draw with
-        /// </devdoc>
-        public Graphics Graphics {
-            get {
-                return graphics;    
-            }
-        }
-
-        public bool Handled {
-            get { return handled; }
-            set { handled = value; }
+        public ToolStripContentPanelRenderEventArgs(Graphics g, ToolStripContentPanel contentPanel)
+        {
+            Graphics = g;
+            ToolStripContentPanel = contentPanel;
         }
 
         /// <devdoc>
-        ///  Represents which toolStrip was affected by the click
+        /// The graphics object to draw with
         /// </devdoc>
-        public ToolStripContentPanel ToolStripContentPanel {
-            get {
-                return contentPanel;
-            }
-        }
-        
+        public Graphics Graphics { get; }
+
+        /// <devdoc>
+        /// Represents which toolStrip was affected by the click
+        /// </devdoc>
+        public ToolStripContentPanel ToolStripContentPanel { get; }
+
+        public bool Handled { get; set; }
     }
 }

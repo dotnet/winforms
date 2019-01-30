@@ -280,7 +280,6 @@ namespace System.Windows.Forms
                                     bool isLastVisibleRow)
         {
             Debug.Assert(graphics != null);
-            Debug.Assert(inheritedRowStyle != null);
 
             this.graphics = graphics;
             this.clipBounds = clipBounds;

@@ -46,7 +46,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         void ICollection.CopyTo(Array ar, int index)
         {
-            IntSecurity.UnmanagedCode.Demand();
             ScrubWeakRefs();
             listManagers.CopyTo(ar, index);
         }
@@ -60,7 +59,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            IntSecurity.UnmanagedCode.Demand();
             ScrubWeakRefs();
             return listManagers.GetEnumerator();
         }
@@ -376,7 +374,6 @@ namespace System.Windows.Forms {
             else
                 wRef.Target = bindingManagerBase;
 
-            IntSecurity.UnmanagedCode.Demand();
             ScrubWeakRefs();
             // Return the final binding manager
             return bindingManagerBase;

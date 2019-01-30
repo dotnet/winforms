@@ -12,10 +12,6 @@
       <Namespace>System.Windows.Forms.Design.Editors.Resources</Namespace>
     </EmbeddedResource>
   </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />

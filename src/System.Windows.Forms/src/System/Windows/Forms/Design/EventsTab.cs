@@ -18,8 +18,6 @@ namespace System.Windows.Forms.Design {
     /// <devdoc>
     ///    <para>Provides a tab on the property browser to display events for selection and linking.</para>
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class EventsTab : PropertyTab {
         private IServiceProvider sp;
         private IDesignerHost currentHost;

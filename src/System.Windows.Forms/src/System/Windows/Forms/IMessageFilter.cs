@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     
     using System;
 	using System.Security;
-	using System.Security.Permissions;
 
     /// <include file='doc\IMessageFilter.uex' path='docs/doc[@for="IMessageFilter"]/*' />
     /// <devdoc>
@@ -24,16 +23,6 @@ namespace System.Windows.Forms {
         ///    <para>Filters out a message before it is dispatched. </para>
         /// </devdoc>
         /// 
-
-
-
-
-
-
-
-		[
-		System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-		]
 		bool PreFilterMessage(ref Message m);
     }
 }

@@ -2,82 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-    /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.Control.KeyPress'/>
-    ///       event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.Control.KeyPress'/> event.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class KeyPressEventArgs : EventArgs {
-
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.keyChar"]/*' />
+    [ComVisible(true)]
+    public class KeyPressEventArgs : EventArgs
+    {
         /// <devdoc>
-        ///     Contains the character of the current KeyPress event.
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.KeyPressEventArgs'/>
+        /// class.
         /// </devdoc>
-        private char keyChar;
-
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.handled"]/*' />
-        /// <devdoc>
-        ///     Determines if this event has been handled by a handler.  If handled, the
-        ///     key event will not be sent along to Windows.  If not handled, the event
-        ///     will be sent to Windows for default processing.
-        /// </devdoc>
-        private bool handled;
-
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.KeyPressEventArgs"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new
-        ///       instance of the <see cref='System.Windows.Forms.KeyPressEventArgs'/>
-        ///       class.
-        ///    </para>
-        /// </devdoc>
-        public KeyPressEventArgs(char keyChar) {
-            this.keyChar = keyChar;
+        public KeyPressEventArgs(char keyChar)
+        {
+            KeyChar = keyChar;
         }
 
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.KeyChar"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the character corresponding to the key
-        ///       pressed.
-        ///    </para>
+        /// Gets the character corresponding to the key pressed.
         /// </devdoc>
-        public char KeyChar {
-            get {
-                return keyChar;
-            }
-            set {
-                keyChar = value;
-            }
-        }
+        public char KeyChar { get; set; }
 
-        /// <include file='doc\KeyPressEvent.uex' path='docs/doc[@for="KeyPressEventArgs.Handled"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the <see cref='System.Windows.Forms.Control.KeyPress'/>
-        ///       event was handled.
-        ///    </para>
+        /// Gets or sets a value indicating whether the <see cref='System.Windows.Forms.Control.KeyPress'/>
+        /// event was handled.
         /// </devdoc>
-        public bool Handled {
-            get {
-                return handled;
-            }
-            set {
-                handled = value;
-            }
-        }
+        public bool Handled { get; set; }
     }
 }

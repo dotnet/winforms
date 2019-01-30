@@ -6,7 +6,6 @@ namespace System.Windows.Forms {
 
     using Microsoft.Win32;
     using System;
-    using System.Security.Permissions;
     using System.Collections;
     using System.ComponentModel;
     using System.ComponentModel.Design;
@@ -97,7 +96,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
 
@@ -337,7 +335,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 

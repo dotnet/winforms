@@ -67,25 +67,6 @@ namespace System.Windows.Forms.Tests
             return data;
         }
 
-        // helper method to generate theory data Color values
-        public static TheoryData<Color> GetColorTheoryData()
-        {
-            var data = new TheoryData<Color>();
-            data.Add(Color.Red);
-            data.Add(Color.Blue);
-            data.Add(Color.Black);
-            return data;
-        }
-
-        // helper method to generate invalid theory data Color value(s)
-        public static TheoryData<Color> GetColorTheoryDataInvalid()
-        {
-            var data = new TheoryData<Color>();
-            data.Add(new Color());
-            data.Add(Color.Empty);
-            return data;
-        }
-
         // helper method to generate theory data Point values
         public static TheoryData<Size> GetSizeTheoryData() => GetSizeTheoryData(TestIncludeType.All);
 

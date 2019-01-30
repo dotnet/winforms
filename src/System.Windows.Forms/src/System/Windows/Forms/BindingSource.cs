@@ -21,8 +21,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Globalization;
     using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Text;
 
     [
@@ -686,7 +684,7 @@ namespace System.Windows.Forms {
             Type genericType = typeof(BindingList<>);
             Type bindingType = genericType.MakeGenericType(new Type[] { type });
 
-            return (IList) SecurityUtils.SecureCreateInstance(bindingType);
+            return (IList) Activator.CreateInstance(bindingType);
         }
 
         // Create an object of the given type. Throw an exception if this fails.
@@ -695,7 +693,7 @@ namespace System.Windows.Forms {
             Exception instanceException = null;
 
             try {
-                instancedObject = SecurityUtils.SecureCreateInstance(type);
+                instancedObject = Activator.CreateInstance(type);
             }
             catch (TargetInvocationException ex) {
                 instanceException = ex; // Default ctor threw an exception

@@ -18,7 +18,6 @@ namespace System.Experimental.Gdi
     using System.Drawing;
     using System.Drawing.Text;
     using System.Security;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Runtime.Versioning;
 

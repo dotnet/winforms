@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Collections;
     
     using System.Windows.Forms;
-    using System.Security.Permissions;
     
     using System.ComponentModel;
     using System.Drawing;
@@ -1080,7 +1079,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return owner.dataGrid.AccessibilityObject;
                 }
@@ -1111,13 +1109,11 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return null;
                 }
             }
             
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 owner.dataGrid.NavigateBack();
             }
@@ -1176,7 +1172,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Right:
@@ -1204,7 +1199,6 @@ namespace System.Windows.Forms {
 
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
             }
         }

@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.ComponentModel;
     using System.Windows.Forms.Internal;
-    using System.Security.Permissions;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using Runtime.CompilerServices;
@@ -1186,7 +1185,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 DataGridViewLinkCell dataGridViewCell = (DataGridViewLinkCell)this.Owner;
