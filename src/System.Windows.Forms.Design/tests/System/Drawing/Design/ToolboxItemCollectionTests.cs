@@ -16,25 +16,19 @@
         }	
 
         [Fact]
-        public void Contains_StateUnderTest_ExpectedBehavior()	
-        {	
-            var unitUnderTest = CreateToolboxItemCollection();	
-            ToolboxItem value = unitUnderTest[0];	
+        public void TestToolboxItemCollection_Throw_NotImplemented_Exception()
+        {
+            bool rightExceptionThrown = false;
+            try
+            {
+                var unitUnderTest = CreateToolboxItemCollection();
+            }
+            catch (System.NotImplementedException)
+            {
+                rightExceptionThrown = true;
+            }
 
-             var result = unitUnderTest.Contains( value);	
-
-             Assert.True(result);	
-        }	
-
-        [Fact]
-        public void IndexOf_StateUnderTest_ExpectedBehavior()	
-        {	
-            var unitUnderTest = CreateToolboxItemCollection();	
-            ToolboxItem value = unitUnderTest[0];	
-
-             var result = unitUnderTest.IndexOf(	 value);	
-
-             Assert.Equal(0,result);	
-        }	
+             Assert.True(rightExceptionThrown);
+        }
     }	
 }
