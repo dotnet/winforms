@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,18 +9,8 @@ using System.Security;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
-// Investigate removing this if the duplicate code in OleDragDropHandler.cs is removed
-[assembly:
-    SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope = "member",
-        Target = "System.Design.UnsafeNativeMethods.GetStockObject(System.Int32):System.IntPtr")]
-[assembly:
-    SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage", Scope = "member",
-        Target =
-            "System.Design.UnsafeNativeMethods.IntReleaseDC(System.Runtime.InteropServices.HandleRef,System.Runtime.InteropServices.HandleRef):System.Int32")]
-
 namespace System.Windows.Forms.Design
 {
-    [SuppressUnmanagedCodeSecurity]
     internal class UnsafeNativeMethods
     {
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
@@ -40,7 +30,6 @@ namespace System.Windows.Forms.Design
         public static extern IntPtr SendMessage(IntPtr hwnd, int msg, bool wparam, int lparam);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr GetActiveWindow();
 
@@ -49,7 +38,6 @@ namespace System.Windows.Forms.Design
         public static extern int GetMessageTime();
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SetActiveWindow(HandleRef hWnd);
@@ -462,7 +450,6 @@ namespace System.Windows.Forms.Design
                 int grfStatFlag);
         }
 
-        [SuppressUnmanagedCodeSecurity]
         [ComImport]
         [Guid("0000000C-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
