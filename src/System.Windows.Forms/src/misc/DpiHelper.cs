@@ -429,15 +429,13 @@ namespace System.Windows.Forms
                         break;
                     case HighDpiMode.PerMonitorV2:
                         // Necessary for RS1, since this SetProcessDpiAwarenessContext IS available here.
-                        rs2AndAboveDpiFlag = NativeMethods.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2;
-                        rs2AndAboveDpiFlag = SafeNativeMethods.IsValidDpiAwarenessContext(rs2AndAboveDpiFlag) ?
+                        rs2AndAboveDpiFlag = SafeNativeMethods.IsValidDpiAwarenessContext(NativeMethods.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) ?
                                              NativeMethods.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 :
                                              NativeMethods.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
                         break;
                     case HighDpiMode.DpiUnawareGdiScaled:
-                        rs2AndAboveDpiFlag = NativeMethods.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED;
                         // Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
-                        rs2AndAboveDpiFlag = SafeNativeMethods.IsValidDpiAwarenessContext(rs2AndAboveDpiFlag) ?
+                        rs2AndAboveDpiFlag = SafeNativeMethods.IsValidDpiAwarenessContext(NativeMethods.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED) ?
                                              NativeMethods.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED :
                                              NativeMethods.DPI_AWARENESS_CONTEXT_UNAWARE;
                         break;
