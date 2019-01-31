@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -805,20 +805,30 @@ namespace System.Windows.Forms {
         [ResourceExposure(ResourceScope.None)]
         public static extern bool CloseDesktop(IntPtr hDesktop);
 
-        // for Windows vista to windows 8.
+        // for Windows Windows 7 to Windows 8.
+        [DllImport(ExternDll.User32, SetLastError = true)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool IsProcessDPIAware();
+
+        // for Windows Windows 7 to Windows 8.
         [DllImport(ExternDll.User32, SetLastError = true)]
         [ResourceExposure(ResourceScope.None)]
         public static extern bool SetProcessDPIAware();
 
-        // for windows 8.1 and above 
+        // for Windows 8.1 and above 
         [DllImport(ExternDll.ShCore, SetLastError = true)]
         [ResourceExposure(ResourceScope.None)]
         public static extern int SetProcessDpiAwareness(NativeMethods.PROCESS_DPI_AWARENESS awareness);
 
-        // for windows 8.1 and above 
+        // for Windows 8.1 and above 
         [DllImport(ExternDll.ShCore, SetLastError = true)]
         [ResourceExposure(ResourceScope.None)]
         public static extern int GetProcessDpiAwareness(IntPtr processHandle, out NativeMethods.PROCESS_DPI_AWARENESS awareness);
+
+        // for Windows 10 version RS2 and above
+        [DllImport(ExternDll.User32, SetLastError = true)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool IsValidDpiAwarenessContext(int dpiFlag);
 
         // for Windows 10 version RS2 and above
         [DllImport(ExternDll.User32, SetLastError = true)]
@@ -847,7 +857,6 @@ namespace System.Windows.Forms {
         internal const int PROCESS_VM_READ = 0x0010;
 
         // Color conversion
-        //
         public static int RGBToCOLORREF(int rgbValue) {
 
             // clear the A value, swap R & B values

@@ -4,38 +4,16 @@
 
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-
-    /// <include file='doc\DataGridViewAutoSizeColumnModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeColumnModeEventArgs"]/*' />
     public class DataGridViewAutoSizeColumnModeEventArgs : EventArgs
     {
-        private DataGridViewAutoSizeColumnMode previousMode;
-        private DataGridViewColumn dataGridViewColumn;
-
-        /// <include file='doc\DataGridViewAutoSizeColumnModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeColumnModeEventArgs.DataGridViewAutoSizeColumnModeEventArgs"]/*' />
         public DataGridViewAutoSizeColumnModeEventArgs(DataGridViewColumn dataGridViewColumn, DataGridViewAutoSizeColumnMode previousMode)
         {
-            this.dataGridViewColumn = dataGridViewColumn;
-            this.previousMode = previousMode;
+            Column = dataGridViewColumn;
+            PreviousMode = previousMode;
         }
 
-        /// <include file='doc\DataGridViewAutoSizeColumnModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeColumnModeEventArgs.Column"]/*' />
-        public DataGridViewColumn Column
-        {
-            get
-            {
-                return this.dataGridViewColumn;
-            }
-        }
+        public DataGridViewColumn Column { get; }
 
-        /// <include file='doc\DataGridViewAutoSizeColumnModeEventArgs.uex' path='docs/doc[@for="DataGridViewAutoSizeColumnModeEventArgs.PreviousMode"]/*' />
-        public DataGridViewAutoSizeColumnMode PreviousMode
-        {
-            get
-            {
-                return this.previousMode;
-            }
-        }
+        public DataGridViewAutoSizeColumnMode PreviousMode { get; }
     }
 }

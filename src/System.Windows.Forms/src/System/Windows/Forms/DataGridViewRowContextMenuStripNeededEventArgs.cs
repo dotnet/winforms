@@ -4,16 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-
-    /// <include file='doc\DataGridViewRowContextMenuStripNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowContextMenuStripNeededEventArgs"]/*' />
     public class DataGridViewRowContextMenuStripNeededEventArgs : EventArgs
     {
-        private int rowIndex;
-        private ContextMenuStrip contextMenuStrip;
-
-        /// <include file='doc\DataGridViewRowContextMenuStripNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowContextMenuStripNeededEventArgs.DataGridViewRowContextMenuStripNeededEventArgs"]/*' />
         public DataGridViewRowContextMenuStripNeededEventArgs(int rowIndex)
         {
             if (rowIndex < -1)
@@ -21,34 +13,16 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
-            this.rowIndex = rowIndex;
+            RowIndex = rowIndex;
         }
 
         internal DataGridViewRowContextMenuStripNeededEventArgs(int rowIndex, ContextMenuStrip contextMenuStrip) : this(rowIndex)
         {
-            this.contextMenuStrip = contextMenuStrip;
+            ContextMenuStrip = contextMenuStrip;
         }
 
-        /// <include file='doc\DataGridViewRowContextMenuStripNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowContextMenuStripNeededEventArgs.RowIndex"]/*' />
-        public int RowIndex
-        {
-            get
-            {
-                return this.rowIndex;
-            }
-        }
+        public int RowIndex { get; }
 
-        /// <include file='doc\DataGridViewRowContextMenuStripNeededEventArgs.uex' path='docs/doc[@for="DataGridViewRowContextMenuStripNeededEventArgs.ContextMenuStrip"]/*' />
-        public ContextMenuStrip ContextMenuStrip
-        {
-            get
-            {
-                return this.contextMenuStrip;
-            }
-            set
-            {
-                this.contextMenuStrip = value;
-            }
-        }
+        public ContextMenuStrip ContextMenuStrip { get; set; }
     }
 }

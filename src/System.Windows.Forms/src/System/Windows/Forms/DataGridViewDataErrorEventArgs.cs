@@ -2,62 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.ComponentModel;
-
-    /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs"]/*' />
     public class DataGridViewDataErrorEventArgs : DataGridViewCellCancelEventArgs
     {
-        private Exception exception;
-        private bool throwException;
-        private DataGridViewDataErrorContexts context;
-    
-        /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs.DataGridViewDataErrorEventArgs"]/*' />
-        public DataGridViewDataErrorEventArgs(Exception exception,
-            int columnIndex,
-            int rowIndex,
-            DataGridViewDataErrorContexts context) : base(columnIndex, rowIndex)
+        private bool _throwException;
+
+        public DataGridViewDataErrorEventArgs(Exception exception, int columnIndex, int rowIndex, DataGridViewDataErrorContexts context) : base(columnIndex, rowIndex)
         {
-            this.exception = exception;
-            this.context = context;
+            Exception = exception;
+            Context = context;
         }
 
-        /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs.Context"]/*' />
-        public DataGridViewDataErrorContexts Context
-        {
-            get
-            {
-                return this.context;
-            }
-        }
+        public DataGridViewDataErrorContexts Context { get; }
 
-        /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs.Exception"]/*' />
-        public Exception Exception
-        {
-            get
-            {
-                return this.exception;
-            }
-        }
+        public Exception Exception { get; }
 
-        /// <include file='doc\DataGridViewDataErrorEventArgs.uex' path='docs/doc[@for="DataGridViewDataErrorEventArgs.ThrowException"]/*' />
         public bool ThrowException
         {
-            get
-            {
-                return this.throwException;
-            }
+            get => _throwException;
             set
             {
-                if (value && this.exception == null)
+                if (value && Exception == null)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_CannotThrowNullException));
                 }
-                this.throwException = value;
+
+                _throwException = value;
             }
         }
     }

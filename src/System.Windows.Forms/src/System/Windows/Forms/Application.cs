@@ -376,6 +376,32 @@ namespace System.Windows.Forms {
             }
         }
 
+        /// <summary>
+        /// Gets the current HighDpi mode for the process.
+        /// </summary>
+        public static HighDpiMode HighDpiMode
+        {
+            get
+            {
+                return DpiHelper.GetWinformsApplicationDpiAwareness();
+            }
+        }
+
+        /// <summary>
+        /// Sets the HighDpi mode for process.
+        /// </summary>
+        /// <param name="highDpiMode">The HighDpi mode to set.</param>
+        /// <returns></returns>
+        public static bool SetHighDpiMode(HighDpiMode highDpiMode)
+        {
+            if (DpiHelper.FirstParkingWindowCreated)
+            {
+                return false;
+            }
+
+            return DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
+        }
+
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.LocalUserAppDataPath"]/*' />
         /// <devdoc>
         ///    <para>Gets the path for the application data specific to a local, non-roaming user.</para>
@@ -3985,6 +4011,7 @@ namespace System.Windows.Forms {
                 SetState(STATE_TOPLEVEL, true);
                 Text = "WindowsFormsParkingWindow";
                 Visible = false;
+                DpiHelper.FirstParkingWindowCreated = true;
             }
 
             protected override CreateParams CreateParams {
@@ -4259,12 +4286,42 @@ namespace System.Windows.Forms {
                 context.EnableWindowsForModalLoop(onlyWinForms, this);                
             }
 
-
             protected override void ExitThreadCore() {
                 // do nothing... modal dialogs exit by setting dialog result
             }
         }
 
+    }
+
+    /// <summary>
+    /// Specifies the HighDpi mode.
+    /// </summary>
+    public enum HighDpiMode
+    {
+        /// <summary>
+        /// The window does not scale for DPI changes and always assumes a scale factor of 100%.
+        /// </summary>
+        DpiUnaware,
+
+        /// <summary>
+        /// The window will query for the DPI of the primary monitor once and use this for the process on all monitors. 
+        /// </summary>
+        SystemAware,
+
+        /// <summary>
+        /// The Window checks for DPI when it's created and adjusts scale factor when the DPI changes.
+        /// </summary>
+        PerMonitor,
+
+        /// <summary>
+        /// Similar to PerMonitor, but enables Child window DPI change notification, improved scaling of comctl32 controls and dialog scaling.
+        /// </summary>
+        PerMonitorV2,
+
+        /// <summary>
+        /// Similar to DpiUnaware, but improves the quality of GDI/GDI+ based content.
+        /// </summary>
+        DpiUnawareGdiScaled
     }
 }
 
