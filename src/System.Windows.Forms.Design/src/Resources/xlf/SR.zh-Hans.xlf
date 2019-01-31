@@ -1,110 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-Hans" original="../SR.resx">
+  <file datatype="xml" source-language="en" target-language="zh-HANS" original="../SR.resx">
     <body>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
         <source>Optimized Code Generation</source>
-        <target state="new">Optimized Code Generation</target>
+        <target state="translated">优化代码生成</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenSettings">
         <source>Code Generation Settings</source>
-        <target state="new">Code Generation Settings</target>
+        <target state="translated">代码生成设置</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingCat">
         <source>InSitu Editing</source>
-        <target state="new">InSitu Editing</target>
+        <target state="translated">就地编辑</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingDesc">
         <source>Controls whether InSitu editing is enabled.</source>
-        <target state="new">Controls whether InSitu editing is enabled.</target>
+        <target state="translated">控制是否启用就地编辑。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingDisplay">
         <source>Enable InSitu Editing</source>
-        <target state="new">Enable InSitu Editing</target>
+        <target state="translated">启用就地编辑</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_GridSizeDesc">
         <source>Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</source>
-        <target state="new">Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</target>
+        <target state="translated">当 LayoutMode = SnapToGrid 时，在设计器上设置默认的 X 和 Y 网格设置。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_GridSizeDisplayName">
         <source>Default Grid Cell Size</source>
-        <target state="new">Default Grid Cell Size</target>
+        <target state="translated">默认网格单元格大小</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_LayoutSettings">
         <source>Layout Settings</source>
-        <target state="new">Layout Settings</target>
+        <target state="translated">布局设置</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="new">Controls whether designer smart tag windows should be shown by default.</target>
+        <target state="translated">控制在默认情况下是否应显示设计器智能标记窗口。 </target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
         <source>Automatically Open Smart Tags</source>
-        <target state="new">Automatically Open Smart Tags</target>
+        <target state="translated">自动打开智能标记</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagSettings">
         <source>Object Bound Smart Tag Settings</source>
-        <target state="new">Object Bound Smart Tag Settings</target>
+        <target state="translated">对象绑定智能标记设置</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_OptimizedCodeGen">
         <source>Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</source>
-        <target state="new">Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</target>
+        <target state="translated">启用优化代码生成。某些控件可能与此模式不兼容。为使此更改生效，必须关闭 Visual Studio，然后再重新打开它。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ShowGridDesc">
         <source>Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</source>
-        <target state="new">Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</target>
+        <target state="translated">当 LayoutMode = SnapToGrid 时，控制设计器是否应显示大小调整网格。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ShowGridDisplayName">
         <source>Show Grid</source>
-        <target state="new">Show Grid</target>
+        <target state="translated">显示网格</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_SnapToGridDesc">
         <source>Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</source>
-        <target state="new">Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</target>
+        <target state="translated">当 LayoutMode = SnapToGrid 时，控制设计器是否应对齐网格点。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_SnapToGridDisplayName">
         <source>Snap to Grid</source>
-        <target state="new">Snap to Grid</target>
+        <target state="translated">对齐网格</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="new">Controls whether designers should show smart tag popup windows.</target>
+        <target state="translated">控制设计器是否应显示智能标记弹出窗口。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">
         <source>Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</source>
-        <target state="new">Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</target>
+        <target state="translated">控制设计器是否应使用对齐线。如果设置为 True，则使用对齐线作为参考线。如果设置为 False，则使用网格线。</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
         <source>This IDataObject doesn't support SetData.</source>
-        <target state="new">This IDataObject doesn't support SetData.</target>
+        <target state="translated">此 IDataObject 不支持 SetData。</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
-        <target state="new">This method/object is not implemented by design.</target>
+        <target state="translated">未按设计实现此方法/对象。</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
-        <target state="new">Winforms Designer is not supported on this platform.</target>
+        <target state="translated">此平台上不支持 Winforms Designer。</target>
         <note />
       </trans-unit>
     </body>
