@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -373,6 +373,7 @@ namespace System.Windows.Forms
         public static System.Globalization.CultureInfo CurrentCulture { get { throw null; } set { } }
         public static System.Windows.Forms.InputLanguage CurrentInputLanguage { get { throw null; } set { } }
         public static string ExecutablePath { get { throw null; } }
+        public static HighDpiMode HighDpiMode { get {throw null; } }
         public static string LocalUserAppDataPath { get { throw null; } }
         public static bool MessageLoop { get { throw null; } }
         public static System.Windows.Forms.FormCollection OpenForms { get { throw null; } }
@@ -396,6 +397,7 @@ namespace System.Windows.Forms
         public static void AddMessageFilter(System.Windows.Forms.IMessageFilter value) { }
         public static void DoEvents() { }
         public static void EnableVisualStyles() { }
+        public static bool SetHighDpiMode(HighDpiMode highDpiMode) { throw null; }
         public static void Exit() { }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public static void Exit(System.ComponentModel.CancelEventArgs e) { }
@@ -7712,6 +7714,16 @@ namespace System.Windows.Forms
         public virtual void SetShowHelp(System.Windows.Forms.Control ctl, bool value) { }
         public override string ToString() { throw null; }
     }
+
+    public enum HighDpiMode
+    {
+        DpiUnaware,
+        SystemAware,
+        PerMonitor,
+        PerMonitorV2,
+        DpiUnawareGdiScaled
+    }
+
     public enum HorizontalAlignment
     {
         Center = 2,
