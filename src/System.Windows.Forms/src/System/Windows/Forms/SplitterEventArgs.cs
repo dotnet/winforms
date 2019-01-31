@@ -2,99 +2,46 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-    /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for splitter events.
-    ///    </para>
+    /// Provides data for splitter events.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class SplitterEventArgs : EventArgs {
-
-        private readonly int x;
-        private readonly int y;
-        private int splitX;
-        private int splitY;
-
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.SplitterEventArgs"]/*' />
+    [ComVisible(true)]
+    public class SplitterEventArgs : EventArgs
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Initializes an instance of the <see cref='System.Windows.Forms.SplitterEventArgs'/> class with the specified coordinates
-        ///       of the mouse pointer and the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/>.
-        ///    </para>
+        /// Initializes an instance of the <see cref='System.Windows.Forms.SplitterEventArgs'/> class with the specified coordinates
+        /// of the mouse pointer and the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/>.
         /// </devdoc>
-        public SplitterEventArgs(int x, int y, int splitX, int splitY) {
-            this.x = x;
-            this.y = y;
-            this.splitX = splitX;
-            this.splitY = splitY;
+        public SplitterEventArgs(int x, int y, int splitX, int splitY)
+        {
+            X = x;
+            Y = y;
+            SplitX = splitX;
+            SplitY = splitY;
         }
 
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.X"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the x-coordinate of the
-        ///       mouse pointer (in client coordinates).
-        ///    </para>
+        /// Gets the x-coordinate of the mouse pointer (in client coordinates).
         /// </devdoc>
-        public int X {
-            get {
-                return x;
-            }
-        }
+        public int X { get; }
 
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.Y"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the y-coordinate of the mouse pointer (in
-        ///       client coordinates).
-        ///    </para>
+        /// Gets the y-coordinate of the mouse pointer (in client coordinates).
         /// </devdoc>
-        public int Y {
-            get {
-                return y;
-            }
-        }
+        public int Y { get; }
 
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.SplitX"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the x-coordinate of the
-        ///       upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
-        ///    </para>
+        /// Gets the x-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
         /// </devdoc>
-        public int SplitX {
-            get {
-                return splitX;
-            }
-            set {
-                splitX = value;
-            }
-        }
+        public int SplitX { get; set; }
 
-        /// <include file='doc\SplitterEvent.uex' path='docs/doc[@for="SplitterEventArgs.SplitY"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the y-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
-        ///    </para>
+        /// Gets the y-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
         /// </devdoc>
-        public int SplitY {
-            get {
-                return splitY;
-            }
-            set {
-                splitY = value;
-            }
-        }
+        public int SplitY { get; set; }
     }
 }
