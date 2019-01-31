@@ -8,6 +8,7 @@
 
   </PropertyGroup>
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
+  <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />
   <Import Project="$(MSBuildThisFileDirectory)eng\ReferenceAssemblies.props" />
   <Import Project="$(MSBuildThisFileDirectory)eng\FacadeAssemblies.props" />
 

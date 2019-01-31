@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -21,7 +21,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// See Com2Properties for the array of handler classes to interface classes
     /// where handlers should be registered.
     /// </devdoc>
-    [System.Security.SuppressUnmanagedCodeSecurityAttribute()]
     internal class Com2IVsPerPropertyBrowsingHandler: Com2ExtendedBrowsingHandler {
 
          /// <include file='doc\COM2IVsPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IVsPerPropertyBrowsingHandler.Interface"]/*' />

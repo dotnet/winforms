@@ -4,37 +4,16 @@
 
 namespace System.Windows.Forms
 {
-    using System;
-
-    /// <include file='doc\DataGridViewRowStateChangedEventArgs.uex' path='docs/doc[@for="DataGridViewRowStateChangedEventArgs"]/*' />
     public class DataGridViewRowStateChangedEventArgs : EventArgs
     {
-        private DataGridViewRow dataGridViewRow;
-        private DataGridViewElementStates stateChanged;
-    
-        /// <include file='doc\DataGridViewRowStateChangedEventArgs.uex' path='docs/doc[@for="DataGridViewRowStateChangedEventArgs.DataGridViewRowStateChangedEventArgs"]/*' />
         public DataGridViewRowStateChangedEventArgs(DataGridViewRow dataGridViewRow, DataGridViewElementStates stateChanged)
         {
-            this.dataGridViewRow = dataGridViewRow;
-            this.stateChanged = stateChanged;
+            Row = dataGridViewRow;
+            StateChanged = stateChanged;
         }
 
-        /// <include file='doc\DataGridViewRowStateChangedEventArgs.uex' path='docs/doc[@for="DataGridViewRowStateChangedEventArgs.Row"]/*' />
-        public DataGridViewRow Row
-        {
-            get
-            {
-                return this.dataGridViewRow;
-            }
-        }
+        public DataGridViewRow Row { get;}
 
-        /// <include file='doc\DataGridViewRowStateChangedEventArgs.uex' path='docs/doc[@for="DataGridViewRowStateChangedEventArgs.StateChanged"]/*' />
-        public DataGridViewElementStates StateChanged
-        {
-            get
-            {
-                return this.stateChanged;
-            }
-        }
+        public DataGridViewElementStates StateChanged { get; }
     }
 }

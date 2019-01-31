@@ -4,7 +4,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GenerateAssemblyInfo)'=='true'">
-    <AssemblyInfoFile Condition="'$(MSBuildProjectExtension)' == '.csproj'">$(IntermediateOutputPath)_AssemblyInfo.cs</AssemblyInfoFile>
+    <AssemblyInfoFile Condition="'$(MSBuildProjectExtension)' == '.csproj'">$(IntermediateOutputPath)_AssemblyInfo.g.cs</AssemblyInfoFile>
   </PropertyGroup>
 
   <PropertyGroup>        

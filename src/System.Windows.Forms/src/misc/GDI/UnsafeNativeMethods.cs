@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -218,7 +218,6 @@ namespace System.Experimental.Gdi
 
         // Font.
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         [DllImport(ExternDll.Gdi32, SetLastError = true, EntryPoint = "CreateFontIndirect", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         [ResourceExposure(ResourceScope.Process)]
         public static extern IntPtr IntCreateFontIndirect([In, Out, MarshalAs(UnmanagedType.AsAny)] object lf); // need object here since LOGFONT is not public.
