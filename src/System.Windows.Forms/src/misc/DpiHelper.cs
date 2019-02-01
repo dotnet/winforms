@@ -467,7 +467,7 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                return SafeNativeMethods.SetProcessDpiAwareness(dpiFlag) != NativeMethods.S_OK;
+                return SafeNativeMethods.SetProcessDpiAwareness(dpiFlag) == NativeMethods.S_OK;
             }
 
             // For operating systems windows 7 to windows 8
