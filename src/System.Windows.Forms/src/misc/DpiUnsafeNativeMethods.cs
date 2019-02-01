@@ -31,6 +31,26 @@ namespace System.Windows.Forms
         [ResourceExposure(ResourceScope.None)]
         private static extern DpiAwarenessContext GetWindowDpiAwarenessContext(IntPtr hwnd);
 
+        public static bool GetThreadDpiAwarenessContextIsAvailable()
+        {
+            return ApiHelper.IsApiAvailable(ExternDll.User32, nameof(GetThreadDpiAwarenessContext));
+        }
+
+        public static bool SetThreadDpiAwarenessContextIsAvailable()
+        {
+            return ApiHelper.IsApiAvailable(ExternDll.User32, nameof(SetThreadDpiAwarenessContext));
+        }
+
+        public static bool AreDpiAwarenessContextsEqualIsAvailable()
+        {
+            return ApiHelper.IsApiAvailable(ExternDll.User32, nameof(AreDpiAwarenessContextsEqual));
+        }
+
+        public static bool GetWindowDpiAwarenessContextIsAvailable()
+        {
+            return ApiHelper.IsApiAvailable(ExternDll.User32, nameof(GetWindowDpiAwarenessContext));
+        }
+
         /// <summary>
         /// Tries to compare two DPIawareness context values. Return true if they were equal. 
         /// Return false when they are not equal or underlying OS does not support this API.
@@ -47,7 +67,7 @@ namespace System.Windows.Forms
                 return false; // because we know A is not null
             }
 
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(DpiUnsafeNativeMethods.AreDpiAwarenessContextsEqual)))
+            if (AreDpiAwarenessContextsEqualIsAvailable())
             {
                 return AreDpiAwarenessContextsEqual((DpiAwarenessContext)dpiContextA, (DpiAwarenessContext)dpiContextB);
             }
@@ -61,7 +81,7 @@ namespace System.Windows.Forms
         /// <returns> returns thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
         public static DpiAwarenessContext? TryGetThreadDpiAwarenessContext()
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(DpiUnsafeNativeMethods.GetThreadDpiAwarenessContext)))
+            if (GetThreadDpiAwarenessContextIsAvailable())
             {
                 return GetThreadDpiAwarenessContext();
             }
@@ -78,7 +98,7 @@ namespace System.Windows.Forms
         /// <returns> returns old thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
         public static DpiAwarenessContext? TrySetThreadDpiAwarenessContext(DpiAwarenessContext? dpiContext)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(DpiUnsafeNativeMethods.SetThreadDpiAwarenessContext)))
+            if (SetThreadDpiAwarenessContextIsAvailable())
             {
                 if (dpiContext == null)
                 {
@@ -99,7 +119,7 @@ namespace System.Windows.Forms
         /// <returns> returns window dpi awareness context if API is available in this version of OS. otherwise, return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED.</returns>
         public static DpiAwarenessContext? TryGetWindowDpiAwarenessContext(IntPtr hwnd)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(DpiUnsafeNativeMethods.GetWindowDpiAwarenessContext)))
+            if (GetWindowDpiAwarenessContextIsAvailable())
             {
                 return GetWindowDpiAwarenessContext(hwnd);
             }
