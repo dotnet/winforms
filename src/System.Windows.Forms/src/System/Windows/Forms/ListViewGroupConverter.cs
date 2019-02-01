@@ -101,9 +101,8 @@ namespace System.Windows.Forms {
                 // Header
                 //
                 ctor = typeof(ListViewGroup).GetConstructor(new Type[] {typeof(string), typeof(HorizontalAlignment)});
-                if (ctor != null) {
-                    return new InstanceDescriptor(ctor, new object[] { group.Header, group.HeaderAlignment }, false);
-                }
+                Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                return new InstanceDescriptor(ctor, new object[] { group.Header, group.HeaderAlignment }, false);
             }
 
             if (destinationType == typeof(string) && value == null) {

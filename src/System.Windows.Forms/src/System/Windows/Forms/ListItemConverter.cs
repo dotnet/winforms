@@ -60,24 +60,16 @@ namespace System.Windows.Forms {
                     if (item.SubItems[i].CustomStyle) {
                         if (!string.IsNullOrEmpty(item.ImageKey)) {
                             ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string)});
-                            if (ctor != null) {
-                                ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
-                                ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
-                                return new InstanceDescriptor(ctor, new object[] {subItemArray, item.ImageKey}, false);
-                            }       
-                            else {
-                                break;
-                            }
+                            Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                            ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
+                            ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
+                            return new InstanceDescriptor(ctor, new object[] {subItemArray, item.ImageKey}, false);
                         } else {
                             ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(int)});
-                            if (ctor != null) {
-                                ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
-                                ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
-                                return new InstanceDescriptor(ctor, new object[] {subItemArray, item.ImageIndex}, false);
-                            }       
-                            else {
-                                break;
-                            }
+                            Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                            ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
+                            ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
+                            return new InstanceDescriptor(ctor, new object[] {subItemArray, item.ImageIndex}, false);
                         }
                     }
                 }                
@@ -99,15 +91,14 @@ namespace System.Windows.Forms {
                             typeof(Color),
                             typeof(Color),
                             typeof(Font)});
-                        if (ctor != null) {
-                            return new InstanceDescriptor(ctor, new object[] {
-                                subItems,
-                                item.ImageKey,
-                                item.SubItems[0].CustomForeColor ? item.ForeColor : Color.Empty,
-                                item.SubItems[0].CustomBackColor ? item.BackColor : Color.Empty,
-                                item.SubItems[0].CustomFont ? item.Font : null
-                                }, false);
-                        }
+                        Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                        return new InstanceDescriptor(ctor, new object[] {
+                            subItems,
+                            item.ImageKey,
+                            item.SubItems[0].CustomForeColor ? item.ForeColor : Color.Empty,
+                            item.SubItems[0].CustomBackColor ? item.BackColor : Color.Empty,
+                            item.SubItems[0].CustomFont ? item.Font : null
+                            }, false);
                     } else {
                         ctor = typeof(ListViewItem).GetConstructor(new Type[] {
                             typeof(string[]),
@@ -115,15 +106,14 @@ namespace System.Windows.Forms {
                             typeof(Color),
                             typeof(Color),
                             typeof(Font)});
-                        if (ctor != null) {
-                            return new InstanceDescriptor(ctor, new object[] {
-                                subItems,
-                                item.ImageIndex,
-                                item.SubItems[0].CustomForeColor ? item.ForeColor : Color.Empty,
-                                item.SubItems[0].CustomBackColor ? item.BackColor : Color.Empty,
-                                item.SubItems[0].CustomFont ? item.Font : null
-                                }, false);
-                        }
+                        Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                        return new InstanceDescriptor(ctor, new object[] {
+                            subItems,
+                            item.ImageIndex,
+                            item.SubItems[0].CustomForeColor ? item.ForeColor : Color.Empty,
+                            item.SubItems[0].CustomBackColor ? item.BackColor : Color.Empty,
+                            item.SubItems[0].CustomFont ? item.Font : null
+                            }, false);
                     }
                 }
 
@@ -131,9 +121,7 @@ namespace System.Windows.Forms {
                 //
                 if (item.ImageIndex == -1 && string.IsNullOrEmpty(item.ImageKey) && item.SubItems.Count <= 1) {
                     ctor = typeof(ListViewItem).GetConstructor(new Type[] {typeof(string)});
-                    if (ctor != null) {
-                        return new InstanceDescriptor(ctor, new object[] {item.Text}, false);
-                    }
+                    return new InstanceDescriptor(ctor, new object[] {item.Text}, false);
                 }
                 
                 // Text and Image
@@ -143,16 +131,14 @@ namespace System.Windows.Forms {
                         ctor = typeof(ListViewItem).GetConstructor(new Type[] {
                             typeof(string),
                             typeof(string)});
-                        if (ctor != null) {
-                            return new InstanceDescriptor(ctor, new object[] {item.Text, item.ImageKey}, false);
-                        }
+                        Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                        return new InstanceDescriptor(ctor, new object[] {item.Text, item.ImageKey}, false);
                     } else {
                         ctor = typeof(ListViewItem).GetConstructor(new Type[] {
                             typeof(string),
                             typeof(int)});
-                        if (ctor != null) {
-                            return new InstanceDescriptor(ctor, new object[] {item.Text, item.ImageIndex}, false);
-                        }
+                        Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                        return new InstanceDescriptor(ctor, new object[] {item.Text, item.ImageIndex}, false);
                     }
                 }
 
@@ -162,16 +148,13 @@ namespace System.Windows.Forms {
                     ctor = typeof(ListViewItem).GetConstructor(new Type[] {
                         typeof(string[]),
                         typeof(string)});
-                    if (ctor != null) {
-                        return new InstanceDescriptor(ctor, new object[] {subItems, item.ImageKey}, false);
-                    }
+                    return new InstanceDescriptor(ctor, new object[] {subItems, item.ImageKey}, false);
                 } else {
                     ctor = typeof(ListViewItem).GetConstructor(new Type[] {
                         typeof(string[]),
                         typeof(int)});
-                    if (ctor != null) {
-                        return new InstanceDescriptor(ctor, new object[] {subItems, item.ImageIndex}, false);
-                    }
+                    Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                    return new InstanceDescriptor(ctor, new object[] {subItems, item.ImageIndex}, false);
                 }
             }
             
@@ -206,22 +189,20 @@ namespace System.Windows.Forms {
                         typeof(Color),
                         typeof(Color),
                         typeof(Font)});
-                    if (ctor != null) {
-                        return new InstanceDescriptor(ctor, new object[] {
-                            null,
-                            item.Text,
-                            item.ForeColor,
-                            item.BackColor,
-                            item.Font}, true);
-                    }
+                    Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                    return new InstanceDescriptor(ctor, new object[] {
+                        null,
+                        item.Text,
+                        item.ForeColor,
+                        item.BackColor,
+                        item.Font}, true);
                 }
 
                 // Otherwise, just use the text constructor
                 //
                 ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[] {typeof(ListViewItem), typeof(string)});
-                if (ctor != null) {
-                    return new InstanceDescriptor(ctor, new object[] {null, item.Text}, true);
-                }
+                Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                return new InstanceDescriptor(ctor, new object[] {null, item.Text}, true);
             }
             
             return base.ConvertTo(context, culture, value, destinationType);
