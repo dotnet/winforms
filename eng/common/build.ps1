@@ -18,6 +18,7 @@ Param(
   [switch] $pack,
   [switch] $publish,
   [switch][Alias('bl')]$binaryLog,
+  [string][Alias('bln')]$binaryLogName = "Build",
   [switch] $ci,
   [switch] $prepareMachine,
   [switch] $help,
@@ -31,6 +32,7 @@ function Print-Usage() {
     Write-Host "  -configuration <value>  Build configuration: 'Debug' or 'Release' (short: -c)"
     Write-Host "  -verbosity <value>      Msbuild verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic] (short: -v)"
     Write-Host "  -binaryLog              Output binary log (short: -bl)"
+    Write-Host "  -binaryLogName <value>  Specify name of Binary Log in the form <value>.binlog (short: -bln)"
     Write-Host "  -help                   Print help and exit"
     Write-Host ""
 
@@ -74,7 +76,7 @@ function Build {
   $toolsetBuildProj = InitializeToolset
   InitializeCustomToolset
 
-  $bl = if ($binaryLog) { "/bl:" + (Join-Path $LogDir "Build.binlog") } else { "" }
+  $bl = if ($binaryLog) { "/bl:" + (Join-Path $LogDir ($binaryLogName + ".binlog")) } else { "" }
 
   if ($projects) {
     # Re-assign properties to a new variable because PowerShell doesn't let us append properties directly for unclear reasons.
