@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 #if WINFORMS_NAMESPACE
 using CAPS = System.Windows.Forms.NativeMethods;
@@ -425,7 +426,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-                /// <summary>
+        /// <summary>
         /// Sets the DPI awareness. If not available on the current OS, it falls back to the next possible.
         /// </summary>
         /// <returns>true/false - If the process DPI awareness is successfully set, returns true. Otherwise false.</returns>
@@ -504,7 +505,9 @@ namespace System.Windows.Forms
                         dpiFlag.ToString(),
                         nameof(SafeNativeMethods.SetProcessDpiAwareness)));
                 }
-
+                Debug.Assert(hResult != NativeMethods.E_ACCESSDENIED, 
+                    "The DPI awareness is already set, either by calling this API previously or through the application (.exe) manifest.");
+                    
                 return hResult == NativeMethods.S_OK;
             }
 
