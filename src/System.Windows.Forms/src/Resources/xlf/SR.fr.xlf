@@ -9974,7 +9974,7 @@
       </trans-unit>
       <trans-unit id="TextBoxPlaceholderTextDescr">
         <source>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </source>
-        <target state="new">Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </target>
+        <target state="translated">Spécifie le PlaceholderText du contrôle TextBox. Le PlaceholderText s'affiche dans le contrôle quand la propriété Text est null ou vide et peut servir à guider l'utilisateur pour savoir quelle entrée est attendue par le contrôle.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxPreferredHeightDescr">
