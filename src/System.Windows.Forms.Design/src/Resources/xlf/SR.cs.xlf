@@ -4,107 +4,107 @@
     <body>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
         <source>Optimized Code Generation</source>
-        <target state="new">Optimized Code Generation</target>
+        <target state="translated">Generování optimalizovaného kódu</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenSettings">
         <source>Code Generation Settings</source>
-        <target state="new">Code Generation Settings</target>
+        <target state="translated">Nastavení generování kódu</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingCat">
         <source>InSitu Editing</source>
-        <target state="new">InSitu Editing</target>
+        <target state="translated">Úprava na místě (InSitu)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingDesc">
         <source>Controls whether InSitu editing is enabled.</source>
-        <target state="new">Controls whether InSitu editing is enabled.</target>
+        <target state="translated">Určuje, zda je úprava na místě (InSitu) povolena.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingDisplay">
         <source>Enable InSitu Editing</source>
-        <target state="new">Enable InSitu Editing</target>
+        <target state="translated">Povolit úpravu na místě (InSitu)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_GridSizeDesc">
         <source>Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</source>
-        <target state="new">Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</target>
+        <target state="translated">Nastaví výchozí nastavení mřížky X a Y pro návrháře s nastavením LayoutMode = SnapToGrid.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_GridSizeDisplayName">
         <source>Default Grid Cell Size</source>
-        <target state="new">Default Grid Cell Size</target>
+        <target state="translated">Výchozí velikost buňky mřížky</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_LayoutSettings">
         <source>Layout Settings</source>
-        <target state="new">Layout Settings</target>
+        <target state="translated">Nastavení rozložení</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="new">Controls whether designer smart tag windows should be shown by default.</target>
+        <target state="translated">Určuje, zda mají být standardně zobrazena okna inteligentních značek návrháře.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
         <source>Automatically Open Smart Tags</source>
-        <target state="new">Automatically Open Smart Tags</target>
+        <target state="translated">Automaticky otevřít inteligentní značky</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagSettings">
         <source>Object Bound Smart Tag Settings</source>
-        <target state="new">Object Bound Smart Tag Settings</target>
+        <target state="translated">Nastavení inteligentních značek pro objekty</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_OptimizedCodeGen">
         <source>Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</source>
-        <target state="new">Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</target>
+        <target state="translated">Bylo povoleno generování optimalizovaného kódu. Některé ovládací prvky pravděpodobně nejsou s tímto režimem slučitelné. Aby se tato změna projevila, aplikace Visual Studio musí být ukončena a znovu spuštěna.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ShowGridDesc">
         <source>Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</source>
-        <target state="new">Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</target>
+        <target state="translated">Určuje, zda má návrhář zobrazit mřížku velikosti v případě nastavení LayoutMode = SnapToGrid.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ShowGridDisplayName">
         <source>Show Grid</source>
-        <target state="new">Show Grid</target>
+        <target state="translated">Zobrazit mřížku</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_SnapToGridDesc">
         <source>Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</source>
-        <target state="new">Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</target>
+        <target state="translated">Určuje, zda mají být v návrháři objekty přichytávány do mřížky v případě nastavení LayoutMode = SnapToGrid.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_SnapToGridDisplayName">
         <source>Snap to Grid</source>
-        <target state="new">Snap to Grid</target>
+        <target state="translated">Přichytit k mřížce</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="new">Controls whether designers should show smart tag popup windows.</target>
+        <target state="translated">Určuje, zda mají být v návrháři zobrazována místní okna inteligentních značek.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">
         <source>Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</source>
-        <target state="new">Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</target>
+        <target state="translated">Určuje, zda mají být v návrháři použity vodicí čáry. Pokud je tato vlastnost nastavena na hodnotu True, vodicí čáry budou použity jako vodítka. Pokud je tato vlastnost nastavena na hodnotu False, budou použity čáry mřížky.</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
         <source>This IDataObject doesn't support SetData.</source>
-        <target state="new">This IDataObject doesn't support SetData.</target>
+        <target state="translated">Tento objekt IDataObject nepodporuje funkci SetData.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
-        <target state="new">This method/object is not implemented by design.</target>
+        <target state="translated">Tuto metodu nebo objekt návrh neimplementuje.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
-        <target state="new">Winforms Designer is not supported on this platform.</target>
+        <target state="translated">Winforms Designer není na této platformě podporován.</target>
         <note />
       </trans-unit>
     </body>

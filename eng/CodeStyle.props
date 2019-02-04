@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <!--
+      Make sure any documentation comments which are included in code get checked for syntax during the build, but do
+      not report warnings for missing comments.
+
+      CS1573: Parameter 'parameter' has no matching param tag in the XML comment for 'parameter' (but other parameters do)
+      CS1591: Missing XML comment for publicly visible type or member 'Type_or_Member'
+      CS1712: Type parameter 'type_parameter' has no matching typeparam tag in the XML comment on 'type_or_member' (but other type parameters do)
+    -->
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
+
+    <!--
+      Disable warnings for XML comments with outright errors.
+
+      CS0419: Ambiguous reference in cref attribute
+      CS1570: XML comment has badly formed XML
+      CS1572: XML comment has a param tag for 'parameter', but there is no parameter by that name
+      CS1574: XML comment has cref attribute 'Reference' that could not be resolved
+      CS1584: XML comment has syntactically incorrect cref attribute
+      CS1587: XML comment is not placed on a valid language element
+      CS1589: Unable to include XML fragment
+      CS1658: Unexpected character
+      CS1734: XML comment on 'type_or_member' has a paramref tag for 'parameter', but there is no parameter by that name
+    -->
+    <NoWarn>$(NoWarn),419,1570,1572,1574,1584,1587,1589,1658,1734</NoWarn>
+  </PropertyGroup>
+
+</Project>

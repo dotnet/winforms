@@ -18868,7 +18868,7 @@ example usage
                         }
 
                         if (freeLib) {
-                            UnsafeNativeMethods.FreeLibrary(new HandleRef(null, oleAccAvailable));
+                            CommonUnsafeNativeMethods.FreeLibrary(new HandleRef(null, oleAccAvailable));
                         }
 
                     }

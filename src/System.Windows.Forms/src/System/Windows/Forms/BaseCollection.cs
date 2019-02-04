@@ -2,81 +2,42 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System.Runtime.InteropServices;
+using System.Collections;
+using System.ComponentModel;
 
-    using System;
-    using System.ComponentModel;
-    using System.Collections;
-    using ArrayList = System.Collections.ArrayList;
-
-    /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>Provides the base functionality for creating collections.</para>
+    /// Provides the base functionality for creating collections.
     /// </devdoc>
     public class BaseCollection : MarshalByRefObject, ICollection {
 
-        //==================================================
-        // the ICollection methods
-        //==================================================
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.Count"]/*' />
         /// <devdoc>
-        ///    <para>Gets the total number of elements in a collection.</para>
+        /// Gets the total number of elements in a collection.
         /// </devdoc>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
-        public virtual int Count {
-            get {
-                return List.Count;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public virtual int Count => List.Count;
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.CopyTo"]/*' />
-        public void CopyTo(Array ar, int index) {
-            List.CopyTo(ar, index);
-        }
+        public void CopyTo(Array ar, int index) => List.CopyTo(ar, index);
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.GetEnumerator"]/*' />
         /// <devdoc>
-        ///    <para>Gets an IEnumerator for the collection.</para>
+        /// Gets an IEnumerator for the collection.
         /// </devdoc>
-        public IEnumerator GetEnumerator() {
-            return List.GetEnumerator();
-        }
+        public IEnumerator GetEnumerator() => List.GetEnumerator();
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.IsReadOnly"]/*' />
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
-        public bool IsReadOnly {
-            get {
-                return false;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public bool IsReadOnly => false;
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.IsSynchronized"]/*' />
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool IsSynchronized {
-            get {
-                // so the user will know that it has to lock this object
-                return false;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public bool IsSynchronized => false;
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.SyncRoot"]/*' />
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public object SyncRoot {
-            get {
-                return this;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public object SyncRoot => this;
 
-        /// <include file='doc\BaseCollection.uex' path='docs/doc[@for="BaseCollection.List"]/*' />
-        protected virtual ArrayList List {
-            get {
-                return null;
-            }
-        }
+        protected virtual ArrayList List => null;
     }
 }

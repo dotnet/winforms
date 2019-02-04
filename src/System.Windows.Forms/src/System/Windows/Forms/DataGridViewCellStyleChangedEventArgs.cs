@@ -6,22 +6,10 @@ namespace System.Windows.Forms
 {
     internal class DataGridViewCellStyleChangedEventArgs : EventArgs
     {
-        private bool changeAffectsPreferredSize;
-
-        internal DataGridViewCellStyleChangedEventArgs()
+        public DataGridViewCellStyleChangedEventArgs()
         {
         }
 
-        internal bool ChangeAffectsPreferredSize
-        {
-            get
-            {
-                return this.changeAffectsPreferredSize;
-            }
-            set
-            {
-                this.changeAffectsPreferredSize = value;
-            }
-        }
+        public bool ChangeAffectsPreferredSize { get; set; }
     }
 }

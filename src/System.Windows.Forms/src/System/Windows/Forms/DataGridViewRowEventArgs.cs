@@ -4,32 +4,13 @@
 
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-
-    /// <include file='doc\DataGridViewRowEventArgs.uex' path='docs/doc[@for="DataGridViewRowEventArgs"]/*' />
     public class DataGridViewRowEventArgs : EventArgs
     {
-        private DataGridViewRow dataGridViewRow;
-
-        /// <include file='doc\DataGridViewRowEventArgs.uex' path='docs/doc[@for="DataGridViewRowEventArgs.DataGridViewRowEventArgs"]/*' />
         public DataGridViewRowEventArgs(DataGridViewRow dataGridViewRow)
         {
-            if (dataGridViewRow == null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewRow));
-            }
-
-            this.dataGridViewRow = dataGridViewRow;
+            Row = dataGridViewRow ?? throw new ArgumentNullException(nameof(dataGridViewRow));
         }
 
-        /// <include file='doc\DataGridViewRowEventArgs.uex' path='docs/doc[@for="DataGridViewRowEventArgs.Row"]/*' />
-        public DataGridViewRow Row
-        {
-            get
-            {
-                return this.dataGridViewRow;
-            }
-        }
+        public DataGridViewRow Row { get; }
     }
 }

@@ -4,33 +4,13 @@
 
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-
-    /// <include file='doc\DataGridViewCellToolTipTextNeededEventArgs.uex' path='docs/doc[@for="DataGridViewCellToolTipTextNeededEventArgs"]/*' />
     public class DataGridViewCellToolTipTextNeededEventArgs : DataGridViewCellEventArgs
     {
-        private string toolTipText;
-
-        internal DataGridViewCellToolTipTextNeededEventArgs(
-            int columnIndex, 
-            int rowIndex,
-            string toolTipText) : base(columnIndex, rowIndex)
+        internal DataGridViewCellToolTipTextNeededEventArgs(int columnIndex,  int rowIndex, string toolTipText) : base(columnIndex, rowIndex)
         {
-            this.toolTipText = toolTipText;
+            ToolTipText = toolTipText;
         }
 
-        /// <include file='doc\DataGridViewCellToolTipTextNeededEventArgs.uex' path='docs/doc[@for="DataGridViewCellToolTipTextNeededEventArgs.ToolTipText"]/*' />
-        public string ToolTipText
-        {
-            get
-            {
-                return this.toolTipText;
-            }
-            set
-            {
-                this.toolTipText = value;
-            }
-        }
+        public string ToolTipText { get; set; }
     }
 }

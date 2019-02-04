@@ -16,21 +16,70 @@ namespace System.Windows.Forms.Tests
             Assert.Null(element.DataGridView);
         }
 
+        [Fact]
+        public void OnDataGridViewChanged_Invoke_Nop()
+        {
+            var element = new SubDataGridViewElement();
+            element.OnDataGridViewChanged();
+        }
+
+        [Fact]
+        public void RaiseCellClick_Invoke_Nop()
+        {
+            var element = new SubDataGridViewElement();
+            element.RaiseCellClick(new DataGridViewCellEventArgs(1, 2));
+        }
+
+        [Fact]
+        public void RaiseCellContentClick_Invoke_Nop()
+        {
+            var element = new SubDataGridViewElement();
+            element.RaiseCellContentClick(new DataGridViewCellEventArgs(1, 2));
+        }
+
+        [Fact]
+        public void RaiseCellContentDoubleClick_Invoke_Nop()
+        {
+            var element = new SubDataGridViewElement();
+            element.RaiseCellContentDoubleClick(new DataGridViewCellEventArgs(1, 2));
+        }
+
+        [Fact]
+        public void RaiseCellValueChanged_Invoke_Nop()
+        {
+            var element = new SubDataGridViewElement();
+            element.RaiseCellValueChanged(new DataGridViewCellEventArgs(1, 2));
+        }
+
+        [Fact]
+        public void RaiseDataError_Invoke_Nop()
+        {
+            var element = new SubDataGridViewElement();
+            element.RaiseDataError(new DataGridViewDataErrorEventArgs(new Exception(), 1, 2, DataGridViewDataErrorContexts.Formatting));
+        }
+
+        [Fact]
+        public void RaiseMouseWheel_Invoke_Nop()
+        {
+            var element = new SubDataGridViewElement();
+            element.RaiseMouseWheel(new MouseEventArgs(MouseButtons.Left, 1, 2, 3, 4));
+        }
+
         private class SubDataGridViewElement : DataGridViewElement
         {
-            public void OnDataGridViewChangedEntry() => OnDataGridViewChanged();
-
-            public void RaiseCellClickEntry(DataGridViewCellEventArgs e) => RaiseCellClick(e);
-
-            public void RaiseCellContentClickEntry(DataGridViewCellEventArgs e) => RaiseCellContentClick(e);
-
-            public void RaiseCellContentDoubleClickEntry(DataGridViewCellEventArgs e) => RaiseCellContentDoubleClick(e);
-        
-            public void RaiseCellValueChangedEntry(DataGridViewCellEventArgs e) => RaiseCellValueChanged(e);
-
-            public void RaiseDataErrorEntry(DataGridViewDataErrorEventArgs e) => RaiseDataErrorEntry(e);
-
-            public void RaiseMouseWheelEntry(MouseEventArgs e) => RaiseMouseWheel(e);
+            public new void OnDataGridViewChanged() => base.OnDataGridViewChanged();
+     
+            public new void RaiseCellClick(DataGridViewCellEventArgs e) => base.RaiseCellClick(e);
+     
+            public new void RaiseCellContentClick(DataGridViewCellEventArgs e) => base.RaiseCellContentClick(e);
+     
+            public new void RaiseCellContentDoubleClick(DataGridViewCellEventArgs e) => base.RaiseCellContentDoubleClick(e);
+          
+            public new void RaiseCellValueChanged(DataGridViewCellEventArgs e) => base.RaiseCellValueChanged(e);
+            
+            public new void RaiseDataError(DataGridViewDataErrorEventArgs e) => base.RaiseDataError(e);
+     
+            public new void RaiseMouseWheel(MouseEventArgs e) => base.RaiseMouseWheel(e);
         }
     }
 }

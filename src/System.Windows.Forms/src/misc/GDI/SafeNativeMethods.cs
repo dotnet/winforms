@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -22,7 +22,6 @@ namespace System.Experimental.Gdi
     ///   This is done to be able to compile the GDI code in both assemblies System.Drawing
     ///   and System.Windows.Forms.
     /// </devdoc>
-    [System.Security.SuppressUnmanagedCodeSecurityAttribute()]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
