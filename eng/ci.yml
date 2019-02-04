@@ -104,7 +104,7 @@ jobs:
       - script: eng\cibuild.cmd
           -prepareMachine
           -configuration $(_BuildConfig)
-          -binaryLogName Build
+          -bl Build
           $(_OfficialBuildIdArgs)
           -build
         displayName: Build
@@ -112,7 +112,7 @@ jobs:
       # Run unit tests
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
-          -binaryLogName Test
+          -bl Test
           $(_OfficialBuildIdArgs)
           -test
         displayName: Run Unit Tests
@@ -120,7 +120,7 @@ jobs:
       # Run integration tests
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
-          -binaryLogName IntegrationTest
+          -bl IntegrationTest
           $(_OfficialBuildIdArgs)
           -integrationTest
         displayName: Run Integration Tests
@@ -128,7 +128,7 @@ jobs:
       # Create Nuget package, sign, and publish
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
-          -binaryLogName PackSignPublish
+          -bl PackSignPublish
           $(_OfficialBuildIdArgs)
           -pack
           -sign $(_SignArgs)
