@@ -502,8 +502,8 @@ function GetMSBuildBinaryLogCommandLineArgument($arguments) {
   return $null
 }
 
-$RepoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
-$EngRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+$RepoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+$EngRoot = Resolve-Path (Join-Path $PSScriptRoot "")
 $ArtifactsDir = Join-Path $RepoRoot "artifacts"
 $ToolsetDir = Join-Path $ArtifactsDir "toolset"
 $ToolsDir = Join-Path $RepoRoot ".tools"
