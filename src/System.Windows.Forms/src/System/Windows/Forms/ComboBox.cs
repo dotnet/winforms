@@ -13,8 +13,6 @@ namespace System.Windows.Forms {
     using System;
     using System.Runtime.Versioning;
     using System.Globalization;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms.Layout;
     using System.Windows.Forms.ComponentModel;
     using System.ComponentModel;
@@ -239,15 +237,6 @@ namespace System.Windows.Forms {
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
 
-                if (value != AutoCompleteSource.None && 
-                    value != AutoCompleteSource.CustomSource && 
-                    value != AutoCompleteSource.ListItems)
-                {
-                    FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
-                    fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-                    fiop.Demand();
-                }
-
                 autoCompleteSource = value;
                 SetAutoComplete(false, true);
             }
@@ -384,7 +373,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "COMBOBOX";
@@ -897,7 +885,7 @@ namespace System.Windows.Forms {
                     //  if the user manually sets Size = (121, 20) in code (usually height gets forced to 21), then he will see Whidey.(1) above
                     //  user usually uses nondefault size and will experience whidbey.(2) above
 
-                    Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(Int16.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
+                    Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
                     prefHeightCache = (short)(textSize.Height + SystemInformation.BorderSize.Height * 8 + Padding.Size.Height);
 
                     return prefHeightCache ;
@@ -907,7 +895,7 @@ namespace System.Windows.Forms {
                     // caching, but in this case we can not because PreferredHeight is used in ApplySizeConstraints
                     // which is used by GetPreferredSize (infinite loop).
                     if (prefHeightCache < 0) {
-                        Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(Int16.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
+                        Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, this.Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
 
                         // For a "simple" style combobox, the preferred height depends on the
                         // number of items in the combobox.
@@ -1234,8 +1222,8 @@ namespace System.Windows.Forms {
                     //preserve everett behavior if "formatting enabled == false" -- just return selecteditem text.
                     if (FormattingEnabled) {
                         string candidate = GetItemText(SelectedItem);
-                        if (!String.IsNullOrEmpty(candidate)) {
-                            if (String.Compare(candidate, base.Text, true, CultureInfo.CurrentCulture) == 0) {
+                        if (!string.IsNullOrEmpty(candidate)) {
+                            if (string.Compare(candidate, base.Text, true, CultureInfo.CurrentCulture) == 0) {
                                 return candidate;   //for whidbey, if we only differ by case -- return the candidate;
                             }
                         }
@@ -1247,7 +1235,7 @@ namespace System.Windows.Forms {
                 return base.Text;
             }
             set {
-                if (DropDownStyle == ComboBoxStyle.DropDownList && !IsHandleCreated && !String.IsNullOrEmpty(value) && FindStringExact(value) == -1)
+                if (DropDownStyle == ComboBoxStyle.DropDownList && !IsHandleCreated && !string.IsNullOrEmpty(value) && FindStringExact(value) == -1)
                     return;
 
                 base.Text = value;
@@ -1262,7 +1250,7 @@ namespace System.Windows.Forms {
                         SelectedIndex = -1;
                     }
                     else if (value != null &&
-                        (selectedItem == null || (String.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0))) {
+                        (selectedItem == null || (string.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0))) {
 
                         int index = FindStringIgnoreCase(value);
 
@@ -2313,7 +2301,7 @@ namespace System.Windows.Forms {
             
             string oldText = WindowText;
             base.RecreateHandleCore();
-            if (!String.IsNullOrEmpty(oldText) && String.IsNullOrEmpty(WindowText)) {
+            if (!string.IsNullOrEmpty(oldText) && string.IsNullOrEmpty(WindowText)) {
                 WindowText = oldText;   //restore the window text
             }
         }
@@ -2796,7 +2784,7 @@ namespace System.Windows.Forms {
             if (Sorted) {
                 if (DataSource != null && Created) {
                     // we will only throw the exception when the control is already on the form.
-                    Debug.Assert(DisplayMember.Equals(String.Empty), "if this list is sorted it means that dataSource was null when Sorted first became true. at that point DisplayMember had to be String.Empty");
+                    Debug.Assert(DisplayMember.Equals(string.Empty), "if this list is sorted it means that dataSource was null when Sorted first became true. at that point DisplayMember had to be String.Empty");
                     DataSource = null;
                     throw new InvalidOperationException(SR.ComboBoxDataSourceWithSort);
                 }
@@ -2843,9 +2831,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ProcessKeyEventArgs"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        ]
         protected override bool ProcessKeyEventArgs(ref Message m) {
             if (this.AutoCompleteMode != AutoCompleteMode.None &&
                 this.AutoCompleteSource == AutoCompleteSource.ListItems &&
@@ -3058,7 +3043,7 @@ namespace System.Windows.Forms {
                         }
                         int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), (int)AutoCompleteSource | mode);
                     }
-                    catch (SecurityException) {
+                    catch (System.Security.SecurityException) {
                         // If we don't have full trust, degrade gracefully. Allow the control to
                         // function without auto-complete. Allow the app to continue running.
                     }
@@ -3095,7 +3080,7 @@ namespace System.Windows.Forms {
         ///     Selects all the text in the editable portion of the ComboBox.
         /// </devdoc>
         public void SelectAll() {
-            Select(0, Int32.MaxValue);
+            Select(0, int.MaxValue);
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetBoundsCore"]/*' />
@@ -3457,7 +3442,6 @@ namespace System.Windows.Forms {
         ///     base.wndProc(m); to ensure the combo continues to function properly.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 // We don't want to fire the focus events twice -
@@ -3700,16 +3684,7 @@ namespace System.Windows.Forms {
 
                     // If the requested object identifier is UiaRootObjectId, 
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    InternalAccessibleObject internalAccessibleObject;
-                    IntSecurity.UnmanagedCode.Assert();
-                    try
-                    {
-                        internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    InternalAccessibleObject internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
                     m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
                         new HandleRef(this, Handle),
                         m.WParam,
@@ -3735,16 +3710,10 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.IAccessibleInternal iacc = null;
 
                         if (_accessibilityObject == null) {
-                            IntSecurity.UnmanagedCode.Assert();
-                            try {
-                                wfAccessibleObject = AccessibilityImprovements.Level3
-                                    ? GetChildAccessibleObject(_childWindowType)
-                                    : new ChildAccessibleObject(_owner, Handle);
-                                _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
-                            }
-                            finally {
-                                CodeAccessPermission.RevertAssert();
-                            }
+                            wfAccessibleObject = AccessibilityImprovements.Level3
+                                ? GetChildAccessibleObject(_childWindowType)
+                                : new ChildAccessibleObject(_owner, Handle);
+                            _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
                         }
                         iacc = (UnsafeNativeMethods.IAccessibleInternal)_accessibilityObject;
 
@@ -3752,12 +3721,10 @@ namespace System.Windows.Forms {
                         //
                         punkAcc = Marshal.GetIUnknownForObject(iacc);
 
-                        IntSecurity.UnmanagedCode.Assert();
                         try {
                             m.Result = UnsafeNativeMethods.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(this, punkAcc));
                         }
                         finally {
-                            CodeAccessPermission.RevertAssert();
                             Marshal.Release(punkAcc);
                         }
                     }
@@ -3789,8 +3756,8 @@ namespace System.Windows.Forms {
                 if (item2 == null)
                     return 1; //item2 is null, so item 1 is greater
 
-                String itemName1 = comboBox.GetItemText(item1);
-                String itemName2 = comboBox.GetItemText(item2);
+                string itemName1 = comboBox.GetItemText(item1);
+                string itemName2 = comboBox.GetItemText(item2);
 
                 CompareInfo compInfo = (Application.CurrentCulture).CompareInfo;
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
@@ -4161,7 +4128,7 @@ namespace System.Windows.Forms {
                 if (owner.IsHandleCreated) {
                     bool selected = (index == owner.SelectedIndex);
 
-                    if (String.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0) {
+                    if (string.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0) {
                         owner.NativeRemoveAt(index);
                         owner.NativeInsert(index, value);
                         if (selected) {
@@ -4194,7 +4161,6 @@ namespace System.Windows.Forms {
             ComboBox owner;
 
             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ChildAccessibleObject.ChildAccessibleObject"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public ChildAccessibleObject(ComboBox owner, IntPtr handle) {
                 Debug.Assert(owner != null && owner.Handle != IntPtr.Zero, "ComboBox's handle hasn't been created");
 

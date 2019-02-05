@@ -249,9 +249,7 @@ namespace System.Windows.Forms {
         }
 
         private static void SetCursor(Control control, Cursor cursor) {
-            IntSecurity.ModifyCursor.Assert();
             control.Cursor = cursor;
-            // CodeAccessPermission.RevertAssert automatically called 
         }
 
         internal class ToolStripGripAccessibleObject : ToolStripButtonAccessibleObject {

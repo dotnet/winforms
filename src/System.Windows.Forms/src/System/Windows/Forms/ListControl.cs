@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
         private BindingMemberInfo valueMember;
 
         // Formatting stuff
-        private string formatString = String.Empty;
+        private string formatString = string.Empty;
         private IFormatProvider formatInfo = null;
         private bool formattingEnabled = false;
         private static readonly object EVENT_FORMAT   = new object();
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null)
-                    value = String.Empty;
+                    value = string.Empty;
                 if (!value.Equals(formatString)) {
                     formatString = value;
                     RefreshItems();
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
             for (int i = 0; i < propsCount; i++) {
                 if (typeof(IList).IsAssignableFrom(props[i].PropertyType))
                     continue;
-                if (String.Compare(props[i].Name, bindingMemberInfo.BindingField, true, CultureInfo.CurrentCulture) == 0) {
+                if (string.Compare(props[i].Name, bindingMemberInfo.BindingField, true, CultureInfo.CurrentCulture) == 0) {
                     return true;
                 }
             }
@@ -503,10 +503,10 @@ namespace System.Windows.Forms {
             for (int index = (startIndex+1) % items.Count; numberOfTimesThroughLoop < items.Count; index = (index+1) % items.Count) {
                 numberOfTimesThroughLoop++;
                 if (exact) {
-                    found = String.Compare(str, GetItemText(items[index]), ignorecase, CultureInfo.CurrentCulture) == 0;
+                    found = string.Compare(str, GetItemText(items[index]), ignorecase, CultureInfo.CurrentCulture) == 0;
                 }
                 else {
-                    found = String.Compare(str, 0, GetItemText(items[index]), 0, length, ignorecase, CultureInfo.CurrentCulture) == 0;
+                    found = string.Compare(str, 0, GetItemText(items[index]), 0, length, ignorecase, CultureInfo.CurrentCulture) == 0;
                 }
                 
                 if (found) {
@@ -526,7 +526,7 @@ namespace System.Windows.Forms {
             if (!formattingEnabled) {
 
                 if (item == null) {
-                    return String.Empty;
+                    return string.Empty;
                 }
 
                 item = FilterItemOnProperty(item, displayMember.BindingField);
@@ -540,22 +540,22 @@ namespace System.Windows.Forms {
             object filteredItem = FilterItemOnProperty(item, displayMember.BindingField);
 
             // first try: the OnFormat event
-            ListControlConvertEventArgs e = new ListControlConvertEventArgs(filteredItem, typeof(String), item);
+            ListControlConvertEventArgs e = new ListControlConvertEventArgs(filteredItem, typeof(string), item);
             OnFormat(e);
 
             // Microsoft: we need a better check. Should add the Handled property on the ListControlConvertEventArgs?
-            if (e.Value != item && e.Value is String) {
+            if (e.Value != item && e.Value is string) {
                 return (string) e.Value;
             }
 
             // try Formatter::FormatObject
             if (stringTypeConverter == null)
             { 
-                stringTypeConverter = TypeDescriptor.GetConverter(typeof(String));
+                stringTypeConverter = TypeDescriptor.GetConverter(typeof(string));
             }  
             try
             {
-                return (string) Formatter.FormatObject(filteredItem, typeof(String), this.DisplayMemberConverter, stringTypeConverter, formatString, formatInfo, null, System.DBNull.Value);
+                return (string) Formatter.FormatObject(filteredItem, typeof(string), this.DisplayMemberConverter, stringTypeConverter, formatString, formatInfo, null, System.DBNull.Value);
             }
             catch (Exception exception)
             {

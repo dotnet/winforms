@@ -11,8 +11,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Imaging;
     using System.ComponentModel;
     using System.Windows.Forms.Layout;
-    using System.Security;
-    using System.Security.Permissions;
     
     /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer"]/*' />
     public abstract class ToolStripRenderer {
@@ -378,12 +376,10 @@ namespace System.Windows.Forms {
 
 
 
-       [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
        private void AddHandler(object key, Delegate value) {
             Events.AddHandler(key, value);
        }
 
-       [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
        private void RemoveHandler(object key, Delegate value) {
             Events.RemoveHandler(key, value);
        }
@@ -868,7 +864,7 @@ namespace System.Windows.Forms {
             if (imageRect != Rectangle.Empty && image != null) {
                 bool disposeImage = false;
                 if (e.ShiftOnPress && e.Item.Pressed) {
-                   imageRect.X +=1;
+                   imageRect.X++;
                 }
                 if (!e.Item.Enabled) {
                     image = CreateDisabledImage(image, e.ImageAttributes);

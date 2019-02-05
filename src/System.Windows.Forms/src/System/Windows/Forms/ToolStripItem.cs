@@ -17,8 +17,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Collections.Specialized;
     using System.Drawing.Design;
-    using System.Security.Permissions;
-    using System.Security;
     using System.Configuration;        
     using System.Drawing.Imaging;
     using System.Diagnostics.CodeAnalysis;
@@ -974,7 +972,6 @@ namespace System.Windows.Forms {
        
         private void EnsureParentDropTargetRegistered() {
             if (ParentInternal != null) {
-                IntSecurity.ClipboardRead.Demand();
                 ParentInternal.DropTargetManager.EnsureRegistered(this);
             }
         }
@@ -2335,7 +2332,7 @@ namespace System.Windows.Forms {
                     string toolText = Text;
                     if (WindowsFormsUtils.ContainsMnemonic(toolText)) {
                        // this shouldnt be called a lot so we can take the perf hit here. 
-                       toolText = String.Join("", toolText.Split('&'));
+                       toolText = string.Join("", toolText.Split('&'));
                     }
                     return toolText;
                 }
@@ -2508,9 +2505,8 @@ namespace System.Windows.Forms {
         /// that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
         /// implements System.Windows.Forms.IDataObject.
         /// </devdoc>        
-        [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public DragDropEffects DoDragDrop(Object data, DragDropEffects allowedEffects) {
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) {
             int[] finalEffect = new int[] {(int)DragDropEffects.None};
             UnsafeNativeMethods.IOleDropSource dropSource = this.DropSource;
             IComDataObject dataObject = null;
@@ -3348,8 +3344,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// See Control.ProcessDialogKey for more info.
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal virtual bool ProcessDialogKey(Keys keyData) {
             // 
             if (keyData == Keys.Enter || (state[stateSupportsSpaceKey] && keyData == Keys.Space)) {
@@ -3365,18 +3359,12 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// See Control.ProcessCmdKey for more info.
         /// </devdoc>
-        [
-        SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected internal virtual bool ProcessCmdKey(ref Message m, Keys keyData) {
             return false;
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ProcessMnemonic"]/*' />
         
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal virtual bool ProcessMnemonic(char charCode) {
             // checking IsMnemonic is not necessary - control does this for us.
@@ -3447,7 +3435,7 @@ namespace System.Windows.Forms {
 #if DEBUG
     // let's not snap the stack trace unless we're debugging selection.
     if (ToolStrip.SelectionDebug.TraceVerbose) {
-        Debug.WriteLine(String.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Select: {0} \r\n{1}\r\n", this.ToString(), new StackTrace().ToString().Substring(0,200)));
+        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Select: {0} \r\n{1}\r\n", this.ToString(), new StackTrace().ToString().Substring(0,200)));
     }
 #endif
             if (!CanSelect) {
@@ -3835,7 +3823,7 @@ namespace System.Windows.Forms {
         ///   removes selection bits from item state
         /// </devdoc>
         internal void Unselect() {
-            Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", this.ToString()));
+            Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", this.ToString()));
             if (state[stateSelected]) {
                 state[stateSelected] = false;   
                 if (Available) {
@@ -4063,7 +4051,7 @@ namespace System.Windows.Forms {
                         return Name;
                     }
                     else if (propertyID == NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId) {
-                        return (Object)this.IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                        return (object)this.IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
                     }
                 }
 
@@ -4175,7 +4163,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 if (Owner != null) {
                     ((ToolStripItem)Owner).PerformClick();
@@ -4192,12 +4179,9 @@ namespace System.Windows.Forms {
                     handler(Owner, args);
 
                     fileName = args.HelpNamespace;                             
-                    if (fileName != null && fileName.Length > 0) {
-                        IntSecurity.DemandFileIO(FileIOPermissionAccess.PathDiscovery, fileName);
-                    }
 
                     try {
-                        topic = Int32.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
+                        topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
                     }
                     catch {
                     }
@@ -4210,7 +4194,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection) {
                 ToolStripItem nextItem = null;
 
@@ -4296,8 +4279,6 @@ namespace System.Windows.Forms {
             /// <para>When overridden in a derived class, gets or sets the parent of an accessible object.</para>
             /// </devdoc>
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (Owner.IsOnDropDown) {
                         // Return the owner item as the accessible parent.
@@ -4402,7 +4383,7 @@ namespace System.Windows.Forms {
         private ButtonBaseAdapter.LayoutData layoutData;
         private const int BORDER_WIDTH = 2;
         private const int BORDER_HEIGHT = 3;
-        private readonly static Size INVALID_SIZE = new Size(Int32.MinValue,Int32.MinValue);
+        private readonly static Size INVALID_SIZE = new Size(int.MinValue, int.MinValue);
         
         private Size lastPreferredSize = INVALID_SIZE;
         private ToolStripLayoutData parentLayoutData = null;
@@ -4503,7 +4484,7 @@ namespace System.Windows.Forms {
             layoutOptions.maxFocus           = true;
             layoutOptions.focusOddEvenFixup  = false;
             layoutOptions.font               = ownerItem.Font;
-            layoutOptions.text               = ((Owner.DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) ? Owner.Text : String.Empty;
+            layoutOptions.text               = ((Owner.DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) ? Owner.Text : string.Empty;
             layoutOptions.imageSize          = PreferredImageSize;
             layoutOptions.checkSize          = 0;
             layoutOptions.checkPaddingSize   = 0;

@@ -21,8 +21,6 @@ namespace System.Resources {
     /// <devdoc>
     ///     ResX resource set.
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class ResXResourceSet : ResourceSet {
 
         /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet.ResXResourceSet"]/*' />
@@ -32,7 +30,7 @@ namespace System.Resources {
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Shipped like this in Everett.
         ]
-        public ResXResourceSet(String fileName) : base(new ResXResourceReader(fileName)) {
+        public ResXResourceSet(string fileName) : base(new ResXResourceReader(fileName)) {
             ReadResources();
         }
 

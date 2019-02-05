@@ -1,7 +1,7 @@
 parameters:
 
   # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp
+  agentPool: dotnet-external-temp-vs2019
 
   # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
   runAsPublic: true
@@ -43,6 +43,16 @@ jobs:
         - name: _OfficialBuildIdArgs
           value: ''
 
+        # needed for helix jobs
+        - name: _HelixAgentPool
+          value: 'Windows.10.Amd64.Open'
+        - name: _WinformsControlsTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
+        - name: _WinformsFuncTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
+        - name: _HelixStagingDir
+          value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+
         # Override some values if we're building internally
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
@@ -56,7 +66,7 @@ jobs:
           - group: DotNet-Blob-Feed
           - group: DotNet-Symbol-Server-Pats
           - name: _PublishBlobFeedUrl
-            value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
+            value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
           # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
           # until the agent is running on the machine. They can be overridden any time before they are resolved,
@@ -72,19 +82,16 @@ jobs:
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
+          - name: _HelixAgentPool
+            value: 'Windows.10.Amd64'
+
       strategy:
         matrix:
           Build_Debug:
             _BuildConfig: Debug
             # override some variables for debug
             _PublishType: none
-
-            # Test signing is running into sporadic failures on build machines, so disable it for now
-            # TODO: revert this once https://github.com/dotnet/core-eng/issues/4734 is resolved
-            #_SignType: test
-            _SignType: ''
-            _Sign: false
-
+            _SignType: test
             _DotNetPublishToBlobFeed : false
           Build_Release:
             _BuildConfig: Release
@@ -93,18 +100,45 @@ jobs:
       - checkout: self
         clean: true
 
-      # Build, test, pack, and sign
-      - script: eng\common\cibuild.cmd
-          -configuration $(_BuildConfig) 
+      # Restore and build
+      - script: eng\cibuild.cmd
           -prepareMachine
-          $(_PublishArgs)
-          $(_SignArgs)
+          -configuration $(_BuildConfig)
+          -bl Build
           $(_OfficialBuildIdArgs)
-        displayName: Windows Build / Publish
+          -build
+        displayName: Build
 
-      # Publish the nuget package as a build artifact
-      # Only do this if the build is internal AND the config is released (this ensures package contents are real signed)
+      # Run unit tests
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          -bl Test
+          $(_OfficialBuildIdArgs)
+          -test
+        displayName: Run Unit Tests
+
+      # Run integration tests
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          -bl IntegrationTest
+          $(_OfficialBuildIdArgs)
+          -integrationTest
+        displayName: Run Integration Tests
+
+      # Create Nuget package, sign, and publish
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          -bl PackSignPublish
+          $(_OfficialBuildIdArgs)
+          -pack
+          -sign $(_SignArgs)
+          -publish $(_PublishArgs)
+        displayName: Pack, Sign, and Publish
+
+      # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
+
+        # Publish the nuget package as a build artifact (only for release, ensuring package contents are real-signed)
         - task: PublishPipelineArtifact@0
           inputs:
             artifactName: 'Package'

@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
-    using System.Security;
     using System.Globalization;
     
     /// <devdoc> this is the menu that merges into the MdiWindowListItem
@@ -98,9 +97,9 @@ namespace System.Windows.Forms {
                                 (!activeFormAdded && (formsAddedToMenu < (maxMenuForms-1)) ||   // save room for active if it's not in yet
                                 (forms[i].Equals(activeMdiChild)))){                            // there's always room for activeMdiChild
                                 string text =  WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);
-                                text = (text == null) ? String.Empty : text;
+                                text = (text == null) ? string.Empty : text;
                                 ToolStripMenuItem windowListItem = new ToolStripMenuItem(mdiParent.MdiChildren[i]);
-                                windowListItem.Text = String.Format(CultureInfo.CurrentCulture, "&{0} {1}", accel, text);
+                                windowListItem.Text = string.Format(CultureInfo.CurrentCulture, "&{0} {1}", accel, text);
                                 windowListItem.MergeAction = MergeAction.Append;
                                 windowListItem.MergeIndex = accel;
                                 windowListItem.Click += new EventHandler(OnWindowListItemClick);
@@ -140,27 +139,18 @@ namespace System.Windows.Forms {
              Form[] forms = mdiParent.MdiChildren;
              
              if (forms != null) {
-                // 
+                using (MdiWindowDialog dialog = new MdiWindowDialog()) {
+                    dialog.SetItems(mdiParent.ActiveMdiChild, forms);
+                    DialogResult result = dialog.ShowDialog();
+                    if (result == DialogResult.OK) {
 
-
-                IntSecurity.AllWindows.Assert();
-                try {
-                    using (MdiWindowDialog dialog = new MdiWindowDialog()) {
-                        dialog.SetItems(mdiParent.ActiveMdiChild, forms);
-                        DialogResult result = dialog.ShowDialog();
-                        if (result == DialogResult.OK) {
-
-                            // AllWindows Assert above allows this...
-                            //
-                            dialog.ActiveChildForm.Activate();
-                            if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused) {
-                                dialog.ActiveChildForm.ActiveControl.Focus();
-                            }
+                        // AllWindows Assert above allows this...
+                        //
+                        dialog.ActiveChildForm.Activate();
+                        if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused) {
+                            dialog.ActiveChildForm.ActiveControl.Focus();
                         }
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
                 }
             }
         }
@@ -173,20 +163,10 @@ namespace System.Windows.Forms {
                 Form boundForm = windowListItem.MdiForm;
             
                 if (boundForm != null) {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        boundForm.Activate();
-                        if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused) {
-                            boundForm.ActiveControl.Focus();
-                        }
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-                        
+                    boundForm.Activate();
+                    if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused) {
+                        boundForm.ActiveControl.Focus();
+                    }                       
                 }
             }
         }

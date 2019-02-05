@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.Globalization;
 
@@ -252,7 +250,6 @@ namespace System.Windows.Forms {
         ///     filled up with the basic info.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
@@ -927,21 +924,12 @@ namespace System.Windows.Forms {
                 splitTarget = spd.target;
                 splitSize = GetSplitSize(x, y);
 
-                // 
-
-
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    if (splitterMessageFilter != null)
-                    {
-                        splitterMessageFilter = new SplitterMessageFilter(this);
-                    }
-                    Application.AddMessageFilter(splitterMessageFilter);
+                if (splitterMessageFilter != null)
+                {
+                    splitterMessageFilter = new SplitterMessageFilter(this);
                 }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                Application.AddMessageFilter(splitterMessageFilter);
+
                 CaptureInternal = true;
                 DrawSplitBar(DRAW_START);
             }
@@ -1030,9 +1018,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             /// </devdoc>
             /// <internalonly/>
-            [
-                System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode),
-            ]
             public bool PreFilterMessage(ref Message m) {
                 if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {
                     if (m.Msg == NativeMethods.WM_KEYDOWN && unchecked((int)(long)m.WParam) == (int)Keys.Escape) {

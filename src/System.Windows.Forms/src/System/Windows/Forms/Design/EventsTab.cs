@@ -18,8 +18,6 @@ namespace System.Windows.Forms.Design {
     /// <devdoc>
     ///    <para>Provides a tab on the property browser to display events for selection and linking.</para>
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class EventsTab : PropertyTab {
         private IServiceProvider sp;
         private IDesignerHost currentHost;
@@ -58,7 +56,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets a value indicating whether the specified object can be extended.</para>
         /// </devdoc>
-        public override bool CanExtend(Object extendee) {
+        public override bool CanExtend(object extendee) {
             return !Marshal.IsComObject(extendee);
         }
 
@@ -163,7 +161,7 @@ namespace System.Windows.Forms.Design {
                          continue;
                     }
 
-                    Object namespaceValue = nsProp.GetValue(component);
+                    object namespaceValue = nsProp.GetValue(component);
                     EventDescriptorCollection namespaceEvents = TypeDescriptor.GetEvents(namespaceValue, attributes);
                     if (namespaceEvents.Count > 0) {
                         if (list == null) {

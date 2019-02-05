@@ -10,8 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System;
-    using System.Security.Permissions;
-    using System.Security;
     using System.Drawing;
     using System.Windows.Forms.Internal;
     using System.Drawing.Design;
@@ -337,7 +335,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_TREEVIEW;
@@ -599,7 +596,7 @@ namespace System.Windows.Forms {
             set {
                 if (ImageIndexer.Key != value) {
                     ImageIndexer.Key = value;
-                    if (String.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
+                    if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
                         ImageIndex = (ImageList != null) ? 0:-1;
                     }
                     if (IsHandleCreated) {
@@ -796,8 +793,8 @@ namespace System.Windows.Forms {
                     if (value < 1) {
                         throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidLowBoundArgumentEx, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
                     }
-                    if (value >= Int16.MaxValue) {
-                        throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidHighBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), Int16.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                    if (value >= short.MaxValue) {
+                        throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidHighBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), short.MaxValue.ToString(CultureInfo.CurrentCulture)));
                     }
                     itemHeight = value;
                     if (IsHandleCreated) {
@@ -1080,7 +1077,7 @@ namespace System.Windows.Forms {
                 if (SelectedImageIndexer.Key != value) {
                     SelectedImageIndexer.Key = value;
 
-                    if (String.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
+                    if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone)) {
                         SelectedImageIndex = (ImageList != null) ? 0 : -1;
                     }
                     if (IsHandleCreated) {
@@ -1973,7 +1970,7 @@ namespace System.Windows.Forms {
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
                 oldSize = this.Width;
                 int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle), NativeMethods.NullHandleRef, this.Left, this.Top, Int32.MaxValue, this.Height, flags);
+                SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle), NativeMethods.NullHandleRef, this.Left, this.Top, int.MaxValue, this.Height, flags);
 
                 root.Realize(false);
 
@@ -3044,17 +3041,11 @@ namespace System.Windows.Forms {
             base.WndProc(ref m);
 
             if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D) {
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    using (Graphics g = Graphics.FromHdc(m.WParam)) {
-                        Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
-                        g.DrawRectangle(new Pen(VisualStyleInformation.TextControlBorder), rect);
-                        rect.Inflate(-1, -1);
-                        g.DrawRectangle(SystemPens.Window, rect);
-                    }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                using (Graphics g = Graphics.FromHdc(m.WParam)) {
+                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    g.DrawRectangle(new Pen(VisualStyleInformation.TextControlBorder), rect);
+                    rect.Inflate(-1, -1);
+                    g.DrawRectangle(SystemPens.Window, rect);
                 }
             }
         }
@@ -3063,7 +3054,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_WINDOWPOSCHANGING:

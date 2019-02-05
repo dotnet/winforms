@@ -11,8 +11,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Windows.Forms.Layout;
     using System.Drawing;
-    using System.Security;
-    using System.Security.Permissions;
     
     /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection"]/*' />
     /// <summary>
@@ -21,7 +19,6 @@ namespace System.Windows.Forms {
     [
     Editor("System.Windows.Forms.Design.ToolStripCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
     ListBindable(false),
-    UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)
     ]
     public class ToolStripItemCollection : ArrangedElementCollection, IList {
         
@@ -220,13 +217,6 @@ namespace System.Windows.Forms {
                 if (dropDown.OwnerItem == value) {
                    throw new NotSupportedException(SR.ToolStripItemCircularReference); 
                 }
-                
-                // ScrollButton is the only allowed control host as it correctly eats key messages.
-                if (value is ToolStripControlHost && !(value is System.Windows.Forms.ToolStripScrollButton)) {
-                    if (dropDown.IsRestrictedWindow) {
-                        IntSecurity.AllWindows.Demand();
-                    }
-                }
             }
            
         }
@@ -356,7 +346,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
         /// </devdoc>
-        public virtual int IndexOfKey(String key) {
+        public virtual int IndexOfKey(string key) {
             // Step 0 - Arg validation
             if ((key == null) || (key.Length == 0)){
                 return -1; // we dont support empty or null keys.

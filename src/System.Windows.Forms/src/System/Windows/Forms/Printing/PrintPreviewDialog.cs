@@ -15,8 +15,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Windows.Forms.Design;
     using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Runtime.Versioning;
 
     /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog"]/*' />
@@ -1484,8 +1482,8 @@ namespace System.Windows.Forms {
             pageCounter.Text = "1";
             pageCounter.TextAlign = HorizontalAlignment.Right;
             pageCounter.DecimalPlaces = 0;
-            pageCounter.Minimum = new Decimal(0d);
-            pageCounter.Maximum = new Decimal(1000d);
+            pageCounter.Minimum = new decimal(0d);
+            pageCounter.Maximum = new decimal(1000d);
             pageCounter.ValueChanged += new EventHandler(UpdownMove);
             this.pageCounter.Name = "pageCounter";
 
@@ -1602,7 +1600,6 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
 
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
            if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None) {
                 Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -1623,7 +1620,6 @@ namespace System.Windows.Forms {
         ///       This is breaking from Everett.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessTabKey(bool forward) {
             if (this.ActiveControl == this.previewControl)
             {

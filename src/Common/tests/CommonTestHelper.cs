@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using Xunit;
 
 namespace WinForms.Common.Tests
@@ -18,6 +21,16 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData GetEnumTypeTheoryData(Type enumType)
+        {
+            var data = new TheoryData<Enum>();
+            foreach (Enum item in Enum.GetValues(enumType))
+            {
+                data.Add(item);
+            }
+            return data;
+        }
+
         // helper method to generate invalid theory data for an enum type
         // This method assumes that int.MinValue and int.MaxValue are not in the enum
         internal static TheoryData<T> GetEnumTheoryDataInvalid<T>() where T : Enum
@@ -30,10 +43,21 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<Enum> GetEnumTypeTheoryDataInvalid(Type enumType)
+        {
+            var data = new TheoryData<Enum>();
+            IEnumerable<Enum> values = Enum.GetValues(enumType).Cast<Enum>().OrderBy(p => p);
+
+            // Assumes that the enum is sequential.
+            data.Add((Enum)Enum.ToObject(enumType, Convert.ToInt32(values.Min()) - 1));
+            data.Add((Enum)Enum.ToObject(enumType, Convert.ToInt32(values.Max()) + 1));
+            return data;
+        }
+
         #region Primitives
 
         // helper method to generate theory data for all values of a boolean
-        internal static TheoryData<bool> GetBoolTheoryData()
+        public static TheoryData<bool> GetBoolTheoryData()
         {
             var data = new TheoryData<bool>();
             data.Add(true);
@@ -42,7 +66,7 @@ namespace WinForms.Common.Tests
         }
 
         // helper method to generate theory data for some values of a int
-        internal static TheoryData<int> GetIntTheoryData()
+        public static TheoryData<int> GetIntTheoryData()
         {
             var data = new TheoryData<int>();
             data.Add(int.MinValue);
@@ -50,6 +74,16 @@ namespace WinForms.Common.Tests
             data.Add(0);
             data.Add(1);
             data.Add(-1);
+            data.Add(int.MaxValue / 2);
+            return data;
+        }
+
+        public static TheoryData<int> GetNonNegativeIntTheoryData()
+        {
+            var data = new TheoryData<int>();
+            data.Add(int.MaxValue);
+            data.Add(0);
+            data.Add(1);
             data.Add(int.MaxValue / 2);
             return data;
         }
@@ -81,10 +115,10 @@ namespace WinForms.Common.Tests
             var data = new TheoryData<float>();
             data.Add(float.MaxValue);
             data.Add(float.MinValue);
-            data.Add(Single.Epsilon);
-            data.Add(Single.Epsilon * -1);
-            data.Add(Single.NegativeInfinity); // not sure about these two
-            data.Add(Single.PositiveInfinity); // 2
+            data.Add(float.Epsilon);
+            data.Add(float.Epsilon * -1);
+            data.Add(float.NegativeInfinity); // not sure about these two
+            data.Add(float.PositiveInfinity); // 2
             data.Add(0);
             data.Add(-1);
             data.Add(1);
@@ -97,8 +131,8 @@ namespace WinForms.Common.Tests
         {
             var data = new TheoryData<float>();
             data.Add(float.MaxValue);
-            data.Add(Single.Epsilon);
-            data.Add(Single.PositiveInfinity); // not sure about this one
+            data.Add(float.Epsilon);
+            data.Add(float.PositiveInfinity); // not sure about this one
             data.Add(0);
             data.Add(1);
             data.Add(float.MaxValue / 2);
@@ -106,11 +140,54 @@ namespace WinForms.Common.Tests
         }
 
         // helper method to generate theory data for a span of string values
-        internal static TheoryData<string> GetStringTheoryData()
+        public static TheoryData<string> GetStringTheoryData()
         {
             var data = new TheoryData<string>();
             data.Add(string.Empty);
             data.Add("reasonable");
+            return data;
+        }
+
+        public static TheoryData<string> GetStringWithNullTheoryData()
+        {
+            var data = new TheoryData<string>();
+            data.Add(null);
+            data.Add(string.Empty);
+            data.Add("reasonable");
+            return data;
+        }
+
+        public static TheoryData<string> GetNullOrEmptyStringTheoryData()
+        {
+            var data = new TheoryData<string>();
+            data.Add(null);
+            data.Add(string.Empty);
+            return data;
+        }
+
+        public static TheoryData<IntPtr> GetIntPtrTheoryData()
+        {
+            var data = new TheoryData<IntPtr>();
+            data.Add((IntPtr)(-1));
+            data.Add(IntPtr.Zero);
+            data.Add((IntPtr)1);
+            return data;
+        }
+
+        public static TheoryData<Color> GetColorTheoryData()
+        {
+            var data = new TheoryData<Color>();
+            data.Add(Color.Red);
+            data.Add(Color.Blue);
+            data.Add(Color.Black);
+            return data;
+        }
+
+        public static TheoryData<Type> GetTypeWithNullTheoryData()
+        {
+            var data = new TheoryData<Type>();
+            data.Add(null);
+            data.Add(typeof(int));
             return data;
         }
 

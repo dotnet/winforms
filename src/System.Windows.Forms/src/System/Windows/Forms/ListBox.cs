@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
 
     using System;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Windows.Forms.Layout;
 
@@ -317,7 +315,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "LISTBOX";
@@ -1089,7 +1086,7 @@ namespace System.Windows.Forms {
 
                     int cnt = Items.Count;
                     for (int index=0; index < cnt; ++index) {
-                        if (String.Compare(value, GetItemText(Items[index]), true, CultureInfo.CurrentCulture) == 0) {
+                        if (string.Compare(value, GetItemText(Items[index]), true, CultureInfo.CurrentCulture) == 0) {
                             SelectedIndex = index;
                             return;
                         }
@@ -2229,19 +2226,13 @@ namespace System.Windows.Forms {
         private void WmPrint(ref Message m) {
             base.WndProc(ref m);
             if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D) {
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    using (Graphics g = Graphics.FromHdc(m.WParam)) {
-                        Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
-                        using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
-                            g.DrawRectangle(pen, rect);
-                        }
-                        rect.Inflate(-1, -1);
-                        g.DrawRectangle(SystemPens.Window, rect);
+                using (Graphics g = Graphics.FromHdc(m.WParam)) {
+                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
+                        g.DrawRectangle(pen, rect);
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                    rect.Inflate(-1, -1);
+                    g.DrawRectangle(SystemPens.Window, rect);
                 }
             }
         }
@@ -2250,10 +2241,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [
-        System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode),
-        System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual void WmReflectCommand(ref Message m) {
             switch (NativeMethods.Util.HIWORD(m.WParam)) {
                 case NativeMethods.LBN_SELCHANGE:
@@ -2340,7 +2327,6 @@ namespace System.Windows.Forms {
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the list continues to function properly.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:
@@ -2780,8 +2766,8 @@ namespace System.Windows.Forms {
                     item2 = ((Entry)item2).item;
                 }
 
-                String itemName1 = listControl.GetItemText(item1);
-                String itemName2 = listControl.GetItemText(item2);
+                string itemName1 = listControl.GetItemText(item1);
+                string itemName2 = listControl.GetItemText(item2);
 
                 CompareInfo compInfo = (Application.CurrentCulture).CompareInfo;
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
@@ -3299,7 +3285,7 @@ namespace System.Windows.Forms {
                 // is different to the current text in the native list item, recreate the native list item...
                 if (owner.IsHandleCreated) {
                     bool selected = (owner.SelectedIndex == index);
-                    if (String.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0) {
+                    if (string.Compare(this.owner.GetItemText(value), this.owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0) {
                         owner.NativeRemoveAt(index);
                         owner.SelectedItems.SetSelected(index, false);
                         owner.NativeInsert(index, value);
@@ -3382,7 +3368,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object item) {
-                if (item is Int32) {
+                if (item is int) {
                     return Contains((int)item);
                 }
                 else {
@@ -3418,7 +3404,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object item) {
-                if (item is Int32) {
+                if (item is int) {
                     return IndexOf((int)item);
                 }
                 else {
@@ -3773,7 +3759,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object selectedIndex) {
-                if (selectedIndex is Int32) {
+                if (selectedIndex is int) {
                     return Contains((int)selectedIndex);
                 }
                 else {
@@ -3801,7 +3787,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object selectedIndex) {
-                if (selectedIndex is Int32) {
+                if (selectedIndex is int) {
                     return IndexOf((int)selectedIndex);
                 }
                 else {

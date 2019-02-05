@@ -4,107 +4,107 @@
     <body>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
         <source>Optimized Code Generation</source>
-        <target state="new">Optimized Code Generation</target>
+        <target state="translated">최적화된 코드 생성</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenSettings">
         <source>Code Generation Settings</source>
-        <target state="new">Code Generation Settings</target>
+        <target state="translated">코드 생성 설정</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingCat">
         <source>InSitu Editing</source>
-        <target state="new">InSitu Editing</target>
+        <target state="translated">InSitu 편집</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingDesc">
         <source>Controls whether InSitu editing is enabled.</source>
-        <target state="new">Controls whether InSitu editing is enabled.</target>
+        <target state="translated">InSitu 편집을 사용할지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingDisplay">
         <source>Enable InSitu Editing</source>
-        <target state="new">Enable InSitu Editing</target>
+        <target state="translated">InSitu 편집 사용</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_GridSizeDesc">
         <source>Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</source>
-        <target state="new">Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</target>
+        <target state="translated">LayoutMode = SnapToGrid일 때 디자이너에서 기본 X 및 Y 모눈 설정을 지정합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_GridSizeDisplayName">
         <source>Default Grid Cell Size</source>
-        <target state="new">Default Grid Cell Size</target>
+        <target state="translated">기본 모눈 셀 크기</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_LayoutSettings">
         <source>Layout Settings</source>
-        <target state="new">Layout Settings</target>
+        <target state="translated">레이아웃 설정</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="new">Controls whether designer smart tag windows should be shown by default.</target>
+        <target state="translated">디자이너 스마트 태그 창을 기본적으로 표시할지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
         <source>Automatically Open Smart Tags</source>
-        <target state="new">Automatically Open Smart Tags</target>
+        <target state="translated">스마트 태그 자동 열기</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagSettings">
         <source>Object Bound Smart Tag Settings</source>
-        <target state="new">Object Bound Smart Tag Settings</target>
+        <target state="translated">개체 바인딩 스마트 태그 설정</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_OptimizedCodeGen">
         <source>Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</source>
-        <target state="new">Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</target>
+        <target state="translated">최적화된 코드 생성을 사용합니다. 일부 컨트롤은 이 모드와 호환되지 않을 수 있습니다. 이 변경 내용을 적용하려면 Visual Studio를 닫은 다음 다시 열어야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ShowGridDesc">
         <source>Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</source>
-        <target state="new">Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</target>
+        <target state="translated">LayoutMode = SnapToGrid일 때 디자이너에서 크기 조정 모눈을 표시할지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ShowGridDisplayName">
         <source>Show Grid</source>
-        <target state="new">Show Grid</target>
+        <target state="translated">모눈 표시</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_SnapToGridDesc">
         <source>Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</source>
-        <target state="new">Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</target>
+        <target state="translated">LayoutMode = SnapToGrid일 때 디자이너에서 모눈 점에 맞출지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_SnapToGridDisplayName">
         <source>Snap to Grid</source>
-        <target state="new">Snap to Grid</target>
+        <target state="translated">모눈에 맞춤</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="new">Controls whether designers should show smart tag popup windows.</target>
+        <target state="translated">디자이너에서 스마트 태그 팝업 창을 표시할지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">
         <source>Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</source>
-        <target state="new">Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</target>
+        <target state="translated">디자이너에서 맞춤선을 사용할지 여부를 제어합니다. true이면 맞춤선이 안내선으로 사용되고 false이면 모눈선이 사용됩니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
         <source>This IDataObject doesn't support SetData.</source>
-        <target state="new">This IDataObject doesn't support SetData.</target>
+        <target state="translated">IDataObject는 SetData를 지원하지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
-        <target state="new">This method/object is not implemented by design.</target>
+        <target state="translated">이 메서드/개체는 의도적으로 구현되지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
-        <target state="new">Winforms Designer is not supported on this platform.</target>
+        <target state="translated">Winforms 디자이너는 이 플랫폼에서 지원되지 않습니다.</target>
         <note />
       </trans-unit>
     </body>

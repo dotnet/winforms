@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
                 if (vertical) {
                     if (!item.IsOnDropDown) {
                         // center so that it matches office
-                        bounds.Y +=3;
+                        bounds.Y += 3;
                         bounds.Height = Math.Max(0, bounds.Height -6);
                     }
                 }

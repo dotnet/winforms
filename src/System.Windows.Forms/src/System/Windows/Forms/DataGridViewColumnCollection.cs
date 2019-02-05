@@ -222,7 +222,7 @@ namespace System.Windows.Forms
                 {
                     DataGridViewColumn dataGridViewColumn = (DataGridViewColumn) this.items[i];
                     // NOTE: case-insensitive
-                    if (String.Equals(dataGridViewColumn.Name, columnName, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(dataGridViewColumn.Name, columnName, StringComparison.OrdinalIgnoreCase))
                     {
                         return dataGridViewColumn;
                     }
@@ -340,7 +340,7 @@ namespace System.Windows.Forms
 
             while (initialColumns.Count > 0)
             {
-                smallestDisplayIndex = Int32.MaxValue;
+                smallestDisplayIndex = int.MaxValue;
                 smallestIndex = -1;
                 for (index = 0; index < initialColumns.Count; index++) 
                 {
@@ -473,7 +473,7 @@ namespace System.Windows.Forms
             {
                 DataGridViewColumn dataGridViewColumn = (DataGridViewColumn) this.items[i];
                 // NOTE: case-insensitive
-                if (0 == String.Compare(dataGridViewColumn.Name, columnName, true, CultureInfo.InvariantCulture))
+                if (0 == string.Compare(dataGridViewColumn.Name, columnName, true, CultureInfo.InvariantCulture))
                 {
                     return true;
                 }
@@ -836,7 +836,7 @@ namespace System.Windows.Forms
             if (index == -1)
             {
                 bool columnFound = false;
-                int indexMin = Int32.MaxValue, displayIndexMin = Int32.MaxValue;
+                int indexMin = int.MaxValue, displayIndexMin = int.MaxValue;
                 for (index = 0; index < this.items.Count; index++)
                 {
                     DataGridViewColumn dataGridViewColumn = (DataGridViewColumn) this.items[index];
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms
             {
                 DataGridViewColumn dataGridViewColumn = (DataGridViewColumn) this.items[i];
                 // NOTE: case-insensitive
-                if (0 == String.Compare(dataGridViewColumn.Name, columnName, true, CultureInfo.InvariantCulture))
+                if (0 == string.Compare(dataGridViewColumn.Name, columnName, true, CultureInfo.InvariantCulture))
                 {
                     RemoveAt(i);
                     return;
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
             {
             }
 
-            public Int32 Compare(Object x, Object y)
+            public int Compare(object x, object y)
             {
                 Debug.Assert(x != null);
                 Debug.Assert(y != null);

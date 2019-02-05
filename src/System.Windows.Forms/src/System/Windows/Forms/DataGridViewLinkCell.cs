@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.ComponentModel;
     using System.Windows.Forms.Internal;
-    using System.Security.Permissions;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using Runtime.CompilerServices;
@@ -22,8 +21,8 @@ namespace System.Windows.Forms
         private static readonly DataGridViewContentAlignment anyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
         private static readonly DataGridViewContentAlignment anyBottom = DataGridViewContentAlignment.BottomRight | DataGridViewContentAlignment.BottomCenter | DataGridViewContentAlignment.BottomLeft;
 
-        private static Type defaultFormattedValueType = typeof(System.String);
-        private static Type defaultValueType = typeof(System.Object);
+        private static Type defaultFormattedValueType = typeof(string);
+        private static Type defaultValueType = typeof(object);
         private static Type cellType = typeof(DataGridViewLinkCell);
 
         private static readonly int PropLinkCellActiveLinkColor = PropertyStore.CreateKey();
@@ -612,7 +611,7 @@ namespace System.Windows.Forms
                 rowIndex < 0 ||
                 this.OwningColumn == null ||
                 !this.DataGridView.ShowCellErrors ||
-                String.IsNullOrEmpty(GetErrorText(rowIndex)))
+                string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
                 return Rectangle.Empty;
             }
@@ -1147,7 +1146,7 @@ namespace System.Windows.Forms
             }
             else if (computeErrorIconBounds)
             {
-                if (!String.IsNullOrEmpty(errorText))
+                if (!string.IsNullOrEmpty(errorText))
                 {
                     resultBounds = ComputeErrorIconBounds(errorBounds);
                 }
@@ -1186,7 +1185,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 DataGridViewLinkCell dataGridViewCell = (DataGridViewLinkCell)this.Owner;

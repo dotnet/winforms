@@ -14,8 +14,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Text;
     using System.Windows.Forms.ComponentModel;
     using System.Globalization;
@@ -590,7 +588,7 @@ namespace System.Windows.Forms {
             if (index <= 0) {
                 return 0;
             }
-            if (String.IsNullOrEmpty(text)) {
+            if (string.IsNullOrEmpty(text)) {
                 Debug.Assert(text != null, "string should not be null"); 
                 //do no conversion, just return the original value passed in
                 return index;
@@ -729,7 +727,7 @@ namespace System.Windows.Forms {
         [ResourceConsumption(ResourceScope.Process)]
         internal override StringFormat CreateStringFormat() {
             StringFormat stringFormat = base.CreateStringFormat();
-            if (String.IsNullOrEmpty(Text)) {
+            if (string.IsNullOrEmpty(Text)) {
                 return stringFormat;
             }
 
@@ -745,7 +743,7 @@ namespace System.Windows.Forms {
         private CharacterRange[] AdjustCharacterRangesForSurrogateChars(){
             string text = Text;
 
-            if (String.IsNullOrEmpty(text)) {
+            if (string.IsNullOrEmpty(text)) {
                 return new CharacterRange[]{};
             }
 
@@ -898,12 +896,7 @@ namespace System.Windows.Forms {
 
             try {
                 Link focusLink = FocusLink;
-                if (focusLink == null) {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    
+                if (focusLink == null) {                   
                     // Set focus on first link.  
                     // This will raise the OnGotFocus event again but it will not be processed because processingOnGotFocus is true.
                     Select(true /*directed*/, true /*forward*/);
@@ -1526,7 +1519,6 @@ namespace System.Windows.Forms {
         ///       will seldom, if ever, need to override this method.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             if ((keyData & (Keys.Alt | Keys.Control)) != Keys.Alt) {
                 Keys keyCode = keyData & Keys.KeyCode;
@@ -1915,7 +1907,6 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message msg) {
             switch (msg.Msg) {
                 case NativeMethods.WM_SETCURSOR:
@@ -2193,7 +2184,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int  IndexOfKey(String key) {
+            public virtual int  IndexOfKey(string key) {
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key)){
                     return -1; // we dont support empty or null keys.
@@ -2395,7 +2386,7 @@ namespace System.Windows.Forms {
             public int Length {
                 get { 
                     if (length == -1) {
-                        if (owner != null && !String.IsNullOrEmpty(owner.Text)) {
+                        if (owner != null && !string.IsNullOrEmpty(owner.Text)) {
                             StringInfo stringInfo = new StringInfo(owner.Text);
                             return stringInfo.LengthInTextElements - Start;
                         }
@@ -2625,17 +2616,7 @@ namespace System.Windows.Forms {
             public override Rectangle Bounds {
                 get {
                     Region region = link.VisualRegion;
-                    Graphics g = null;
-
-                    IntSecurity.ObjectFromWin32Handle.Assert();
-                    try
-                    {
-                        g = Graphics.FromHwnd(link.Owner.Handle);
-                    }
-                    finally 
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    Graphics g = Graphics.FromHwnd(link.Owner.Handle);
 
                     // Make sure we have a region for this link
                     //
@@ -2705,7 +2686,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return link.Owner.AccessibilityObject;                
                 }
@@ -2733,7 +2713,6 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (AccessibilityImprovements.Level1) {
                         // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
@@ -2744,7 +2723,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 link.Owner.OnLinkClicked(new LinkLabelLinkClickedEventArgs(link));
             }

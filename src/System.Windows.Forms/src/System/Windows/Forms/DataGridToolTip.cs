@@ -52,7 +52,7 @@ namespace System.Windows.Forms {
 
         // this function will add a toolTip to the
         // windows system
-        public void AddToolTip(String toolTipString, IntPtr toolTipId, Rectangle iconBounds)
+        public void AddToolTip(string toolTipString, IntPtr toolTipId, Rectangle iconBounds)
         {
             Debug.Assert(tipWindow != null && tipWindow.Handle != IntPtr.Zero, "the tipWindow was not initialized, bailing out");
 

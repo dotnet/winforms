@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Tests
             var paramName = "SelectedIndex";
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => underTest.SelectedIndex = index);
             Assert.Equal(paramName, ex.ParamName);
-            Assert.Contains($"Value of '{index}' is not valid for '{paramName}'.\r\nParameter name: {paramName}", ex.Message);
+            Assert.Contains($"Value of '{index}' is not valid for '{paramName}'.{Environment.NewLine}Parameter name: {paramName}", ex.Message);
         }
 
         [Fact]

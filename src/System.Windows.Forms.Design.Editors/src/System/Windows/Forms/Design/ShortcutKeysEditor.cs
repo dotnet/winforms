@@ -7,8 +7,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms.Design.Editors.Resources;
 
 namespace System.Windows.Forms.Design
@@ -17,7 +15,6 @@ namespace System.Windows.Forms.Design
     /// <summary>
     ///     Provides an editor for picking shortcut keys.
     /// </summary>
-    [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
     [CLSCompliant(false)]
     public class ShortcutKeysEditor : UITypeEditor
     {

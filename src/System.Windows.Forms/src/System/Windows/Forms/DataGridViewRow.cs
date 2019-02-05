@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Drawing;
     using System.Windows.Forms.VisualStyles;
-    using System.Security.Permissions;
     using System.Globalization;
 
     /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow"]/*' />
@@ -499,7 +498,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
-                        if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
+                        if (this.DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
@@ -520,7 +519,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
-                        if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
+                        if (this.DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
@@ -541,7 +540,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
-                        if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
+                        if (this.DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         }
@@ -1519,6 +1518,11 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
             }
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
+
             DataGridView dataGridView = this.DataGridView;
             Rectangle updatedClipBounds = clipBounds;
             DataGridViewRow sharedRow = dataGridView.Rows.SharedRow(rowIndex);
@@ -1593,6 +1597,10 @@ namespace System.Windows.Forms
             if (this.DataGridView == null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+            }
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
             }
             if ((int) paintParts < (int) DataGridViewPaintParts.None || (int) paintParts > (int) DataGridViewPaintParts.All)
             {
@@ -1782,13 +1790,15 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
             }
-            
-            // not using ClientUtils.IsValidEnum here because this is a flags enum.  
-            // everything is valid between 0x0 and 0x7F.
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
             if ((int) paintParts < (int) DataGridViewPaintParts.None || (int) paintParts > (int) DataGridViewPaintParts.All)
             {
                 throw new InvalidEnumArgumentException(nameof(paintParts), (int)paintParts, typeof(DataGridViewPaintParts));
             }
+
             DataGridView dataGridView = this.DataGridView;
             if (dataGridView.RowHeadersVisible)
             {
@@ -2011,7 +2021,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.ParentPrivate;
@@ -2118,7 +2127,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Value"]/*' />
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     if (this.owner == null)
@@ -2225,7 +2233,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 if (this.owner == null)
@@ -2303,7 +2310,6 @@ namespace System.Windows.Forms
             }
             
             /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Select"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags)
             {
                 if (this.owner == null)
@@ -2444,7 +2450,6 @@ namespace System.Windows.Forms
 
             public override AccessibleObject Parent
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.owner.AccessibilityObject;
@@ -2469,7 +2474,6 @@ namespace System.Windows.Forms
 
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.Name;
@@ -2535,7 +2539,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 switch (navigationDirection)

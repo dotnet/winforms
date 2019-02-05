@@ -1,11 +1,10 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms {
 
     using System;
-    using System.Security.Permissions;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.ComponentModel.Design;
@@ -315,7 +314,6 @@ namespace System.Windows.Forms {
         ///    Overrides Control.  A Label is a Win32 STATIC control, which we setup here.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "STATIC";
@@ -1386,14 +1384,11 @@ namespace System.Windows.Forms {
         protected override void OnMouseEnter(EventArgs e) {
             if (!controlToolTip && !DesignMode && AutoEllipsis && showToolTip && textToolTip != null) {
 
-                // 
-                IntSecurity.AllWindows.Assert();
                 try {
                     controlToolTip = true;
                     textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
                 }
                 finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
                     controlToolTip = false;
                 }
                     
@@ -1409,18 +1404,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
-        [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         protected override void OnMouseLeave(EventArgs e) {
             if (!controlToolTip && textToolTip != null && textToolTip.GetHandleCreated()) {
-                    textToolTip.RemoveAll();
-                    // 
-                    IntSecurity.AllWindows.Assert();
-                    try {
-                        textToolTip.Hide(this);
-                    }
-                    finally {
-                        System.Security.CodeAccessPermission.RevertAssert();
-                    }
+                textToolTip.RemoveAll();
+
+                textToolTip.Hide(this);
             }
 
             base.OnMouseLeave(e);
@@ -1449,7 +1437,6 @@ namespace System.Windows.Forms {
 
         
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
-        [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
         protected override void OnHandleDestroyed(EventArgs e) {
             base.OnHandleDestroyed(e);
             if (textToolTip != null && textToolTip.GetHandleCreated())
@@ -1613,24 +1600,14 @@ namespace System.Windows.Forms {
         ///       mnemonic for this control.
         ///    </para>
         /// </devdoc>        
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic()) {
                 Control parent = ParentInternal;
                 if (parent != null) {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        if (parent.SelectNextControl(this, true, false, true, false)) {
-                            if (!parent.ContainsFocus) {
-                                parent.Focus();
-                            }
+                    if (parent.SelectNextControl(this, true, false, true, false)) {
+                        if (!parent.ContainsFocus) {
+                            parent.Focus();
                         }
-                    }
-                    finally {
-                        System.Security.CodeAccessPermission.RevertAssert();
                     }
                 }
                 return true;
@@ -1705,7 +1682,6 @@ namespace System.Windows.Forms {
         ///       class would normally override.
         ///    </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_NCHITTEST:

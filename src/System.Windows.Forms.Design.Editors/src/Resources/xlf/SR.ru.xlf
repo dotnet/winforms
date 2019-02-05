@@ -4,117 +4,117 @@
     <body>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
-        <target state="new">Anchor Editor</target>
+        <target state="translated">Редактор привязки</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">По нижнему краю</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">По левому краю</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">По правому краю</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">По верхнему краю</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
-        <target state="new">Color Picker</target>
+        <target state="translated">Палитра цветов</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorPaletteTab">
         <source>Custom</source>
-        <target state="new">Custom</target>
+        <target state="translated">Настройка</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
-        <target state="new">Web</target>
+        <target state="translated">Веб</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">
         <source>System</source>
-        <target state="new">System</target>
+        <target state="translated">Система</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
-        <target state="new">Dock Picker</target>
+        <target state="translated">Выбор дока</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">По нижнему краю</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorFillAccName">
         <source>Fill</source>
-        <target state="new">Fill</target>
+        <target state="translated">Заливка</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">По левому краю</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorNoneAccName">
         <source>None</source>
-        <target state="new">None</target>
+        <target state="translated">Нет</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">По правому краю</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">По верхнему краю</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericFileFilter">
         <source>All Files(*.*)|*.*</source>
-        <target state="new">All Files(*.*)|*.*</target>
+        <target state="translated">Все файлы(*.*)|*.*</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericOpenFile">
         <source>Open File</source>
-        <target state="new">Open File</target>
+        <target state="translated">Открыть файл</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
-        <target state="new">Winforms Designer is not supported on this platform.</target>
+        <target state="translated">Конструктор Windows Forms не поддерживается на этой платформе.</target>
         <note />
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
-        <target state="new">(Unknown)</target>
+        <target state="translated">(Неизвестный)</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">
         <source>Bitmap files</source>
-        <target state="new">Bitmap files</target>
+        <target state="translated">Файлы точечных рисунков</target>
         <note />
       </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
-        <target state="new">All image files</target>
+        <target state="translated">Все файлы изображений</target>
         <note />
       </trans-unit>
       <trans-unit id="metafileFileDescription">
         <source>Metafiles</source>
-        <target state="new">Metafiles</target>
+        <target state="translated">Метафайлы</target>
         <note />
       </trans-unit>
     </body>

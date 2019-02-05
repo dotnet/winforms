@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Security; 
-    using System.Security.Permissions;
     using System;
     using System.Drawing;
     using System.Drawing.Design;
@@ -68,7 +67,7 @@ namespace System.Windows.Forms {
 
         private BitVector32 state = new BitVector32();
         private ListViewItemImageIndexer imageIndexer;
-        private String toolTipText = String.Empty;
+        private string toolTipText = string.Empty;
         object userData;
 
         // We need a special way to defer to the ListView's image
@@ -828,7 +827,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null)
-                    value = String.Empty;
+                    value = string.Empty;
                 if (WindowsFormsUtils.SafeCompareStrings(toolTipText, value, false /*ignoreCase*/)) {
                     return;
                 }
@@ -910,7 +909,7 @@ namespace System.Windows.Forms {
             newItem.Tag = this.Tag;
 
             // Only copy over the ImageKey if we're using it.
-            if (!String.IsNullOrEmpty(this.ImageIndexer.Key)) {
+            if (!string.IsNullOrEmpty(this.ImageIndexer.Key)) {
                 newItem.ImageIndexer.Key = this.ImageIndexer.Key;
             }
 
@@ -1013,7 +1012,7 @@ namespace System.Windows.Forms {
         internal void UpdateGroupFromName() {
             Debug.Assert(this.listView != null, "This method is used only when items are parented in a list view");
             Debug.Assert(!this.listView.VirtualMode, "we need to update the group only when the user specifies the list view items in localizable forms");
-            if (String.IsNullOrEmpty(this.groupName)) {
+            if (string.IsNullOrEmpty(this.groupName)) {
                 return;
             }
 
@@ -1220,12 +1219,10 @@ namespace System.Windows.Forms {
         ///     Saves this ListViewItem object to the given data stream.
         /// </devdoc>
         /// 
-       	[SecurityPermissionAttribute(SecurityAction.Demand, Flags=SecurityPermissionFlag.SerializationFormatter), 		
-         SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.SerializationFormatter)]
         protected virtual void Serialize(SerializationInfo info, StreamingContext context) {
             info.AddValue("Text", Text);
             info.AddValue("ImageIndex", ImageIndexer.Index);  
-            if (!String.IsNullOrEmpty(ImageIndexer.Key)) {
+            if (!string.IsNullOrEmpty(ImageIndexer.Key)) {
                 info.AddValue("ImageKey", ImageIndexer.Key);
             }
             if (SubItemCount > 1) {
@@ -1301,7 +1298,6 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ISerializable.GetObjectData"]/*' />
         /// <internalonly/>        
-        [SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)]       
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
             Serialize(info, context);
         }
@@ -1883,7 +1879,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int  IndexOfKey(String key) {
+            public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                   if (string.IsNullOrEmpty(key)){
                         return -1; // we dont support empty or null keys.

@@ -15,8 +15,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;    
     using System.Windows.Forms.Design;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog"]/*' />
     /// <devdoc>
@@ -138,8 +136,6 @@ namespace System.Windows.Forms {
         ///       box.
         ///    </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected virtual IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
             if (msg == NativeMethods.WM_INITDIALOG) {
                 MoveToScreenCenter(hWnd);
@@ -199,10 +195,6 @@ namespace System.Windows.Forms {
         ///       overridden to add specific functionality to a common dialog box.
         ///    </para>
         /// </devdoc>
-        [
-            System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode),
-            System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual IntPtr OwnerWndProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
             if (msg == helpMsg) {
                 if (NativeWindow.WndProcShouldBeDebuggable) {
@@ -229,7 +221,6 @@ namespace System.Windows.Forms {
         ///       values.
         ///    </para>
         /// </devdoc>
-        [System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)]
         public abstract void Reset();
 
         /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.RunDialog"]/*' />
@@ -239,7 +230,6 @@ namespace System.Windows.Forms {
         ///       specifies a common dialog box.
         ///    </para>
         /// </devdoc>
-        [System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)]
         protected abstract bool RunDialog(IntPtr hwndOwner);
 
         /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.ShowDialog"]/*' />
@@ -260,8 +250,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")]
         public DialogResult ShowDialog( IWin32Window owner ) {
-
-            IntSecurity.SafeSubWindows.Demand();
 
             if (!SystemInformation.UserInteractive) {
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);

@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Windows.Forms.ComponentModel.Com2Interop;
     using System.Windows.Forms.Design;
     using System.Windows.Forms.PropertyGridInternal;
@@ -26,8 +25,6 @@ namespace System.Windows.Forms {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
     public class PropertyGrid : ContainerControl, IComPropertyBrowser, UnsafeNativeMethods.IPropertyNotifySink {
 
@@ -81,7 +78,7 @@ namespace System.Windows.Forms {
         private GridEntry peDefault;
         private GridEntry peMain;
         private GridEntryCollection currentPropEntries;
-        private Object[]   currentObjects;
+        private object[]   currentObjects;
         
         private int                                 paintFrozen;
         private Color                               lineColor = SystemInformation.HighContrast ? (AccessibilityImprovements.Level1 ? SystemColors.ControlDarkDark : SystemColors.ControlDark )
@@ -1064,7 +1061,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior)),
         TypeConverter(typeof(SelectedObjectConverter))
         ]
-        public Object SelectedObject {
+        public object SelectedObject {
             get {
                 if (currentObjects == null || currentObjects.Length == 0) {
                     return null;
@@ -1076,7 +1073,7 @@ namespace System.Windows.Forms {
                     SelectedObjects = new object[0];
                 }
                 else {
-                    SelectedObjects = new Object[]{value};
+                    SelectedObjects = new object[]{value};
                 }
             }
         }
@@ -1128,8 +1125,8 @@ namespace System.Windows.Forms {
                             }
        
                             Type oldType = GetUnwrappedObject(i).GetType();
-       
-                            Object objTemp = value[i];
+
+                            object objTemp = value[i];
        
                             if (objTemp is ICustomTypeDescriptor) {
                                 objTemp = ((ICustomTypeDescriptor)objTemp).GetPropertyOwner(null);
@@ -1162,7 +1159,7 @@ namespace System.Windows.Forms {
                         peDefault = null;
 
                         if (value == null) {
-                            currentObjects = new Object[0];
+                            currentObjects = new object[0];
                         }
                         else {
                             currentObjects = (object[])value.Clone();
@@ -1209,7 +1206,7 @@ namespace System.Windows.Forms {
                         // make sure we've also got events on all the objects
                         if (showEvents && viewTabs != null && viewTabs.Length > EVENTS && (viewTabs[EVENTS] is EventsTab)) {
                             showEvents = viewTabButtons[EVENTS].Visible;
-                            Object tempObj;
+                            object tempObj;
                             PropertyDescriptorCollection events;
                             Attribute[] attrs = new Attribute[BrowsableAttributes.Count];
                             BrowsableAttributes.CopyTo(attrs, 0);
@@ -1723,7 +1720,7 @@ namespace System.Windows.Forms {
         }
 
  
-        internal void AddRefTab(Type tabType, Object component, PropertyTabScope type, bool setupToolbar) {
+        internal void AddRefTab(Type tabType, object component, PropertyTabScope type, bool setupToolbar) {
             PropertyTab tab = null;
             int tabIndex = -1;
 
@@ -1780,7 +1777,7 @@ namespace System.Windows.Forms {
                                 continue;
                             }
 
-                            if (String.Compare(tab.TabName, viewTabs[i].TabName, false, CultureInfo.InvariantCulture) < 0) {
+                            if (string.Compare(tab.TabName, viewTabs[i].TabName, false, CultureInfo.InvariantCulture) < 0) {
                                 tabIndex = i;
                                 break;
                             }
@@ -1808,10 +1805,10 @@ namespace System.Windows.Forms {
 
             if (tab != null && component != null) {
                 try {
-                    Object[] tabComps = tab.Components;
+                    object[] tabComps = tab.Components;
                     int oldArraySize = tabComps == null ? 0 : tabComps.Length;
 
-                    Object[] newComps = new Object[oldArraySize + 1];
+                    object[] newComps = new object[oldArraySize + 1];
                     if (oldArraySize > 0) {
                         Array.Copy(tabComps, newComps, oldArraySize);
                     }
@@ -1893,7 +1890,7 @@ namespace System.Windows.Forms {
 
             if (tab == null) {
                 ConstructorInfo constructor = tabType.GetConstructor(new Type[] {typeof(IServiceProvider)});
-                Object param = null;
+                object param = null;
                 if (constructor == null) {
     
                     // try a IDesignerHost ctor
@@ -1909,7 +1906,7 @@ namespace System.Windows.Forms {
     
     
                 if (param != null && constructor != null) {
-                    tab = (PropertyTab) constructor.Invoke(new Object[] {param});
+                    tab = (PropertyTab) constructor.Invoke(new object[] {param});
                 }
                 else {
                     // just call the default ctor
@@ -2217,7 +2214,7 @@ namespace System.Windows.Forms {
             GetPropertyGridView().DropDownDone();
         }
         
-        private bool EnablePropPageButton(Object obj) {
+        private bool EnablePropPageButton(object obj) {
             if (obj == null) {
                 btnViewPropertyPages.Enabled = false;
                 return false;
@@ -2370,7 +2367,7 @@ namespace System.Windows.Forms {
             gridView.RecursivelyExpand(peMain, false, true, PropertyGridView.MaxRecurseExpand);
         }
 
-        private static Type[] GetCommonTabs(Object[] objs, PropertyTabScope tabScope) {
+        private static Type[] GetCommonTabs(object[] objs, PropertyTabScope tabScope) {
 
             if (objs == null || objs.Length == 0) {
                 return new Type[0];
@@ -2458,7 +2455,7 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            Object obj = currentObjects[index];
+            object obj = currentObjects[index];
             if (obj is ICustomTypeDescriptor) {
                 obj = ((ICustomTypeDescriptor)obj).GetPropertyOwner(null);
             }
@@ -2503,7 +2500,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         void IComPropertyBrowser.LoadState(RegistryKey optRoot) {
             if (optRoot != null) {
-                Object val = optRoot.GetValue("PbrsAlpha", "0");
+                object val = optRoot.GetValue("PbrsAlpha", "0");
 
                 if (val != null && val.ToString().Equals("1")) {
                     this.PropertySort = PropertySort.Alphabetical;
@@ -2523,7 +2520,7 @@ namespace System.Windows.Forms {
 
                 bool update = false;
                 if (val is string) {
-                    int ratio = Int32.Parse((string)val, CultureInfo.InvariantCulture);
+                    int ratio = int.Parse((string)val, CultureInfo.InvariantCulture);
                     if (ratio > 0) {
                         dcSizeRatio = ratio;
                         update = true;
@@ -2532,7 +2529,7 @@ namespace System.Windows.Forms {
 
                 val = optRoot.GetValue("PbrsHotCommandHeightRatio", "-1");
                 if (val is string) {
-                    int ratio = Int32.Parse((string)val, CultureInfo.InvariantCulture);
+                    int ratio = int.Parse((string)val, CultureInfo.InvariantCulture);
                     if (ratio > 0) {
                         dcSizeRatio = ratio;
                         update = true;
@@ -2554,7 +2551,7 @@ namespace System.Windows.Forms {
 
         // when the active document is changed, check all the components so see if they
         // are offering up any new tabs
-        private void OnActiveDesignerChanged(Object sender, ActiveDesignerEventArgs e) {
+        private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e) {
 
             if (e.OldDesigner != null && e.OldDesigner == designerHost) {
                 this.ActiveDesigner = null;
@@ -2594,10 +2591,10 @@ namespace System.Windows.Forms {
                 if (!gridView.GetInPropertySet() || fullRefresh) {
                     Refresh(fullRefresh);
                 }
-    
+
                 // this is so changes to names of native
                 // objects will be reflected in the combo box
-                Object obj = GetUnwrappedObject(0);
+                object obj = GetUnwrappedObject(0);
                 if (ComNativeDescriptor.Instance.IsNameDispId(obj, dispID) || dispID == NativeMethods.ActiveX.DISPID_Name) {
                     OnComComponentNameChanged(new ComponentRenameEventArgs(obj, null, TypeDescriptor.GetClassName(obj)));
                 }
@@ -2608,7 +2605,7 @@ namespace System.Windows.Forms {
         /// We forward messages from several of our children
         /// to our mouse move so we can put up the spliter over their borders
         /// </devdoc>
-        private void OnChildMouseMove(Object sender, MouseEventArgs me) {
+        private void OnChildMouseMove(object sender, MouseEventArgs me) {
             Point newPt = Point.Empty;
             if (ShouldForwardChildMouseMessage((Control)sender, me, ref newPt)) {
                 // forward the message
@@ -2621,7 +2618,7 @@ namespace System.Windows.Forms {
         /// We forward messages from several of our children
         /// to our mouse move so we can put up the spliter over their borders
         /// </devdoc>
-        private void OnChildMouseDown(Object sender, MouseEventArgs me) {
+        private void OnChildMouseDown(object sender, MouseEventArgs me) {
             Point newPt = Point.Empty;
 
             if (ShouldForwardChildMouseMessage((Control)sender, me, ref newPt)) {
@@ -2631,7 +2628,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        private void OnComponentAdd(Object sender, ComponentEventArgs e) {
+        private void OnComponentAdd(object sender, ComponentEventArgs e) {
 
             PropertyTabAttribute attribute = (PropertyTabAttribute) TypeDescriptor.GetAttributes(e.Component.GetType())[typeof(PropertyTabAttribute)];
 
@@ -2647,7 +2644,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void OnComponentChanged(Object sender, ComponentChangedEventArgs e) {
+        private void OnComponentChanged(object sender, ComponentChangedEventArgs e) {
             bool batchMode = GetFlag(BatchMode);
             if (batchMode || GetFlag(InternalChange) || gridView.GetInPropertySet() ||
                (currentObjects == null) || (currentObjects.Length == 0)) {
@@ -2667,7 +2664,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void OnComponentRemove(Object sender, ComponentEventArgs e) {
+        private void OnComponentRemove(object sender, ComponentEventArgs e) {
 
             PropertyTabAttribute attribute = (PropertyTabAttribute) TypeDescriptor.GetAttributes(e.Component.GetType())[typeof(PropertyTabAttribute)];
 
@@ -3050,7 +3047,7 @@ namespace System.Windows.Forms {
 
 
 
-        private void OnButtonClick(Object sender, EventArgs e) {
+        private void OnButtonClick(object sender, EventArgs e) {
             // we don't want to steal focus from the property pages...
             if (sender != btnViewPropertyPages) {
                 gridView.FocusInternal();
@@ -3251,7 +3248,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        private void OnViewSortButtonClick(Object sender, EventArgs e) {
+        private void OnViewSortButtonClick(object sender, EventArgs e) {
             try {
             
                this.FreezePainting = true;
@@ -3300,7 +3297,7 @@ namespace System.Windows.Forms {
             
         }
 
-        private void OnViewTabButtonClick(Object sender, EventArgs e) {
+        private void OnViewTabButtonClick(object sender, EventArgs e) {
             try {
             
                this.FreezePainting = true;
@@ -3315,13 +3312,13 @@ namespace System.Windows.Forms {
          
         }
 
-        private void OnViewButtonClickPP(Object sender, EventArgs e) {
+        private void OnViewButtonClickPP(object sender, EventArgs e) {
 
             if (btnViewPropertyPages.Enabled &&
                 currentObjects != null &&
                 currentObjects.Length > 0) {
-                Object baseObject = currentObjects[0];
-                Object obj = baseObject;
+                object baseObject = currentObjects[0];
+                object obj = baseObject;
 
                 bool success = false;
 
@@ -3386,7 +3383,7 @@ namespace System.Windows.Forms {
                 }
                 catch (Exception ex)
                 {
-                    String errString = SR.ErrorPropertyPageFailed;
+                    string errString = SR.ErrorPropertyPageFailed;
                     if (uiSvc != null)
                     {
                         uiSvc.ShowError(ex, errString);
@@ -3512,9 +3509,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Returns the last child control that can take focus
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
-        [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust")]
-        [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             switch (keyData & Keys.KeyCode) {
@@ -3749,7 +3743,7 @@ namespace System.Windows.Forms {
             SetupToolbar();
         }
 
-        internal void ReleaseTab(Type tabType, Object component) {
+        internal void ReleaseTab(Type tabType, object component) {
             PropertyTab tab = null;
             int tabIndex = -1;
             for (int i = 0; i < viewTabs.Length; i++) {
@@ -3765,7 +3759,7 @@ namespace System.Windows.Forms {
                 return;
             }
 
-            Object[] components = tab.Components;
+            object[] components = tab.Components;
             bool killTab = false;
 
             try {
@@ -3850,7 +3844,7 @@ namespace System.Windows.Forms {
 
                 // clear the component refs of the tabs
                 for (int i = 0; i < viewTabs.Length; i++) {
-                    viewTabs[i].Components = new Object[0];
+                    viewTabs[i].Components = new object[0];
                 }
             }
         }
@@ -4409,7 +4403,7 @@ namespace System.Windows.Forms {
             
             for (int i = 0; i < currentObjects.Length; i++) {
                 try {
-                    Object obj = GetUnwrappedObject(i);
+                    object obj = GetUnwrappedObject(i);
 
                     if (!Marshal.IsComObject(obj)) {
                         continue;
@@ -4620,7 +4614,6 @@ namespace System.Windows.Forms {
 
 
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -4825,8 +4818,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection"]/*' />
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class PropertyTabCollection : ICollection {
         
             internal static PropertyTabCollection Empty = new PropertyTabCollection(null);

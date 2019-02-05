@@ -592,14 +592,8 @@ namespace System.Windows.Forms.Tests
 
         #region Colors
 
-        /// <summary>
-        /// Data for the BackColorGetSet test
-        /// </summary>
-        public static TheoryData<Color> BackColorGetSetData =>
-            TestHelper.GetColorTheoryData();
-
         [Theory]
-        [MemberData(nameof(BackColorGetSetData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
         public void Control_BackColorGetSet(Color expected)
         {
             var cont = new Control();
@@ -622,14 +616,8 @@ namespace System.Windows.Forms.Tests
         }
 
 
-        /// <summary>
-        /// Data for the ForeColorGetSet test
-        /// </summary>
-        public static TheoryData<Color> ForeColorGetSetData =>
-            TestHelper.GetColorTheoryData();
-
         [Theory]
-        [MemberData(nameof(ForeColorGetSetData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
         public void Control_ForeColorGetSet(Color expected)
         {
             var cont = new Control();
@@ -1343,7 +1331,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(10.0f)]
         [InlineData(0.1f)]
-        [InlineData(System.Single.Epsilon)]
+        [InlineData(float.Epsilon)]
         public void Control_ScaleFont(float expected)
         {
             var cont = new Control();

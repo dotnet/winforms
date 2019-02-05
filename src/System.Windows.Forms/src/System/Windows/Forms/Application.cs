@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,8 +14,6 @@ namespace System.Windows.Forms {
     using System;
     using System.IO;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Collections;
     using System.Globalization;
     using System.Runtime.Versioning;
@@ -195,7 +193,6 @@ namespace System.Windows.Forms {
                     try {
                         //We need access to be able to read from the registry here.  We're not creating a 
                         //registry key, nor are we returning information from the registry to the user.
-                        new RegistryPermission(PermissionState.Unrestricted).Assert();
                         RegistryKey key = Registry.LocalMachine.OpenSubKey(CommonAppDataRegistryKeyName);
                         if (key != null) {
                             object value = key.GetValue(everettThreadAffinityValue);
@@ -206,7 +203,7 @@ namespace System.Windows.Forms {
                             }
                         }
                     }
-                    catch (SecurityException) {
+                    catch (System.Security.SecurityException) {
                         // Can't read the key: use default value (false)
                     }
                     catch (InvalidCastException) {
@@ -332,8 +329,6 @@ namespace System.Windows.Forms {
                 return InputLanguage.CurrentInputLanguage;
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-                IntSecurity.AffectThreadBehavior.Demand();
                 InputLanguage.CurrentInputLanguage = value;
             }
         }
@@ -363,10 +358,10 @@ namespace System.Windows.Forms {
                     Assembly asm = Assembly.GetEntryAssembly();
                     if (asm == null) {
                         StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
-                        executablePath = IntSecurity.UnsafeGetFullPath(sb.ToString());
+                        executablePath = Path.GetFullPath(sb.ToString());
                     }
                     else {
-                        String cb = asm.CodeBase;
+                        string cb = asm.CodeBase;
                         Uri codeBase = new Uri(cb);
                         if (codeBase.IsFile) {
                             executablePath = codeBase.LocalPath + Uri.UnescapeDataString(codeBase.Fragment); ;
@@ -376,13 +371,35 @@ namespace System.Windows.Forms {
                         }
                     }
                 }
-                Uri exeUri = new Uri(executablePath);
-                if (exeUri.Scheme == "file") {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileIO(" + executablePath + ") Demanded");
-                    new FileIOPermission(FileIOPermissionAccess.PathDiscovery, executablePath).Demand();
-                }
+
                 return executablePath;
             }
+        }
+
+        /// <summary>
+        /// Gets the current HighDpi mode for the process.
+        /// </summary>
+        public static HighDpiMode HighDpiMode
+        {
+            get
+            {
+                return DpiHelper.GetWinformsApplicationDpiAwareness();
+            }
+        }
+
+        /// <summary>
+        /// Sets the HighDpi mode for process.
+        /// </summary>
+        /// <param name="highDpiMode">The HighDpi mode to set.</param>
+        /// <returns></returns>
+        public static bool SetHighDpiMode(HighDpiMode highDpiMode)
+        {
+            if (DpiHelper.FirstParkingWindowCreated)
+            {
+                return false;
+            }
+
+            return DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
         }
 
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.LocalUserAppDataPath"]/*' />
@@ -434,7 +451,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static FormCollection OpenForms {
-            [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
             get {
                 return OpenFormsInternal;
             }
@@ -585,8 +601,7 @@ namespace System.Windows.Forms {
 
         // Allows the hosting environment to register a callback 
         [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)
+            EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public static void RegisterMessageLoop(MessageLoopCallback callback) {
             ThreadContext.FromCurrent().RegisterMessageLoop(callback);
@@ -617,8 +632,6 @@ namespace System.Windows.Forms {
                 return safeTopLevelCaptionSuffix;
             }
             set {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "WindowAdornmentModification Demanded");
-                IntSecurity.WindowAdornmentModification.Demand();
                 if (value == null) value = string.Empty;
                 safeTopLevelCaptionSuffix = value;
             }
@@ -643,16 +656,13 @@ namespace System.Windows.Forms {
                     // startupPath = Path.GetDirectoryName(sb.ToString());
                     startupPath = AppContext.BaseDirectory;
                 }
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "FileIO(" + startupPath + ") Demanded");
-                new FileIOPermission(FileIOPermissionAccess.PathDiscovery, startupPath).Demand();
                 return startupPath;
             }
         }
 
         // Allows the hosting environment to unregister a callback 
         [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)
+            EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public static void UnregisterMessageLoop() {
             ThreadContext.FromCurrent().RegisterMessageLoop(null);
@@ -858,16 +868,13 @@ namespace System.Windows.Forms {
         ///       destinations.</para>
         /// </devdoc>
         public static void AddMessageFilter(IMessageFilter value) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ManipulateWndProcAndHandles Demanded");
-            IntSecurity.UnmanagedCode.Demand();
             ThreadContext.FromCurrent().AddMessageFilter(value);
         }
 
         /// <devdoc>
         ///  Processes all message filters for given message
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         EditorBrowsable(EditorBrowsableState.Advanced),         
+        [EditorBrowsable(EditorBrowsableState.Advanced),         
          SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")  // using ref is OK.
         ]
         public static bool FilterMessage(ref Message message) {            
@@ -926,14 +933,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static event EventHandler EnterThreadModal {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
                     current.enterModalHandler += value;
                 }
             }        
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             remove {
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
@@ -950,14 +955,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static event EventHandler LeaveThreadModal {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
                     current.leaveModalHandler += value;
                 }
             }
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             remove {
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
@@ -972,9 +975,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static event ThreadExceptionEventHandler ThreadException {
             add {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-                IntSecurity.AffectThreadBehavior.Demand();
-
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock(current) {                    
                     current.threadExceptionHandler = value;
@@ -1039,15 +1039,8 @@ namespace System.Windows.Forms {
         public static void EnableVisualStyles() {
             string assemblyLoc = null;
             
-            FileIOPermission fiop = new FileIOPermission(PermissionState.None);
-            fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-            fiop.Assert();
-            try {
-                assemblyLoc = typeof(Application).Assembly.Location;
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
-            }
+            assemblyLoc = typeof(Application).Assembly.Location;
+
             // Pull manifest from our resources
             if (assemblyLoc != null) {
                 // CSC embeds DLL manifests as resource ID 2
@@ -1096,13 +1089,6 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
         ]
         public static void Exit(CancelEventArgs e) {
-            Assembly entryAssembly = Assembly.GetEntryAssembly();
-            Assembly callingAssembly = Assembly.GetCallingAssembly();
-            if (entryAssembly == null || callingAssembly == null || !entryAssembly.Equals(callingAssembly))
-            {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-                IntSecurity.AffectThreadBehavior.Demand();
-            }
             bool cancelExit = ExitInternal();
             if (e != null) {
                 e.Cancel = cancelExit;
@@ -1153,18 +1139,13 @@ namespace System.Windows.Forms {
         ///       current thread and closes all windows on the thread.</para>
         /// </devdoc>
         public static void ExitThread() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-            IntSecurity.AffectThreadBehavior.Demand();
-
-            ExitThreadInternal();
-        }
-
-        private static void ExitThreadInternal() {
             ThreadContext context = ThreadContext.FromCurrent();
-            if (context.ApplicationContext != null) {
+            if (context.ApplicationContext != null)
+            {
                 context.ApplicationContext.ExitThread();
             }
-            else {
+            else
+            {
                 context.Dispose(true);
             }
         }
@@ -1191,19 +1172,7 @@ namespace System.Windows.Forms {
                 if (appFileVersion == null) {
                     Type t = GetAppMainType();
                     if (t != null) {
-                        // 
-
-
-                        FileIOPermission fiop = new FileIOPermission( PermissionState.None );
-                        fiop.AllFiles = FileIOPermissionAccess.PathDiscovery | FileIOPermissionAccess.Read;
-                        fiop.Assert();
-
-                        try {
-                            appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
                     }
                     else {
                         appFileVersion = FileVersionInfo.GetVersionInfo(ExecutablePath);
@@ -1256,7 +1225,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [ResourceExposure(ResourceScope.Machine)]
         [ResourceConsumption(ResourceScope.Machine)]
-        private static string GetDataPath(String basePath) {
+        private static string GetDataPath(string basePath) {
             string template = @"{0}\{1}\{2}\{3}";
 
             string company = CompanyName;
@@ -1365,7 +1334,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
             EditorBrowsable(EditorBrowsableState.Advanced),
-            SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
             SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers"),
             SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")
         ]
@@ -1389,10 +1357,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Restarts the application.</para>
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         public static void Restart()
         {
             if (Assembly.GetEntryAssembly() == null)
@@ -1404,23 +1368,11 @@ namespace System.Windows.Forms {
 
             Process process = Process.GetCurrentProcess();
             Debug.Assert(process != null);
-            if (String.Equals(process.MainModule.ModuleName, IEEXEC, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(process.MainModule.ModuleName, IEEXEC, StringComparison.OrdinalIgnoreCase))
             {
-                string clrPath = string.Empty;
+                string clrPath = Path.GetDirectoryName(typeof(object).Module.FullyQualifiedName);
 
-                // 
-
-
-                new FileIOPermission(PermissionState.Unrestricted).Assert();
-                try
-                {
-                    clrPath = Path.GetDirectoryName(typeof(object).Module.FullyQualifiedName);
-                }
-                finally
-                {
-                    CodeAccessPermission.RevertAssert();
-                }
-                if (String.Equals(clrPath + "\\" + IEEXEC, process.MainModule.FileName, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(clrPath + "\\" + IEEXEC, process.MainModule.FileName, StringComparison.OrdinalIgnoreCase))
                 {
                     // HRef exe case
                     hrefExeCase = true;
@@ -1448,7 +1400,7 @@ namespace System.Windows.Forms {
 #endif
                 {
                     // Regular app case
-                    String[] arguments = Environment.GetCommandLineArgs();
+                    string[] arguments = Environment.GetCommandLineArgs();
                     Debug.Assert(arguments != null && arguments.Length > 0);
                     StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
                     for (int argumentIndex = 1; argumentIndex < arguments.Length - 1; argumentIndex++)
@@ -1539,7 +1491,6 @@ namespace System.Windows.Forms {
         ///     Returns true if the call succeeded, else false.
         /// </devdoc>
         public static bool SetSuspendState(PowerState state, bool force, bool disableWakeEvent) {
-            IntSecurity.AffectMachineState.Demand();
             return UnsafeNativeMethods.SetSuspendState(state == PowerState.Hibernate, force, disableWakeEvent);
         }
 
@@ -1572,9 +1523,6 @@ namespace System.Windows.Forms {
         ///     precedence over the application exception mode.
         /// </devdoc>
         public static void SetUnhandledExceptionMode(UnhandledExceptionMode mode, bool threadScope) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "AffectThreadBehavior Demanded");
-            IntSecurity.AffectThreadBehavior.Demand();
-
             NativeWindow.SetUnhandledExceptionModeInternal(mode, threadScope);
         }
         
@@ -2596,21 +2544,11 @@ namespace System.Windows.Forms {
                         }
 #endif
 
-
-
-
-
-                        IntSecurity.ManipulateWndProcAndHandles.Assert();
-                        try {
-                            using (DpiHelper.EnterDpiAwarenessScope(context)) {
-                                parkingWindow = new ParkingWindow();
-                            }
-
-                            parkingWindows.Add(parkingWindow);
+                        using (DpiHelper.EnterDpiAwarenessScope(context)) {
+                            parkingWindow = new ParkingWindow();
                         }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+
+                        parkingWindows.Add(parkingWindow);
                     }
                     return parkingWindow;
                 }
@@ -3234,36 +3172,17 @@ namespace System.Windows.Forms {
                             ThreadExceptionDialog td = new ThreadExceptionDialog(t);
                             DialogResult result = DialogResult.OK;
 
-                            // 
-
-
-
-                            IntSecurity.ModifyFocus.Assert();
                             try {
                                 result = td.ShowDialog();
                             }
                             finally {
-                                CodeAccessPermission.RevertAssert();
                                 td.Dispose();
                             }
                             switch (result) {
                                 case DialogResult.Abort:
-                                    // 
-
-
-
-
-
-
-
-
 
                                     Application.ExitInternal();
 
-                                    // 
-
-
-                                    new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
                                     Environment.Exit(0);
                                     break;
                                 case DialogResult.Yes:
@@ -4093,6 +4012,7 @@ namespace System.Windows.Forms {
                 SetState(STATE_TOPLEVEL, true);
                 Text = "WindowsFormsParkingWindow";
                 Visible = false;
+                DpiHelper.FirstParkingWindowCreated = true;
             }
 
             protected override CreateParams CreateParams {
@@ -4367,12 +4287,42 @@ namespace System.Windows.Forms {
                 context.EnableWindowsForModalLoop(onlyWinForms, this);                
             }
 
-
             protected override void ExitThreadCore() {
                 // do nothing... modal dialogs exit by setting dialog result
             }
         }
 
+    }
+
+    /// <summary>
+    /// Specifies the HighDpi mode.
+    /// </summary>
+    public enum HighDpiMode
+    {
+        /// <summary>
+        /// The window does not scale for DPI changes and always assumes a scale factor of 100%.
+        /// </summary>
+        DpiUnaware,
+
+        /// <summary>
+        /// The window will query for the DPI of the primary monitor once and use this for the process on all monitors. 
+        /// </summary>
+        SystemAware,
+
+        /// <summary>
+        /// The Window checks for DPI when it's created and adjusts scale factor when the DPI changes.
+        /// </summary>
+        PerMonitor,
+
+        /// <summary>
+        /// Similar to PerMonitor, but enables Child window DPI change notification, improved scaling of comctl32 controls and dialog scaling.
+        /// </summary>
+        PerMonitorV2,
+
+        /// <summary>
+        /// Similar to DpiUnaware, but improves the quality of GDI/GDI+ based content.
+        /// </summary>
+        DpiUnawareGdiScaled
     }
 }
 

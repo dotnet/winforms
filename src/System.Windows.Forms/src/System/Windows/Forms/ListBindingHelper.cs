@@ -52,7 +52,7 @@ namespace System.Windows.Forms {
             //
 
             dataSource = GetList(dataSource);
-            if (dataSource == null || dataSource is Type || String.IsNullOrEmpty(dataMember)) {
+            if (dataSource == null || dataSource is Type || string.IsNullOrEmpty(dataMember)) {
                 return dataSource;
             }
 
@@ -178,7 +178,7 @@ namespace System.Windows.Forms {
         public static PropertyDescriptorCollection GetListItemProperties(object dataSource, string dataMember, PropertyDescriptor[] listAccessors) {
             dataSource = GetList(dataSource);
 
-            if (!String.IsNullOrEmpty(dataMember)) {
+            if (!string.IsNullOrEmpty(dataMember)) {
                 // Find the property on the data source specified by the data member
                 PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
                 PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
             Exception instanceException = null;
 
             try {
-                instancedObject = SecurityUtils.SecureCreateInstance(type);
+                instancedObject = Activator.CreateInstance(type);
             }
             catch (TargetInvocationException ex) {
                 instanceException = ex; // Default ctor threw an exception
@@ -269,24 +269,24 @@ namespace System.Windows.Forms {
         public static Type GetListItemType(object dataSource, string dataMember) {
             // No data source
             if (dataSource == null) {
-                return typeof(Object);
+                return typeof(object);
             }
 
             // No data member - Determine item type directly from data source
-            if (String.IsNullOrEmpty(dataMember)) {
+            if (string.IsNullOrEmpty(dataMember)) {
                 return GetListItemType(dataSource);
             }
 
             // Get list item properties for this data source
             PropertyDescriptorCollection dsProps = GetListItemProperties(dataSource);
             if (dsProps == null) {
-                return typeof(Object);
+                return typeof(object);
             }
 
             // Find the property specified by the data member
             PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
             if (dmProp == null || dmProp.PropertyType is ICustomTypeDescriptor) {
-                return typeof(Object);
+                return typeof(object);
             }
 
             // Determine item type from data member property

@@ -12,12 +12,10 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Permissions;
 
 namespace System.Windows.Forms
 {
     /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement"]/*' />
-    [PermissionSetAttribute(SecurityAction.LinkDemand, Name = "FullTrust")]
     public sealed class HtmlElement
     {
         internal static readonly object EventClick = new object();
@@ -43,7 +41,6 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IHTMLElement htmlElement;
         private HtmlShimManager shimManager;
 
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         internal HtmlElement(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLElement element)
         {
             this.htmlElement = element;

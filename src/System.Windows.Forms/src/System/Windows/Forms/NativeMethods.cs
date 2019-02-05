@@ -2181,7 +2181,7 @@ namespace System.Windows.Forms {
                 int nCmdexecopt,
                 // we need to have this an array because callers need to be able to specify NULL or VT_NULL
                 [In, MarshalAs(UnmanagedType.LPArray)]
-                Object[] pvaIn,
+                object[] pvaIn,
                 int pvaOut);
         }
 
@@ -3709,7 +3709,7 @@ namespace System.Windows.Forms {
                     if (Byref) {
                         val = (IntPtr) Marshal.ReadByte(val);
                     }
-                    return (SByte) (0xFF & (SByte) val);
+                    return (sbyte) (0xFF & (sbyte) val);
 
                 case (int)tagVT.VT_UI1:
                     if (Byref) {
@@ -3728,7 +3728,7 @@ namespace System.Windows.Forms {
                     if (Byref) {
                         val = (IntPtr) Marshal.ReadInt16(val);
                     }
-                    return (UInt16)(0xFFFF & (UInt16) val);
+                    return (ushort)(0xFFFF & (ushort) val);
 
                 case (int)tagVT.VT_I4:
                 case (int)tagVT.VT_INT:
@@ -3742,7 +3742,7 @@ namespace System.Windows.Forms {
                     if (Byref) {
                         val = (IntPtr) Marshal.ReadInt32(val);
                     }
-                    return (UInt32)val;
+                    return (uint)val;
 
                 case (int)tagVT.VT_I8:
                 case (int)tagVT.VT_UI8:
@@ -3757,7 +3757,7 @@ namespace System.Windows.Forms {
                         return (long)longVal;
                     }
                     else {
-                        return (UInt64)longVal;
+                        return (ulong)longVal;
                     }
                 }
 
@@ -3775,7 +3775,7 @@ namespace System.Windows.Forms {
                 case (int)tagVT.VT_CY:
                     // internally currency is 8-byte int scaled by 10,000
                     longVal = ((uint)data1 & 0xffffffff) | ((uint)data2 << 32);
-                    return new Decimal(longVal);
+                    return new decimal(longVal);
                 case (int)tagVT.VT_DATE:
                     throw new FormatException(SR.CannotConvertDoubleToDate);
 
@@ -3797,7 +3797,7 @@ namespace System.Windows.Forms {
 
                 case (int)tagVT.VT_DECIMAL:
                     longVal = ((uint)data1 & 0xffffffff) | ((uint)data2 << 32);
-                    return new Decimal(longVal);
+                    return new decimal(longVal);
 
                 case (int)tagVT.VT_BOOL:
                     return (val != IntPtr.Zero);
@@ -5289,11 +5289,11 @@ namespace System.Windows.Forms {
                 return i;
             }
 
-            private static int GetEmbeddedNullStringLengthAnsi(String s) {
+            private static int GetEmbeddedNullStringLengthAnsi(string s) {
                 int n = s.IndexOf('\0');
                 if (n > -1) {
-                    String left = s.Substring(0, n);
-                    String right = s.Substring(n+1);
+                    string left = s.Substring(0, n);
+                    string right = s.Substring(n+1);
                     return left.Length + GetEmbeddedNullStringLengthAnsi(right) + 1;
                 }
                 else {
@@ -5303,7 +5303,7 @@ namespace System.Windows.Forms {
     
             [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]
             [ResourceExposure(ResourceScope.None)]
-            private static extern int lstrlen(String s);
+            private static extern int lstrlen(string s);
         }
     
         public enum  tagTYPEKIND {
@@ -5656,6 +5656,7 @@ namespace System.Windows.Forms {
         public const int DPI_AWARENESS_CONTEXT_SYSTEM_AWARE = -2;
         public const int DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = -3;
         public const int DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = -4;
+        public const int DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED = -5;
 
         // Theming/Visual Styles stuff
         public const int STAP_ALLOW_NONCLIENT    =  (1 << 0);

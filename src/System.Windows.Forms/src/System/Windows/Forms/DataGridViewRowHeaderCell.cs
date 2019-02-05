@@ -13,7 +13,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms.VisualStyles;
     using System.ComponentModel;
     using System.Windows.Forms.Internal;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Runtime.Versioning;
 
@@ -230,7 +229,7 @@ namespace System.Windows.Forms
 
             Debug.Assert((!this.DataGridView.RightToLeftInternal && firstCell) || (this.DataGridView.RightToLeftInternal && lastCell));
 
-            if (String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
             {
                 if (inFirstRow)
                 {
@@ -261,10 +260,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                bool csv = String.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase);
+                bool csv = string.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase);
                 if (csv ||
-                    String.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
-                    String.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
+                    string.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
                 {
                     if (val != null)
                     {
@@ -369,7 +368,7 @@ namespace System.Windows.Forms
             if (this.DataGridView == null ||
                 rowIndex < 0 ||
                 !this.DataGridView.ShowRowErrors ||
-                String.IsNullOrEmpty(GetErrorText(rowIndex)))
+                string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
                 return Rectangle.Empty;
             }
@@ -889,7 +888,7 @@ namespace System.Windows.Forms
             {
                 Rectangle errorBounds = valBounds;
                 string formattedString = formattedValue as string;
-                if (!String.IsNullOrEmpty(formattedString))
+                if (!string.IsNullOrEmpty(formattedString))
                 {
                     // There is text to display
                     if (valBounds.Width >= iconsWidth + 
@@ -1030,7 +1029,7 @@ namespace System.Windows.Forms
                         }
                         else if (computeErrorIconBounds)
                         {
-                            if (!String.IsNullOrEmpty(errorText))
+                            if (!string.IsNullOrEmpty(errorText))
                             {
                                 resultBounds = ComputeErrorIconBounds(errorBounds);
                             }
@@ -1112,7 +1111,7 @@ namespace System.Windows.Forms
                         }
                         else if (computeErrorIconBounds)
                         {
-                            if (!String.IsNullOrEmpty(errorText))
+                            if (!string.IsNullOrEmpty(errorText))
                             {
                                 resultBounds = ComputeErrorIconBounds(errorBounds);
                             }
@@ -1231,7 +1230,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -1247,7 +1246,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
             }
@@ -1255,7 +1254,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.ParentPrivate;
@@ -1316,15 +1314,13 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Value"]/*' />
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
             }
 
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 if ((this.Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
@@ -1336,7 +1332,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 Debug.Assert(this.Owner.DataGridView.RowHeadersVisible, "if the rows are not visible how did you get the row headers acc obj?");
@@ -1422,7 +1417,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Select"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags)
             {
                 if (this.Owner == null)

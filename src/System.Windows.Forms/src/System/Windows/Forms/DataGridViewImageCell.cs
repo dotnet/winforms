@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     using System.Drawing.Imaging;
     using System.Drawing.Drawing2D;
     using System.Diagnostics;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Runtime.Versioning;
 
@@ -368,7 +367,7 @@ namespace System.Windows.Forms
                 rowIndex < 0 ||
                 this.OwningColumn == null ||
                 !this.DataGridView.ShowCellErrors ||
-                String.IsNullOrEmpty(GetErrorText(rowIndex)))
+                string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
                 return Rectangle.Empty;
             }
@@ -496,7 +495,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            preferredSize = new Size(0, Math.Min(img.Height, Decimal.ToInt32((decimal)img.Height * imgWidthAllowed / img.Width)));
+                            preferredSize = new Size(0, Math.Min(img.Height, decimal.ToInt32((decimal)img.Height * imgWidthAllowed / img.Width)));
                         }
                     }
                     else
@@ -508,7 +507,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            preferredSize = new Size(0, Math.Min(ico.Height, Decimal.ToInt32((decimal)ico.Height * icoWidthAllowed / ico.Width)));
+                            preferredSize = new Size(0, Math.Min(ico.Height, decimal.ToInt32((decimal)ico.Height * icoWidthAllowed / ico.Width)));
                         }
                     }
                 }
@@ -531,7 +530,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            preferredSize = new Size(Math.Min(img.Width, Decimal.ToInt32((decimal)img.Width * imgHeightAllowed / img.Height)), 0);
+                            preferredSize = new Size(Math.Min(img.Width, decimal.ToInt32((decimal)img.Width * imgHeightAllowed / img.Height)), 0);
                         }
                     }
                     else
@@ -543,7 +542,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            preferredSize = new Size(Math.Min(ico.Width, Decimal.ToInt32((decimal)ico.Width * icoHeightAllowed / ico.Height)), 0);
+                            preferredSize = new Size(Math.Min(ico.Width, decimal.ToInt32((decimal)ico.Width * icoHeightAllowed / ico.Height)), 0);
                         }
                     }
                 }
@@ -645,12 +644,12 @@ namespace System.Windows.Forms
                     if (imgWidth * bounds.Height < imgHeight * bounds.Width)
                     {
                         // we fill the height
-                        imgBounds = new Rectangle(bounds.X, bounds.Y, Decimal.ToInt32((decimal)imgWidth * bounds.Height / imgHeight), bounds.Height);
+                        imgBounds = new Rectangle(bounds.X, bounds.Y, decimal.ToInt32((decimal)imgWidth * bounds.Height / imgHeight), bounds.Height);
                     }
                     else
                     {
                         // we fill the width
-                        imgBounds = new Rectangle(bounds.X, bounds.Y, bounds.Width, Decimal.ToInt32((decimal)imgHeight * bounds.Width / imgWidth));
+                        imgBounds = new Rectangle(bounds.X, bounds.Y, bounds.Width, decimal.ToInt32((decimal)imgHeight * bounds.Width / imgWidth));
                     }
                     break;
                 default:
@@ -957,7 +956,7 @@ namespace System.Windows.Forms
             }
             else if (computeErrorIconBounds)
             {
-                if (!String.IsNullOrEmpty(errorText))
+                if (!string.IsNullOrEmpty(errorText))
                 {
                     resultBounds = ComputeErrorIconBounds(valBounds);
                 }
@@ -995,7 +994,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
             }
 
@@ -1019,13 +1018,11 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.Value"]/*' />
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get 
                 {
                     return base.Value;
                 }
 
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 set
                 {
                     // do nothing.
@@ -1033,7 +1030,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 // do nothing if Level < 3

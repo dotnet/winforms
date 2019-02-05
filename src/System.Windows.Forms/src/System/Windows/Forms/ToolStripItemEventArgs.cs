@@ -2,23 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    /// <include file='doc\ToolStripItemEventArgs.uex' path='docs/doc[@for="ToolStripItemEventArgs"]/*' />
-    public class  ToolStripItemEventArgs : EventArgs {
-
-        private ToolStripItem item;
-
-        /// <include file='doc\ToolStripItemEventArgs.uex' path='docs/doc[@for="ToolStripItemEventArgs.ToolStripItemEventArgs"]/*' />
-        public ToolStripItemEventArgs(ToolStripItem item) {
-           this.item = item;
+namespace System.Windows.Forms
+{
+    public class ToolStripItemEventArgs : EventArgs
+    {
+        public ToolStripItemEventArgs(ToolStripItem item)
+        {
+           Item = item;
         }
 
-        /// <include file='doc\ToolStripItemEventArgs.uex' path='docs/doc[@for="ToolStripItemEventArgs.Item"]/*' />
-        public ToolStripItem Item {
-            get {
-                return item;
-            }
-        }
+        public ToolStripItem Item { get; }
     }
 }

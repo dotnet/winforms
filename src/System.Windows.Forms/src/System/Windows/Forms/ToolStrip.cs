@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Threading;
     using System.Windows.Forms.Layout;
     using System.ComponentModel.Design.Serialization;
@@ -46,7 +45,7 @@ namespace System.Windows.Forms {
 
 
         private static  Size                    onePixel                = new Size(1,1);
-        internal static Point                   InvalidMouseEnter       = new Point(Int32.MaxValue, Int32.MaxValue);
+        internal static Point                   InvalidMouseEnter       = new Point(int.MaxValue, int.MaxValue);
 
         private ToolStripItemCollection        toolStripItemCollection    = null;
         private ToolStripOverflowButton        toolStripOverflowButton    = null;
@@ -2279,10 +2278,10 @@ namespace System.Windows.Forms {
                  ToolStripItem tanWinner = null;
                  ToolStripItem hypotenuseWinner = null;
      
-                 double minHypotenuse = Double.MaxValue;
-                 double minTan = Double.MaxValue;
-                 double hypotenuseOfTanWinner = Double.MaxValue;
-                 double tanOfHypotenuseWinner = Double.MaxValue;
+                 double minHypotenuse = double.MaxValue;
+                 double minTan = double.MaxValue;
+                 double hypotenuseOfTanWinner = double.MaxValue;
+                 double tanOfHypotenuseWinner = double.MaxValue;
      
                   if (selectedItem == null) {
                      ToolStripItem item = GetNextItemHorizontal(selectedItem, down);
@@ -2350,7 +2349,7 @@ namespace System.Windows.Forms {
                          minTan = Math.Min(minTan, tan);
                          minHypotenuse = Math.Min(minHypotenuse, hypotenuse);
      
-                         if (minTan == tan && minTan != Double.NaN) {
+                         if (minTan == tan && minTan != double.NaN) {
                              tanWinner = otherItem;
                              hypotenuseOfTanWinner = hypotenuse;
                          }
@@ -2406,10 +2405,10 @@ namespace System.Windows.Forms {
              // Translating 0,0 from ClientSize to actual Size tells us how much space
              // is required for the borders.
               if (proposedSize.Width == 1) {
-                 proposedSize.Width = Int32.MaxValue;
+                 proposedSize.Width = int.MaxValue;
              }
              if (proposedSize.Height == 1) {
-                 proposedSize.Height = Int32.MaxValue;
+                 proposedSize.Height = int.MaxValue;
              }
 
              Padding padding = Padding;
@@ -2711,11 +2710,11 @@ namespace System.Windows.Forms {
         }
 
         private static bool IsPseudoMnemonic(char charCode, string text) {
-            if (!String.IsNullOrEmpty(text)) {
+            if (!string.IsNullOrEmpty(text)) {
                 if (!WindowsFormsUtils.ContainsMnemonic(text)) {
-                     char charToCompare = Char.ToUpper(charCode, CultureInfo.CurrentCulture);
-                     char firstLetter = Char.ToUpper(text[0], CultureInfo.CurrentCulture);
-                     if (firstLetter == charToCompare ||(Char.ToLower(charCode, CultureInfo.CurrentCulture) == Char.ToLower(text[0], CultureInfo.CurrentCulture)) ) {
+                     char charToCompare = char.ToUpper(charCode, CultureInfo.CurrentCulture);
+                     char firstLetter = char.ToUpper(text[0], CultureInfo.CurrentCulture);
+                     if (firstLetter == charToCompare ||(char.ToLower(charCode, CultureInfo.CurrentCulture) == char.ToLower(text[0], CultureInfo.CurrentCulture)) ) {
                          return true;
                      }
                 }              
@@ -2813,7 +2812,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <param name=m></param>
         /// <param name=keyData></param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
 
             if (ToolStripManager.IsMenuKey(keyData)) {
@@ -2875,7 +2873,6 @@ namespace System.Windows.Forms {
         /// on the form. For the arrow keys,
         /// !!!
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             bool retVal = false;
 
@@ -2964,7 +2961,6 @@ namespace System.Windows.Forms {
         ///    Else 
         ///    change the selection from the current selected item to the first item that matched.
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             // menus and toolbars only take focus on ALT
             if (!CanProcessMnemonic()) {
@@ -3478,9 +3474,9 @@ namespace System.Windows.Forms {
                 // the actual coordinates.
 
 
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "Item to get mouse move: {0}",  (item == null) ? "null" : item.ToString()));
+                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Item to get mouse move: {0}",  (item == null) ? "null" : item.ToString()));
                 if (item != lastMouseActiveItem) {
-                    Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "This is a new item - last item to get was {0}",  (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
+                    Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "This is a new item - last item to get was {0}",  (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
 
                     // notify the item that we've moved on
                     HandleMouseLeave();
@@ -3489,7 +3485,7 @@ namespace System.Windows.Forms {
                     lastMouseActiveItem = (item is ToolStripControlHost) ? null : item;
 
                     if (lastMouseActiveItem != null) {
-                        Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}",  (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
+                        Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}",  (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
                         item.FireEvent(new System.EventArgs(), ToolStripItemEventType.MouseEnter);
                     }
                     // 
@@ -3506,7 +3502,7 @@ namespace System.Windows.Forms {
                 item = this.Grip;
             }
             if (item != null) {
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}",  (item == null) ? "null" : item.ToString()));
+                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}",  (item == null) ? "null" : item.ToString()));
 
                 // Fire mouse move on the item
                 // Transpose this to "client coordinates" of the ToolStripItem.
@@ -3515,7 +3511,7 @@ namespace System.Windows.Forms {
                 item.FireEvent(mea, ToolStripItemEventType.MouseMove);
             }
             else {
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}",  (this == null) ? "null" : this.ToString()));
+                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}",  (this == null) ? "null" : this.ToString()));
 
                 base.OnMouseMove(mea);
             }
@@ -4537,14 +4533,7 @@ namespace System.Windows.Forms {
 
                 if (item != currentlyActiveTooltipItem && ToolTip != null) {
 
-                    // 
-                    IntSecurity.AllWindows.Assert();
-                    try {
-                        ToolTip.Hide(this);
-                    }
-                    finally {
-                         System.Security.CodeAccessPermission.RevertAssert();
-                    }
+                    ToolTip.Hide(this);
 
                     if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
                         ToolTip.Active = false;
@@ -4566,17 +4555,10 @@ namespace System.Windows.Forms {
 
                             cursorLocation = WindowsFormsUtils.ConstrainToScreenBounds(new Rectangle(cursorLocation, onePixel)).Location;
 
-                            // 
-                            IntSecurity.AllWindows.Assert();
-                            try {                                           
-                                ToolTip.Show(currentlyActiveTooltipItem.ToolTipText,
-                                         this,
-                                         PointToClient(cursorLocation),
-                                         ToolTip.AutoPopDelay);                           
-                            }
-                            finally {
-                                System.Security.CodeAccessPermission.RevertAssert();
-                            }
+                            ToolTip.Show(currentlyActiveTooltipItem.ToolTipText,
+                                        this,
+                                        PointToClient(cursorLocation),
+                                        ToolTip.AutoPopDelay);                           
                         }
                     }
                 }
@@ -4651,7 +4633,6 @@ namespace System.Windows.Forms {
         /// Summary of WndProc.
         /// </devdoc>
         /// <param name=m></param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             if (m.Msg == NativeMethods.WM_SETFOCUS) {

@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    using System.Security.Permissions;
     using System.Collections;
     using System.Windows.Forms;
     using System.Windows.Forms.VisualStyles;
@@ -185,7 +184,6 @@ namespace System.Windows.Forms {
         ///     correctly.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.Style |= NativeMethods.LBS_OWNERDRAWFIXED | NativeMethods.LBS_WANTKEYBOARDINPUT;
@@ -993,9 +991,6 @@ namespace System.Windows.Forms {
         ///     We need to get LBN_SELCHANGE notifications
         /// </devdoc>
         /// <internalonly/>
-        [
-        System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected override void WmReflectCommand(ref Message m) {
             switch (NativeMethods.Util.HIWORD(m.WParam)) {
                 case NativeMethods.LBN_SELCHANGE:
@@ -1050,7 +1045,6 @@ namespace System.Windows.Forms {
         ///     base.wndProc(m); to ensure the button continues to function properly.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -1238,7 +1232,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Contains"]/*' />
             /// <internalonly/>
             bool IList.Contains(object index) {
-                if (index is Int32) {
+                if (index is int) {
                     return Contains((int)index);
                 }
                 else {
@@ -1283,7 +1277,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.IndexOf"]/*' />
             /// <internalonly/>
             int IList.IndexOf(object index) {
-                if (index is Int32) {
+                if (index is int) {
                     return IndexOf((int)index);
                 }
                 else {
@@ -1560,7 +1554,6 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation direction) {
                 if (GetChildCount() > 0) {
                     if (direction == AccessibleNavigation.FirstChild) {
@@ -1631,7 +1624,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return parent;
                 }
@@ -1677,18 +1669,15 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return ParentCheckedListBox.GetItemChecked(index).ToString();
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 ParentCheckedListBox.SetItemChecked(index, !ParentCheckedListBox.GetItemChecked(index));
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation direction) {
                 // Down/Next
                 //
@@ -1711,7 +1700,6 @@ namespace System.Windows.Forms {
                 return base.Navigate(direction);
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
                 try {
                     ParentCheckedListBox.AccessibilityObject.GetSystemIAccessibleInternal().accSelect((int) flags, index + 1);

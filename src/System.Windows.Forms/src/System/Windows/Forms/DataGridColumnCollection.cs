@@ -201,7 +201,7 @@ namespace System.Windows.Forms {
                 for (int i = 0; i < itemCount; ++i) {
                     DataGridColumnStyle column = (DataGridColumnStyle)items[i];
                     // NOTE: case-insensitive
-                    if (String.Equals(column.MappingName, columnName, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(column.MappingName, columnName, StringComparison.OrdinalIgnoreCase))
                         return column;
                 }
                 return null;
@@ -213,7 +213,7 @@ namespace System.Windows.Forms {
             for (int i = 0; i < itemCount; ++i) {
                 DataGridColumnStyle column = (DataGridColumnStyle)items[i];
                 // NOTE: case-insensitive
-                if (String.Equals(column.MappingName, mappingName, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(column.MappingName, mappingName, StringComparison.OrdinalIgnoreCase))
                     return column;
             }
             return null;
@@ -251,7 +251,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
 
         internal void CheckForMappingNameDuplicates(DataGridColumnStyle column) {
-            if (String.IsNullOrEmpty(column.MappingName))
+            if (string.IsNullOrEmpty(column.MappingName))
                 return;
             for (int i = 0; i < items.Count; i++)
                 if ( ((DataGridColumnStyle)items[i]).MappingName.Equals(column.MappingName) && column != items[i])
@@ -377,7 +377,7 @@ namespace System.Windows.Forms {
             while (e.MoveNext()) {
                 DataGridColumnStyle column = (DataGridColumnStyle)e.Current;
                 // NOTE: case-insensitive
-                if (String.Compare(column.MappingName, name, true, CultureInfo.InvariantCulture) == 0)
+                if (string.Compare(column.MappingName, name, true, CultureInfo.InvariantCulture) == 0)
                     return true;
             }
             return false;

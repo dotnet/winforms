@@ -20,8 +20,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms.Layout;
     using System.Globalization;
 
@@ -56,7 +54,7 @@ namespace System.Windows.Forms {
         private bool currentlyScaling          = false;
         private int selectedIndex = -1;
         private Size cachedSize = Size.Empty;
-        private string controlTipText = String.Empty;
+        private string controlTipText = string.Empty;
         private bool handleInTable;
 
         //events
@@ -323,7 +321,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_TABCONTROL;
@@ -1577,9 +1574,6 @@ namespace System.Windows.Forms {
         ///     We override this to get the Ctrl and Ctrl-Shift Tab functionality.
         /// </devdoc>
         /// <internalonly/>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected override bool ProcessKeyPreview(ref Message m) {
             if (ProcessKeyEventArgs(ref m)) return true;
             return base.ProcessKeyPreview(ref m);
@@ -1892,17 +1886,7 @@ namespace System.Windows.Forms {
                     if (updateFocus) {
                         if (!Focused || tabControlState[TABCONTROLSTATE_selectFirstControl]) {
                             tabControlState[TABCONTROLSTATE_UISelection] = false;
-                            bool selectNext = false;
-                            // 
-
-
-                            IntSecurity.ModifyFocus.Assert();
-                            try {
-                                selectNext = tabPages[index].SelectNextControl(null, true, true, false, false);
-                            }
-                            finally {
-                                CodeAccessPermission.RevertAssert();
-                            }
+                            bool selectNext = tabPages[index].SelectNextControl(null, true, true, false, false);
 
                             if (selectNext) {
                                 if (!ContainsFocus) {
@@ -1925,16 +1909,7 @@ namespace System.Windows.Forms {
                                         ((ContainerControl)c).SetActiveControlInternal(this);
                                     }
                                     else {
-                                        // 
-
-
-                                        IntSecurity.ModifyFocus.Assert();
-                                        try {
-                                            c.ActiveControl = this;
-                                        }
-                                        finally {
-                                            CodeAccessPermission.RevertAssert();
-                                        }
+                                        c.ActiveControl = this;
                                     }
                                 }
                             }
@@ -2052,16 +2027,7 @@ namespace System.Windows.Forms {
                     ((ContainerControl)c).SetActiveControlInternal(this);
                 }
                 else {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        c.ActiveControl = this;
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    c.ActiveControl = this;
                 }
             }
             // Fire DeSelecting .... on the current Selected Index...
@@ -2107,7 +2073,6 @@ namespace System.Windows.Forms {
         ///     base.wndProc(m); to ensure the tab continues to function properly.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -2426,7 +2391,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int  IndexOfKey(String key) {
+            public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key)){
                     return -1; // we dont support empty or null keys.

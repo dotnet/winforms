@@ -124,7 +124,7 @@ namespace System.ComponentModel {
 
         private class WeakKeyComparer : IEqualityComparer
         {
-            bool IEqualityComparer.Equals(Object x, Object y)
+            bool IEqualityComparer.Equals(object x, object y)
             {
                 if (x == null)
                 {
@@ -159,7 +159,7 @@ namespace System.ComponentModel {
                 return false;
             }
 
-            int IEqualityComparer.GetHashCode (Object obj)
+            int IEqualityComparer.GetHashCode (object obj)
             {
                 return obj.GetHashCode();
             }

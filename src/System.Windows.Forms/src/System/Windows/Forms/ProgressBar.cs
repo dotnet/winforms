@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
-    using System.Security.Permissions;
     using System.Drawing;
     using System.ComponentModel;
     using System.ComponentModel.Design;
@@ -85,7 +84,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_PROGRESS;
@@ -957,31 +955,31 @@ namespace System.Windows.Forms {
 
             internal override double LargeChange {
                 get {
-                    return Double.NaN;
+                    return double.NaN;
                 }
             }
 
             internal override double Maximum {
                 get {
-                    return this.OwningProgressBar?.Maximum ?? Double.NaN;
+                    return this.OwningProgressBar?.Maximum ?? double.NaN;
                 }
             }
 
             internal override double Minimum {
                 get {
-                    return this.OwningProgressBar?.Minimum ?? Double.NaN;
+                    return this.OwningProgressBar?.Minimum ?? double.NaN;
                 }
             }
 
             internal override double SmallChange {
                 get {
-                    return Double.NaN;
+                    return double.NaN;
                 }
             }
 
             internal override double RangeValue {
                 get {
-                    return this.OwningProgressBar?.Value ?? Double.NaN;
+                    return this.OwningProgressBar?.Value ?? double.NaN;
                 }
             }
 

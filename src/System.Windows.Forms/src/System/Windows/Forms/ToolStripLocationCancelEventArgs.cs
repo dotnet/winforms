@@ -2,47 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
+using System.ComponentModel;
+using System.Drawing;
 
-    /// <include file='doc\ToolStripLocationCancelEventArgs.uex' path='docs/doc[@for="ToolStripLocationCancelEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       ToolStripLocationCancelEventArgs provides Arguments for the Cancelable LocationChanging Event.
-    ///       event.
-    ///    </para>
+    /// Provides Arguments for the Cancelable LocationChanging Event.
     /// </devdoc>
-    internal class ToolStripLocationCancelEventArgs : CancelEventArgs {
-
-        private Point newLocation;
-        
-        
-        /// <include file='doc\ToolStripLocationCancelEventArgs.uex' path='docs/doc[@for="ToolStripLocationCancelEventArgs.ToolStripLocationCancelEventArgs"]/*' />
+    internal class ToolStripLocationCancelEventArgs : CancelEventArgs
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the ToolStripLocationCancelEventArgs with cancel value.
-        ///    </para>
+        /// Initializes a new instance of the ToolStripLocationCancelEventArgs with cancel value.
         /// </devdoc>
-        public ToolStripLocationCancelEventArgs(Point newLocation, bool value) : base(value) {
-           
-            this.newLocation = newLocation;
-            
+        public ToolStripLocationCancelEventArgs(Point newLocation, bool value) : base(value)
+        {
+            NewLocation = newLocation;
         }
 
-        /// <include file='doc\ToolStripLocationCancelEventArgs.uex' path='docs/doc[@for="ToolStripLocationCancelEventArgs.NewLocation"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Returns the New Location of the ToolStrip.
-        ///    </para>
+        /// Returns the New Location of the ToolStrip.
         /// </devdoc>
-        public Point NewLocation {
-            get {
-                return this.newLocation;
-            }
-        }
+        public Point NewLocation { get; }
     }
 }
-

@@ -17,8 +17,6 @@ namespace System.Windows.Forms {
     using Hashtable = System.Collections.Hashtable;
     using System.Drawing;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Text;
     using System.Drawing.Design;
     using System.Globalization;
@@ -230,10 +228,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected virtual CreateParams CreateParams {
-            [
-                SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             get {
                 CreateParams cp = new CreateParams();
                 if (TopLevelControl != null && !TopLevelControl.IsDisposed) {
@@ -296,22 +290,6 @@ namespace System.Windows.Forms {
                     CreateHandle();
                 }
                 return window.Handle;
-            }
-        }
-
-        /// <devdoc>
-        ///    
-
-        private bool HasAllWindowsPermission {
-            get {
-                try {
-                    IntSecurity.AllWindows.Demand();
-                    return true;
-                }
-                catch (SecurityException) {
-                }
-                
-                return false;
             }
         }
 
@@ -406,7 +384,6 @@ namespace System.Windows.Forms {
             {
                 return ownerDraw;
             }
-            [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
             set 
             {
                 ownerDraw = value;
@@ -531,7 +508,7 @@ namespace System.Windows.Forms {
                     toolTipIcon = value;
                     if (toolTipIcon > 0 && GetHandleCreated()) {
                         // If the title is null/empty, the icon won't display.
-                        string title = !String.IsNullOrEmpty(toolTipTitle) ? toolTipTitle : " ";
+                        string title = !string.IsNullOrEmpty(toolTipTitle) ? toolTipTitle : " ";
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTITLE, (int)toolTipIcon, title);
 
                         // Tooltip need to be updated to reflect the changes in the icon because
@@ -928,9 +905,9 @@ namespace System.Windows.Forms {
             if (ForeColor != SystemColors.InfoText) {
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTIPTEXTCOLOR, ColorTranslator.ToWin32(ForeColor), 0);
             }
-            if (toolTipIcon > 0 || !String.IsNullOrEmpty(toolTipTitle)) {
+            if (toolTipIcon > 0 || !string.IsNullOrEmpty(toolTipTitle)) {
                 // If the title is null/empty, the icon won't display.
-                string title = !String.IsNullOrEmpty(toolTipTitle) ? toolTipTitle : " ";
+                string title = !string.IsNullOrEmpty(toolTipTitle) ? toolTipTitle : " ";
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTITLE, (int)toolTipIcon, title);
             }
         }
@@ -1230,7 +1207,7 @@ namespace System.Windows.Forms {
         ]
         public string GetToolTip(Control control) {
             if (control == null) {
-                return String.Empty; 
+                return string.Empty; 
             }
             TipInfo tt = (TipInfo)tools[control];
             if (tt == null || tt.Caption == null) {
@@ -1444,7 +1421,7 @@ namespace System.Windows.Forms {
                 exists = true;
             }
 
-            if (info == null || String.IsNullOrEmpty(info.Caption)) {
+            if (info == null || string.IsNullOrEmpty(info.Caption)) {
                 empty = true;
             }
 
@@ -1614,7 +1591,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
          public void Show(string text, IWin32Window window) {
             // Check if the foreground window is the TopLevelWindow
-            if (HasAllWindowsPermission && IsWindowActive(window)) {
+            if (IsWindowActive(window)) {
                 ShowTooltip(text, window, 0);
             }
             
@@ -1632,7 +1609,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, "duration", (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
-            if (HasAllWindowsPermission && IsWindowActive(window)) {
+            if (IsWindowActive(window)) {
                 ShowTooltip(text, window, duration);
             }
         }
@@ -1648,7 +1625,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(window));
             }
 
-            if (HasAllWindowsPermission && IsWindowActive(window)) {
+            if (IsWindowActive(window)) {
                 //Set The ToolTips...
                 NativeMethods.RECT r = new NativeMethods.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
@@ -1674,7 +1651,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, "duration", (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
-            if (HasAllWindowsPermission && IsWindowActive(window)) {
+            if (IsWindowActive(window)) {
                 //Set The ToolTips...
                 NativeMethods.RECT r = new NativeMethods.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
@@ -1699,7 +1676,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(window));
             }
 
-            if (HasAllWindowsPermission && IsWindowActive(window)) {
+            if (IsWindowActive(window)) {
                 NativeMethods.RECT r = new NativeMethods.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
@@ -1723,7 +1700,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, "duration", (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
             }
 
-            if (HasAllWindowsPermission && IsWindowActive(window)) {
+            if (IsWindowActive(window)) {
                 NativeMethods.RECT r = new NativeMethods.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
@@ -1938,47 +1915,45 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(win));
             }
 
-            if (HasAllWindowsPermission) {
-                if (window == null)
-                {
-                    return;
-                }
+            if (window == null)
+            {
+                return;
+            }
                 
-                if (GetHandleCreated())  {                    
-                    IntPtr hWnd = Control.GetSafeHandle(win);
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_TRACKACTIVATE, 0, GetWinTOOLINFO(hWnd));
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_DELTOOL, 0, GetWinTOOLINFO(hWnd));                   
-                }
-                StopTimer();
+            if (GetHandleCreated())  {                    
+                IntPtr hWnd = Control.GetSafeHandle(win);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_TRACKACTIVATE, 0, GetWinTOOLINFO(hWnd));
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_DELTOOL, 0, GetWinTOOLINFO(hWnd));                   
+            }
+            StopTimer();
 
-                //Check if the passed in IWin32Window is a Control...
-                Control tool = win as Control;
-                if (tool == null) {
+            //Check if the passed in IWin32Window is a Control...
+            Control tool = win as Control;
+            if (tool == null) {
+                owners.Remove(win.Handle);
+            }
+            else
+            {
+                if (tools.ContainsKey(tool)) {
+                    SetToolInfo(tool, GetToolTip(tool));
+                }
+                else {
                     owners.Remove(win.Handle);
                 }
-                else
-                {
-                    if (tools.ContainsKey(tool)) {
-                        SetToolInfo(tool, GetToolTip(tool));
-                    }
-                    else {
-                        owners.Remove(win.Handle);
-                    }
-                    // Lets find the Form for associated Control ...
-                    // and hook up to the Deactivated event to Hide the Shown tooltip
-                    Form baseFrom = tool.FindFormInternal();
-                    if (baseFrom != null) {
-                        baseFrom.Deactivate -= new EventHandler(this.BaseFormDeactivate);
-                    }
+                // Lets find the Form for associated Control ...
+                // and hook up to the Deactivated event to Hide the Shown tooltip
+                Form baseFrom = tool.FindFormInternal();
+                if (baseFrom != null) {
+                    baseFrom.Deactivate -= new EventHandler(this.BaseFormDeactivate);
                 }
-                
-                // Clear off the toplevel control.
-                ClearTopLevelControlEvents();
-                topLevelControl = null;
             }
+                
+            // Clear off the toplevel control.
+            ClearTopLevelControlEvents();
+            topLevelControl = null;
         }
         
-        private void BaseFormDeactivate(System.Object sender, System.EventArgs e){
+        private void BaseFormDeactivate(object sender, System.EventArgs e){
             HideAllToolTips();
 
             if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
@@ -2432,19 +2407,12 @@ namespace System.Windows.Forms {
                    {
                         wp->x = cursorPos.X;
                         // Since HotSpot requires a security demand .. we assert this and revert Assert immediately 
-                        try {
-                            IntSecurity.ObjectFromWin32Handle.Assert();
-                             
-                            wp->y = cursorPos.Y;
-                            if (wp->y + wp->cy + currentCursor.Size.Height - currentCursor.HotSpot.Y > screen.WorkingArea.Bottom) {
-                               wp->y = cursorPos.Y - wp->cy;
-                            }
-                            else {
-                               wp->y = cursorPos.Y + currentCursor.Size.Height - currentCursor.HotSpot.Y;
-                            }
+                        wp->y = cursorPos.Y;
+                        if (wp->y + wp->cy + currentCursor.Size.Height - currentCursor.HotSpot.Y > screen.WorkingArea.Bottom) {
+                            wp->y = cursorPos.Y - wp->cy;
                         }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
+                        else {
+                            wp->y = cursorPos.Y + currentCursor.Size.Height - currentCursor.HotSpot.Y;
                         }
                    }
                    if (wp->x + wp->cx >screen.WorkingArea.Right) {
@@ -2602,7 +2570,6 @@ namespace System.Windows.Forms {
                                 win = (IWin32Window)ac;
                             }
                             Font font;
-                            IntSecurity.ObjectFromWin32Handle.Assert();
                             try {
                                 font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.WM_GETFONT, 0, 0));
                             }
@@ -2610,9 +2577,6 @@ namespace System.Windows.Forms {
                                 // If the current default tooltip font is a non-TrueType font, then
                                 // Font.FromHfont throws this exception, so fall back to the default control font.
                                 font = Control.DefaultFont;
-                            }
-                            finally {
-                                CodeAccessPermission.RevertAssert();
                             }
 
                             OnDraw(new DrawToolTipEventArgs(g, win, ac, bounds, GetToolTip(ac), 

@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
-    using System.Security.Permissions;
     using System.Windows.Forms.VisualStyles;
     using System.Drawing;
     using Microsoft.Win32;
@@ -349,7 +348,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
 
@@ -1204,7 +1202,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
@@ -1927,7 +1924,6 @@ namespace System.Windows.Forms {
                     }
 
                     public override AccessibleObject Parent {
-                        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                         get {
                             return parent;
                         }

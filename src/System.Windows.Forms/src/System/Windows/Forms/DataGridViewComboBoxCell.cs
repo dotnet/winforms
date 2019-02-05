@@ -53,9 +53,9 @@ namespace System.Windows.Forms
 
         internal const int DATAGRIDVIEWCOMBOBOXCELL_defaultMaxDropDownItems = 8;
 
-        private static Type defaultFormattedValueType = typeof(System.String);
+        private static Type defaultFormattedValueType = typeof(string);
         private static Type defaultEditType = typeof(System.Windows.Forms.DataGridViewComboBoxEditingControl);
-        private static Type defaultValueType = typeof(System.Object);
+        private static Type defaultValueType = typeof(object);
         private static Type cellType = typeof(DataGridViewComboBoxCell);
 
         private byte flags;  // see DATAGRIDVIEWCOMBOBOXCELL_ consts above
@@ -250,7 +250,7 @@ namespace System.Windows.Forms
                 object displayMember = this.Properties.GetObject(PropComboBoxCellDisplayMember);
                 if (displayMember == null)
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
                 else
                 {
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
                 object valueMember = this.Properties.GetObject(PropComboBoxCellValueMember);
                 if (valueMember == null)
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
                 else
                 {
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms
                     adjustment = 6;
                 }
             }
-            return DataGridViewCell.MeasureTextHeight(graphics, " ", cellStyle.Font, System.Int32.MaxValue, TextFormatFlags.Default) + adjustment;
+            return DataGridViewCell.MeasureTextHeight(graphics, " ", cellStyle.Font, int.MaxValue, TextFormatFlags.Default) + adjustment;
         }
 
         /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.GetErrorIconBounds"]/*' />
@@ -1067,7 +1067,7 @@ namespace System.Windows.Forms
                 rowIndex < 0 ||
                 this.OwningColumn == null ||
                 !this.DataGridView.ShowCellErrors ||
-                String.IsNullOrEmpty(GetErrorText(rowIndex)))
+                string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
                 return Rectangle.Empty;
             }
@@ -1166,7 +1166,7 @@ namespace System.Windows.Forms
                 return base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
             }
 
-            String strValue = value as String;
+            string strValue = value as string;
             if ((this.DataManager != null && (this.ValueMemberProperty != null || this.DisplayMemberProperty != null)) ||
                 !string.IsNullOrEmpty(this.ValueMember) || !string.IsNullOrEmpty(this.DisplayMember))
             {
@@ -1177,9 +1177,9 @@ namespace System.Windows.Forms
                     {
                         displayValue = System.DBNull.Value;
                     }
-                    else if (strValue != null && String.IsNullOrEmpty(strValue) && this.DisplayType == typeof(String))
+                    else if (strValue != null && string.IsNullOrEmpty(strValue) && this.DisplayType == typeof(string))
                     {
-                        displayValue = String.Empty;
+                        displayValue = string.Empty;
                     }
                     else if (this.DataGridView != null)
                     {
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms
             {
                 if (!this.Items.Contains(value) && 
                     value != System.DBNull.Value &&
-                    (!(value is String) || !String.IsNullOrEmpty(strValue)))
+                    (!(value is string) || !string.IsNullOrEmpty(strValue)))
                 {
                     if (this.DataGridView != null)
                     {
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        value = String.Empty;
+                        value = string.Empty;
                     }
                 }
                 return base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
@@ -1589,7 +1589,7 @@ namespace System.Windows.Forms
         {
             if (this.DataManager != null)
             {
-                if (String.IsNullOrEmpty(displayMember))
+                if (string.IsNullOrEmpty(displayMember))
                 {
                     this.DisplayMemberProperty = null;
                 } 
@@ -1617,7 +1617,7 @@ namespace System.Windows.Forms
         {
             if (this.DataManager != null)
             {
-                if (String.IsNullOrEmpty(valueMember))
+                if (string.IsNullOrEmpty(valueMember))
                 {
                     this.ValueMemberProperty = null;
                 } 
@@ -2539,7 +2539,7 @@ namespace System.Windows.Forms
                         }
                         focusBounds.Width++;
                         focusBounds.Y--;
-                        focusBounds.Height+=2;
+                        focusBounds.Height += 2;
                         ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, br.Color);
                     }
                     else if (paintPostXPThemes)
@@ -2635,7 +2635,7 @@ namespace System.Windows.Forms
 
             if (computeErrorIconBounds)
             {
-                if (!String.IsNullOrEmpty(errorText))
+                if (!string.IsNullOrEmpty(errorText))
                 {
                     resultBounds = ComputeErrorIconBounds(errorBounds);
                 }
@@ -2682,7 +2682,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        throw new FormatException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.Formatter_CantConvert), value, this.DisplayType));
+                        throw new FormatException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.Formatter_CantConvert), value, this.DisplayType));
                     }
                 }
                 return value;
@@ -3126,8 +3126,8 @@ namespace System.Windows.Forms
                 {
                     return 1; //item2 is null, so item 1 is greater
                 }
-                String itemName1 = this.dataGridViewComboBoxCell.GetItemDisplayText(item1);
-                String itemName2 = this.dataGridViewComboBoxCell.GetItemDisplayText(item2);
+                string itemName1 = this.dataGridViewComboBoxCell.GetItemDisplayText(item1);
+                string itemName2 = this.dataGridViewComboBoxCell.GetItemDisplayText(item2);
 
                 CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);

@@ -13,8 +13,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Forms.Layout;   
-    using System.Security;
-    using System.Security.Permissions;
     using System.Runtime.InteropServices;
     using System.ComponentModel.Design.Serialization;
     using System.Windows.Forms.Design; 
@@ -1143,9 +1141,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// handle shortcut keys here.
         /// </devdoc>
-        [
-        SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
 
             if (Enabled && ShortcutKeys == keyData && !HasDropDownItems) {
@@ -1159,7 +1154,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ProcessMnemonic"]/*' />
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
              // no need to check IsMnemonic, toolstrip.ProcessMnemonic checks this already.
@@ -1212,7 +1206,7 @@ namespace System.Windows.Forms {
                 return shortcutKeyDisplayString;
             }
             else if (shortcutKeys == Keys.None) {
-                return String.Empty;
+                return string.Empty;
             }
             else {
                 return TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(shortcutKeys);

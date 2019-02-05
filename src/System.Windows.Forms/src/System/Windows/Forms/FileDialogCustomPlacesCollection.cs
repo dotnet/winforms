@@ -5,8 +5,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Security;
-using System.Security.Permissions;
 
 namespace System.Windows.Forms
 {
@@ -18,10 +16,6 @@ namespace System.Windows.Forms
             for (int i = this.Items.Count - 1; i >= 0; --i)
             {
                 FileDialogCustomPlace customPlace = this.Items[i];
-
-                // Fix for Dev10 
-                FileIOPermission permission = new FileIOPermission(FileIOPermissionAccess.PathDiscovery, customPlace.Path);
-                permission.Demand();
 
                 try
                 {

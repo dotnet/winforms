@@ -5,7 +5,6 @@
 //#define PBRS_PAINT_DEBUG
 
 namespace System.Windows.Forms.PropertyGridInternal {
-    using System.Security.Permissions;
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
@@ -671,7 +670,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     keyWord = parentPE.HelpKeyword;
                 }
                 if (keyWord == null) {
-                    keyWord = String.Empty;
+                    keyWord = string.Empty;
                 }
 
                 return keyWord;
@@ -1764,7 +1763,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             if (str == null) {
-                str = String.Empty;
+                str = string.Empty;
             }
             return str;
         }
@@ -1787,9 +1786,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             // These can be null, so workaround giving hashcode = 0 for null objects.
             object label = this.PropertyLabel;
             object type = this.PropertyType;
-            UInt32 h1 = (UInt32)((label == null)  ? 0 : label.GetHashCode());
-            UInt32 h2 = (UInt32)((type == null)   ? 0 : type.GetHashCode());
-            UInt32 h3 = (UInt32)GetType().GetHashCode();
+            uint h1 = (uint)((label == null)  ? 0 : label.GetHashCode());
+            uint h2 = (uint)((type == null)   ? 0 : type.GetHashCode());
+            uint h3 = (uint)GetType().GetHashCode();
 
             return(int)(h1 ^ ((h2 << 13) | (h2 >> 19)) ^ ((h3 << 26) | (h3 >> 6)));
         }
@@ -2802,7 +2801,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return NativeMethods.UIA_ButtonControlTypeId;
                 }
                 else if (propertyID == NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId) {
-                    return (Object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                    return (object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
                 }
 
                 return null;
@@ -2843,7 +2842,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             #endregion
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 owner.OnOutlineClick(EventArgs.Empty);
             }
@@ -2855,7 +2853,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return((Control)this.owner.GridEntryHost).AccessibilityObject;
                 }
@@ -2927,12 +2924,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return owner.GetPropertyTextValue();
                 }
 
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 set {
                     owner.SetPropertyTextValue(value);
                 }                
@@ -2958,7 +2953,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
 
                 PropertyGridView.PropertyGridViewAccessibleObject parent =
@@ -2986,7 +2980,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
 
                 // make sure we're on the right thread.
@@ -3014,7 +3007,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public class DisplayNameSortComparer : IComparer {
             public int Compare(object left, object right) {
 		// review: (Microsoft) Is CurrentCulture correct here?  This was already reviewed as invariant...
-                return String.Compare(((PropertyDescriptor)left).DisplayName, ((PropertyDescriptor)right).DisplayName, true, CultureInfo.CurrentCulture);
+                return string.Compare(((PropertyDescriptor)left).DisplayName, ((PropertyDescriptor)right).DisplayName, true, CultureInfo.CurrentCulture);
             }
         }
     }
@@ -3062,7 +3055,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             else if (a2 == null) {
                 return 1;
             }
-            return String.Compare(AttributeTypeSorter.GetTypeIdString(a1), AttributeTypeSorter.GetTypeIdString(a2), false, CultureInfo.InvariantCulture);
+            return string.Compare(AttributeTypeSorter.GetTypeIdString(a1), AttributeTypeSorter.GetTypeIdString(a2), false, CultureInfo.InvariantCulture);
         }
     }
     

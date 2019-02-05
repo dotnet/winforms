@@ -2,46 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
-    using System.ComponentModel;
-    using System.Diagnostics;
-
     /// <devdoc>
-    ///     MaskInputRejectedEventArgs.  Provides data for the MaskInputRejected event.
+    /// Provides data for the MaskInputRejected event.
     /// </devdoc>
     public class MaskInputRejectedEventArgs : EventArgs
     {
-        private int position;
-        MaskedTextResultHint hint;
-        
         public MaskInputRejectedEventArgs(int position, MaskedTextResultHint rejectionHint)
         {
-            Debug.Assert(!MaskedTextProvider.GetOperationResultFromHint(rejectionHint), "Rejection hint is not on a failure.");
-            this.position = position;
-            this.hint     = rejectionHint;
+            Position = position;
+            RejectionHint = rejectionHint;
         }
 
         /// <devdoc>
-        ///     The position where the test failed the mask constraint.
+        /// The position where the test failed the mask constraint.
         /// </devdoc>
-        public int Position
-        {
-            get 
-            { 
-                return this.position; 
-            }
-        }
+        public int Position { get; }
 
         /// <devdoc>
-        ///     Retreives a hint on why the input is rejected.
+        /// Retreives a hint on why the input is rejected.
         /// </devdoc>
-        public MaskedTextResultHint RejectionHint
-        {
-            get 
-            { 
-                return this.hint; 
-            }
-        }
+        public MaskedTextResultHint RejectionHint { get; }
     }
 }
