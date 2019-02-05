@@ -14,7 +14,6 @@ trigger:
 - master
 - release/*
 
-# To be added in the future when VSTS supports this feature
 # only trigger pull request builds for the master branch
 pr:
 - master
