@@ -107,6 +107,7 @@ function Build {
     /p:Sign=$sign `
     /p:Publish=$publish `
     /p:ContinuousIntegrationBuild=$ci `
+    /p:AllowUnsafeBlocks=true `
     @properties
 }
 
