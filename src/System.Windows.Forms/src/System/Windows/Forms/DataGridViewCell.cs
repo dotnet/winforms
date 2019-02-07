@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1324,6 +1324,24 @@ namespace System.Windows.Forms
                 Debug.Assert(dgv.EditingPanel.Controls.Contains(dgv.EditingControl));
                 dgv.EditingPanel.Controls.Remove(dgv.EditingControl);
                 Debug.Assert(dgv.EditingControl.ParentInternal == null);
+
+                if (AccessibilityImprovements.Level3)
+                {
+                    if (dgv.EditingControl is DataGridViewTextBoxEditingControl)
+                    {
+                        dgv.TextBoxControlWasDetached = true;
+                    }
+
+                    if (dgv.EditingControl is DataGridViewComboBoxEditingControl)
+                    {
+                        dgv.ComboBoxControlWasDetached = true;
+                    }
+
+                    dgv.EditingControlAccessibleObject.SetParent(null);
+                    AccessibilityObject.SetDetachableChild(null);
+
+                    AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
+                }
             }
             if (dgv.EditingPanel.ParentInternal != null)
             {
@@ -2713,6 +2731,24 @@ namespace System.Windows.Forms
             }
             Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);
             Debug.Assert(dgv.EditingPanel.ParentInternal == dgv);
+
+            if (AccessibilityImprovements.Level3)
+            {
+                if ((dgv.ComboBoxControlWasDetached && dgv.EditingControl is DataGridViewComboBoxEditingControl) ||
+                    (dgv.TextBoxControlWasDetached && dgv.EditingControl is DataGridViewTextBoxEditingControl))
+                {
+                    // Recreate control handle is necessary for cases when the same control was detached and then
+                    // reattached to clear accessible hierarchy cache and not announce previous editing cell.
+                    dgv.EditingControl.RecreateHandleCore();
+
+                    dgv.ComboBoxControlWasDetached = false;
+                    dgv.TextBoxControlWasDetached = false;
+                }
+
+                dgv.EditingControlAccessibleObject.SetParent(AccessibilityObject);
+                AccessibilityObject.SetDetachableChild(dgv.EditingControl.AccessibilityObject);
+                AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildAdded, dgv.EditingControlAccessibleObject.RuntimeId);
+            }
         }
 
         /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCell.KeyDownUnsharesRow"]/*' />
@@ -4692,6 +4728,7 @@ namespace System.Windows.Forms
         protected class DataGridViewCellAccessibleObject : AccessibleObject
         {
             private int[] runtimeId = null; // Used by UIAutomation
+            private AccessibleObject _child = null;
 
             DataGridViewCell owner;
 
@@ -5356,6 +5393,22 @@ namespace System.Windows.Forms
                 }
             }
 
+            /// <summary>
+            /// Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
+            /// </summary>
+            /// <param name="child">The child accessible object.</param>
+            internal override void SetDetachableChild(AccessibleObject child)
+            {
+                _child = child;
+            }
+
+            internal override void SetFocus()
+            {
+                base.SetFocus();
+
+                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            }
+
             internal override int[] RuntimeId
             {
                 get
@@ -5368,6 +5421,20 @@ namespace System.Windows.Forms
                     }
 
                     return runtimeId;
+                }
+            }
+
+            private string AutomationId
+            {
+                get
+                {
+                    string automationId = string.Empty;
+                    foreach (int runtimeIdPart in RuntimeId)
+                    {
+                        automationId += runtimeIdPart.ToString();
+                    }
+
+                    return automationId;
                 }
             }
 
@@ -5422,9 +5489,10 @@ namespace System.Windows.Forms
                     case UnsafeNativeMethods.NavigateDirection.FirstChild:
                     case UnsafeNativeMethods.NavigateDirection.LastChild:
                         if (this.owner.DataGridView.CurrentCell == this.owner &&
+                            this.owner.DataGridView.IsCurrentCellInEditMode &&
                             this.owner.DataGridView.EditingControl != null)
                         {
-                            return this.owner.DataGridView.EditingPanelAccessibleObject;
+                            return _child;
                         }
                         break;
                     default:
@@ -5447,21 +5515,23 @@ namespace System.Windows.Forms
                         case NativeMethods.UIA_NamePropertyId:
                             return this.Name;
                         case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return owner.Selected;
+                            return (State & AccessibleStates.Focused) == AccessibleStates.Focused; // Announce the cell when focusing.
                         case NativeMethods.UIA_IsEnabledPropertyId:
                             return owner.DataGridView.Enabled;
+                        case NativeMethods.UIA_AutomationIdPropertyId:
+                            return AutomationId;
                         case NativeMethods.UIA_HelpTextPropertyId:
-                            return this.Help ?? string.Empty;
+                            return Help ?? string.Empty;
                         case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                            return (this.State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
+                            return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
                         case NativeMethods.UIA_IsPasswordPropertyId:
                             return false;
                         case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return (this.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                            return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                         case NativeMethods.UIA_AccessKeyPropertyId:
                             return string.Empty;
                         case NativeMethods.UIA_GridItemContainingGridPropertyId:
-                            return this.Owner.DataGridView.AccessibilityObject;
+                            return Owner.DataGridView.AccessibilityObject;
                     }
                 }
 
@@ -5481,7 +5551,8 @@ namespace System.Windows.Forms
             {
                 if (AccessibilityImprovements.Level3 &&
                     (patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId) ||
-                    patternId.Equals(NativeMethods.UIA_InvokePatternId)))
+                    patternId.Equals(NativeMethods.UIA_InvokePatternId) ||
+                    patternId.Equals(NativeMethods.UIA_ValuePatternId)))
                 {
                     return true;
                 }

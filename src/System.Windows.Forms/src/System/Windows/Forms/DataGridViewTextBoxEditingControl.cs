@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -254,6 +254,16 @@ namespace System.Windows.Forms
             this.dataGridView.NotifyCurrentCellDirty(true);
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            if (AccessibilityImprovements.Level3)
+            {
+                AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            }
+        }
+
         /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.OnMouseWheel"]/*' />
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -333,6 +343,11 @@ namespace System.Windows.Forms
     {
         private DataGridViewTextBoxEditingControl ownerControl;
 
+        /// <summary>
+        /// The parent is changed when the editing control is attached to another editing cell.
+        /// </summary>
+        private AccessibleObject _parentAccessibleObject = null;
+
         public DataGridViewTextBoxEditingControlAccessibleObject(DataGridViewTextBoxEditingControl ownerControl) : base(ownerControl)
         {
             this.ownerControl = ownerControl;
@@ -342,7 +357,28 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.EditingPanelAccessibleObject;
+                return _parentAccessibleObject;
+            }
+        }
+
+        public override string Name
+        {
+            get
+            {
+                string name = Owner.AccessibleName;
+                if (name != null)
+                {
+                    return name;
+                }
+                else
+                {
+                    return SR.DataGridView_AccEditingControlAccName;
+                }
+            }
+
+            set
+            {
+                base.Name = value;
             }
         }
 
@@ -351,7 +387,13 @@ namespace System.Windows.Forms
             switch (direction)
             {
                 case UnsafeNativeMethods.NavigateDirection.Parent:
-                    return Parent;
+                    var owner = Owner as IDataGridViewEditingControl;
+                    if (owner != null && owner.EditingControlDataGridView.EditingControl == owner)
+                    {
+                        return _parentAccessibleObject;
+                    }
+
+                    return null;
             }
 
             return base.FragmentNavigate(direction);
@@ -371,9 +413,32 @@ namespace System.Windows.Forms
             {
                 case NativeMethods.UIA_ControlTypePropertyId:
                     return NativeMethods.UIA_EditControlTypeId;
+                case NativeMethods.UIA_NamePropertyId:
+                    return Name;
+                case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
+                    return true;
             }
 
             return base.GetPropertyValue(propertyID);
+        }
+
+        internal override bool IsPatternSupported(int patternId)
+        {
+            if (patternId == NativeMethods.UIA_ValuePatternId)
+            {
+                return true;
+            }
+
+            return base.IsPatternSupported(patternId);
+        }
+
+        /// <summary>
+        /// Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+        /// </summary>
+        /// <param name="parent">The parent accessible object.</param>
+        internal override void SetParent(AccessibleObject parent)
+        {
+            _parentAccessibleObject = parent;
         }
     }
 }

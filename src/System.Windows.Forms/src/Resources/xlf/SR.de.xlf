@@ -1112,6 +1112,11 @@
         <target state="translated">Steuert die Darstellung und Funktionalität des Kombinationsfeldes.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxValueSelectedFormat">
+        <source>{0} selected</source>
+        <target state="new">{0} selected</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Die neue Befehls-ID kann nicht zugeordnet werden.</target>
@@ -2848,8 +2853,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
-        <source>DataGridView EditingPanel UIA Provider</source>
-        <target state="translated">DataGridView EditingPanel UIA-Anbieter</target>
+        <source>DataGridView EditingPanel UI Automation provider</source>
+        <target state="needs-review-translation">DataGridView EditingPanel UI Automation-Anbieter</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange">
@@ -8743,8 +8748,8 @@
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridPropertyValueSelectedFormat">
-        <source> {0} selected.</source>
-        <target state="translated"> {0} ausgewählt.</target>
+        <source>{0} selected.</source>
+        <target state="translated">{0} ausgewählt.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridRemotedObject">

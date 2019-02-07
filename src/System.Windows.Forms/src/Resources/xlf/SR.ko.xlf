@@ -1112,6 +1112,11 @@
         <target state="translated">콤보 상자의 모양과 기능을 제어합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxValueSelectedFormat">
+        <source>{0} selected</source>
+        <target state="new">{0} selected</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">새 명령 ID를 할당할 수 없습니다.</target>
@@ -2848,8 +2853,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
-        <source>DataGridView EditingPanel UIA Provider</source>
-        <target state="translated">DataGridView EditingPanel UIA 공급자</target>
+        <source>DataGridView EditingPanel UI Automation provider</source>
+        <target state="needs-review-translation">DataGridView EditingPanel UI Automation 공급자</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange">
@@ -8743,8 +8748,8 @@
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridPropertyValueSelectedFormat">
-        <source> {0} selected.</source>
-        <target state="translated"> {0}이(가) 선택되었습니다.</target>
+        <source>{0} selected.</source>
+        <target state="translated">{0}이(가) 선택되었습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridRemotedObject">

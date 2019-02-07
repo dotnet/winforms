@@ -1112,6 +1112,11 @@
         <target state="translated">Determina l'aspetto e la funzionalità della casella combinata.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxValueSelectedFormat">
+        <source>{0} selected</source>
+        <target state="new">{0} selected</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Impossibile allocare un nuovo ID di comando.</target>
@@ -2848,7 +2853,7 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
-        <source>DataGridView EditingPanel UIA Provider</source>
+        <source>DataGridView EditingPanel UI Automation provider</source>
         <target state="translated">Provider di Automazione interfaccia utente del pannello di modifica DataGridView</target>
         <note />
       </trans-unit>
@@ -8743,8 +8748,8 @@
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridPropertyValueSelectedFormat">
-        <source> {0} selected.</source>
-        <target state="translated"> È stato selezionato {0}.</target>
+        <source>{0} selected.</source>
+        <target state="translated">È stato selezionato {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridRemotedObject">

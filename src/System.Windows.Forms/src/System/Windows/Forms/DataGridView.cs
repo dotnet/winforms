@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2082,6 +2082,16 @@ namespace System.Windows.Forms
                 this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED, value);
             }
         }
+
+        /// <summary>
+        /// Indicates whether the ComboBox editing control was just detached. (focused out to another cell)
+        /// </summary>
+        internal bool ComboBoxControlWasDetached { get; set; }
+
+        /// <summary>
+        /// Indicates whether the TextBox editing control was just detached. (focused out to another cell)
+        /// </summary>
+        internal bool TextBoxControlWasDetached { get; set; }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersVisible"]/*' />
         /// <devdoc>

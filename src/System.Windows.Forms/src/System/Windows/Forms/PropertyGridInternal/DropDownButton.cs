@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -35,6 +35,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
             set {
                 ignoreMouse = value;
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether or not the control supports UIA Providers via
+        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        /// </summary>
+        internal override bool SupportsUiaProviders {
+            get {
+                return AccessibilityImprovements.Level3;
             }
         }
 
@@ -105,6 +115,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
+        internal void PerformButtonClick() {
+            if (Visible && Enabled) {
+                OnClick(EventArgs.Empty);
+            }
+        }
+
         private void SetAccessibleName() {
             if (AccessibilityImprovements.Level1 && useComboBoxTheme) {
                 this.AccessibleName = SR.PropertyGridDropDownButtonComboBoxAccessibleName;
@@ -112,6 +128,18 @@ namespace System.Windows.Forms.PropertyGridInternal {
             else {
                 this.AccessibleName = SR.PropertyGridDropDownButtonAccessibleName;
             }
+        }
+
+        /// <summary>
+        /// Constructs the new instance of the accessibility object for this control.
+        /// </summary>
+        /// <returns>The accessibility object for this control.</returns>
+        protected override AccessibleObject CreateAccessibilityInstance() {
+            if (AccessibilityImprovements.Level3) {
+                return new DropDownButtonAccessibleObject(this);
+            }
+
+            return base.CreateAccessibilityInstance();
         }
 
         internal override ButtonBaseAdapter CreateStandardAdapter() {
@@ -184,6 +212,113 @@ namespace System.Windows.Forms.PropertyGridInternal {
              ControlPaint.DrawImageReplaceColor(graphics, image, imageBounds, Color.Black, Control.ForeColor);
              //ControlPaint.DrawImageColorized(graphics, image, imageBounds , Control.ForeColor);
         } 
+    }
+
+    /// <summary>
+    /// Represents the accessibility object for the PropertyGrid DropDown button.
+    /// This DropDownButtonAccessibleObject is available in Level3 only.
+    /// </summary>
+    [Runtime.InteropServices.ComVisible(true)]
+    internal class DropDownButtonAccessibleObject : Control.ControlAccessibleObject {
+
+        private DropDownButton _owningDropDownButton;
+        private PropertyGridView _owningPropertyGrid;
+
+        /// <summary>
+        /// Constructs the new instance of DropDownButtonAccessibleObject.
+        /// </summary>
+        /// <param name="owningDropDownButton"></param>
+        public DropDownButtonAccessibleObject(DropDownButton owningDropDownButton) : base(owningDropDownButton) {
+            _owningDropDownButton = owningDropDownButton;
+            _owningPropertyGrid = owningDropDownButton.Parent as PropertyGridView;
+
+            UseStdAccessibleObjects(owningDropDownButton.Handle);
+        }
+
+        public override void DoDefaultAction() {
+            _owningDropDownButton.PerformButtonClick();
+        }
+
+        /// <summary>
+        /// Request to return the element in the specified direction.
+        /// </summary>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction.</returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+            if (direction == UnsafeNativeMethods.NavigateDirection.Parent &&
+                _owningPropertyGrid.SelectedGridEntry != null &&
+                _owningDropDownButton.Visible) {
+                return _owningPropertyGrid.SelectedGridEntry?.AccessibilityObject;
+            }
+            else if (direction == UnsafeNativeMethods.NavigateDirection.PreviousSibling) {
+                return _owningPropertyGrid.EditAccessibleObject;
+            }
+
+            return base.FragmentNavigate(direction);
+        }
+
+        /// <summary>
+        /// Returns the element that is the root node of this fragment of UI.
+        /// </summary>
+        internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
+            get {
+                return _owningPropertyGrid.AccessibilityObject;
+            }
+        }
+
+        /// <summary>
+        /// Request value of specified property from an element.
+        /// </summary>
+        /// <param name="propertyId">Identifier indicating the property to return</param>
+        /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
+        internal override object GetPropertyValue(int propertyID) {
+            switch (propertyID) {
+                case NativeMethods.UIA_ControlTypePropertyId:
+                    return NativeMethods.UIA_ButtonControlTypeId;
+                case NativeMethods.UIA_NamePropertyId:
+                    return Name;
+                case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
+                    return true;
+                case NativeMethods.UIA_LegacyIAccessibleRolePropertyId:
+                    return Role;
+                default:
+                    return base.GetPropertyValue(propertyID);
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the specified pattern is supported.
+        /// </summary>
+        /// <param name="patternId">The pattern ID.</param>
+        /// <returns>True if specified pattern is supported, otherwise false.</returns>
+        internal override bool IsPatternSupported(int patternId) {
+            if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId) {
+                return true;
+            }
+
+            return base.IsPatternSupported(patternId);
+        }
+
+        /// <summary>
+        /// Gets the accessible role.
+        /// </summary>
+        public override AccessibleRole Role {
+            get {
+                return AccessibleRole.PushButton;
+            }
+        }
+
+        /// <summary>
+        /// Request that focus is set to this item.
+        /// The UIAutomation framework will ensure that the UI hosting this fragment is already
+        /// focused before calling this method, so this method should only update its internal
+        /// focus state; it should not attempt to give its own HWND the focus, for example.
+        /// </summary>
+        internal override void SetFocus() {
+            RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+
+            base.SetFocus();
+        }
     }
 }
 

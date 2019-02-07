@@ -1112,6 +1112,11 @@
         <target state="translated">控制组合框的外观和功能。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxValueSelectedFormat">
+        <source>{0} selected</source>
+        <target state="new">{0} selected</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">无法分配新的命令 ID。</target>
@@ -2848,8 +2853,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
-        <source>DataGridView EditingPanel UIA Provider</source>
-        <target state="translated">DataGridView EditingPanel UIA 提供程序</target>
+        <source>DataGridView EditingPanel UI Automation provider</source>
+        <target state="needs-review-translation">DataGridView EditingPanel UI Automation 提供程序</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange">
@@ -8743,7 +8748,7 @@
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridPropertyValueSelectedFormat">
-        <source> {0} selected.</source>
+        <source>{0} selected.</source>
         <target state="translated">已选择 {0}。</target>
         <note />
       </trans-unit>

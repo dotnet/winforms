@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -808,11 +808,61 @@ namespace System.Windows.Forms {
             if ((owner == null) || !owner.HasDropDownItems) {
                 return -1;
             }
+
+            // Do not expose child items when the submenu is collapsed to prevent Narrator from announcing
+            // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
+            // in scan mode (CAPSLOCK + Space)
+            if (AccessibilityImprovements.Level3 && ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed) {
+                return 0;
+            }
+
             if (owner.DropDown.LayoutRequired) {
                 LayoutTransaction.DoLayout(owner.DropDown, owner.DropDown, PropertyNames.Items);
             }
             return owner.DropDown.AccessibilityObject.GetChildCount();
 
+        }
+
+        internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child) {
+            if ((owner == null) || (owner.DropDownItems == null)) {
+                return -1;
+            }
+
+            for (int i = 0; i < owner.DropDownItems.Count; i++) {
+                if (owner.DropDownItems[i].Available && child.Owner == owner.DropDownItems[i]) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Gets the number of children belonging to an accessible object.
+        /// </summary>
+        /// <returns>The number of children.</returns>
+        internal int GetChildFragmentCount() {
+            if ((owner == null) || (owner.DropDownItems == null)) {
+                return -1;
+            }
+
+            int count = 0;
+            for (int i = 0; i < owner.DropDownItems.Count; i++) {
+                if (owner.DropDownItems[i].Available) {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        internal AccessibleObject GetChildFragment(int index) {
+            var toolStripAccessibleObject = owner.DropDown.AccessibilityObject as ToolStrip.ToolStripAccessibleObject;
+            if (toolStripAccessibleObject != null) {
+                return toolStripAccessibleObject.GetChildFragment(index);
+            }
+
+            return null;
         }
 
         internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
@@ -822,9 +872,19 @@ namespace System.Windows.Forms {
 
             switch (direction) {
                 case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                    return owner.DropDown.Items.Count > 0 ? owner.DropDown.Items[0].AccessibilityObject : null;
+                    int childCount = GetChildCount();
+                    if (childCount > 0) {
+                        return GetChildFragment(0);
+                    }
+
+                    return null;
                 case UnsafeNativeMethods.NavigateDirection.LastChild:
-                    return owner.DropDown.Items.Count > 0 ? owner.DropDown.Items[owner.DropDown.Items.Count - 1].AccessibilityObject : null;
+                    childCount = GetChildCount();
+                    if (childCount > 0) {
+                        return GetChildFragment(childCount - 1);
+                    }
+
+                    return null;
                 case UnsafeNativeMethods.NavigateDirection.NextSibling:
                 case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
                     ToolStripDropDown dropDown = owner.Owner as ToolStripDropDown;
@@ -841,7 +901,17 @@ namespace System.Windows.Forms {
 
                     index += direction == UnsafeNativeMethods.NavigateDirection.NextSibling ? 1 : -1;
 
-                    return index >= 0 && index < dropDown.Items.Count ? dropDown.Items[index].AccessibilityObject : null;
+                    if (index >= 0 && index < dropDown.Items.Count) {
+                        var item = dropDown.Items[index];
+                        var controlHostItem = item as ToolStripControlHost;
+                        if (controlHostItem != null) {
+                            return controlHostItem.ControlAccessibilityObject;
+                        }
+
+                        return item.AccessibilityObject;
+                    }
+
+                    return null;
             }
 
             return base.FragmentNavigate(direction);
