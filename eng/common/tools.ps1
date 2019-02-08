@@ -7,9 +7,9 @@
 # Build configuration. Common values include 'Debug' and 'Release', but the repository may use other names.
 [string]$configuration = if (Test-Path variable:configuration) { $configuration } else { "Debug" }
 
-# Binary log name; give to output binary log from msbuild. Note that emitting binary log slows down the build.
+# Set to true to output binary log from msbuild. Note that emitting binary log slows down the build.
 # Binary log must be enabled on CI.
-[string]$binaryLog = if (Test-Path variable:binaryLog) { $binaryLog } else { if ($ci) { "" } else { $null } }
+[bool]$binaryLog = if (Test-Path variable:binaryLog) { $binaryLog } else { $ci }
 
 # Turns on machine preparation/clean up code that changes the machine state (e.g. kills build processes).
 [bool]$prepareMachine = if (Test-Path variable:prepareMachine) { $prepareMachine } else { $false }
@@ -161,9 +161,10 @@ function GetDotNetInstallScript([string] $dotnetRoot) {
   return $installScript
 }
 
-function InstallDotNetSdk([string] $dotnetRoot, [string] $version) {
+function InstallDotNetSdk([string] $dotnetRoot, [string] $version, [string] $architecture = "") {
   $installScript = GetDotNetInstallScript $dotnetRoot
-  & $installScript -Version $version -InstallDir $dotnetRoot
+  $archArg = if ($architecture) { $architecture } else { "<auto>" }
+  & $installScript -Version $version -InstallDir $dotnetRoot -Architecture $archArg
   if ($lastExitCode -ne 0) {
     Write-Host "Failed to install dotnet cli (exit code '$lastExitCode')." -ForegroundColor Red
     ExitWithExitCode $lastExitCode
@@ -406,15 +407,7 @@ function InitializeToolset() {
   $buildTool = InitializeBuildTool
 
   $proj = Join-Path $ToolsetDir "restore.proj"
-  
-  $bl = ""
-  # if flag is present
-  if ($null -ne $binaryLog) 
-  { 
-    # if value is set, then use it; otherwise default to ToolsetRestore.binlog
-    $binaryLogName = if ("" -eq $binaryLog) { "ToolsetRestore" } else { $binaryLog }
-    $bl = "/bl:" + (Join-Path $LogDir ($binaryLogName + ".binlog")) 
-  }
+  $bl = if ($binaryLog) { "/bl:" + (Join-Path $LogDir "ToolsetRestore.binlog") } else { "" }
   
   '<Project Sdk="Microsoft.DotNet.Arcade.Sdk"/>' | Set-Content $proj
   MSBuild $proj $bl /t:__WriteToolsetLocation /noconsolelogger /p:__ToolsetLocationOutputFile=$toolsetLocationFile
@@ -448,8 +441,8 @@ function Stop-Processes() {
 #
 function MSBuild() {
   if ($ci) {
-    if ($null -eq $binaryLog) {
-      throw "Binary log must not be null in CI build."
+    if (!$binaryLog) {
+      throw "Binary log must be enabled in CI build."
     }
 
     if ($nodeReuse) {
