@@ -44,7 +44,7 @@ The Visual Studio WinForms designer is not yet available and will be part of a V
 
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
-* The [contributing guidelines][contributing]and the more general [.NET Core contributing guide][corefx-contributing] define contributing rules.
+* The [contributing guidelines][contributing] and the more general [.NET Core contributing guide][corefx-contributing] define contributing rules.
 * The [Developer Guide][developing] defines the setup and workflow for working on this repository.
 * If you have a question or have found a bug, [file an issue][issue-new].
 * Use [daily builds][getting-started] if you want to contribute and stay up to date with the team.
