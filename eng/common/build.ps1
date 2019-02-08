@@ -17,7 +17,7 @@ Param(
   [switch] $sign,
   [switch] $pack,
   [switch] $publish,
-  [switch][Alias('bl')]$binaryLog,
+  [string][Alias('bl')]$binaryLog,
   [switch] $ci,
   [switch] $prepareMachine,
   [switch] $help,
@@ -30,7 +30,7 @@ function Print-Usage() {
     Write-Host "Common settings:"
     Write-Host "  -configuration <value>  Build configuration: 'Debug' or 'Release' (short: -c)"
     Write-Host "  -verbosity <value>      Msbuild verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic] (short: -v)"
-    Write-Host "  -binaryLog              Output binary log (short: -bl)"
+    Write-Host "  -binaryLog <value>      Output binary log; specify name of Binary Log in the form <value>.binlog (short: -bl)"
     Write-Host "  -help                   Print help and exit"
     Write-Host ""
 
@@ -74,7 +74,14 @@ function Build {
   $toolsetBuildProj = InitializeToolset
   InitializeCustomToolset
 
-  $bl = if ($binaryLog) { "/bl:" + (Join-Path $LogDir "Build.binlog") } else { "" }
+  $bl = ""
+  # if flag is present
+  if ($null -ne $binaryLog)
+  { 
+    # if value is set, then use it; otherwise default to Build.binlog
+    $binaryLogName = if ("" -eq $binaryLog) { "Build" } else { $binaryLog }
+    $bl = "/bl:" + (Join-Path $LogDir ($binaryLogName + ".binlog")) 
+  }
 
   if ($projects) {
     # Re-assign properties to a new variable because PowerShell doesn't let us append properties directly for unclear reasons.
@@ -105,13 +112,14 @@ function Build {
 }
 
 try {
-  if ($help -or (($properties -ne $null) -and ($properties.Contains("/help") -or $properties.Contains("/?")))) {
+  if ($help -or (($null -ne $properties) -and ($properties.Contains("/help") -or $properties.Contains("/?")))) {
     Print-Usage
     exit 0
   }
 
   if ($ci) {
-    $binaryLog = $true
+    # if binarylog value is given, do not overwrite it
+    $binaryLog = if ($null -eq $binaryLog) { "" } else { $binaryLog }
     $nodeReuse = $false
   }
 
