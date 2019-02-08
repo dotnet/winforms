@@ -127,8 +127,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         protected override IntPtr CreateMenuHandle() {
             return UnsafeNativeMethods.CreateMenu();
         }

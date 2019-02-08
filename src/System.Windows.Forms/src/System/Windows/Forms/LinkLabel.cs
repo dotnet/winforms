@@ -723,8 +723,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         internal override StringFormat CreateStringFormat() {
             StringFormat stringFormat = base.CreateStringFormat();
             if (string.IsNullOrEmpty(Text)) {

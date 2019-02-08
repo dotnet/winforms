@@ -26,8 +26,8 @@ namespace System.Experimental.Gdi
 #endif
     sealed class WindowsSolidBrush : WindowsBrush
     {
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         protected override void CreateBrush()
         { 
             IntPtr nativeHandle = IntSafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32( this.Color));
@@ -39,22 +39,22 @@ namespace System.Experimental.Gdi
             this.NativeHandle = nativeHandle;  // sets the handle value in the base class.
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsSolidBrush(DeviceContext dc)  : base(dc)
         {
             // CreateBrush() on demand.
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsSolidBrush(DeviceContext dc, Color color) : base( dc, color )
         {
             // CreateBrush() on demand.
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public override object Clone()
         { 
             return new WindowsSolidBrush(this.DC, this.Color);

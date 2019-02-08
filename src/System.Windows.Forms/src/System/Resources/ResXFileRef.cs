@@ -227,8 +227,8 @@ namespace System.Resources {
             }
 
             /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertFrom"]/*' />
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             public override object ConvertFrom(ITypeDescriptorContext context, 
                                                CultureInfo culture,
                                                object value) {

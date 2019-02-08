@@ -206,8 +206,8 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public override Image Image {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return base.Image;
                 }

@@ -416,8 +416,8 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetFormattedValue"]/*' />
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected override object GetFormattedValue(object value,
                                                     int rowIndex,
                                                     ref DataGridViewCellStyle cellStyle,

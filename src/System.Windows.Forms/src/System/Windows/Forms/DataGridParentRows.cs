@@ -733,8 +733,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine, ResourceScope.Machine)]
+        
         private Bitmap GetBitmap(string bitmapName, Color transparentColor) {
             Bitmap b = null;
             try {
@@ -747,8 +746,8 @@ namespace System.Windows.Forms {
             return b;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         private Bitmap GetRightArrowBitmap()
         {
             if (rightArrow == null)
@@ -756,8 +755,8 @@ namespace System.Windows.Forms {
             return rightArrow;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         private Bitmap GetLeftArrowBitmap()
         {
             if (leftArrow == null)

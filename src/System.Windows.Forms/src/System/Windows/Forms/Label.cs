@@ -449,8 +449,8 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance))
         ]
         public Image Image {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 Image image = (Image)Properties.GetObject(PropImage);
 
@@ -1109,8 +1109,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Get StringFormat object for rendering text using GDI+ (Graphics).
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         internal virtual StringFormat CreateStringFormat() {
             return ControlPaint.CreateStringFormat( this, this.TextAlign, this.AutoEllipsis, this.UseMnemonic );
         }

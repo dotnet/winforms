@@ -5091,8 +5091,8 @@ namespace System.Windows.Forms {
         private Size cachedHDCSize = Size.Empty;
         private HandleRef cachedItemBitmap = NativeMethods.NullHandleRef;
         // this DC is cached and should only be deleted on Dispose or when the size changes.
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public HandleRef GetCachedItemDC(HandleRef toolStripHDC, Size bitmapSize) {
 
                if ((cachedHDCSize.Width < bitmapSize.Width)

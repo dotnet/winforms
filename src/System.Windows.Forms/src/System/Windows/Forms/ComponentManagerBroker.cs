@@ -102,8 +102,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Static ctor.  We just set up a few per-process globals here
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         static ComponentManagerBroker() {
             int pid = SafeNativeMethods.GetCurrentProcessId();
             _syncObject = new object();

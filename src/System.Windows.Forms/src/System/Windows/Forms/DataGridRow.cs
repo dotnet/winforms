@@ -209,8 +209,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets the bitmap associated with the row.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected Bitmap GetBitmap(string bitmapName) {
             Bitmap b = null;
             try {
@@ -261,8 +261,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets or sets the bitmap displayed in the row header of a new row.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected Bitmap GetStarBitmap() {
             if (starBmp == null)
                 starBmp = GetBitmap("DataGridRow.star.bmp");
@@ -274,8 +274,8 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the bitmap displayed in the row header that indicates a row can 
         ///       be edited.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected Bitmap GetPencilBitmap() {
             if (pencilBmp == null)
                 pencilBmp = GetBitmap("DataGridRow.pencil.bmp");
@@ -286,8 +286,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets or sets the bitmap displayed on a row with an error.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected Bitmap GetErrorBitmap() {
             if (errorBmp == null)
                 errorBmp = GetBitmap("DataGridRow.error.bmp");
@@ -295,16 +295,16 @@ namespace System.Windows.Forms {
             return errorBmp;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected Bitmap GetLeftArrowBitmap() {
             if (leftArrow == null)
                 leftArrow = GetBitmap("DataGridRow.left.bmp");
             return leftArrow;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected Bitmap GetRightArrowBitmap() {
             if (rightArrow == null)
                 rightArrow = GetBitmap("DataGridRow.right.bmp");

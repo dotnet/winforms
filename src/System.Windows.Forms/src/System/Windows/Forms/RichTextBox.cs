@@ -2294,8 +2294,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Loads the contents of the given RTF or text file into a RichTextBox control.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         public void LoadFile(string path) {
             LoadFile(path, RichTextBoxStreamType.RichText);
         }
@@ -2304,8 +2304,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Loads the contents of a RTF or text into a RichTextBox control.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         public void LoadFile(string path, RichTextBoxStreamType fileType) {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText)){
@@ -2628,8 +2628,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Saves the contents of a RichTextBox control to a file.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         public void SaveFile(string path) {
             SaveFile(path, RichTextBoxStreamType.RichText);
         }
@@ -2638,8 +2638,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Saves the contents of a RichTextBox control to a file.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         public void SaveFile(string path, RichTextBoxStreamType fileType) {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))

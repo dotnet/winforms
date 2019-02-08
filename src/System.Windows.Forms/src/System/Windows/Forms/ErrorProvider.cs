@@ -596,8 +596,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         internal IconRegion Region {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 if (region == null)
                     region = new IconRegion(Icon);
@@ -1628,8 +1628,8 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Constructor that takes an Icon and extracts its 16x16 version.
             /// </devdoc>
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             public IconRegion(Icon icon) {
                 this.icon = new Icon(icon, 16, 16);
             }
@@ -1653,8 +1653,7 @@ namespace System.Windows.Forms {
             ///     Returns the handle of the region.
             /// </devdoc>
             public Region Region {
-                [ResourceExposure(ResourceScope.Process)]
-                [ResourceConsumption(ResourceScope.Process | ResourceScope.Machine, ResourceScope.Process | ResourceScope.Machine)]
+                
                 get {
                     if (region == null) {
                         region = new Region(new Rectangle(0,0,0,0));

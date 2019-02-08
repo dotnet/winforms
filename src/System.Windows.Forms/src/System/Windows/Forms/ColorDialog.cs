@@ -173,8 +173,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected virtual IntPtr Instance {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get { return UnsafeNativeMethods.GetModuleHandle(null);}
         }
 

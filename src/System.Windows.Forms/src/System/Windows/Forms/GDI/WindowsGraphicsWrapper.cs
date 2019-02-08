@@ -36,8 +36,8 @@ namespace System.Windows.Forms
         ///        In this case we create the WindowsGraphics from the native DC by calling IDeviceContext.GetHdc,
         ///        on dispose we need to call IDeviceContext.ReleaseHdc.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsGraphicsWrapper( IDeviceContext idc, TextFormatFlags flags)
         {
             if( idc is Graphics )

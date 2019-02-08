@@ -295,7 +295,7 @@ namespace System.Windows.Forms {
 
         // Initially check for illegal multithreading based on whether the
         // debugger is attached.
-        [ResourceExposure(ResourceScope.Process)]
+        
         private static bool checkForIllegalCrossThreadCalls = Debugger.IsAttached;
         private static ContextCallback invokeMarshaledCallbackHelperDelegate;
 
@@ -785,8 +785,8 @@ example usage
         ///     to another method so we do not force JIT the ActiveX codebase.
         /// </devdoc>
         private Font ActiveXAmbientFont {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get {
                 return ActiveXInstance.AmbientFont;
             }
@@ -1005,8 +1005,8 @@ example usage
         ///                   from BackBrush to BackColorBrush due to a naming conflict with DataGrid's BackBrush.
         /// </devdoc>
         internal IntPtr BackColorBrush {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get {
                 object customBackBrush = Properties.GetObject(PropBackBrush);
                 if (customBackBrush != null) {
@@ -1597,8 +1597,8 @@ example usage
         DescriptionAttribute(nameof(SR.ControlCompanyNameDescr))
         ]
         public string CompanyName {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return VersionInfo.CompanyName;
             }
@@ -1957,8 +1957,8 @@ example usage
         /// </devdoc>
         /// <internalonly/>
         internal int CreateThreadId {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get {
                 if (IsHandleCreated) {
                     int pid;
@@ -2103,8 +2103,8 @@ example usage
         ///     different defaults.
         /// </devdoc>
         public static Font DefaultFont {
-            [ResourceExposure(ResourceScope.None)]
-            [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+            
+            
             get {
                 if (defaultFont == null) {
                     defaultFont = SystemFonts.DefaultFont;
@@ -2431,8 +2431,8 @@ example usage
         ]
         public virtual Font Font {
             [return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(ActiveXFontMarshaler))]
-            [ResourceExposure(ResourceScope.None)]
-            [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+            
+            
             get {
                 Font font = (Font)Properties.GetObject(PropFont);
                 if (font != null) {
@@ -3382,8 +3382,8 @@ example usage
         SRDescription(nameof(SR.ControlProductNameDescr))
         ]
         public string ProductName {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return VersionInfo.ProductName;
             }
@@ -3399,8 +3399,8 @@ example usage
         SRDescription(nameof(SR.ControlProductVersionDescr))
         ]
         public string ProductVersion {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return VersionInfo.ProductVersion;
             }
@@ -5124,8 +5124,8 @@ example usage
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         private IntPtr ActiveXMergeRegion(IntPtr region) {
             return ActiveXInstance.MergeRegion(region);
         }
@@ -5566,8 +5566,8 @@ example usage
         ///     method when it is no longer needed.  The Graphics Object is only valid for
         ///     the duration of the current window's message.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public System.Drawing.Graphics CreateGraphics() {
             using (new MultithreadSafeCallScope())
             {
@@ -5576,8 +5576,8 @@ example usage
         }
        
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         internal System.Drawing.Graphics CreateGraphicsInternal() {
             return Graphics.FromHwndInternal(this.Handle);
         }
@@ -6930,8 +6930,8 @@ example usage
         // NOTE: this message may not have originally been sent to this HWND.
         //
 
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         internal virtual IntPtr InitializeDCForWmCtlColor (IntPtr dc, int msg) {
             if (!GetStyle(ControlStyles.UserPaint)) {
                 SafeNativeMethods.SetTextColor(new HandleRef(null, dc), ColorTranslator.ToWin32(ForeColor));
@@ -15764,8 +15764,8 @@ example usage
             /// </devdoc>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal Font AmbientFont {
-                [ResourceExposure(ResourceScope.None)]
-                [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+                
+                
                 get {
                     AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
 
@@ -16800,8 +16800,8 @@ example usage
             ///      to SetWindowRgn.  The region does not have to be destroyed.
             ///      The original region is destroyed if a new region is returned.
             /// </devdoc>
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             internal IntPtr MergeRegion(IntPtr region) {
                 if (clipRegion == IntPtr.Zero) {
                     return region;
@@ -18476,8 +18476,7 @@ example usage
             NativeMethods.RECT destRect;
 
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Process | ResourceScope.Machine, ResourceScope.Process | ResourceScope.Machine)]
+            
             internal MetafileDCWrapper(HandleRef hOriginalDC, Size size) {
                 Debug.Assert(UnsafeNativeMethods.GetObjectType(hOriginalDC) == NativeMethods.OBJ_ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
@@ -19320,8 +19319,8 @@ example usage
             ///     The company name associated with the component.
             /// </devdoc>
             internal string CompanyName {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     if (companyName == null) {
                         object[] attrs = owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
@@ -19362,8 +19361,8 @@ example usage
             ///     The product name associated with this component.
             /// </devdoc>
             internal string ProductName {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     if (productName == null) {
                         object[] attrs = owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
@@ -19403,8 +19402,8 @@ example usage
             ///     The product version associated with this component.
             /// </devdoc>
             internal string ProductVersion {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     if (productVersion == null) {
                         // custom attribute
@@ -19438,8 +19437,8 @@ example usage
             ///     Retrieves the FileVersionInfo associated with the main module for
             ///     the component.
             /// </devdoc>
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             private FileVersionInfo GetFileVersionInfo() {
                 if (versionInfo == null) {
                     string path = owner.GetType().Module.FullyQualifiedName;

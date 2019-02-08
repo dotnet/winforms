@@ -1525,8 +1525,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         private static Bitmap GetBitmap(string bitmapName)
         {
             Bitmap b = new Bitmap(typeof(DataGridViewCell), bitmapName);

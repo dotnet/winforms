@@ -6796,8 +6796,8 @@ namespace System.Windows.Forms
             return this.AccessibilityObject.GetChild(objectId - 1);
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         internal SolidBrush GetCachedBrush(Color color)
         {
             SolidBrush brush = (SolidBrush) this.brushes[color];
@@ -6822,8 +6822,8 @@ namespace System.Windows.Forms
         }
 #endif // DGV_GDI
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         internal Pen GetCachedPen(Color color)
         {
             Pen pen = (Pen) this.pens[color];

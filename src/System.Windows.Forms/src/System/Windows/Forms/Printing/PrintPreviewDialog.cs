@@ -313,8 +313,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Icon Icon {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return base.Icon;
             }

@@ -1181,8 +1181,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemImageDescr))
         ]
         public virtual Image Image {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 Image image = (Image)Properties.GetObject(PropImage);
             
@@ -2023,8 +2023,8 @@ namespace System.Windows.Forms {
         }
 
         internal Image MirroredImage {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 if (state[stateInvalidMirroredImage]) {
                     Image image = Image;

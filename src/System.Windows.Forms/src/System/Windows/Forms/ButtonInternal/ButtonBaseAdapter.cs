@@ -108,8 +108,7 @@ namespace System.Windows.Forms.ButtonInternal {
             return Color.FromArgb(a3, r3, g3, b3);
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process | ResourceScope.Machine, ResourceScope.Machine)]
+        
         internal static Brush CreateDitherBrush(Color color1, Color color2) {
 
             // Note: Don't dispose the bitmap here. The texture brush will take ownership
@@ -128,8 +127,8 @@ namespace System.Windows.Forms.ButtonInternal {
         /// <devdoc>
         ///     Get StringFormat object for rendering text using GDI+ (Graphics).
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         internal virtual StringFormat CreateStringFormat() {
             return ControlPaint.CreateStringFormat( Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic );
         }
@@ -904,8 +903,8 @@ namespace System.Windows.Forms.ButtonInternal {
             ///     we cache the flags that make it up and create it on demand so it can be disposed by calling code.
             /// </devdoc>
             public StringFormat StringFormat {
-                [ResourceExposure(ResourceScope.Process)]
-                [ResourceConsumption(ResourceScope.Process)]
+                
+                
                 get {
                     StringFormat format = new StringFormat();
 

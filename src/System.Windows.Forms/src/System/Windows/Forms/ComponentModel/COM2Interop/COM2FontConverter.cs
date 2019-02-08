@@ -43,8 +43,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         ///     Converts the native value into a managed value
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd) {
             // we're getting an IFont thing here
             UnsafeNativeMethods.IFont nativeFont = nativeValue as UnsafeNativeMethods.IFont;
@@ -89,8 +89,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         ///     Converts the managed value into a native value
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet) {
 
             // we default to black.

@@ -3204,8 +3204,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        [ResourceExposure(ResourceScope.Process)]        
-        [ResourceConsumption(ResourceScope.Process)]
+                
+        
         internal override IntPtr InitializeDCForWmCtlColor (IntPtr dc, int msg)
         {
             if (isMaskEdit) {
@@ -4011,8 +4011,8 @@ namespace System.Windows.Forms {
             // IOleInPlaceSite methods:
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OleInterfaces.GetWindow"]/*' />
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             IntPtr UnsafeNativeMethods.IOleInPlaceSite.GetWindow() {
                 try {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetWindow");
@@ -4544,8 +4544,8 @@ namespace System.Windows.Forms {
         ///     Maps from a System.Drawing.Image to an OLE IPicture
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected static object GetIPictureFromPicture(Image image) {
             if (image == null) return null;
             object pictdesc = GetPICTDESCFromPicture(image);
@@ -4557,8 +4557,8 @@ namespace System.Windows.Forms {
         ///     Maps from a System.Drawing.Cursor to an OLE IPicture
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected static object GetIPictureFromCursor(Cursor cursor) {
             if (cursor == null) return null;
             NativeMethods.PICTDESCicon pictdesc = new NativeMethods.PICTDESCicon(Icon.FromHandle(cursor.Handle));
@@ -4570,8 +4570,8 @@ namespace System.Windows.Forms {
         ///     Maps from a System.Drawing.Image to an OLE IPictureDisp
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected static object GetIPictureDispFromPicture(Image image) {
             if (image == null) return null;
             object pictdesc = GetPICTDESCFromPicture(image);
@@ -4583,8 +4583,8 @@ namespace System.Windows.Forms {
         ///     Maps from an OLE IPicture to a System.Drawing.Image
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected static Image GetPictureFromIPicture(object picture) {
             if (picture == null) return null;
             IntPtr hPal = IntPtr.Zero;
@@ -4605,8 +4605,8 @@ namespace System.Windows.Forms {
         ///     Maps from an OLE IPictureDisp to a System.Drawing.Image
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected static Image GetPictureFromIPictureDisp(object picture) {
             if (picture == null) return null;
             IntPtr hPal = IntPtr.Zero;
@@ -4622,8 +4622,8 @@ namespace System.Windows.Forms {
             return GetPictureFromParams(pict, pict.Handle, type, hPal, pict.Width, pict.Height);
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         private static Image GetPictureFromParams(object pict, IntPtr handle, int type, IntPtr paletteHandle, int width, int height) {
             switch (type) {
                 case NativeMethods.Ole.PICTYPE_ICON:

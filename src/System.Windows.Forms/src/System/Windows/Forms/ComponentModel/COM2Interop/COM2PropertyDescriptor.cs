@@ -916,8 +916,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     invoking the getXXX method.  An exception in the getXXX
         ///     method will pass through.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public override object GetValue(object component) {
             lastValue = GetNativeValue(component);
             // do we need to convert the type?
@@ -1201,8 +1201,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     property so that getXXX following a setXXX should return the value
         ///     passed in if no exception was thrown in the setXXX call.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         public override void SetValue(object component, object value) {
 
             if (this.readOnly) {

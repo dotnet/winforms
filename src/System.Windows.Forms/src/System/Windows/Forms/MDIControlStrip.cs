@@ -120,8 +120,8 @@ namespace System.Windows.Forms {
 */
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             private Image GetTargetWindowIcon() {
                 Image systemIcon = null;
                 IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), NativeMethods.WM_GETICON, NativeMethods.ICON_SMALL, 0);

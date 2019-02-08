@@ -809,16 +809,16 @@ namespace System.Resources {
             this.names = names;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         public Assembly GetAssembly(AssemblyName name) {
             return GetAssembly(name, true);
         }
 
         //
         [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         public Assembly GetAssembly(AssemblyName name, bool throwOnError) {
 
             Assembly result = null;
@@ -864,8 +864,8 @@ namespace System.Resources {
             return result;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         public string GetPathOfAssembly(AssemblyName name) {
             return name.CodeBase;
         }

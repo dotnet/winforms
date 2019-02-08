@@ -317,8 +317,8 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance))
         ]
         public Image Image {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 if (image == null && imageList != null) {
                     int actualIndex = imageIndex.ActualIndex;
@@ -983,8 +983,8 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         internal virtual StringFormat CreateStringFormat() {
             if( Adapter == null ) {
                 Debug.Fail("Adapter not expected to be null at this point");
