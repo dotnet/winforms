@@ -27,5 +27,4 @@
   <PropertyGroup>
     <MicrosoftDotNetXUnitExtensionsPackage>2.4.0-beta.18414.1</MicrosoftDotNetXUnitExtensionsPackage>
   </PropertyGroup>
-
 </Project>
