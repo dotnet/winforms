@@ -5,17 +5,13 @@
 namespace System.Windows.Forms {
     using System.Text;
     using System.Runtime.Remoting;
-
     using System;
     using System.Collections;
-    
     using System.Windows.Forms;
-    
     using System.ComponentModel;
     using System.Drawing;
     using System.Drawing.Imaging;
     using Microsoft.Win32;
-    
     using System.Runtime.InteropServices;
     using System.Diagnostics;
     using System.Runtime.Versioning;
@@ -609,7 +605,6 @@ namespace System.Windows.Forms {
             return width;
         }
 
-
         // will return the width of the best fit for the column
         //
         private int GetColDataBoxWidth(Graphics g, int colNum) {
@@ -733,7 +728,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        
         private Bitmap GetBitmap(string bitmapName, Color transparentColor) {
             Bitmap b = null;
             try {
@@ -746,8 +740,6 @@ namespace System.Windows.Forms {
             return b;
         }
 
-        
-        
         private Bitmap GetRightArrowBitmap()
         {
             if (rightArrow == null)
@@ -755,8 +747,6 @@ namespace System.Windows.Forms {
             return rightArrow;
         }
 
-        
-        
         private Bitmap GetLeftArrowBitmap()
         {
             if (leftArrow == null)
@@ -1165,7 +1155,6 @@ namespace System.Windows.Forms {
 
                 return null;
             }
-
 
             /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.DataGridParentRowsAccessibleObject.Navigate"]/*' />
             /// <devdoc>
