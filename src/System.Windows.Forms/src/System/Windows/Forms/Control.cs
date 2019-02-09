@@ -4,12 +4,9 @@
 
 #define DEBUG_PREFERREDSIZE
 
-
-
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Control+ActiveXFontMarshaler..ctor()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.Control.PreProcessControlMessageInternal(System.Windows.Forms.Control, System.Windows.Forms.Message):System.Windows.Forms.PreProcessControlState")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.Control.OnPreviewKeyDown(System.Windows.Forms.PreviewKeyDownEventArgs):System.Void")]
-
 
 namespace System.Windows.Forms {
     using Accessibility;
@@ -54,13 +51,13 @@ namespace System.Windows.Forms {
     ///       with visual representation.</para>
     /// </devdoc>
     [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Text)),
-    DefaultEvent(nameof(Click)),
-    Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign),
-    DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
-    ToolboxItemFilter("System.Windows.Forms")
+        ComVisible(true),
+        ClassInterface(ClassInterfaceType.AutoDispatch),
+        DefaultProperty(nameof(Text)),
+        DefaultEvent(nameof(Click)),
+        Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign),
+        DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
+        ToolboxItemFilter("System.Windows.Forms")
     ]
     public partial class Control :
     Component,
@@ -538,7 +535,6 @@ example usage
                 clientHeight = height - (rect.bottom - rect.top);
             }
 
-
             // Set up for async operations on this thread.
             if (autoInstallSyncContext) {
                 WindowsFormsSynchronizationContext.InstallIfNeeded();
@@ -592,9 +588,9 @@ example usage
         ///      The Accessibility Object for this Control
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlAccessibilityObjectDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlAccessibilityObjectDescr))
         ]
         public AccessibleObject AccessibilityObject {
             get {
@@ -676,10 +672,10 @@ example usage
         ///      The default action description of the control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAccessibility)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))
+            SRCategory(nameof(SR.CatAccessibility)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))
         ]
         public string AccessibleDefaultActionDescription {
             get {
@@ -695,10 +691,10 @@ example usage
         ///      The accessible description of the control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAccessibility)),
-        DefaultValue(null),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))
+            SRCategory(nameof(SR.CatAccessibility)),
+            DefaultValue(null),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))
         ]
         public string AccessibleDescription {
             get {
@@ -714,10 +710,10 @@ example usage
         ///      The accessible name of the control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAccessibility)),
-        DefaultValue(null),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlAccessibleNameDescr))
+            SRCategory(nameof(SR.CatAccessibility)),
+            DefaultValue(null),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlAccessibleNameDescr))
         ]
         public string AccessibleName {
             get {
@@ -734,9 +730,9 @@ example usage
         ///      The accessible role of the control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAccessibility)),
-        DefaultValue(AccessibleRole.Default),
-        SRDescription(nameof(SR.ControlAccessibleRoleDescr))
+            SRCategory(nameof(SR.CatAccessibility)),
+            DefaultValue(AccessibleRole.Default),
+            SRDescription(nameof(SR.ControlAccessibleRoleDescr))
         ]
         public AccessibleRole AccessibleRole {
 
@@ -785,8 +781,6 @@ example usage
         ///     to another method so we do not force JIT the ActiveX codebase.
         /// </devdoc>
         private Font ActiveXAmbientFont {
-            
-            
             get {
                 return ActiveXInstance.AmbientFont;
             }
@@ -847,9 +841,9 @@ example usage
         ///     this control will allow drag and drop operations and events to be used.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.ControlAllowDropDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            DefaultValue(false),
+            SRDescription(nameof(SR.ControlAllowDropDescr))
         ]
         public virtual bool AllowDrop {
             get {
@@ -905,11 +899,11 @@ example usage
         ///     edges.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        DefaultValue(CommonProperties.DefaultAnchor),
-        SRDescription(nameof(SR.ControlAnchorDescr)),
-        RefreshProperties(RefreshProperties.Repaint)
+            SRCategory(nameof(SR.CatLayout)),
+            Localizable(true),
+            DefaultValue(CommonProperties.DefaultAnchor),
+            SRDescription(nameof(SR.ControlAnchorDescr)),
+            RefreshProperties(RefreshProperties.Repaint)
         ]
         public virtual AnchorStyles Anchor {
             get {
@@ -966,9 +960,9 @@ example usage
         /// Default is the upper left hand corner of the control.
         /// </devdoc>
         [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        DefaultValue(typeof(Point), "0, 0")
+            Browsable(false),
+            EditorBrowsable(EditorBrowsableState.Advanced),
+            DefaultValue(typeof(Point), "0, 0")
         ]
         public virtual Point AutoScrollOffset {
             get {
@@ -1005,8 +999,6 @@ example usage
         ///                   from BackBrush to BackColorBrush due to a naming conflict with DataGrid's BackBrush.
         /// </devdoc>
         internal IntPtr BackColorBrush {
-            
-            
             get {
                 object customBackBrush = Properties.GetObject(PropBackBrush);
                 if (customBackBrush != null) {
@@ -1055,9 +1047,9 @@ example usage
         ///     will always return a non-null value.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        DispId(NativeMethods.ActiveX.DISPID_BACKCOLOR),
-        SRDescription(nameof(SR.ControlBackColorDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            DispId(NativeMethods.ActiveX.DISPID_BACKCOLOR),
+            SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public virtual Color BackColor {
             get {
@@ -1123,10 +1115,10 @@ example usage
         ///     The background image of the control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(null),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlBackgroundImageDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            DefaultValue(null),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlBackgroundImageDescr))
         ]
         public virtual Image BackgroundImage {
             get {
@@ -1156,10 +1148,10 @@ example usage
         ///     The BackgroundImageLayout of the control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(ImageLayout.Tile),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            DefaultValue(ImageLayout.Tile),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))
         ]
         public virtual ImageLayout BackgroundImageLayout {
             get {
@@ -1279,9 +1271,9 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContext"]/*' />
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlBindingContextDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlBindingContextDescr))
         ]
         public virtual BindingContext BindingContext {
             get {
@@ -1308,10 +1300,10 @@ example usage
         ///    <para>The bottom coordinate of this control.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlBottomDescr)),
-        SRCategory(nameof(SR.CatLayout))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlBottomDescr)),
+            SRCategory(nameof(SR.CatLayout))
         ]
         public int Bottom {
             get {
@@ -1325,10 +1317,10 @@ example usage
         ///     control in parent client coordinates.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlBoundsDescr)),
-        SRCategory(nameof(SR.CatLayout))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlBoundsDescr)),
+            SRCategory(nameof(SR.CatLayout))
         ]
         public Rectangle Bounds {
             get {
@@ -1355,10 +1347,10 @@ example usage
         ///       property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatFocus)),
-        SRDescription(nameof(SR.ControlCanFocusDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRCategory(nameof(SR.CatFocus)),
+            SRDescription(nameof(SR.ControlCanFocusDescr))
         ]
         public bool CanFocus {
             get {
@@ -1394,10 +1386,10 @@ example usage
         ///       is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatFocus)),
-        SRDescription(nameof(SR.ControlCanSelectDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRCategory(nameof(SR.CatFocus)),
+            SRDescription(nameof(SR.ControlCanSelectDescr))
         ]
         public bool CanSelect {
             // We implement this to allow only AxHost to override canSelectCore, but still
@@ -1413,10 +1405,10 @@ example usage
         ///    <para> Indicates whether the control has captured the mouse.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatFocus)),
-        SRDescription(nameof(SR.ControlCaptureDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRCategory(nameof(SR.CatFocus)),
+            SRDescription(nameof(SR.ControlCaptureDescr))
         ]
         public bool Capture {
             get {
@@ -1450,9 +1442,9 @@ example usage
         ///       Indicates whether entering the control causes validation on the controls requiring validation.</para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatFocus)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.ControlCausesValidationDescr))
+            SRCategory(nameof(SR.CatFocus)),
+            DefaultValue(true),
+            SRDescription(nameof(SR.ControlCausesValidationDescr))
         ]
         public bool CausesValidation {
             get {
@@ -1528,9 +1520,10 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CheckForIllegalCrossThreadCalls"]/*' />
-        [ Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-          SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
-          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        [ 
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public static bool CheckForIllegalCrossThreadCalls {
             get { return checkForIllegalCrossThreadCalls; }
@@ -1542,10 +1535,10 @@ example usage
         ///     The client rect of the control.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.ControlClientRectangleDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRCategory(nameof(SR.CatLayout)),
+            SRDescription(nameof(SR.ControlClientRectangleDescr))
         ]
         public Rectangle ClientRectangle {
             get {
@@ -1558,10 +1551,10 @@ example usage
         ///     The size of the clientRect.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlClientSizeDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlClientSizeDescr))
         ]
         public Size ClientSize {
             get {
@@ -1592,9 +1585,9 @@ example usage
         ///     Retrieves the company name of this specific component.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        DescriptionAttribute(nameof(SR.ControlCompanyNameDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            DescriptionAttribute(nameof(SR.ControlCompanyNameDescr))
         ]
         public string CompanyName {
             
@@ -1610,9 +1603,9 @@ example usage
         ///       focus. This property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlContainsFocusDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlContainsFocusDescr))
         ]
         public bool ContainsFocus {
             get {
@@ -1647,10 +1640,10 @@ example usage
         ///     and a context menu strip are assigned, context menu will be shown instead of context menu strip.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.ControlContextMenuDescr)),
-        Browsable(false)
+            SRCategory(nameof(SR.CatBehavior)),
+            DefaultValue(null),
+            SRDescription(nameof(SR.ControlContextMenuDescr)),
+            Browsable(false)
         ]
         public virtual ContextMenu ContextMenu {
             get {
@@ -1679,9 +1672,9 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuChanged"]/*' />
         [
-        SRCategory(nameof(SR.CatPropertyChanged)),
-        SRDescription(nameof(SR.ControlOnContextMenuChangedDescr)),
-        Browsable(false)
+            SRCategory(nameof(SR.CatPropertyChanged)),
+            SRDescription(nameof(SR.ControlOnContextMenuChangedDescr)),
+            Browsable(false)
         ]
         public event EventHandler ContextMenuChanged {
             add {
@@ -1692,7 +1685,6 @@ example usage
             }
         }
 
-
        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenu"]/*' />
        /// <devdoc>
        ///     The contextMenuStrip associated with this control. The contextMenuStrip
@@ -1700,9 +1692,9 @@ example usage
        ///     Note: if a context menu is also assigned, it will take precidence over this property.
        /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.ControlContextMenuDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            DefaultValue(null),
+            SRDescription(nameof(SR.ControlContextMenuDescr))
         ]
         public virtual ContextMenuStrip ContextMenuStrip {
             get {
@@ -1729,6 +1721,7 @@ example usage
              }
 
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuStripChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged {
@@ -1745,9 +1738,9 @@ example usage
         ///     Collection of child controls.
         /// </devdoc>
         [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(nameof(SR.ControlControlsDescr))
+            Browsable(false),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
+            SRDescription(nameof(SR.ControlControlsDescr))
         ]
         public ControlCollection Controls {
             get {
@@ -1766,9 +1759,9 @@ example usage
         ///    <para>Indicates whether the control has been created. This property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlCreatedDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlCreatedDescr))
         ]
         public bool Created {
             get {
@@ -1957,8 +1950,6 @@ example usage
         /// </devdoc>
         /// <internalonly/>
         internal int CreateThreadId {
-            
-            
             get {
                 if (IsHandleCreated) {
                     int pid;
@@ -1976,9 +1967,9 @@ example usage
         ///     control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ControlCursorDescr)),
-        AmbientValue(null)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.ControlCursorDescr)),
+            AmbientValue(null)
         ]
         public virtual Cursor Cursor {
             get {
@@ -2056,11 +2047,11 @@ example usage
         ///     Retrieves the bindings for this control.
         /// </devdoc>
         [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.ControlBindingsDescr)),
-        RefreshProperties(RefreshProperties.All),
-        ParenthesizePropertyName(true)
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
+            SRCategory(nameof(SR.CatData)),
+            SRDescription(nameof(SR.ControlBindingsDescr)),
+            RefreshProperties(RefreshProperties.All),
+            ParenthesizePropertyName(true)
         ]
         public ControlBindingsCollection DataBindings
         {
@@ -2103,8 +2094,6 @@ example usage
         ///     different defaults.
         /// </devdoc>
         public static Font DefaultFont {
-            
-            
             get {
                 if (defaultFont == null) {
                     defaultFont = SystemFonts.DefaultFont;
@@ -2161,7 +2150,6 @@ example usage
             ContextMenu = null;
         }
 
-
         private void DetachContextMenuStrip(object sender, EventArgs e) {
             ContextMenuStrip = null;
         }
@@ -2215,9 +2203,9 @@ example usage
         ///     area differs from their display area.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlDisplayRectangleDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlDisplayRectangleDescr))
         ]
         public virtual Rectangle DisplayRectangle {
             [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
@@ -2232,9 +2220,9 @@ example usage
         ///       property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlDisposedDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlDisposedDescr))
         ]
         public bool IsDisposed {
             get {
@@ -2261,9 +2249,9 @@ example usage
         ///       property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlDisposingDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlDisposingDescr))
         ]
         public bool Disposing {
             get {
@@ -2279,11 +2267,11 @@ example usage
         ///     top of the container, extending the length of the container.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        RefreshProperties(RefreshProperties.Repaint),
-        DefaultValue(CommonProperties.DefaultDock),
-        SRDescription(nameof(SR.ControlDockDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Localizable(true),
+            RefreshProperties(RefreshProperties.Repaint),
+            DefaultValue(CommonProperties.DefaultDock),
+            SRDescription(nameof(SR.ControlDockDescr))
         ]
         public virtual DockStyle Dock {
             get {
@@ -2324,8 +2312,8 @@ example usage
         ///    <para>This will enable or disable double buffering.</para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ControlDoubleBufferedDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.ControlDoubleBufferedDescr))
         ]
         protected virtual bool DoubleBuffered {
             get {
@@ -2333,7 +2321,6 @@ example usage
             }
             set {
                 if (value != DoubleBuffered) {
-                    
                     if (value) {
                         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, value);
                     }
@@ -2357,10 +2344,10 @@ example usage
         ///    <para>Indicates whether the control is currently enabled.</para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DispId(NativeMethods.ActiveX.DISPID_ENABLED),
-        SRDescription(nameof(SR.ControlEnabledDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            Localizable(true),
+            DispId(NativeMethods.ActiveX.DISPID_ENABLED),
+            SRDescription(nameof(SR.ControlEnabledDescr))
         ]
         public bool Enabled {
             get {
@@ -2407,9 +2394,9 @@ example usage
         ///    <para>Indicates whether the control has focus. This property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlFocusedDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlFocusedDescr))
         ]
         public virtual bool Focused {
             get {
@@ -2423,16 +2410,14 @@ example usage
         ///     by default for painting and text in the control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DispId(NativeMethods.ActiveX.DISPID_FONT),
-        AmbientValue(null),
-        SRDescription(nameof(SR.ControlFontDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            Localizable(true),
+            DispId(NativeMethods.ActiveX.DISPID_FONT),
+            AmbientValue(null),
+            SRDescription(nameof(SR.ControlFontDescr))
         ]
         public virtual Font Font {
             [return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(ActiveXFontMarshaler))]
-            
-            
             get {
                 Font font = (Font)Properties.GetObject(PropFont);
                 if (font != null) {
@@ -2633,9 +2618,9 @@ example usage
         ///     The foreground color of the control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        DispId(NativeMethods.ActiveX.DISPID_FORECOLOR),
-        SRDescription(nameof(SR.ControlForeColorDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            DispId(NativeMethods.ActiveX.DISPID_FORECOLOR),
+            SRDescription(nameof(SR.ControlForeColorDescr))
         ]
         public virtual Color ForeColor {
             get {
@@ -2737,8 +2722,6 @@ example usage
                     }
                 }
             
-              
-
                 CacheTextInternal = true;
                 try {
                     prefSize = GetPreferredSizeCore(proposedSize);
@@ -2772,10 +2755,10 @@ example usage
         ///     has not yet been created, this will force handle creation.
         /// </devdoc>
         [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        DispId(NativeMethods.ActiveX.DISPID_HWND),
-        SRDescription(nameof(SR.ControlHandleDescr))
+            Browsable(false),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            DispId(NativeMethods.ActiveX.DISPID_HWND),
+            SRDescription(nameof(SR.ControlHandleDescr))
         ]
         public IntPtr Handle {
             get {
@@ -2808,9 +2791,9 @@ example usage
         ///     same effect.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlHasChildrenDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlHasChildrenDescr))
         ]
         public bool HasChildren {
             get {
@@ -2830,10 +2813,10 @@ example usage
         ///     The height of this control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlHeightDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlHeightDescr))
         ]
         public int Height {
             get {
@@ -2889,9 +2872,9 @@ example usage
         ///     Whether or not this control has a handle associated with it.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlHandleCreatedDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlHandleCreatedDescr))
         ]
         public bool IsHandleCreated {
             get { return window.Handle != IntPtr.Zero; }
@@ -2949,7 +2932,6 @@ example usage
                         }
                     }
 
-
                     Graphics g = CreateGraphics();
                     try {
                         emptyRegion = working.IsEmpty(g);
@@ -2999,13 +2981,12 @@ example usage
         ///     invoke methods.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlInvokeRequiredDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlInvokeRequiredDescr))
         ]
         public bool InvokeRequired {
             get {
-
                 using (new MultithreadSafeCallScope())
                 {
                     HandleRef hwnd;
@@ -3036,10 +3017,10 @@ example usage
         ///      i.e. whether it should be visible to accessibility applications.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlIsAccessibleDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlIsAccessibleDescr))
         ]
         public bool IsAccessible {
             get {
@@ -3087,11 +3068,11 @@ example usage
         ///     since we might call CreateParams here - you dig!
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),        
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.IsMirroredDescr))        
+            SRCategory(nameof(SR.CatLayout)),        
+            Browsable(false),
+            EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.IsMirroredDescr))        
         ]
         public bool IsMirrored {
             get {
@@ -3131,10 +3112,10 @@ example usage
         ///     The left coordinate of this control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlLeftDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlLeftDescr))
         ]
         public int Left {
             get {
@@ -3150,9 +3131,9 @@ example usage
         ///     The location of this control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlLocationDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlLocationDescr))
         ]
         public Point Location {
             get {
@@ -3176,9 +3157,9 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Margin"]/*' />
         [
-        SRDescription(nameof(SR.ControlMarginDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true)
+            SRDescription(nameof(SR.ControlMarginDescr)),
+            SRCategory(nameof(SR.CatLayout)),
+            Localizable(true)
         ]
         public Padding Margin
         {
@@ -3248,7 +3229,6 @@ example usage
                 Debug.Assert(MinimumSize == value, "Error detected while setting MinimumSize.");
             }
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ModifierKeys"]/*' />
         /// <devdoc>
@@ -3342,10 +3322,10 @@ example usage
         ///     The parent of this control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlParentDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            Browsable(false),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlParentDescr))
         ]
         public Control Parent {
             get {
@@ -3377,9 +3357,9 @@ example usage
         ///     Retrieves the product name of this specific component.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlProductNameDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlProductNameDescr))
         ]
         public string ProductName {
             
@@ -6188,7 +6168,6 @@ example usage
                 }
             }
 
-
             return Focused;
         }
 
@@ -6243,7 +6222,6 @@ example usage
             return ApplyBoundsConstraints(0,0,width, height).Size;
         }
 
-
         // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
         // constraints on their size.
         internal Size ApplySizeConstraints(Size proposedSize) {
@@ -6268,8 +6246,6 @@ example usage
 
             return new Rectangle(suggestedX, suggestedY, proposedWidth, proposedHeight);
         }
-
-        
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetChildAtPoint"]/*' />
         /// <devdoc>
@@ -6300,7 +6276,6 @@ example usage
 
             return(ctl == this) ? null : ctl;
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetChildAtPoint"]/*' />
         /// <devdoc>
@@ -6626,8 +6601,6 @@ example usage
             return holders;
         }
 
-        // 
-
         internal virtual Control GetFirstChildControlInTabOrder(bool forward) {
          
             ControlCollection ctlControls = (ControlCollection)this.Properties.GetObject(PropControlsCollection);
@@ -6886,7 +6859,6 @@ example usage
             Visible = false;
         }
 
-
         /// <devdoc>
         ///     Sets up the TrackMouseEvent for listening for the
         ///     mouse leave event.
@@ -6929,9 +6901,6 @@ example usage
         //
         // NOTE: this message may not have originally been sent to this HWND.
         //
-
-        
-        
         internal virtual IntPtr InitializeDCForWmCtlColor (IntPtr dc, int msg) {
             if (!GetStyle(ControlStyles.UserPaint)) {
                 SafeNativeMethods.SetTextColor(new HandleRef(null, dc), ColorTranslator.ToWin32(ForeColor));
@@ -7040,7 +7009,6 @@ example usage
                 OnInvalidated(new InvalidateEventArgs(bounds));
             }
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate2"]/*' />
         /// <devdoc>
@@ -7393,10 +7361,6 @@ example usage
         ///     pre-processing of a character includes checking whether the character
         ///     is a mnemonic of another control.
         /// </devdoc>
-        
-        // 
-
-
         protected virtual bool IsInputChar(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputChar 0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture));
 
@@ -7421,10 +7385,6 @@ example usage
         ///     pre-processing phase. Keys that are pre-processed include TAB, RETURN,
         ///     ESCAPE, and arrow keys.
         /// </devdoc>
-
-        // 
-
-
         protected virtual bool IsInputKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
 
@@ -7476,7 +7436,6 @@ example usage
                 Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...returning false");
                 return false;
             } //if
-
 
             if (text != null) {
                 int pos = -1; // start with -1 to handle double &'s
@@ -7663,19 +7622,16 @@ example usage
         }
 
         // Used by form to notify the control that it has been "entered"
-        //
         internal void NotifyEnter() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::NotifyEnter() - " + this.Name);
             OnEnter(EventArgs.Empty);
         }
 
         // Used by form to notify the control that it has been "left"
-        //
         internal void NotifyLeave() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::NotifyLeave() - " + this.Name);
             OnLeave(EventArgs.Empty);
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.NotifyInvalidate"]/*' />
         /// <internalonly/>
@@ -7690,7 +7646,6 @@ example usage
         }
 
         // Used by form to notify the control that it is validating.
-        //
         private bool NotifyValidating() {
             CancelEventArgs ev = new CancelEventArgs();
             OnValidating(ev);
@@ -7698,7 +7653,6 @@ example usage
         }
 
         // Used by form to notify the control that it has been validated.
-        //
         private void NotifyValidated() {
             OnValidated(EventArgs.Empty);
         }
@@ -7956,9 +7910,7 @@ example usage
                 Properties.SetInteger(PropFontHeight, -1);
             }
 
-
             // Cleanup any font handle wrapper...
-            //
             DisposeFontHandle();
 
             if (IsHandleCreated && !GetStyle(ControlStyles.UserPaint)) {
@@ -8106,14 +8058,12 @@ example usage
             }
         }
 
-
         // occurs when the parent of this control has recreated
         // its handle.
         // presently internal as we feel this will be rare to
         // require override
         internal virtual void OnParentHandleRecreated() {
             // restore ourselves over to the original control.
-
             // use SetParent directly so as to not raise ParentChanged events
             Control parent = ParentInternal;
             if (parent != null) {
@@ -8129,9 +8079,7 @@ example usage
             if (ReflectParent == ParentInternal)  {
                  RecreateHandle();
             }
-
         }
-
 
         // occurs when the parent of this control is recreating
         // its handle.
@@ -8454,7 +8402,6 @@ example usage
                 }
 
                 // Update accessbility information.
-                //
                 ControlAccessibleObject accObj = Properties.GetObject(PropAccessibility) as ControlAccessibleObject;
                 ControlAccessibleObject ncAccObj = Properties.GetObject(PropNcAccessibility) as ControlAccessibleObject;
 
@@ -8469,7 +8416,6 @@ example usage
                 }
 
                 // Set the window text from the Text property.
-                //
                 if (text != null && text.Length != 0) {
                     UnsafeNativeMethods.SetWindowText(new HandleRef(this, Handle), text);
                 }
@@ -8565,8 +8511,6 @@ example usage
             // label, etc. Without this processing, any time you change a
             // property that forces handle recreation, you lose your text!
             // See the above code in wmCreate
-            //
-
             try {
                 if (!GetAnyDisposingInHierarchy()) {
                     text = Text;
@@ -8583,7 +8527,6 @@ example usage
                 // you ask for the text property after you have destroyed their handle. We
                 // don't want those exceptions to bubble all the way to the top, since
                 // we leave our state in a mess.
-                //
             }
         }
 
@@ -8808,9 +8751,6 @@ example usage
 
             bool parentRequiresLayout = LayoutEngine.Layout(this, levent);
 
-            // 
-
-
             if(parentRequiresLayout && ParentInternal != null) {
                 // LayoutEngine.Layout can return true to request that our parent resize us because
                 // we did not have enough room for our contents.  We can not just call PerformLayout
@@ -8945,7 +8885,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
- 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDpiChangedBeforeParent"]/*' />
         /// <devdoc>
         /// <para>
@@ -9060,7 +8999,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPaintBackground"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle the erase
@@ -9144,8 +9082,8 @@ example usage
         /// <para>Raises the <see cref='System.Windows.Forms.Control.PreviewKeyDown'/> event.</para>
         /// </devdoc>
         [
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
+            EditorBrowsable(EditorBrowsableState.Advanced),
+            SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
         ]
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e) {
             Contract.Requires(e != null);
@@ -9271,8 +9209,6 @@ example usage
             // The rest of this won't do much if BackColor is transparent and there is no BackgroundImage,
             // but we need to call it in the partial alpha case.
 
-            // 
-
             if (BackgroundImage != null && !DisplayInformation.HighContrast && !formRTL) {
 
                 if (BackgroundImageLayout == ImageLayout.Tile) {
@@ -9280,8 +9216,6 @@ example usage
                         PaintTransparentBackground(e, rectangle);
                     }
                 }
-
-                // 
 
                 Point scrollLocation = scrollOffset;
                 ScrollableControl scrollControl = this as ScrollableControl;
@@ -9417,7 +9351,6 @@ example usage
                 e.Graphics.DrawLine(pen, clientRectangle.Left, clientRectangle.Bottom,
                                     clientRectangle.Right, clientRectangle.Top);
             }
-
 #endif
         }
 
@@ -9460,9 +9393,7 @@ example usage
                         if (graphicsState != null) {
                             g.Restore(graphicsState);   
                         }
-                    }
-                    
-                    
+                    }                    
                 }
                 else {
                     // how to move the rendering area and setup it's size
@@ -9491,9 +9422,7 @@ example usage
                             }
                         }
                     }
-
-                }
-                        
+                }                        
             }
             else {
                 // For whatever reason, our parent can't paint our background, but we need some kind of background
@@ -9631,8 +9560,6 @@ example usage
                 }
 #endif
 #endif
-
-
             }
             finally {
                 CacheTextInternal = false;
@@ -9848,10 +9775,12 @@ example usage
             return ret;
         }
 
-        [EditorBrowsable(EditorBrowsableState.Advanced),
-         SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly"),
-         SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters"),
-         SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")]  // using ref is OK.
+        [
+            EditorBrowsable(EditorBrowsableState.Advanced),
+            SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly"),
+            SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters"),
+            SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")
+        ]  // using ref is OK.
         public PreProcessControlState PreProcessControlMessage(ref Message msg) {
             return PreProcessControlMessageInternal(null, ref msg);
         }
@@ -10466,9 +10395,7 @@ example usage
         ///     Forces the recreation of the handle for this control. Inheriting controls
         ///     must call base.RecreateHandle.
         /// </devdoc>
-        [
-        EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RecreateHandle() {
             RecreateHandleCore();
         }
@@ -10563,7 +10490,6 @@ example usage
                         }
                     }
                     
-
                     // Restore control focus
                     if (focused) {
                         FocusInternal();
@@ -10695,7 +10621,6 @@ example usage
             bool performedLayout = false;
 
             if (layoutSuspendCount > 0) {
-
                 if (layoutSuspendCount == 1) {
                     layoutSuspendCount++;
                     try {
@@ -10719,7 +10644,6 @@ example usage
                 SetState2(STATE2_CLEARLAYOUTARGS, true);
             }
                 
-
             /*
 
             We've had this since Everett,but it seems wrong, redundant and a performance hit.  The
@@ -11077,10 +11001,7 @@ example usage
             
             MaximumSize = maxSize;
             MinimumSize = minSize;
-            
-            
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleCore"]/*' />
         /// <devdoc>
@@ -11205,7 +11126,6 @@ example usage
             return null;
         }
 
-
         /// <devdoc>
         ///     Unsafe internal version of SelectNextControl - Use with caution!
         /// </devdoc>
@@ -11225,10 +11145,6 @@ example usage
                 IContainerControl c = ParentInternal.GetContainerControlInternal();
 
                 if (c != null) {
-                    // 
-
-
-
                     ((Control)c).SelectNextControlInternal(this, true, true, true, true);
                 }
             }
@@ -11250,6 +11166,7 @@ example usage
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, ref wparam, ref lparam);
         }
+        
         internal IntPtr SendMessage(int msg, int wparam, IntPtr lparam) {
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, (IntPtr)wparam, lparam);
@@ -11290,6 +11207,7 @@ example usage
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SendToBack"]/*' />
         /// <devdoc>
         ///     sends this control to the back of the z-order
@@ -11302,7 +11220,6 @@ example usage
                 SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle), NativeMethods.HWND_BOTTOM, 0, 0, 0, 0,
                                                NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
             }
-
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetBounds"]/*' />
@@ -11460,7 +11377,6 @@ example usage
 
         internal Size SizeFromClientSize(int width, int height) {
             NativeMethods.RECT rect = new NativeMethods.RECT(0, 0, width, height);
-
             CreateParams cp = CreateParams;
             AdjustWindowRectEx(ref rect, cp.Style, HasMenu, cp.ExStyle);
             return rect.Size;
@@ -11886,7 +11802,6 @@ example usage
             UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)(value? styleFlags | flag: styleFlags & ~flag)));
         }
 
-
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Show"]/*' />
         /// <devdoc>
         ///     Makes the control display by setting the visible property to true
@@ -11941,8 +11856,6 @@ example usage
         ///     Suspends the layout logic for the control.
         /// </devdoc>
         public void SuspendLayout() {
-
-           
             layoutSuspendCount++;
             if (layoutSuspendCount == 1) {
                 OnLayoutSuspended();
@@ -12234,7 +12147,6 @@ example usage
             }
         }
 
-        //
         // Give a chance for derived controls to do what they want, just before we resize.
         internal virtual void OnBoundsUpdate(int x, int y, int width, int height)
         {
@@ -12279,7 +12191,6 @@ example usage
             DefWndProc(ref m);
         }
 
-
         /// <devdoc>
         ///     Handles the WM_CAPTURECHANGED message
         /// </devdoc>
@@ -12289,6 +12200,7 @@ example usage
             DefWndProc(ref m);
 
         }
+        
         /// <devdoc>
         ///     Handles the WM_COMMAND message
         /// </devdoc>
@@ -12309,6 +12221,7 @@ example usage
         internal virtual void WmContextMenu(ref Message m) {
             WmContextMenu(ref m, this);
         }
+        
         /// <devdoc>
         ///     Handles the WM_CONTEXTMENU message
         /// </devdoc>
@@ -12333,8 +12246,6 @@ example usage
                 else {
                     client = PointToClientInternal(new Point(x, y));
                 }
-
-                // 
 
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
                 if (ClientRectangle.Contains( client )) {
@@ -13030,7 +12941,6 @@ example usage
                 
                 DefWndProc(ref m);
             }
-
         }
 
         /// <devdoc>
@@ -13042,7 +12952,6 @@ example usage
                 DefWndProc(ref m);
             }
         }
-
 
         /// <devdoc>
         ///     Handles the WM_DRAWITEM\WM_MEASUREITEM messages for controls other than menus
@@ -13521,11 +13430,6 @@ example usage
         ///     call base.wndProc for any messages that they don't handle.
         /// </devdoc>
         protected virtual void WndProc(ref Message m) {
-            //
-            // 
-
-
-
 
             /*
             if( GetState(STATE_DISPOSED))
@@ -13563,18 +13467,23 @@ example usage
                 case NativeMethods.WM_COMMAND:
                     WmCommand(ref m);
                     break;
+                    
                 case NativeMethods.WM_CLOSE:
                     WmClose(ref m);
                     break;
+                    
                 case NativeMethods.WM_CONTEXTMENU:
                     WmContextMenu(ref m);
                     break;
+                    
                 case NativeMethods.WM_DISPLAYCHANGE:
                     WmDisplayChange(ref m);
                     break;
+                    
                 case NativeMethods.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
+                    
                 case NativeMethods.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
@@ -13620,7 +13529,8 @@ example usage
                         }
                     }
                     DefWndProc(ref m);
-                break;
+                    break;
+                    
                 case NativeMethods.WM_INPUTLANGCHANGE:
                     WmInputLangChange(ref m);
                     break;
@@ -13632,6 +13542,7 @@ example usage
                 case NativeMethods.WM_MEASUREITEM:
                     WmMeasureItem(ref m);
                     break;
+                    
                 case NativeMethods.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
@@ -13655,13 +13566,14 @@ example usage
                 case NativeMethods.WM_SYSKEYUP:
                     WmKeyChar(ref m);
                     break;
+                    
                 case NativeMethods.WM_CREATE:
                     WmCreate(ref m);
                     break;
+                    
                 case NativeMethods.WM_DESTROY:
                     WmDestroy(ref m);
                     break;
-
 
                 case NativeMethods.WM_CTLCOLOR:
                 case NativeMethods.WM_CTLCOLORBTN:
@@ -13687,6 +13599,7 @@ example usage
                 case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORSTATIC:                    
                     WmCtlColorControl(ref m);
                     break;
+                    
                 case NativeMethods.WM_HSCROLL:
                 case NativeMethods.WM_VSCROLL:
                 case NativeMethods.WM_DELETEITEM:
@@ -13697,119 +13610,153 @@ example usage
                         DefWndProc(ref m);
                     }
                     break;
+                    
                 case NativeMethods.WM_IME_CHAR:
                     WmImeChar(ref m);
                     break;
+                    
                 case NativeMethods.WM_IME_STARTCOMPOSITION:
                     WmImeStartComposition(ref m);
                     break;
+                    
                 case NativeMethods.WM_IME_ENDCOMPOSITION:
                     WmImeEndComposition(ref m);
                     break;
+                    
                 case NativeMethods.WM_IME_NOTIFY:
                     WmImeNotify(ref m);
                     break;
+                    
                 case NativeMethods.WM_KILLFOCUS:
                     WmKillFocus(ref m);
                     break;
+                    
                 case NativeMethods.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
+                    
                 case NativeMethods.WM_LBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Left, 1);
                     break;
+                    
                 case NativeMethods.WM_LBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Left, 1);
                     break;
+                    
                 case NativeMethods.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
+                    
                 case NativeMethods.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     break;
+                    
                 case NativeMethods.WM_MBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Middle, 1);
                     break;
+                    
                 case NativeMethods.WM_XBUTTONDOWN:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
+                    
                 case NativeMethods.WM_XBUTTONUP:
                     WmMouseUp(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
+                    
                 case NativeMethods.WM_XBUTTONDBLCLK:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
+                    
                 case NativeMethods.WM_MOUSELEAVE:
                     WmMouseLeave(ref m);
                     break;
+                    
                 case NativeMethods.WM_DPICHANGED_BEFOREPARENT:
                     WmDpiChangedBeforeParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
+                    
                 case NativeMethods.WM_DPICHANGED_AFTERPARENT:
                     WmDpiChangedAfterParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
+                    
                 case NativeMethods.WM_MOUSEMOVE:
                     WmMouseMove(ref m);
                     break;
+                    
                 case NativeMethods.WM_MOUSEWHEEL:
                     WmMouseWheel(ref m);
                     break;
+                    
                 case NativeMethods.WM_MOVE:
                     WmMove(ref m);
                     break;
+                    
                 case NativeMethods.WM_NOTIFY:
                     WmNotify(ref m);
                     break;
+                    
                 case NativeMethods.WM_NOTIFYFORMAT:
                     WmNotifyFormat(ref m);
                     break;
+                    
                 case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFYFORMAT:
                     m.Result = (IntPtr)(NativeMethods.NFR_UNICODE);
                     break;
+                    
                 case NativeMethods.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
+                    
                 case NativeMethods.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
+                    
                 case NativeMethods.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     break;
+                    
                 case NativeMethods.WM_RBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Right, 1);
                     break;
+                    
                 case NativeMethods.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
+                    
                 case NativeMethods.WM_MOUSEHOVER:
                     WmMouseHover(ref m);
                     break;
+                    
                 case NativeMethods.WM_WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
+                    
                 case NativeMethods.WM_QUERYNEWPALETTE:
                     WmQueryNewPalette(ref m);
                     break;
+                    
                 case NativeMethods.WM_UPDATEUISTATE:
                     WmUpdateUIState(ref m);
                     break;
+                    
                 case NativeMethods.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
+                    
                 default:
                     // If we received a thread execute message, then execute it.
                     //
@@ -14093,16 +14040,19 @@ example usage
         void IDropTarget.OnDragEnter(DragEventArgs drgEvent) {
                 OnDragEnter(drgEvent);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragOver"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragOver(DragEventArgs drgEvent) {
                 OnDragOver(drgEvent);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragLeave"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragLeave(EventArgs e) {
                 OnDragLeave(e);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragDrop"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragDrop(DragEventArgs drgEvent) {
@@ -14117,6 +14067,7 @@ example usage
         void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)  {
                 OnGiveFeedback(giveFeedbackEventArgs);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ISupportOleDropSource.OnQueryContinueDrag"]/*' />
         /// <internalonly/>
         void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) {
@@ -14127,9 +14078,7 @@ example usage
         /// <devdoc>
         ///     Collection of controls...
         /// </devdoc>
-        [
-            ListBindable(false), ComVisible(false)
-        ]
+        [ListBindable(false), ComVisible(false)]
         public class ControlCollection : ArrangedElementCollection, IList, ICloneable {
 
             private Control owner;
@@ -14244,8 +14193,6 @@ example usage
                 // exception thrown from AssignParent if the following throws an exception.
                 LayoutTransaction.DoLayout(owner, value, PropertyNames.Parent);
                 owner.OnControlAdded(new ControlEventArgs(value));
-
-                
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.IList.Add"]/*' />
@@ -14301,7 +14248,6 @@ example usage
             public bool Contains(Control control) {
                 return InnerList.Contains(control);
             }
-
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Find"]/*' />
             /// <devdoc>
@@ -14528,7 +14474,6 @@ example usage
 
                 }
             }
-
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Clear"]/*' />
             public virtual void Clear() {
@@ -15763,9 +15708,7 @@ example usage
             ///      Retrieves the ambient font for the control.
             /// </devdoc>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            internal Font AmbientFont {
-                
-                
+            internal Font AmbientFont {                               
                 get {
                     AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
 
@@ -16157,7 +16100,6 @@ example usage
                     #endif
                     };
                 }
-
 
                 e = new ActiveXVerbEnum(axVerbs);
                 return NativeMethods.S_OK;
@@ -16800,8 +16742,6 @@ example usage
             ///      to SetWindowRgn.  The region does not have to be destroyed.
             ///      The original region is destroyed if a new region is returned.
             /// </devdoc>
-            
-            
             internal IntPtr MergeRegion(IntPtr region) {
                 if (clipRegion == IntPtr.Zero) {
                     return region;
@@ -16812,8 +16752,6 @@ example usage
                 }
 
                 try {
-                    // 
-
                     IntPtr newRegion = SafeNativeMethods.CreateRectRgn(0, 0, 0, 0);
                     try {
                         SafeNativeMethods.CombineRgn(new HandleRef(null, newRegion), new HandleRef(null, region), new HandleRef(this, clipRegion), NativeMethods.RGN_DIFF);
@@ -16893,7 +16831,6 @@ example usage
                     }
 
                     // Special properties that we care about
-                    //
                     object obj = new object();
 
                     switch (dispID) {
@@ -17089,7 +17026,6 @@ example usage
                     // implements IConnectionPoint for the proxy object via the CCW or COM-callable wrapper.
                     // We use the helper class ComConnectionPoint to get to the CCW directly to to call the interface. 
                     // It is critical to call Dispose to ensure that the IUnknown is released.
-
                     using (ComConnectionPoint cp = cpc.FindConnectionPoint(eventInterface)) {
                         using (SafeIUnknown punkEventsSink = new SafeIUnknown(sink, true)) {
                             // Finally...we can call IConnectionPoint.Advise to hook up a native COM event sink
@@ -17785,7 +17721,6 @@ example usage
             /// </devdoc>
             internal int TranslateAccelerator(ref NativeMethods.MSG lpmsg) {
                
-
 #if DEBUG
                 if (CompModSwitches.ActiveX.TraceInfo) {
                     if (!control.IsHandleCreated) {
@@ -17842,7 +17777,6 @@ example usage
                         }
                     }
                 }
-
 
                 // SITE processing.  We're not interested in the message, but the site may be.
                 
@@ -18160,7 +18094,6 @@ example usage
                 return retVal;
             }
 
-
             /** Indicates whether the component is in design mode. */
             public bool DesignMode {
                 get {
@@ -18476,7 +18409,6 @@ example usage
             NativeMethods.RECT destRect;
 
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
-            
             internal MetafileDCWrapper(HandleRef hOriginalDC, Size size) {
                 Debug.Assert(UnsafeNativeMethods.GetObjectType(hOriginalDC) == NativeMethods.OBJ_ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
@@ -18638,7 +18570,6 @@ example usage
                 return fSuccess;
             }
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject"]/*' />
         /// <devdoc>
@@ -19319,8 +19250,6 @@ example usage
             ///     The company name associated with the component.
             /// </devdoc>
             internal string CompanyName {
-                
-                
                 get {
                     if (companyName == null) {
                         object[] attrs = owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
@@ -19355,14 +19284,11 @@ example usage
                 }
             }
 
-
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlVersionInfo.ProductName"]/*' />
             /// <devdoc>
             ///     The product name associated with this component.
             /// </devdoc>
             internal string ProductName {
-                
-                
                 get {
                     if (productName == null) {
                         object[] attrs = owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
@@ -19402,8 +19328,6 @@ example usage
             ///     The product version associated with this component.
             /// </devdoc>
             internal string ProductVersion {
-                
-                
                 get {
                     if (productVersion == null) {
                         // custom attribute
@@ -19432,24 +19356,18 @@ example usage
                 }
             }
 
-
             /// <devdoc>
             ///     Retrieves the FileVersionInfo associated with the main module for
             ///     the component.
             /// </devdoc>
-            
-            
             private FileVersionInfo GetFileVersionInfo() {
                 if (versionInfo == null) {
                     string path = owner.GetType().Module.FullyQualifiedName;
 
                     versionInfo = FileVersionInfo.GetVersionInfo(path);
                 }
-
                 return versionInfo;
-
             }
-
         }
 
         private sealed class MultithreadSafeCallScope : IDisposable
