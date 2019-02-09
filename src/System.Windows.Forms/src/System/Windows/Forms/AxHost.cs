@@ -3089,12 +3089,10 @@ namespace System.Windows.Forms {
                 // nop...  windows forms wrapper will override...
         }
 
-
         private bool CanShowPropertyPages() {
             if (GetOcState() < OC_RUNNING) return false;
             return(GetOcx() is NativeMethods.ISpecifyPropertyPages);
         }
-
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HasPropertyPages"]/*' />
         public bool HasPropertyPages() {
@@ -3204,8 +3202,6 @@ namespace System.Windows.Forms {
             }
         }
 
-                
-        
         internal override IntPtr InitializeDCForWmCtlColor (IntPtr dc, int msg)
         {
             if (isMaskEdit) {
@@ -3551,7 +3547,6 @@ namespace System.Windows.Forms {
                     }
                 }
 
-
                 if (connectionPoint == null || cookie == 0) {
                     if (connectionPoint != null) {
                         Marshal.ReleaseComObject(connectionPoint);
@@ -3847,7 +3842,6 @@ namespace System.Windows.Forms {
 
             // IOleControlSite methods:
 
-
             int UnsafeNativeMethods.IOleControlSite.OnControlInfoChanged() {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnControlInfoChanged");
                 return NativeMethods.S_OK;
@@ -3941,7 +3935,6 @@ namespace System.Windows.Forms {
             }
 
             // IOleClientSite methods:
-
             int UnsafeNativeMethods.IOleClientSite.SaveObject() {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SaveObject");
                 return NativeMethods.E_NOTIMPL;
@@ -3958,7 +3951,6 @@ namespace System.Windows.Forms {
                 container = host.GetParentContainer();
                 return NativeMethods.S_OK;
             }
-
 
             int UnsafeNativeMethods.IOleClientSite.ShowObject() {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ShowObject");
@@ -4011,8 +4003,6 @@ namespace System.Windows.Forms {
             // IOleInPlaceSite methods:
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OleInterfaces.GetWindow"]/*' />
-            
-            
             IntPtr UnsafeNativeMethods.IOleInPlaceSite.GetWindow() {
                 try {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetWindow");
@@ -4130,7 +4120,7 @@ namespace System.Windows.Forms {
             }
 
             // IPropertyNotifySink methods
-
+                
             void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid) {
                 // Some controls fire OnChanged() notifications when getting values of some properties.
                 // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
@@ -4273,7 +4263,6 @@ namespace System.Windows.Forms {
             TransitionDownTo(OC_PASSIVE);
         }
 
-
         private bool GetControlEnabled() {
             try {
                 return IsHandleCreated;
@@ -4395,7 +4384,6 @@ namespace System.Windows.Forms {
             }
         }
 
-
         private static NativeMethods.COMRECT FillInRect(NativeMethods.COMRECT dest, Rectangle source) {
             dest.left = source.X;
             dest.top = source.Y;
@@ -4500,7 +4488,6 @@ namespace System.Windows.Forms {
             return iPerPropertyBrowsing;
         }
 
-
         // Mapping functions:
 
 #if false
@@ -4544,8 +4531,6 @@ namespace System.Windows.Forms {
         ///     Maps from a System.Drawing.Image to an OLE IPicture
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        
-        
         protected static object GetIPictureFromPicture(Image image) {
             if (image == null) return null;
             object pictdesc = GetPICTDESCFromPicture(image);
@@ -4557,8 +4542,6 @@ namespace System.Windows.Forms {
         ///     Maps from a System.Drawing.Cursor to an OLE IPicture
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        
-        
         protected static object GetIPictureFromCursor(Cursor cursor) {
             if (cursor == null) return null;
             NativeMethods.PICTDESCicon pictdesc = new NativeMethods.PICTDESCicon(Icon.FromHandle(cursor.Handle));
@@ -4570,8 +4553,6 @@ namespace System.Windows.Forms {
         ///     Maps from a System.Drawing.Image to an OLE IPictureDisp
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        
-        
         protected static object GetIPictureDispFromPicture(Image image) {
             if (image == null) return null;
             object pictdesc = GetPICTDESCFromPicture(image);
@@ -4583,8 +4564,6 @@ namespace System.Windows.Forms {
         ///     Maps from an OLE IPicture to a System.Drawing.Image
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        
-        
         protected static Image GetPictureFromIPicture(object picture) {
             if (picture == null) return null;
             IntPtr hPal = IntPtr.Zero;
@@ -4605,8 +4584,6 @@ namespace System.Windows.Forms {
         ///     Maps from an OLE IPictureDisp to a System.Drawing.Image
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        
-        
         protected static Image GetPictureFromIPictureDisp(object picture) {
             if (picture == null) return null;
             IntPtr hPal = IntPtr.Zero;
@@ -4622,8 +4599,6 @@ namespace System.Windows.Forms {
             return GetPictureFromParams(pict, pict.Handle, type, hPal, pict.Width, pict.Height);
         }
 
-        
-        
         private static Image GetPictureFromParams(object pict, IntPtr handle, int type, IntPtr paletteHandle, int width, int height) {
             switch (type) {
                 case NativeMethods.Ole.PICTYPE_ICON:
@@ -4962,8 +4937,6 @@ namespace System.Windows.Forms {
             }
         }
 
-
-
         /// <devdoc>
         /// </devdoc>
         internal class EnumUnknown : UnsafeNativeMethods.IEnumUnknown {
@@ -5029,7 +5002,6 @@ namespace System.Windows.Forms {
                 ppenum = new EnumUnknown(arr, loc);
             }
         }
-
 
         /// <devdoc>
         /// </devdoc>
@@ -5196,7 +5168,6 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-
 
             private void LockComponents() {
                 lockCount++;
@@ -5634,7 +5605,6 @@ namespace System.Windows.Forms {
                     ppmkOut[0] = null;
                  return NativeMethods.E_NOTIMPL;
             }
-
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.EnumObjects"]/*' />
             int UnsafeNativeMethods.IOleContainer.EnumObjects(int grfFlags, out UnsafeNativeMethods.IEnumUnknown ppenum) {
@@ -6608,10 +6578,6 @@ namespace System.Windows.Forms {
             private  const int         FlagIgnoreCanAccessProperties = 0x00000008;
             private  const int         FlagSettingValue              = 0x00000010;
             
-            
-
-            
-
             [
                 SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Shipped in Everett
             ]
@@ -6857,7 +6823,6 @@ namespace System.Windows.Forms {
                 if (owner.GetOcx() == null) {
                     return;
                 }
-                    
 
                 try {
                     NativeMethods.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
@@ -6879,7 +6844,6 @@ namespace System.Windows.Forms {
                             Debug.Fail("An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid=" +
                                        dispid + "), object type=" + new ComNativeDescriptor().GetClassName(ppb));
                         }
-
 
                         if (hr != NativeMethods.S_OK) {
                             hasStrings = false;
