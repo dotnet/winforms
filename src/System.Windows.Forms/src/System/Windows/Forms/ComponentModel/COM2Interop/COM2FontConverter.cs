@@ -38,13 +38,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-
         /// <include file='doc\COM2FontConverter.uex' path='docs/doc[@for="Com2FontConverter.ConvertNativeToManaged"]/*' />
         /// <devdoc>
         ///     Converts the native value into a managed value
         /// </devdoc>
-        
-        
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd) {
             // we're getting an IFont thing here
             UnsafeNativeMethods.IFont nativeFont = nativeValue as UnsafeNativeMethods.IFont;
@@ -89,8 +86,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         ///     Converts the managed value into a native value
         /// </devdoc>
-        
-        
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet) {
 
             // we default to black.
@@ -105,7 +100,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 // don't do anything here.
                 return null;
             }
-
 
             lastFont = (Font)managedValue;
             UnsafeNativeMethods.IFont nativeFont = (UnsafeNativeMethods.IFont)pd.GetNativeValue(pd.TargetObject);
