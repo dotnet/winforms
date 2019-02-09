@@ -127,7 +127,6 @@ namespace System.Windows.Forms {
            return result;
        }
 
-
         // a color appropriate for certain elements that are ControlDark in normal color schemes,
         // but for which ControlDark does not work in high contrast color schemes
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.ContrastControlDark"]/*' />
@@ -139,9 +138,6 @@ namespace System.Windows.Forms {
 
         // Returns address of a BITMAPINFO for use by CreateHBITMAP16Bit.
         // The caller is resposible for freeing the memory returned by this method.
-        // 
-
-
         private static IntPtr CreateBitmapInfo(Bitmap bitmap, IntPtr hdcS) {
             NativeMethods.BITMAPINFOHEADER header = new NativeMethods.BITMAPINFOHEADER();
             header.biSize = Marshal.SizeOf(header);
@@ -181,8 +177,6 @@ namespace System.Windows.Forms {
         ///     From MSDN: 
         ///       This member supports the .NET Framework infrastructure and is not intended to be used directly from your code.
         /// </devdoc>
-        
-        
         public static IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background) {
             IntPtr hBitmap;
             Size size = bitmap.Size;
@@ -237,8 +231,6 @@ namespace System.Windows.Forms {
         ///     From MSDN:
         ///         This member supports the .NET Framework infrastructure and is not intended to be used directly from your code.
         /// </devdoc>
-        
-        
         public static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap) {
             if (bitmap == null) {
                 throw new ArgumentNullException(nameof(bitmap));
@@ -289,8 +281,6 @@ namespace System.Windows.Forms {
         ///     From MSDN:
         ///       This member supports the .NET Framework infrastructure and is not intended to be used directly from your code.
         /// </devdoc>
-        
-        
         public static IntPtr CreateHBitmapColorMask(Bitmap bitmap, IntPtr monochromeMask) {
             Size size = bitmap.Size;
 
@@ -322,7 +312,6 @@ namespace System.Windows.Forms {
             return  System.Internal.HandleCollector.Add(colorMask, NativeMethods.CommonHandles.GDI);;
         }
 
-        
         internal static IntPtr CreateHalftoneHBRUSH() {
             short[] grayPattern = new short[8];
             for (int i = 0; i < 8; i++)
@@ -510,11 +499,8 @@ namespace System.Windows.Forms {
                     imageAttrib.Dispose();
                     
                 }
-                 
-            }
-            
+            }   
         }
-
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder"]/*' />
         public static void DrawBorder(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
@@ -1125,7 +1111,6 @@ namespace System.Windows.Forms {
                              (int) button | (int) state, Color.Empty, Color.Empty);
         }
 
-
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawCheckBox"]/*' />
         /// <devdoc>
         ///     Draws a Win32 checkbox control in the given rectangle with the given state.
@@ -1326,7 +1311,6 @@ namespace System.Windows.Forms {
                 highContrast),
                     rectangle);
         }
-
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawFrameControl"]/*' />
         /// <devdoc>
@@ -1578,7 +1562,6 @@ namespace System.Windows.Forms {
                 disabledImageAttr.SetColorMatrix(grayMatrix);
             }
 
-
             if (unscaledImage) {
                 using (Bitmap bmp = new Bitmap(image.Width, image.Height)) {
                     using (Graphics g = Graphics.FromImage(bmp)) {
@@ -1599,7 +1582,6 @@ namespace System.Windows.Forms {
                                    disabledImageAttr);
             }
 #else
-
 
             // This is remarkably simple -- make a monochrome version of the image, draw once
             // with the button highlight color, then a second time offset by one pixel
@@ -1956,7 +1938,6 @@ namespace System.Windows.Forms {
             }
         }
 
-
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawVisualStyleBorder"]/*' />
         /// <devdoc>
         ///     Draws a string in the style appropriate for disabled items.
@@ -2006,8 +1987,6 @@ namespace System.Windows.Forms {
         //
         // This is not really a general-purpose function -- when used on something
         // not obtained from ChooseFont, it may round away some precision.
-        
-        
         internal static Font FontInPoints(Font font) {
             return new Font(font.FontFamily, font.SizeInPoints, font.Style, GraphicsUnit.Point, font.GdiCharSet, font.GdiVerticalFont);
         }
@@ -2104,7 +2083,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///      Retrieves the brush used to draw active objects.
         /// </devdoc>
-        
         private static Brush GetActiveBrush(Color backColor) {
             Color brushColor;
 
@@ -2157,7 +2135,6 @@ namespace System.Windows.Forms {
         ///      Retrieves the pen used to draw a focus rectangle around a control.  The focus
         ///      rectangle is typically drawn when the control has keyboard focus.
         /// </devdoc>
-        
         private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast) {
             if (focusPen == null ||
                 (!highContrast && focusPenColor.GetBrightness() <= .5 && baseColor.GetBrightness() <= .5) ||
@@ -2223,7 +2200,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///      Retrieves the brush used to draw selected objects.
         /// </devdoc>
-        
         private static Brush GetSelectedBrush(Color backColor) {
             Color brushColor;
 
@@ -2629,7 +2605,6 @@ namespace System.Windows.Forms {
             return result;
         }
 
-
         internal static  TextFormatFlags TranslateAlignmentForGDI(ContentAlignment align) {
             TextFormatFlags result;
             if ((align & anyBottom) != 0)
@@ -2641,7 +2616,6 @@ namespace System.Windows.Forms {
             return result;
         }
 
-     
         internal static StringAlignment TranslateLineAlignment(ContentAlignment align) {
             StringAlignment result;
             if ((align & anyBottom) != 0) {
@@ -2667,8 +2641,6 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        
-        
         internal static StringFormat StringFormatForAlignment(ContentAlignment align) {
             StringFormat output = new StringFormat();
             output.Alignment = TranslateAlignment(align);
@@ -2687,15 +2659,11 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Get StringFormat object for rendering text using GDI+ (Graphics).
         /// </devdoc>
-        
-        
         internal static StringFormat CreateStringFormat( Control ctl, ContentAlignment textAlign, bool showEllipsis, bool useMnemonic ) {
 
             StringFormat stringFormat = ControlPaint.StringFormatForAlignment( textAlign );
 
             // make sure that the text is contained within the label
-            // 
-
 
             // Adjust string format for Rtl controls
             if( ctl.RightToLeft == RightToLeft.Yes ) {
@@ -2758,7 +2726,6 @@ namespace System.Windows.Forms {
 
             return flags;
         }
-
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor"]/*' />
         /// <devdoc>
@@ -3061,7 +3028,6 @@ namespace System.Windows.Forms {
                     return( n1 );
 
             }
-
         }
     }
 }
