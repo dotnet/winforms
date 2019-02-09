@@ -1525,8 +1525,6 @@ namespace System.Windows.Forms
             }
         }
 
-        
-        
         private static Bitmap GetBitmap(string bitmapName)
         {
             Bitmap b = new Bitmap(typeof(DataGridViewCell), bitmapName);
