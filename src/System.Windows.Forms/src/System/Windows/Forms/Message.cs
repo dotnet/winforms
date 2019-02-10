@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
 
 
-    /// <include file='doc\Message.uex' path='docs/doc[@for="Message"]/*' />
     /// <devdoc>
     ///    <para> 
     ///       Implements a Windows message.</para>
@@ -30,7 +29,6 @@ namespace System.Windows.Forms {
         IntPtr lparam;
         IntPtr result;
         
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.HWnd"]/*' />
         /// <devdoc>
         ///    <para>Specifies the window handle of the message.</para>
         /// </devdoc>
@@ -40,7 +38,6 @@ namespace System.Windows.Forms {
             set { hWnd = value; }
         }
 
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.Msg"]/*' />
         /// <devdoc>
         ///    <para>Specifies the ID number for the message.</para>
         /// </devdoc>
@@ -49,7 +46,6 @@ namespace System.Windows.Forms {
             set { msg = value; }
         }
 
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.WParam"]/*' />
         /// <devdoc>
         /// <para>Specifies the <see cref='System.Windows.Forms.Message.wparam'/> of the message.</para>
         /// </devdoc>
@@ -58,7 +54,6 @@ namespace System.Windows.Forms {
             set { wparam = value; }
         }
 
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.LParam"]/*' />
         /// <devdoc>
         /// <para>Specifies the <see cref='System.Windows.Forms.Message.lparam'/> of the message.</para>
         /// </devdoc>
@@ -67,7 +62,6 @@ namespace System.Windows.Forms {
             set { lparam = value; }
         }
 
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.Result"]/*' />
         /// <devdoc>
         ///    <para>Specifies the return value of the message.</para>
         /// </devdoc>
@@ -76,7 +70,6 @@ namespace System.Windows.Forms {
              set { result = value; }
         }
 
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.GetLParam"]/*' />
         /// <devdoc>
         /// <para>Gets the <see cref='System.Windows.Forms.Message.lparam'/> value, and converts the value to an object.</para>
         /// </devdoc>
@@ -84,7 +77,6 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.PtrToStructure(lparam, cls);
         }
 
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.Create"]/*' />
         /// <devdoc>
         /// <para>Creates a new <see cref='System.Windows.Forms.Message'/> object.</para>
         /// </devdoc>
@@ -104,7 +96,6 @@ namespace System.Windows.Forms {
             return m;
         }
         
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.Equals"]/*' />
         public override bool Equals(object o) {
             if (!(o is Message)) {
                 return false;
@@ -126,12 +117,10 @@ namespace System.Windows.Forms {
             return a.Equals(b);
         }
 
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.GetHashCode"]/*' />
         public override int GetHashCode() {
             return (int)hWnd << 4 | msg;
         }
 
-        /// <include file='doc\Message.uex' path='docs/doc[@for="Message.ToString"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>

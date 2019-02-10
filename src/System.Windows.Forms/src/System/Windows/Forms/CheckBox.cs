@@ -23,7 +23,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox"]/*' />
     /// <devdoc>
     ///    <para> Represents a Windows
     ///       check box.</para>
@@ -57,7 +56,6 @@ namespace System.Windows.Forms {
         internal int flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
         internal int flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBox"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.CheckBox'/> class.
@@ -91,7 +89,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.Appearance"]/*' />
         /// <devdoc>
         ///    <para>Gets
         ///       or sets the value that determines the appearance of a
@@ -129,7 +126,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.AppearanceChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
         public event EventHandler AppearanceChanged {
             add {
@@ -140,7 +136,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.AutoCheck"]/*' />
         /// <devdoc>
         /// <para>Gets or sets a value indicating whether the <see cref='System.Windows.Forms.CheckBox.Checked'/> or <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         /// value and the check box's appearance are automatically
@@ -161,7 +156,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckAlign"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets
@@ -199,7 +193,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.Checked"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -228,7 +221,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckState"]/*' />
         /// <devdoc>
         ///    <para>Gets
         ///       or sets a value indicating whether the check box is checked.</para>
@@ -269,7 +261,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.DoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
@@ -281,7 +272,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.MouseDoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
@@ -293,7 +283,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CreateParams"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -328,7 +317,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -372,7 +360,6 @@ namespace System.Windows.Forms {
             return size + Padding.Size;
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OverChangeRectangle"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -395,7 +382,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.DownChangeRectangle"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -411,7 +397,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.TextAlign"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -433,7 +418,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.ThreeState"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating
         ///       whether the check box will allow three check states rather than two.</para>
@@ -452,7 +436,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckedChanged"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the
         ///       value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
@@ -468,7 +451,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckStateChanged"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the
         ///       value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
@@ -484,7 +466,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CreateAccessibilityInstance"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -496,7 +477,6 @@ namespace System.Windows.Forms {
             return new CheckBoxAccessibleObject(this);
         }
         
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnAppearanceChanged"]/*' />
         protected virtual void OnAppearanceChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_APPEARANCECHANGED] as EventHandler;
             if (eh != null) {
@@ -504,7 +484,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnCheckedChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.CheckBox.CheckedChanged'/>
         /// event.</para>
@@ -526,7 +505,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnCheckStateChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.CheckBox.CheckStateChanged'/> event.</para>
         /// </devdoc>
@@ -539,7 +517,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnClick"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -579,7 +556,6 @@ namespace System.Windows.Forms {
             base.OnClick(e);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnHandleCreated"]/*' />
         /// <devdoc>
         ///     We override this to ensure that the control's click values are set up
         ///     correctly.
@@ -616,7 +592,6 @@ namespace System.Windows.Forms {
             base.OnKeyDown(e);
         }
         
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnMouseUp"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -656,7 +631,6 @@ namespace System.Windows.Forms {
             return new CheckBoxStandardAdapter(this);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.ProcessMnemonic"]/*' />
         /// <devdoc>
         ///     Overridden to handle mnemonics properly.
         /// </devdoc>
@@ -677,7 +651,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.ToString"]/*' />
         /// <devdoc>
         ///     Provides some interesting information for the CheckBox control in
         ///     String form.
@@ -691,18 +664,15 @@ namespace System.Windows.Forms {
             return s + ", CheckState: " + checkState.ToString(CultureInfo.InvariantCulture);
         }
 
-        /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject"]/*' />
         /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]        
         public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject {
 
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject"]/*' />
             public CheckBoxAccessibleObject(Control owner) : base(owner) {
             }
 
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction {
                 get {
                     string defaultAction = Owner.AccessibleDefaultActionDescription;
@@ -719,7 +689,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.Role"]/*' />
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;
@@ -730,7 +699,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.State"]/*' />
             public override AccessibleStates State {
                 get {
                     switch (((CheckBox)Owner).CheckState) {
@@ -744,7 +712,6 @@ namespace System.Windows.Forms {
                 }
             }                        
 
-            /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.DoDefaultAction"]/*' />
             public override void DoDefaultAction() {
                 CheckBox cb = this.Owner as CheckBox;
 

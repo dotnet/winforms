@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance"]/*' />
     /// <devdoc>
     /// </devdoc>
     [TypeConverter(typeof(FlatButtonAppearanceConverter))]
@@ -27,7 +26,6 @@ namespace System.Windows.Forms {
             this.owner = owner;
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.BorderSize"]/*' />
         /// <devdoc>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the size, in pixels of the border around the button.
         /// </devdoc>
@@ -58,7 +56,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.BorderColor"]/*' />
         /// <devdoc>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the border around the button.
         /// </devdoc>
@@ -87,7 +84,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.CheckedBackColor"]/*' />
         /// <devdoc>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///     of the button when the button state is checked and the mouse cursor is NOT within the bounds of the control.
@@ -112,7 +108,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.MouseDownBackColor"]/*' />
         /// <devdoc>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///     of the button when the mouse cursor is within the bounds of the control and the left button is pressed.
@@ -138,7 +133,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.MouseOverBackColor"]/*' />
         /// <devdoc>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client
         ///     area of the button when the mouse cursor is within the bounds of the control.

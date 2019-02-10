@@ -16,7 +16,6 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell"]/*' />
     /// <devdoc>
     ///    <para></para>
     /// </devdoc>
@@ -75,7 +74,6 @@ namespace System.Windows.Forms
         private static byte nonXPTriangleHeight = DATAGRIDVIEWCOMBOBOXCELL_nonXPTriangleHeight;
         private static byte nonXPTriangleWidth = DATAGRIDVIEWCOMBOBOXCELL_nonXPTriangleWidth;
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.DataGridViewComboBoxCell"]/*' />
         public DataGridViewComboBoxCell()
         {
             this.flags = DATAGRIDVIEWCOMBOBOXCELL_autoComplete;
@@ -111,7 +109,6 @@ namespace System.Windows.Forms
             return base.CreateAccessibilityInstance();
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.AutoComplete"]/*' />
         [DefaultValue(true)]
         public virtual bool AutoComplete
         {
@@ -164,7 +161,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.DataSource"]/*' />
         public virtual object DataSource
         {
             get
@@ -241,7 +237,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.DisplayMember"]/*' />
         [DefaultValue("")]
         public virtual string DisplayMember
         {
@@ -300,7 +295,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.DisplayStyle"]/*' />
         [DefaultValue(DataGridViewComboBoxDisplayStyle.DropDownButton)]
         public DataGridViewComboBoxDisplayStyle DisplayStyle
         {
@@ -351,7 +345,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.DisplayStyleForCurrentCellOnly"]/*' />
         [DefaultValue(false)]
         public bool DisplayStyleForCurrentCellOnly
         {
@@ -430,7 +423,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.DropDownWidth"]/*' />
         [DefaultValue(1)]
         public virtual int DropDownWidth
         {
@@ -470,7 +462,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.EditType"]/*' />
         public override Type EditType
         {
             get
@@ -479,7 +470,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.FlatStyle"]/*' />
         [DefaultValue(FlatStyle.Standard)]
         public FlatStyle FlatStyle
         {
@@ -520,7 +510,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.FormattedValueType"]/*' />
         public override Type FormattedValueType
         {
             get
@@ -537,7 +526,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.Items"]/*' />
         [Browsable(false)]
         public virtual ObjectCollection Items
         {
@@ -547,7 +535,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.MaxDropDownItems"]/*' />
         [DefaultValue(DATAGRIDVIEWCOMBOBOXCELL_defaultMaxDropDownItems)]
         public virtual int MaxDropDownItems
         {
@@ -593,7 +580,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.Sorted"]/*' />
         [DefaultValue(false)]
         public virtual bool Sorted
         {
@@ -642,7 +628,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ValueMember"]/*' />
         [DefaultValue("")]
         public virtual string ValueMember
         {
@@ -702,7 +687,6 @@ namespace System.Windows.Forms
         }
         
      
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ValueType"]/*' />
         public override Type ValueType
         {
             get
@@ -851,7 +835,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewComboBoxCell dataGridViewCell;
@@ -931,7 +914,6 @@ namespace System.Windows.Forms
             InitializeValueMemberPropertyDescriptor(this.ValueMember);
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.DetachEditingControl"]/*' />
         public override void DetachEditingControl()
         {
             DataGridView dgv = this.DataGridView;
@@ -951,7 +933,6 @@ namespace System.Windows.Forms
             base.DetachEditingControl();
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.GetContentBounds"]/*' />
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -1055,7 +1036,6 @@ namespace System.Windows.Forms
             return DataGridViewCell.MeasureTextHeight(graphics, " ", cellStyle.Font, int.MaxValue, TextFormatFlags.Default) + adjustment;
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.GetErrorIconBounds"]/*' />
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -1120,7 +1100,6 @@ namespace System.Windows.Forms
             return errorIconBounds;
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.GetFormattedValue"]/*' />
         [
             SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")   // OK to cast value into String twice.
         ]
@@ -1347,7 +1326,6 @@ namespace System.Windows.Forms
             return value;
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.GetPreferredSize"]/*' />
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // Hard coded space is OK here.
         ]
@@ -1497,7 +1475,6 @@ namespace System.Windows.Forms
             this.EditingComboBox.Text = (string) GetFormattedValue(GetValue(rowIndex), rowIndex, ref dataGridViewCellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.InitializeEditingControl"]/*' />
         public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
         {
             Debug.Assert(this.DataGridView != null && 
@@ -1747,7 +1724,6 @@ namespace System.Windows.Forms
             return item;
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.KeyEntersEditMode"]/*' />
         public override bool KeyEntersEditMode(KeyEventArgs e)
         {
             if (((char.IsLetterOrDigit((char)e.KeyCode) && !(e.KeyCode >= Keys.F1 && e.KeyCode <= Keys.F24)) ||
@@ -1842,7 +1818,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.OnDataGridViewChanged"]/*' />
         protected override void OnDataGridViewChanged()
         {
             if (this.DataGridView != null)
@@ -1854,7 +1829,6 @@ namespace System.Windows.Forms
             base.OnDataGridViewChanged();
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.OnEnter"]/*' />
         protected override void OnEnter(int rowIndex, bool throughMouseClick)
         {
             if (this.DataGridView == null)
@@ -1885,7 +1859,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.OnLeave"]/*' />
         protected override void OnLeave(int rowIndex, bool throughMouseClick)
         {
             if (this.DataGridView == null)
@@ -1895,7 +1868,6 @@ namespace System.Windows.Forms
             this.flags = (byte)(this.flags & ~DATAGRIDVIEWCOMBOBOXCELL_ignoreNextMouseClick);
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.OnMouseClick"]/*' />
         protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -1922,7 +1894,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.OnMouseEnter"]/*' />
         protected override void OnMouseEnter(int rowIndex)
         {
             if (this.DataGridView == null)
@@ -1938,7 +1909,6 @@ namespace System.Windows.Forms
             base.OnMouseEnter(rowIndex);
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.OnMouseLeave"]/*' />
         protected override void OnMouseLeave(int rowIndex)
         {
             if (this.DataGridView == null)
@@ -1966,7 +1936,6 @@ namespace System.Windows.Forms
             base.OnMouseEnter(rowIndex);
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.OnMouseMove"]/*' />
         protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -2039,7 +2008,6 @@ namespace System.Windows.Forms
             return rowIndex != -1 && this.EditingComboBox != null && rowIndex == ((IDataGridViewEditingControl)this.EditingComboBox).EditingControlRowIndex;
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.Paint"]/*' />
         protected override void Paint(Graphics graphics, 
             Rectangle clipBounds,
             Rectangle cellBounds, 
@@ -2648,7 +2616,6 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ParseFormattedValue"]/*' />
         public override object ParseFormattedValue(object formattedValue,
                                                    DataGridViewCellStyle cellStyle,
                                                    TypeConverter formattedValueTypeConverter,
@@ -2694,7 +2661,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ToString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
@@ -2735,7 +2701,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection"]/*' />
         /// <devdoc>
         ///     <para>
         ///       A collection that stores objects.
@@ -2748,7 +2713,6 @@ namespace System.Windows.Forms
             private ArrayList items;
             private IComparer comparer;
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.ObjectCollection"]/*' />
             public ObjectCollection(DataGridViewComboBoxCell owner) 
             {
                 Debug.Assert(owner != null);
@@ -2767,7 +2731,6 @@ namespace System.Windows.Forms
                 }
             }
                         
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.Count"]/*' />
             /// <devdoc>
             ///     Retrieves the number of items.
             /// </devdoc>
@@ -2794,7 +2757,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.ICollection.SyncRoot"]/*' />
             /// <internalonly/>
             object ICollection.SyncRoot
             {
@@ -2804,7 +2766,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.ICollection.IsSynchronized"]/*' />
             /// <internalonly/>
             bool ICollection.IsSynchronized 
             {
@@ -2814,7 +2775,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.IList.IsFixedSize"]/*' />
             /// <internalonly/>
             bool IList.IsFixedSize 
             {
@@ -2824,7 +2784,6 @@ namespace System.Windows.Forms
                 }
             }
             
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.IsReadOnly"]/*' />
             public bool IsReadOnly 
             {
                 get 
@@ -2833,7 +2792,6 @@ namespace System.Windows.Forms
                 }
             }
         
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.Add"]/*' />
             /// <devdoc>
             ///     Adds an item to the collection. For an unsorted combo box, the item is
             ///     added to the end of the existing list of items. For a sorted combo box,
@@ -2875,14 +2833,12 @@ namespace System.Windows.Forms
                 return index;
             }
             
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object item) 
             {
                 return Add(item);
             }
             
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.AddRange"]/*' />
             public void AddRange(params object[] items)
             {
                 //this.owner.CheckNoSharedCell();
@@ -2891,7 +2847,6 @@ namespace System.Windows.Forms
                 this.owner.OnItemsCollectionChanged();
             }
             
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.AddRange1"]/*' />
             public void AddRange(ObjectCollection value) 
             {
                 //this.owner.CheckNoSharedCell();
@@ -2931,7 +2886,6 @@ namespace System.Windows.Forms
                 this.InnerArray.Sort(this.Comparer);
             }
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.this"]/*' />
             /// <devdoc>
             ///     Retrieves the item with the specified index.
             /// </devdoc>
@@ -2965,7 +2919,6 @@ namespace System.Windows.Forms
                 }
             }
             
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.Clear"]/*' />
             /// <devdoc>
             ///     Removes all items from the collection.
             /// </devdoc>
@@ -2985,13 +2938,11 @@ namespace System.Windows.Forms
                 this.InnerArray.Clear();
             }
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.Contains"]/*' />
             public bool Contains(object value) 
             {
                 return IndexOf(value) != -1;
             }
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.CopyTo"]/*' />
             /// <devdoc>
             ///     Copies the DataGridViewComboBoxCell Items collection to a destination array.
             /// </devdoc>
@@ -3004,7 +2955,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.ICollection.CopyTo"]/*' />
             /// <internalonly/>
             void ICollection.CopyTo(Array destination, int index)
             {
@@ -3015,7 +2965,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.GetEnumerator"]/*' />
             /// <devdoc>
             ///     Returns an enumerator for the DataGridViewComboBoxCell Items collection.
             /// </devdoc>
@@ -3024,7 +2973,6 @@ namespace System.Windows.Forms
                 return this.InnerArray.GetEnumerator();
             }
             
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.IndexOf"]/*' />
             public int IndexOf(object value) 
             {
                 if (value == null) 
@@ -3034,7 +2982,6 @@ namespace System.Windows.Forms
                 return this.InnerArray.IndexOf(value);
             }
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.Insert"]/*' />
             /// <devdoc>
             ///     Adds an item to the collection. For an unsorted combo box, the item is
             ///     added to the end of the existing list of items. For a sorted combo box,
@@ -3070,7 +3017,6 @@ namespace System.Windows.Forms
                 }
             }
             
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.Remove"]/*' />
             /// <devdoc>
             ///     Removes the given item from the collection, provided that it is
             ///     actually in the list.
@@ -3085,7 +3031,6 @@ namespace System.Windows.Forms
                 }
             }
         
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.ObjectCollection.RemoveAt"]/*' />
             /// <devdoc>
             ///     Removes an item from the collection at the given index.
             /// </devdoc>
@@ -3224,11 +3169,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCellAccessibleObject"]/*' />
         protected class DataGridViewComboBoxCellAccessibleObject : DataGridViewCellAccessibleObject
         {
 
-            /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCellAccessibleObject.DataGridViewComboBoxCellAccessibleObject"]/*' />
             public DataGridViewComboBoxCellAccessibleObject(DataGridViewCell owner) : base(owner)
             {
             }

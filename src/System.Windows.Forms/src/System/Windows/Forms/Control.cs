@@ -45,7 +45,6 @@ namespace System.Windows.Forms {
     using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
     using Collections.Generic;
 
-    /// <include file='doc\Control.uex' path='docs/doc[@for="Control"]/*' />
     /// <devdoc>
     ///    <para>Defines the base class for controls, which are components
     ///       with visual representation.</para>
@@ -458,7 +457,6 @@ example usage
 
 #endif
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
         /// </devdoc>
@@ -541,14 +539,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control1"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
         /// </devdoc>
         public Control( string text ) : this( (Control) null, text ) {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control2"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
         /// </devdoc>
@@ -556,7 +552,6 @@ example usage
                     this( (Control) null, text, left, top, width, height ) {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control3"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
         /// </devdoc>
@@ -565,7 +560,6 @@ example usage
             this.Text = text;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control4"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
         /// </devdoc>
@@ -583,7 +577,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityObject"]/*' />
         /// <devdoc>
         ///      The Accessibility Object for this Control
         /// </devdoc>
@@ -655,7 +648,6 @@ example usage
             return accessibleObject;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetAccessibilityObjectById"]/*' />
         /// <devdoc>
         ///      Returns a specific AccessibleObbject associated w/ the objectID
         /// </devdoc>
@@ -667,7 +659,6 @@ example usage
             return null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibleDefaultActionDescription"]/*' />
         /// <devdoc>
         ///      The default action description of the control
         /// </devdoc>
@@ -686,7 +677,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibleDescription"]/*' />
         /// <devdoc>
         ///      The accessible description of the control
         /// </devdoc>
@@ -705,7 +695,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibleName"]/*' />
         /// <devdoc>
         ///      The accessible name of the control
         /// </devdoc>
@@ -725,7 +714,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibleRole"]/*' />
         /// <devdoc>
         ///      The accessible role of the control
         /// </devdoc>
@@ -835,7 +823,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AllowDrop"]/*' />
         /// <devdoc>
         ///     The AllowDrop property. If AllowDrop is set to true then
         ///     this control will allow drag and drop operations and events to be used.
@@ -892,7 +879,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Anchor"]/*' />
         /// <devdoc>
         ///     The current value of the anchor property. The anchor property
         ///     determines which edges of the control are anchored to the container's
@@ -914,7 +900,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AutoSize"]/*' />
         [SRCategory(nameof(SR.CatLayout))]
         [RefreshProperties(RefreshProperties.All)]
         [Localizable(true)]
@@ -943,7 +928,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AutoSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler AutoSizeChanged {
@@ -986,7 +970,6 @@ example usage
             return CommonProperties.GetAutoSizeMode(this);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LayoutEngine"]/*' />
         // Public because this is interesting for ControlDesigners.
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual LayoutEngine LayoutEngine {
@@ -1041,7 +1024,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackColor"]/*' />
         /// <devdoc>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
@@ -1099,7 +1081,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
             add {
@@ -1110,7 +1091,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImage"]/*' />
         /// <devdoc>
         ///     The background image of the control.
         /// </devdoc>
@@ -1132,7 +1112,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
         public event EventHandler BackgroundImageChanged {
             add {
@@ -1143,7 +1122,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageLayout"]/*' />
         /// <devdoc>
         ///     The BackgroundImageLayout of the control.
         /// </devdoc>
@@ -1184,7 +1162,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
         public event EventHandler BackgroundImageLayoutChanged {
             add {
@@ -1217,7 +1194,6 @@ example usage
             return accName != null && accName.Length > 0;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetBindings"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetBindings() {
             ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(PropBindings);
@@ -1226,7 +1202,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContextInternal"]/*' />
         /// <devdoc>
         ///    BindingContextInternal provides a mechanism so that controls like SplitContainer that inherit from the
         ///    ContainerControl can bypass the "containerControls" bindingContext property and do what the other simple controls
@@ -1269,7 +1244,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContext"]/*' />
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1284,7 +1258,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContextChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
         public event EventHandler BindingContextChanged {
             add {
@@ -1295,7 +1268,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Bottom"]/*' />
         /// <devdoc>
         ///    <para>The bottom coordinate of this control.</para>
         /// </devdoc>
@@ -1311,7 +1283,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Bounds"]/*' />
         /// <devdoc>
         ///     The bounds of this control. This is the window coordinates of the
         ///     control in parent client coordinates.
@@ -1341,7 +1312,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CanFocus"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control can receive focus. This
         ///       property is read-only.</para>
@@ -1363,7 +1333,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CanRaiseEvents"]/*' />
         /// <devdoc>
         ///     Determines if events can be fired on the control.  If this control is being
         ///     hosted as an ActiveX control, this property will return false if the ActiveX
@@ -1379,7 +1348,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CanSelect"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates whether the control can be selected. This property
@@ -1400,7 +1368,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Capture"]/*' />
         /// <devdoc>
         ///    <para> Indicates whether the control has captured the mouse.</para>
         /// </devdoc>
@@ -1436,7 +1403,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CausesValidation"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates whether entering the control causes validation on the controls requiring validation.</para>
@@ -1459,7 +1425,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CausesValidationChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
         public event EventHandler CausesValidationChanged {
             add {
@@ -1519,18 +1484,15 @@ example usage
             }                
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CheckForIllegalCrossThreadCalls"]/*' />
-        [ 
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
+        [ Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+          SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
+          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public static bool CheckForIllegalCrossThreadCalls {
             get { return checkForIllegalCrossThreadCalls; }
             set { checkForIllegalCrossThreadCalls = value; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ClientRectangle"]/*' />
         /// <devdoc>
         ///     The client rect of the control.
         /// </devdoc>
@@ -1546,7 +1508,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ClientSize"]/*' />
         /// <devdoc>
         ///     The size of the clientRect.
         /// </devdoc>
@@ -1566,7 +1527,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ClientSizeChanged"]/*' />
         /// <devdoc>
         ///    Fired when ClientSize changes.
         /// </devdoc>
@@ -1580,7 +1540,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CompanyName"]/*' />
         /// <devdoc>
         ///     Retrieves the company name of this specific component.
         /// </devdoc>
@@ -1597,7 +1556,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContainsFocus"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control or one of its children currently has the system
         ///       focus. This property is read-only.</para>
@@ -1631,7 +1589,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenu"]/*' />
         /// <devdoc>
         ///     The contextMenu associated with this control. The contextMenu
         ///     will be shown when the user right clicks the mouse on the control.
@@ -1670,7 +1627,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.ControlOnContextMenuChangedDescr)),
@@ -1685,7 +1641,7 @@ example usage
             }
         }
 
-       /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenu"]/*' />
+
        /// <devdoc>
        ///     The contextMenuStrip associated with this control. The contextMenuStrip
        ///     will be shown when the user right clicks the mouse on the control.
@@ -1721,8 +1677,6 @@ example usage
              }
 
         }
-        
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuStripChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged {
             add {
@@ -1733,7 +1687,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Controls"]/*' />
         /// <devdoc>
         ///     Collection of child controls.
         /// </devdoc>
@@ -1754,7 +1707,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Created"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control has been created. This property is read-only.</para>
         /// </devdoc>
@@ -1769,7 +1721,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateParams"]/*' />
         /// <devdoc>
         ///     Returns the CreateParams used to create the handle for this control.
         ///     Inheriting classes should call base.CreateParams in the manor
@@ -1961,7 +1912,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Cursor"]/*' />
         /// <devdoc>
         ///     Retrieves the cursor that will be displayed when the mouse is over this
         ///     control.
@@ -2031,7 +1981,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CursorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
         public event EventHandler CursorChanged {
             add {
@@ -2042,7 +1991,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DataBindings"]/*' />
         /// <devdoc>
         ///     Retrieves the bindings for this control.
         /// </devdoc>
@@ -2067,7 +2015,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultBackColor"]/*' />
         /// <devdoc>
         ///     The default BackColor of a generic top-level Control.  Subclasses may have
         ///     different defaults.
@@ -2076,7 +2023,6 @@ example usage
             get { return SystemColors.Control;}
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultCursor"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default cursor for their control.
         ///     This is more efficient than setting the cursor in the control's constructor,
@@ -2088,7 +2034,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultFont"]/*' />
         /// <devdoc>
         ///     The default Font of a generic top-level Control.  Subclasses may have
         ///     different defaults.
@@ -2104,7 +2049,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultForeColor"]/*' />
         /// <devdoc>
         ///     The default ForeColor of a generic top-level Control.  Subclasses may have
         ///     different defaults.
@@ -2113,22 +2057,18 @@ example usage
             get { return SystemColors.ControlText;}
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultMargin"]/*' />
         protected virtual Padding DefaultMargin {
             get { return CommonProperties.DefaultMargin; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultMaximumSize"]/*' />
         protected virtual Size DefaultMaximumSize {
             get { return CommonProperties.DefaultMaximumSize; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultMinimumSize"]/*' />
         protected virtual Size DefaultMinimumSize {
             get { return CommonProperties.DefaultMinimumSize; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultPadding"]/*' />
         protected virtual Padding DefaultPadding {
             get { return Padding.Empty; }
         }
@@ -2137,7 +2077,6 @@ example usage
             get { return RightToLeft.No; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -2154,7 +2093,6 @@ example usage
             ContextMenuStrip = null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DeviceDpi"]/*' />
         /// <devdoc>
         ///  DPI value either for the primary screen or for the monitor where the top-level parent is displayed when
         ///  EnableDpiChangedMessageHandling option is on and the application is per-monitor V2 DPI-aware (rs2+)
@@ -2195,7 +2133,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DisplayRectangle"]/*' />
         /// <devdoc>
         ///     Returns the client rect of the display area of the control.
         ///     For the base control class, this is identical to getClientRect.
@@ -2214,7 +2151,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Disposed"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control has been disposed. This
         ///       property is read-only.</para>
@@ -2243,7 +2179,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Disposing"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control is in the process of being disposed. This
         ///       property is read-only.</para>
@@ -2259,7 +2194,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Dock"]/*' />
         /// <devdoc>
         ///     The dock property. The dock property controls to which edge
         ///     of the container this control is docked to. For example, when docked to
@@ -2296,7 +2230,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DockChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnDockChangedDescr))]
         public event EventHandler DockChanged {
             add {
@@ -2307,7 +2240,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DoubleBuffered"]/*' />
         /// <devdoc>
         ///    <para>This will enable or disable double buffering.</para>
         /// </devdoc>
@@ -2339,7 +2271,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Enabled"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control is currently enabled.</para>
         /// </devdoc>
@@ -2375,7 +2306,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.EnabledChanged"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is enabled.</para>
         /// </devdoc>
@@ -2389,7 +2319,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Focused"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control has focus. This property is read-only.</para>
         /// </devdoc>
@@ -2404,7 +2333,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Font"]/*' />
         /// <devdoc>
         ///     Retrieves the current font for this control. This will be the font used
         ///     by default for painting and text in the control.
@@ -2517,7 +2445,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnFontChangedDescr))]
         public event EventHandler FontChanged {
             add {
@@ -2576,7 +2503,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontHeight"]/*' />
         protected int FontHeight {
             get {
                 bool found;
@@ -2613,7 +2539,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ForeColor"]/*' />
         /// <devdoc>
         ///     The foreground color of the control.
         /// </devdoc>
@@ -2663,7 +2588,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ForeColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
             add {
@@ -2681,7 +2605,6 @@ example usage
                 return null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetPreferredSize"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
         public virtual Size GetPreferredSize(Size proposedSize) {
@@ -2749,7 +2672,6 @@ example usage
             return CommonProperties.GetSpecifiedBounds(this).Size;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Handle"]/*' />
         /// <devdoc>
         ///     The HWND handle that this control is bound to. If the handle
         ///     has not yet been created, this will force handle creation.
@@ -2784,7 +2706,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HasChildren"]/*' />
         /// <devdoc>
         ///     True if this control has child controls in its collection.  This
         ///     is more efficient than checking for Controls.Count > 0, but has the
@@ -2808,7 +2729,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Height"]/*' />
         /// <devdoc>
         ///     The height of this control
         /// </devdoc>
@@ -2867,7 +2787,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsHandleCreated"]/*' />
         /// <devdoc>
         ///     Whether or not this control has a handle associated with it.
         /// </devdoc>
@@ -2965,7 +2884,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeRequired"]/*' />
         /// <devdoc>
         ///     Determines if the caller must call invoke when making method
         ///     calls to this control.  Controls in windows forms are bound to a specific thread,
@@ -3011,7 +2929,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsAccessible"]/*' />
         /// <devdoc>
         ///      Indicates whether or not this control is an accessible control
         ///      i.e. whether it should be visible to accessibility applications.
@@ -3107,7 +3024,6 @@ example usage
 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Left"]/*' />
         /// <devdoc>
         ///     The left coordinate of this control.
         /// </devdoc>
@@ -3126,7 +3042,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Location"]/*' />
         /// <devdoc>
         ///     The location of this control.
         /// </devdoc>
@@ -3144,7 +3059,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LocationChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
         public event EventHandler LocationChanged {
             add {
@@ -3155,7 +3069,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Margin"]/*' />
         [
             SRDescription(nameof(SR.ControlMarginDescr)),
             SRCategory(nameof(SR.CatLayout)),
@@ -3180,7 +3093,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MarginChanged"]/*' />
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
         public event EventHandler MarginChanged
         {
@@ -3194,7 +3106,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MaximumSize"]/*' />
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
         [SRDescription(nameof(SR.ControlMaximumSizeDescr))]
@@ -3215,7 +3126,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MinimumSize"]/*' />
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
         [SRDescription(nameof(SR.ControlMinimumSizeDescr))]
@@ -3230,7 +3140,7 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ModifierKeys"]/*' />
+
         /// <devdoc>
         ///     Retrieves the current state of the modifier keys. This will check the
         ///     current state of the shift, control, and alt keys.
@@ -3247,7 +3157,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseButtons"]/*' />
         /// <devdoc>
         ///     The current state of the mouse buttons. This will check the
         ///     current state of the left, right, and middle mouse buttons.
@@ -3266,7 +3175,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MousePosition"]/*' />
         /// <devdoc>
         ///     The current position of the mouse in screen coordinates.
         /// </devdoc>
@@ -3285,7 +3193,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Name"]/*' />
         /// <devdoc>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control.  The name can be
@@ -3317,7 +3224,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Parent"]/*' />
         /// <devdoc>
         ///     The parent of this control.
         /// </devdoc>
@@ -3352,7 +3258,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProductName"]/*' />
         /// <devdoc>
         ///     Retrieves the product name of this specific component.
         /// </devdoc>
@@ -3369,7 +3274,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProductVersion"]/*' />
         /// <devdoc>
         ///     Retrieves the product version of this specific component.
         /// </devdoc>
@@ -3404,7 +3308,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RecreatingHandle"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control is currently recreating its handle. This
         ///       property is read-only.</para>
@@ -3444,7 +3347,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Region"]/*' />
         /// <devdoc>
         ///     The Region associated with this control.  (defines the
         ///     outline/silhouette/boundary of control)
@@ -3497,7 +3399,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RegionChanged"]/*' />
         /// <devdoc>
         ///     Event fired when the value of Region property is changed on Control
         /// </devdoc>
@@ -3512,7 +3413,6 @@ example usage
         }
 
         // Helper function for Rtl
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RenderRightToLeft"]/*' />
         /// <internalonly/>
         [Obsolete("This property has been deprecated. Please use RightToLeft instead. http://go.microsoft.com/fwlink/?linkid=14202")]
         protected internal bool RenderRightToLeft
@@ -3582,7 +3482,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResizeRedraw"]/*' />
         /// <devdoc>
         ///     Indicates whether the control should redraw itself when resized.
         /// </devdoc>
@@ -3598,7 +3497,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Right"]/*' />
         /// <devdoc>
         ///    <para>The right coordinate of the control.</para>
         /// </devdoc>
@@ -3614,7 +3512,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RightToLeft"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -3670,7 +3567,6 @@ example usage
 
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RightToLeftChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
             add {
@@ -3682,7 +3578,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleChildren"]/*' />
         /// <devdoc>
         ///     This property controls the scaling of child controls.  If true child controls
         ///     will be scaled when the Scale method on this control is called.  If false,
@@ -3696,7 +3591,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Site"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site {
             get {
@@ -3764,7 +3658,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Size"]/*' />
         /// <devdoc>
         ///    <para>The size of the control.</para>
         /// </devdoc>
@@ -3782,7 +3675,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
         public event EventHandler SizeChanged {
             add {
@@ -3793,7 +3685,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabIndex"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The tab index of
@@ -3822,7 +3713,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
         public event EventHandler TabIndexChanged {
             add {
@@ -3833,7 +3723,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabStop"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the user can give the focus to this control using the TAB
         ///       key. This property is read-only.</para>
@@ -3869,7 +3758,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabStopChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
         public event EventHandler TabStopChanged {
             add {
@@ -3882,7 +3770,6 @@ example usage
 
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -3900,7 +3787,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Text"]/*' />
         /// <devdoc>
         ///     The current text associated with this control.
         /// </devdoc>
@@ -3949,7 +3835,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TextChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTextChangedDescr))]
         public event EventHandler TextChanged {
             add {
@@ -3960,7 +3845,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Top"]/*' />
         /// <devdoc>
         ///     Top coordinate of this control.
         /// </devdoc>
@@ -3979,7 +3863,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TopLevelControl"]/*' />
         /// <devdoc>
         ///     The top level control that contains this control. This doesn't
         ///     have to be the same as the value returned from getForm since forms
@@ -4026,7 +3909,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShowKeyboardCues"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the user interface is in a state to show or hide keyboard
         ///       accelerators. This property is read-only.</para>
@@ -4090,7 +3972,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShowFocusCues"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the user interface is in a state to show or hide focus
         ///       rectangles. This property is read-only.</para>
@@ -4140,7 +4021,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UseWaitCursor"]/*' />
         /// <devdoc>
         ///     When this property in true the Cursor Property is set to WaitCursor as well as the Cursor Property
         ///     of all the child controls.
@@ -4222,7 +4102,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Visible"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the control is visible.</para>
         /// </devdoc>
@@ -4240,7 +4119,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.VisibleChanged"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control becomes visible.</para>
         /// </devdoc>
@@ -4254,7 +4132,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.WaitForWaitHandle"]/*' />
         /// <devdoc>
         ///     Wait for the wait handle to receive a signal: throw an exception if the thread is no longer with us.
         /// </devdoc>
@@ -4302,7 +4179,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Width"]/*' />
         /// <devdoc>
         ///     The width of this control.
         /// </devdoc>
@@ -4347,7 +4223,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.WindowTarget"]/*' />
         /// <devdoc>
         ///     The target of Win32 window messages.
         /// </devdoc>
@@ -4423,7 +4298,6 @@ example usage
 
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Click"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is clicked.</para>
         /// </devdoc>
@@ -4439,7 +4313,6 @@ example usage
 
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAdded"]/*' />
         /// <devdoc>
         ///    <para>Occurs when a new control is added.</para>
         /// </devdoc>
@@ -4459,7 +4332,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlRemoved"]/*' />
         /// <devdoc>
         ///    <para>Occurs when a control is removed.</para>
         /// </devdoc>
@@ -4478,7 +4350,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragDrop"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragDropDescr))]
         public event DragEventHandler DragDrop {
             add {
@@ -4490,7 +4361,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragEnter"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragEnterDescr))]
         public event DragEventHandler DragEnter {
             add {
@@ -4502,7 +4372,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragOver"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragOverDescr))]
         public event DragEventHandler DragOver {
             add {
@@ -4514,7 +4383,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragLeave"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
         public event EventHandler DragLeave {
             add {
@@ -4525,7 +4393,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GiveFeedback"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
         public event GiveFeedbackEventHandler GiveFeedback {
             add {
@@ -4537,7 +4404,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HandleCreated"]/*' />
         /// <devdoc>
         ///    <para>Occurs when a handle is created for the control.</para>
         /// </devdoc>
@@ -4552,7 +4418,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HandleDestroyed"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control's handle is destroyed.</para>
         /// </devdoc>
@@ -4567,7 +4432,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HelpRequested"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnHelpDescr))]
         public event HelpEventHandler HelpRequested {
             add {
@@ -4579,7 +4443,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidated"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnInvalidateDescr))]
         public event InvalidateEventHandler Invalidated {
             add {
@@ -4590,13 +4453,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PreferredSize"]/*' />
         [Browsable(false)]
         public Size PreferredSize {
             get { return GetPreferredSize(Size.Empty); }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Padding"]/*' />
         [
         SRDescription(nameof(SR.ControlPaddingDescr)),
         SRCategory(nameof(SR.CatLayout)),
@@ -4624,7 +4485,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PaddingChanged"]/*' />
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public event EventHandler PaddingChanged {
             add {
@@ -4636,7 +4496,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Paint"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ControlOnPaintDescr))]
         public event PaintEventHandler Paint {
             add {
@@ -4648,7 +4507,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryContinueDrag"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
         public event QueryContinueDragEventHandler QueryContinueDrag {
             add {
@@ -4659,7 +4517,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryAccessibilityHelp"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
             add {
@@ -4670,7 +4527,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DoubleClick"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is double clicked.</para>
         /// </devdoc>
@@ -4684,7 +4540,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Enter"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is entered.</para>
         /// </devdoc>
@@ -4698,7 +4553,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GotFocus"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control receives focus.</para>
         /// </devdoc>
@@ -4712,7 +4566,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.KeyDown"]/*' />
         /// <devdoc>
         ///    <para>Occurs when a key is pressed down while the control has focus.</para>
         /// </devdoc>
@@ -4727,7 +4580,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.KeyPress"]/*' />
         /// <devdoc>
         ///    <para> Occurs when a key is pressed while the control has focus.</para>
         /// </devdoc>
@@ -4742,7 +4594,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.KeyUp"]/*' />
         /// <devdoc>
         ///    <para> Occurs when a key is released while the control has focus.</para>
         /// </devdoc>
@@ -4757,7 +4608,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Layout"]/*' />
         /// <devdoc>
         /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnLayoutDescr))]
@@ -4771,7 +4621,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Leave"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is left.</para>
         /// </devdoc>
@@ -4785,7 +4634,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LostFocus"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control loses focus.</para>
         /// </devdoc>
@@ -4799,7 +4647,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseClick"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is mouse clicked.</para>
         /// </devdoc>
@@ -4814,7 +4661,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseDoubleClick"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is mouse double clicked.</para>
         /// </devdoc>
@@ -4829,7 +4675,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseCaptureChanged"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control loses mouse Capture.</para>
         /// </devdoc>
@@ -4843,7 +4688,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseDown"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is
         ///       pressed.</para>
@@ -4859,7 +4703,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseEnter"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer enters the control.</para>
         /// </devdoc>
@@ -4873,7 +4716,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseLeave"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer leaves the control.</para>
         /// </devdoc>
@@ -4887,7 +4729,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DpiChangedBeforeParent"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the DPI resolution of the screen this control is displayed on changes, 
         ///    either when the top level window is moved between monitors or when the OS settings are changed.
@@ -4904,7 +4745,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DpiChangedAfterParent"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the DPI resolution of the screen this control is displayed on changes, 
         ///    either when the top level window is moved between monitors or when the OS settings are changed.
@@ -4921,7 +4761,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseHover"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer hovers over the contro.</para>
         /// </devdoc>
@@ -4936,7 +4775,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseMove"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse pointer is moved over the control.</para>
         /// </devdoc>
@@ -4951,7 +4789,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseUp"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is released.</para>
         /// </devdoc>
@@ -4966,7 +4803,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseWheel"]/*' />
         /// <devdoc>
         ///    <para> Occurs when the mouse wheel moves while the control has focus.</para>
         /// </devdoc>
@@ -4981,7 +4817,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Move"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is moved.</para>
         /// </devdoc>
@@ -5009,7 +4844,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Resize"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is resized.</para>
         /// </devdoc>
@@ -5024,7 +4858,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ChangeUICues"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
         public event UICuesEventHandler ChangeUICues {
             add {
@@ -5035,7 +4868,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.StyleChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
         public event EventHandler StyleChanged {
             add {
@@ -5046,7 +4878,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SystemColorsChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
         public event EventHandler SystemColorsChanged {
             add {
@@ -5057,7 +4888,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Validating"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is validating.</para>
         /// </devdoc>
@@ -5072,7 +4902,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Validated"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the control is done validating.</para>
         /// </devdoc>
@@ -5086,13 +4915,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityNotifyClients"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void AccessibilityNotifyClients(AccessibleEvents accEvent, int childID) {
             AccessibilityNotifyClients(accEvent, NativeMethods.OBJID_CLIENT, childID);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityNotifyClients1"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID) {
             if (IsHandleCreated) {
@@ -5132,7 +4959,6 @@ example usage
         // This has been cut from the product.
         //
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXRegister"]/*' />
         /// <devdoc>
         ///     This is called by regasm to register a control as an ActiveX control.
         /// </devdoc>
@@ -5211,7 +5037,6 @@ example usage
         // This has been cut from the product.
         //
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXUnregister"]/*' />
         /// <devdoc>
         ///     This is called by regasm to un-register a control as an ActiveX control.
         /// </devdoc>
@@ -5339,7 +5164,6 @@ example usage
             if (ParentInternal != null) ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.All);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ParentChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnParentChangedDescr))]
         public event EventHandler ParentChanged {
             add {
@@ -5350,7 +5174,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BeginInvoke"]/*' />
         /// <devdoc>
         ///     Executes the given delegate on the thread that owns this Control's
         ///     underlying window handle.  The delegate is called asynchronously and this
@@ -5372,7 +5195,6 @@ example usage
             return BeginInvoke(method, null);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BeginInvoke1"]/*' />
         /// <devdoc>
         ///     Executes the given delegate on the thread that owns this Control's
         ///     underlying window handle.  The delegate is called asynchronously and this
@@ -5406,7 +5228,6 @@ example usage
             updateCount++;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BringToFront"]/*' />
         /// <devdoc>
         ///     Brings this control to the front of the zorder.
         /// </devdoc>
@@ -5501,7 +5322,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Contains"]/*' />
         /// <devdoc>
         ///    <para>Verifies if a control is a child of this control.</para>
         /// </devdoc>
@@ -5518,7 +5338,6 @@ example usage
             return false;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateAccessibilityInstance"]/*' />
         /// <devdoc>
         ///     constructs the new instance of the accessibility object for this control. Subclasses
         ///     should not call base.CreateAccessibilityObject.
@@ -5528,7 +5347,6 @@ example usage
             return new ControlAccessibleObject(this);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateControlsInstance"]/*' />
         /// <devdoc>
         ///     Constructs the new instance of the Controls collection objects. Subclasses
         ///     should not call base.CreateControlsInstance.
@@ -5538,7 +5356,6 @@ example usage
             return new System.Windows.Forms.Control.ControlCollection(this);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateGraphics"]/*' />
         /// <devdoc>
         ///     Creates a Graphics for this control. The control's brush, font, foreground
         ///     color and background color become the default values for the Graphics.
@@ -5562,7 +5379,6 @@ example usage
             return Graphics.FromHwndInternal(this.Handle);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateHandle"]/*' />
         /// <devdoc>
         ///     Creates a handle for this control. This method is called by the .NET Framework, this should
         ///     not be called. Inheriting classes should always call base.createHandle when
@@ -5638,7 +5454,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateControl"]/*' />
         /// <devdoc>
         ///     Forces the creation of the control. This includes the creation of the handle,
         ///     and any child controls.
@@ -5708,7 +5523,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefWndProc"]/*' />
         /// <devdoc>
         ///     Sends the message to the default window proc.
         /// </devdoc>
@@ -5721,7 +5535,6 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DestroyHandle"]/*' />
         /// <devdoc>
         ///     Destroys the handle associated with this control. Inheriting classes should
         ///     always call base.destroyHandle.
@@ -5779,7 +5592,6 @@ example usage
             trackMouseEvent = null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Dispose"]/*' />
         /// <devdoc>
         ///    <para>Disposes of the resources (other than memory) used by the
         ///    <see cref='System.Windows.Forms.Control'/>
@@ -5884,7 +5696,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DoDragDrop"]/*' />
         /// <devdoc>
         ///     Begins a drag operation. The allowedEffects determine which
         ///     drag operations can occur. If the drag operation needs to interop
@@ -5926,7 +5737,6 @@ example usage
             return(DragDropEffects)finalEffect[0];
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DrawToBitmap"]/*' />
         /// <devdoc>
         //      Trinity are currently calling IViewObject::Draw in order to render controls on Word & Excel
         //      before they are in place active. However this method is private and they need a public way to do this.
@@ -5979,7 +5789,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.EndInvoke"]/*' />
         /// <devdoc>
         ///     Retrieves the return value of the asynchronous operation
         ///     represented by the IAsyncResult interface passed. If the
@@ -6042,7 +5851,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FindForm"]/*' />
         /// <devdoc>
         ///     Retrieves the form that this control is on. The control's parent
         ///     may not be the same as the form.
@@ -6093,7 +5901,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetTopLevel"]/*' />
         protected bool GetTopLevel() {
             return(state & STATE_TOPLEVEL) != 0;
         }
@@ -6107,7 +5914,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RaiseKeyEvent"]/*' />
         /// <devdoc>
         ///     Raises the event associated with key with the event data of
         ///     e and a sender of this control.
@@ -6118,7 +5924,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RaiseMouseEvent"]/*' />
         /// <devdoc>
         ///     Raises the event associated with key with the event data of
         ///     e and a sender of this control.
@@ -6129,7 +5934,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Focus"]/*' />
         /// <devdoc>
         ///    <para> Sets focus to the control.</para>
         ///    <para>Attempts to set focus to this control.</para>
@@ -6171,7 +5975,6 @@ example usage
             return Focused;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FromChildHandle"]/*' />
         /// <devdoc>
         ///     Returns the control that is currently associated with handle.
         ///     This method will search up the HWND parent chain until it finds some
@@ -6194,7 +5997,6 @@ example usage
             return null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FromHandle"]/*' />
         /// <devdoc>
         ///     Returns the control that is currently associated with handle.
         /// </devdoc>
@@ -6247,7 +6049,8 @@ example usage
             return new Rectangle(suggestedX, suggestedY, proposedWidth, proposedHeight);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetChildAtPoint"]/*' />
+        
+
         /// <devdoc>
         ///     Retrieves the child control that is located at the specified client
         ///     coordinates.
@@ -6277,7 +6080,7 @@ example usage
             return(ctl == this) ? null : ctl;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetChildAtPoint"]/*' />
+
         /// <devdoc>
         ///     Retrieves the child control that is located at the specified client
         ///     coordinates.
@@ -6286,7 +6089,6 @@ example usage
             return GetChildAtPoint(pt, GetChildAtPointSkip.None);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetContainerControl"]/*' />
         /// <devdoc>
         ///     Returns the closest ContainerControl in the control's chain of
         ///     parent controls and forms.
@@ -6341,7 +6143,6 @@ example usage
             return handle;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetScaledBounds"]/*' />
         /// <devdoc>
         ///     This is a helper method that is called by ScaleControl to retrieve the bounds
         ///     that the control should be scaled by.  You may override this method if you
@@ -6630,7 +6431,6 @@ example usage
 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetNextControl"]/*' />
         /// <devdoc>
         ///     Retrieves the next control in the tab order of child controls.
         /// </devdoc>
@@ -6842,7 +6642,6 @@ example usage
             return (state2 & flag) != 0;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetStyle"]/*' />
         /// <devdoc>
         ///     Retrieves the current value of the specified bit in the control's style.
         ///     NOTE: This is control style, not the Win32 style of the hWnd.
@@ -6851,7 +6650,6 @@ example usage
             return (controlStyle & flag) == flag;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Hide"]/*' />
         /// <devdoc>
         ///     Hides the control by setting the visible property to false;
         /// </devdoc>
@@ -6878,7 +6676,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InitLayout"]/*' />
         /// <devdoc>
         ///     Called after the control has been added to another container.
         /// </devdoc>
@@ -6951,7 +6748,6 @@ example usage
         }
         #endif
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate"]/*' />
         /// <devdoc>
         ///     Invalidates a region of the control and causes a paint message
         ///     to be sent to the control. This will not force a synchronous paint to
@@ -6962,7 +6758,6 @@ example usage
             Invalidate(region, false);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate1"]/*' />
         /// <devdoc>
         ///     Invalidates a region of the control and causes a paint message
         ///     to be sent to the control. This will not force a synchronous paint to
@@ -7010,7 +6805,7 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate2"]/*' />
+
         /// <devdoc>
         ///     Invalidates the control and causes a paint message to be sent to the control.
         ///     This will not force a synchronous paint to occur, calling update after
@@ -7020,7 +6815,6 @@ example usage
             Invalidate(false);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate3"]/*' />
         /// <devdoc>
         ///     Invalidates the control and causes a paint message to be sent to the control.
         ///     This will not force a synchronous paint to occur, calling update after
@@ -7049,7 +6843,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate4"]/*' />
         /// <devdoc>
         ///     Invalidates a rectangular region of the control and causes a paint message
         ///     to be sent to the control. This will not force a synchronous paint to
@@ -7060,7 +6853,6 @@ example usage
             Invalidate(rc, false);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate5"]/*' />
         /// <devdoc>
         ///     Invalidates a rectangular region of the control and causes a paint message
         ///     to be sent to the control. This will not force a synchronous paint to
@@ -7096,7 +6888,6 @@ example usage
                 NotifyInvalidate(rc);
             }
         }
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invoke"]/*' />
         /// <devdoc>
         ///     Executes the given delegate on the thread that owns this Control's
         ///     underlying window handle.  It is an error to call this on the same thread that
@@ -7115,7 +6906,6 @@ example usage
             return Invoke(method, null);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invoke1"]/*' />
         /// <devdoc>
         ///     Executes the given delegate on the thread that owns this Control's
         ///     underlying window handle.  It is an error to call this on the same thread that
@@ -7283,12 +7073,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokePaint"]/*' />
         protected void InvokePaint(Control c, PaintEventArgs e) {
             c.OnPaint(e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokePaintBackground"]/*' />
         protected void InvokePaintBackground(Control c, PaintEventArgs e) {
            c.OnPaintBackground(e);
         }
@@ -7321,7 +7109,6 @@ example usage
             return false;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsKeyLocked"]/*' />
         /// <devdoc>
         /// This Function will return a Boolean as to whether the Key value passed in is Locked...
         /// </devdoc>
@@ -7349,7 +7136,6 @@ example usage
             throw new NotSupportedException(SR.ControlIsKeyLockedNumCapsScrollLockKeysSupportedOnly);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsInputChar"]/*' />
         /// <devdoc>
         ///     Determines if charCode is an input character that the control
         ///     wants. This method is called during window message pre-processing to
@@ -7374,7 +7160,6 @@ example usage
             return(unchecked( (int) (long)SendMessage(NativeMethods.WM_GETDLGCODE, 0, 0)) & mask) != 0;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsInputKey"]/*' />
         /// <devdoc>
         ///     Determines if keyData is an input key that the control wants.
         ///     This method is called during window message pre-processing to determine
@@ -7410,7 +7195,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsMnemonic"]/*' />
         /// <devdoc>
         ///     Determines if charCode is the mnemonic character in text.
         ///     The mnemonic character is the character imediately following the first
@@ -7472,7 +7256,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalToDeviceUnits"]/*' />
         /// <devdoc>
         /// Transforms an integer coordinate from logical to device units
         /// by scaling it for the current DPI and rounding down to the nearest integer value.
@@ -7633,7 +7416,7 @@ example usage
             OnLeave(EventArgs.Empty);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.NotifyInvalidate"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    Propagates the invalidation event, notifying the control that
@@ -7657,7 +7440,6 @@ example usage
             OnValidated(EventArgs.Empty);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeOnClick"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Click'/> event.</para>
         /// </devdoc>
@@ -7668,7 +7450,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnAutoSizeChanged"]/*' />
         protected virtual void OnAutoSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
             EventHandler eh = Events[EventAutoSizeChanged] as EventHandler;
@@ -7677,7 +7458,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackColorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7714,7 +7494,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackgroundImageChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7740,7 +7519,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackgroundImageLayoutChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageLayoutChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7756,7 +7534,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBindingContextChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7780,7 +7557,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCausesValidationChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCausesValidationChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7790,7 +7566,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnChildLayoutResuming"]/*' />
         /// <devdoc>
         ///     Called when a child is about to resume its layout.  The default implementation
         ///     calls OnChildLayoutResuming on the parent.
@@ -7801,7 +7576,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnContextMenuChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7811,7 +7585,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnContextMenuStripChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuStripChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7821,7 +7594,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCursorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCursorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7841,7 +7613,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDockChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDockChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7851,7 +7622,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnEnabledChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Enabled'/> event.</para>
         /// <para>Inheriting classes should override this method to handle this event.
@@ -7894,7 +7664,6 @@ example usage
         internal virtual void OnFrameWindowActivate(bool fActivate) {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnFontChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFontChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7938,7 +7707,6 @@ example usage
             LayoutTransaction.DoLayout(this,this,PropertyNames.Font);            
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnForeColorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnForeColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7964,7 +7732,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnRightToLeftChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7994,7 +7761,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnNotifyMessage"]/*' />
         /// <devdoc>
         ///    OnNotifyMessage is called if the ControlStyles.EnableNotifyMessage
         ///    bit is set. This allows for semi-trusted controls to listen to
@@ -8005,7 +7771,6 @@ example usage
         protected virtual void OnNotifyMessage(Message m) {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackColorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8015,14 +7780,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackgroundImageChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackgroundImageChanged(EventArgs e) {
             Contract.Requires(e != null);
             OnBackgroundImageChanged(e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBindingContextChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBindingContextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8031,7 +7794,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentCursorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentCursorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8040,7 +7802,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentEnabledChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentEnabledChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8049,7 +7810,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentFontChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8100,7 +7860,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentForeColorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentForeColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8110,7 +7869,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentRightToLeftChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentRightToLeftChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8119,7 +7877,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentVisibleChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentVisibleChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8142,7 +7899,6 @@ example usage
             }
         }
         
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPrint"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -8193,7 +7949,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTabIndexChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabIndexChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8203,7 +7958,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTabStopChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabStopChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8213,7 +7967,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTextChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8223,7 +7976,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnVisibleChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Visible'/> event.</para>
         /// <para>Inheriting classes should override this method to handle this event.
@@ -8268,7 +8020,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTopMostActiveXParentChanged"]/*' />
         internal virtual void OnTopMostActiveXParentChanged(EventArgs e) {
             Contract.Requires(e != null);
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
@@ -8282,7 +8033,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8298,7 +8048,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnClick"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Click'/>
         /// event.</para>
@@ -8310,7 +8059,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnClientSizeChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClientSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8320,7 +8068,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnControlAdded"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.ControlAdded'/> event.</para>
         /// </devdoc>
@@ -8331,7 +8078,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnControlRemoved"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.ControlRemoved'/> event.</para>
         /// </devdoc>
@@ -8342,7 +8088,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCreateControl"]/*' />
         /// <devdoc>
         ///    <para>Called when the control is first created.</para>
         /// </devdoc>
@@ -8350,7 +8095,6 @@ example usage
         protected virtual void OnCreateControl() {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnHandleCreated"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to find out when the
         ///     handle has been created.
@@ -8465,7 +8209,6 @@ example usage
             } 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLocationChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLocationChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8477,7 +8220,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnHandleDestroyed"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to find out when the
         ///     handle is about to be destroyed.
@@ -8530,7 +8272,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDoubleClick"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.DoubleClick'/> event.</para>
         /// </devdoc>
@@ -8541,7 +8282,6 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDragEnter"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Enter'/> event.</para>
         /// <para>Inheriting classes should override this method to handle this event.
@@ -8558,7 +8298,6 @@ example usage
             if (handler != null) handler(this,drgevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDragOver"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDragOver to send this event to any registered event listeners.
@@ -8570,7 +8309,6 @@ example usage
             if (handler != null) handler(this,drgevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDragLeave"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDragLeave to send this event to any registered event listeners.
@@ -8582,7 +8320,6 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDragDrop"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDragDrop to send this event to any registered event listeners.
@@ -8594,7 +8331,6 @@ example usage
             if (handler != null) handler(this,drgevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnGiveFeedback"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onGiveFeedback to send this event to any registered event listeners.
@@ -8607,7 +8343,6 @@ example usage
             if (handler != null) handler(this,gfbevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnEnter"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnter(EventArgs e) {
             Contract.Requires(e != null);
@@ -8615,7 +8350,6 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeGotFocus"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.GotFocus'/> event.</para>
         /// </devdoc>
@@ -8629,7 +8363,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnGotFocus"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.GotFocus'/> event.</para>
         /// </devdoc>
@@ -8648,7 +8381,6 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnHelpRequested"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onHelp to send this event to any registered event listeners.
@@ -8670,7 +8402,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnInvalidated"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.OnInvalidate to send this event to any registered event listeners.
@@ -8698,7 +8429,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnKeyDown"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyDown'/> event.</para>
         /// </devdoc>
@@ -8709,7 +8439,6 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnKeyPress"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyPress'/> event.</para>
         /// </devdoc>
@@ -8720,7 +8449,6 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnKeyUp"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyUp'/> event.</para>
         /// </devdoc>
@@ -8731,7 +8459,6 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLayout"]/*' />
         /// <devdoc>
         ///     Core layout logic. Inheriting controls should override this function
         ///     to do any custom layout logic. It is not neccessary to call
@@ -8760,7 +8487,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLayoutResuming"]/*' />
         /// <devdoc>
         ///     Called when the last resume layout call is made.  If performLayout is true
         ///     a layout will occur as soon as this call returns.  Layout is
@@ -8776,7 +8502,6 @@ example usage
         internal virtual void OnLayoutSuspended() {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLeave"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Leave'/> event.</para>
         /// </devdoc>
@@ -8787,7 +8512,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeLostFocus"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeLostFocus(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
@@ -8798,7 +8522,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLostFocus"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.LostFocus'/> event.</para>
         /// </devdoc>
@@ -8819,7 +8542,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseDoubleClick"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseDoubleClick'/> event.</para>
         /// </devdoc>
@@ -8830,7 +8552,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseClick"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.OnMouseClick'/> event.</para>
         /// </devdoc>
@@ -8841,7 +8562,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseCaptureChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseCaptureChanged'/> event.</para>
         /// </devdoc>
@@ -8852,7 +8572,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseDown"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseDown'/> event.</para>
         /// </devdoc>
@@ -8863,7 +8582,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseEnter"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseEnter'/> event.</para>
         /// </devdoc>
@@ -8874,7 +8592,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseLeave"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseLeave'/> event.</para>
         /// </devdoc>
@@ -8885,7 +8602,7 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDpiChangedBeforeParent"]/*' />
+ 
         /// <devdoc>
         /// <para>
         /// Raises the <see cref='System.Windows.Forms.Control.DpiChangedBeforeParent'/> event.
@@ -8903,7 +8620,6 @@ example usage
             ((EventHandler)Events[EventDpiChangedBeforeParent])?.Invoke(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDpiChangedAfterParent"]/*' />
         /// <devdoc>
         /// <para>
         /// Raises the <see cref='System.Windows.Forms.Control.DpiChangedAfterParent'/> event.
@@ -8921,7 +8637,6 @@ example usage
             ((EventHandler)Events[EventDpiChangedAfterParent])?.Invoke(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseHover"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseHover'/> event.</para>
         /// </devdoc>
@@ -8932,7 +8647,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseMove"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseMove'/> event.</para>
         /// </devdoc>
@@ -8943,7 +8657,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseUp"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseUp'/> event.</para>
         /// </devdoc>
@@ -8954,7 +8667,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseWheel"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseWheel'/> event.</para>
         /// </devdoc>
@@ -8965,7 +8677,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMove"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Move'/> event.</para>
         /// </devdoc>
@@ -8978,7 +8689,6 @@ example usage
                 Invalidate();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPaint"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onPaint to send this event to any registered event listeners.
@@ -8999,7 +8709,7 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPaintBackground"]/*' />
+
         /// <devdoc>
         ///     Inheriting classes should override this method to handle the erase
         ///     background request from windows. It is not necessary to call
@@ -9035,7 +8745,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnQueryContinueDrag"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onQueryContinueDrag to send this event to any registered event listeners.
@@ -9048,7 +8757,6 @@ example usage
             if (handler != null) handler(this, qcdevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnRegionChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.RegionChanged'/> event when the Region property has changed.</para>
         /// </devdoc>
@@ -9061,7 +8769,6 @@ example usage
            }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnResize"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Resize'/> event.</para>
         /// </devdoc>
@@ -9077,7 +8784,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPreviewKeyDown"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.PreviewKeyDown'/> event.</para>
         /// </devdoc>
@@ -9093,7 +8799,6 @@ example usage
             }
         }
        
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnSizeChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -9105,7 +8810,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnChangeUICues"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.ChangeUICues'/>
         /// event.</para>
@@ -9117,7 +8821,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnStyleChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.OnStyleChanged'/>
         /// event.</para>
@@ -9129,7 +8832,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnSystemColorsChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.SystemColorsChanged'/>
         /// event.</para>
@@ -9152,7 +8854,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnValidating"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Validating'/>
         /// event.</para>
@@ -9164,7 +8865,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnValidated"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Validated'/> event.</para>
         /// </devdoc>
@@ -9175,7 +8875,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RescaleConstantsForDpi"]/*' />
         /// <devdoc>
         /// Is invoked when the control handle is created or right before the top level parent receives WM_DPICHANGED message.
         /// This method is an opportunity to rescale any constant sizes, glyphs or bitmaps before re-painting.
@@ -9473,7 +9172,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ParentContainerControl"]/*' />
         /// <devdoc>
         ///     Find ContainerControl that is the container of this control.
         /// </devdoc>
@@ -9489,7 +9187,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PerformLayout"]/*' />
         /// <devdoc>
         ///     Forces the control to apply layout logic to all of the child controls.
         /// </devdoc>
@@ -9509,7 +9206,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PerformLayout1"]/*' />
         /// <devdoc>
         ///     Forces the control to apply layout logic to all of the child controls.
         /// </devdoc>
@@ -9658,7 +9354,6 @@ example usage
             return failed;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PointToClient"]/*' />
         /// <devdoc>
         ///     Computes the location of the screen point p in client coords.
         /// </devdoc>
@@ -9681,7 +9376,6 @@ example usage
             return new Point(point.x, point.y);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PointToScreen"]/*' />
         /// <devdoc>
         ///     Computes the location of the client point p in screen coords.
         /// </devdoc>
@@ -9698,7 +9392,6 @@ example usage
             return new Point(point.x, point.y);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PreProcessMessage"]/*' />
         /// <devdoc>
         ///     <para>
         ///     This method is called by the application's message loop to pre-process
@@ -9869,7 +9562,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessCmdKey"]/*' />
         /// <devdoc>
         ///     <para>
         ///     Processes a command key. This method is called during message
@@ -9996,7 +9688,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessDialogChar"]/*' />
         /// <devdoc>
         ///     <para>
         ///     Processes a dialog character. This method is called during message
@@ -10025,7 +9716,6 @@ example usage
             return parent == null? false: parent.ProcessDialogChar(charCode);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessDialogKey"]/*' />
         /// <devdoc>
         ///     <para>
         ///     Processes a dialog key. This method is called during message
@@ -10054,7 +9744,6 @@ example usage
             return parent == null? false: parent.ProcessDialogKey(keyData);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessKeyEventArgs"]/*' />
         /// <devdoc>
         ///     <para>
         ///     Processes a key message. This method is called when a control receives a
@@ -10141,7 +9830,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessKeyMessage"]/*' />
         /// <devdoc>
         ///     Processes a key message. This method is called when a control receives a
         ///     keyboard message. The method first checks if the control has a parent,
@@ -10163,7 +9851,6 @@ example usage
             return ProcessKeyEventArgs(ref m);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessKeyPreview"]/*' />
         /// <devdoc>
         ///     <para>
         ///     Previews a keyboard message. This method is called by a child control
@@ -10193,7 +9880,6 @@ example usage
             return parent == null? false: parent.ProcessKeyPreview(ref m);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessMnemonic"]/*' />
         /// <devdoc>
         ///     <para>
         ///     Processes a mnemonic character. This method is called to give a control
@@ -10290,7 +9976,6 @@ example usage
              }
          }
       
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RaiseDragEvent"]/*' />
         /// <devdoc>
         ///     Raises the event associated with key with the event data of
         ///     e and a sender of this control.
@@ -10301,7 +9986,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RaisePaintEvent"]/*' />
         /// <devdoc>
         ///     Raises the event associated with key with the event data of
         ///     e and a sender of this control.
@@ -10324,7 +10008,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetBackColor"]/*' />
         /// <devdoc>
         ///     Resets the back color to be based on the parent's back color.
         /// </devdoc>
@@ -10333,7 +10016,6 @@ example usage
             BackColor = Color.Empty;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetCursor"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void ResetCursor() {
             Cursor = null;
@@ -10343,7 +10025,6 @@ example usage
             Enabled = true;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetFont"]/*' />
         /// <devdoc>
         ///     Resets the font to be based on the parent's font.
         /// </devdoc>
@@ -10352,7 +10033,6 @@ example usage
             Font = null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetForeColor"]/*' />
         /// <devdoc>
         ///     Resets the fore color to be based on the parent's fore color.
         /// </devdoc>
@@ -10381,7 +10061,6 @@ example usage
             Size = DefaultSize;
        }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetRightToLeft"]/*' />
         /// <devdoc>
         ///     Resets the RightToLeft to be the default.
         /// </devdoc>
@@ -10390,7 +10069,6 @@ example usage
             RightToLeft = RightToLeft.Inherit;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RecreateHandle"]/*' />
         /// <devdoc>
         ///     Forces the recreation of the handle for this control. Inheriting controls
         ///     must call base.RecreateHandle.
@@ -10498,7 +10176,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RectangleToClient"]/*' />
         /// <devdoc>
         ///     Computes the location of the screen rectangle r in client coords.
         /// </devdoc>
@@ -10515,7 +10192,6 @@ example usage
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RectangleToScreen"]/*' />
         /// <devdoc>
         ///     Computes the location of the client rectangle r in screen coords.
         /// </devdoc>
@@ -10532,7 +10208,6 @@ example usage
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ReflectMessage"]/*' />
         /// <devdoc>
         ///     Reflects the specified message to the control that is bound to hWnd.
         /// </devdoc>
@@ -10549,7 +10224,6 @@ example usage
             return true;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Refresh"]/*' />
         /// <devdoc>
         ///     Forces the control to invalidate and immediately
         ///     repaint itself and any children.
@@ -10571,7 +10245,6 @@ example usage
             UnsafeNativeMethods.UiaReturnRawElementProvider(new HandleRef(this, handle), new IntPtr(0), new IntPtr(0), null);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetMouseEventArgs"]/*' />
         /// <devdoc>
         ///     Resets the mouse leave listeners.
         /// </devdoc>
@@ -10584,7 +10257,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetText"]/*' />
         /// <devdoc>
         ///     Resets the text to it's default value.
         /// </devdoc>
@@ -10596,7 +10268,6 @@ example usage
             Visible = true;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResumeLayout"]/*' />
         /// <devdoc>
         ///     Resumes normal layout logic. This will force a layout immediately
         ///     if there are any pending layout requests.
@@ -10605,7 +10276,6 @@ example usage
             ResumeLayout(true);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResumeLayout1"]/*' />
         /// <devdoc>
         ///     Resumes normal layout logic. If performLayout is set to true then
         ///     this will force a layout immediately if there are any pending layout requests.
@@ -10708,7 +10378,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Scale"]/*' />
         /// <devdoc>
         ///     Scales to entire control and any child controls.
         /// </devdoc>
@@ -10718,7 +10387,6 @@ example usage
             ScaleCore(ratio, ratio);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Scale1"]/*' />
         /// <devdoc>
         ///     Scales the entire control and any child controls.
         /// </devdoc>
@@ -10740,7 +10408,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Scale2"]/*' />
         /// <devdoc>
         ///     Scales a control and its children given a scaling factor.
         /// </devdoc>
@@ -10769,7 +10436,6 @@ example usage
 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Scale3"]/*' />
         /// <devdoc>
         ///     Scales a control and its children given a pair of scaling factors.
         ///     IncludedFactor will be applied to the dimensions of controls based on
@@ -10796,7 +10462,6 @@ example usage
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleChildControls"]/*' />
         /// <devdoc>
         ///     Scales the children of this control.  The default implementation recursively
         ///     walks children and calls ScaleControl on each one.
@@ -10906,7 +10571,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleControl"]/*' />
         /// <devdoc>
         ///     Scales an individual control's location, size, padding and margin.
         ///     If the control is top level, this will not scale the control's location.
@@ -11003,7 +10667,7 @@ example usage
             MinimumSize = minSize;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleCore"]/*' />
+
         /// <devdoc>
         ///     Performs the work of scaling the entire control and any child controls.
         /// </devdoc>
@@ -11064,7 +10728,6 @@ example usage
             return size;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Select"]/*' />
         /// <devdoc>
         ///     Activates this control.
         /// </devdoc>
@@ -11073,7 +10736,6 @@ example usage
         }
 
         // used by Form
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Select1"]/*' />
         protected virtual void Select(bool directed, bool forward) {
             IContainerControl c = GetContainerControlInternal();
 
@@ -11082,7 +10744,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SelectNextControl"]/*' />
         /// <devdoc>
         ///     Selects the next control following ctl.
         /// </devdoc>
@@ -11207,8 +10868,6 @@ example usage
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
-        
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SendToBack"]/*' />
         /// <devdoc>
         ///     sends this control to the back of the z-order
         /// </devdoc>
@@ -11222,7 +10881,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetBounds"]/*' />
         /// <devdoc>
         ///     Sets the bounds of the control.
         /// </devdoc>
@@ -11241,7 +10899,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetBounds1"]/*' />
         /// <devdoc>
         ///     Sets the bounds of the control.
         /// </devdoc>
@@ -11265,7 +10922,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetBoundsCore"]/*' />
         /// <devdoc>
         ///     Performs the work of setting the bounds of this control. Inheriting
         ///     classes can overide this function to add size restrictions. Inheriting
@@ -11357,7 +11013,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetClientSizeCore"]/*' />
         /// <devdoc>
         ///     Performs the work of setting the size of the client area of the control.
         /// </devdoc>
@@ -11369,7 +11024,6 @@ example usage
             OnClientSizeChanged(EventArgs.Empty);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SizeFromClientSize"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual Size SizeFromClientSize(Size clientSize) {
             return SizeFromClientSize(clientSize.Width, clientSize.Height);
@@ -11452,7 +11106,6 @@ example usage
             state2 = value ? state2 | flag : state2 & ~flag;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetStyle"]/*' />
         /// <devdoc>
         ///     Sets the current value of the specified bit in the control's style.
         ///     NOTE: This is control style, not the Win32 style of the hWnd.
@@ -11479,7 +11132,6 @@ example usage
             return result;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetTopLevel"]/*' />
         protected void SetTopLevel(bool value) {
             if (value && IsActiveX) {
                 throw new InvalidOperationException(SR.TopLevelNotAllowedIfActiveX);
@@ -11511,7 +11163,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetVisibleCore"]/*' />
         protected virtual void SetVisibleCore(bool value) {
             try {
                 System.Internal.HandleCollector.SuspendCollect();
@@ -11607,7 +11258,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="ContainerControl.GetAutoValidateForControl"]/*' />
         /// <devdoc>
         ///     Determine effective auto-validation setting for a given control, based on the AutoValidate property
         ///     of its containing control. Defaults to 'EnablePreventFocusChange' if there is no containing control
@@ -11619,7 +11269,6 @@ example usage
             return (parent != null) ? parent.AutoValidate : AutoValidate.EnablePreventFocusChange;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldAutoValidate"]/*' />
         /// <devdoc>
         ///     Is auto-validation currently in effect for this control?
         ///     Depends on the AutoValidate property of the containing control.
@@ -11638,7 +11287,6 @@ example usage
             return GetStyle(ControlStyles.ContainerControl);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeBackColor"]/*' />
         /// <devdoc>
         ///     Returns true if the backColor should be persisted in code gen.
         /// </devdoc>
@@ -11648,7 +11296,6 @@ example usage
             return !backColor.IsEmpty;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeCursor"]/*' />
         /// <devdoc>
         ///     Returns true if the cursor should be persisted in code gen.
         /// </devdoc>
@@ -11667,7 +11314,6 @@ example usage
             return (!GetState(STATE_ENABLED));
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeForeColor"]/*' />
         /// <devdoc>
         ///     Returns true if the foreColor should be persisted in code gen.
         /// </devdoc>
@@ -11677,7 +11323,6 @@ example usage
             return !foreColor.IsEmpty;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeFont"]/*' />
         /// <devdoc>
         ///     Returns true if the font should be persisted in code gen.
         /// </devdoc>
@@ -11688,7 +11333,6 @@ example usage
             return (found && font != null);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeRightToLeft"]/*' />
         /// <devdoc>
         ///     Returns true if the RightToLeft should be persisted in code gen.
         /// </devdoc>
@@ -11709,25 +11353,21 @@ example usage
 
         // Helper function - translates text alignment for Rtl controls
         // Read TextAlign as Left == Near, Right == Far
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected HorizontalAlignment RtlTranslateAlignment(HorizontalAlignment align) {
             return RtlTranslateHorizontal(align);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment1"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected LeftRightAlignment RtlTranslateAlignment(LeftRightAlignment align) {
             return RtlTranslateLeftRight(align);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment2"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected ContentAlignment RtlTranslateAlignment(ContentAlignment align) {
             return RtlTranslateContent(align);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateHorizontal"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected HorizontalAlignment RtlTranslateHorizontal(HorizontalAlignment align) {
 
@@ -11743,7 +11383,6 @@ example usage
             return align;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateLeftRight"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected LeftRightAlignment RtlTranslateLeftRight(LeftRightAlignment align) {
 
@@ -11759,7 +11398,6 @@ example usage
             return align;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateContent"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal ContentAlignment RtlTranslateContent(ContentAlignment align) {
             if (RightToLeft.Yes == RightToLeft) {
@@ -11802,7 +11440,7 @@ example usage
             UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)(value? styleFlags | flag: styleFlags & ~flag)));
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Show"]/*' />
+
         /// <devdoc>
         ///     Makes the control display by setting the visible property to true
         /// </devdoc>
@@ -11830,7 +11468,6 @@ example usage
             return !Padding.Equals(DefaultPadding);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeSize"]/*' />
         /// <devdoc>
         /// <para>Determines if the <see cref='System.Windows.Forms.Control.Size'/> property needs to be persisted.</para>
         /// </devdoc>        
@@ -11842,7 +11479,6 @@ example usage
             return width != s.Width || height != s.Height;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeText"]/*' />
         /// <devdoc>
         /// <para>Determines if the <see cref='System.Windows.Forms.Control.Text'/> property needs to be persisted.</para>
         /// </devdoc>
@@ -11851,7 +11487,6 @@ example usage
             return Text.Length != 0;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SuspendLayout"]/*' />
         /// <devdoc>
         ///     Suspends the layout logic for the control.
         /// </devdoc>
@@ -11877,7 +11512,6 @@ example usage
             SetState(STATE_TRACKINGMOUSEEVENT, false);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Update"]/*' />
         /// <devdoc>
         ///     Forces the control to paint any currently invalid areas.
         /// </devdoc>
@@ -11885,7 +11519,6 @@ example usage
             SafeNativeMethods.UpdateWindow(new HandleRef(window, InternalHandle));
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateBounds"]/*' />
         /// <devdoc>
         ///     Updates the bounds of the control based on the handle the control is
         ///     bound to.
@@ -11906,7 +11539,6 @@ example usage
                          rect.bottom - rect.top, clientWidth, clientHeight);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateBounds1"]/*' />
         /// <devdoc>
         ///     Updates the bounds of the control based on the bounds passed in.
         /// </devdoc>
@@ -11927,7 +11559,6 @@ example usage
             UpdateBounds(x, y, width, height, clientWidth, clientHeight);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateBounds2"]/*' />
         /// <devdoc>
         ///     Updates the bounds of the control based on the bounds passed in.
         /// </devdoc>
@@ -12057,7 +11688,6 @@ example usage
             ReflectParent = null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateZOrder"]/*' />
         /// <devdoc>
         ///     Updates this control in it's parent's zorder.
         /// </devdoc>
@@ -12101,7 +11731,6 @@ example usage
             window.LockReference(GetTopLevel() && Visible);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateStyles"]/*' />
         /// <devdoc>
         ///     Forces styles to be reapplied to the handle. This function will call
         ///     CreateParams to get the styles to apply.
@@ -13423,7 +13052,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.WndProc"]/*' />
         /// <devdoc>
         ///     Base wndProc. All messages are sent to wndProc after getting filtered
         ///     through the preProcessMessage function. Inheriting controls should
@@ -13823,7 +13451,6 @@ example usage
             Application.OnThreadException(e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.Children"]/*' />
         /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get {
@@ -13835,7 +13462,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.Container"]/*' />
         /// <internalonly/>
         IArrangedElement IArrangedElement.Container {
             get {
@@ -13844,26 +13470,22 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.ParticipatesInLayout"]/*' />
         /// <internalonly/>
         bool IArrangedElement.ParticipatesInLayout {
             get { return GetState(STATE_VISIBLE); }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.PerformLayout"]/*' />
         /// <internalonly/>
         void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string affectedProperty) {
             PerformLayout(new LayoutEventArgs(affectedElement, affectedProperty));
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.Properties"]/*' />
         /// <internalonly/>
         PropertyStore IArrangedElement.Properties {
             get { return Properties; }
         }
 
         // CAREFUL: This really calls SetBoundsCore, not SetBounds.
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.SetBounds"]/*' />
         /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             ISite site = Site;
@@ -14035,25 +13657,18 @@ example usage
         ///
         /// Explicit support of DropTarget
         ///
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragEnter"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragEnter(DragEventArgs drgEvent) {
                 OnDragEnter(drgEvent);
         }
-        
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragOver"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragOver(DragEventArgs drgEvent) {
                 OnDragOver(drgEvent);
         }
-        
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragLeave"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragLeave(EventArgs e) {
                 OnDragLeave(e);
         }
-        
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragDrop"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragDrop(DragEventArgs drgEvent) {
                 OnDragDrop(drgEvent);
@@ -14062,19 +13677,15 @@ example usage
         ///
         /// Explicit support of DropSource
         ///
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ISupportOleDropSource.OnGiveFeedback"]/*' />
         /// <internalonly/>
         void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)  {
                 OnGiveFeedback(giveFeedbackEventArgs);
         }
-        
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ISupportOleDropSource.OnQueryContinueDrag"]/*' />
         /// <internalonly/>
         void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) {
                 OnQueryContinueDrag(queryContinueDragEventArgs);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection"]/*' />
         /// <devdoc>
         ///     Collection of controls...
         /// </devdoc>
@@ -14090,12 +13701,10 @@ example usage
             private int lastAccessedIndex = -1;
 
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.ControlCollection"]/*' />
             public ControlCollection(Control owner) {
                 this.owner = owner;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.ContainsKey"]/*' />
             /// <devdoc>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
             /// </devdoc>
@@ -14103,7 +13712,6 @@ example usage
                return IsValidIndex(IndexOfKey(key));
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Add"]/*' />
             /// <devdoc>
             ///    <para>Adds a child control to this control. The control becomes the last control in
             ///       the child control list. If the control is already a child of another control it
@@ -14195,7 +13803,6 @@ example usage
                 owner.OnControlAdded(new ControlEventArgs(value));
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.IList.Add"]/*' />
             /// <internalonly/>
             int IList.Add(object control) {
                 if (control is Control) {
@@ -14207,7 +13814,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.AddRange"]/*' />
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual void AddRange(Control[] controls) {
                 if (controls == null) {
@@ -14232,7 +13838,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.ICloneable.Clone"]/*' />
             /// <internalonly/>
             object ICloneable.Clone() {
                 // Use CreateControlInstance so we get the same type of ControlCollection, but whack the
@@ -14244,12 +13849,11 @@ example usage
                 return ccOther;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Contains"]/*' />
             public bool Contains(Control control) {
                 return InnerList.Contains(control);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Find"]/*' />
+
             /// <devdoc>
             ///     <para>Searches for Controls by their Name property, builds up an array
             ///           of all the controls that match.
@@ -14269,7 +13873,6 @@ example usage
                 return stronglyTypedFoundControls;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.FindInternal"]/*' />
             /// <devdoc>
             ///     <para>Searches for Controls by their Name property, builds up an array list
             ///           of all the controls that match.
@@ -14321,12 +13924,10 @@ example usage
                 return new ControlCollectionEnumerator(this); 
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.IndexOf"]/*' />
             public int IndexOf(Control control) {
                 return InnerList.IndexOf(control);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.this"]/*' />
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
@@ -14357,7 +13958,6 @@ example usage
                 return -1;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.IsValidIndex"]/*' />
             /// <devdoc>
             ///     <para>Determines if the index is valid for the collection.</para>
             /// </devdoc>
@@ -14366,7 +13966,6 @@ example usage
                 return ((index >= 0) && (index < this.Count));
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Owner"]/*' />
             /// <devdoc>
             ///     <para>Who owns this control collection.</para>
             /// </devdoc>
@@ -14377,7 +13976,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Remove"]/*' />
             /// <devdoc>
             ///     Removes control from this control. Inheriting controls should call
             ///     base.remove to ensure that the control is removed.
@@ -14411,7 +14009,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.IList.Remove"]/*' />
             /// <internalonly/>
             void IList.Remove(object control) {
                 if (control is Control) {
@@ -14419,12 +14016,10 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.RemoveAt"]/*' />
             public void RemoveAt(int index) {
                 Remove(this[index]);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.RemoveByKey"]/*' />
             /// <devdoc>
             ///     <para>Removes the child control with the specified key.</para>
             /// </devdoc>
@@ -14435,7 +14030,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.this"]/*' />
             /// <devdoc>
             ///     Retrieves the child control with the specified index.
             /// </devdoc>
@@ -14452,7 +14046,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.this1"]/*' />
             /// <devdoc>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
@@ -14475,7 +14068,7 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Clear"]/*' />
+
             public virtual void Clear() {
 #if DEBUG
                 int layoutSuspendCount = owner.LayoutSuspendCount;
@@ -14496,7 +14089,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.GetChildIndex"]/*' />
             /// <devdoc>
             ///     Retrieves the index of the specified
             ///     child control in this array.  An ArgumentException
@@ -14507,7 +14099,6 @@ example usage
                 return GetChildIndex(child, true);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.GetChildIndex1"]/*' />
             /// <devdoc>
             ///     Retrieves the index of the specified
             ///     child control in this array.  An ArgumentException
@@ -14552,7 +14143,6 @@ example usage
 
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.SetChildIndex"]/*' />
             /// <devdoc>
             ///     Sets the index of the specified
             ///     child control in this array.  An ArgumentException
@@ -14616,7 +14206,6 @@ example usage
 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.GetControlInfo"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14639,7 +14228,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.OnMnemonic"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14653,7 +14241,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14665,7 +14252,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.FreezeEvents"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14676,7 +14262,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.GetWindow"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14684,7 +14269,6 @@ example usage
             return((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(out hwnd);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.ContextSensitiveHelp"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14692,7 +14276,6 @@ example usage
             ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.TranslateAccelerator"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14700,7 +14283,6 @@ example usage
             return ActiveXInstance.TranslateAccelerator(ref lpmsg);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.OnFrameWindowActivate"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14710,7 +14292,6 @@ example usage
             // return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.OnDocWindowActivate"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14721,7 +14302,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.ResizeBorder"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14730,7 +14310,6 @@ example usage
             // return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.EnableModeless"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14739,7 +14318,6 @@ example usage
             // return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.GetWindow"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14750,7 +14328,6 @@ example usage
             return hr;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.ContextSensitiveHelp"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14761,7 +14338,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.InPlaceDeactivate"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14772,7 +14348,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.UIDeactivate"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14781,7 +14356,6 @@ example usage
             return ActiveXInstance.UIDeactivate();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.SetObjectRects"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14792,7 +14366,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.ReactivateAndUndo"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14801,7 +14374,6 @@ example usage
             // return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetClientSite"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14811,7 +14383,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetClientSite"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14820,7 +14391,6 @@ example usage
             return ActiveXInstance.GetClientSite();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetHostNames"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14831,7 +14401,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.Close"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14841,7 +14410,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetMoniker"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14850,7 +14418,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetMoniker"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14860,7 +14427,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.InitFromData"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14869,7 +14435,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetClipboardData"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14879,7 +14444,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.DoVerb"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14917,7 +14481,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.EnumVerbs"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14926,7 +14489,6 @@ example usage
             return ActiveXImpl.EnumVerbs(out e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.OleUpdate"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14935,7 +14497,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.IsUpToDate"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14944,7 +14505,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetUserClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14954,7 +14514,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetUserType"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14969,7 +14528,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14981,7 +14539,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -14994,7 +14551,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.Advise"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15004,7 +14560,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.Unadvise"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15016,7 +14571,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.EnumAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15026,7 +14580,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetMiscStatus"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15053,7 +14606,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetColorScheme"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15062,7 +14614,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleWindow.GetWindow"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15070,7 +14621,6 @@ example usage
             return((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(out hwnd);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15078,7 +14628,6 @@ example usage
             ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersist.GetClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15087,7 +14636,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersist.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.InitNew"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15095,7 +14643,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.InitNew");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.GetClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15104,7 +14651,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.Load"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15115,7 +14661,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.Save"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15126,7 +14671,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.GetClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15135,7 +14679,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.IsDirty"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15144,7 +14687,6 @@ example usage
             return ActiveXInstance.IsDirty();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.InitNew"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15152,7 +14694,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.InitNew");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.Load"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15164,7 +14705,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.Save"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15175,7 +14715,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.SaveCompleted"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15183,7 +14722,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.SaveCompleted");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.HandsOffStorage"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15191,7 +14729,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.HandsOffStorage");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.GetClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15200,7 +14737,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.IsDirty"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15209,7 +14745,6 @@ example usage
             return ActiveXInstance.IsDirty();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.Load"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15220,7 +14755,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.Save"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15231,7 +14765,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.GetSizeMax"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15239,7 +14772,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetSizeMax");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.InitNew"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15247,7 +14779,6 @@ example usage
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IQuickActivate.QuickActivate"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15258,7 +14789,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IQuickActivate.SetContentExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15269,7 +14799,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IQuickActivate.GetContentExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15280,7 +14809,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.Draw"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15305,7 +14833,6 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.GetColorSet"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15319,7 +14846,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.Freeze"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15328,7 +14854,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.Unfreeze"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15337,7 +14862,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.SetAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15346,7 +14870,6 @@ example usage
             ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.GetAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15355,7 +14878,6 @@ example usage
             ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.Draw"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15369,7 +14891,6 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.GetColorSet"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15383,7 +14904,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.Freeze"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15392,7 +14912,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.Unfreeze"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15401,7 +14920,6 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.SetAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15410,7 +14928,6 @@ example usage
             ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.GetAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15419,7 +14936,6 @@ example usage
             ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.GetExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -15645,7 +15161,6 @@ example usage
             private short                   accelCount = -1;
             private NativeMethods.COMRECT   adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.ActiveXImpl"]/*' />
             /// <devdoc>
             ///      Creates a new ActiveXImpl.
             /// </devdoc>
@@ -15667,7 +15182,6 @@ example usage
                 };
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.AmbientBackColor"]/*' />
             /// <devdoc>
             ///      Retrieves the ambient back color for the control.
             /// </devdoc>
@@ -15778,7 +15292,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.EventsFrozen"]/*' />
             /// <devdoc>
             ///      Determines if events should be frozen.
             /// </devdoc>
@@ -15855,7 +15368,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Advise"]/*' />
             /// <devdoc>
             ///      Implements IOleObject::Advise
             /// </devdoc>
@@ -15864,7 +15376,6 @@ example usage
                 return adviseList.Count;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Close"]/*' />
             /// <devdoc>
             ///      Implements IOleObject::Close
             /// </devdoc>
@@ -15884,7 +15395,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.DoVerb"]/*' />
             /// <devdoc>
             ///      Implements IOleObject::DoVerb
             /// </devdoc>
@@ -15979,7 +15489,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Draw"]/*' />
             /// <devdoc>
             ///      Implements IViewObject2::Draw.
             /// </devdoc>
@@ -16067,7 +15576,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.EnumVerbs"]/*' />
             /// <devdoc>
             ///     Returns a new verb enumerator.
             /// </devdoc>
@@ -16190,7 +15698,6 @@ example usage
                 return clientSite;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.GetControlInfo"]/*' />
             /// <devdoc>
             /// </devdoc>
             /// <internalonly/>
@@ -16352,7 +15859,6 @@ example usage
                 return pt;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.InPlaceActivate"]/*' />
             /// <devdoc>
             ///      In place activates this Object.
             /// </devdoc>
@@ -16494,7 +16000,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.InPlaceDeactivate"]/*' />
             /// <devdoc>
             ///      Implements IOleInPlaceObject::InPlaceDeactivate.
             /// </devdoc>
@@ -16574,7 +16079,6 @@ example usage
                 return (prop.GetValue(control) is ISerializable);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Load"]/*' />
             /// <devdoc>
             ///      Implements IPersistStorage::Load
             /// </devdoc>
@@ -16602,7 +16106,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Load1"]/*' />
             /// <devdoc>
             ///      Implements IPersistStreamInit::Load
             /// </devdoc>
@@ -16813,7 +16316,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.OnAmbientPropertyChange"]/*' />
             /// <devdoc>
             ///      Implements IOleControl::OnAmbientPropertyChanged
             /// </devdoc>
@@ -16859,7 +16361,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.OnDocWindowActivate"]/*' />
             /// <devdoc>
             ///      Implements IOleInPlaceActiveObject::OnDocWindowActivate.
             /// </devdoc>
@@ -16900,7 +16401,6 @@ example usage
                 return pt;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.QuickActivate"]/*' />
             /// <devdoc>
             ///     Our implementation of IQuickActivate::QuickActivate
             /// </devdoc>
@@ -17256,7 +16756,6 @@ example usage
             }
 
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Save"]/*' />
             /// <devdoc>
             ///      Implements IPersistStorage::Save
             /// </devdoc>
@@ -17267,7 +16766,6 @@ example usage
                 UnsafeNativeMethods.ReleaseComObject(stream);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Save1"]/*' />
             /// <devdoc>
             ///      Implements IPersistStreamInit::Save
             /// </devdoc>
@@ -17353,7 +16851,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.SetAdvise"]/*' />
             /// <devdoc>
             ///      Implements IViewObject2::SetAdvise.
             /// </devdoc>
@@ -17382,7 +16879,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.SetClientSite"]/*' />
             /// <devdoc>
             ///      Implements IOleObject::SetClientSite.
             /// </devdoc>
@@ -17706,7 +17202,6 @@ example usage
             }
             #endif
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.ThrowHr"]/*' />
             /// <devdoc>
             ///      Throws the given hresult.  This is used by ActiveX sourcing.
             /// </devdoc>
@@ -17715,7 +17210,6 @@ example usage
                 throw e;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.TranslateAccelerator"]/*' />
             /// <devdoc>
             ///     Handles IOleControl::TranslateAccelerator
             /// </devdoc>
@@ -17798,7 +17292,6 @@ example usage
                 return hr;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.UIDeactivate"]/*' />
             /// <devdoc>
             ///      Implements IOleInPlaceObject::UIDeactivate.
             /// </devdoc>
@@ -17829,7 +17322,6 @@ example usage
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Unadvise"]/*' />
             /// <devdoc>
             ///      Implements IOleObject::Unadvise
             /// </devdoc>
@@ -18323,7 +17815,6 @@ example usage
             private object value;
             private bool empty;
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.AmbientProperty"]/*' />
             /// <devdoc>
             ///      Creates a new, empty ambient property.
             /// </devdoc>
@@ -18334,7 +17825,6 @@ example usage
                 this.empty = true;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.Name"]/*' />
             /// <devdoc>
             ///      The windows forms property name.
             /// </devdoc>
@@ -18344,7 +17834,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.DispID"]/*' />
             /// <devdoc>
             ///      The DispID for the property.
             /// </devdoc>
@@ -18354,7 +17843,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.Empty"]/*' />
             /// <devdoc>
             ///      Returns true if this property has not been set.
             /// </devdoc>
@@ -18364,7 +17852,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.Value"]/*' />
             /// <devdoc>
             ///      The current value of the property.
             /// </devdoc>
@@ -18378,7 +17865,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.ResetValue"]/*' />
             /// <devdoc>
             ///      Resets the property.
             /// </devdoc>
@@ -18571,7 +18057,7 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject"]/*' />
+
         /// <devdoc>
         ///      An implementation of AccessibleChild for use with Controls
         /// </devdoc>
@@ -18588,7 +18074,6 @@ example usage
 
             // constructors
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject"]/*' />
             public ControlAccessibleObject(Control ownerControl) {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
@@ -18605,7 +18090,6 @@ example usage
                 this.Handle = handle;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject1"]/*' />
             internal ControlAccessibleObject(Control ownerControl, int accObjId) {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
@@ -18728,7 +18212,6 @@ example usage
                 return true;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction {
                 get {
                     string defaultAction = ownerControl.AccessibleDefaultActionDescription;
@@ -18754,7 +18237,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Description"]/*' />
             public override string Description {
                 get {
                     string description = ownerControl.AccessibleDescription;
@@ -18767,7 +18249,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Handle"]/*' />
             public IntPtr Handle {
 
                 get {
@@ -18806,7 +18287,6 @@ example usage
 
             } // end Handle
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Help"]/*' />
             public override string Help {
                 get {
                     QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[EventQueryAccessibilityHelp];
@@ -18822,7 +18302,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlAccessibleObject.KeyboardShortcut"]/*' />
             public override string KeyboardShortcut {
                 get {
                     // For controls, the default keyboard shortcut comes directly from the accessible
@@ -18832,7 +18311,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Name"]/*' />
             public override string Name {
                 get {
                     // Special case: If an explicit name has been set in the AccessibleName property, use that.
@@ -18855,7 +18333,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent {
                 get {
                     return base.Parent;
@@ -18893,7 +18370,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Owner"]/*' />
             public Control Owner {
                 get {
                     return ownerControl;
@@ -18941,7 +18417,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Role"]/*' />
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = ownerControl.AccessibleRole;
@@ -18955,7 +18430,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.GetHelpTopic"]/*' />
             public override int GetHelpTopic(out string fileName) {
                 int topic = 0;
 
@@ -18983,7 +18457,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients"]/*' />
             public void NotifyClients(AccessibleEvents accEvent) {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
                                   this.ToString() + ", accEvent = " + accEvent.ToString() + ", childID = self");
@@ -18991,7 +18464,6 @@ example usage
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, 0);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients1"]/*' />
             public void NotifyClients(AccessibleEvents accEvent, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
@@ -19002,7 +18474,6 @@ example usage
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, childID + 1);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients2"]/*' />
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
@@ -19071,7 +18542,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ToString"]/*' />
             public override string ToString() {
                 if (Owner != null) {
                     return "ControlAccessibleObject: Owner = " + Owner.ToString();
@@ -19245,7 +18715,6 @@ example usage
                 this.owner = owner;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlVersionInfo.CompanyName"]/*' />
             /// <devdoc>
             ///     The company name associated with the component.
             /// </devdoc>
@@ -19284,7 +18753,7 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlVersionInfo.ProductName"]/*' />
+
             /// <devdoc>
             ///     The product name associated with this component.
             /// </devdoc>

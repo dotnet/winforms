@@ -36,7 +36,6 @@ namespace System.Internal
     using System.Globalization;
 
 
-    /// <include file='doc\DbgUtil.uex' path='docs/doc[@for="DbgUtil"]/*' />
     /// <devdoc>
     /// Debug help utility.
     /// </devdoc>

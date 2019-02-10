@@ -25,10 +25,8 @@ namespace System.Windows.Forms
     using System.Runtime.Versioning;
     using Runtime.CompilerServices;
 
-    /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView"]/*' />
     public partial class DataGridView
     {
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AccessibilityNotifyCurrentCellChanged"]/*' />
         protected virtual void AccessibilityNotifyCurrentCellChanged(Point cellAddress)
         {
             if (cellAddress.X < 0 || cellAddress.X >= this.Columns.Count)
@@ -88,7 +86,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AdjustColumnHeaderBorderStyle"]/*' />
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -1357,7 +1354,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AreAllCellsSelected"]/*' />
         // Does not seem to be a valid fxcop violation report. Contacting fxcop team to double-check.
         [SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops")] 
         public bool AreAllCellsSelected(bool includeInvisibleCells)
@@ -1649,19 +1645,16 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumn0"]/*' />
         public void AutoResizeColumn(int columnIndex)
         {
             AutoResizeColumn(columnIndex, DataGridViewAutoSizeColumnMode.AllCells);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumn1"]/*' />
         public void AutoResizeColumn(int columnIndex, DataGridViewAutoSizeColumnMode autoSizeColumnMode)
         {
             AutoResizeColumn(columnIndex, autoSizeColumnMode, true);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumn2"]/*' />
         protected void AutoResizeColumn(int columnIndex, DataGridViewAutoSizeColumnMode autoSizeColumnMode, bool fixedHeight)
         {
             if (autoSizeColumnMode == DataGridViewAutoSizeColumnMode.NotSet ||
@@ -1699,19 +1692,16 @@ namespace System.Windows.Forms
             AutoResizeColumnInternal(columnIndex, (DataGridViewAutoSizeColumnCriteriaInternal) autoSizeColumnMode, fixedHeight);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumnHeadersHeight1"]/*' />
         public void AutoResizeColumnHeadersHeight()
         {
             AutoResizeColumnHeadersHeight(true, true);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumnHeadersHeight2"]/*' />
         public void AutoResizeColumnHeadersHeight(int columnIndex)
         {
             AutoResizeColumnHeadersHeight(columnIndex, true, true);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumnHeadersHeight3"]/*' />
         protected void AutoResizeColumnHeadersHeight(bool fixedRowHeadersWidth, bool fixedColumnsWidth)
         {
             if (!this.ColumnHeadersVisible)
@@ -1779,7 +1769,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumnHeadersHeight4"]/*' />
         protected void AutoResizeColumnHeadersHeight(int columnIndex, bool fixedRowHeadersWidth, bool fixedColumnWidth)
         {
             if (columnIndex < -1 || columnIndex >= this.Columns.Count)
@@ -1908,19 +1897,16 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumns0"]/*' />
         public void AutoResizeColumns()
         {
             AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumns1"]/*' />
         public void AutoResizeColumns(DataGridViewAutoSizeColumnsMode autoSizeColumnsMode)
         {
             AutoResizeColumns(autoSizeColumnsMode, true);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeColumns2"]/*' />
         protected void AutoResizeColumns(DataGridViewAutoSizeColumnsMode autoSizeColumnsMode, bool fixedHeight)
         {
             for (int columnIndex = 0; columnIndex < this.Columns.Count; columnIndex++)
@@ -1929,19 +1915,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRow0"]/*' />
         public void AutoResizeRow(int rowIndex)
         {
             AutoResizeRow(rowIndex, DataGridViewAutoSizeRowMode.AllCells);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRow1"]/*' />
         public void AutoResizeRow(int rowIndex, DataGridViewAutoSizeRowMode autoSizeRowMode)
         {
             AutoResizeRow(rowIndex, autoSizeRowMode, true /*fixedWidth*/);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRow2"]/*' />
         protected void AutoResizeRow(int rowIndex, DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth)
         {
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
@@ -1960,7 +1943,6 @@ namespace System.Windows.Forms
             AutoResizeRowInternal(rowIndex, autoSizeRowMode, fixedWidth, false /*internalAutosizing*/);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRowHeadersWidth1"]/*' />
         // User can override this if there is a quicker way to determine preferred row headers width
         public void AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode)
         {
@@ -1969,7 +1951,6 @@ namespace System.Windows.Forms
                                       true /*fixedRowsHeight*/);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRowHeadersWidth2"]/*' />
         // User can override this if there is a quicker way to determine preferred row headers width
         protected void AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode,
                                                  bool fixedColumnHeadersHeight, 
@@ -2115,7 +2096,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRowHeadersWidth3"]/*' />
         public void AutoResizeRowHeadersWidth(int rowIndex, DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode)
         {
             AutoResizeRowHeadersWidth(rowIndex,
@@ -2124,7 +2104,6 @@ namespace System.Windows.Forms
                                       true /*fixedRowHeight*/);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRowHeadersWidth4"]/*' />
         protected void AutoResizeRowHeadersWidth(int rowIndex,
                                                  DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode,
                                                  bool fixedColumnHeadersHeight, 
@@ -2348,19 +2327,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRows0"]/*' />
         public void AutoResizeRows()
         {
             AutoResizeRows(DataGridViewAutoSizeRowsMode.AllCells);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRows1"]/*' />
         public void AutoResizeRows(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
         {
             AutoResizeRows(autoSizeRowsMode, true /*fixedWidth*/);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRows2"]/*' />
         protected void AutoResizeRows(DataGridViewAutoSizeRowsMode autoSizeRowsMode, bool fixedWidth)
         {
             switch (autoSizeRowsMode) 
@@ -2391,7 +2367,6 @@ namespace System.Windows.Forms
             AdjustShrinkingRows(autoSizeRowsMode, fixedWidth, false /*internalAutosizing*/);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoResizeRows3"]/*' />
         protected void AutoResizeRows(int rowIndexStart, int rowsCount, DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth)
         {
             // not using ClientUtils.IsEnumValid here because DataGridViewAutoSizeRowCriteriaInternal is a flags enum.
@@ -2582,7 +2557,6 @@ namespace System.Windows.Forms
             return clip;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BeginEdit"]/*' />
         public virtual bool BeginEdit(bool selectAll)
         {
             if (this.ptCurrentCell.X == -1)
@@ -3055,7 +3029,6 @@ namespace System.Windows.Forms
             return r;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CancelEdit"]/*' />
         public bool CancelEdit()
         {
             return CancelEdit(false /*endEdit, DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.InitialValueRestoration*/);
@@ -3418,7 +3391,6 @@ namespace System.Windows.Forms
             this.cachedScrollableRegion = null;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ClearSelection"]/*' />
         public void ClearSelection()
         {
             this.noDimensionChangeCount++;
@@ -3485,7 +3457,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ClearSelection2"]/*' />
         protected void ClearSelection(int columnIndexException, int rowIndexException, bool selectExceptionElement)
         {
             switch (this.SelectionMode)
@@ -3747,7 +3718,6 @@ namespace System.Windows.Forms
                 (columnDisplayIndex1 == columnDisplayIndex2 && columnIndex1 < columnIndex2);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CommitEdit"]/*' />
         public bool CommitEdit(DataGridViewDataErrorContexts context)
         {
             if (this.IsCurrentCellInEditMode)
@@ -5381,19 +5351,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CreateControlsInstance"]/*' />
         protected override Control.ControlCollection CreateControlsInstance()
         {
             return new DataGridViewControlCollection(this);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CreateColumnsInstance"]/*' />
         /// <devdoc>
         ///     Constructs the new instance of the Columns collection objects. Subclasses
         ///     should not call base.CreateColumnsInstance.
@@ -5404,7 +5371,6 @@ namespace System.Windows.Forms
             return new DataGridViewColumnCollection(this);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CreateRowsInstance"]/*' />
         /// <devdoc>
         ///     Constructs the new instance of the Rows collection objects. Subclasses
         ///     should not call base.CreateRowsInstance.
@@ -5505,7 +5471,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DisplayedColumnCount"]/*' />
         public int DisplayedColumnCount(bool includePartialColumns)
         {
             int cxMax = this.layout.Data.Width, cx = 0;
@@ -5551,14 +5516,12 @@ namespace System.Windows.Forms
             return includePartialColumns ? partialColumns : completeColumns;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DisplayedRowCount"]/*' />
         public int DisplayedRowCount(bool includePartialRow)
         {
             return includePartialRow ? (this.displayedBandsInfo.NumDisplayedFrozenRows + this.displayedBandsInfo.NumDisplayedScrollingRows) :
                 (this.displayedBandsInfo.NumTotallyDisplayedFrozenRows + this.displayedBandsInfo.NumTotallyDisplayedScrollingRows);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Dispose"]/*' />
         protected override void Dispose(bool disposing) 
         {
             if (disposing)
@@ -6144,13 +6107,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.EndEdit1"]/*' />
         public bool EndEdit()
         {
             return EndEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.EndEdit2"]/*' />
         public bool EndEdit(DataGridViewDataErrorContexts context)
         {
             if (this.EditMode == DataGridViewEditMode.EditOnEnter)
@@ -6788,7 +6749,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.GetAccessibilityObjectById"]/*' />
         protected override AccessibleObject GetAccessibilityObjectById(int objectId)
         {
             // decrement the objectId because in our implementation of AccessibilityClient notitification objectId's are 1 - based.
@@ -6882,7 +6842,6 @@ namespace System.Windows.Forms
             return rect;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.GetCellCount"]/*' />
         [
             SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes"), // using specialized DataGridViewCellLinkedList class instead of generics
         ]
@@ -7069,7 +7028,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.GetCellDisplayRectangle"]/*' />
         public Rectangle GetCellDisplayRectangle(int columnIndex, int rowIndex, bool cutOverflow)
         {
             Rectangle rowRect;
@@ -7185,7 +7143,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.GetClipboardContent"]/*' />
         [
             SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes"), // using specialized DataGridViewCellLinkedList class instead of generics
         ]
@@ -8216,7 +8173,6 @@ namespace System.Windows.Forms
             #endif
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.GetColumnDisplayRectangle"]/*' />
         // Rectangle returned includes the potential column header
         public Rectangle GetColumnDisplayRectangle(int columnIndex, bool cutOverflow)
         {
@@ -9078,7 +9034,6 @@ namespace System.Windows.Forms
             return new Size(preferredWidth, preferredHeight);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.GetRowDisplayRectangle"]/*' />
         // Rectangle returned includes the potential row header
         public Rectangle GetRowDisplayRectangle(int rowIndex, bool cutOverflow)
         {
@@ -9350,7 +9305,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.HitTest"]/*' />
         public HitTestInfo HitTest(int x, int y) 
         {
             HitTestInfo hti = new HitTestInfo();
@@ -9904,7 +9858,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.InvalidateCell"]/*' />
         public void InvalidateCell(DataGridViewCell dataGridViewCell)
         {
             if (dataGridViewCell == null)
@@ -9925,7 +9878,6 @@ namespace System.Windows.Forms
             InvalidateCell(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.InvalidateCell1"]/*' />
         public void InvalidateCell(int columnIndex, int rowIndex)
         {
             if (columnIndex < -1 || columnIndex >= this.Columns.Count)
@@ -9951,7 +9903,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.InvalidateColumn"]/*' />
         /// <devdoc>
         ///      Invalidate the painting region for the column specified.
         /// </devdoc>
@@ -9997,7 +9948,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.InvalidateRow"]/*' />
         /// <devdoc>
         ///      Invalidate the painting region for the row specified.
         /// </devdoc>
@@ -10199,7 +10149,6 @@ namespace System.Windows.Forms
             return rowIndex >= this.Rows.Count || rowIndex == -1;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.IsInputChar"]/*' />
         protected override bool IsInputChar(char charCode)
         {
             if (this.editingControl != null &&
@@ -10214,7 +10163,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.IsInputKey"]/*' />
         protected override bool IsInputKey(Keys keyData)
         {
             if ((keyData & Keys.Alt) == Keys.Alt)
@@ -10663,7 +10611,6 @@ namespace System.Windows.Forms
             Invalidate(CalcColResizeFeedbackRect(this.currentColSplitBar));
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.NotifyCurrentCellDirty"]/*' />
         public virtual void NotifyCurrentCellDirty(bool dirty)
         {
             Debug.Assert(this.ptCurrentCell.X >= 0 && this.ptCurrentCell.X < this.Columns.Count);
@@ -11219,7 +11166,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAllowUserToAddRowsChanged"]/*' />
         protected virtual void OnAllowUserToAddRowsChanged(EventArgs e)
         {
             PushAllowUserToAddRows();
@@ -11231,7 +11177,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAllowUserToDeleteRowsChanged"]/*' />
         protected virtual void OnAllowUserToDeleteRowsChanged(EventArgs e)
         {
             EventHandler eh = this.Events[EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED] as EventHandler;
@@ -11241,7 +11186,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAllowUserToOrderColumnsChanged"]/*' />
         protected virtual void OnAllowUserToOrderColumnsChanged(EventArgs e)
         {
             EventHandler eh = this.Events[EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED] as EventHandler;
@@ -11251,7 +11195,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAllowUserToResizeColumnsChanged"]/*' />
         protected virtual void OnAllowUserToResizeColumnsChanged(EventArgs e)
         {
             EventHandler eh = this.Events[EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED] as EventHandler;
@@ -11261,7 +11204,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAllowUserToResizeRowsChanged"]/*' />
         protected virtual void OnAllowUserToResizeRowsChanged(EventArgs e)
         {
             EventHandler eh = this.Events[EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED] as EventHandler;
@@ -11271,7 +11213,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAlternatingRowsDefaultCellStyleChanged"]/*' />
         protected virtual void OnAlternatingRowsDefaultCellStyleChanged(EventArgs e)
         {
             DataGridViewCellStyleChangedEventArgs dgvcsce = e as DataGridViewCellStyleChangedEventArgs;
@@ -11295,7 +11236,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAutoGenerateColumnsChanged"]/*' />
         protected virtual void OnAutoGenerateColumnsChanged(EventArgs e)
         {
             if (this.AutoGenerateColumns && this.DataSource != null)
@@ -11317,7 +11257,6 @@ namespace System.Windows.Forms
             OnAutoSizeColumnModeChanged(dgvascme);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAutoSizeColumnModeChanged"]/*' />
         protected virtual void OnAutoSizeColumnModeChanged(DataGridViewAutoSizeColumnModeEventArgs e)
         {
             DataGridViewColumn dataGridViewColumn = e.Column;
@@ -11390,7 +11329,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAutoSizeColumnsModeChanged"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.PreviousModes is more precise than just e
         protected virtual void OnAutoSizeColumnsModeChanged(DataGridViewAutoSizeColumnsModeEventArgs e)
         {
@@ -11477,7 +11415,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnAutoSizeRowsModeChanged"]/*' />
         protected virtual void OnAutoSizeRowsModeChanged(DataGridViewAutoSizeModeEventArgs e)
         {
             if (this.autoSizeRowsMode == DataGridViewAutoSizeRowsMode.None)
@@ -11510,7 +11447,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnBackgroundColorChanged"]/*' />
         protected virtual void OnBackgroundColorChanged(EventArgs e) 
         {
             InvalidateInside();
@@ -11620,7 +11556,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnBindingContextChanged"]/*' />
         protected override void OnBindingContextChanged(EventArgs e)
         {
             if (this.dataGridViewState2[DATAGRIDVIEWSTATE2_inBindingContextChanged])
@@ -11671,7 +11606,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnBorderStyleChanged"]/*' />
         protected virtual void OnBorderStyleChanged(EventArgs e)
         {
             EventHandler eh = this.Events[EVENT_DATAGRIDVIEWBORDERSTYLECHANGED] as EventHandler;
@@ -11681,7 +11615,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCancelRowEdit"]/*' />
         protected virtual void OnCancelRowEdit(QuestionEventArgs e)
         {
             QuestionEventHandler eh = this.Events[EVENT_DATAGRIDVIEWCANCELROWEDIT] as QuestionEventHandler;
@@ -11692,7 +11625,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellBeginEdit"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellBeginEdit(DataGridViewCellCancelEventArgs e)
         {
@@ -11711,7 +11643,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellBorderStyleChanged"]/*' />
         protected virtual void OnCellBorderStyleChanged(EventArgs e)
         {
             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
@@ -11729,7 +11660,6 @@ namespace System.Windows.Forms
             OnCellClick(e);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellClick"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellClick(DataGridViewCellEventArgs e)
         {
@@ -11815,7 +11745,6 @@ namespace System.Windows.Forms
             OnCellContentClick(e);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellContentClick"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellContentClick(DataGridViewCellEventArgs e)
         {
@@ -11851,7 +11780,6 @@ namespace System.Windows.Forms
             OnCellContentDoubleClick(e);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellContentDoubleClick"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellContentDoubleClick(DataGridViewCellEventArgs e)
         {
@@ -11888,7 +11816,6 @@ namespace System.Windows.Forms
             OnCellContextMenuStripChanged(dgvce);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellContextMenuStripChanged"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellContextMenuStripChanged(DataGridViewCellEventArgs e)
         {
@@ -11914,7 +11841,6 @@ namespace System.Windows.Forms
             return dgvccmsne.ContextMenuStrip;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellContextMenuStripNeeded"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellContextMenuStripNeeded(DataGridViewCellContextMenuStripNeededEventArgs e)
         {
@@ -11933,7 +11859,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellDoubleClick"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellDoubleClick(DataGridViewCellEventArgs e)
         {
@@ -11964,7 +11889,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellEndEdit"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellEndEdit(DataGridViewCellEventArgs e)
         {
@@ -12000,7 +11924,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellEnter"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellEnter(DataGridViewCellEventArgs e)
         {
@@ -12037,7 +11960,6 @@ namespace System.Windows.Forms
             OnCellErrorTextChanged(dgvce);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellErrorTextChanged"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellErrorTextChanged(DataGridViewCellEventArgs e)
         {
@@ -12067,7 +11989,6 @@ namespace System.Windows.Forms
             return dgvcetne.ErrorText;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellErrorTextNeeded"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellErrorTextNeeded(DataGridViewCellErrorTextNeededEventArgs e)
         {
@@ -12097,7 +12018,6 @@ namespace System.Windows.Forms
             return dgvcfe;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellFormatting"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellFormatting(DataGridViewCellFormattingEventArgs e)
         {
@@ -12133,7 +12053,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellLeave"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellLeave(DataGridViewCellEventArgs e)
         {
@@ -12162,7 +12081,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellMouseClick"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseClick(DataGridViewCellMouseEventArgs e)
         {
@@ -12194,7 +12112,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellMouseDoubleClick"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseDoubleClick(DataGridViewCellMouseEventArgs e)
         {
@@ -12226,7 +12143,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellMouseDown"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseDown(DataGridViewCellMouseEventArgs e)
         {
@@ -12887,7 +12803,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellMouseEnter"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseEnter(DataGridViewCellEventArgs e)
         {
@@ -12921,7 +12836,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellMouseLeave"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseLeave(DataGridViewCellEventArgs e)
         {
@@ -12955,7 +12869,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellMouseMove"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseMove(DataGridViewCellMouseEventArgs e)
         {
@@ -13023,7 +12936,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellMouseUp"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellMouseUp(DataGridViewCellMouseEventArgs e)
         {
@@ -13054,7 +12966,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellPainting"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected internal virtual void OnCellPainting(DataGridViewCellPaintingEventArgs e)
         {
@@ -13083,7 +12994,6 @@ namespace System.Windows.Forms
             return dgvcpe;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellParsing"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellParsing(DataGridViewCellParsingEventArgs e)
         {
@@ -13134,7 +13044,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellStateChanged"]/*' />
         protected virtual void OnCellStateChanged(DataGridViewCellStateChangedEventArgs e)
         {
             // At this point we assume that only the Selected state has an influence on the rendering of the cell.
@@ -13181,7 +13090,6 @@ namespace System.Windows.Forms
             OnCellStyleChanged(dgvce);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellStyleChanged"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellStyleChanged(DataGridViewCellEventArgs e)
         {
@@ -13236,7 +13144,6 @@ namespace System.Windows.Forms
             OnCellStyleContentChanged(dgvcscce);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellStyleContentChanged"]/*' />
         protected virtual void OnCellStyleContentChanged(DataGridViewCellStyleContentChangedEventArgs e)
         {
             // We assume that when a color changes, it has no effect on the autosize of elements
@@ -13367,7 +13274,6 @@ namespace System.Windows.Forms
             OnCellToolTipTextChanged(dgvce);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellToolTipTextChanged"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellToolTipTextChanged(DataGridViewCellEventArgs e)
         {
@@ -13393,7 +13299,6 @@ namespace System.Windows.Forms
             return dgvctttne.ToolTipText;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellToolTipTextNeeded"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellToolTipTextNeeded(DataGridViewCellToolTipTextNeededEventArgs e)
         {
@@ -13429,7 +13334,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellValidated"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValidated(DataGridViewCellEventArgs e)
         {
@@ -13482,7 +13386,6 @@ namespace System.Windows.Forms
             return dgvcfvce.Cancel;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellValidating"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValidating(DataGridViewCellValidatingEventArgs e)
         {
@@ -13520,7 +13423,6 @@ namespace System.Windows.Forms
             OnCellValueChanged(e);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellValueChanged"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValueChanged(DataGridViewCellEventArgs e)
         {
@@ -13549,7 +13451,6 @@ namespace System.Windows.Forms
             return dgvcve.Value;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellValueNeeded"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValueNeeded(DataGridViewCellValueEventArgs e)
         {
@@ -13580,7 +13481,6 @@ namespace System.Windows.Forms
             OnCellValuePushed(dgvcve);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCellValuePushed"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")] // e.ColumnIndex / e.RowIndex is more precise than just e
         protected virtual void OnCellValuePushed(DataGridViewCellValueEventArgs e)
         {
@@ -13665,7 +13565,6 @@ namespace System.Windows.Forms
             this.individualReadOnlyCells.Clear();
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnAdded"]/*' />
         protected virtual void OnColumnAdded(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -13732,7 +13631,6 @@ namespace System.Windows.Forms
             OnColumnGlobalAutoSize(columnIndex);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnContextMenuStripChanged"]/*' />
         protected virtual void OnColumnContextMenuStripChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -13751,7 +13649,6 @@ namespace System.Windows.Forms
             OnColumnDataPropertyNameChanged(new DataGridViewColumnEventArgs(dataGridViewColumn));
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnDataPropertyNameChanged"]/*' />
         protected virtual void OnColumnDataPropertyNameChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -13781,7 +13678,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnDefaultCellStyleChanged"]/*' />
         protected virtual void OnColumnDefaultCellStyleChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -13858,7 +13754,6 @@ namespace System.Windows.Forms
             // Note that displayIndex of moved column is updated by caller.
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnDisplayIndexChanged"]/*' />
         protected virtual void OnColumnDisplayIndexChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -13898,7 +13793,6 @@ namespace System.Windows.Forms
             FlushDisplayIndexChanged(true /*raiseEvent*/);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnDividerDoubleClick"]/*' />
         protected virtual void OnColumnDividerDoubleClick(DataGridViewColumnDividerDoubleClickEventArgs e)
         {
             DataGridViewColumnDividerDoubleClickEventHandler eh = this.Events[EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK] as DataGridViewColumnDividerDoubleClickEventHandler;
@@ -13930,7 +13824,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnDividerWidthChanged"]/*' />
         protected virtual void OnColumnDividerWidthChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -14015,7 +13908,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnHeaderCellChanged"]/*' />
         protected virtual void OnColumnHeaderCellChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -14075,7 +13967,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnHeaderMouseClick"]/*' />
         protected virtual void OnColumnHeaderMouseClick(DataGridViewCellMouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left &&
@@ -14115,7 +14006,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnHeaderMouseDoubleClick"]/*' />
         protected virtual void OnColumnHeaderMouseDoubleClick(DataGridViewCellMouseEventArgs e)
         {
             DataGridViewCellMouseEventHandler eh = this.Events[EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK] as DataGridViewCellMouseEventHandler;
@@ -14317,7 +14207,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnHeadersBorderStyleChanged"]/*' />
         protected virtual void OnColumnHeadersBorderStyleChanged(EventArgs e)
         {
             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
@@ -14330,7 +14219,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnHeadersDefaultCellStyleChanged"]/*' />
         protected virtual void OnColumnHeadersDefaultCellStyleChanged(EventArgs e)
         {
             if (this.ColumnHeadersVisible)
@@ -14401,7 +14289,6 @@ namespace System.Windows.Forms
             AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.Header, true /*fixedHeight*/);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnHeadersHeightChanged"]/*' />
         protected virtual void OnColumnHeadersHeightChanged(EventArgs e)
         {
             if (this.editingControl != null)
@@ -14420,7 +14307,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnHeadersHeightSizeModeChanged"]/*' />
         protected virtual void OnColumnHeadersHeightSizeModeChanged(DataGridViewAutoSizeModeEventArgs e)
         {
             if (this.columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
@@ -14474,7 +14360,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnMinimumWidthChanged"]/*' />
         protected virtual void OnColumnMinimumWidthChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -14501,7 +14386,6 @@ namespace System.Windows.Forms
             OnColumnNameChanged(dgvce);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnNameChanged"]/*' />
         protected virtual void OnColumnNameChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -14555,7 +14439,6 @@ namespace System.Windows.Forms
             OnColumnRemoved(new DataGridViewColumnEventArgs(dataGridViewColumn));
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnRemoved"]/*' />
         protected virtual void OnColumnRemoved(DataGridViewColumnEventArgs e)
         {
             DataGridViewColumnEventHandler eh = this.Events[EVENT_DATAGRIDVIEWCOLUMNREMOVED] as DataGridViewColumnEventHandler;
@@ -14699,7 +14582,6 @@ namespace System.Windows.Forms
             OnColumnSortModeChanged(dgvce);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnSortModeChanged"]/*' />
         protected virtual void OnColumnSortModeChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -14750,7 +14632,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnStateChanged"]/*' />
         protected virtual void OnColumnStateChanged(DataGridViewColumnStateChangedEventArgs e)
         {
             // column.Frozen | .Visible changed - this may require a complete re-layout of the control
@@ -14893,7 +14774,6 @@ namespace System.Windows.Forms
             OnColumnToolTipTextChanged(new DataGridViewColumnEventArgs(dataGridViewColumn));
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnToolTipTextChanged"]/*' />
         protected virtual void OnColumnToolTipTextChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -14907,7 +14787,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnColumnWidthChanged"]/*' />
         protected virtual void OnColumnWidthChanged(DataGridViewColumnEventArgs e)
         {
             if (e.Column.DataGridView != this)
@@ -14995,7 +14874,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCurrentCellChanged"]/*' />
         protected virtual void OnCurrentCellChanged(EventArgs e)
         {
             VerifyImeRestrictedModeChanged();
@@ -15006,7 +14884,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCurrentCellDirtyStateChanged"]/*' />
         protected virtual void OnCurrentCellDirtyStateChanged(EventArgs e)
         {
             if (this.RowHeadersVisible && this.ShowEditingIcon)
@@ -15032,7 +14909,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnCursorChanged"]/*' />
         protected override void OnCursorChanged(EventArgs e)
         {
             base.OnCursorChanged(e);
@@ -15047,7 +14923,6 @@ namespace System.Windows.Forms
             OnDataBindingComplete(new DataGridViewBindingCompleteEventArgs(listChangedType));
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnDataBindingComplete"]/*' />
         protected virtual void OnDataBindingComplete(DataGridViewBindingCompleteEventArgs e)
         {
             DataGridViewBindingCompleteEventHandler eh = this.Events[EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE] as DataGridViewBindingCompleteEventHandler;
@@ -15057,7 +14932,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnDataError"]/*' />
         [
             SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions") // Not using options when RightToLeft == false
         ]
@@ -15334,7 +15208,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnDataMemberChanged"]/*' />
         protected virtual void OnDataMemberChanged(EventArgs e)
         {
             RefreshColumnsAndRows();
@@ -15351,7 +15224,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnDataSourceChanged"]/*' />
         protected virtual void OnDataSourceChanged(EventArgs e)
         {
             RefreshColumnsAndRows();
@@ -15369,7 +15241,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnDefaultCellStyleChanged"]/*' />
         protected virtual void OnDefaultCellStyleChanged(EventArgs e)
         {
             DataGridViewCellStyleChangedEventArgs dgvcsce = e as DataGridViewCellStyleChangedEventArgs;
@@ -15393,7 +15264,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnDefaultValuesNeeded"]/*' />
         protected virtual void OnDefaultValuesNeeded(DataGridViewRowEventArgs e)
         {
             DataGridViewRowEventHandler eh = this.Events[EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED] as DataGridViewRowEventHandler;
@@ -15403,7 +15273,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnDoubleClick"]/*' />
         protected override void OnDoubleClick(EventArgs e)
         {
             base.OnDoubleClick(e);
@@ -15425,7 +15294,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnEditingControlShowing"]/*' />
         protected virtual void OnEditingControlShowing(DataGridViewEditingControlShowingEventArgs e)
         {
             DataGridViewEditingControlShowingEventHandler eh = this.Events[EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING] as DataGridViewEditingControlShowingEventHandler;
@@ -15435,7 +15303,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnEditModeChanged"]/*' />
         protected virtual void OnEditModeChanged(EventArgs e)
         {
             if (this.Focused &&
@@ -15454,7 +15321,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnEnabledChanged"]/*' />
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
@@ -15480,7 +15346,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnEnter"]/*' />
         protected override void OnEnter(EventArgs e) 
         {
             if (this.editingControl != null && this.editingControl.ContainsFocus)
@@ -15555,7 +15420,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnFontChanged"]/*' />
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
@@ -15594,7 +15458,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnForeColorChanged"]/*' />
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
@@ -15658,7 +15521,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnGotFocus"]/*' />
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
@@ -15680,7 +15542,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnGridColorChanged"]/*' />
         protected virtual void OnGridColorChanged(EventArgs e) 
         {
             InvalidateInside();
@@ -15692,7 +15553,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnHandleCreated"]/*' />
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
@@ -15719,7 +15579,6 @@ namespace System.Windows.Forms
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.OnUserPreferenceChanged);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnHandleDestroyed"]/*' />
         protected override void OnHandleDestroyed(EventArgs e)
         {
             SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.OnUserPreferenceChanged);
@@ -16102,7 +15961,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnKeyDown"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnKeyDown(KeyEventArgs e) 
         {
@@ -16160,7 +16018,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnKeyPress"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnKeyPress(KeyPressEventArgs e) 
         {
@@ -16187,7 +16044,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnKeyUp"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnKeyUp(KeyEventArgs e) 
         {
@@ -16221,7 +16077,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnLayout"]/*' />
         protected override void OnLayout(LayoutEventArgs e) 
         {
             if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_editingControlChanging])
@@ -16241,7 +16096,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnLeave"]/*' />
         protected override void OnLeave(EventArgs e) 
         {
             if (this.ptCurrentCell.X > -1 && !this.dataGridViewState1[DATAGRIDVIEWSTATE1_leavingWithTabKey])
@@ -16273,7 +16127,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnLostFocus"]/*' />
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
@@ -16283,7 +16136,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnMouseClick"]/*' />
         protected override void OnMouseClick(MouseEventArgs e)
         {
             bool mouseClickRaised = false;
@@ -16370,7 +16222,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnMouseDoubleClick"]/*' />
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
             base.OnMouseDoubleClick(e);
@@ -16483,7 +16334,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnMouseDown"]/*' />
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (!this.dataGridViewState2[DATAGRIDVIEWSTATE2_messageFromEditingCtrls])
@@ -16524,7 +16374,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnMouseEnter"]/*' />
         protected override void OnMouseEnter(EventArgs e)
         {
             if (!this.dataGridViewState2[DATAGRIDVIEWSTATE2_mouseOverRemovedEditingCtrl] && 
@@ -16540,7 +16389,6 @@ namespace System.Windows.Forms
             this.dataGridViewState2[DATAGRIDVIEWSTATE2_mouseEnterExpected] = false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnMouseLeave"]/*' />
         protected override void OnMouseLeave(EventArgs e) 
         {
             // when the mouse leaves the dataGridView control, reset the cursor to the previously cached one
@@ -16579,7 +16427,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnMouseMove"]/*' />
         protected override void OnMouseMove(MouseEventArgs e) 
         {
             base.OnMouseMove(e);
@@ -16755,7 +16602,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnMouseUp"]/*' />
         protected override void OnMouseUp(MouseEventArgs e) 
         {
             if (!this.dataGridViewState2[DATAGRIDVIEWSTATE2_messageFromEditingCtrls])
@@ -16858,7 +16704,6 @@ namespace System.Windows.Forms
             base.OnMouseUp(e);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnMouseWheel"]/*' />
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
@@ -17052,7 +16897,6 @@ namespace System.Windows.Forms
             OnMouseWheel(e);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnMultiSelectChanged"]/*' />
         protected virtual void OnMultiSelectChanged(EventArgs e)
         {
             EventHandler eh = this.Events[EVENT_DATAGRIDVIEWMULTISELECTCHANGED] as EventHandler;
@@ -17062,7 +16906,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnNewRowNeeded"]/*' />
         protected virtual void OnNewRowNeeded(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -17076,7 +16919,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnPaint"]/*' />
         protected override void OnPaint(PaintEventArgs e) 
         {
             try 
@@ -17270,7 +17112,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnReadOnlyChanged"]/*' />
         protected virtual void OnReadOnlyChanged(EventArgs e)
         {
             EventHandler eh = this.Events[EVENT_DATAGRIDVIEWREADONLYCHANGED] as EventHandler;
@@ -17841,7 +17682,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnResize"]/*' />
         protected override void OnResize(EventArgs e) 
         {
             int borderWidth = this.BorderWidth;
@@ -17921,7 +17761,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRightToLeftChanged"]/*' />
         protected override void OnRightToLeftChanged(EventArgs e)
         {
             this.dataGridViewState2[DATAGRIDVIEWSTATE2_rightToLeftValid] = false;
@@ -17978,7 +17817,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowContextMenuStripChanged"]/*' />
         protected virtual void OnRowContextMenuStripChanged(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -17999,7 +17837,6 @@ namespace System.Windows.Forms
             return dgvrcmsne.ContextMenuStrip;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowContextMenuStripNeeded"]/*' />
         protected virtual void OnRowContextMenuStripNeeded(DataGridViewRowContextMenuStripNeededEventArgs e)
         {
             DataGridViewRowContextMenuStripNeededEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED] as DataGridViewRowContextMenuStripNeededEventHandler;
@@ -18009,7 +17846,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowDefaultCellStyleChanged"]/*' />
         protected virtual void OnRowDefaultCellStyleChanged(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -18026,7 +17862,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowDirtyStateNeeded"]/*' />
         protected virtual void OnRowDirtyStateNeeded(QuestionEventArgs e)
         {
             QuestionEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED] as QuestionEventHandler;
@@ -18036,7 +17871,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowDividerDoubleClick"]/*' />
         protected virtual void OnRowDividerDoubleClick(DataGridViewRowDividerDoubleClickEventArgs e)
         {
             DataGridViewRowDividerDoubleClickEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK] as DataGridViewRowDividerDoubleClickEventHandler;
@@ -18065,7 +17899,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowDividerHeightChanged"]/*' />
         protected virtual void OnRowDividerHeightChanged(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -18164,7 +17997,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowEnter"]/*' />
         protected virtual void OnRowEnter(DataGridViewCellEventArgs e)
         {
             try
@@ -18191,7 +18023,6 @@ namespace System.Windows.Forms
             OnRowErrorTextChanged(dgvre);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowErrorTextChanged"]/*' />
         protected virtual void OnRowErrorTextChanged(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -18215,7 +18046,6 @@ namespace System.Windows.Forms
             return dgvretne.ErrorText;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowErrorTextNeeded"]/*' />
         protected virtual void OnRowErrorTextNeeded(DataGridViewRowErrorTextNeededEventArgs e)
         {
             DataGridViewRowErrorTextNeededEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED] as DataGridViewRowErrorTextNeededEventHandler;
@@ -18285,7 +18115,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeaderCellChanged"]/*' />
         protected virtual void OnRowHeaderCellChanged(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -18358,7 +18187,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeaderMouseClick"]/*' />
         protected virtual void OnRowHeaderMouseClick(DataGridViewCellMouseEventArgs e)
         {
             DataGridViewCellMouseEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK] as DataGridViewCellMouseEventHandler;
@@ -18368,7 +18196,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeaderMouseDoubleClick"]/*' />
         protected virtual void OnRowHeaderMouseDoubleClick(DataGridViewCellMouseEventArgs e)
         {
             DataGridViewCellMouseEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK] as DataGridViewCellMouseEventHandler;
@@ -18602,7 +18429,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeadersBorderStyleChanged"]/*' />
         protected virtual void OnRowHeadersBorderStyleChanged(EventArgs e)
         {
             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
@@ -18615,7 +18441,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeadersDefaultCellStyleChanged"]/*' />
         protected virtual void OnRowHeadersDefaultCellStyleChanged(EventArgs e)
         {
             if (this.RowHeadersVisible)
@@ -18675,7 +18500,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeadersWidthChanged"]/*' />
         protected virtual void OnRowHeadersWidthChanged(EventArgs e)
         {
             if (this.RowHeadersVisible)
@@ -18700,7 +18524,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeadersWidthSizeModeChanged"]/*' />
         protected virtual void OnRowHeadersWidthSizeModeChanged(DataGridViewAutoSizeModeEventArgs e)
         {
             if (this.rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
@@ -18727,7 +18550,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeightChanged"]/*' />
         protected virtual void OnRowHeightChanged(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -18753,7 +18575,6 @@ namespace System.Windows.Forms
             return dgvrhine;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeightInfoNeeded"]/*' />
         protected virtual void OnRowHeightInfoNeeded(DataGridViewRowHeightInfoNeededEventArgs e)
         {
             DataGridViewRowHeightInfoNeededEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED] as DataGridViewRowHeightInfoNeededEventHandler;
@@ -18780,7 +18601,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowHeightInfoPushed"]/*' />
         protected virtual void OnRowHeightInfoPushed(DataGridViewRowHeightInfoPushedEventArgs e)
         {
             DataGridViewRowHeightInfoPushedEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED] as DataGridViewRowHeightInfoPushedEventHandler;
@@ -18812,7 +18632,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowLeave"]/*' />
         protected virtual void OnRowLeave(DataGridViewCellEventArgs e)
         {
             try
@@ -18833,7 +18652,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowMinimumHeightChanged"]/*' />
         protected virtual void OnRowMinimumHeightChanged(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -18847,7 +18665,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowPostPaint"]/*' />
         protected internal virtual void OnRowPostPaint(DataGridViewRowPostPaintEventArgs e)
         {
             DataGridViewRowPostPaintEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWPOSTPAINT] as DataGridViewRowPostPaintEventHandler;
@@ -18857,7 +18674,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowPrePaint"]/*' />
         protected internal virtual void OnRowPrePaint(DataGridViewRowPrePaintEventArgs e)
         {
             DataGridViewRowPrePaintEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWPREPAINT] as DataGridViewRowPrePaintEventHandler;
@@ -18872,7 +18688,6 @@ namespace System.Windows.Forms
             OnRowsAdded(new DataGridViewRowsAddedEventArgs(rowIndex, rowCount));
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowsAdded"]/*' />
         protected virtual void OnRowsAdded(DataGridViewRowsAddedEventArgs e)
         {
             DataGridViewRowsAddedEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWSADDED] as DataGridViewRowsAddedEventHandler;
@@ -18882,7 +18697,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowsDefaultCellStyleChanged"]/*' />
         protected virtual void OnRowsDefaultCellStyleChanged(EventArgs e)
         {
             DataGridViewCellStyleChangedEventArgs dgvcsce = e as DataGridViewCellStyleChangedEventArgs;
@@ -19056,7 +18870,6 @@ namespace System.Windows.Forms
             OnRowsRemoved(new DataGridViewRowsRemovedEventArgs(rowIndex, rowCount));
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowsRemoved"]/*' />
         protected virtual void OnRowsRemoved(DataGridViewRowsRemovedEventArgs e)
         {
             DataGridViewRowsRemovedEventHandler eh = this.Events[EVENT_DATAGRIDVIEWROWSREMOVED] as DataGridViewRowsRemovedEventHandler;
@@ -19066,7 +18879,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowStateChanged"]/*' />
         protected virtual void OnRowStateChanged(int rowIndex, DataGridViewRowStateChangedEventArgs e)
         {
             Debug.Assert(rowIndex >= -1);
@@ -19212,7 +19024,6 @@ namespace System.Windows.Forms
             OnRowUnshared(dgvre);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowUnshared"]/*' />
         protected virtual void OnRowUnshared(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -19247,7 +19058,6 @@ namespace System.Windows.Forms
             return dgvcce.Cancel;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowValidating"]/*' />
         protected virtual void OnRowValidating(DataGridViewCellCancelEventArgs e)
         {
             try
@@ -19294,7 +19104,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnRowValidated"]/*' />
         protected virtual void OnRowValidated(DataGridViewCellEventArgs e)
         {
             try
@@ -19410,7 +19219,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnScroll"]/*' />
         protected virtual void OnScroll(ScrollEventArgs e)
         {
             ScrollEventHandler eh = this.Events[EVENT_DATAGRIDVIEWSCROLL] as ScrollEventHandler;
@@ -19420,7 +19228,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnSelectionChanged"]/*' />
         protected virtual void OnSelectionChanged(EventArgs e)
         {
             this.dataGridViewState2[DATAGRIDVIEWSTATE2_raiseSelectionChanged] = false;
@@ -19440,7 +19247,6 @@ namespace System.Windows.Forms
             return dgvsce.Handled;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnSortCompare"]/*' />
         protected virtual void OnSortCompare(DataGridViewSortCompareEventArgs e)
         {
             DataGridViewSortCompareEventHandler eh = this.Events[EVENT_DATAGRIDVIEWSORTCOMPARE] as DataGridViewSortCompareEventHandler;
@@ -19450,7 +19256,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnSorted"]/*' />
         protected virtual void OnSorted(EventArgs e)
         {
             EventHandler eh = this.Events[EVENT_DATAGRIDVIEWSORTED] as EventHandler;
@@ -19516,7 +19321,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnUserAddedRow"]/*' />
         protected virtual void OnUserAddedRow(DataGridViewRowEventArgs e)
         {
             if (e.Row.DataGridView != this)
@@ -19530,7 +19334,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnUserDeletedRow"]/*' />
         protected virtual void OnUserDeletedRow(DataGridViewRowEventArgs e)
         {
             DataGridViewRowEventHandler eh = this.Events[EVENT_DATAGRIDVIEWUSERDELETEDROW] as DataGridViewRowEventHandler;
@@ -19540,7 +19343,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnUserDeletingRow"]/*' />
         protected virtual void OnUserDeletingRow(DataGridViewRowCancelEventArgs e)
         {
             DataGridViewRowCancelEventHandler eh = this.Events[EVENT_DATAGRIDVIEWUSERDELETINGROW] as DataGridViewRowCancelEventHandler;
@@ -19574,7 +19376,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.OnValidating"]/*' />
         protected override void OnValidating(CancelEventArgs e) 
         {
             // Avoid Cell/Row Validation events when the grid or its editing control gets the focus
@@ -19733,7 +19534,6 @@ namespace System.Windows.Forms
             UpdateColumnsDisplayedState(this.Visible /*displayed*/);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.PaintBackground"]/*' />
         protected virtual void PaintBackground(Graphics graphics, Rectangle clipBounds, Rectangle gridBounds)
         {
             // Paint potential block below rows
@@ -20413,7 +20213,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessAKey"]/*' />
         protected bool ProcessAKey(Keys keyData)
         {
             if ((keyData & (Keys.Shift | Keys.Control | Keys.Alt)) == Keys.Control &&
@@ -20425,7 +20224,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessDeleteKey"]/*' />
         [
             SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters") // Derived controls may need keyData.
         ]
@@ -20551,7 +20349,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessDialogKey"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value that indicates whether a key should be processed
@@ -20648,7 +20445,6 @@ namespace System.Windows.Forms
             return base.ProcessDialogKey(keyData);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessDownKey"]/*' />
         protected bool ProcessDownKey(Keys keyData)
         {
             bool moved;
@@ -21493,7 +21289,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessEndKey"]/*' />
         protected bool ProcessEndKey(Keys keyData)
         {
             bool success;
@@ -21788,7 +21583,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessEnterKey"]/*' />
         protected bool ProcessEnterKey(Keys keyData)
         {
             // When Enter is pressed, no matter Ctrl is also pressed or not,
@@ -21865,7 +21659,6 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessEscapeKey"]/*' />
         [
             SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters") // Derived controls may need keyData.
         ]
@@ -21886,7 +21679,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessF2Key"]/*' />
         [
             SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters") // Derived controls may need keyData.
         ]
@@ -21914,7 +21706,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessF3Key"]/*' />
         /// <devdoc>
         ///     Sorts the current column.
         ///     'UseLegacyAccessibilityFeatures2' accessibility switch 
@@ -21937,7 +21728,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessHomeKey"]/*' />
         protected bool ProcessHomeKey(Keys keyData)
         {
             bool success;
@@ -22214,7 +22004,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessInsertKey"]/*' />
         protected bool ProcessInsertKey(Keys keyData)
         {
             if (((keyData & (Keys.Shift | Keys.Control | Keys.Alt)) == Keys.Control ||
@@ -22231,7 +22020,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessKeyEventArgs"]/*' />
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
             if (m.Msg == NativeMethods.WM_SYSKEYDOWN || m.Msg == NativeMethods.WM_KEYDOWN)
@@ -22291,7 +22079,6 @@ namespace System.Windows.Forms
             return base.ProcessKeyEventArgs(ref m);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessKeyPreview"]/*' />
         protected override bool ProcessKeyPreview(ref Message m) 
         {
             bool dataGridViewWantsInputKey;
@@ -22406,7 +22193,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessLeftKey"]/*' />
         protected bool ProcessLeftKey(Keys keyData)
         {
             if (this.RightToLeftInternal)
@@ -23159,7 +22945,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessNextKey"]/*' />
         protected bool ProcessNextKey(Keys keyData)
         {
             bool success;
@@ -23395,7 +23180,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessPriorKey"]/*' />
         protected bool ProcessPriorKey(Keys keyData)
         {
             bool success;
@@ -23633,7 +23417,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessRightKey"]/*' />
         protected bool ProcessRightKey(Keys keyData)
         {
             if (this.RightToLeftInternal)
@@ -24370,7 +24153,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessSpaceKey"]/*' />
         protected bool ProcessSpaceKey(Keys keyData)
         {
             if ((keyData & (Keys.Control | Keys.Shift | Keys.Alt)) == Keys.Shift &&
@@ -24448,7 +24230,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessTabKey"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the Tab key should be processed.
@@ -24550,7 +24331,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessDataGridViewKey"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Processes keys for dataGridView navigation.
@@ -24638,7 +24418,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessUpKey"]/*' />
         protected bool ProcessUpKey(Keys keyData)
         {
             bool success;
@@ -25332,7 +25111,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessZeroKey"]/*' />
         protected bool ProcessZeroKey(Keys keyData)
         {
             if (this.ptCurrentCell.X != -1 && !this.IsCurrentCellInEditMode && ColumnEditable(this.ptCurrentCell.X))
@@ -25528,7 +25306,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RefreshEdit"]/*' />
         //  Returns true for success, and false if an OnDataError event was raised and cancelled the operation (e.Cancel = true).
         public bool RefreshEdit()
         {
@@ -25835,7 +25612,6 @@ namespace System.Windows.Forms
             this.GridColor = DefaultGridColor;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ResetText"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void ResetText()
         {
@@ -26529,7 +26305,6 @@ namespace System.Windows.Forms
             FlushDisplayedChanged();
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SelectAll"]/*' />
         // Does not seem to be a valid fxcop violation report. Contacting fxcop team to double-check.
         [SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops")] 
         public void SelectAll()
@@ -26718,7 +26493,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SetCurrentCellAddressCore"]/*' />
         protected virtual bool SetCurrentCellAddressCore(int columnIndex, 
             int rowIndex, 
             bool setAnchorCellAddress,
@@ -27360,7 +27134,6 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SetBoundsCore"]/*' />
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             if ((specified & BoundsSpecified.Width) == BoundsSpecified.Width && width > upperSize) {
@@ -27518,7 +27291,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SetSelectedCellCore"]/*' />
         [
             SuppressMessage("Microsoft.Performance", "CA1817:DoNotCallPropertiesThatCloneValuesInLoops") // Illegitimate report.
         ]
@@ -27841,7 +27613,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SetSelectedColumnCore"]/*' />
         protected virtual void SetSelectedColumnCore(int columnIndex, bool selected)
         {
             if (columnIndex < 0 || columnIndex >= this.Columns.Count)
@@ -27956,7 +27727,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SetSelectedRowCore"]/*' />
         protected virtual void SetSelectedRowCore(int rowIndex, bool selected)
         {
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
@@ -28053,7 +27823,6 @@ namespace System.Windows.Forms
             return !this.RowsDefaultCellStyle.Equals(defaultStyle);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Sort1"]/*' />
         public virtual void Sort(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
         {
             if (dataGridViewColumn == null)
@@ -28079,7 +27848,6 @@ namespace System.Windows.Forms
             SortInternal(null, dataGridViewColumn, direction);    
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Sort2"]/*' />
         public virtual void Sort(IComparer comparer)
         {
             if (comparer == null)
@@ -28790,7 +28558,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UpdateCellErrorText"]/*' />
         public void UpdateCellErrorText(int columnIndex, int rowIndex)
         {
             if (columnIndex < -1 || columnIndex >= this.Columns.Count)
@@ -28807,7 +28574,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UpdateCellValue"]/*' />
         public void UpdateCellValue(int columnIndex, int rowIndex)
         {
             if (columnIndex < 0 || columnIndex >= this.Columns.Count)
@@ -28866,7 +28632,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UpdateRowErrorText"]/*' />
         public void UpdateRowErrorText(int rowIndex)
         {
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
@@ -28879,7 +28644,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UpdateRowErrorText1"]/*' />
         public void UpdateRowErrorText(int rowIndexStart, int rowIndexEnd)
         {
             if (rowIndexStart < 0 || rowIndexStart >= this.Rows.Count)
@@ -28912,7 +28676,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UpdateRowHeightInfo"]/*' />
         public void UpdateRowHeightInfo(int rowIndex, bool updateToEnd)
         {
             UpdateRowHeightInfoPrivate(rowIndex, updateToEnd, true /*invalidInAdjustFillingColumns*/);
@@ -29842,7 +29605,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.WndProc"]/*' />
         protected override void WndProc(ref Message m) 
         {
             switch (m.Msg)

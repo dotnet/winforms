@@ -8,16 +8,12 @@ namespace System.Windows.Forms {
     
     using System;
 
-    /// <include file='doc\StructFormat.uex' path='docs/doc[@for="StructFormat"]/*' />
     /// <internalonly/>
     /// <devdoc>
     /// </devdoc>
     public enum StructFormat {
-        /// <include file='doc\StructFormat.uex' path='docs/doc[@for="StructFormat.Ansi"]/*' />
         Ansi = 1,
-        /// <include file='doc\StructFormat.uex' path='docs/doc[@for="StructFormat.Unicode"]/*' />
         Unicode = 2,
-        /// <include file='doc\StructFormat.uex' path='docs/doc[@for="StructFormat.Auto"]/*' />
         Auto = 3,
     }
 }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -20,7 +20,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using Microsoft.Win32;
 
-    /// <include file='doc\Button.uex' path='docs/doc[@for="Button"]/*' />
     /// <devdoc>
     ///    <para>Represents a
     ///       Windows button.</para>
@@ -32,7 +31,6 @@ namespace System.Windows.Forms {
     ]
     public class Button : ButtonBase, IButtonControl {
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.dialogResult"]/*' />
         /// <devdoc>
         ///     The dialog result that will be sent to the parent dialog form when
         ///     we are clicked.
@@ -41,14 +39,12 @@ namespace System.Windows.Forms {
 
         private const int InvalidDimensionValue = int.MinValue;
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.dialogResult"]/*' />
         /// <devdoc>
         ///     For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels  
         ///     of the border around the button.
         /// </devdoc>
         private Size systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.Button"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Button'/>
@@ -133,7 +129,6 @@ namespace System.Windows.Forms {
             return AutoSizeMode == AutoSizeMode.GrowAndShrink ? paddedSize : LayoutUtils.UnionSizes(paddedSize, Size);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.CreateParams"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -161,7 +156,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.DialogResult"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value that is returned to the
@@ -187,7 +181,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseEnter"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -198,7 +191,6 @@ namespace System.Windows.Forms {
             base.OnMouseEnter(e);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseLeave"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -209,7 +201,6 @@ namespace System.Windows.Forms {
             base.OnMouseLeave(e);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.DoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
@@ -221,7 +212,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.MouseDoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
@@ -233,7 +223,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.NotifyDefault"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Notifies the <see cref='System.Windows.Forms.Button'/>
@@ -248,7 +237,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnClick"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -278,7 +266,6 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseUp"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -329,7 +316,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.PerformClick"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Generates a <see cref='System.Windows.Forms.Control.Click'/> event for a
@@ -350,7 +336,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ProcessMnemonic"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -369,7 +354,6 @@ namespace System.Windows.Forms {
             return base.ProcessMnemonic(charCode);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ToString"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -383,7 +367,6 @@ namespace System.Windows.Forms {
             return s + ", Text: " + Text;
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.WndProc"]/*' />
         /// <devdoc>
         ///     The button's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call

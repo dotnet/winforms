@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using Internal;
 
-    /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents a display device or
@@ -106,7 +105,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.AllScreens"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets an array of all of the displays on the system.
@@ -143,7 +141,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.BitsPerPixel"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets Bits per Pixel value.
@@ -155,7 +152,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.Bounds"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the bounds of the display.
@@ -167,7 +163,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.DeviceName"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the device name associated with a display.
@@ -179,7 +174,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.Primary"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether a particular display is
@@ -192,7 +186,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.PrimaryScreen"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the
@@ -216,7 +209,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.WorkingArea"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the working area of the screen.
@@ -276,7 +268,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.Equals"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies a value that indicates whether the specified object is equal to
@@ -293,7 +284,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.FromPoint"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
@@ -311,7 +301,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.FromRectangle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
@@ -330,7 +319,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.FromControl"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
@@ -342,7 +330,6 @@ namespace System.Windows.Forms {
             return FromHandleInternal(control.Handle);
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.FromHandle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
@@ -363,7 +350,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.GetWorkingArea"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the working area for the monitor that is closest to the
@@ -374,7 +360,6 @@ namespace System.Windows.Forms {
         public static Rectangle GetWorkingArea(Point pt) {
             return Screen.FromPoint(pt).WorkingArea;
         }
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.GetWorkingArea1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the working area for the monitor that contains the largest region
@@ -385,7 +370,6 @@ namespace System.Windows.Forms {
         public static Rectangle GetWorkingArea(Rectangle rect) {
             return Screen.FromRectangle(rect).WorkingArea;
         }
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.GetWorkingArea2"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the working area for the monitor that contains the largest
@@ -397,7 +381,6 @@ namespace System.Windows.Forms {
             return Screen.FromControl(ctl).WorkingArea;
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.GetBounds"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the bounds of the monitor that is closest to the specified
@@ -407,7 +390,6 @@ namespace System.Windows.Forms {
         public static Rectangle GetBounds(Point pt) {
             return Screen.FromPoint(pt).Bounds;
         }
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.GetBounds1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the bounds of the monitor that contains the largest region of the
@@ -417,7 +399,6 @@ namespace System.Windows.Forms {
         public static Rectangle GetBounds(Rectangle rect) {
             return Screen.FromRectangle(rect).Bounds;
         }
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.GetBounds2"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the bounds of the monitor
@@ -428,7 +409,6 @@ namespace System.Windows.Forms {
             return Screen.FromControl(ctl).Bounds;
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.GetHashCode"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Computes and retrieves a hash code for an object.
@@ -467,7 +447,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.ToString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves a string representing this object.
@@ -478,7 +457,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.MonitorEnumCallback"]/*' />
         /// <devdoc>         
         /// </devdoc>         
         private class MonitorEnumCallback {

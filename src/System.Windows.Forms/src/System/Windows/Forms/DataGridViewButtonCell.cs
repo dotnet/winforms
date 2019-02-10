@@ -15,7 +15,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms.ButtonInternal;
     using System.Globalization;
 
-    /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell"]/*' />
     /// <devdoc>
     ///    <para>Identifies a button cell in the dataGridView.</para>
     /// </devdoc>
@@ -38,7 +37,6 @@ namespace System.Windows.Forms
         private static Type defaultValueType = typeof(object);
         private static Type cellType = typeof(DataGridViewButtonCell);
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.DataGridViewButtonCell"]/*' />
         public DataGridViewButtonCell()
         {
         }
@@ -67,7 +65,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.EditType"]/*' />
         public override Type EditType
         {
             get
@@ -77,7 +74,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.FlatStyle"]/*' />
         [
             DefaultValue(FlatStyle.Standard)
         ]
@@ -120,7 +116,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.FormattedValueType"]/*' />
         public override Type FormattedValueType
         {
             get 
@@ -130,7 +125,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.UseColumnTextForButtonValue"]/*' />
         [DefaultValue(false)]
         public bool UseColumnTextForButtonValue
         {
@@ -165,7 +159,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.ValueType"]/*' />
         public override Type ValueType
         {
             get
@@ -179,7 +172,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewButtonCell dataGridViewCell;
@@ -199,13 +191,11 @@ namespace System.Windows.Forms
             return dataGridViewCell;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewButtonCellAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.GetContentBounds"]/*' />
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -259,7 +249,6 @@ namespace System.Windows.Forms
             return contentBounds;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.GetErrorIconBounds"]/*' />
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -317,7 +306,6 @@ namespace System.Windows.Forms
             return errorIconBounds;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.GetPreferredSize"]/*' />
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
             if (this.DataGridView == null)
@@ -448,7 +436,6 @@ namespace System.Windows.Forms
             return rectThemeMargins;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.GetValue"]/*' />
         protected override object GetValue(int rowIndex)
         {
             if (this.UseColumnTextForButtonValue &&
@@ -462,43 +449,36 @@ namespace System.Windows.Forms
             return base.GetValue(rowIndex);
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.KeyDownUnsharesRow"]/*' />
         protected override bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
         {
             return e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.KeyUpUnsharesRow"]/*' />
         protected override bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex)
         {
             return e.KeyCode == Keys.Space;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.MouseDownUnsharesRow"]/*' />
         protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return e.Button == MouseButtons.Left;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.MouseEnterUnsharesRow"]/*' />
         protected override bool MouseEnterUnsharesRow(int rowIndex)
         {
             return this.ColumnIndex == this.DataGridView.MouseDownCellAddress.X && rowIndex == this.DataGridView.MouseDownCellAddress.Y;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.MouseLeaveUnsharesRow"]/*' />
         protected override bool MouseLeaveUnsharesRow(int rowIndex)
         {
             return (this.ButtonState & ButtonState.Pushed) != 0;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.MouseUpUnsharesRow"]/*' />
         protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return e.Button == MouseButtons.Left;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.OnKeyDown"]/*' />
         protected override void OnKeyDown(KeyEventArgs e, int rowIndex)
         {
             if (this.DataGridView == null)
@@ -512,7 +492,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.OnKeyUp"]/*' />
         protected override void OnKeyUp(KeyEventArgs e, int rowIndex)
         {
             if (this.DataGridView == null)
@@ -536,7 +515,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.OnLeave"]/*' />
         protected override void OnLeave(int rowIndex, bool throughMouseClick)
         {
             if (this.DataGridView == null)
@@ -550,7 +528,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.OnMouseDown"]/*' />
         protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -564,7 +541,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.OnMouseLeave"]/*' />
         protected override void OnMouseLeave(int rowIndex)
         {
             if (this.DataGridView == null)
@@ -591,7 +567,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.OnMouseMove"]/*' />
         protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -628,7 +603,6 @@ namespace System.Windows.Forms
             base.OnMouseMove(e);
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.OnMouseUp"]/*' />
         protected override void OnMouseUp(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -641,7 +615,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.Paint"]/*' />
         protected override void Paint(Graphics graphics, 
             Rectangle clipBounds,
             Rectangle cellBounds, 
@@ -1052,7 +1025,6 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCell.ToString"]/*' />
         public override string ToString()
         {
             return "DataGridViewButtonCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
@@ -1094,15 +1066,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCellAccessibleObject"]/*' />
         protected class DataGridViewButtonCellAccessibleObject : DataGridViewCellAccessibleObject
         {
-            /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCellAccessibleObject.DataGridViewButtonCellAccessibleObject"]/*' />
             public DataGridViewButtonCellAccessibleObject(DataGridViewCell owner) : base (owner)
             {
             }
 
-            /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCellAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction
             {
                 get
@@ -1111,7 +1080,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCellAccessibleObject.DoDefaultAction"]/*' />
             public override void DoDefaultAction()
             {
                 DataGridViewButtonCell dataGridViewCell = (DataGridViewButtonCell)this.Owner;
@@ -1129,7 +1097,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewButtonCell.uex' path='docs/doc[@for="DataGridViewButtonCellAccessibleObject.GetChildCount"]/*' />
             public override int GetChildCount()
             {
                 return 0;

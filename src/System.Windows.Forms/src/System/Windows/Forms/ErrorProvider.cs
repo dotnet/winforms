@@ -18,7 +18,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;    
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider"]/*' />
     /// <devdoc>
     ///     ErrorProvider presents a simple user interface for indicating to the
     ///     user that a control on a form has an error associated with it.  If a
@@ -76,7 +75,6 @@ namespace System.Windows.Forms {
         // CONSTRUCTOR
         //
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorProvider"]/*' />
         /// <devdoc>
         ///     Default constructor.
         /// </devdoc>
@@ -87,14 +85,12 @@ namespace System.Windows.Forms {
             currentChanged = new EventHandler(ErrorManager_CurrentChanged);
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorProvider1"]/*' />
         public ErrorProvider(ContainerControl parentControl) : this() {
             this.parentControl = parentControl;
             propChangedEvent = new EventHandler(ParentControl_BindingContextChanged);
             parentControl.BindingContextChanged += propChangedEvent;
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorProvider2"]/*' />
         public ErrorProvider(IContainer container) : this() {
             if (container == null) {
                 throw new ArgumentNullException(nameof(container));
@@ -107,7 +103,6 @@ namespace System.Windows.Forms {
         // PROPERTIES
         //
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.Site"]/*' />
         public override ISite Site {
             set {
                 base.Site = value;
@@ -125,7 +120,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.BlinkStyle"]/*' />
         /// <devdoc>
         ///     Returns or sets when the error icon flashes.
         /// </devdoc>
@@ -180,7 +174,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ContainerControl"]/*' />
         /// <devdoc>
         ///    Indicates what container control (usually the form) should be inspected for bindings.
         ///    A binding will reveal what control to place errors on for a
@@ -210,7 +203,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.RightToLeft"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -236,7 +228,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
             add {
@@ -247,7 +238,6 @@ namespace System.Windows.Forms {
             }
         }        
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.Tag"]/*' />
         /// <devdoc>
         ///    User defined data associated with the control.
         /// </devdoc>
@@ -320,7 +310,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.DataSource"]/*' />
         /// <devdoc>
         ///    Indicates the source of data to bind errors against.
         /// </devdoc>
@@ -350,12 +339,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ShouldSerializeDataSource"]/*' />
         private bool ShouldSerializeDataSource() {
             return (dataSource != null);
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.DataMember"]/*' />
         /// <devdoc>
         ///    Indicates the sub-list of data from the DataSource to bind errors against.
         /// </devdoc>
@@ -375,12 +362,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ShouldSerializeDataMember"]/*' />
         private bool ShouldSerializeDataMember() {
             return (dataMember != null && dataMember.Length != 0);
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.BindToDataAndErrors"]/*' />
         public void BindToDataAndErrors(object newDataSource, string newDataMember) {
             Set_ErrorManager(newDataSource, newDataMember, false);
         }
@@ -430,7 +415,6 @@ namespace System.Windows.Forms {
         }
 
         // Work around... we should figure out if errors changed automatically.
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.UpdateBinding"]/*' />
         public void UpdateBinding() {
             ErrorManager_CurrentChanged(errorManager, EventArgs.Empty);
         }
@@ -520,7 +504,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.BlinkRate"]/*' />
         /// <devdoc>
         ///     Returns or set the rate in milliseconds at which the error icon flashes.
         /// </devdoc>
@@ -545,7 +528,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.DefaultIcon"]/*' />
         /// <devdoc>
         ///     Demand load and cache the default icon.
         /// </devdoc>
@@ -563,7 +545,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.Icon"]/*' />
         /// <devdoc>
         ///     Returns or sets the Icon that displayed next to a control when an error
         ///     description string has been set for the control.  For best results, an
@@ -590,7 +571,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.Region"]/*' />
         /// <devdoc>
         ///     Create the icon region on demand.
         /// </devdoc>
@@ -656,7 +636,6 @@ namespace System.Windows.Forms {
             EndInitCore();
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.Clear"]/*' />
         /// <devdoc>
         ///     Clears all errors being tracked by this error provider, ie. undoes all previous calls to SetError.
         /// </devdoc>
@@ -675,7 +654,6 @@ namespace System.Windows.Forms {
             items.Clear();
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.CanExtend"]/*' />
         /// <devdoc>
         ///     Returns whether a control can be extended.
         /// </devdoc>
@@ -683,7 +661,6 @@ namespace System.Windows.Forms {
             return extendee is Control && !(extendee is Form) && !(extendee is ToolBar);
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.Dispose"]/*' />
         /// <devdoc>
         ///     Release any resources that this component is using.  After calling Dispose,
         ///     the component should no longer be used.
@@ -697,7 +674,6 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.DisposeRegion"]/*' />
         /// <devdoc>
         ///     Helper to dispose the cached icon region.
         /// </devdoc>
@@ -709,7 +685,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.EnsureControlItem"]/*' />
         /// <devdoc>
         ///     Helper to make sure we have allocated a control item for this control.
         /// </devdoc>
@@ -725,7 +700,6 @@ namespace System.Windows.Forms {
             return item;
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.EnsureErrorWindow"]/*' />
         /// <devdoc>
         ///     Helper to make sure we have allocated an error window for this control.
         /// </devdoc>
@@ -739,7 +713,6 @@ namespace System.Windows.Forms {
             return window;
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.GetError"]/*' />
         /// <devdoc>
         ///     Returns the current error description string for the specified control.
         /// </devdoc>
@@ -753,7 +726,6 @@ namespace System.Windows.Forms {
             return EnsureControlItem(control).Error;
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.GetIconAlignment"]/*' />
         /// <devdoc>
         ///     Returns where the error icon should be placed relative to the control.
         /// </devdoc>
@@ -767,7 +739,6 @@ namespace System.Windows.Forms {
             return EnsureControlItem(control).IconAlignment;
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.GetIconPadding"]/*' />
         /// <devdoc>
         ///     Returns the amount of extra space to leave next to the error icon.
         /// </devdoc>
@@ -785,7 +756,6 @@ namespace System.Windows.Forms {
             Icon = DefaultIcon;
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftChanged(EventArgs e) {
 
@@ -799,7 +769,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.SetError"]/*' />
         /// <devdoc>
         ///     Sets the error description string for the specified control.
         /// </devdoc>
@@ -807,7 +776,6 @@ namespace System.Windows.Forms {
             EnsureControlItem(control).Error = value;
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.SetIconAlignment"]/*' />
         /// <devdoc>
         ///     Sets where the error icon should be placed relative to the control.
         /// </devdoc>
@@ -815,7 +783,6 @@ namespace System.Windows.Forms {
             EnsureControlItem(control).IconAlignment = value;
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.SetIconPadding"]/*' />
         /// <devdoc>
         ///     Sets the amount of extra space to leave next to the error icon.
         /// </devdoc>
@@ -827,7 +794,6 @@ namespace System.Windows.Forms {
             return Icon != DefaultIcon;
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow"]/*' />
         /// <devdoc>
         ///     There is one ErrorWindow for each control parent.  It is parented to the
         ///     control parent.  The window's region is made up of the regions from icons
@@ -859,7 +825,6 @@ namespace System.Windows.Forms {
             // CONSTRUCTORS
             //
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.ErrorWindow"]/*' />
             /// <devdoc>
             ///     Construct an error window for this provider and control parent.
             /// </devdoc>
@@ -872,7 +837,6 @@ namespace System.Windows.Forms {
             // METHODS
             //
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.Add"]/*' />
             /// <devdoc>
             ///     This is called when a control would like to show an error icon.
             /// </devdoc>
@@ -894,7 +858,6 @@ namespace System.Windows.Forms {
                 Update(false /*timerCaused*/);
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.Dispose"]/*' />
             /// <devdoc>
             ///     Called to get rid of any resources the Object may have.
             /// </devdoc>
@@ -902,7 +865,6 @@ namespace System.Windows.Forms {
                 EnsureDestroyed();
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.EnsureCreated"]/*' />
             /// <devdoc>
             ///     Make sure the error window is created, and the tooltip window is created.
             /// </devdoc>
@@ -942,7 +904,6 @@ namespace System.Windows.Forms {
                 return true;
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.EnsureDestroyed"]/*' />
             /// <devdoc>
             ///     Destroy the timer, toolwindow, and the error window itself.
             /// </devdoc>
@@ -1023,7 +984,6 @@ namespace System.Windows.Forms {
                 mirrordcMode = DeviceContextMapMode.Text;
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.OnPaint"]/*' />
             /// <devdoc>
             ///     This is called when the error window needs to paint.  We paint each icon at its
             ///     correct location.
@@ -1054,7 +1014,6 @@ namespace System.Windows.Forms {
                 Application.OnThreadException(e);
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.OnTimer"]/*' />
             /// <devdoc>
             ///     This is called when an error icon is flashing, and the view needs to be updatd.
             /// </devdoc>
@@ -1087,7 +1046,6 @@ namespace System.Windows.Forms {
 #endif
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.Remove"]/*' />
             /// <devdoc>
             ///     This is called when a control no longer needs to display an error icon.
             /// </devdoc>
@@ -1110,7 +1068,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.StartBlinking"]/*' />
             /// <devdoc>
             ///     Start the blinking process.  The timer will fire until there are no more
             ///     icons that need to blink.
@@ -1132,7 +1089,6 @@ namespace System.Windows.Forms {
                 Update(false /*timerCaused*/);
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.Update"]/*' />
             /// <devdoc>
             ///     Move and size the error window, compute and set the window region,
             ///     set the tooltip rectangles and descriptions.  This basically brings
@@ -1247,7 +1203,6 @@ namespace System.Windows.Forms {
                 SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), null, false);
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ErrorWindow.WndProc"]/*' />
             /// <devdoc>
             ///     Called when the error window gets a windows message.
             /// </devdoc>
@@ -1272,7 +1227,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem"]/*' />
         /// <devdoc>
         ///     There is one ControlItem for each control that the ErrorProvider is
         ///     is tracking state for.  It contains the values of all the extender
@@ -1299,7 +1253,6 @@ namespace System.Windows.Forms {
             // CONSTRUCTORS
             //
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.ControlItem"]/*' />
             /// <devdoc>
             ///     Construct the item with its associated control, provider, and
             ///     a unique ID.  The ID is used for the tooltip ID.
@@ -1335,7 +1288,6 @@ namespace System.Windows.Forms {
             // PROPERTIES
             //
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.Id"]/*' />
             /// <devdoc>
             ///     Returns the unique ID for this control.  The ID used as the tooltip ID.
             /// </devdoc>
@@ -1345,7 +1297,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.BlinkPhase"]/*' />
             /// <devdoc>
             ///     Returns or set the phase of blinking that this control is currently
             ///     in.   If zero, the control is not blinking.  If odd, then the control
@@ -1363,7 +1314,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.IconPadding"]/*' />
             /// <devdoc>
             ///     Returns or sets the icon padding for the control.
             /// </devdoc>
@@ -1379,7 +1329,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.Error"]/*' />
             /// <devdoc>
             ///     Returns or sets the error description string for the control.
             /// </devdoc>
@@ -1419,7 +1368,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.IconAlignment"]/*' />
             /// <devdoc>
             ///     Returns or sets the location of the error icon for the control.
             /// </devdoc>
@@ -1440,7 +1388,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.ToolTipShown"]/*' />
             /// <devdoc>
             ///     Returns true if the tooltip for this control item is currently shown.
             /// </devdoc>
@@ -1479,7 +1426,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.GetIconBounds"]/*' />
             /// <devdoc>
             ///     Returns the location of the icon in the same coordinate system as
             ///     the control being extended.  The size passed in is the size of
@@ -1520,7 +1466,6 @@ namespace System.Windows.Forms {
                 return new Rectangle(x, y, size.Width, size.Height);
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.UpdateWindow"]/*' />
             /// <devdoc>
             ///     If this control's error icon has been added to the error
             ///     window, then update the window state because some property
@@ -1532,7 +1477,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.StartBlinking"]/*' />
             /// <devdoc>
             ///     If this control's error icon has been added to the error
             ///     window, then start blinking the error window.  The blink
@@ -1545,7 +1489,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.AddToWindow"]/*' />
             /// <devdoc>
             ///     Add this control's error icon to the error window.
             /// </devdoc>
@@ -1565,7 +1508,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.RemoveFromWindow"]/*' />
             /// <devdoc>
             ///     Remove this control's error icon from the error window.
             /// </devdoc>
@@ -1576,7 +1518,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.OnBoundsChanged"]/*' />
             /// <devdoc>
             ///     This is called when a property on the control is changed.
             /// </devdoc>
@@ -1590,7 +1531,6 @@ namespace System.Windows.Forms {
                 AddToWindow();
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.OnCreateHandle"]/*' />
             /// <devdoc>
             ///     This is called when the control's handle is created.
             /// </devdoc>
@@ -1598,7 +1538,6 @@ namespace System.Windows.Forms {
                 AddToWindow();
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.ControlItem.OnDestroyHandle"]/*' />
             /// <devdoc>
             ///     This is called when the control's handle is destroyed.
             /// </devdoc>
@@ -1607,7 +1546,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.IconRegion"]/*' />
         /// <devdoc>
         ///     This represents the HRGN of icon.  The region is calculate from the icon's mask.
         /// </devdoc>
@@ -1624,7 +1562,6 @@ namespace System.Windows.Forms {
             // CONSTRUCTORS
             //
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.IconRegion.IconRegion"]/*' />
             /// <devdoc>
             ///     Constructor that takes an Icon and extracts its 16x16 version.
             /// </devdoc>
@@ -1638,7 +1575,6 @@ namespace System.Windows.Forms {
             // PROPERTIES
             //
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.IconRegion.IconHandle"]/*' />
             /// <devdoc>
             ///     Returns the handle of the icon.
             /// </devdoc>
@@ -1648,7 +1584,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.IconRegion.Region"]/*' />
             /// <devdoc>
             ///     Returns the handle of the region.
             /// </devdoc>
@@ -1696,7 +1631,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.IconRegion.Size"]/*' />
             /// <devdoc>
             ///     Return the size of the icon.
             /// </devdoc>
@@ -1710,7 +1644,6 @@ namespace System.Windows.Forms {
             // METHODS
             //
 
-            /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.IconRegion.Dispose"]/*' />
             /// <devdoc>
             ///     Release any resources held by this Object.
             /// </devdoc>

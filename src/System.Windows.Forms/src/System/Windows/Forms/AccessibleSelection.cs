@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\AccessibleSelection.uex' path='docs/doc[@for="AccessibleSelection"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies how an accessible object will be selected or receive focus.
@@ -20,7 +19,6 @@ namespace System.Windows.Forms {
     [Flags]
     public enum AccessibleSelection {
 
-        /// <include file='doc\AccessibleSelection.uex' path='docs/doc[@for="AccessibleSelection.None"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The selection or focus of an object is unchanged.
@@ -28,7 +26,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\AccessibleSelection.uex' path='docs/doc[@for="AccessibleSelection.TakeFocus"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Assigns focus to an object and makes
@@ -40,7 +37,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         TakeFocus = 1,
 
-        /// <include file='doc\AccessibleSelection.uex' path='docs/doc[@for="AccessibleSelection.TakeSelection"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Selects the object and deselects all other objects in the container.
@@ -48,7 +44,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         TakeSelection = 2,
 
-        /// <include file='doc\AccessibleSelection.uex' path='docs/doc[@for="AccessibleSelection.ExtendSelection"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Selects all objects between the anchor and the selected object.
@@ -56,7 +51,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ExtendSelection = 4,
 
-        /// <include file='doc\AccessibleSelection.uex' path='docs/doc[@for="AccessibleSelection.AddSelection"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Adds the object to the selection.
@@ -64,7 +58,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         AddSelection = 8,
         
-        /// <include file='doc\AccessibleSelection.uex' path='docs/doc[@for="AccessibleSelection.RemoveSelection"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Removes the object from the selection.

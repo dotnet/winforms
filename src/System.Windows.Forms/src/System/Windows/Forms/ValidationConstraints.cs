@@ -6,20 +6,17 @@ namespace System.Windows.Forms
 {
     using System;
 
-    /// <include file='doc\ValidationConstraints.uex' path='docs/doc[@for="ValidationConstraints"]/*' />
     /// <devdoc>
     ///     Determines which child controls in a ContainerControl will be validated
     ///     by the <see cref='ContainerControl.ValidateChildren'/> method.
     /// </devdoc>
     [Flags]
     public enum ValidationConstraints {
-        /// <include file='doc\ValidationConstraints.uex' path='docs/doc[@for="ValidationConstraints.All"]/*' />
         /// <devdoc>
         ///     All child controls and their descendants are validated.
         /// </devdoc>
         None = 0x00,
 
-        /// <include file='doc\ValidationConstraints.uex' path='docs/doc[@for="ValidationConstraints.Selectable"]/*' />
         /// <devdoc>
         ///     Child control must be selectable to be validated.
         ///
@@ -30,25 +27,21 @@ namespace System.Windows.Forms
         /// </devdoc>
         Selectable = 0x01,
 
-        /// <include file='doc\ValidationConstraints.uex' path='docs/doc[@for="ValidationConstraints.Enabled"]/*' />
         /// <devdoc>
         ///     Child control must be enabled to be validated (Control.Enabled = true).
         /// </devdoc>
         Enabled = 0x02,
 
-        /// <include file='doc\ValidationConstraints.uex' path='docs/doc[@for="ValidationConstraints.Visible"]/*' />
         /// <devdoc>
         ///     Child control must be visible to be validated (Control.Visible = true).
         /// </devdoc>
         Visible = 0x04,
 
-        /// <include file='doc\ValidationConstraints.uex' path='docs/doc[@for="ValidationConstraints.TabStop"]/*' />
         /// <devdoc>
         ///     Child control must be a tab stops to be validated (Control.TabStop = true).
         /// </devdoc>
         TabStop = 0x08,
 
-        /// <include file='doc\ValidationConstraints.uex' path='docs/doc[@for="ValidationConstraints.ImmediateChildren"]/*' />
         /// <devdoc>
         ///     Only immediate children of container control are validated. Descendants are not validated.
         /// </devdoc>

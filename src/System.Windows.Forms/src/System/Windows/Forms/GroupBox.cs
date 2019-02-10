@@ -18,7 +18,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Encapsulates
@@ -39,7 +38,6 @@ namespace System.Windows.Forms {
         Font cachedFont;
         FlatStyle flatStyle = FlatStyle.Standard;
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.GroupBox"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.GroupBox'/> class.
@@ -58,7 +56,6 @@ namespace System.Windows.Forms {
             TabStop = false;
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.AllowDrop"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -76,7 +73,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.AutoSize"]/*' />
         /// <devdoc>
         ///    <para> Override to re-expose AutoSize.</para>
         /// </devdoc>
@@ -94,7 +90,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.AutoSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
@@ -143,7 +138,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.CreateParams"]/*' />
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -172,7 +166,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -183,7 +176,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.DisplayRectangle"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -216,7 +208,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.FlatStyle"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(FlatStyle.Standard),
@@ -267,7 +258,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.TabStop"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -287,7 +277,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.TabStopChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TabStopChanged {
@@ -299,7 +288,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.Text"]/*' />
         [
         Localizable(true)
         ]
@@ -355,7 +343,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.Click"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler Click {
@@ -367,7 +354,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseClick {
@@ -379,7 +365,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.DoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
@@ -392,7 +377,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseDoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
@@ -404,7 +388,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.KeyUp"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp {
@@ -416,7 +399,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.KeyDown"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown {
@@ -428,7 +410,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.KeyPress"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress {
@@ -440,7 +421,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseDown"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown {
@@ -452,7 +432,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseUp"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp {
@@ -464,7 +443,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseMove"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove {
@@ -476,7 +454,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseEnter"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter {
@@ -488,7 +465,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseLeave"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave {
@@ -500,7 +476,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.OnPaint"]/*' />
         /// <internalonly/>
         protected override void OnPaint(PaintEventArgs e) {
             
@@ -690,7 +665,6 @@ namespace System.Windows.Forms {
             return prefSize + totalPadding;
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.OnFontChanged"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -701,7 +675,6 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.ProcessMnemonic"]/*' />
         /// <devdoc>
         ///     We use this to process mnemonics and send them on to the first child
         ///     control.
@@ -733,7 +706,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
@@ -761,7 +733,6 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.WndProc"]/*' />
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
        
@@ -792,7 +763,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new GroupBoxAccessibleObject(this);
         }

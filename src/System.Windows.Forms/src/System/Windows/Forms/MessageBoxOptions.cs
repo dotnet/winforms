@@ -4,10 +4,8 @@
 
 
 namespace System.Windows.Forms {
-    /// <include file='doc\MessageBoxOptions.uex' path='docs/doc[@for="MessageBoxOptions"]/*' />
     [Flags]
     public enum MessageBoxOptions {
-        /// <include file='doc\MessageBoxOptions.uex' path='docs/doc[@for="MessageBoxOptions.ServiceNotification"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the message box is displayed on the active desktop. 
@@ -15,7 +13,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ServiceNotification = 0x00200000,
 
-        /// <include file='doc\MessageBoxOptions.uex' path='docs/doc[@for="MessageBoxOptions.DefaultDesktopOnly"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the message box is displayed on the active desktop. 
@@ -23,7 +20,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         DefaultDesktopOnly = 0x00020000,
 
-        /// <include file='doc\MessageBoxOptions.uex' path='docs/doc[@for="MessageBoxOptions.RightAlign"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the message box text is right-aligned.
@@ -31,7 +27,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         RightAlign         = 0x00080000,
 
-        /// <include file='doc\MessageBoxOptions.uex' path='docs/doc[@for="MessageBoxOptions.RtlReading"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the message box text is displayed with Rtl reading order.

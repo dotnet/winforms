@@ -12,9 +12,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <include file='doc\DataGridDefaultColumnWidthTypeConverter.uex' path='docs/doc[@for="DataGridPreferredColumnWidthTypeConverter"]/*' />
     public class DataGridPreferredColumnWidthTypeConverter : TypeConverter {
-        /// <include file='doc\DataGridDefaultColumnWidthTypeConverter.uex' path='docs/doc[@for="DataGridPreferredColumnWidthTypeConverter.CanConvertFrom"]/*' />
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
             if (sourceType == typeof(string) || sourceType == typeof(int))
@@ -23,7 +21,6 @@ namespace System.Windows.Forms {
                 return false;
         }
 
-        /// <include file='doc\DataGridDefaultColumnWidthTypeConverter.uex' path='docs/doc[@for="DataGridPreferredColumnWidthTypeConverter.ConvertTo"]/*' />
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
             if (destinationType == typeof(string))
@@ -45,7 +42,6 @@ namespace System.Windows.Forms {
                 return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        /// <include file='doc\DataGridDefaultColumnWidthTypeConverter.uex' path='docs/doc[@for="DataGridPreferredColumnWidthTypeConverter.ConvertFrom"]/*' />
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             if (value.GetType() == typeof(string))

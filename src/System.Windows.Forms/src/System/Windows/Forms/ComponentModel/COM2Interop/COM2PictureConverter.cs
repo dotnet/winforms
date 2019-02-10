@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,7 +12,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\COM2PictureConverter.uex' path='docs/doc[@for="Com2PictureConverter"]/*' />
     /// <devdoc>
     /// This class maps an IPicture to a System.Drawing.Image.
     /// </devdoc>
@@ -31,7 +30,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PictureConverter.uex' path='docs/doc[@for="Com2PictureConverter.ManagedType"]/*' />
         /// <devdoc>
         ///     Returns the managed type that this editor maps the property type to.
         /// </devdoc>
@@ -41,7 +39,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PictureConverter.uex' path='docs/doc[@for="Com2PictureConverter.ConvertNativeToManaged"]/*' />
         /// <devdoc>
         ///     Converts the native value into a managed value
         /// </devdoc>
@@ -85,7 +82,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return lastManaged;
         }
 
-        /// <include file='doc\COM2PictureConverter.uex' path='docs/doc[@for="Com2PictureConverter.ConvertManagedToNative"]/*' />
         /// <devdoc>
         ///     Converts the managed value into a native value
         /// </devdoc>

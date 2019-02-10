@@ -13,14 +13,12 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
 
 
-    /// <include file='doc\MessageDecoder.uex' path='docs/doc[@for="MessageDecoder"]/*' />
     /// <devdoc>
     ///     Decodes Windows messages.  This is in a separate class from Message
     ///     so we can avoid loading it in the 99% case where we don't need it.
     /// </devdoc>
     internal static class MessageDecoder {
 
-        /// <include file='doc\MessageDecoder.uex' path='docs/doc[@for="MessageDecoder.MsgToString"]/*' />
         /// <devdoc>
         ///     Returns the symbolic name of the msg value, or null if it
         ///     isn't one of the existing constants.

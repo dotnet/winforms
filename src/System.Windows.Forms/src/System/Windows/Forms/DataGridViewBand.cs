@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     using System;
     using System.Globalization;
         
-    /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand"]/*' />
     /// <devdoc>
     ///    <para>Identifies a band or column in the dataGridView.</para>
     /// </devdoc>
@@ -33,7 +32,6 @@ namespace System.Windows.Forms
         private int bandIndex;
         internal bool bandIsRow;
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.DataGridViewBand"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewBand'/> class.
@@ -45,7 +43,6 @@ namespace System.Windows.Forms
             this.bandIndex = -1;
         }
         
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Finalize"]/*' />
         ~DataGridViewBand() 
         {
             Dispose(false);
@@ -63,7 +60,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.ContextMenu"]/*' />
         [
             DefaultValue(null)
         ]
@@ -112,7 +108,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.DefaultCellStyle"]/*' />
         [
             Browsable(false)
         ]
@@ -156,7 +151,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.DefaultHeaderCellType"]/*' />
         [
             Browsable(false)
         ]
@@ -194,7 +188,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Displayed"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -274,7 +267,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Frozen"]/*' />
         [
             DefaultValue(false),
         ]
@@ -303,7 +295,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.HasDefaultCellStyle"]/*' />
         [
             Browsable(false)
         ]
@@ -331,7 +322,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.HeaderCellCore"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -432,7 +422,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Index"]/*' />
         /// <devdoc>
         /// <para></para>
         /// </devdoc>
@@ -455,7 +444,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.InheritedStyle"]/*' />
         [
             Browsable(false)
         ]
@@ -467,7 +455,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.IsRow"]/*' />
         protected bool IsRow
         {
             get
@@ -529,7 +516,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.ReadOnly"]/*' />
         [
             DefaultValue(false)
         ]
@@ -615,7 +601,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Resizable"]/*' />
         [
             Browsable(true)
         ]
@@ -671,7 +656,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Selected"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -736,7 +720,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Tag"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -848,7 +831,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Visible"]/*' />
         [
             DefaultValue(true),
         ]
@@ -886,7 +868,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Clone"]/*' />
         public virtual object Clone()
         {
             DataGridViewBand dataGridViewBand = (DataGridViewBand) System.Activator.CreateInstance(this.GetType());
@@ -930,14 +911,12 @@ namespace System.Windows.Forms
             this.ContextMenuStripInternal = null;
         }
         
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Dispose"]/*' />
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.Dispose2"]/*' />
         protected virtual void Dispose(bool disposing)
         {
             if (disposing) 
@@ -1010,7 +989,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.OnDataGridViewChanged"]/*' />
         protected override void OnDataGridViewChanged()
         {
             if (this.HasDefaultCellStyle)
@@ -1040,7 +1018,6 @@ namespace System.Windows.Forms
             return (this.State & DataGridViewElementStates.ResizableSet) != 0;
         }
 
-        /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand.ToString"]/*' />
         /// <devdoc>
         ///    <para></para>
         /// </devdoc>

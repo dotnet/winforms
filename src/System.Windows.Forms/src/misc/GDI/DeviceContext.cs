@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -25,7 +25,6 @@ namespace System.Experimental.Gdi
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext"]/*' />
     /// <devdoc>
     ///     Represents a Win32 device context.  Provides operations for setting some of the properties
     ///     of a device context.  It's the managed wrapper for an HDC.
@@ -302,7 +301,6 @@ namespace System.Experimental.Gdi
             return new DeviceContext(compatibleDc, DeviceContextType.Memory);
         }
         
-        /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext.FromHdc"]/*' />
         /// <devdoc>
         ///     Used for wrapping an existing hdc.  In this case, this object doesn't own the hdc
         ///     so calls to GetHdc/ReleaseHdc don't PInvoke into GDI.
@@ -315,7 +313,6 @@ namespace System.Experimental.Gdi
             return new DeviceContext(hdc, DeviceContextType.Unknown);
         }
 
-        /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext.FromHwnd"]/*' />
         /// <devdoc>
         ///     When hwnd is null, we are getting the screen DC.
         /// </devdoc>
@@ -325,20 +322,17 @@ namespace System.Experimental.Gdi
         }
 
         
-        /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext.Finalize"]/*' />
         ~DeviceContext()
         {
             Dispose(false);
         }
 
-        /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext.Dispose"]/*' />
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext.Dispose1"]/*' />
         internal void Dispose(bool disposing)
         {
             if (disposed)
@@ -409,7 +403,6 @@ namespace System.Experimental.Gdi
             DbgUtil.AssertFinalization(this, disposing);
         }
 
-        /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext.GetHdc"]/*' />
         /// <devdoc>
         ///     Explicit interface method implementation to hide them a bit for usability reasons so the object is seen 
         ///     as a wrapper around an hdc that is always available, and for performance reasons since it caches the hdc 
@@ -435,7 +428,6 @@ namespace System.Experimental.Gdi
         }
 
 
-        /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext.ReleaseHdc"]/*' />
         ///<devdoc>
         ///     If the object was created from a DC, this object doesn't 'own' the dc so we just ignore 
         ///     this call.

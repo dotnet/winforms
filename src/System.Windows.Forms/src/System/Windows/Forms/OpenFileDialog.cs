@@ -15,7 +15,6 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents a common dialog box
@@ -27,7 +26,6 @@ namespace System.Windows.Forms
     public sealed class OpenFileDialog : FileDialog
     {
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.CheckFileExists"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays a
@@ -50,7 +48,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.Multiselect"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value
@@ -74,7 +71,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.ReadOnlyChecked"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether
@@ -98,7 +94,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.ShowReadOnly"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog contains a read-only check box.
@@ -121,7 +116,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.OpenFile"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Opens the file selected by the user with read-only permission.  The file
@@ -145,7 +139,6 @@ namespace System.Windows.Forms
             return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Resets all properties to their default values.
@@ -157,7 +150,6 @@ namespace System.Windows.Forms
             SetOption(NativeMethods.OFN_FILEMUSTEXIST, true);
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.RunFileDialog"]/*' />
         /// <devdoc>
         ///     Displays a file open dialog.
         /// </devdoc>

@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms;
     using System.Globalization;
 
-    /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn"]/*' />
     [ToolboxBitmapAttribute(typeof(DataGridViewLinkColumn), "DataGridViewLinkColumn.bmp")]
     public class DataGridViewLinkColumn : DataGridViewColumn
     {
@@ -19,12 +18,10 @@ namespace System.Windows.Forms
 
         private string text;
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.DataGridViewLinkColumn"]/*' />
         public DataGridViewLinkColumn() : base(new DataGridViewLinkCell())
         {
         }
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.ActiveLinkColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_LinkColumnActiveLinkColorDescr))
@@ -73,7 +70,6 @@ namespace System.Windows.Forms
             return !this.ActiveLinkColor.Equals(LinkUtilities.IEActiveLinkColor);
         }
         
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.CellTemplate"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -94,7 +90,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.LinkBehavior"]/*' />
         [
             DefaultValue(LinkBehavior.SystemDefault),
             SRCategory(nameof(SR.CatBehavior)),
@@ -134,7 +129,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.LinkColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_LinkColumnLinkColorDescr))
@@ -183,7 +177,6 @@ namespace System.Windows.Forms
             return !this.LinkColor.Equals(LinkUtilities.IELinkColor);
         }
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.Text"]/*' />
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatAppearance)),
@@ -227,7 +220,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.TrackVisitedState"]/*' />
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatBehavior)),
@@ -267,7 +259,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.UseColumnTextForLinkValue"]/*' />
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatAppearance)),
@@ -307,7 +298,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.VisitedLinkColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_LinkColumnVisitedLinkColorDescr))
@@ -356,7 +346,6 @@ namespace System.Windows.Forms
             return !this.VisitedLinkColor.Equals(LinkUtilities.IEVisitedLinkColor);
         }
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewLinkColumn dataGridViewColumn;
@@ -380,7 +369,6 @@ namespace System.Windows.Forms
             return dataGridViewColumn;
         }
 
-        /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn.ToString"]/*' />
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);

@@ -13,31 +13,26 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TabAlignment.uex' path='docs/doc[@for="TabAlignment"]/*' />
     /// <devdoc>
     ///     Controls where the tabs will be located in a Tab Control.
     /// </devdoc>
     public enum TabAlignment {
 
-        /// <include file='doc\TabAlignment.uex' path='docs/doc[@for="TabAlignment.Top"]/*' />
         /// <devdoc>
         ///     Tabs will be located across the top of the control.
         /// </devdoc>
         Top = 0,
 
-        /// <include file='doc\TabAlignment.uex' path='docs/doc[@for="TabAlignment.Bottom"]/*' />
         /// <devdoc>
         ///     Tabs will be located across the bottom of the control.
         /// </devdoc>
         Bottom = 1,
 
-        /// <include file='doc\TabAlignment.uex' path='docs/doc[@for="TabAlignment.Left"]/*' />
         /// <devdoc>
         ///     Tabs will be located along the left edge of the control.
         /// </devdoc>
         Left = 2,
 
-        /// <include file='doc\TabAlignment.uex' path='docs/doc[@for="TabAlignment.Right"]/*' />
         /// <devdoc>
         ///     Tabs will be located along the right edge of the control.
         /// </devdoc>

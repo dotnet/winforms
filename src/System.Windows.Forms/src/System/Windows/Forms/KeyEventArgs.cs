@@ -59,7 +59,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\KeyEvent.uex' path='docs/doc[@for="KeyEventArgs.KeyValue"]/*' />
         /// <devdoc>
         /// Gets the keyboard value for a <see cref='System.Windows.Forms.Control.KeyDown'/> or
         /// <see cref='System.Windows.Forms.Control.KeyUp'/> event.

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,7 +14,6 @@ namespace System.Internal {
 
     using Hashtable = System.Collections.Hashtable;
 
-    /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker"]/*' />
     /// <devdoc>
     ///     The job of this class is to collect and track handle usage in
     ///     windows forms.  Ideally, a developer should never have to call dispose() on
@@ -49,7 +48,6 @@ namespace System.Internal {
 
         private static object internalSyncObject = new object();
         
-        /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.IgnoreCurrentHandlesAsLeaks"]/*' />
         /// <devdoc>
         ///     All handles available at this time will be not be considered as leaks
         ///     when CheckLeaks is called to report leaks.
@@ -70,7 +68,6 @@ namespace System.Internal {
             }
         }
 
-        /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.CheckLeaks"]/*' />
         /// <devdoc>
         ///     Called at shutdown to check for handles that are currently allocated.
         ///     Normally, there should be none.  This will print a list of all
@@ -97,7 +94,6 @@ namespace System.Internal {
             }
         }
 
-        /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.Initialize"]/*' />
         /// <devdoc>
         ///     Ensures leak detection has been initialized.
         /// </devdoc>
@@ -107,7 +103,6 @@ namespace System.Internal {
             // static constructor which does all the work.
         }
 
-        /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.OnHandleAdd"]/*' />
         /// <devdoc>
         ///     Called by the Win32 handle collector when a new handle is created.
         /// </devdoc>
@@ -121,7 +116,6 @@ namespace System.Internal {
             type.Add(handle);
         }
 
-        /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.OnHandleRemove"]/*' />
         /// <devdoc>
         ///     Called by the Win32 handle collector when a new handle is created.
         /// </devdoc>
@@ -148,7 +142,6 @@ namespace System.Internal {
             }
         }
 
-        /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType"]/*' />
         /// <devdoc>
         ///     Represents a specific type of handle.
         /// </devdoc>
@@ -160,7 +153,6 @@ namespace System.Internal {
 
             private const int BUCKETS = 10;
 
-            /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleType"]/*' />
             /// <devdoc>
             ///     Creates a new handle type.
             /// </devdoc>
@@ -169,7 +161,6 @@ namespace System.Internal {
                 this.buckets = new HandleEntry[BUCKETS];
             }
 
-            /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.Add"]/*' />
             /// <devdoc>
             ///     Adds a handle to this handle type for monitoring.
             /// </devdoc>
@@ -196,7 +187,6 @@ namespace System.Internal {
                 }
             }
 
-            /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.CheckLeaks"]/*' />
             /// <devdoc>
             ///     Checks and reports leaks for handle monitoring.
             /// </devdoc>
@@ -221,7 +211,6 @@ namespace System.Internal {
                 }
             }
 
-            /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.IgnoreCurrentHandlesAsLeaks"]/*' />
             /// <devdoc>
             ///     Marks all the handles currently stored, as ignorable, so that they will not be reported as leaks later.
             /// </devdoc>
@@ -239,7 +228,6 @@ namespace System.Internal {
                 }
             }
 
-            /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.ComputeHash"]/*' />
             /// <devdoc>
             ///     Computes the hash bucket for this handle.
             /// </devdoc>
@@ -247,7 +235,6 @@ namespace System.Internal {
                 return(unchecked((int)handle) & 0xFFFF) % BUCKETS;
             }
 
-            /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.Remove"]/*' />
             /// <devdoc>
             ///     Removes the given handle from our monitor list.
             /// </devdoc>
@@ -281,7 +268,6 @@ namespace System.Internal {
                 }
             }
 
-            /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry"]/*' />
             /// <devdoc>
             ///     Denotes a single entry in our handle list.
             /// </devdoc>
@@ -294,7 +280,6 @@ namespace System.Internal {
                 public readonly string callStack;
                 public bool ignorableAsLeak;
 
-                /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.HandleEntry"]/*' />
                 /// <devdoc>
                 ///     Creates a new handle entry
                 /// </devdoc>
@@ -310,7 +295,6 @@ namespace System.Internal {
                     }
                 }
 
-                /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.ToString"]/*' />
                 /// <devdoc>
                 ///     Converts this handle to a printable string.  the string consists
                 ///     of the handle value along with the callstack for it's
@@ -356,7 +340,6 @@ namespace System.Internal {
                     return Convert.ToString(unchecked((int)handle), 16) + description + ": " + sp.ToString();
                 }
 
-                /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.StackParser"]/*' />
                 /// <devdoc>
                 ///     Simple stack parsing class to manipulate our callstack.
                 /// </devdoc>
@@ -366,7 +349,6 @@ namespace System.Internal {
                     internal int endIndex;
                     internal int length;
 
-                    /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.StackParser.StackParser"]/*' />
                     /// <devdoc>
                     ///     Creates a new stackparser with the given callstack
                     /// </devdoc>
@@ -375,7 +357,6 @@ namespace System.Internal {
                         length = releventStack.Length;
                     }
 
-                    /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.StackParser.ContainsString"]/*' />
                     /// <devdoc>
                     ///     Determines if the given string contains token.  This is a case
                     ///     sensitive match.
@@ -396,7 +377,6 @@ namespace System.Internal {
                         return false;
                     }
 
-                    /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.StackParser.DiscardNext"]/*' />
                     /// <devdoc>
                     ///     Discards the next line of the stack trace.
                     /// </devdoc>
@@ -404,7 +384,6 @@ namespace System.Internal {
                         GetLine();
                     }
 
-                    /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.StackParser.DiscardTo"]/*' />
                     /// <devdoc>
                     ///     Discards all lines up to and including the line that contains
                     ///     discardText.
@@ -418,7 +397,6 @@ namespace System.Internal {
                         }
                     }
 
-                    /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.StackParser.GetLine"]/*' />
                     /// <devdoc>
                     ///     Retrieves the next line of the stack.
                     /// </devdoc>
@@ -440,7 +418,6 @@ namespace System.Internal {
                         return line;
                     }
 
-                    /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.StackParser.ToString"]/*' />
                     /// <devdoc>
                     ///     Rereives the string of the parsed stack trace
                     /// </devdoc>
@@ -448,7 +425,6 @@ namespace System.Internal {
                         return releventStack.Substring(startIndex);
                     }
 
-                    /// <include file='doc\DebugHandleTracker.uex' path='docs/doc[@for="DebugHandleTracker.HandleType.HandleEntry.StackParser.Truncate"]/*' />
                     /// <devdoc>
                     ///     Truncates the stack trace, saving the given # of lines.
                     /// </devdoc>

@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
     using Microsoft.Win32;
 
-    /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents
@@ -30,7 +29,6 @@ namespace System.Windows.Forms {
     SRDescription(nameof(SR.DescriptionFontDialog))
     ]
     public class FontDialog : CommonDialog {
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.EventApply"]/*' />
         protected static readonly object EventApply = new object();
 
         private const int defaultMinSize = 0;
@@ -44,7 +42,6 @@ namespace System.Windows.Forms {
         private bool showColor = false;
         private bool usingDefaultIndirectColor = false;
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.FontDialog"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.FontDialog'/>
@@ -59,7 +56,6 @@ namespace System.Windows.Forms {
             Reset();
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.AllowSimulations"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box allows graphics device interface
@@ -81,7 +77,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.AllowVectorFonts"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box allows vector font selections.
@@ -102,7 +97,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.AllowVerticalFonts"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether
@@ -125,7 +119,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.AllowScriptChange"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -149,7 +142,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Color"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating the selected font color.
@@ -181,7 +173,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.FixedPitchOnly"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets
@@ -203,7 +194,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Font"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating the selected font.
@@ -234,7 +224,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.FontMustExist"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box specifies an error condition if the
@@ -256,7 +245,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.MaxSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the maximum
@@ -284,7 +272,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.MinSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating the minimum point size a user can select.
@@ -311,7 +298,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Options"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -324,7 +310,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ScriptsOnly"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a
@@ -346,7 +331,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShowApply"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box contains an Apply button.
@@ -366,7 +350,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShowColor"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays the color choice.
@@ -386,7 +369,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShowEffects"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box contains controls that allow the
@@ -407,7 +389,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShowHelp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays a Help button.
@@ -427,7 +408,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Apply"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the user clicks the Apply button in the font
@@ -444,7 +424,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.GetOption"]/*' />
         /// <devdoc>
         ///     Returns the state of the given option flag.
         /// </devdoc>
@@ -453,7 +432,6 @@ namespace System.Windows.Forms {
             return(options & option) != 0;
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.HookProc"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies the common dialog box hook procedure that is overridden to add
@@ -501,7 +479,6 @@ namespace System.Windows.Forms {
             return base.HookProc(hWnd, msg, wparam, lparam);
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.OnApply"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.FontDialog.Apply'/> event.
@@ -512,7 +489,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Resets all dialog box options to their default values.
@@ -533,7 +509,6 @@ namespace System.Windows.Forms {
             font = null;
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.RunDialog"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -614,7 +589,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.SetOption"]/*' />
         /// <devdoc>
         ///     Sets the given option to the given boolean value.
         /// </devdoc>
@@ -628,7 +602,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShouldSerializeFont"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.FontDialog.Font'/> property should be
@@ -639,7 +612,6 @@ namespace System.Windows.Forms {
             return !Font.Equals(Control.DefaultFont);
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ToString"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -653,7 +625,6 @@ namespace System.Windows.Forms {
             return s + ",  Font: " + Font.ToString();
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.UpdateColor"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -664,7 +635,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.UpdateFont"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>

@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Globalization;
 
-    /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager"]/*' />
     /// <devdoc>
     ///    <para>Manages the position and bindings of a
     ///       list.</para>
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
         private bool bound = false;
         private bool shouldBind = true;
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.listposition"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -49,13 +47,11 @@ namespace System.Windows.Forms {
         private ItemChangedEventArgs resetEvent = new ItemChangedEventArgs(-1);
         private EventHandler onMetaDataChangedHandler;
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.finalType"]/*' />
         /// <devdoc>
         ///    <para>Gets the type of the list.</para>
         /// </devdoc>
         protected Type finalType;
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.ItemChanged"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the
         ///       current item has been
@@ -71,7 +67,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.ListChanged"]/*' />
         public event ListChangedEventHandler ListChanged {
             add {
                 onListChanged += value;
@@ -81,7 +76,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.CurrencyManager"]/*' />
         /// <devdoc>
         /// </devdoc>
         [
@@ -136,7 +130,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.Count"]/*' />
         /// <devdoc>
         ///    <para>Gets the number of items in the list.</para>
         /// </devdoc>
@@ -149,7 +142,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.Current"]/*' />
         /// <devdoc>
         ///    <para>Gets the current item in the list.</para>
         /// </devdoc>
@@ -215,7 +207,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.IsBinding"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>Gets a value indicating whether the list is bound to a data source.</para>
@@ -233,7 +224,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.List"]/*' />
         /// <devdoc>
         ///    <para>Gets the list as an object.</para>
         /// </devdoc>
@@ -249,7 +239,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.Position"]/*' />
         /// <devdoc>
         ///    <para> Gets or sets the position you are at within the list.</para>
         /// </devdoc>
@@ -291,7 +280,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.AddNew"]/*' />
         public override void AddNew() {
             IBindingList ibl = list as IBindingList;
             if (ibl != null) {
@@ -306,7 +294,6 @@ namespace System.Windows.Forms {
                                                                                                                     // true for pulling data from the controls
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.CancelCurrentEdit"]/*' />
         /// <devdoc>
         ///    <para>Cancels the current edit operation.</para>
         /// </devdoc>
@@ -381,7 +368,6 @@ namespace System.Windows.Forms {
             }                
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.CheckEmpty"]/*' />
         /// <devdoc>
         ///    <para>Throws an exception if there is no list.</para>
         /// </devdoc>
@@ -439,12 +425,10 @@ namespace System.Windows.Forms {
             return success;
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.RemoveAt"]/*' />
         public override void RemoveAt(int index) {
             list.RemoveAt(index);
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.EndCurrentEdit"]/*' />
         /// <devdoc>
         ///    <para>Ends the current edit operation.</para>
         /// </devdoc>
@@ -552,7 +536,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.GetListName1"]/*' />
         /// <devdoc>
         ///    <para>Gets the name of the specified list.</para>
         /// </devdoc>
@@ -571,7 +554,6 @@ namespace System.Windows.Forms {
             return ListBindingHelper.GetListItemProperties(this.list, listAccessors);
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.GetItemProperties"]/*' />
         /// <devdoc>
         /// <para>Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for
         ///    the list.</para>
@@ -759,7 +741,6 @@ namespace System.Windows.Forms {
             Debug.Assert(lastGoodKnownRow == -1 || listposition == lastGoodKnownRow, "how did they get out of sync?");
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.MetaDataChanged"]/*' />
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Exists in Everett
         [SRCategory(nameof(SR.CatData))]
         public event EventHandler MetaDataChanged {
@@ -771,7 +752,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnCurrentChanged"]/*' />
         /// <devdoc>
         /// <para>Causes the CurrentChanged event to occur. </para>
         /// </devdoc>
@@ -813,14 +793,12 @@ namespace System.Windows.Forms {
 
         // this method should only be called when the currency manager receives the ListChangedType.ItemChanged event
         // and when the index of the ListChangedEventArgs == the position in the currency manager
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnCurrentItemChanged"]/*' />
         internal protected override void OnCurrentItemChanged(EventArgs e) {
             if (onCurrentItemChangedHandler != null) {
                 onCurrentItemChangedHandler(this, e);
             }
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnItemChanged"]/*' />
         /// <devdoc>
         /// </devdoc>
         protected virtual void OnItemChanged(ItemChangedEventArgs e) {
@@ -858,7 +836,6 @@ namespace System.Windows.Forms {
                 onMetaDataChangedHandler(this,e);
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnPositionChanged"]/*' />
         /// <devdoc>
         /// </devdoc>
         protected virtual void OnPositionChanged(EventArgs e) {
@@ -874,7 +851,6 @@ namespace System.Windows.Forms {
             // }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.Refresh"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Forces a repopulation of the CurrencyManager
@@ -896,7 +872,6 @@ namespace System.Windows.Forms {
             UnwireEvents(list);
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.ResumeBinding"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>Resumes binding of component properties to list items.</para>
@@ -918,7 +893,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.SuspendBinding"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>Suspends binding.</para>
@@ -941,7 +915,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.UpdateIsBinding"]/*' />
         protected override void UpdateIsBinding() {
             UpdateIsBinding(true);
         }

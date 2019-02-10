@@ -24,7 +24,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     
 
-    /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Implements a node of a <see cref='System.Windows.Forms.TreeView'/>.
@@ -75,22 +74,17 @@ namespace System.Windows.Forms {
         internal class TreeNodeImageIndexer : ImageList.Indexer {
            private TreeNode owner;
            
-           /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType"]/*' />
            public enum ImageListType {
-               /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.Default"]/*' />
                Default,
-               /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.State"]/*' />
                State
            }
            private ImageListType imageListType;
 
-           /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.TreeNodeImageIndexer"]/*' />
            public TreeNodeImageIndexer(TreeNode node, ImageListType imageListType) {
               owner = node;
               this.imageListType = imageListType;
            }
 
-           /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.ImageList"]/*' />
            public override ImageList ImageList {
                 get {
                     if (owner.TreeView != null) {
@@ -160,7 +154,6 @@ namespace System.Windows.Forms {
                              | NativeMethods.TVIF_IMAGE
                              | NativeMethods.TVIF_SELECTEDIMAGE;
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.TreeNode"]/*' />
         /// <devdoc>
         ///     Creates a TreeNode object.
         /// </devdoc>
@@ -172,7 +165,6 @@ namespace System.Windows.Forms {
             this.treeView = treeView;
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.TreeNode1"]/*' />
         /// <devdoc>
         ///     Creates a TreeNode object.
         /// </devdoc>
@@ -180,7 +172,6 @@ namespace System.Windows.Forms {
             this.text = text;
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.TreeNode2"]/*' />
         /// <devdoc>
         ///     Creates a TreeNode object.
         /// </devdoc>
@@ -189,7 +180,6 @@ namespace System.Windows.Forms {
             this.Nodes.AddRange(children);
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.TreeNode3"]/*' />
         /// <devdoc>
         ///     Creates a TreeNode object.
         /// </devdoc>
@@ -199,7 +189,6 @@ namespace System.Windows.Forms {
             this.SelectedImageIndexer.Index = selectedImageIndex;
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.TreeNode4"]/*' />
         /// <devdoc>
         ///     Creates a TreeNode object.
         /// </devdoc>
@@ -213,7 +202,6 @@ namespace System.Windows.Forms {
         /**
          * Constructor used in deserialization
          */
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.TreeNode5"]/*' />
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         [
@@ -224,7 +212,6 @@ namespace System.Windows.Forms {
             Deserialize(serializationInfo, context);
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.BackColor"]/*' />
         /// <devdoc>
         ///     The background color of this node.
         ///     If null, the color used will be the default color from the TreeView control that this
@@ -261,7 +248,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Bounds"]/*' />
         /// <devdoc>
         ///     The bounding rectangle for the node (text area only). The coordinates
         ///     are relative to the upper left corner of the TreeView control.
@@ -285,7 +271,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Bounds"]/*' />
         /// <devdoc>
         ///     The bounding rectangle for the node (full row). The coordinates
         ///     are relative to the upper left corner of the TreeView control.
@@ -343,7 +328,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Checked"]/*' />
         /// <devdoc>	
         ///     Indicates whether the node's checkbox is checked.
         /// </devdoc>
@@ -382,7 +366,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ContextMenu"]/*' />
         /// <devdoc>
         ///     The contextMenu associated with this tree node. The contextMenu
         ///     will be shown when the user right clicks the mouse on the control.
@@ -401,7 +384,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ContextMenu"]/*' />
         /// <devdoc>
         /// </devdoc>
         [
@@ -418,7 +400,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.FirstNode"]/*' />
         /// <devdoc>
         ///     The first child node of this node.
         /// </devdoc>
@@ -440,7 +421,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ForeColor"]/*' />
         /// <devdoc>
         ///     The foreground color of this node.
         ///     If null, the color used will be the default color from the TreeView control that this
@@ -476,7 +456,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.FullPath"]/*' />
         /// <devdoc>
         ///     Returns the full path of this node.
         ///     The path consists of the labels of each of the nodes from the root to this node,
@@ -496,7 +475,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Handle"]/*' />
         /// <devdoc>
         ///     The HTREEITEM handle associated with this node.  If the handle
         ///     has not yet been created, this will force handle creation.
@@ -511,7 +489,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ImageIndex"]/*' />
         /// <devdoc>
         ///     The index of the image to be displayed when the node is in the unselected state.
         ///     The image is contained in the ImageList referenced by the imageList property.
@@ -535,7 +512,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ImageIndex"]/*' />
         /// <devdoc>
         ///     The index of the image to be displayed when the node is in the unselected state.
         ///     The image is contained in the ImageList referenced by the imageList property.
@@ -559,7 +535,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Index"]/*' />
         /// <devdoc>
         ///     Returns the position of this node in relation to its siblings
         /// </devdoc>
@@ -571,7 +546,6 @@ namespace System.Windows.Forms {
             get { return index;}
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.IsEditing"]/*' />
         /// <devdoc>
         ///     Specifies whether this node is being edited by the user.
         /// </devdoc>
@@ -587,7 +561,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.IsExpanded"]/*' />
         /// <devdoc>
         ///     Specifies whether this node is in the expanded state.
         /// </devdoc>
@@ -601,7 +574,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.IsSelected"]/*' />
         /// <devdoc>
         ///     Specifies whether this node is in the selected state.
         /// </devdoc>
@@ -613,7 +585,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.IsVisible"]/*' />
         /// <devdoc>
         ///     Specifies whether this node is visible.
         /// </devdoc>
@@ -638,7 +609,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.LastNode"]/*' />
         /// <devdoc>
         ///     The last child node of this node.
         /// </devdoc>
@@ -651,7 +621,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Level"]/*' />
         /// <devdoc>
         ///     This denotes the depth of nesting of the treenode.
         /// </devdoc>
@@ -669,7 +638,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.NextNode"]/*' />
         /// <devdoc>
         ///     The next sibling node.
         /// </devdoc>
@@ -685,7 +653,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.NextVisibleNode"]/*' />
         /// <devdoc>
         ///     The next visible node.  It may be a child, sibling,
         ///     or a node from another branch.
@@ -715,7 +682,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.NodeFont"]/*' />
         /// <devdoc>
         ///     The font that will be used to draw this node
         ///     If null, the font used will be the default font from the TreeView control that this
@@ -755,7 +721,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Nodes"]/*' />
         [
         ListBindable(false), 
         Browsable(false)
@@ -769,7 +734,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Parent"]/*' />
         /// <devdoc>
         ///     Retrieves parent node.
         /// </devdoc>
@@ -787,7 +751,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.PrevNode"]/*' />
         /// <devdoc>
         ///     The previous sibling node.
         /// </devdoc>
@@ -811,7 +774,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.PrevVisibleNode"]/*' />
         /// <devdoc>
         ///     The next visible node.  It may be a parent, sibling,
         ///     or a node from another branch.
@@ -841,7 +803,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.SelectedImageIndex"]/*' />
         /// <devdoc>
         ///     The index of the image displayed when the node is in the selected state.
         ///     The image is contained in the ImageList referenced by the imageList property.
@@ -866,7 +827,6 @@ namespace System.Windows.Forms {
             }
         }
 
-  	    /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.SelectedImageKey"]/*' />
         /// <devdoc>
         ///     The index of the image displayed when the node is in the selected state.
         ///     The image is contained in the ImageList referenced by the imageList property.
@@ -891,7 +851,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.State"]/*' />
         /// <devdoc>
         ///     Retrieve state bits for this node
         /// </devdoc>
@@ -916,7 +875,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ImageIndex"]/*' />
         /// <devdoc>
         ///     The key of the StateImage that the user want to display.
         /// </devdoc>
@@ -944,7 +902,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.StateImageIndex"]/*' />
         [
         Localizable(true),
         TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
@@ -972,7 +929,6 @@ namespace System.Windows.Forms {
         }
 
         // <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Tag"]/*' />
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -990,7 +946,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Text"]/*' />
         /// <devdoc>
         ///     The label text for the tree node
         /// </devdoc>
@@ -1010,7 +965,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ToolTipText"]/*' />
         /// <devdoc>
         ///     The ToolTip text that will be displayed when the mouse hovers over the node.
         /// </devdoc>
@@ -1029,7 +983,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Name"]/*' />
         /// <devdoc>
         ///     The name for the tree node - useful for indexing.
         /// </devdoc>
@@ -1049,7 +1002,6 @@ namespace System.Windows.Forms {
 
         
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.TreeView"]/*' />
         /// <devdoc>
         ///     Return the TreeView control this node belongs to.
         /// </devdoc>
@@ -1062,7 +1014,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.AddSorted"]/*' />
         /// <devdoc>
         ///     Adds a new child node at the appropriate sorted position
         /// </devdoc>
@@ -1114,7 +1065,6 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.FromHandle"]/*' />
         /// <devdoc>
         ///     Returns a TreeNode object for the given HTREEITEM handle
         /// </devdoc>
@@ -1179,7 +1129,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.BeginEdit"]/*' />
         /// <devdoc>
         ///     Initiate editing of the node's label.
         ///     Only effective if LabelEdit property is true.
@@ -1241,7 +1190,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Clone"]/*' />
         /// <devdoc>
         ///     Clone the entire subtree rooted at this node.
         /// </devdoc>
@@ -1337,7 +1285,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Collapse"]/*' />
         /// <devdoc>
         ///     Collapse the node ignoring its children while collapsing the parent
         /// </devdoc>
@@ -1346,7 +1293,6 @@ namespace System.Windows.Forms {
             CollapseInternal(ignoreChildren);
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Collapse"]/*' />
         /// <devdoc>
         ///     Collapse the node.
         /// </devdoc>
@@ -1354,7 +1300,6 @@ namespace System.Windows.Forms {
             CollapseInternal(false);    
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.DoCollapse"]/*' />
         /// <devdoc>
         ///     Windows TreeView doesn't send the proper notifications on collapse, so we do it manually.
         /// </devdoc>
@@ -1369,7 +1314,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Deserialize"]/*' />
         protected virtual void Deserialize(SerializationInfo serializationInfo, StreamingContext context) {
 
             int childCount = 0;
@@ -1461,7 +1405,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.EndEdit"]/*' />
         /// <devdoc>
         ///     Terminate the editing of any tree view item's label.
         /// </devdoc>
@@ -1473,7 +1416,6 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_ENDEDITLABELNOW, cancel?1:0, 0);
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.EnsureCapacity"]/*' />
         /// <devdoc>
         ///     Makes sure there is enough room to add n children
         /// </devdoc>
@@ -1498,7 +1440,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.EnsureStateImageValue"]/*' />
         /// <devdoc>
         ///     Ensures the the node's StateImageIndex value is properly set.
         /// </devdoc>
@@ -1521,7 +1462,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.EnsureVisible"]/*' />
         /// <devdoc>
         ///     Ensure that the node is visible, expanding nodes and scrolling the
         ///     TreeView control as necessary.
@@ -1534,7 +1474,6 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_ENSUREVISIBLE, 0, Handle);
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Expand"]/*' />
         /// <devdoc>
         ///     Expand the node.
         /// </devdoc>
@@ -1553,7 +1492,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ExpandAll"]/*' />
         /// <devdoc>
         ///     Expand the node.
         /// </devdoc>
@@ -1564,7 +1502,6 @@ namespace System.Windows.Forms {
             }
             
         }
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.FindTreeView"]/*' />
         /// <devdoc>
         ///     Locate this tree node's containing tree view control by scanning
         ///     up to the virtual root, whose treeView pointer we know to be
@@ -1577,7 +1514,6 @@ namespace System.Windows.Forms {
             return node.treeView;
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.GetFullPath"]/*' />
         /// <devdoc>
         ///     Helper function for getFullPath().
         /// </devdoc>
@@ -1590,7 +1526,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.GetNodeCount"]/*' />
         /// <devdoc>
         ///     Returns number of child nodes.
         /// </devdoc>
@@ -1603,7 +1538,6 @@ namespace System.Windows.Forms {
             return total;
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.InsertNodeAt"]/*' />
         /// <devdoc>
         ///     Helper function to add node at a given index after all validation has been done
         /// </devdoc>
@@ -1623,7 +1557,6 @@ namespace System.Windows.Forms {
                 TreeView.SelectedNode = node; // communicate this to the handle
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.InvalidateHostTree"]/*' />
         /// <devdoc>
         ///     Invalidates the treeview control that is hosting this node
         /// </devdoc>
@@ -1631,7 +1564,6 @@ namespace System.Windows.Forms {
             if (treeView != null && treeView.IsHandleCreated) treeView.Invalidate();
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Realize"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1738,7 +1670,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Remove"]/*' />
         /// <devdoc>
         ///     Remove this node from the TreeView control.  Child nodes are also removed from the
         ///     TreeView, but are still attached to this node.
@@ -1747,7 +1678,6 @@ namespace System.Windows.Forms {
             Remove(true);
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Remove1"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1788,7 +1718,6 @@ namespace System.Windows.Forms {
             treeView = null;
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.RemovePropBagIfEmpty"]/*' />
         /// <devdoc>
         ///     Removes the propBag object if it's now devoid of useful data
         /// </devdoc>
@@ -1818,7 +1747,6 @@ namespace System.Windows.Forms {
             return ForeColor != Color.Empty;
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Serialize"]/*' />
         /// <devdoc>
         ///     Saves this TreeNode object to the given data stream.
         /// </devdoc>
@@ -1859,7 +1787,6 @@ namespace System.Windows.Forms {
                 si.AddValue("UserData", userData, userData.GetType());
             }
         }
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Toggle"]/*' />
         /// <devdoc>
         ///     Toggle the state of the node. Expand if collapsed or collapse if
         ///     expanded.
@@ -1878,7 +1805,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ToString"]/*' />
         /// <devdoc>
         ///     Returns the label text for the tree node
         /// </devdoc>
@@ -1886,7 +1812,6 @@ namespace System.Windows.Forms {
             return "TreeNode: " + (text == null ? "" : text);
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.UpdateNode"]/*' />
         /// <devdoc>
         ///     Tell the TreeView to refresh this node
         /// </devdoc>
@@ -1940,7 +1865,6 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.ISerializable.GetObjectData"]/*' />
         /// <devdoc>
         /// ISerializable private implementation
         /// </devdoc>

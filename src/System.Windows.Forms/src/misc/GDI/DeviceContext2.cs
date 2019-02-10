@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -20,7 +20,6 @@ namespace System.Experimental.Gdi
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext"]/*' />
     /// <devdoc>
     ///     Represents a Win32 device context.  Provides operations for setting some of the properties
     ///     of a device context.  It's the managed wrapper for an HDC.

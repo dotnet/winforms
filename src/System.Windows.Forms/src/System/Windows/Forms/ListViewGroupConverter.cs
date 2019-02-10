@@ -15,8 +15,8 @@ namespace System.Windows.Forms
     /// ListViewGroupConverter is a class that can be used to convert  ListViewGroup objects
     /// from one data type to another. Access this class through the TypeDescriptor.
     /// </devdoc>
-    internal class ListViewGroupConverter : TypeConverter
-    {
+    internal class ListViewGroupConverter : TypeConverter {
+    
         /// <devdoc>
         /// Determines if this converter can convert an object in the given source type to
         /// the native type of the converter.
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
 
             return base.ConvertFrom(context, culture, value);
         }
-
+        
         /// <devdoc>
         /// Converts the given object to another type. The most common types to convert
         /// are to and from a string object. The default implementation will make a call
@@ -134,7 +134,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\ListViewGroupConverter.uex' path='docs/doc[@for="ListViewGroupConverter.GetStandardValuesExclusive"]/*' />
         /// <devdoc>
         /// Determines if the list of standard values returned from GetStandardValues is an
         /// exclusive list.  If the list is exclusive, then no other values are valid, such as

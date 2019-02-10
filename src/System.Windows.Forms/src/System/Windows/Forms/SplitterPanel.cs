@@ -19,7 +19,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.ComponentModel.Design.Serialization;
 
-    /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel"]/*' />
     /// <devdoc>
     ///     TBD.
     /// </devdoc>
@@ -35,7 +34,6 @@ namespace System.Windows.Forms {
         SplitContainer owner  = null;
         private bool collapsed = false;
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.SplitterPanel"]/*' />
         public SplitterPanel(SplitContainer owner)
         : base() {
               this.owner =   owner;
@@ -53,7 +51,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.AutoSize"]/*' />
         /// <devdoc>
         ///    Override AutoSize to make it hidden from the user in the designer 
         /// </devdoc>
@@ -71,7 +68,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
             add {
@@ -99,7 +95,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Anchor"]/*' />
         /// <devdoc>
         ///    Override Anchor to make it hidden from the user in the designer 
         /// </devdoc>
@@ -117,7 +112,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.BorderStyle"]/*' />
         /// <devdoc>
         ///     Indicates what type of border the Splitter control has.  This value
         ///     comes from the System.Windows.Forms.BorderStyle enumeration.
@@ -136,7 +130,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Dock"]/*' />
         /// <devdoc>
         ///     The dock property. The dock property controls to which edge
         ///     of the container this control is docked to. For example, when docked to
@@ -157,7 +150,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.DockPadding"]/*' />
         /// <devdoc>
         ///    Override DockPadding to make it hidden from the user in the designer 
         /// </devdoc>
@@ -172,7 +164,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Height"]/*' />
         /// <devdoc>
         ///     The height of this SplitterPanel
         /// </devdoc>
@@ -203,7 +194,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Location"]/*' />
         /// <devdoc>
         ///     Override Location to make it hidden from the user in the designer
         /// </devdoc>
@@ -221,7 +211,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.DefaultMargin"]/*' />
         /// <devdoc>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
@@ -233,7 +222,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.MinimumSize"]/*' />
         /// <devdoc>
         ///    Override AutoSize to make it hidden from the user in the designer 
         /// </devdoc>
@@ -252,7 +240,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.MaximumSize"]/*' />
         /// <devdoc>
         ///    Override AutoSize to make it hidden from the user in the designer 
         /// </devdoc>
@@ -270,7 +257,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Name"]/*' />
         /// <devdoc>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control.  The name can be
@@ -290,7 +276,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Parent"]/*' />
         /// <devdoc>
         ///     The parent of this control.
         /// </devdoc>
@@ -300,7 +285,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Parent"]/*' />
         /// <devdoc>
         ///     The parent of this control.
         /// </devdoc>
@@ -318,7 +302,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Size"]/*' />
         /// <devdoc>
         ///     Override Size to make it hidden from the user in the designer
         /// </devdoc>
@@ -339,7 +322,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabIndex"]/*' />
         /// <devdoc>
         ///     Override TabIndex to make it hidden from the user in the designer
         /// </devdoc>
@@ -358,7 +340,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabStop"]/*' />
         /// <devdoc>
         ///     Override TabStop to make it hidden from the user in the designer
         /// </devdoc>
@@ -376,7 +357,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Visible"]/*' />
         /// <devdoc>
         ///     Override Visible to make it hidden from the user in the designer
         /// </devdoc>
@@ -394,7 +374,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Width"]/*' />
         /// <devdoc>
         ///     The width of this control.
         /// </devdoc>
@@ -425,7 +404,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.VisibleChanged"]/*' />
         /// <devdoc>
         ///     Override VisibleChanged to make it hidden from the user in the designer
         /// </devdoc>
@@ -443,7 +421,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.DockChanged"]/*' />
         /// <devdoc>
         ///     Override DockChanged to make it hidden from the user in the designer
         /// </devdoc>
@@ -461,7 +438,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.LocationChanged"]/*' />
         /// <devdoc>
         ///     Override LocationChanged to make it hidden from the user in the designer
         /// </devdoc>
@@ -479,7 +455,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabIndexChanged"]/*' />
         /// <devdoc>
         ///     Override TabIndexChanged to make it hidden from the user in the designer
         /// </devdoc>
@@ -497,7 +472,6 @@ namespace System.Windows.Forms {
             }
         }        
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabStopChanged"]/*' />
         /// <devdoc>
         ///     Override TabStopChanged to make it hidden from the user in the designer
         /// </devdoc>

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext"]/*' />
     /// <devdoc>
     /// <para>Manages the collection of System.Windows.Forms.BindingManagerBase
     /// objects for a Win Form.</para>
@@ -21,7 +20,6 @@ namespace System.Windows.Forms {
 
         private Hashtable listManagers;
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.ICollection.Count"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -36,7 +34,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.ICollection.CopyTo"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -50,7 +47,6 @@ namespace System.Windows.Forms {
             listManagers.CopyTo(ar, index);
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.IEnumerable.GetEnumerator"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -63,7 +59,6 @@ namespace System.Windows.Forms {
             return listManagers.GetEnumerator();
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.IsReadOnly"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -76,7 +71,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.ICollection.IsSynchronized"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -90,7 +84,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.ICollection.SyncRoot"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>Gets an object to use for synchronization (thread safety).</para>
@@ -102,7 +95,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.BindingContext"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the System.Windows.Forms.BindingContext class.</para>
         /// </devdoc>
@@ -110,7 +102,6 @@ namespace System.Windows.Forms {
             listManagers = new Hashtable();
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.this"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the System.Windows.Forms.BindingManagerBase
@@ -123,7 +114,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.this1"]/*' />
         /// <devdoc>
         /// <para>Gets the System.Windows.Forms.BindingManagerBase associated with the specified data source and
         ///    data member.</para>
@@ -134,7 +124,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.Add"]/*' />
         /// <devdoc>
         /// Adds the listManager to the collection.  An ArgumentNullException is thrown if this listManager
         /// is null.  An exception is thrown if a listManager to the same target and Property as an existing listManager or
@@ -147,7 +136,6 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataSource));
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.AddCore"]/*' />
         /// <devdoc>
         /// </devdoc>
         protected virtual void AddCore(object dataSource, BindingManagerBase listManager) {
@@ -162,7 +150,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.CollectionChanged"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the collection has changed.
@@ -180,7 +167,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.Clear"]/*' />
         /// <devdoc>
         /// Clears the collection of any bindings.
         /// Fires the CollectionChangedEvent.
@@ -191,7 +177,6 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.ClearCore"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Clears the collection.
@@ -202,7 +187,6 @@ namespace System.Windows.Forms {
             listManagers.Clear();
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.Contains"]/*' />
         /// <devdoc>
         /// <para>Gets a value indicating whether the System.Windows.Forms.BindingContext
         /// contains the specified
@@ -212,7 +196,6 @@ namespace System.Windows.Forms {
             return Contains(dataSource, "");
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.Contains1"]/*' />
         /// <devdoc>
         /// <para>Gets a value indicating whether the System.Windows.Forms.BindingContext
         /// contains the specified data source and data member.</para>
@@ -225,7 +208,6 @@ namespace System.Windows.Forms {
             return new HashKey(dataSource, dataMember);
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.HashKey"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -248,7 +230,6 @@ namespace System.Windows.Forms {
                 this.dataMember = dataMember.ToLower(CultureInfo.InvariantCulture);
             }
 
-            /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.HashKey.GetHashCode"]/*' />
             /// <internalonly/>
             /// <devdoc>
             /// </devdoc>
@@ -256,7 +237,6 @@ namespace System.Windows.Forms {
                 return dataSourceHashCode * dataMember.GetHashCode();
             }
 
-            /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.HashKey.Equals"]/*' />
             /// <internalonly/>
             /// <devdoc>
             /// </devdoc>
@@ -269,7 +249,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.OnCollectionChanged"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    This method is called whenever the collection changes.  Overriders
@@ -280,7 +259,6 @@ namespace System.Windows.Forms {
         protected virtual void OnCollectionChanged(CollectionChangeEventArgs ccevent) {
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.Remove"]/*' />
         /// <devdoc>
         /// Removes the given listManager from the collection.
         /// An ArgumentNullException is thrown if this listManager is null.  An ArgumentException is thrown
@@ -293,7 +271,6 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataSource));
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.RemoveCore"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -302,7 +279,6 @@ namespace System.Windows.Forms {
             listManagers.Remove(GetKey(dataSource, ""));
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.EnsureListManager"]/*' />
         /// <devdoc>
         ///    Create a suitable binding manager for the specified dataSource/dataMember combination.
         ///    - If one has already been created and cached by this BindingContext, return that instead.
@@ -417,7 +393,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingContext.uex' path='docs/doc[@for="BindingContext.UpdateBinding"]/*' />
         /// <devdoc>
         ///     Associates a Binding with a different BindingContext. Intended for use by components that support
         ///     IBindableComponent, to update their Bindings when the value of IBindableComponent.BindingContext

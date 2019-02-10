@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\ItemActivation.uex' path='docs/doc[@for="ItemActivation"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies how the user activates items and the appearance
@@ -22,7 +21,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum ItemActivation {
 
-        /// <include file='doc\ItemActivation.uex' path='docs/doc[@for="ItemActivation.Standard"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Activate items with a double-click.
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Standard = 0,
 
-        /// <include file='doc\ItemActivation.uex' path='docs/doc[@for="ItemActivation.OneClick"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Activate
@@ -43,7 +40,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         OneClick = 1,
 
-        /// <include file='doc\ItemActivation.uex' path='docs/doc[@for="ItemActivation.TwoClick"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Activate items with a

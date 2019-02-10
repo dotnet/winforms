@@ -7,14 +7,12 @@ namespace System.Windows.Forms {
 
     internal interface ISupportOleDropSource {
 	
-        /// <include file='doc\ISupportOleDropSource.uex' path='docs/doc[@for=ISupportOleDropSource.OnQueryContinueDrag]/*'/ />
         /// <devdoc>
         /// Summary of OnQueryContinueDrag.
         /// </devdoc>
         /// <param name=qcdevent></param>	
         void OnQueryContinueDrag(QueryContinueDragEventArgs qcdevent);
 	
-        /// <include file='doc\ISupportOleDropSource.uex' path='docs/doc[@for=ISupportOleDropSource.OnGiveFeedback]/*'/ />
         /// <devdoc>
         /// Summary of OnGiveFeedback.
         /// </devdoc>

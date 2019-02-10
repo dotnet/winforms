@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -20,7 +20,6 @@ namespace System.Resources {
     using System.Runtime.Serialization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef"]/*' />
     /// <devdoc>
     ///     ResX File Reference class. This allows the developer to represent
     ///     a link to an external resource. When the resource manager asks
@@ -33,7 +32,6 @@ namespace System.Resources {
         [OptionalField(VersionAdded = 2)]
         private Encoding textFileEncoding;
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.ResXFileRef"]/*' />
         /// <devdoc>
         ///     Creates a new ResXFileRef that points to the specified file.
         ///     The type refered to by typeName must support a constructor
@@ -54,7 +52,6 @@ namespace System.Resources {
         private void OnDeserialized(StreamingContext ctx) {
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.ResXFileRef"]/*' />
         /// <devdoc>
         ///     Creates a new ResXFileRef that points to the specified file.
         ///     The type refered to by typeName must support a constructor
@@ -68,28 +65,26 @@ namespace System.Resources {
             return new ResXFileRef(fileName, typeName, textFileEncoding);
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.FileName"]/*' />
+
         public string FileName {
             get {
                 return fileName;
             }
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.TextFileEncoding"]/*' />
         public string TypeName {
             get {
                 return typeName;
             }
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.TextFileEncoding"]/*' />
         public Encoding TextFileEncoding {
             get {
                 return textFileEncoding;
             }
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.PathDifference"]/*' />
+
         /// <devdoc>
         ///    path1+result = path2
         ///   A string which is the relative path difference between path1 and
@@ -136,7 +131,6 @@ namespace System.Resources {
             fileName = PathDifference(basePath, fileName, false);
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.ToString"]/*' />
         public override string ToString() {
             string result = string.Empty;
             
@@ -152,9 +146,10 @@ namespace System.Resources {
             return result;
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter"]/*' />
+       
+
+
         public class Converter : TypeConverter {
-            /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.CanConvertFrom"]/*' />
             public override bool CanConvertFrom(ITypeDescriptorContext context,
                                                 Type sourceType) {
                 if (sourceType == typeof(string)) {
@@ -163,14 +158,12 @@ namespace System.Resources {
                 return false;
             }
 
-            /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.CanConvertTo"]/*' />
             public override bool CanConvertTo(ITypeDescriptorContext context, 
                                               Type destinationType)
             {
                 return destinationType == typeof(string);
             }
 
-            /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertTo"]/*' />
             public override object ConvertTo(ITypeDescriptorContext context, 
                                              CultureInfo culture,
                                              object value, 
@@ -219,7 +212,8 @@ namespace System.Resources {
                 return result;  
             }
 
-            /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertFrom"]/*' />
+            [ResourceExposure(ResourceScope.Machine)]
+            [ResourceConsumption(ResourceScope.Machine)]
             public override object ConvertFrom(ITypeDescriptorContext context, 
                                                CultureInfo culture,
                                                object value) {

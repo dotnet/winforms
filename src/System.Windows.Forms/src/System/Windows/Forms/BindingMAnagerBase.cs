@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,17 +9,14 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase"]/*' />
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors")] // Shipped in Everett
     public abstract class BindingManagerBase
     {
         private BindingsCollection bindings;
         private bool pullingData = false;
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.onCurrentChangedHandler"]/*' />
         protected EventHandler onCurrentChangedHandler;
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.onPositionChangedHandler"]/*' />
         protected EventHandler onPositionChangedHandler;
 
         // Hook BindingComplete events on all owned Binding objects, and propagate those events through our own BindingComplete event
@@ -31,7 +28,6 @@ namespace System.Windows.Forms {
         // Event handler for the DataError event
         internal BindingManagerDataErrorEventHandler onDataErrorHandler;
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.Bindings"]/*' />
         public BindingsCollection Bindings {
             get {
                 if (bindings == null) {
@@ -46,34 +42,28 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.OnBindingComplete"]/*' />
         internal protected void OnBindingComplete(BindingCompleteEventArgs args) {
             if (onBindingCompleteHandler != null) {
                 onBindingCompleteHandler(this, args);
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.OnCurrentChanged"]/*' />
         internal protected abstract void OnCurrentChanged(EventArgs e);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.OnCurrentItemChanged"]/*' />
         internal protected abstract void OnCurrentItemChanged(EventArgs e);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.OnDataError"]/*' />
         internal protected void OnDataError(Exception e) {
             if (onDataErrorHandler != null) {
                 onDataErrorHandler(this, new BindingManagerDataErrorEventArgs(e));
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.Current"]/*' />
         public abstract object Current {
             get;
         }
 
         internal abstract void SetDataSource(object dataSource);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.BindingManagerBase"]/*' />
         public BindingManagerBase() { }
 
         [
@@ -90,12 +80,10 @@ namespace System.Windows.Forms {
 
         internal abstract PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.GetItemProperties"]/*' />
         public virtual PropertyDescriptorCollection GetItemProperties() {
             return GetItemProperties(null);
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.GetItemProperties1"]/*' />
         protected internal virtual PropertyDescriptorCollection GetItemProperties(ArrayList dataSources, ArrayList listAccessors) {
             IList list = null;
             if (this is CurrencyManager) {
@@ -113,7 +101,6 @@ namespace System.Windows.Forms {
         // offset is how far we are in the listAccessors
         // listAccessors is the list of accessors (duh)
         //
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.GetItemProperties2"]/*' />
         protected virtual PropertyDescriptorCollection GetItemProperties(Type listType, int offset, ArrayList dataSources, ArrayList listAccessors) {
             if (listAccessors.Count < offset)
                 return null;
@@ -179,7 +166,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.BindingComplete"]/*' />
         public event BindingCompleteEventHandler BindingComplete {
             add {
                 onBindingCompleteHandler += value;
@@ -189,7 +175,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.CurrentChanged"]/*' />
         public event EventHandler CurrentChanged {
             add {
                 onCurrentChangedHandler += value;
@@ -199,7 +184,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.CurrentItemChanged"]/*' />
         public event EventHandler CurrentItemChanged {
             add {
                 onCurrentItemChangedHandler += value;
@@ -209,7 +193,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.DataError"]/*' />
         public event BindingManagerDataErrorEventHandler DataError {
             add {
                 onDataErrorHandler += value;
@@ -220,20 +203,14 @@ namespace System.Windows.Forms {
         }
 
         internal abstract string GetListName();
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.CancelCurrentEdit"]/*' />
         public abstract void CancelCurrentEdit();
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.EndCurrentEdit"]/*' />
         public abstract void EndCurrentEdit();
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.AddNew"]/*' />
         public abstract void AddNew();
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.RemoveAt"]/*' />
         public abstract void RemoveAt(int index);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.Position"]/*' />
         public abstract int Position{get; set;}
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PositionChanged"]/*' />
         public event EventHandler PositionChanged {
             add {
                 this.onPositionChangedHandler += value;
@@ -242,25 +219,19 @@ namespace System.Windows.Forms {
                 this.onPositionChangedHandler -= value;
             }
         }
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.UpdateIsBinding"]/*' />
         protected abstract void UpdateIsBinding();
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.GetListName"]/*' />
         protected internal abstract string GetListName(ArrayList listAccessors);
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.SuspendBinding"]/*' />
         public abstract void SuspendBinding();
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.ResumeBinding"]/*' />
         public abstract void ResumeBinding();
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PullData"]/*' />
         protected void PullData() {
             bool success;
             PullData(out success);
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PullData1"]/*' />
         internal void PullData(out bool success) {
             success = true;
             pullingData = true;
@@ -280,13 +251,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PushData"]/*' />
         protected void PushData() {
             bool success;
             PushData(out success);
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.PushData1"]/*' />
         internal void PushData(out bool success) {
             success = true;
 
@@ -311,7 +280,6 @@ namespace System.Windows.Forms {
             get;
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.IsBindingSuspended"]/*' />
         /// <devdoc>
         /// <devdoc>
         public bool IsBindingSuspended {
@@ -320,7 +288,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingMAnagerBase.uex' path='docs/doc[@for="BindingManagerBase.Count"]/*' />
         public abstract int Count {
             get;
         }
