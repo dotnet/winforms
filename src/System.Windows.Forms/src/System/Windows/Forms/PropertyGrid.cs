@@ -664,7 +664,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        ///<internalonly/>
         protected bool DrawFlatToolbar {
             get {
                 return drawFlatToolBar;
@@ -1340,7 +1339,6 @@ namespace System.Windows.Forms {
             }
         }
        
-        ///<internalonly/>        
         protected internal override bool ShowFocusCues {
             get {
                 return true;
@@ -1650,8 +1648,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        ///<internalonly/>        
-        event ComponentRenameEventHandler IComPropertyBrowser.ComComponentNameChanged {
             add {
                 Events.AddHandler(EventComComponentNameChanged, value);
             }
@@ -1971,7 +1967,6 @@ namespace System.Windows.Forms {
             return button;
         }
         
-        ///<internalonly/>        
         internal void DumpPropsToConsole() {
             gridView.DumpPropsToConsole(peMain, "");
         }
