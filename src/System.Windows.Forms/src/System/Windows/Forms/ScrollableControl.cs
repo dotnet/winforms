@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
     
-    /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Defines a base class for controls that support auto-scrolling behavior.
@@ -37,25 +37,25 @@ namespace System.Windows.Forms {
         internal static readonly TraceSwitch AutoScrolling;
 #endif
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateAutoScrolling"]/*' />
+
         /// <internalonly/>
         protected const int ScrollStateAutoScrolling     =  0x0001;
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateHScrollVisible"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected const int ScrollStateHScrollVisible    =  0x0002;
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateVScrollVisible"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected const int ScrollStateVScrollVisible    =  0x0004;
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateUserHasScrolled"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected const int ScrollStateUserHasScrolled   =  0x0008;
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateFullDrag"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -97,7 +97,7 @@ namespace System.Windows.Forms {
         // the horizontal scrollbar is first shown
         private bool resetRTLHScrollValue = false;
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollableControl"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ScrollableControl'/> class.
@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
             SetScrollState(ScrollStateAutoScrolling, false);
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.AutoScroll"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -140,7 +140,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.AutoScrollMargin"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.AutoScrollPosition"]/*' />
+
         /// <devdoc>
         ///    <para>Gets or sets the location of the auto-scroll position.</para>
         /// </devdoc>
@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.AutoScrollMinSize"]/*' />
+
         /// <devdoc>
         ///    <para>Gets or sets the mimimum size of the auto-scroll.</para>
         /// </devdoc>
@@ -215,7 +215,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.CreateParams"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -244,7 +244,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DisplayRectangle"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -272,7 +272,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.IArrangedElement.DisplayRectangle"]/*' />
+
         /// <internalonly/>
         Rectangle IArrangedElement.DisplayRectangle {
             get {
@@ -287,7 +287,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.HScroll"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.HorizontalScroll"]/*' />
+
         /// <devdoc>
         ///    <para>Gets the Horizontal Scroll bar for this ScrollableControl.</para>
         /// </devdoc>
@@ -325,7 +325,7 @@ namespace System.Windows.Forms {
        
 
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.VScroll"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -342,7 +342,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.VerticalScroll"]/*' />
+
         /// <devdoc>
         ///    <para>Gets the Veritcal Scroll bar for this ScrollableControl.</para>
         /// </devdoc>
@@ -360,7 +360,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPadding"]/*' />
+
         /// <devdoc>
         ///    <para>Gets the dock padding settings for all
         ///       edges of the control.</para>
@@ -379,7 +379,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.AdjustFormScrollbars"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Adjusts
@@ -645,7 +645,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.GetScrollState"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Tests a given scroll state bit to determine if it is set.
@@ -657,7 +657,7 @@ namespace System.Windows.Forms {
         }
       
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.OnLayout"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    Forces the layout of any docked or anchored child controls.
@@ -687,7 +687,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.OnMouseWheel"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///     Handles mouse wheel processing for our scrollbars.
@@ -736,7 +736,7 @@ namespace System.Windows.Forms {
             base.OnMouseWheel(e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnRightToLeftChanged"]/*' />
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
@@ -745,7 +745,7 @@ namespace System.Windows.Forms {
             LayoutTransaction.DoLayout(this, this, PropertyNames.RightToLeft);
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.OnPaintBackground"]/*' />
+
         protected override void OnPaintBackground (PaintEventArgs e) {
             if ((HScroll || VScroll) &&
                 BackgroundImage != null && 
@@ -769,7 +769,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.OnVisibleChanged"]/*' />
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnVisibleChanged(EventArgs e) {
             if (Visible) {
@@ -787,14 +787,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScaleCore"]/*' />
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy) {
             ScaleDockPadding(dx, dy);
             base.ScaleCore(dx, dy);
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ScaleControl"]/*' />
+
         /// <devdoc>
         ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
         /// </devdoc>
@@ -813,7 +813,7 @@ namespace System.Windows.Forms {
           SetDisplayRectLocation(x, y);
         }
         
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.SetDisplayRectLocation"]/*' />
+
         /// <devdoc>
         ///    Adjusts the displayRect to be at the offset x, y. The contents of the
         ///    Form is scrolled using Windows.ScrollWindowEx.
@@ -885,7 +885,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollControlIntoView"]/*' />
+
         /// <devdoc>
         ///    Scrolls the currently active control into view if we are an AutoScroll
         ///    Form that has the Horiz or Vert scrollbar displayed...
@@ -981,7 +981,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.Scroll"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Occurs when the scroll box has been moved by either a mouse or keyboard action.
@@ -997,7 +997,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.OnScroll"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ScrollBar.OnScroll'/> event.
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms {
             scrollProperties.value = 0;
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.SetAutoScrollMargin"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Sets the size
@@ -1152,7 +1152,7 @@ namespace System.Windows.Forms {
             return needLayout;
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.SetScrollState"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Sets a given scroll state bit.
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms {
             UpdateFullDrag();
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.WndProc"]/*' />
+
         /// <devdoc>
         ///    The button's window procedure.  Inheriting classes can override this
         ///    to add extra functionality, but should not forget to call
@@ -1479,7 +1479,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges"]/*' />
+
         /// <devdoc>
         ///    <para>Determines the border padding for
         ///       docked controls.</para>
@@ -1507,7 +1507,7 @@ namespace System.Windows.Forms {
                 this.bottom = bottom;
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.All"]/*' />
+
             /// <devdoc>
             ///    <para>Gets
             ///       or
@@ -1555,7 +1555,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Bottom"]/*' />
+
             /// <devdoc>
             ///    <para>Gets
             ///       or
@@ -1586,7 +1586,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Left"]/*' />
+
             /// <devdoc>
             ///    <para>Gets
             ///       or sets the padding width for the left edge of a docked control.</para>
@@ -1616,7 +1616,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Right"]/*' />
+
             /// <devdoc>
             ///    <para>Gets
             ///       or sets the padding width for the right edge of a docked control.</para>
@@ -1646,7 +1646,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Top"]/*' />
+
             /// <devdoc>
             ///    <para>Gets
             ///       or sets the padding width for the top edge of a docked control.</para>
@@ -1721,7 +1721,7 @@ namespace System.Windows.Forms {
                 return $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="DockPaddingEdges.ICloneable.Clone"]/*' />
+
             /// <internalonly/>
             object ICloneable.Clone() {
                 DockPaddingEdges dpe = new DockPaddingEdges(Left, Right, Top, Bottom);
@@ -1730,9 +1730,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdgesConverter"]/*' />
+
         public class DockPaddingEdgesConverter : TypeConverter {
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdgesConverter.GetProperties"]/*' />
+
             /// <devdoc>
             ///    Retrieves the set of properties for this type.  By default, a type has
             ///    does not return any properties.  An easy implementation of this method
@@ -1743,7 +1743,7 @@ namespace System.Windows.Forms {
                 return props.Sort(new string[] {"All", "Left", "Top", "Right", "Bottom"});
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdgesConverter.GetPropertiesSupported"]/*' />
+
             /// <devdoc>
             ///    Determines if this object supports properties.  By default, this
             ///    is false.

@@ -379,7 +379,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Controls"]/*' />
+
         /// <devdoc>
         ///     Controls Collection...
         ///     This is overriden so that the Controls.Add ( ) is not Code Gened...

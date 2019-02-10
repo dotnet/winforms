@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Windows.Forms.VisualStyles;
     using System.Globalization;
 
-    /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow"]/*' />
+
     /// <devdoc>
     ///    <para>Identifies a row in the dataGridView.</para>
     /// </devdoc>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
 
         private DataGridViewCellCollection rowCells;
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DataGridViewRow"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
             this.Thickness = Control.DefaultFont.Height + 9;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.AccessibilityObject"]/*' />
+
         [
             Browsable(false)
         ]
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Cells"]/*' />
+
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.ContextMenuStrip"]/*' />
+
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatBehavior)),
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DataBoundItem"]/*' />
+
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -122,7 +122,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DefaultCellStyle"]/*' />
+
         [
             Browsable(true),
             NotifyParentProperty(true),
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Displayed"]/*' />
+
         [
             Browsable(false)
         ]
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DividerHeight"]/*' />
+
         [
             DefaultValue(0),
             NotifyParentProperty(true),
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.ErrorText"]/*' />
+
         [
             DefaultValue(""),
             NotifyParentProperty(true),
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Frozen"]/*' />
+
         [
             Browsable(false),
         ]
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.HeaderCell"]/*' />
+
         [
             Browsable(false), 
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Height"]/*' />
+
         [
             DefaultValue(22),
             NotifyParentProperty(true),
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.InheritedStyle"]/*' />
+
         public override DataGridViewCellStyle InheritedStyle
         {
             get
@@ -314,7 +314,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.IsNewRow"]/*' />
+
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -327,7 +327,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.MinimumHeight"]/*' />
+
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.ReadOnly"]/*' />
+
         [
             Browsable(true),
             DefaultValue(false),
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Resizable"]/*' />
+
         [
             NotifyParentProperty(true),
             SRCategory(nameof(SR.CatBehavior)),
@@ -394,7 +394,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Selected"]/*' />
+
         public override bool Selected
         {
             get
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.State"]/*' />
+
         public override DataGridViewElementStates State
         {
             get
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Visible"]/*' />
+
         [
             Browsable(false)
         ]
@@ -448,7 +448,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.AdjustRowHeaderBorderStyle"]/*' />
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual DataGridViewAdvancedBorderStyle AdjustRowHeaderBorderStyle(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
             DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder,
@@ -1113,7 +1113,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Clone"]/*' />
+
         public override object Clone()
         {
             DataGridViewRow dataGridViewRow;
@@ -1173,13 +1173,13 @@ namespace System.Windows.Forms
             } */
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.CreateAccessibilityInstance"]/*' />
+
         protected virtual AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewRowAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.CreateCells1"]/*' />
+
         public void CreateCells(DataGridView dataGridView)
         {
             if (dataGridView == null)
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.CreateCells2"]/*' />
+
         public void CreateCells(DataGridView dataGridView, params object[] values)
         {
             if (values == null)
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms
             SetValuesInternal(values);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.CreateCellsInstance"]/*' />
+
         /// <devdoc>
         ///     Constructs the new instance of the Cells collection objects. Subclasses
         ///     should not call base.CreateCellsInstance.
@@ -1263,7 +1263,7 @@ namespace System.Windows.Forms
             Debug.Assert(!this.Selected);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DrawFocus"]/*' />
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal virtual void DrawFocus(Graphics graphics, 
             Rectangle clipBounds,
@@ -1297,7 +1297,7 @@ namespace System.Windows.Forms
             ControlPaint.DrawFocusRectangle(graphics, bounds, Color.Empty, backColor);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.GetContextMenuStrip"]/*' />
+
         public ContextMenuStrip GetContextMenuStrip(int rowIndex)
         {
             ContextMenuStrip contextMenuStrip = this.ContextMenuStripInternal;
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms
             return (GetState(rowIndex) & DataGridViewElementStates.Displayed) != 0;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.GetErrorText"]/*' />
+
         public string GetErrorText(int rowIndex)
         {
             string errorText = this.ErrorTextInternal;
@@ -1376,7 +1376,7 @@ namespace System.Windows.Forms
             return minimumHeight;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.GetPreferredHeight"]/*' />
+
         public virtual int GetPreferredHeight(int rowIndex, DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth)
         {
             // not using IsEnumValid here because this is a flags enum, using mask instead.
@@ -1462,7 +1462,7 @@ namespace System.Windows.Forms
             return (GetState(rowIndex) & DataGridViewElementStates.Selected) != 0;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.GetState"]/*' />
+
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -1505,7 +1505,7 @@ namespace System.Windows.Forms
             this.DataGridView.OnDataGridViewElementStateChanging(this, sharedRowIndex, elementState);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Paint"]/*' />
+
         protected internal virtual void Paint(Graphics graphics,
             Rectangle clipBounds,
             Rectangle rowBounds,
@@ -1581,7 +1581,7 @@ namespace System.Windows.Forms
             dataGridView.OnRowPostPaint(dgvrpostpe);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.PaintCells2"]/*' />
+
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.PaintHeader"]/*' />
+
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -1853,7 +1853,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.SetValues"]/*' />
+
         public bool SetValues(params object[] values)
         {
             if (values == null)
@@ -1896,7 +1896,7 @@ namespace System.Windows.Forms
             return setResult && values.Length <= cellCount;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.ToString"]/*' />
+
         /// <devdoc>
         ///    <para></para>
         /// </devdoc>
@@ -1909,7 +1909,7 @@ namespace System.Windows.Forms
             return sb.ToString();
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject"]/*' />
+
         [
             System.Runtime.InteropServices.ComVisible(true)
         ]
@@ -1919,18 +1919,18 @@ namespace System.Windows.Forms
             private DataGridViewRow owner;
             private DataGridViewSelectedRowCellsAccessibleObject selectedCellsAccessibilityObject = null;
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.DataGridViewRowAccessibleObject1"]/*' />
+
             public DataGridViewRowAccessibleObject()
             {
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.DataGridViewRowAccessibleObject2"]/*' />
+
             public DataGridViewRowAccessibleObject(DataGridViewRow owner)
             {
                 this.owner = owner;
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Bounds"]/*' />
+
             public override Rectangle Bounds
             {
                 get {
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Name"]/*' />
+
             public override string Name
             {
                 get
@@ -2001,7 +2001,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Owner"]/*' />
+
             public DataGridViewRow Owner
             {
                 get
@@ -2018,7 +2018,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Parent"]/*' />
+
             public override AccessibleObject Parent
             {
                 get
@@ -2039,7 +2039,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Role"]/*' />
+
             public override AccessibleRole Role
             {
                 get
@@ -2080,7 +2080,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.State"]/*' />
+
             public override AccessibleStates State
             {
                 get
@@ -2124,7 +2124,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Value"]/*' />
+
             public override string Value
             {
                 get
@@ -2163,7 +2163,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.GetChild"]/*' />
+
             public override AccessibleObject GetChild(int index)
             {
                 if (index < 0)
@@ -2191,7 +2191,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.GetChildCount"]/*' />
+
             public override int GetChildCount()
             {
                 if (this.owner == null)
@@ -2209,13 +2209,13 @@ namespace System.Windows.Forms
                 return result;
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.GetSelected"]/*' />
+
             public override AccessibleObject GetSelected()
             {
                 return this.SelectedCellsAccessibilityObject;
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.GetFocused"]/*' />
+
             public override AccessibleObject GetFocused()
             {
                 if (this.owner == null)
@@ -2232,7 +2232,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Navigate"]/*' />
+
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 if (this.owner == null)
@@ -2309,7 +2309,7 @@ namespace System.Windows.Forms
                 }
             }
             
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Select"]/*' />
+
             public override void Select(AccessibleSelection flags)
             {
                 if (this.owner == null)

@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TextBoxRenderer.uex' path='docs/doc[@for="TextBoxRenderer"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       This is a rendering class for the TextBox control.
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         private TextBoxRenderer() {
         }
 
-        /// <include file='doc\TextBoxRenderer.uex' path='docs/doc[@for="TextBoxRenderer.IsSupported"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns true if this class is supported for the current OS and user/application settings, 
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxRenderer.uex' path='docs/doc[@for="TextBoxRenderer.DrawTextBox"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a TextBox control.
@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
             DrawBackground(g, bounds, state);
         }
 
-        /// <include file='doc\TextBoxRenderer.uex' path='docs/doc[@for="TextBoxRenderer.DrawTextBox1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a TextBox control.
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, textBoxText, font, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <include file='doc\TextBoxRenderer.uex' path='docs/doc[@for="TextBoxRenderer.DrawTextBox1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a TextBox control.
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, textBoxText, font, textBounds, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <include file='doc\TextBoxRenderer.uex' path='docs/doc[@for="TextBoxRenderer.DrawTextBox2"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a TextBox control.
@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, textBoxText, font, textBounds, flags, state);
         }
 
-        /// <include file='doc\TextBoxRenderer.uex' path='docs/doc[@for="TextBoxRenderer.DrawTextBox2"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a TextBox control.

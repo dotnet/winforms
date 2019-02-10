@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\Orientation.uex' path='docs/doc[@for="Orientation"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the Fixed Panel in the SplitContainer Control.
@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     public enum FixedPanel {
-        /// <include file='doc\FixedPanel.uex' path='docs/doc[@for="FixedPanel.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       No panel is fixed. Resize causes the Resize of both the panels.
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\FixedPanel.uex' path='docs/doc[@for="FixedPanel.Panel1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Panel1 is Fixed. The resize will increase the size of second panel.
@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Panel1 = 1,
 
-        /// <include file='doc\FixedPanel.uex' path='docs/doc[@for="FixedPanel.Panel2"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Panel2 is Fixed. The resize will increase the size of first panel.

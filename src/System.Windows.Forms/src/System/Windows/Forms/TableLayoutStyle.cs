@@ -14,14 +14,14 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Reflection;
 
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="Style"]/*' />
+
     [TypeConverterAttribute(typeof(TableLayoutSettings.StyleConverter))]
     public abstract class TableLayoutStyle {
         private IArrangedElement _owner;
         private SizeType _sizeType = SizeType.AutoSize;
         private float _size;
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="Style.SizeType"]/*' />
+
         [DefaultValue(SizeType.AutoSize)]
         public SizeType SizeType {
             get { return _sizeType; }

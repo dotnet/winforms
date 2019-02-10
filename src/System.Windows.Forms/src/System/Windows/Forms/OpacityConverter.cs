@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <include file='doc\OpacityConverter.uex' path='docs/doc[@for="OpacityConverter"]/*' />
+
     /// <devdoc>
     ///      OpacityConverter is a class that can be used to convert
     ///      opacity values from one data type to another.  Access this
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class OpacityConverter : TypeConverter {
     
-        /// <include file='doc\OpacityConverter.uex' path='docs/doc[@for="OpacityConverter.CanConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
             return base.CanConvertFrom(context, sourceType);
         }
 
-        /// <include file='doc\OpacityConverter.uex' path='docs/doc[@for="OpacityConverter.ConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             return base.ConvertFrom(context, culture, value);
         }
         
-        /// <include file='doc\OpacityConverter.uex' path='docs/doc[@for="OpacityConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call

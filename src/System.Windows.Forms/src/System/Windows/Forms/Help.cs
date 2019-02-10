@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
     
-    /// <include file='doc\Help.uex' path='docs/doc[@for="Help"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Represents the HTML 1.0 Help engine.
@@ -65,7 +65,7 @@ namespace System.Windows.Forms {
         private Help() {
         }        
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelp"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
             ShowHelp(parent, url, HelpNavigator.TableOfContents, null);
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelp1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the contents of
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
             ShowHelp(parent, url, navigator, null);
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelp2"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the contents of
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelp3"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the contents of the Help file located at
@@ -127,7 +127,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelpIndex"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the index of the specified file.
@@ -139,7 +139,7 @@ namespace System.Windows.Forms {
             ShowHelp(parent, url, HelpNavigator.Index, null);
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowPopup"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays a Help pop-up window.
@@ -171,7 +171,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHTML10Help"]/*' />
+
         /// <devdoc>
         ///     Displays HTML 1.0 Help with the specified parameters
         /// </devdoc>
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHTMLFile"]/*' />
+
         /// <devdoc>
         ///     Displays HTMLFile with the specified parameters
         /// </devdoc>
@@ -361,7 +361,7 @@ namespace System.Windows.Forms {
             return file;
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.GetHelpFileType"]/*' />
+
         /// <internalonly/>
         private static int GetHelpFileType(string url) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: GetHelpFileType " + url);
@@ -387,7 +387,7 @@ namespace System.Windows.Forms {
             return HTMLFILE;
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.MapCommandToHTMLCommand"]/*' />
+
         /// <devdoc>
         ///     Maps one of the COMMAND_* constants to the HTML 1.0 Help equivalent.
         /// </devdoc>

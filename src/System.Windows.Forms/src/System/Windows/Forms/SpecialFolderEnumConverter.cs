@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
         public SpecialFolderEnumConverter(Type type) : base(type) {
         }
 
-        /// <include file='doc\SpecialFolderEnumConverter.uex' path='docs/doc[@for="SpecialFolderEnumConverter.GetStandardValues"]/*' />
+
         /// Personal appears twice in type editor because its numeric value matches with MyDocuments.
         /// This code filters out the duplicate value.
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {

@@ -15,7 +15,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     
     using System.Collections;
 
-    /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter"]/*' />
+
     /// <devdoc>
     /// Base class for value editors that extend basic functionality.
     /// calls will be delegated to the "base value editor".
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
          }
          
          
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.CanConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.CanConvertFrom(context, sourceType);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.CanConvertTo"]/*' />
+
         /// <devdoc>
         ///      Determines if this converter can convert an object to the given destination
         ///      type.
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.ConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.ConvertFrom(context, culture, value);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.CreateInstance"]/*' />
+
         /// <devdoc>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.CreateInstance(context, propertyValues);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.GetCreateInstanceSupported"]/*' />
+
         /// <devdoc>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetCreateInstanceSupported(context);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.GetProperties"]/*' />
+
         /// <devdoc>
         ///      Retrieves the set of properties for this type.  By default, a type has
         ///      does not return any properties.  An easy implementation of this method
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetProperties(context, value, attributes);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.GetPropertiesSupported"]/*' />
+
         /// <devdoc>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetPropertiesSupported(context);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.GetStandardValues"]/*' />
+
         /// <devdoc>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetStandardValues(context);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.GetStandardValuesExclusive"]/*' />
+
         /// <devdoc>
         ///      Determines if the list of standard values returned from
         ///      GetStandardValues is an exclusive list.  If the list
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetStandardValuesExclusive(context);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.GetStandardValuesSupported"]/*' />
+
         /// <devdoc>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
@@ -199,7 +199,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetStandardValuesSupported(context);
         }
         
-        /// <include file='doc\COM2ExtendedTypeConverter.uex' path='docs/doc[@for="Com2ExtendedTypeConverter.IsValid"]/*' />
+
         /// <devdoc>
         ///      Determines if the given object value is valid for this type.
         /// </devdoc>

@@ -13,13 +13,13 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ToolBarButtonStyle.uex' path='docs/doc[@for="ToolBarButtonStyle"]/*' />
+
     /// <devdoc>
     ///    <para>Specifies the button style within a toolbar.</para>
     /// </devdoc>
     public enum ToolBarButtonStyle {
 
-        /// <include file='doc\ToolBarButtonStyle.uex' path='docs/doc[@for="ToolBarButtonStyle.PushButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         PushButton     = 1,
 
-        /// <include file='doc\ToolBarButtonStyle.uex' path='docs/doc[@for="ToolBarButtonStyle.ToggleButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A toggle button that appears sunken when clicked
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ToggleButton   = 2,
 
-        /// <include file='doc\ToolBarButtonStyle.uex' path='docs/doc[@for="ToolBarButtonStyle.Separator"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A space or
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Separator      = 3,
 
-        /// <include file='doc\ToolBarButtonStyle.uex' path='docs/doc[@for="ToolBarButtonStyle.DropDownButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A drop down control that displays a menu or other window

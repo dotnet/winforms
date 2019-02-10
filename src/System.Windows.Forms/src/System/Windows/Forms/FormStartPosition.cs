@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\FormStartPosition.uex' path='docs/doc[@for="FormStartPosition"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the initial position of a
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum FormStartPosition {
 
-        /// <include file='doc\FormStartPosition.uex' path='docs/doc[@for="FormStartPosition.Manual"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Manual = 0,
-        /// <include file='doc\FormStartPosition.uex' path='docs/doc[@for="FormStartPosition.CenterScreen"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The form is centered on the current display,
@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         CenterScreen = 1,
-        /// <include file='doc\FormStartPosition.uex' path='docs/doc[@for="FormStartPosition.WindowsDefaultLocation"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The form is positioned at the Windows default
@@ -49,7 +49,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         WindowsDefaultLocation = 2,
-        /// <include file='doc\FormStartPosition.uex' path='docs/doc[@for="FormStartPosition.WindowsDefaultBounds"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The form is positioned at the Windows default
@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         WindowsDefaultBounds = 3,
-        /// <include file='doc\FormStartPosition.uex' path='docs/doc[@for="FormStartPosition.CenterParent"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The form is centered within the bounds of its parent form.

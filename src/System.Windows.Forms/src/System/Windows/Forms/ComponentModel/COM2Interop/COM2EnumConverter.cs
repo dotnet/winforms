@@ -22,7 +22,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             com2Enum = enumObj;
         }
         
-        /// <include file='doc\COM2EnumConverter.uex' path='docs/doc[@for="Com2EnumConverter.CanConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
        }
 
 
-        /// <include file='doc\COM2EnumConverter.uex' path='docs/doc[@for="Com2EnumConverter.ConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.ConvertFrom(context, culture, value);
         }
     
-        /// <include file='doc\COM2EnumConverter.uex' path='docs/doc[@for="Com2EnumConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.ConvertTo(context, culture, value, destinationType);
         }
      
-        /// <include file='doc\COM2EnumConverter.uex' path='docs/doc[@for="Com2EnumConverter.GetStandardValues"]/*' />
+
         /// <devdoc>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
@@ -96,7 +96,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return values;
         }
     
-        /// <include file='doc\COM2EnumConverter.uex' path='docs/doc[@for="Com2EnumConverter.GetStandardValuesExclusive"]/*' />
+
         /// <devdoc>
         ///      Determines if the list of standard values returned from
         ///      GetStandardValues is an exclusive list.  If the list
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return com2Enum.IsStrictEnum;
         }
         
-        /// <include file='doc\COM2EnumConverter.uex' path='docs/doc[@for="Com2EnumConverter.GetStandardValuesSupported"]/*' />
+
         /// <devdoc>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return true;
         }
         
-        /// <include file='doc\COM2EnumConverter.uex' path='docs/doc[@for="Com2EnumConverter.IsValid"]/*' />
+
         /// <devdoc>
         ///      Determines if the given object value is valid for this type.
         /// </devdoc>

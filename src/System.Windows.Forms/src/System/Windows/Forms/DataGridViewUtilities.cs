@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     using System.Drawing.Imaging;
     using System.Windows.Forms.VisualStyles;
     
-    /// <include file='doc\DataGridViewUtilities.uex' path='docs/doc[@for="DataGridViewUtilities"]/*' />
+
     /// <devdoc>
     ///    <para></para>
     /// </devdoc>
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight = 2;
         private const byte DATAGRIDVIEWROWHEADERCELL_verticalTextMargin = 1;
 
-        /// <include file='doc\DataGridViewUtilities.uex' path='docs/doc[@for="DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment"]/*' />
+
         internal static System.Drawing.ContentAlignment ComputeDrawingContentAlignmentForCellStyleAlignment(DataGridViewContentAlignment alignment)
         {
             // Why isn't the DataGridView using System.Drawing.ContentAlignment?
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewUtilities.uex' path='docs/doc[@for="DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment"]/*' />
+
         internal static TextFormatFlags ComputeTextFormatFlagsForCellStyleAlignment(bool rightToLeft, 
                                                                                     DataGridViewContentAlignment alignment, 
                                                                                     DataGridViewTriState wrapMode)
@@ -163,7 +163,7 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DataGridViewUtilities.uex' path='docs/doc[@for="DataGridViewUtilities.GetPreferredRowHeaderSize"]/*' />
+
         internal static Size GetPreferredRowHeaderSize(Graphics graphics, 
                                                        string val, 
                                                        DataGridViewCellStyle cellStyle, 

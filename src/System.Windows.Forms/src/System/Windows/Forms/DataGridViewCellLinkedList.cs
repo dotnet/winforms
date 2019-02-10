@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     using System.Windows.Forms;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList"]/*' />
+
     /// <devdoc>
     /// <para>Represents a linked list of <see cref='System.Windows.Forms.DataGridViewCell'/> objects</para>
     /// </devdoc>
@@ -20,19 +20,19 @@ namespace System.Windows.Forms
         private DataGridViewCellLinkedListElement headElement;
         private int count, lastAccessedIndex;
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.IEnumerable.GetEnumerator"]/*' />
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new DataGridViewCellLinkedListEnumerator(this.headElement);
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.DataGridViewCellLinkedList"]/*' />
+
         public DataGridViewCellLinkedList()
         {
             this.lastAccessedIndex = -1;
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.CellAt"]/*' />
+
         public DataGridViewCell this[int index]
         {
             get
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.Count"]/*' />
+
         public int Count
         {
             get
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.HeadCell"]/*' />
+
         public DataGridViewCell HeadCell
         {
             get
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.Add"]/*' />
+
         public void Add(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(dataGridViewCell != null);
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
             this.lastAccessedIndex = -1;
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.Clear"]/*' />
+
         public void Clear()
         {
             this.lastAccessedElement = null;
@@ -110,7 +110,7 @@ namespace System.Windows.Forms
             this.count = 0;
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.Contains"]/*' />
+
         public bool Contains(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(dataGridViewCell != null);
@@ -130,7 +130,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.Remove"]/*' />
+
         public bool Remove(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(dataGridViewCell != null);
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
         }
 
         /* Unused for now
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.RemoveHead"]/*' />
+
         public DataGridViewCell RemoveHead()
         {
             if (this.headElement == null)
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
         }
         */
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedList.RemoveAllCellsAtColumn"]/*' />
+
         public int RemoveAllCellsAtBand(bool column, int bandIndex)
         {
             int removedCount = 0;
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListEnumerator"]/*' />
+
     /// <devdoc>
     /// <para>Represents an emunerator of elements in a <see cref='System.Windows.Forms.DataGridViewCellLinkedList'/>  linked list.</para>
     /// </devdoc>
@@ -225,14 +225,14 @@ namespace System.Windows.Forms
         private DataGridViewCellLinkedListElement current;
         private bool reset;
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListEnumerator.DataGridViewCellLinkedListEnumerator"]/*' />
+
         public DataGridViewCellLinkedListEnumerator(DataGridViewCellLinkedListElement headElement)
         {
             this.headElement = headElement;
             this.reset = true;
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListEnumerator.IEnumerator.Current"]/*' />
+
         object IEnumerator.Current
         {
             get
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListEnumerator.IEnumerator.MoveNext"]/*' />
+
         bool IEnumerator.MoveNext()
         {
             if (this.reset)
@@ -259,7 +259,7 @@ namespace System.Windows.Forms
             return (this.current != null);
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListEnumerator.IEnumerator.Reset"]/*' />
+
         void IEnumerator.Reset()
         {
             this.reset = true;
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListElement"]/*' />
+
     /// <devdoc>
     /// <para>Represents an element in a <see cref='System.Windows.Forms.DataGridViewCellLinkedList'/> linked list.</para>
     /// </devdoc>
@@ -276,14 +276,14 @@ namespace System.Windows.Forms
         private DataGridViewCell dataGridViewCell;
         private DataGridViewCellLinkedListElement next;
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListElement.DataGridViewCellLinkedListElement"]/*' />
+
         public DataGridViewCellLinkedListElement(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(dataGridViewCell != null);
             this.dataGridViewCell = dataGridViewCell;
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListElement.DataGridViewCell"]/*' />
+
         public DataGridViewCell DataGridViewCell
         {
             get
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListElement.Next"]/*' />
+
         public DataGridViewCellLinkedListElement Next
         {
             get

@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       This is a rendering class for the ComboBox control.
@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
         private ComboBoxRenderer() {
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.IsSupported"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns true if this class is supported for the current OS and user/application settings, 
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
             DrawBackground(g, bounds, state);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, comboBoxText, font, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox2"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
@@ -98,7 +98,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, comboBoxText, font, textBounds, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox3"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
@@ -117,7 +117,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, comboBoxText, font, textBounds, flags, state);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox4"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
@@ -139,7 +139,7 @@ namespace System.Windows.Forms {
             TextRenderer.DrawText(g, comboBoxText, font, textBounds, textColor, flags);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawDropDownButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a ComboBox drop-down button.

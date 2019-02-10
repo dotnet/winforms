@@ -17,13 +17,13 @@ namespace System.Resources {
     using System.Collections;
     using System.Resources;
 
-    /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet"]/*' />
+
     /// <devdoc>
     ///     ResX resource set.
     /// </devdoc>
     public class ResXResourceSet : ResourceSet {
 
-        /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet.ResXResourceSet"]/*' />
+
         /// <devdoc>
         ///     Creates a resource set for the specified file.
         /// </devdoc>
@@ -34,7 +34,7 @@ namespace System.Resources {
             ReadResources();
         }
 
-        /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet.ResXResourceSet1"]/*' />
+
         /// <devdoc>
         ///     Creates a resource set for the specified stream.
         /// </devdoc>
@@ -45,7 +45,7 @@ namespace System.Resources {
             ReadResources();
         }
 
-        /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet.GetDefaultReader"]/*' />
+
         /// <devdoc>
         ///     Gets the default reader type associated with this set.
         /// </devdoc>
@@ -53,7 +53,7 @@ namespace System.Resources {
             return typeof(ResXResourceReader);
         }
 
-        /// <include file='doc\ResXResourceSet.uex' path='docs/doc[@for="ResXResourceSet.GetDefaultWriter"]/*' />
+
         /// <devdoc>
         ///     Gets the default writer type associated with this set.
         /// </devdoc>

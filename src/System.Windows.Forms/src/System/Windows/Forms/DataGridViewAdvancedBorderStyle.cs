@@ -8,7 +8,7 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle"]/*' />
+
     public sealed class DataGridViewAdvancedBorderStyle : ICloneable
     {
         private DataGridView owner;
@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         private DataGridViewAdvancedCellBorderStyle right = DataGridViewAdvancedCellBorderStyle.None;
         private DataGridViewAdvancedCellBorderStyle bottom = DataGridViewAdvancedCellBorderStyle.None;
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.DataGridViewAdvancedBorderStyle"]/*' />
+
         public DataGridViewAdvancedBorderStyle() : this(null,
                                                         DataGridViewAdvancedCellBorderStyle.NotSet, 
                                                         DataGridViewAdvancedCellBorderStyle.NotSet, 
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             this.banned3 = banned3;
         }
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.All"]/*' />
+
         public DataGridViewAdvancedCellBorderStyle All
         {
             get 
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.Bottom"]/*' />
+
         public DataGridViewAdvancedCellBorderStyle Bottom
         {
             get 
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.Left"]/*' />
+
         public DataGridViewAdvancedCellBorderStyle Left
         {
             get 
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.Right"]/*' />
+
         public DataGridViewAdvancedCellBorderStyle Right
         {
             get 
@@ -251,7 +251,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.Top"]/*' />
+
         public DataGridViewAdvancedCellBorderStyle Top
         {
             get 
@@ -302,7 +302,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.Equals"]/*' />
+
         /// <internalonly/>
         public override bool Equals(object other) 
         {
@@ -322,14 +322,14 @@ namespace System.Windows.Forms
 
         public override int GetHashCode() => HashCode.Combine(top, left, bottom, right);
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.ToString"]/*' />
+
         /// <internalonly/>
         public override string ToString() 
         {
             return "DataGridViewAdvancedBorderStyle { All=" + this.All.ToString() + ", Left=" + this.Left.ToString() + ", Right=" + this.Right.ToString() + ", Top=" + this.Top.ToString() + ", Bottom=" + this.Bottom.ToString() + " }";
         }
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.ICloneable.Clone"]/*' />
+
         /// <internalonly/>
         object ICloneable.Clone() 
         {

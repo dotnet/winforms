@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\HScrollProperties.uex' path='docs/doc[@for="HScrollProperties"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Basic Properties for VScroll.
@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class HScrollProperties : ScrollProperties {
 
-        /// <include file='doc\HScrollProperties.uex' path='docs/doc[@for="HScrollProperties.HScrollProperties"]/*' />
+
         public HScrollProperties(ScrollableControl container) : base(container) {
         }
 

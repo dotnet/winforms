@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
     
-    /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection"]/*' />
+
     /// <devdoc>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewRow'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
     /// control.</para>
@@ -46,56 +46,56 @@ namespace System.Windows.Forms
 
         /* IList interface implementation */
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.Add"]/*' />
+
         /// <internalonly/>
         int IList.Add(object value)
         {
             return this.Add((DataGridViewRow) value);            
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.Clear"]/*' />
+
         /// <internalonly/>
         void IList.Clear()
         {
             this.Clear();
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.Contains"]/*' />
+
         /// <internalonly/>
         bool IList.Contains(object value)
         {
             return this.items.Contains(value);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.IndexOf"]/*' />
+
         /// <internalonly/>
         int IList.IndexOf(object value)
         {
             return this.items.IndexOf(value);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.Insert"]/*' />
+
         /// <internalonly/>
         void IList.Insert(int index, object value)
         {
             this.Insert(index, (DataGridViewRow) value);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.Remove"]/*' />
+
         /// <internalonly/>
         void IList.Remove(object value)
         {
             this.Remove((DataGridViewRow) value);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.RemoveAt"]/*' />
+
         /// <internalonly/>
         void IList.RemoveAt(int index)
         {
             this.RemoveAt(index);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.IsFixedSize"]/*' />
+
         /// <internalonly/>
         bool IList.IsFixedSize
         {
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.IsReadOnly"]/*' />
+
         /// <internalonly/>
         bool IList.IsReadOnly
         {
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.this"]/*' />
+
         /// <internalonly/>
         object IList.this[int index]
         {
@@ -131,14 +131,14 @@ namespace System.Windows.Forms
 
         /* ICollection interface implementation */
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.ICollection.CopyTo"]/*' />
+
         /// <internalonly/>
         void ICollection.CopyTo(Array array, int index)
         {
             this.items.CopyTo(array, index);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.ICollection.Count"]/*' />
+
         /// <internalonly/>
         int ICollection.Count 
         {
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.ICollection.IsSynchronized"]/*' />
+
         /// <internalonly/>
         bool ICollection.IsSynchronized
         {
@@ -158,7 +158,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.ICollection.SyncRoot"]/*' />
+
         /// <internalonly/>
         object ICollection.SyncRoot
         {
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
 
         /* IEnumerator interface implementation */
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IEnumerable.GetEnumerator"]/*' />
+
         /// <internalonly/>
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.DataGridViewRowCollection"]/*' />
+
         public DataGridViewRowCollection(DataGridView dataGridView)
         {
             InvalidateCachedRowCounts();
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
             this.items = new RowArrayList(this);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Count"]/*' />
+
         public int Count
         {
             get
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.List"]/*' />
+
         protected ArrayList List
         {
             [
@@ -232,13 +232,13 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.SharedRow"]/*' />
+
         public DataGridViewRow SharedRow(int rowIndex)
         {
             return (DataGridViewRow) this.SharedList[rowIndex];
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.DataGridView"]/*' />
+
         protected DataGridView DataGridView
         {
             get
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.this"]/*' />
+
         /// <devdoc>
         ///      Retrieves the DataGridViewRow with the specified index.
         /// </devdoc>
@@ -303,7 +303,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.CollectionChanged"]/*' />
+
         public event CollectionChangeEventHandler CollectionChanged
         {
             add
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Add"]/*' />
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add()
         {
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
             return index;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Add1"]/*' />
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add(params object[] values)
         {
@@ -455,7 +455,7 @@ namespace System.Windows.Forms
             return AddInternal(false /*newRow*/, values);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Add2"]/*' />
+
         /// <devdoc>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewRow'/> to this collection.</para>
         /// </devdoc>
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
             return AddInternal(dataGridViewRow);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Add3"]/*' />
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add(int count)
         {
@@ -618,7 +618,7 @@ namespace System.Windows.Forms
             return index;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.AddCopy2"]/*' />
+
         public virtual int AddCopy(int indexSource)
         {
             if (this.DataGridView.DataSource != null)
@@ -684,7 +684,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.AddCopies2"]/*' />
+
         public virtual int AddCopies(int indexSource, int count)
         {
             if (this.DataGridView.DataSource != null)
@@ -849,7 +849,7 @@ namespace System.Windows.Forms
             return this.SharedList.Add(dataGridViewRow);
         }
         
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.AddRange"]/*' />
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewRow[] dataGridViewRows)
         {
@@ -925,7 +925,7 @@ namespace System.Windows.Forms
             this.DataGridView.OnAddedRows_PostNotification(dataGridViewRows);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Clear"]/*' />
+
         public virtual void Clear()
         {
             if (this.DataGridView.NoDimensionChangeAllowed)
@@ -980,7 +980,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Contains"]/*' />
+
         /// <devdoc>
         ///      Checks to see if a DataGridViewRow is contained in this collection.
         /// </devdoc>
@@ -989,7 +989,7 @@ namespace System.Windows.Forms
             return this.items.IndexOf(dataGridViewRow) != -1;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.CopyTo"]/*' />
+
         public void CopyTo(DataGridViewRow[] array, int index)
         {
             this.items.CopyTo(array, index);
@@ -1019,7 +1019,7 @@ namespace System.Windows.Forms
             return -1;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetFirstRow"]/*' />
+
         public int GetFirstRow(DataGridViewElementStates includeFilter)
         {
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms
             return (index < this.items.Count) ? index : -1;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetFirstRow2"]/*' />
+
         public int GetFirstRow(DataGridViewElementStates includeFilter,
                                DataGridViewElementStates excludeFilter)
         {
@@ -1111,7 +1111,7 @@ namespace System.Windows.Forms
             return (index < this.items.Count) ? index : -1;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetLastRow"]/*' />
+
         public int GetLastRow(DataGridViewElementStates includeFilter)
         {
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms
             return rowIndex;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetNextRow"]/*' />
+
         public int GetNextRow(int indexStart, DataGridViewElementStates includeFilter)
         {
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
@@ -1188,7 +1188,7 @@ namespace System.Windows.Forms
             return (index < this.items.Count) ? index : -1;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetNextRow2"]/*' />
+
         public int GetNextRow(int indexStart, 
                               DataGridViewElementStates includeFilter,
                               DataGridViewElementStates excludeFilter)
@@ -1220,7 +1220,7 @@ namespace System.Windows.Forms
             return (index < this.items.Count) ? index : -1;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetPreviousRow"]/*' />
+
         public int GetPreviousRow(int indexStart, DataGridViewElementStates includeFilter)
         {
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms
             return (index >= 0) ? index : -1;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetPreviousRow2"]/*' />
+
         public int GetPreviousRow(int indexStart, 
                                   DataGridViewElementStates includeFilter,
                                   DataGridViewElementStates excludeFilter)
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms
             return (index >= 0) ? index : -1;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetRowCount"]/*' />
+
         public int GetRowCount(DataGridViewElementStates includeFilter)
         {
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms
             return jumpRows;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetRowsHeight"]/*' />
+
         public int GetRowsHeight(DataGridViewElementStates includeFilter)
         {
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
@@ -1437,7 +1437,7 @@ namespace System.Windows.Forms
             return rowsHeight > heightLimit;
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.GetRowState"]/*' />
+
         public virtual DataGridViewElementStates GetRowState(int rowIndex)
         {
             if (rowIndex < 0 || rowIndex >= this.items.Count)
@@ -1456,13 +1456,13 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IndexOf"]/*' />
+
         public int IndexOf(DataGridViewRow dataGridViewRow)
         {
             return this.items.IndexOf(dataGridViewRow);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Insert1"]/*' />
+
         public virtual void Insert(int rowIndex, params object[] values)
         {
             Debug.Assert(this.DataGridView != null);
@@ -1494,7 +1494,7 @@ namespace System.Windows.Forms
             Insert(rowIndex, dataGridViewRow);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Insert2"]/*' />
+
         /// <devdoc>
         /// <para>Inserts a <see cref='System.Windows.Forms.DataGridViewRow'/> to this collection.</para>
         /// </devdoc>
@@ -1513,7 +1513,7 @@ namespace System.Windows.Forms
             InsertInternal(rowIndex, dataGridViewRow);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Insert3"]/*' />
+
         public virtual void Insert(int rowIndex, int count)
         {
             if (this.DataGridView.DataSource != null)
@@ -1682,13 +1682,13 @@ namespace System.Windows.Forms
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewRow), rowIndex, 1, false, true, false, newCurrentCell);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.InsertCopy"]/*' />
+
         public virtual void InsertCopy(int indexSource, int indexDestination)
         {
             InsertCopies(indexSource, indexDestination, 1);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.InsertCopies"]/*' />
+
         public virtual void InsertCopies(int indexSource, int indexDestination, int count)
         {
             if (this.DataGridView.DataSource != null)
@@ -1864,7 +1864,7 @@ namespace System.Windows.Forms
 #endif
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.InsertRange"]/*' />
+
         /// <devdoc>
         /// <para>Inserts a range of <see cref='System.Windows.Forms.DataGridViewRow'/> to this collection.</para>
         /// </devdoc>
@@ -2024,7 +2024,7 @@ namespace System.Windows.Forms
 #endif
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.OnCollectionChanged"]/*' />
+
         protected virtual void OnCollectionChanged(CollectionChangeEventArgs e)
         {
             if (this.onCollectionChanged != null)
@@ -2256,7 +2256,7 @@ namespace System.Windows.Forms
             this.DataGridView.OnRowCollectionChanged_PostNotification(recreateNewRow, newCurrentCell.X == -1, cca, dataGridViewRow, rowIndex);
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.Remove"]/*' />
+
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // We don't want to use DataGridViewBand here.
         ]
@@ -2282,7 +2282,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.RemoveAt"]/*' />
+
         public virtual void RemoveAt(int index)
         {
             if (index < 0 || index >= this.Count)

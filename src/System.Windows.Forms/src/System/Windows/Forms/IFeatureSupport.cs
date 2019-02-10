@@ -9,7 +9,7 @@ namespace System.Windows.Forms {
 
     using System;
     
-    /// <include file='doc\IFeatureSupport.uex' path='docs/doc[@for="IFeatureSupport"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies a standard
@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
 
     public interface IFeatureSupport {
     
-        /// <include file='doc\IFeatureSupport.uex' path='docs/doc[@for="IFeatureSupport.IsPresent"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Determines whether any version of the specified feature
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         bool IsPresent(object feature);
         
-        /// <include file='doc\IFeatureSupport.uex' path='docs/doc[@for="IFeatureSupport.IsPresent1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Determines whether the specified or newer version of the
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         bool IsPresent(object feature, Version minimumVersion);
     
-        /// <include file='doc\IFeatureSupport.uex' path='docs/doc[@for="IFeatureSupport.GetVersionPresent"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Retrieves the version

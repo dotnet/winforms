@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
     using System;
     using System.ComponentModel;
 	
-    /// <include file='doc\ToolStripItemAlignment.uex' path='docs/doc[@for="ToolStripItemAlignment"]/*' />
+
     /// <devdoc>
     /// This enum is used to determine alignment of the ToolStripItem on the ToolStrip.
     /// </devdoc>

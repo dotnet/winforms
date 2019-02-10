@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using System.IO;
     using Microsoft.Win32;
 
-    /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange"]/*' />
+
     /// <devdoc>
     ///     This is a class that represents the date selection range of a MonthCalendar control.
     /// </devdoc>
@@ -23,26 +23,26 @@ namespace System.Windows.Forms {
     TypeConverterAttribute(typeof(SelectionRangeConverter))
     ]
     public sealed class SelectionRange {
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.start"]/*' />
+
         /// <devdoc>
         ///     The lower limit of the selection range.
         /// </devdoc>
         private DateTime start = DateTime.MinValue.Date;
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.end"]/*' />
+
         /// <devdoc>
         ///     The upper limit of the selection range.
         /// </devdoc>
         private DateTime end = DateTime.MaxValue.Date;
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.SelectionRange"]/*' />
+
         /// <devdoc>
         ///     Create a new SelectionRange object with the range [null, null].
         /// </devdoc>
         public SelectionRange() {
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.SelectionRange1"]/*' />
+
         /// <devdoc>
         ///     Create a new SelectionRange object with the given range.
         /// </devdoc>
@@ -63,7 +63,7 @@ namespace System.Windows.Forms {
             }                        
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.SelectionRange2"]/*' />
+
         /// <devdoc>
         ///     Create a new SelectionRange object given an existing SelectionRange object.
         /// </devdoc>
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
             this.end = range.end;
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.End"]/*' />
+
         /// <devdoc>
         ///     Returns the ending time of this range.
         /// </devdoc>
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.Start"]/*' />
+
         /// <devdoc>
         ///     Starting time of this range
         /// </devdoc>
@@ -98,7 +98,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.ToString"]/*' />
+
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>

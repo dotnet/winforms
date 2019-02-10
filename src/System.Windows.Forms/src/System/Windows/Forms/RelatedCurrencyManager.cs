@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Collections.Generic;
 
-    /// <include file='doc\RelatedListManager.uex' path='docs/doc[@for="RelatedCurrencyManager"]/*' />
+
     /// <devdoc>
     /// <para>Represents the child version of the System.Windows.Forms.ListManager
     /// that is used when a parent/child relationship exists in a System.Windows.Forms.DataSet.</para>
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
             return parentManager.GetItemProperties(accessors);
         }
 
-        /// <include file='doc\RelatedListManager.uex' path='docs/doc[@for="RelatedCurrencyManager.GetItemProperties"]/*' />
+
         /// <devdoc>
         ///    <para>Gets the properties of the item.</para>
         /// </devdoc>
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
             return base.GetListName();
         }
         
-        /// <include file='doc\RelatedListManager.uex' path='docs/doc[@for="RelatedCurrencyManager.GetListName1"]/*' />
+
         /// <devdoc>
         ///    <para>Gets the name of the specified list.</para>
         /// </devdoc>

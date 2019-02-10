@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ButtonState.uex' path='docs/doc[@for="ButtonState"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the appearance of a button.
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     [Flags]
     public enum ButtonState {
 
-        /// <include file='doc\ButtonState.uex' path='docs/doc[@for="ButtonState.Checked"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The button has a
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Checked = NativeMethods.DFCS_CHECKED,
 
-        /// <include file='doc\ButtonState.uex' path='docs/doc[@for="ButtonState.Flat"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The button has a flat, two-dimensional appearance.
@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Flat = NativeMethods.DFCS_FLAT,
 
-        /// <include file='doc\ButtonState.uex' path='docs/doc[@for="ButtonState.Inactive"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The button is inactive (grayed).
@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Inactive = NativeMethods.DFCS_INACTIVE,
 
-        /// <include file='doc\ButtonState.uex' path='docs/doc[@for="ButtonState.Normal"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Normal = 0,
 
-        /// <include file='doc\ButtonState.uex' path='docs/doc[@for="ButtonState.Pushed"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Pushed = NativeMethods.DFCS_PUSHED,
 
-        /// <include file='doc\ButtonState.uex' path='docs/doc[@for="ButtonState.All"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       All viable

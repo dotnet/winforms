@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Globalization;
 
-    /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog"]/*' />
+
     /// <internalonly/>
     /// <devdoc>
     ///    <para>
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
         private Bitmap collapseImage = null;
         private bool detailsVisible = false;
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.ThreadExceptionDialog"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ThreadExceptionDialog'/> class.
@@ -351,7 +351,7 @@ namespace System.Windows.Forms {
             detailsButton.Image = detailsVisible ? collapseImage : expandImage;
         }
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.AutoSize"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Hide the property
@@ -372,7 +372,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.AutoSizeChanged"]/*' />
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
@@ -386,7 +386,7 @@ namespace System.Windows.Forms {
             }
         }                
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.DetailsClick"]/*' />
+
         /// <devdoc>
         ///     Called when the details button is clicked.
         /// </devdoc>

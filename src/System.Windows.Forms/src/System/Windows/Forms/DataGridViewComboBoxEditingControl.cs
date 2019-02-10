@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     using System.Runtime.InteropServices;
     using Security.Permissions;
 
-    /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl"]/*' />
+
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch)
@@ -22,13 +22,13 @@ namespace System.Windows.Forms
         private bool valueChanged;
         private int rowIndex;
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.DataGridViewComboBoxEditingControl"]/*' />
+
         public DataGridViewComboBoxEditingControl() : base()
         {
             this.TabStop = false;
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.CreateAccessibilityInstance"]/*' />
+
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             if (AccessibilityImprovements.Level3)
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
 
         // IDataGridViewEditingControl interface implementation
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlDataGridView"]/*' />
+
         public virtual DataGridView EditingControlDataGridView
         {
             get
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlFormattedValue"]/*' />
+
         public virtual object EditingControlFormattedValue
         {
             get
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlRowIndex"]/*' />
+
         public virtual int EditingControlRowIndex
         {
             get
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlValueChanged"]/*' />
+
         public virtual bool EditingControlValueChanged
         {
             get
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingPanelCursor"]/*' />
+
         public virtual Cursor EditingPanelCursor
         {
             get
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.RepositionOnValueChange"]/*' />
+
         public virtual bool RepositionEditingControlOnValueChange
         {
             get
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.ApplyCellStyleToEditingControl"]/*' />
+
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
             this.Font = dataGridViewCellStyle.Font;
@@ -141,7 +141,7 @@ namespace System.Windows.Forms
             this.ForeColor = dataGridViewCellStyle.ForeColor;
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlWantsInputKey"]/*' />
+
         public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
         {
             if ((keyData & Keys.KeyCode) == Keys.Down ||
@@ -153,13 +153,13 @@ namespace System.Windows.Forms
             return !dataGridViewWantsInputKey;
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.GetEditingControlFormattedValue"]/*' />
+
         public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
         {
             return this.Text;
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.PrepareEditingControlForEdit"]/*' />
+
         public virtual void PrepareEditingControlForEdit(bool selectAll)
         {
             if (selectAll)
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
             this.dataGridView.NotifyCurrentCellDirty(true);
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.OnSelectedIndexChanged"]/*' />
+
         protected override void OnSelectedIndexChanged(EventArgs e) 
         {
             base.OnSelectedIndexChanged(e);

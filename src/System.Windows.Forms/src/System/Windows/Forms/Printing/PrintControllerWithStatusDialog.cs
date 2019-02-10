@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing.Printing;
 
-    /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog"]/*' />
+
     public class PrintControllerWithStatusDialog : PrintController {
         private PrintController underlyingController;
         private PrintDocument document;
@@ -19,17 +19,17 @@ namespace System.Windows.Forms {
         private int pageNumber;
         private string dialogTitle;
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.PrintControllerWithStatusDialog"]/*' />
+
         public PrintControllerWithStatusDialog(PrintController underlyingController) 
         : this(underlyingController, string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePrint)) {
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.PrintControllerWithStatusDialog1"]/*' />
+
         public PrintControllerWithStatusDialog(PrintController underlyingController, string dialogTitle) {
             this.underlyingController = underlyingController;
             this.dialogTitle = dialogTitle;
         }
-        /// <include file='doc\PreviewPrintController.uex' path='docs/doc[@for="PreviewPrintController.IsPreview"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller 
@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnStartPrint"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnStartPage"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnEndPage"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -120,7 +120,7 @@ namespace System.Windows.Forms {
             base.OnEndPage(document, e);
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnEndPrint"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>

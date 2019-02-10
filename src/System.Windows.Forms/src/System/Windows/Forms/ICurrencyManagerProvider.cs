@@ -6,19 +6,19 @@ namespace System.Windows.Forms {
 
     using System;
 
-    /// <include file='doc\ICurrencyManagerProvider.uex' path='docs/doc[@for="ICurrencyManagerProvider"]/*' />
+
     /// <devdoc>
     /// </devdoc>
     [SRDescription(nameof(SR.ICurrencyManagerProviderDescr))]
     public interface ICurrencyManagerProvider {
 
-        /// <include file='doc\ICurrencyManagerProvider.uex' path='docs/doc[@for="ICurrencyManagerProvider.CurrencyManager"]/*' />
+
         /// <devdoc>
         ///     Return the main currency manager for this data source.
         /// </devdoc>
         CurrencyManager CurrencyManager { get; }
 
-        /// <include file='doc\ICurrencyManagerProvider.uex' path='docs/doc[@for="ICurrencyManagerProvider.GetRelatedCurrencyManager"]/*' />
+
         /// <devdoc>
         ///     Return a related currency manager for specified data member on this data source.
         ///     If data member is null or empty, this method returns the data source's main currency

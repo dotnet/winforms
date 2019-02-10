@@ -13,7 +13,7 @@ using System.Globalization;
 
 namespace System.Windows.Forms {
                                
-    /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///         Represents a group within a ListView.
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
 
         private string name;
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup"]/*' />
+
         /// <devdoc>
         ///     Creates a ListViewGroup.
         /// </devdoc>
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
         {
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup1"]/*' />
+
         /// <devdoc>
         ///     Creates a ListViewItem object from an Stream.
         /// </devdoc>
@@ -61,7 +61,7 @@ namespace System.Windows.Forms {
             Deserialize(info, context);
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup2"]/*' />
+
         /// <devdoc>
         ///     Creates a ListViewItem object from a Key and a Name
         /// </devdoc>
@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
             this.header = headerText;
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup2"]/*' />
+
         /// <devdoc>
         ///     Creates a ListViewGroup.
         /// </devdoc>
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
             this.id = nextID++;
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup3"]/*' />
+
         /// <devdoc>
         ///     Creates a ListViewGroup.
         /// </devdoc>
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
             this.headerAlignment = headerAlignment;
         }    	                
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Header"]/*' />
+
         /// <devdoc>
         ///     The text displayed in the group header.
         /// </devdoc>
@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.HeaderAlignment"]/*' />
+
         /// <devdoc>
         ///     The alignment of the group header.
         /// </devdoc>
@@ -144,7 +144,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Items"]/*' />
+
         /// <devdoc>
         ///     The items that belong to this group.
         /// </devdoc>
@@ -186,7 +186,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Name"]/*' />
+
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ListViewGroupNameDescr)),
@@ -206,7 +206,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Tag"]/*' />
+
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -225,7 +225,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Deserialize"]/*' />
+
         private void Deserialize(SerializationInfo info, StreamingContext context) {
 
             int count = 0;
@@ -257,7 +257,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ToString"]/*' />
+
         public override string ToString() {
             return Header;
         }
@@ -268,7 +268,7 @@ namespace System.Windows.Forms {
             }
         }                
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.GetObjectData"]/*' />
+
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
             info.AddValue("Header", this.Header);
             info.AddValue("HeaderAlignment", this.HeaderAlignment);
@@ -285,7 +285,7 @@ namespace System.Windows.Forms {
         }
     }
         
-    /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///         A collection of listview groups.
@@ -302,7 +302,7 @@ namespace System.Windows.Forms {
             this.listView = listView;
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Count"]/*' />
+
         public int Count
         {
             get
@@ -311,7 +311,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.ICollection.SyncRoot"]/*' />
+
         /// <internalonly/>
         object ICollection.SyncRoot {
             get {
@@ -319,7 +319,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.ICollection.IsSynchronized"]/*' />
+
         /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
@@ -327,7 +327,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.IsFixedSize"]/*' />
+
         /// <internalonly/>
         bool IList.IsFixedSize {
             get {
@@ -335,7 +335,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.IsReadOnly"]/*' />
+
         /// <internalonly/>
         bool IList.IsReadOnly {
             get {
@@ -354,7 +354,7 @@ namespace System.Windows.Forms {
             }
         }
                 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.this"]/*' />
+
         public ListViewGroup this[int index] {
             get
             {
@@ -369,7 +369,7 @@ namespace System.Windows.Forms {
             }
         }
                 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.this2"]/*' />
+
         public ListViewGroup this[string key] {
             get {
 
@@ -405,7 +405,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.this"]/*' />
+
         /// <internalonly/>
         object IList.this[int index] {
             get
@@ -420,7 +420,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Add"]/*' />
+
         public int Add(ListViewGroup group)
         {
             if (this.Contains(group)) {
@@ -438,7 +438,7 @@ namespace System.Windows.Forms {
             return index;
         }        
         
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Add1"]/*' />
+
         public ListViewGroup Add(string key, string headerText)
         {
             ListViewGroup group = new ListViewGroup(key, headerText);
@@ -446,7 +446,7 @@ namespace System.Windows.Forms {
             return group;
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Add"]/*' />
+
         /// <internalonly/>
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         [
@@ -460,7 +460,7 @@ namespace System.Windows.Forms {
             throw new ArgumentException(nameof(value));
         }
                 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange"]/*' />
+
         public void AddRange(ListViewGroup[] groups)
         {
             for(int i=0; i < groups.Length; i++) {
@@ -468,7 +468,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange2"]/*' />
+
         public void AddRange(ListViewGroupCollection groups)
         {
             for(int i=0; i < groups.Count; i++) {
@@ -485,7 +485,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Clear"]/*' />
+
         public void Clear() {
             if (listView.IsHandleCreated) {
                 for(int i=0; i < Count; i++) {
@@ -504,12 +504,12 @@ namespace System.Windows.Forms {
             this.listView.UpdateGroupView();
         }
         
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Contains"]/*' />
+
         public bool Contains(ListViewGroup value) {
             return this.List.Contains(value);
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Contains"]/*' />
+
         /// <internalonly/>
         bool IList.Contains(object value)
         {
@@ -519,23 +519,23 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.CopyTo"]/*' />
+
         public void CopyTo(Array array, int index) {
             this.List.CopyTo(array, index);
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.GetEnumerator"]/*' />
+
         public IEnumerator GetEnumerator()
         {
             return this.List.GetEnumerator();
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IndexOf"]/*' />
+
         public int IndexOf(ListViewGroup value) {
             return this.List.IndexOf(value);
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.IndexOf"]/*' />
+
         /// <internalonly/>
         int IList.IndexOf(object value) {
             if (value is ListViewGroup) {
@@ -544,7 +544,7 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Insert"]/*' />
+
         public void Insert(int index, ListViewGroup group) {
             if (Contains(group)) {
                 return;
@@ -557,7 +557,7 @@ namespace System.Windows.Forms {
             }            
         }       
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Insert"]/*' />
+
         /// <internalonly/>
         void IList.Insert(int index, object value) {
             if (value is ListViewGroup) {
@@ -575,7 +575,7 @@ namespace System.Windows.Forms {
             }
         }
        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Remove"]/*' />
+
         public void Remove(ListViewGroup group) {
             group.ListViewInternal = null;            
             this.List.Remove(group);
@@ -585,7 +585,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Remove"]/*' />
+
         /// <internalonly/>
         void IList.Remove(object value)
         {
@@ -594,7 +594,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.RemoveAt"]/*' />
+
         public void RemoveAt(int index) {
             Remove(this[index]);
         }        

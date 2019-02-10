@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     // WARNING: if adding to this enumeration please update Control & ToolStripItem AccessibleRole to ensure the new member is valid.
     // -----------------------------------------------------------------------------------------------------------------------------
     
-    /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies values representing possible roles for an accessible object.
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum AccessibleRole {
 
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Default"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A system provided role.
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Default = -1,
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       No role.
@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0,
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.TitleBar"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A title or caption bar
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         TitleBar =    ( 0x1 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.MenuBar"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A menu bar, usually beneath the
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         MenuBar =     ( 0x2 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ScrollBar"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A vertical or horizontal scroll bar, which
@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ScrollBar =   ( 0x3 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Grip"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A special mouse pointer, which
@@ -82,7 +82,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Grip =        ( 0x4 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Sound"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A system sound, which is associated with
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Sound =       ( 0x5 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Cursor"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A mouse pointer.
@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Cursor =      ( 0x6 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Caret"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A caret, which is a flashing line, block, or bitmap
@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Caret =       ( 0x7 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Alert"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       An alert or condition that a
@@ -122,7 +122,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Alert =       ( 0x8 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Window"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A window frame, which usually contains child
@@ -132,7 +132,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Window =      ( 0x9 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Client"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A
@@ -141,7 +141,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Client =      ( 0xa ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.MenuPopup"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A menu, which presents a list of
@@ -154,7 +154,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         MenuPopup =   ( 0xb ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.MenuItem"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A menu item, which is an entry in
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         MenuItem =    ( 0xc ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ToolTip"]/*' />
+
         /// <devdoc>
         ///    A tool tip, which is a small rectangular pop-up
         ///    window that displays a brief description of a command bar button's
@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ToolTip =     ( 0xd ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Application"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The main window for
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Application = ( 0xe ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Document"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A
@@ -195,7 +195,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Document =    ( 0xf ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Pane"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       One of the separate areas in a frame, a split document
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Pane =        ( 0x10 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Chart"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A graphical image used to
@@ -220,7 +220,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Chart =       ( 0x11 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Dialog"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A dialog box
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Dialog =      ( 0x12 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Border"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A window border. The entire border
@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Border =      ( 0x13 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Grouping"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Objects grouped in a logical
@@ -250,7 +250,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Grouping =    ( 0x14 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Separator"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Visually divides a space into two regions, such as a separator menu item or a
@@ -259,7 +259,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Separator =   ( 0x15 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ToolBar"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A toolbar, which is a grouping of controls that provide
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ToolBar =     ( 0x16 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.StatusBar"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A status bar, which is an area typically at the bottom
@@ -282,7 +282,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         StatusBar =   ( 0x17 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Table"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A table containing rows and columns of cells, and
@@ -291,7 +291,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Table =       ( 0x18 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ColumnHeader"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A column header, which provides a visual label for a column
@@ -300,7 +300,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ColumnHeader =        ( 0x19 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.RowHeader"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A row header, which provides a visual
@@ -310,7 +310,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         RowHeader =   ( 0x1a ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Column"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A column of cells within a table.
@@ -318,7 +318,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Column =      ( 0x1b ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Row"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A row of cells within
@@ -327,7 +327,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Row = ( 0x1c ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Cell"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A cell within
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Cell =        ( 0x1d ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Link"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A link, which is a connection between a source
@@ -347,7 +347,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Link =        ( 0x1e ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.HelpBalloon"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A Help display in the form of a ToolTip or Help
@@ -359,7 +359,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         HelpBalloon = ( 0x1f ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Character"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A cartoon-like graphic object,
@@ -370,7 +370,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Character =   ( 0x20 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.List"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A list box, which allows the user
@@ -380,7 +380,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         List =        ( 0x21 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ListItem"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       An item in a list box or the list
@@ -390,7 +390,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ListItem =    ( 0x22 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Outline"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       An outline or tree structure, such
@@ -401,7 +401,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Outline =     ( 0x23 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.OutlineItem"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       An item
@@ -410,7 +410,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         OutlineItem = ( 0x24 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.PageTab"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A property page that allows a user
@@ -423,7 +423,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         PageTab =     ( 0x25 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.PropertyPage"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A property page, which is a dialog box that
@@ -434,7 +434,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         PropertyPage =        ( 0x26 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Indicator"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       An indicator, such as a pointer
@@ -444,7 +444,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Indicator =   ( 0x27 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Graphic"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A picture.
@@ -452,7 +452,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Graphic =     ( 0x28 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.StaticText"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Read-only text,
@@ -463,7 +463,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         StaticText =  ( 0x29 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Text"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Selectable text
@@ -472,7 +472,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Text =        ( 0x2a ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.PushButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A push button control, which is a
@@ -484,7 +484,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         PushButton =  ( 0x2b ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.CheckButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A check box control, which is an option
@@ -494,7 +494,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         CheckButton = ( 0x2c ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.RadioButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       An option button, also known as a
@@ -506,7 +506,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         RadioButton = ( 0x2d ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ComboBox"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A
@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ComboBox =    ( 0x2e ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.DropList"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A drop-down list box. This control shows one
@@ -527,7 +527,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         DropList =    ( 0x2f ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ProgressBar"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A progress bar, which indicates the progress of a
@@ -541,7 +541,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ProgressBar = ( 0x30 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Dial"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A dial or knob. This can also be a
@@ -550,7 +550,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Dial =        ( 0x31 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.HotkeyField"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A hot-key field that allows the user to enter a combination or sequence of
@@ -561,7 +561,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         HotkeyField = ( 0x32 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Slider"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A control, sometimes called a trackbar,
@@ -573,7 +573,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Slider =      ( 0x33 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.SpinButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A spin box, also
@@ -586,7 +586,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         SpinButton =  ( 0x34 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Diagram"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A graphical image used to diagram data.
@@ -594,7 +594,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Diagram =     ( 0x35 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Animation"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       An animation control, which
@@ -607,7 +607,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Animation =   ( 0x36 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Equation"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A mathematical equation.
@@ -615,7 +615,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Equation =    ( 0x37 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ButtonDropDown"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A button that
@@ -624,7 +624,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ButtonDropDown =      ( 0x38 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ButtonMenu"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A button that drops down a menu.
@@ -632,7 +632,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ButtonMenu =  ( 0x39 ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.ButtonDropDownGrid"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A button that drops down a grid.
@@ -640,7 +640,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ButtonDropDownGrid =  ( 0x3a ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.WhiteSpace"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A blank space between other objects.
@@ -648,7 +648,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         WhiteSpace =  ( 0x3b ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.PageTabList"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A container of page tab controls.
@@ -656,7 +656,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         PageTabList = ( 0x3c ),
         
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.Clock"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A
@@ -665,7 +665,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Clock =       ( 0x3d ),
 
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.SplitButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A toolbar button that jas a drop-down list icon directly adjacent to the button.
@@ -673,7 +673,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         SplitButton = ( 0x3e ),
 
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.IpAddress"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A control designed for entering Internet Protocol (IP) addresses.
@@ -682,7 +682,7 @@ namespace System.Windows.Forms {
         [SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase")]
         IpAddress = ( 0x3f ),
 
-        /// <include file='doc\AccessibleRoles.uex' path='docs/doc[@for="AccessibleRole.OutlineButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A control that navigates like an outline item.

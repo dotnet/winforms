@@ -7,7 +7,7 @@ namespace System.Windows.Forms {
     using System.Collections;
     
     
-    /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection"]/*' />
+
     /// <devdoc>
     ///     <para>
     ///       A collection that stores <see cref='System.Windows.Forms.InputLanguage'/> objects.
@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class InputLanguageCollection : ReadOnlyCollectionBase {
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.InputLanguageCollection"]/*' />
+
         /// <devdoc>
         ///     <para>
         ///       Initializes a new instance of <see cref='System.Windows.Forms.InputLanguageCollection'/> containing any array of <see cref='System.Windows.Forms.InputLanguage'/> objects.
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
             InnerList.AddRange(value);
         }
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.this"]/*' />
+
         /// <devdoc>
         /// <para>Represents the entry at the specified index of the <see cref='System.Windows.Forms.InputLanguage'/>.</para>
         /// </devdoc>
@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.Contains"]/*' />
+
         /// <devdoc>
         /// <para>Gets a value indicating whether the 
         ///    <see cref='System.Windows.Forms.InputLanguageCollection'/> contains the specified <see cref='System.Windows.Forms.InputLanguage'/>.</para>
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
             return InnerList.Contains(value);
         }
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.CopyTo"]/*' />
+
         /// <devdoc>
         /// <para>Copies the <see cref='System.Windows.Forms.InputLanguageCollection'/> values to a one-dimensional <see cref='System.Array'/> instance at the 
         ///    specified index.</para>
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
             InnerList.CopyTo(array, index);
         }
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.IndexOf"]/*' />
+
         /// <devdoc>
         ///    <para>Returns the index of a <see cref='System.Windows.Forms.InputLanguage'/> in 
         ///       the <see cref='System.Windows.Forms.InputLanguageCollection'/> .</para>

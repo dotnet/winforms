@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.ButtonInternal;
         
 
-    /// <include file='doc\ToolStripScrollButton.uex' path='docs/doc[@for="ToolStripScrollButton"]/*' />
+
     /// <devdoc>
     /// A non selectable winbar item
     /// </devdoc>

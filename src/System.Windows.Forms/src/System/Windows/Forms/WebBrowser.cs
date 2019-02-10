@@ -17,7 +17,7 @@ using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms {
-    /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser"]/*' />
+
     /// <devdoc>
     ///     <para>
     /// This is a wrapper over the native WebBrowser control implemented in shdocvw.dll.
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         //
         // 8856f961-340a-11d0-a96b-00c04fd705a2 is the clsid for the native webbrowser control
         //
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowser"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser'/> control.
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
         //
 
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.AllowNavigation"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Specifies whether the WebBrowser control may navigate to another page once 
@@ -106,7 +106,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.AllowWebBrowserDrop"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Specifies whether the WebBrowser control will receive drop notifcations.
@@ -132,7 +132,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ScriptErrorsSuppressed"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Specifies whether the browser control shows script errors in dialogs or not.
@@ -152,7 +152,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserShortcutsEnabled"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Specifies whether the browser control Shortcuts are enabled.
@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.CanGoBack"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// If true, there is navigation history such that calling GoBack() will succeed.
@@ -201,7 +201,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.CanGoForward"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// If true, there is navigation history such that calling GoForward() will succeed.
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Document"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// The HtmlDocument for page hosted in the html page.  If no page is loaded, it returns null.
@@ -267,7 +267,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DocumentStream"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Get/sets the stream for the html document.
@@ -308,7 +308,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DocumentText"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Sets/sets the text of the contained html page.
@@ -342,7 +342,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DocumentTitle"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// The title of the html page currently loaded. If none are loaded, returns empty string.
@@ -372,7 +372,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DocumentType"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// A string containing the MIME type of the document hosted in the browser control.
@@ -398,7 +398,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.EncryptionLevel"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Initially set to WebBrowserEncryptionLevel.Insecure.
@@ -415,7 +415,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.IsBusy"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// True if the browser is engaged in navigation or download.  Maps to IWebBrowser2:Busy.
@@ -433,7 +433,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.IsOffline"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Gets the offline state of the browser control. Maps to IWebBrowser2:Offline.
@@ -446,7 +446,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.IsWebBrowserContextMenuEnabled"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Indicates whether to use the WebBrowser context menu.
@@ -467,7 +467,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ObjectForScripting"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Allows the host application to provide an object that the contained html
@@ -499,7 +499,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Padding"]/*' />
+
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -510,7 +510,7 @@ namespace System.Windows.Forms {
             set { base.Padding = value;}
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.PaddingChanged"]/*' />
+
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -529,7 +529,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ReadyState"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Gets the ReadyState of the browser control. (ex.. document loading vs. load complete).
@@ -548,7 +548,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.StatusText"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// The text that would be displayed in the IE status bar.
@@ -567,7 +567,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Url"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// The url of the HtmlDocument for page hosted in the html page.
@@ -609,7 +609,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Version"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Returns the version property of IE.
@@ -631,7 +631,7 @@ namespace System.Windows.Forms {
         // Public methods:
         //
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.GoBack"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Navigates the browser to the previous page in the navigation history list.
@@ -657,7 +657,7 @@ namespace System.Windows.Forms {
             return retVal;
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.GoForward"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Navigates the browser to the next page in the navigation history list.
@@ -683,7 +683,7 @@ namespace System.Windows.Forms {
             return retVal;
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.GoHome"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Navigates the browser to user's homepage.  Maps to IWebBrowser2:GoHome.
@@ -693,7 +693,7 @@ namespace System.Windows.Forms {
             this.AxIWebBrowser2.GoHome();
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.GoSearch"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Navigates the browser to user's default search page.  Maps to IWebBrowser2:GoSearch.
@@ -703,7 +703,7 @@ namespace System.Windows.Forms {
             this.AxIWebBrowser2.GoSearch();
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigate3"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Navigates to the specified Uri's AbsolutePath
@@ -714,7 +714,7 @@ namespace System.Windows.Forms {
             Url = url; // Does null check in PerformNavigate2
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigate3"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// String overload for Navigate(Uri)
@@ -731,7 +731,7 @@ namespace System.Windows.Forms {
             PerformNavigateHelper(ReadyNavigateToUrl(urlString), false, null, null, null);
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigate1"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Navigates the specified frame to the specified URL.
@@ -744,7 +744,7 @@ namespace System.Windows.Forms {
             PerformNavigateHelper(ReadyNavigateToUrl(url), false, targetFrameName, null, null);
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigate1"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// String overload for Navigate(Uri, string)
@@ -761,7 +761,7 @@ namespace System.Windows.Forms {
             PerformNavigateHelper(ReadyNavigateToUrl(urlString), false, targetFrameName, null, null);
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigate2"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Opens a new window if newWindow is true, navigating it to the specified URL. Maps to IWebBrowser2:Navigate.
@@ -771,7 +771,7 @@ namespace System.Windows.Forms {
             PerformNavigateHelper(ReadyNavigateToUrl(url), newWindow, null, null, null);
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigate2"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// String overload for Navigate(Uri, bool)
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
             PerformNavigateHelper(ReadyNavigateToUrl(urlString), newWindow, null, null, null);
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigate4"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Navigates to the specified Uri's AbsolutePath with specified args
@@ -799,7 +799,7 @@ namespace System.Windows.Forms {
             PerformNavigateHelper(ReadyNavigateToUrl(url), false, targetFrameName, postData, additionalHeaders);
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigate4"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// String overload for Navigate(Uri, string, byte[], string)
@@ -816,7 +816,7 @@ namespace System.Windows.Forms {
             PerformNavigateHelper(ReadyNavigateToUrl(urlString), false, targetFrameName, postData, additionalHeaders);
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Print"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Prints the html document to the default printer w/ no print dialog.
@@ -838,7 +838,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Refresh"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Refreshes the current page.  Maps to IWebBrowser2:Refresh.
@@ -867,7 +867,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Refresh1"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Refreshes the current page w/ the specified refresh option. The refresh option
@@ -896,7 +896,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ScrollBarsEnabled"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Enables/disables the webbrowser's scrollbars.
@@ -916,7 +916,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ShowPageSetupDialog"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Opens the IE page setup dialog for the current page.
@@ -935,7 +935,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ShowPrintDialog"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Opens the IE print dialog.
@@ -955,7 +955,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ShowPrintPreviewDialog"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Opens the IE print preview dialog.  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINTPREVIEW flag.
@@ -974,7 +974,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ShowPropertiesDialog"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Opens the properties dialog for the current html page.
@@ -994,7 +994,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ShowSaveAsDialog"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Opens the IE File-Save dialog.
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Stop"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Stops the current navigation.  Maps to IWebBrowser2:Stop.
@@ -1034,7 +1034,7 @@ namespace System.Windows.Forms {
         //
         // Public events:
         //
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.CanGoBackChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs when the IE back button would change from enabled to disabled or vice versa.
@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserCanGoBackChangedDescr))]
         public event EventHandler CanGoBackChanged;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.CanGoForwardChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs when the IE forward button would change from enabled to disabled or vice versa.
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserCanGoForwardChangedDescr))]
         public event EventHandler CanGoForwardChanged;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DocumentCompleted"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs when the document hosted in the web browser control is fully loaded.
@@ -1063,7 +1063,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.WebBrowserDocumentCompletedDescr))]
         public event WebBrowserDocumentCompletedEventHandler DocumentCompleted;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DocumentTitleChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs whenever the title text changes. The Title is the html page title
@@ -1074,7 +1074,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserDocumentTitleChangedDescr))]
         public event EventHandler DocumentTitleChanged;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.EncryptionLevelChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs whenever encryption level changes.
@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserEncryptionLevelChangedDescr))]
         public event EventHandler EncryptionLevelChanged;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.FileDownload"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs when a file download occurs.
@@ -1093,7 +1093,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.WebBrowserFileDownloadDescr))]
         public event EventHandler FileDownload;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigated"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs after browser control navigation occurs.
@@ -1102,7 +1102,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.WebBrowserNavigatedDescr))]
         public event WebBrowserNavigatedEventHandler Navigated;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Navigating"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs before browser control navigation occurs.
@@ -1112,7 +1112,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.WebBrowserNavigatingDescr))]
         public event WebBrowserNavigatingEventHandler Navigating;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.NewWindow"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs when a new browser window is created.
@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.WebBrowserNewWindowDescr))]
         public event CancelEventHandler NewWindow;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ProgressChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs when an update to the progress of a download occurs.
@@ -1132,7 +1132,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.WebBrowserProgressChangedDescr))]
         public event WebBrowserProgressChangedEventHandler ProgressChanged;
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.StatusTextChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Occurs whenever the status text changes.
@@ -1149,7 +1149,7 @@ namespace System.Windows.Forms {
         // public overrides:
         //
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Focused"]/*' />
+
         /// <devdoc>
         ///     Returns true if this control (or any of its child windows) has focus.
         /// </devdoc>
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms {
         //
         //
         //
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.Dispose"]/*' />
+
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (htmlShimManager != null)
@@ -1183,7 +1183,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DefaultSize"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Overrides the default size property of Control to specify a bigger default size of 250 x 250.
@@ -1195,7 +1195,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.AttachInterfaces"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Retrieves IWebBrowser2 from the native object. Overriding classes should first call base.AttachInterfaces.
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms {
             this.axIWebBrowser2 = (UnsafeNativeMethods.IWebBrowser2)nativeActiveXObject;
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DetachInterfaces"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Discards the IWebBrowser2 reference. Overriding classes should call base.DetachInterfaces.
@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms {
             this.axIWebBrowser2 = null;
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.CreateWebBrowserSite"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Returns a WebBrowserSite object.
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms {
             return new WebBrowserSite(this);
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.CreateSink"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Attaches to the DWebBrowserEvents2 connection point.
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.DetachSink"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Releases the DWebBrowserEvents2 connection point.
@@ -1255,7 +1255,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnTopMostActiveXParent"]/*' />
+
         internal override void OnTopMostActiveXParentChanged(EventArgs e) {
             if (TopMostParent.IsIEParent) {
                 WebBrowser.createdInIE = true;
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms {
         // protected virtuals:
         //
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnCanGoBackChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.CanGoBackChanged'/> event.
@@ -1289,7 +1289,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnCanGoForwardChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.CanGoForwardChanged'/> event.
@@ -1305,7 +1305,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnDocumentCompleted"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.DocumentCompleted'/> event.
@@ -1322,7 +1322,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnDocumentTitleChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.DocumentTitleChanged'/> event.
@@ -1338,7 +1338,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnEncryptionLevelChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.EncryptionLevelChanged'/> event.
@@ -1354,7 +1354,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnFileDownload"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.FileDownload'/> event.
@@ -1370,7 +1370,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnNavigated"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.Navigated'/> event.
@@ -1386,7 +1386,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnNavigating"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.Navigating'/> event.
@@ -1402,7 +1402,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnNewWindow"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.NewWindow'/> event.
@@ -1418,7 +1418,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnProgressChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.ProgressChanged'/> event.
@@ -1434,7 +1434,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.OnStatusTextChanged"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Raises the <see cref='System.Windows.Forms.WebBrowser.StatusTextChanged'/> event.
@@ -1594,7 +1594,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WndProc"]/*' />
+
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_CONTEXTMENU:
@@ -1639,7 +1639,7 @@ namespace System.Windows.Forms {
         // We slap InheritanceDemand on this class so that only users with
         // UnmanagedCode permissions can override this type.
         //
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Provides a default WebBrowserSite implementation for use in the CreateWebBrowserSite
@@ -1649,7 +1649,7 @@ namespace System.Windows.Forms {
         [ComVisible(false)]
         protected class WebBrowserSite : WebBrowserSiteBase, UnsafeNativeMethods.IDocHostUIHandler
         {
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.WebBrowserSite"]/*' />
+
             /// <devdoc>
             ///     <para>
             /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser.WebBrowserSite'/> class.
@@ -1662,7 +1662,7 @@ namespace System.Windows.Forms {
             //
             // IDocHostUIHandler Implementation
             //
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(int dwID, NativeMethods.POINT pt, object pcmdtReserved, object pdispReserved) {
                 WebBrowser wb = (WebBrowser)this.Host;
@@ -1684,7 +1684,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo(NativeMethods.DOCHOSTUIINFO info) {
                 WebBrowser wb = (WebBrowser)this.Host;
@@ -1710,13 +1710,13 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.EnableModeless"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.EnableModeless(bool fEnable) {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.ShowUI"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.ShowUI(int dwID, UnsafeNativeMethods.IOleInPlaceActiveObject activeObject, 
                     NativeMethods.IOleCommandTarget commandTarget, UnsafeNativeMethods.IOleInPlaceFrame frame, 
@@ -1724,43 +1724,43 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_FALSE;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.HideUI"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.HideUI() {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.UpdateUI"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.UpdateUI() {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate(bool fActivate) {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate(bool fActivate) {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder(NativeMethods.COMRECT rect, UnsafeNativeMethods.IOleInPlaceUIWindow doc, bool fFrameWindow) {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, int dw) {
                 return NativeMethods.E_NOTIMPL;
             }
             
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.GetDropTarget"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.GetDropTarget(UnsafeNativeMethods.IOleDropTarget pDropTarget, out UnsafeNativeMethods.IOleDropTarget ppDropTarget) {
                 //
@@ -1770,7 +1770,7 @@ namespace System.Windows.Forms {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.GetExternal"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.GetExternal(out object ppDispatch) {
                 WebBrowser wb = (WebBrowser)this.Host;
@@ -1778,7 +1778,7 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator"]/*' />
+
             /// <internalonly/>
             [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]                     
             int UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator(ref NativeMethods.MSG msg, ref Guid group, int nCmdID) {
@@ -1801,7 +1801,7 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_FALSE;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl(int dwTranslate, string strUrlIn, out string pstrUrlOut) {
                 //
@@ -1811,7 +1811,7 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_FALSE;
             }
 
-            /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject"]/*' />
+
             /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet) 
             {
@@ -1989,7 +1989,7 @@ namespace System.Windows.Forms {
     // Public enums:
     //
 
-    /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel"]/*' />
+
     /// <devdoc>
     ///     <para>
     /// Specifies the EncryptionLevel of the document in the WebBrowser control.
@@ -1997,23 +1997,23 @@ namespace System.Windows.Forms {
     ///     </para>
     /// </devdoc>
     public enum WebBrowserEncryptionLevel {
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Insecure"]/*' />
+
         Insecure = 0, 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Mixed"]/*' />
+
         Mixed = 1,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Unknown"]/*' />
+
         Unknown = 2,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Bit40"]/*' />
+
         Bit40 = 3,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Bit56"]/*' />
+
         Bit56 = 4,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Fortezza"]/*' />
+
         Fortezza = 5,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Bit128"]/*' />
+
         Bit128 = 6
     }
 
-    /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState"]/*' />
+
     /// <devdoc>
     ///     <para>
     /// Specifies the ReadyState of the WebBrowser control.
@@ -2021,32 +2021,32 @@ namespace System.Windows.Forms {
     ///     </para>
     /// </devdoc>
     public enum WebBrowserReadyState {
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Uninitialized"]/*' />
+
         Uninitialized = 0,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Loading"]/*' />
+
         Loading = 1,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Loaded"]/*' />
+
         Loaded = 2,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Interactive"]/*' />
+
         Interactive = 3,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Complete"]/*' />
+
         Complete = 4
     }
 
-    /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption"]/*' />
+
     /// <devdoc>
     ///     <para>
     /// Specifies the RefreshOptions in the <see cref='System.Windows.Forms.WebBrowser.Refresh'/> method.
     ///     </para>
     /// </devdoc>
     public enum WebBrowserRefreshOption {
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption.Normal"]/*' />
+
         Normal = 0,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption.IfExpired"]/*' />
+
         IfExpired = 1,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption.Continue"]/*' />
+
         Continue = 2,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption.Completely"]/*' />
+
         Completely = 3
     }
 }

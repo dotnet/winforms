@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using Collections.Generic;
 
-    /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Provides a small pop-up window containing a line of text
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
 
         private bool cancelled = false;
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ToolTip"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ToolTip'/> class, given the container.
@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
             cont.Add(this);
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ToolTip1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ToolTip'/> class in its default state.
@@ -115,7 +115,7 @@ namespace System.Windows.Forms {
             AdjustBaseFromAuto();
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Active"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the <see cref='System.Windows.Forms.ToolTip'/> control is currently active.
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
             this.Hide(currentTool.GetOwnerWindow());
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.AutomaticDelay"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets
@@ -176,7 +176,7 @@ namespace System.Windows.Forms {
             return ((TipInfo)this.tools[tool])?.Caption;
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.AutoPopDelay"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the initial delay for the <see cref='System.Windows.Forms.ToolTip'/> control.
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.BackColor"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the BackColor for the <see cref='System.Windows.Forms.ToolTip'/> control.
@@ -222,7 +222,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.CreateParams"]/*' />
+
         /// <devdoc>
         ///     The createParams to create the window.
         /// </devdoc>
@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ForeColor"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the ForeColor for the <see cref='System.Windows.Forms.ToolTip'/> control.
@@ -293,7 +293,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.IsBalloon"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the IsBalloon for the <see cref='System.Windows.Forms.ToolTip'/> control.
@@ -344,7 +344,7 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.InitialDelay"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the initial delay for
@@ -369,7 +369,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.OwnerDraw"]/*' />
+
         /// <devdoc>
         /// Indicates whether the ToolTip will be drawn by the system or the user.
         /// </devdoc>
@@ -390,7 +390,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ReshowDelay"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the length of time (in milliseconds) that
@@ -415,7 +415,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ShowAlways"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the <see cref='System.Windows.Forms.ToolTip'/>
@@ -441,7 +441,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.StripAmpersands"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       When set to true, any ampersands in the Text property are not displayed.
@@ -466,7 +466,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Tag"]/*' />
+
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -484,7 +484,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ToolTipIcons"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets an Icon on the ToolTip.
@@ -609,7 +609,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.UseAnimation"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       When set to true, animations are used when tooltip is shown or hidden.
@@ -635,7 +635,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.UseFading"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       When set to true, a fade effect is used when tooltips are shown or hidden.
@@ -660,7 +660,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Draw"]/*' />
+
         /// <devdoc>
         ///    <para>Fires in OwnerDraw mode when the tooltip needs to be drawn.</para>
         /// </devdoc>
@@ -677,7 +677,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Popup"]/*' />
+
         /// <devdoc>
         ///    <para>Fires when the tooltip is just about to be shown.</para>
         /// </devdoc>
@@ -695,7 +695,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.AdjustBaseFromAuto"]/*' />
+
         /// <devdoc>
         ///     Adjusts the other delay values based on the Automatic value.
         /// </devdoc>
@@ -781,7 +781,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.OnDraw"]/*' />
+
         /// <devdoc>
         /// Fires the Draw event. 
         /// </devdoc>
@@ -794,7 +794,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.OnPopup"]/*' />
+
         /// <devdoc>
         /// Fires the Popup event. 
         /// </devdoc>
@@ -816,7 +816,7 @@ namespace System.Windows.Forms {
             DestroyHandle();
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.CanExtend"]/*' />
+
         /// <devdoc>
         ///    Returns true if the tooltip can offer an extender property to the
         ///    specified target component.
@@ -840,7 +840,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.CreateHandle"]/*' />
+
         /// <devdoc>
         ///     Creates the handle for the control.
         /// </devdoc>
@@ -1004,7 +1004,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.DestroyHandle"]/*' />
+
         /// <devdoc>
         ///     Destroys the handle for this control.
         /// </devdoc>
@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Dispose"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1080,7 +1080,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.GetDelayTime"]/*' />
+
         /// <devdoc>
         ///     Returns the delayTime based on the NativeMethods.TTDT_* values.
         /// </devdoc>
@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms {
             return (window != null ? window.Handle != IntPtr.Zero: false);
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.GetMinTOOLINFO"]/*' />
+
         /// <devdoc>
         ///     Returns a new instance of the TOOLINFO_T structure with the minimum
         ///     required data to uniquely identify a region. This is used primarily
@@ -1123,7 +1123,7 @@ namespace System.Windows.Forms {
             return ti;
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.GetTOOLINFO"]/*' />
+
         /// <devdoc>
         ///     Returns a detailed TOOLINFO_TOOLTIP structure that represents the specified
         ///     region. NOTE: This may force the creation of a handle.
@@ -1193,7 +1193,7 @@ namespace System.Windows.Forms {
             return ti;
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.GetToolTip"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Retrieves the <see cref='System.Windows.Forms.ToolTip'/> text associated with the specified control.
@@ -1218,7 +1218,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.GetWindowFromPoint"]/*' />
+
         /// <devdoc>
         ///     Returns the HWND of the window that is at the specified point. This
         ///     handles special cases where one Control owns multiple HWNDs (i.e. ComboBox).
@@ -1307,7 +1307,7 @@ namespace System.Windows.Forms {
             this.topLevelControl = TopLevelControl;
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.RecreateHandle"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1323,7 +1323,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.RemoveAll"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Removes all of the tooltips currently associated
@@ -1356,7 +1356,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.SetDelayTime"]/*' />
+
         /// <devdoc>
         ///     Sets the delayTime based on the NativeMethods.TTDT_* values.
         /// </devdoc>
@@ -1388,7 +1388,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.SetToolTip"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> text with the specified control.
@@ -1401,7 +1401,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.SetToolTipInternal"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref="System.Windows..Forms.ToolTip'/> text with the specified information
@@ -1473,7 +1473,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ShouldSerializeAutomaticDelay"]/*' />
+
         /// <devdoc>
         ///    Returns true if the AutomaticDelay property should be persisted.
         /// </devdoc>
@@ -1487,7 +1487,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ShouldSerializeAutoPopDelay"]/*' />
+
         /// <devdoc>
         ///    Returns true if the AutoPopDelay property should be persisted.
         /// </devdoc>
@@ -1496,7 +1496,7 @@ namespace System.Windows.Forms {
             return !auto;
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ShouldSerializeInitialDelay"]/*' />
+
         /// <devdoc>
         ///    Returns true if the InitialDelay property should be persisted.
         /// </devdoc>
@@ -1505,7 +1505,7 @@ namespace System.Windows.Forms {
             return !auto;
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ShouldSerializeReshowDelay"]/*' />
+
         /// <devdoc>
         ///    Returns true if the ReshowDelay property should be persisted.
         /// </devdoc>
@@ -1515,7 +1515,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ShowTooltip"]/*' />
+
         /// <devdoc>
         ///    Shows a tooltip for specified text, window, and hotspot
         /// </devdoc>
@@ -1583,7 +1583,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Show()"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
@@ -1597,7 +1597,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Show1()"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control 
@@ -1614,7 +1614,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Show2()"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
@@ -1637,7 +1637,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Show3()"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
@@ -1665,7 +1665,7 @@ namespace System.Windows.Forms {
 
 
         
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Show4()"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
@@ -1686,7 +1686,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Show5()"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
@@ -1904,7 +1904,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Hide"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Hides <see cref='System.Windows.Forms.ToolTip'/> with the specified control.
@@ -2057,7 +2057,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="UpDownBase.ToolTip.StartTimer"]/*' />
+
         /// <devdoc>
         ///     Starts the timer hiding Positioned ToolTips
         /// </devdoc>
@@ -2072,7 +2072,7 @@ namespace System.Windows.Forms {
             timer.Start();
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.StopTimer"]/*' />
+
         /// <devdoc>
         ///     Stops the timer for hiding Positioned ToolTips
         /// </devdoc>
@@ -2089,7 +2089,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.TimerHandler"]/*' />
+
         /// <devdoc>
         ///     Generates updown events when the timer calls this function.
         /// </devdoc>
@@ -2097,7 +2097,7 @@ namespace System.Windows.Forms {
             Hide(((ToolTipTimer)source).Host);
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Finalize"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Finalizes garbage collection.
@@ -2107,7 +2107,7 @@ namespace System.Windows.Forms {
             DestroyHandle();
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ToString"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -2140,7 +2140,7 @@ namespace System.Windows.Forms {
             NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOOWNERZORDER);
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.WmMove"]/*' />
+
         /// <devdoc>
         ///     Handles the WM_MOVE message.
         /// </devdoc>
@@ -2185,7 +2185,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.WmMouseActivate"]/*' />
+
         /// <devdoc>
         ///     Handles the WM_MOUSEACTIVATE message.
         /// </devdoc>
@@ -2222,7 +2222,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.WmWindowFromPoint"]/*' />
+
         /// <devdoc>
         ///     Handles the WM_WINDOWFROMPOINT message.
         /// </devdoc>
@@ -2236,7 +2236,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.WmShow"]/*' />
+
         /// <devdoc>
         ///     Handles the TTN_SHOW message.
         /// </devdoc>
@@ -2322,7 +2322,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.WmWindowPosChanged"]/*' />
+
         /// <devdoc>
         ///     Handles the WM_WINDOWPOSCHANGED message.
         ///     We need to Hide the window since the native tooltip actually calls SetWindowPos in its TTN_SHOW even if we cancel showing the
@@ -2340,7 +2340,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.WmWindowPosChanging"]/*' />
+
         /// <devdoc>
         ///     Handles the WM_WINDOWPOSCHANGING message.
         /// </devdoc>
@@ -2438,7 +2438,7 @@ namespace System.Windows.Forms {
             m.Result = IntPtr.Zero; 
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.WmPop"]/*' />
+
         /// <devdoc>
         ///     Called just before the tooltip is hidden
         /// </devdoc>
@@ -2498,7 +2498,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.WndProc"]/*' />
+
         /// <devdoc>
         ///     WNDPROC
         /// </devdoc>
@@ -2602,7 +2602,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ToolTipNativeWindow"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>

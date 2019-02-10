@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     using System.Windows.Forms.VisualStyles;
     
-    /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Represents a Windows text box control.
@@ -75,21 +75,21 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private bool selectionSet = false;
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.autoCompleteMode"]/*' />
+
         /// <devdoc>
         ///     This stores the value for the autocomplete mode which can be either
         ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         /// </devdoc>
         private AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
         
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.autoCompleteSource"]/*' />
+
         /// <devdoc>
         ///     This stores the value for the autoCompleteSource mode which can be one of the values
         ///     from AutoCompleteSource enum.
         /// </devdoc>
         private AutoCompleteSource autoCompleteSource = AutoCompleteSource.None;
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.autoCompleteCustomSource"]/*' />
+
         /// <devdoc>
         ///     This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
         /// </devdoc>
@@ -98,12 +98,12 @@ namespace System.Windows.Forms {
         private StringSource stringSource = null;
         private string placeholderText;
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.TextBox"]/*' />
+
         public TextBox(){
         }
 
         
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.AcceptsReturn"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether pressing ENTER
@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.AutoCompleteMode"]/*' />
+
         /// <devdoc>
         ///     This is the AutoCompleteMode which can be either
         ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend. 
@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.AutoCompleteSource"]/*' />
+
         /// <devdoc>
         ///     This is the AutoCompleteSource which can be one of the 
         ///     values from AutoCompleteSource enumeration. 
@@ -196,7 +196,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.AutoCompleteCustomSource"]/*' />
+
         /// <devdoc>
         ///     This is the AutoCompleteCustomSource which is custom StringCollection used when the 
         ///     AutoCompleteSource is CustomSource. 
@@ -233,7 +233,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.CharacterCasing"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets whether the TextBox control
@@ -263,7 +263,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.Multiline"]/*' />
+
         public override bool Multiline {
             get {
                 return base.Multiline;
@@ -291,7 +291,7 @@ namespace System.Windows.Forms {
         }
 
      
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.CreateParams"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -349,7 +349,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.PasswordChar"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the character used to mask characters in a single-line text box
@@ -389,7 +389,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.ScrollBars"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets which scroll bars should
@@ -438,7 +438,7 @@ namespace System.Windows.Forms {
             return prefSize + scrollBarPadding;
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.Text"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets
@@ -455,7 +455,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.TextAlign"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets how text is
@@ -490,7 +490,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.IsPasswordMode"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///    Indicates if the text in the edit control should appear as
@@ -524,7 +524,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.TextAlignChanged"]/*' />
+
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
             add {
@@ -536,7 +536,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TextBox.Dispose"]/*' />
+
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 // Reset this just in case, because the SHAutoComplete stuff
@@ -556,7 +556,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
        
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.IsInputKey"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -581,7 +581,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnBackColorChanged"]/*' />
+
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
             // Force repainting of the entire window frame
@@ -590,7 +590,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnFontChanged"]/*' />
+
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             if (this.AutoCompleteMode != AutoCompleteMode.None) {
@@ -599,7 +599,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnGotFocus"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    Overrideen to focus the text on first focus.
@@ -618,7 +618,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnHandleCreated"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    Overridden to update the newly created handle with the settings of the
@@ -659,7 +659,7 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
         
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnTextAlignChanged"]/*' />
+
         protected virtual void OnTextAlignChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
             if (eh != null) {
@@ -667,7 +667,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.ProcessCmdKey"]/*' />
+
         /// <devdoc>
         /// Process a command key.
         /// Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
@@ -726,7 +726,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.SetAutoComplete"]/*' />
+
         /// <devdoc>
         ///     Sets the AutoComplete mode in TextBox.
         /// </devdoc>
@@ -906,7 +906,7 @@ namespace System.Windows.Forms {
             TextRenderer.DrawText(graphics, PlaceholderText, Font, rectangle, SystemColors.GrayText, BackColor, flags);
         }
 
-        /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.WndProc"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    The edits window procedure.  Inheritng classes can override this

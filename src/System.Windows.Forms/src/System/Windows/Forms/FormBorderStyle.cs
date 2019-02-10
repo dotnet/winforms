@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Drawing;
 
-    /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the border styles for a form.
@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum FormBorderStyle {
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       No border.
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.FixedSingle"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A fixed, single line border.
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         FixedSingle = 1,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.Fixed3D"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A fixed, three-dimensional border.
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Fixed3D = 2,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.FixedDialog"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A thick, fixed dialog-style border.
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         FixedDialog = 3,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.Sizable"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A resizable border.
@@ -65,7 +65,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Sizable = 4,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.FixedToolWindow"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A tool window border
@@ -74,7 +74,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         FixedToolWindow = 5,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.SizableToolWindow"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       A resizable tool window border.

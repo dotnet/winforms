@@ -12,7 +12,7 @@ namespace System.Windows.Forms
         [
             System.Runtime.InteropServices.ComVisible(true)
         ]
-        /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridView.DataGridViewAccessibleObject"]/*' />
+
         protected class DataGridViewAccessibleObject : ControlAccessibleObject
         {
             private int[] runtimeId = null; // Used by UIAutomation
@@ -21,14 +21,14 @@ namespace System.Windows.Forms
             DataGridViewTopRowAccessibleObject topRowAccessibilityObject = null;
             DataGridViewSelectedCellsAccessibleObject selectedCellsAccessibilityObject = null;
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.DataGridViewAccessibleObject"]/*' />
+
             public DataGridViewAccessibleObject(DataGridView owner)
                 : base(owner)
             {
                 this.owner = owner;
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.Name"]/*' />
+
             public override string Name
             {
                 [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // Don't localize string "DataGridView".
@@ -47,7 +47,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.Role"]/*' />
+
             public override AccessibleRole Role
             {
                 get
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.GetChild"]/*' />
+
             public override AccessibleObject GetChild(int index)
             {
                 if (this.owner.Columns.Count == 0)
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.GetChildCount"]/*' />
+
             public override int GetChildCount()
             {
                 if (this.owner.Columns.Count == 0)
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                 return childCount;
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.GetFocused"]/*' />
+
             public override AccessibleObject GetFocused()
             {
                 if (this.owner.Focused && this.owner.CurrentCell != null)
@@ -181,13 +181,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.GetSelected"]/*' />
+
             public override AccessibleObject GetSelected()
             {
                 return this.SelectedCellsAccessibilityObject;
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.HitTest"]/*' />
+
             public override AccessibleObject HitTest(int x, int y)
             {
                 Point pt = this.owner.PointToClient(new Point(x, y));
@@ -222,7 +222,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.Navigate"]/*' />
+
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 switch (navigationDirection)

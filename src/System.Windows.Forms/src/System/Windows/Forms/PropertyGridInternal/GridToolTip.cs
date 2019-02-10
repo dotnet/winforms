@@ -86,7 +86,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
 
-        /// <include file='doc\GridToolTip.uex' path='docs/doc[@for="GridToolTip.CreateParams"]/*' />
+
         /// <devdoc>
         ///     The createParams to create the window.
         /// </devdoc>

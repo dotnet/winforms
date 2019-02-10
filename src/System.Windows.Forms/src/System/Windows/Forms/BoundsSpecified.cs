@@ -9,7 +9,7 @@ namespace System.Windows.Forms {
 
     using System;
 
-    /// <include file='doc\BoundsSpecified.uex' path='docs/doc[@for="BoundsSpecified"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the bounds of the control to
@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [Flags]
     public enum BoundsSpecified {
-        /// <include file='doc\BoundsSpecified.uex' path='docs/doc[@for="BoundsSpecified.X"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies the
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         X = 0x1,
-        /// <include file='doc\BoundsSpecified.uex' path='docs/doc[@for="BoundsSpecified.Y"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies the
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Y = 0x2,
-        /// <include file='doc\BoundsSpecified.uex' path='docs/doc[@for="BoundsSpecified.Width"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Width = 0x4,
-        /// <include file='doc\BoundsSpecified.uex' path='docs/doc[@for="BoundsSpecified.Height"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Height = 0x8,
-        /// <include file='doc\BoundsSpecified.uex' path='docs/doc[@for="BoundsSpecified.Location"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Both <see langword='X'/> and <see langword='Y'/> coordinates of the control are
@@ -64,7 +64,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Location = X | Y,
-        /// <include file='doc\BoundsSpecified.uex' path='docs/doc[@for="BoundsSpecified.Size"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Both <see cref='System.Windows.Forms.Control.Width'/> and <see cref='System.Windows.Forms.Control.Height'/> property values of the control are
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Size = Width | Height,
-        /// <include file='doc\BoundsSpecified.uex' path='docs/doc[@for="BoundsSpecified.All"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Both <see cref='System.Windows.Forms.Control.Location'/> and <see cref='System.Windows.Forms.Control.Size'/> property values are
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         All = Location | Size,
-        /// <include file='doc\BoundsSpecified.uex' path='docs/doc[@for="BoundsSpecified.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       No

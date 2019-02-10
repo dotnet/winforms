@@ -9,18 +9,18 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\FlowLayoutSettings.uex' path='docs/doc[@for="FlowLayoutSettings"]/*' />
+
     [DefaultProperty(nameof(FlowDirection))]
     public class FlowLayoutSettings : LayoutSettings {
 
         internal FlowLayoutSettings(IArrangedElement owner) : base(owner) {}
         
-        /// <include file='doc\FlowLayoutSettings.uex' path='docs/doc[@for="FlowLayoutSettings.LayoutEngine"]/*' />
+
         public override LayoutEngine LayoutEngine {
             get { return FlowLayout.Instance; }
         }
 
-        /// <include file='doc\FlowLayoutSettings.uex' path='docs/doc[@for="FlowLayoutSettings.FlowDirection"]/*' />
+
         [SRDescription(nameof(SR.FlowPanelFlowDirectionDescr))]
         [DefaultValue(FlowDirection.LeftToRight)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\FlowLayoutSettings.uex' path='docs/doc[@for="FlowLayoutSettings.WrapContents"]/*' />
+
         [SRDescription(nameof(SR.FlowPanelWrapContentsDescr))]
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatLayout))]

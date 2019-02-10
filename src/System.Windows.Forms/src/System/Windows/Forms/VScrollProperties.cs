@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Windows.Forms;
     
-    /// <include file='doc\VScrollProperties.uex' path='docs/doc[@for="VScrollProperties"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Basic Properties for VScroll.
@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class VScrollProperties : ScrollProperties {
         
-        /// <include file='doc\VScrollProperties.uex' path='docs/doc[@for="ScrollProperties.VScrollProperties"]/*' />
+
         public VScrollProperties(ScrollableControl container) : base(container) {
         }
 

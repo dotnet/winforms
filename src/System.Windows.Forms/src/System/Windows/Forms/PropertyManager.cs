@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Collections;
 
-    /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager"]/*' />
+
     public class PropertyManager : BindingManagerBase {
 
         // PropertyManager class
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
         private bool bound;
 
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Current"]/*' />
+
         public override object Current {
             get {
                 return this.dataSource;
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.PropertyManager"]/*' />
+
         public PropertyManager() {}
 
         [
@@ -82,7 +82,7 @@ namespace System.Windows.Forms {
             return TypeDescriptor.GetClassName(dataSource) + "." + propName;
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.SuspendBinding"]/*' />
+
         public override void SuspendBinding() {
             EndCurrentEdit();
             if (bound) {
@@ -97,7 +97,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.ResumeBinding"]/*' />
+
         public override void ResumeBinding() {
             OnCurrentChanged(new EventArgs());
             if (!bound) {
@@ -112,12 +112,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.GetListName"]/*' />
+
         protected internal override string GetListName(ArrayList listAccessors) {
             return "";
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.CancelCurrentEdit"]/*' />
+
         public override void CancelCurrentEdit() {
             IEditableObject obj = this.Current as IEditableObject;
             if (obj != null)
@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
             PushData();
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.EndCurrentEdit"]/*' />
+
         public override void EndCurrentEdit() {
             bool success;
             PullData(out success);
@@ -137,13 +137,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.UpdateIsBinding"]/*' />
+
         protected override void UpdateIsBinding() {
             for (int i = 0; i < this.Bindings.Count; i++)
                 this.Bindings[i].UpdateIsBinding();
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.OnCurrentChanged"]/*' />
+
         internal protected override void OnCurrentChanged(EventArgs ea) {
             PushData();
 
@@ -154,7 +154,7 @@ namespace System.Windows.Forms {
                 this.onCurrentItemChangedHandler(this, ea);
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.OnCurrentItemChanged"]/*' />
+
         internal protected override void OnCurrentItemChanged(EventArgs ea) {
             PushData();
 
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
         }
 
         // no op on the propertyManager
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Position"]/*' />
+
         public override int Position {
             get {
                 return 0;
@@ -184,7 +184,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Count"]/*' />
+
         public override int Count {
             get {
                 return 1;
@@ -192,13 +192,13 @@ namespace System.Windows.Forms {
         }
 
         // no-op on the propertyManager
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.AddNew"]/*' />
+
         public override void AddNew() {
             throw new NotSupportedException(SR.DataBindingAddNewNotSupportedOnPropertyManager);
         }
 
         // no-op on the propertyManager
-        /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.RemoveAt"]/*' />
+
         public override void RemoveAt(int index) {
             throw new NotSupportedException(SR.DataBindingRemoveAtNotSupportedOnPropertyManager);
         }

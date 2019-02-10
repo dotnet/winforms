@@ -5,7 +5,7 @@
 using System.Windows.Forms.Layout;
 namespace System.Windows.Forms {
     
-    /// <include file='doc\LayoutSetting.uex' path='docs/doc[@for="LayoutSetting"]/*' />
+
     public abstract class LayoutSettings {
         private IArrangedElement _owner;
 
@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
             this._owner = owner;
         }
         
-        /// <include file='doc\LayoutSetting.uex' path='docs/doc[@for="LayoutSetting.LayoutEngine"]/*' />
+
         public virtual LayoutEngine LayoutEngine {
             get { return null;}
         }

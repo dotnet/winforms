@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\ToolBarTextAlign.uex' path='docs/doc[@for="ToolBarTextAlign"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum ToolBarTextAlign {
 
-        /// <include file='doc\ToolBarTextAlign.uex' path='docs/doc[@for="ToolBarTextAlign.Underneath"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The text
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Underneath = 0,
 
-        /// <include file='doc\ToolBarTextAlign.uex' path='docs/doc[@for="ToolBarTextAlign.Right"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The text

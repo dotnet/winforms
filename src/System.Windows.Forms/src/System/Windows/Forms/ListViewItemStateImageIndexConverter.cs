@@ -12,14 +12,14 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <include file='doc\ListViewItemStateImageIndexConverter.uex' path='docs/doc[@for="ListViewItemStateImageIndexConverter"]/*' />
+
     /// <devdoc>
     ///      ListViewItemStateImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
     /// </devdoc>
     public class ListViewItemStateImageIndexConverter : ImageIndexConverter {
 
-        /// <include file='doc\ListViewItemStateImageIndexConverter.uex' path='docs/doc[@for="ListViewItemStateImageIndexConverter.IncludeNoneAsStandardValue"]/*' />
+
         protected override bool IncludeNoneAsStandardValue {
             get {
                 return false;
@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
         }                                
 
 
-        /// <include file='doc\ListViewItemStateImageIndexConverter.uex' path='docs/doc[@for="ListViewItemStateImageIndexConverter.GetStandardValues"]/*' />
+
         /// <devdoc>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This

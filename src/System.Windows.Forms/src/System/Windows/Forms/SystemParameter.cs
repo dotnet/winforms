@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the
@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum SystemParameter {
 
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.DropShadow"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       DropShadow.
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         DropShadow = 0,
 
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.FlatMenu"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Flat Menu.
@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         FlatMenu = 1,
 
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.FontSmoothingContrastMetric"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       FontSmoothingContrastMetric.
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         FontSmoothingContrastMetric = 2,
 
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.FontSmoothingTypeMetric"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       FontSmoothingTypeMetric.
@@ -52,7 +52,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         FontSmoothingTypeMetric = 3,
 
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.MenuFadeEnabled"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       MenuFadeEnabled.
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         MenuFadeEnabled = 4,
         
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.SelectionFade"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       SelectionFade.
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         SelectionFade = 5,
         
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.ToolTipAnimationMetric"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       ToolTipAnimationMetric.
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ToolTipAnimationMetric = 6,
 
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.UIEffects"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       UIEffects.
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         UIEffects = 7,
 
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.CaretWidthMetric"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       CaretWidthMetric.
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         CaretWidthMetric = 8,
 
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.VerticalFocusThicknessMetric"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       VerticalFocusThicknessMetric.
@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         VerticalFocusThicknessMetric = 9,
 
-        /// <include file='doc\SystemParameter.uex' path='docs/doc[@for="SystemParameter.HorizontalFocusThicknessMetric"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       HorizontalFocusThicknessMetric.

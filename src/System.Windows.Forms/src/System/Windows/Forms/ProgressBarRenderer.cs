@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <include file='doc\ProgressBarRenderer.uex' path='docs/doc[@for="ProgressBarRenderer"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       This is a rendering class for the ProgressBar control.
@@ -26,7 +26,7 @@ using Microsoft.Win32;
        private ProgressBarRenderer() {
        }
 
-       /// <include file='doc\ProgressBarRenderer.uex' path='docs/doc[@for="ProgressBarRenderer.IsSupported"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
@@ -39,7 +39,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\ProgressBarRenderer.uex' path='docs/doc[@for="ProgressBarRenderer.DrawHorizontalBar"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a horizontal bar.
@@ -54,7 +54,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ProgressBarRenderer.uex' path='docs/doc[@for="ProgressBarRenderer.DrawVerticalBar"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a vertical bar.
@@ -69,7 +69,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ProgressBarRenderer.uex' path='docs/doc[@for="ProgressBarRenderer.DrawHorizontalChunks"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a number of constant size horizontal chunks in the given bounds.
@@ -84,7 +84,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ProgressBarRenderer.uex' path='docs/doc[@for="ProgressBarRenderer.DrawVerticalChunks"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a number of constant size vertical chunks in the given bounds.
@@ -99,7 +99,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TextBoxRenderer.uex' path='docs/doc[@for="ProgressBarRenderer.GetChunkThickness"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns the  width/height of a single horizontal/vertical progress bar chunk.
@@ -113,7 +113,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\TextBoxRenderer.uex' path='docs/doc[@for="ProgressBarRenderer.GetChunkSpaceThickness"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns the  width/height of the space between horizontal/vertical progress bar chunks.

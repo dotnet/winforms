@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\ScrollEvent.uex' path='docs/doc[@for="ScrollEventArgs.ScrollEventArgs3"]/*' />
+
         public ScrollEventArgs(ScrollEventType type, int oldValue,  int newValue, ScrollOrientation scroll) {
             Type = type;
             NewValue = newValue;

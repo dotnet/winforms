@@ -5,13 +5,13 @@
 namespace System.Windows.Forms {
 
     using System.Diagnostics;
-    /// <include file='doc\ErrorBlinkStyle.uex' path='docs/doc[@for="ErrorBlinkStyle"]/*' />
+
     /// <devdoc>
     ///     Describes the times that the error icon supplied by an ErrorProvider
     ///     should blink to alert the user that an error has occurred.
     /// </devdoc>
     public enum ErrorBlinkStyle {
-        /// <include file='doc\ErrorBlinkStyle.uex' path='docs/doc[@for="ErrorBlinkStyle.BlinkIfDifferentError"]/*' />
+
         /// <devdoc>
         ///     Blink only if the error icon is already displayed, but a new
         ///     error string is set for the control.  If the icon did not blink 
@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         BlinkIfDifferentError,
         
-        /// <include file='doc\ErrorBlinkStyle.uex' path='docs/doc[@for="ErrorBlinkStyle.AlwaysBlink"]/*' />
+
         /// <devdoc>
         ///     Blink the error icon when the error is first displayed, or when 
         ///     a new error description string is set for the control and the
@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         AlwaysBlink,
         
-        /// <include file='doc\ErrorBlinkStyle.uex' path='docs/doc[@for="ErrorBlinkStyle.NeverBlink"]/*' />
+
         /// <devdoc>
         ///     Never blink the error icon.
         /// </devdoc>

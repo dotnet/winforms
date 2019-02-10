@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
 
 
-    /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag"]/*' />
+
     /// <devdoc>
     ///
     ///     Class used to pass new font/color information around for "partial" ownerdraw list/treeview items.
@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
         internal OwnerDrawPropertyBag(){
         }
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.Font"]/*' />
+
         public Font Font {
             get { 
                 return font;
@@ -61,7 +61,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.ForeColor"]/*' />
+
         public Color ForeColor {
             get {
                 return foreColor;
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.BackColor"]/*' />
+
         public Color BackColor {
             get {
                 return backColor;
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.IsEmpty"]/*' />
+
         /// <devdoc>
         ///     Returns whether or not this property bag contains all default values (is empty)
         /// </devdoc>
@@ -98,7 +98,7 @@ namespace System.Windows.Forms {
             return (Font == null && foreColor.IsEmpty && backColor.IsEmpty);
         }
 
-        /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag.Copy"]/*' />
+
         /// <devdoc>
         ///     Copies the bag. Always returns a valid ODPB object
         /// </devdoc>
@@ -113,7 +113,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.ISerializable.GetObjectData"]/*' />
+
         /// <devdoc>
         /// ISerializable private implementation
         /// </devdoc>

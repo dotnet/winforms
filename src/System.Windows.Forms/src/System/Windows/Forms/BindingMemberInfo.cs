@@ -7,12 +7,12 @@ namespace System.Windows.Forms {
     using System;
     using System.Globalization;
     
-    /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo"]/*' />
+
     public struct BindingMemberInfo {
         private string dataList;
         private string dataField;
             
-        /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.BindingMemberInfo"]/*' />
+
         public BindingMemberInfo(string dataMember) {
             if (dataMember == null)
                 dataMember = "";
@@ -28,28 +28,28 @@ namespace System.Windows.Forms {
             }
         }
             
-        /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.BindingPath"]/*' />
+
         public string BindingPath {
             get {
                 return (dataList != null ? dataList : "");
             }
         }
             
-        /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.BindingField"]/*' />
+
         public string BindingField {
             get {
                 return (dataField != null ? dataField : "");
             }
         }
             
-        /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.BindingMember"]/*' />
+
         public string BindingMember {
             get {
                 return (BindingPath.Length > 0 ? BindingPath + "." + BindingField : BindingField);
             }
         }
             
-        /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.Equals"]/*' />
+
         public override bool Equals(object otherObject) {
             if (otherObject is BindingMemberInfo) {
                 BindingMemberInfo otherMember = (BindingMemberInfo) otherObject;
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
             return !a.Equals(b);
         }
         
-        /// <include file='doc\DataMemberInfo.uex' path='docs/doc[@for="BindingMemberInfo.GetHashCode"]/*' />
+
         public override int GetHashCode() {
             return base.GetHashCode();
         }

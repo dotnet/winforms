@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Reflection;
 
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection"]/*' />
+
     [Editor("System.Windows.Forms.Design.StyleCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
     public abstract class TableLayoutStyleCollection : IList {
         private IArrangedElement _owner;
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
             get { return null; }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection.IList.Add"]/*' />
+
         /// <internalonly/>
         int IList.Add(object style) {
             EnsureNotOwned((TableLayoutStyle)style);
@@ -41,14 +41,14 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection.Add2"]/*' />
+
         /// <internalonly/>
         public int Add(TableLayoutStyle style) {
             return ((IList)this).Add(style);
         }
 
        
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection.IList.Insert"]/*' />
+
         /// <internalonly/>
         void IList.Insert(int index, object style) {
             EnsureNotOwned((TableLayoutStyle)style);
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection.IList.this"]/*' />
+
         /// <internalonly/>
         object IList.this[int index] {
             get { return _innerList[index]; }
@@ -71,14 +71,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection.IList.this2"]/*' />
+
         /// <internalonly/>
         public TableLayoutStyle this[int index] {
             get { return (TableLayoutStyle)((IList)this)[index]; }
             set { ((IList)this)[index] = value; }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection.IList.Remove"]/*' />
+
         /// <internalonly/>
         void IList.Remove(object style) {
             ((TableLayoutStyle)style).Owner = null;
@@ -86,7 +86,7 @@ namespace System.Windows.Forms {
             PerformLayoutIfOwned();
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection.Clear"]/*' />
+
         public void Clear() {
             foreach(TableLayoutStyle style in _innerList) {
                 style.Owner = null;
@@ -95,7 +95,7 @@ namespace System.Windows.Forms {
             PerformLayoutIfOwned();
         }
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection.RemoveAt"]/*' />
+
         public void RemoveAt(int index) {
             TableLayoutStyle style = (TableLayoutStyle) _innerList[index];
             style.Owner = null;
@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
         bool IList.IsReadOnly { get {return _innerList.IsReadOnly;} }
         void ICollection.CopyTo(System.Array array, int startIndex) { _innerList.CopyTo(array, startIndex); }
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="StyleCollection.Count"]/*' />
+
         public int Count { get { return _innerList.Count; }}
         bool ICollection.IsSynchronized { get{ return _innerList.IsSynchronized; }}
         object ICollection.SyncRoot { get { return _innerList.SyncRoot; }}

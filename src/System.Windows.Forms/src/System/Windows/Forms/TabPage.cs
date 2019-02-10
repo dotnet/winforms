@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage"]/*' />
+
     /// <devdoc>
     ///     TabPage implements a single page of a tab control.  It is essentially
     ///     a Panel with TabItem properties.
@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
         private bool useVisualStyleBackColor = false;
 
         
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPage"]/*' />
+
         /// <devdoc>
         ///     Constructs an empty TabPage.
         /// </devdoc>
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.AutoSizeChanged"]/*' />
+
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
@@ -101,7 +101,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.BackColor"]/*' />
+
         /// <devdoc>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
@@ -144,7 +144,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.CreateControlsInstance"]/*' />
+
         /// <devdoc>
         ///     Constructs the new instance of the Controls collection objects. Subclasses
         ///     should not call base.CreateControlsInstance.  Our version creates a control
@@ -155,7 +155,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ImageIndexer"]/*' />
+
         /// <internalonly/>
         internal ImageList.Indexer ImageIndexer {
             get {
@@ -167,7 +167,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ImageIndex"]/*' />
+
         /// <devdoc>
         ///     Returns the imageIndex for the tabPage.  This should point to an image
         ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ImageIndex"]/*' />
+
         /// <devdoc>
         ///     Returns the imageIndex for the tabPage.  This should point to an image
         ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPage1"]/*' />
+
         /// <devdoc>
         ///     Constructs a TabPage with text for the tab.
         /// </devdoc>
@@ -237,7 +237,7 @@ namespace System.Windows.Forms {
             Text = text;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Anchor"]/*' />
+
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override AnchorStyles Anchor {
             get {
@@ -248,7 +248,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Dock"]/*' />
+
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override DockStyle Dock {
             get {
@@ -259,7 +259,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.DockChanged"]/*' />
+
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler DockChanged {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Enabled"]/*' />
+
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public bool Enabled {
             get {
@@ -282,7 +282,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.EnabledChanged"]/*' />
+
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
@@ -294,7 +294,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.UseVisualStyleBackColor"]/*' />
+
         /// <internalonly/>
         [
         DefaultValue (false),
@@ -311,7 +311,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Location"]/*' />
+
         /// <internalonly/>
         // Make the Location property non-browsable for the TabPages.
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
@@ -325,7 +325,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.LocationChanged"]/*' />
+
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged {
@@ -337,7 +337,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.MaximumSize"]/*' />
+
         [DefaultValue(typeof(Size), "0, 0")]
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override Size MaximumSize {
@@ -348,7 +348,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.MinimumSize"]/*' />
+
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override Size MinimumSize {
             get { return base.MinimumSize; }
@@ -358,13 +358,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.PreferredSize"]/*' />
+
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public new Size PreferredSize {
             get { return base.PreferredSize; }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabIndex"]/*' />
+
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public int TabIndex {
             get {
@@ -387,7 +387,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabIndexChanged"]/*' />
+
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged {
@@ -399,7 +399,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabStop"]/*' />
+
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public bool TabStop {
             get {
@@ -410,7 +410,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabStopChanged"]/*' />
+
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
@@ -422,7 +422,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Text"]/*' />
+
         [
         Localizable (true),
         Browsable (true),
@@ -438,7 +438,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TextChanged"]/*' />
+
         /// <internalonly/>
         [Browsable (true), EditorBrowsable (EditorBrowsableState.Always)]
         new public event EventHandler TextChanged {
@@ -450,7 +450,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ToolTipText"]/*' />
+
         /// <devdoc>
         ///     The toolTipText for the tab, that will appear when the mouse hovers
         ///     over the tab and the TabControl's showToolTips property is true.
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Visible"]/*' />
+
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public bool Visible {
             get {
@@ -488,7 +488,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.VisibleChanged"]/*' />
+
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler VisibleChanged {
@@ -512,7 +512,7 @@ namespace System.Windows.Forms {
             base.AssignParent (value);
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.GetTabPageOfComponent"]/*' />
+
         /// <devdoc>
         ///     Given a component, this retrieves the tab page that it's parented to, or
         /// null if it's not parented to any tab page.
@@ -531,7 +531,7 @@ namespace System.Windows.Forms {
             return (TabPage)c;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.GetTCITEM"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -613,7 +613,7 @@ namespace System.Windows.Forms {
             OnEnter (e);
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.OnEnter"]/*' />
+
         /// <devdoc>
         ///     Actually goes and fires the OnEnter event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -637,7 +637,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.OnLeave"]/*' />
+
         /// <devdoc>
         ///     Actually goes and fires the OnLeave event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -663,7 +663,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.OnPaintBackground"]/*' />
+
         protected override void OnPaintBackground (PaintEventArgs e) {
 
             // Utilize the TabRenderer new to Whidbey to draw the tab pages so that the
@@ -706,7 +706,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.SetBoundsCore"]/*' />
+
         /// <devdoc>
         ///     overrides main setting of our bounds so that we can control our size and that of our
         ///     TabPages...
@@ -735,7 +735,7 @@ namespace System.Windows.Forms {
             return Left != 0 || Top != 0;
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ToString"]/*' />
+
         /// <devdoc>
         ///     The text property is what is returned for the TabPages default printing.
         /// </devdoc>
@@ -743,7 +743,7 @@ namespace System.Windows.Forms {
             return "TabPage: {" + Text + "}";
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.UpdateParent"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -755,21 +755,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPageControlCollection"]/*' />
+
         /// <devdoc>
         ///      Our control collection will throw an exception if you try to add other tab pages.
         /// </devdoc>
         [ComVisible(false)]
         public class TabPageControlCollection : Control.ControlCollection {
             /// <internalonly/>
-            /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPageControlCollection.TabPageControlCollection"]/*' />
+
             /// <devdoc>
             ///      Creates a new TabPageControlCollection.
             /// </devdoc>
             public TabPageControlCollection (TabPage owner) : base(owner) {
             }
 
-            /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPageControlCollection.Add"]/*' />
+
             /// <devdoc>
             ///     Adds a child control to this control. The control becomes the last control
             ///     in the child control list. If the control is already a child of another

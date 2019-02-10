@@ -7,10 +7,10 @@ using System.Diagnostics.CodeAnalysis;
 
 
 namespace System.Windows.Forms {
-    /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon"]/*' />
+
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum MessageBoxIcon {
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None         = 0,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Hand"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Hand         = 0x00000010,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Question"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies
@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Question     = 0x00000020,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Exclamation"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Exclamation  = 0x00000030,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Asterisk"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Asterisk     = 0x00000040,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Stop"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the message box contains a hand icon. This field is
@@ -69,7 +69,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Stop         = Hand,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Error"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -79,7 +79,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Error        = Hand,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Warning"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the message box contains an exclamation icon. 
@@ -87,7 +87,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Warning      = Exclamation,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Information"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the

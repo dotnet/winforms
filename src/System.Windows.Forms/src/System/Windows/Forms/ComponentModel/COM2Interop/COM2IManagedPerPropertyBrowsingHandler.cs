@@ -29,7 +29,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2IManagedPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IManagedPerPropertyBrowsingHandler.OnGetAttributes"]/*' />
+
         /// <devdoc>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.

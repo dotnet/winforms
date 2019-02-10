@@ -25,7 +25,7 @@ namespace System.Experimental.Gdi
     using System.Drawing.Drawing2D;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics"]/*' />
+
     /// <devdoc>
     ///     WindowsGraphics is a library for rendering text and drawing using GDI; it was
     ///     created to address performance and compatibility issues found in GDI+ Graphics
@@ -57,7 +57,7 @@ namespace System.Experimental.Gdi
 
         // Construction/destruction API
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.WindowsGraphics"]/*' />
+
         public WindowsGraphics( DeviceContext dc )
         {
             Debug.Assert( dc != null, "null dc!");         
@@ -98,7 +98,7 @@ namespace System.Experimental.Gdi
             return wg;
         }
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.FromHwnd"]/*' />
+
         public static WindowsGraphics FromHwnd(IntPtr hWnd)
         { 
             DeviceContext dc = DeviceContext.FromHwnd( hWnd );
@@ -108,7 +108,7 @@ namespace System.Experimental.Gdi
             return wg;    
         }
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.FromHwnd"]/*' />
+
         [ResourceExposure(ResourceScope.Process)]
         [ResourceConsumption(ResourceScope.Process)]
         public static WindowsGraphics FromHdc(IntPtr hDc)
@@ -227,7 +227,7 @@ namespace System.Experimental.Gdi
             return wg;
         }
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.Finalize"]/*' />
+
         ~WindowsGraphics()
         { 
             Dispose(false);
@@ -242,7 +242,7 @@ namespace System.Experimental.Gdi
         }
 
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.Dispose"]/*' />
+
         // Okay to suppress.
         //"WindowsGraphics object does not own the Graphics object.  For instance in a control’s Paint event we pass the 
         //GraphicsContainer object to TextRenderer, which uses WindowsGraphics; 
@@ -294,7 +294,7 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.GetHdc"]/*' />
+
         [ResourceExposure(ResourceScope.Process)]
         [ResourceConsumption(ResourceScope.Process)]
         public IntPtr GetHdc()
@@ -302,7 +302,7 @@ namespace System.Experimental.Gdi
             return this.dc.Hdc;
         }
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.ReleaseHdc"]/*' />
+
         public void ReleaseHdc()
         {
             this.dc.Dispose();

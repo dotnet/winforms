@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase"]/*' />
+
     /// <devdoc>
     ///    <para>Implements the basic
     ///       functionality required by an up-down control.</para>
@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
         // hence this variable.
         private bool userEdit = false;
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.borderStyle"]/*' />
+
         /// <devdoc>
         ///     The current border for this edit control.
         /// </devdoc>
@@ -74,7 +74,7 @@ namespace System.Windows.Forms {
 
         internal int defaultButtonsWidth = DefaultButtonsWidth;
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownBase"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.UpDownBase'/>
@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
         ////////////////////////////////////////////////////////////////////////
 
         // AutoScroll is not relevant to an UpDownBase
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.AutoScroll"]/*' />
+
         /// <hideinheritance/>
         /// <internalonly/>
         /// <devdoc>
@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
         }
 
         // AutoScrollMargin is not relevant to an UpDownBase
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.AutoScrollMargin"]/*' />
+
         /// <internalonly/>
         /// <hideinheritance/>
         /// <devdoc>
@@ -144,7 +144,7 @@ namespace System.Windows.Forms {
         }
 
         // AutoScrollMinSize is not relevant to an UpDownBase
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.AutoScrollMinSize"]/*' />
+
         /// <internalonly/>
         /// <hideinheritance/>
         /// <devdoc>
@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.AutoSize"]/*' />
+
         /// <devdoc>
         ///    <para> Override to re-expose AutoSize.</para>
         /// </devdoc>
@@ -177,7 +177,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.AutoSizeChanged"]/*' />
+
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.BackColor"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.BackgroundImage"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -225,7 +225,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.BackgroundImageChanged"]/*' />
+
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -237,7 +237,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.BackgroundImageLayout"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -251,7 +251,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.BackgroundImageLayoutChanged"]/*' />
+
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.BorderStyle"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the border style for
@@ -295,7 +295,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.ChangingText"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the text
@@ -312,7 +312,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.ContextMenu"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -337,7 +337,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.CreateParams"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -366,7 +366,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.DefaultSize"]/*' />
+
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -378,7 +378,7 @@ namespace System.Windows.Forms {
         }
 
         // DockPadding is not relevant to UpDownBase
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.DockPadding"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -389,7 +389,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.Focused"]/*' />
+
         /// <devdoc>
         ///     Returns true if this control has focus.
         /// </devdoc>
@@ -404,7 +404,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.ForeColor"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -421,7 +421,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.InterceptArrowKeys"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether
@@ -445,7 +445,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MaximumSize"]/*' />
+
         public override Size MaximumSize {
             get { return base.MaximumSize; }
             set {
@@ -453,7 +453,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MinimumSize"]/*' />
+
         public override Size MinimumSize {
             get { return base.MinimumSize; }
             set {
@@ -461,7 +461,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseEnter"]/*' />
+
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseEnter {
@@ -473,7 +473,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseLeave"]/*' />
+
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseLeave {
@@ -485,7 +485,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseHover"]/*' />
+
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseHover {
@@ -497,7 +497,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseMove"]/*' />
+
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseMove {
@@ -509,7 +509,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.PreferredHeight"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets the height of
@@ -539,7 +539,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.ReadOnly"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets
@@ -566,7 +566,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.Text"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the text
@@ -602,7 +602,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.TextAlign"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -636,7 +636,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownAlign"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -679,7 +679,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UserEdit"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -704,7 +704,7 @@ namespace System.Windows.Forms {
         ////////////////////////////////////////////////////////////////////////
        
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.DownButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class, handles the pressing of the down button
@@ -737,7 +737,7 @@ namespace System.Windows.Forms {
             return baseName;
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.RescaleConstantsForDpi"]/*' />
+
         /// <devdoc>
         ///       When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
         ///       For UpDown controls, scale the width of the up/down buttons.
@@ -751,7 +751,7 @@ namespace System.Windows.Forms {
             upDownButtons.Width = defaultButtonsWidth;
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnChanged"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// <para>When overridden in a derived class, raises the Changed event.
@@ -760,7 +760,7 @@ namespace System.Windows.Forms {
         protected virtual void OnChanged(object source, EventArgs e) {
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnHandleCreated"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -774,7 +774,7 @@ namespace System.Windows.Forms {
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.UserPreferenceChanged);
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnHandleCreated"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -787,7 +787,7 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnPaint"]/*' />
+
         /// <devdoc>
         ///     Handles painting the buttons on the control.
         ///
@@ -853,7 +853,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnTextBoxKeyDown"]/*' />
+
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyDown'/>
         /// event.</para>
@@ -882,7 +882,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnTextBoxKeyPress"]/*' />
+
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyPress'/>
         /// event.</para>
@@ -892,7 +892,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnTextBoxLostFocus"]/*' />
+
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.LostFocus'/> event.</para>
         /// </devdoc>
@@ -902,7 +902,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnTextBoxResize"]/*' />
+
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Resize'/> event.</para>
         /// </devdoc>
@@ -911,7 +911,7 @@ namespace System.Windows.Forms {
             PositionControls();
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnTextBoxTextChanged"]/*' />
+
         /// <devdoc>
         /// <para>Raises the TextBoxTextChanged event.
         /// event.</para>
@@ -975,7 +975,7 @@ namespace System.Windows.Forms {
             base.OnMouseUp(mevent);
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnMouseWheel"]/*' />
+
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.OnMouseWheel'/> event.</para>
         /// </devdoc>
@@ -1033,7 +1033,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnLayout"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    Handle the layout event. The size of the upDownEdit control, and the
@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms {
             base.OnLayout(e);
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnFontChanged"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1062,7 +1062,7 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.OnUpDown"]/*' />
+
         /// <devdoc>
         ///
         ///     Handles UpDown events, which are generated by clicking on
@@ -1077,7 +1077,7 @@ namespace System.Windows.Forms {
                 DownButton();
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.PositionControls"]/*' />
+
         /// <devdoc>
         ///     Calculates the size and position of the upDownEdit control and
         ///     the updown buttons.
@@ -1138,7 +1138,7 @@ namespace System.Windows.Forms {
 
        }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.Select"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Selects a range of
@@ -1164,7 +1164,7 @@ namespace System.Windows.Forms {
             return e;
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class, handles the pressing of the up button on the up-down control.
@@ -1172,7 +1172,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public abstract void UpButton();
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpdateEditText"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       When overridden
@@ -1187,7 +1187,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.ValidateEditText"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       When overridden in a
@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms {
         protected virtual void ValidateEditText() {
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.WndProc"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -1231,7 +1231,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.SetToolTip"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    This Function sets the ToolTip for this composite control.
@@ -1290,7 +1290,7 @@ namespace System.Windows.Forms {
                 parent.OnMouseDown(parent.TranslateMouseEvent(this, e));
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownEdit.OnMouseUp"]/*' />
+
             /// <devdoc>
             ///
             ///     Handles detecting when the mouse button is released.
@@ -1331,7 +1331,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownEdit.OnKeyUp"]/*' />
+
             /// <devdoc>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyUp'/>
             /// event.</para>
@@ -1382,7 +1382,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons"]/*' />
+
         /// <devdoc>
         ///
         ///     Nested class UpDownButtons
@@ -1441,7 +1441,7 @@ namespace System.Windows.Forms {
             //
             /////////////////////////////////////////////////////////////////////
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.UpDown"]/*' />
+
             /// <devdoc>
             ///
             ///     Adds a handler for the updown button event.
@@ -1513,7 +1513,7 @@ namespace System.Windows.Forms {
                 Invalidate();
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.OnMouseDown"]/*' />
+
             /// <devdoc>
             ///
             ///     Handles detecting mouse hits on the buttons. This method
@@ -1545,7 +1545,7 @@ namespace System.Windows.Forms {
                 parent.OnMouseDown(parent.TranslateMouseEvent(this, e));
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.OnMouseMove"]/*' />
+
             /// <devdoc>
             ///
             ///     Handles detecting mouse movement.
@@ -1627,7 +1627,7 @@ namespace System.Windows.Forms {
                 parent.OnMouseMove(parent.TranslateMouseEvent(this, e));
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.OnMouseUp"]/*' />
+
             /// <devdoc>
             ///
             ///     Handles detecting when the mouse button is released.
@@ -1665,7 +1665,7 @@ namespace System.Windows.Forms {
                 parent.OnMouseUp(me);
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.OnMouseLeave"]/*' />
+
             /// <devdoc>
             ///
             ///     Handles detecting when the mouse leaves.
@@ -1678,7 +1678,7 @@ namespace System.Windows.Forms {
                 parent.OnMouseLeave(e);
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.OnPaint"]/*' />
+
             /// <devdoc>
             ///     Handles painting the buttons on the control.
             ///
@@ -1735,7 +1735,7 @@ namespace System.Windows.Forms {
                 base.OnPaint(e); // raise paint event, just in case this inner class goes public some day
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.OnUpDown"]/*' />
+
             /// <devdoc>
             ///     Occurs when the UpDown buttons are pressed and when the acceleration timer tick event is raised.
             /// </devdoc>
@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms {
                     upDownEventHandler(this, upevent);
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.StartTimer"]/*' />
+
             /// <devdoc>
             ///     Starts the timer for generating updown events
             /// </devdoc>
@@ -1762,7 +1762,7 @@ namespace System.Windows.Forms {
                 timer.Start();
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.StopTimer"]/*' />
+
             /// <devdoc>
             ///     Stops the timer for generating updown events
             /// </devdoc>
@@ -1775,7 +1775,7 @@ namespace System.Windows.Forms {
                 parent.OnStopTimer();
             }
 
-            /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.UpDownButtons.TimerHandler"]/*' />
+
             /// <devdoc>
             ///     Generates updown events when the timer calls this function.
             /// </devdoc>
@@ -1829,7 +1829,7 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject.Role"]/*' />
+
                 public override AccessibleRole Role {
                     get {
                         AccessibleRole role = Owner.AccessibleRole;
@@ -1860,7 +1860,7 @@ namespace System.Windows.Forms {
 
 
 
-                /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject.GetChild"]/*' />
+
                 /// <devdoc>
                 /// </devdoc>
                 public override AccessibleObject GetChild(int index) {
@@ -1880,7 +1880,7 @@ namespace System.Windows.Forms {
                     return null;
                 }
 
-                /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject.GetChildCount"]/*' />
+
                 /// <devdoc>
                 /// </devdoc>
                 public override int GetChildCount() {

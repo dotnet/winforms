@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo"]/*' />
+
         public sealed class HitTestInfo 
         {
             internal DataGridViewHitTestType type = DataGridViewHitTestType.None;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             internal int rowStart;
             internal int colStart;
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.Nowhere"]/*' />
+
             /// <devdoc>
             /// <para>Allows the <see cref='System.Windows.Forms.DataGridView.HitTestInfo'/> object to inform you the 
             ///    extent of the grid.</para>
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
                 this.adjacentRow = this.adjacentCol = -1;
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.ColumnIndex"]/*' />
+
             /// <devdoc>
             ///    <para>Gets the number of the clicked column.</para>
             /// </devdoc>
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.RowIndex"]/*' />
+
             /// <devdoc>
             ///    <para>Gets the
             ///       number of the clicked row.</para>
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.ColumnX"]/*' />
+
             /// <devdoc>
             ///    <para>Gets the left edge of the column.</para>
             /// </devdoc>
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.RowY"]/*' />
+
             /// <devdoc>
             ///    <para>Gets the top edge of the row.</para>
             /// </devdoc>
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.Type"]/*' />
+
             /// <devdoc>
             /// <para>Gets the part of the <see cref='System.Windows.Forms.DataGridView'/> control, other than the row or column, that was 
             ///    clicked.</para>
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.Equals"]/*' />
+
             /// <devdoc>
             ///    <para>Indicates whether two objects are identical.</para>
             /// </devdoc>
@@ -117,13 +117,13 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.GetHashCode"]/*' />
+
             /// <devdoc>
             /// <para>Gets the hash code for the <see cref='System.Windows.Forms.DataGridView.HitTestInfo'/> instance.</para>
             /// </devdoc>
             public override int GetHashCode() => HashCode.Combine(type, row, col);
 
-            /// <include file='doc\DataGridViewHitTestInfo.uex' path='docs/doc[@for="DataGridView.HitTestInfo.ToString"]/*' />
+
             /// <devdoc>
             ///    <para>Gets the type, column number and row number.</para>
             /// </devdoc>

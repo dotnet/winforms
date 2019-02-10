@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint"]/*' />
+
     /// <devdoc>
     ///      The ControlPaint class provides a series of methods that can be used to
     ///      paint common Windows UI pieces.  Many windows forms controls use this class to paint
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
 
         // a color appropriate for certain elements that are ControlDark in normal color schemes,
         // but for which ControlDark does not work in high contrast color schemes
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.ContrastControlDark"]/*' />
+
         public static Color ContrastControlDark {
             get {
                 return SystemInformation.HighContrast ? SystemColors.WindowFrame : SystemColors.ControlDark;
@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
             return address;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.CreateHBitmap16Bit"]/*' />
+
         /// <devdoc>
         ///     Creates a 16-bit color bitmap.
         ///     Sadly, this must be public for the designer to get at it.
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
             return hBitmap;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.CreateHBitmapTransparencyMask"]/*' />
+
         /// <devdoc>
         ///     Creates a Win32 HBITMAP out of the image.  You are responsible for
         ///     de-allocating the HBITMAP with Windows.DeleteObject(handle).
@@ -281,7 +281,7 @@ namespace System.Windows.Forms {
             return mask;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.CreateHBitmapColorMask"]/*' />
+
         /// <devdoc>
         ///     Creates a Win32 HBITMAP out of the image.  You are responsible for
         ///     de-allocating the HBITMAP with Windows.DeleteObject(handle).
@@ -365,7 +365,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.BorderStyleToDashStyle"]/*' />
+
         /// <devdoc>
         ///      Draws a border of the specified style and color to the given graphics.
         /// </devdoc>
@@ -380,7 +380,7 @@ namespace System.Windows.Forms {
             }
         } 
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.Dark"]/*' />
+
         /// <devdoc>
         ///      Creates a new color that is a object of the given color.
         /// </devdoc>
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
             return new HLSColor(baseColor).Darker(percOfDarkDark);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.Dark1"]/*' />
+
         /// <devdoc>
         ///      Creates a new color that is a object of the given color.
         /// </devdoc>
@@ -396,7 +396,7 @@ namespace System.Windows.Forms {
             return new HLSColor(baseColor).Darker(0.5f);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DarkDark"]/*' />
+
         /// <devdoc>
         ///      Creates a new color that is a object of the given color.
         /// </devdoc>
@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder"]/*' />
+
         public static void DrawBorder(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
             // Optimized version
             switch (style) {
@@ -542,7 +542,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder1"]/*' />
+
         /// <devdoc>
         ///      Draws a border of the specified style and color to the given graphics.
         /// </devdoc>
@@ -875,7 +875,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D"]/*' />
+
         /// <devdoc>
         ///     Draws a 3D style border at the given rectangle.  The default 3D style of
         ///     Etched is used.
@@ -885,7 +885,7 @@ namespace System.Windows.Forms {
                          Border3DSide.Left | Border3DSide.Top | Border3DSide.Right | Border3DSide.Bottom);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D1"]/*' />
+
         /// <devdoc>
         ///     Draws a 3D style border at the given rectangle.  You may specify the style
         ///     of the 3D appearance.
@@ -895,7 +895,7 @@ namespace System.Windows.Forms {
                          Border3DSide.Left | Border3DSide.Top | Border3DSide.Right | Border3DSide.Bottom);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D2"]/*' />
+
         /// <devdoc>
         ///     Draws a 3D style border at the given rectangle.  You may specify the style
         ///     of the 3D appearance, and which sides of the 3D rectangle you wish to
@@ -905,7 +905,7 @@ namespace System.Windows.Forms {
             DrawBorder3D(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, style, sides);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D3"]/*' />
+
         /// <devdoc>
         ///     Draws a 3D style border at the given rectangle.  The default 3D style of
         ///     ETCHED is used.
@@ -915,7 +915,7 @@ namespace System.Windows.Forms {
                          Border3DSide.Left | Border3DSide.Top | Border3DSide.Right | Border3DSide.Bottom);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D4"]/*' />
+
         /// <devdoc>
         ///     Draws a 3D style border at the given rectangle.  You may specify the style
         ///     of the 3D appearance.
@@ -925,7 +925,7 @@ namespace System.Windows.Forms {
                          Border3DSide.Left | Border3DSide.Top | Border3DSide.Right | Border3DSide.Bottom);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D5"]/*' />
+
         /// <devdoc>
         ///     Draws a 3D style border at the given rectangle.  You may specify the style
         ///     of the 3D appearance, and which sides of the 3D rectangle you wish to
@@ -1092,7 +1092,7 @@ namespace System.Windows.Forms {
             }
          }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawButton"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 button control in the given rectangle with the given state.
         /// </devdoc>
@@ -1100,7 +1100,7 @@ namespace System.Windows.Forms {
             DrawButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawButton1"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 button control in the given rectangle with the given state.
         /// </devdoc>
@@ -1109,7 +1109,7 @@ namespace System.Windows.Forms {
                              NativeMethods.DFCS_BUTTONPUSH | (int) state, Color.Empty, Color.Empty);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawCaptionButton"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 window caption button in the given rectangle with the given state.
         /// </devdoc>
@@ -1117,7 +1117,7 @@ namespace System.Windows.Forms {
             DrawCaptionButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, button, state);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawCaptionButton1"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 window caption button in the given rectangle with the given state.
         /// </devdoc>
@@ -1127,7 +1127,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawCheckBox"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 checkbox control in the given rectangle with the given state.
         /// </devdoc>
@@ -1135,7 +1135,7 @@ namespace System.Windows.Forms {
             DrawCheckBox(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawCheckBox1"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 checkbox control in the given rectangle with the given state.
         /// </devdoc>
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawComboButton"]/*' />
+
         /// <devdoc>
         ///     Draws the drop down button of a Win32 combo box in the given rectangle with the given state.
         /// </devdoc>
@@ -1158,7 +1158,7 @@ namespace System.Windows.Forms {
             DrawComboButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawComboButton1"]/*' />
+
         /// <devdoc>
         ///     Draws the drop down button of a Win32 combo box in the given rectangle with the given state.
         /// </devdoc>
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms {
                              NativeMethods.DFCS_SCROLLCOMBOBOX | (int) state, Color.Empty, Color.Empty);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawContainerGrabHandle"]/*' />
+
         /// <devdoc>
         ///     Draws a container control grab handle glyph inside the given rectangle.
         /// </devdoc>
@@ -1213,7 +1213,7 @@ namespace System.Windows.Forms {
             graphics.DrawLine(pen, midx - 2, bounds.Bottom - 4, midx+2, bounds.Bottom - 4);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawFlatCheckBox"]/*' />
+
         /// <devdoc>
         ///     Draws a flat checkbox.
         /// </devdoc>
@@ -1232,7 +1232,7 @@ namespace System.Windows.Forms {
             DrawFlatCheckBox(graphics, rectangle, foreground, background, state);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawFlatCheckBox1"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 checkbox control in the given rectangle with the given state.  This
         ///     draws a flat looking check box that is suitable for use in list boxes, etc. We
@@ -1292,7 +1292,7 @@ namespace System.Windows.Forms {
             graphics.DrawRectangle(pen, offsetRectangle.X, offsetRectangle.Y, offsetRectangle.Width - 1, offsetRectangle.Height - 1);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawFocusRectangle"]/*' />
+
         /// <devdoc>
         ///      Draws a focus rectangle.  A focus rectangle is a dotted rectangle that Windows
         ///      uses to indicate what control has the current keyboard focus.
@@ -1301,7 +1301,7 @@ namespace System.Windows.Forms {
             DrawFocusRectangle(graphics, rectangle, SystemColors.ControlText, SystemColors.Control);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawFocusRectangle1"]/*' />
+
         /// <devdoc>
         ///      Draws a focus rectangle.  A focus rectangle is a dotted rectangle that Windows
         ///      uses to indicate what control has the current keyboard focus.
@@ -1329,7 +1329,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawFrameControl"]/*' />
+
         /// <devdoc>
         ///     Draws a win32 frame control.
         /// </devdoc>
@@ -1374,7 +1374,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawGrabHandle"]/*' />
+
         /// <devdoc>
         ///      Draws a standard selection grab handle with the given dimensions.  Grab
         ///      handles are used by components to indicate to the user that they can
@@ -1428,7 +1428,7 @@ namespace System.Windows.Forms {
             graphics.DrawRectangle(pen, rectangle);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawGrid"]/*' />
+
         /// <devdoc>
         ///      Draws a grid of one pixel dots in the given rectangle.
         /// </devdoc>
@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms {
             attributes.Dispose();
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawImageDisabled"]/*' />
+
         /// <devdoc>
         ///     Draws an image and makes it look disabled.
         /// </devdoc>
@@ -1644,7 +1644,7 @@ namespace System.Windows.Forms {
 #endif
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawLockedFrame"]/*' />
+
         /// <devdoc>
         ///     Draws a locked selection frame around the given rectangle.
         /// </devdoc>
@@ -1676,7 +1676,7 @@ namespace System.Windows.Forms {
             graphics.DrawRectangle(pen, rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawMenuGlyph"]/*' />
+
         /// <devdoc>
         ///     Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
         /// </devdoc>
@@ -1684,7 +1684,7 @@ namespace System.Windows.Forms {
             DrawMenuGlyph(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, glyph);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawMenuGlyph0"]/*' />
+
         /// <devdoc>
         ///     Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
         ///     White color is replaced with backColor, Black is replaced with foreColor.
@@ -1694,7 +1694,7 @@ namespace System.Windows.Forms {
             DrawMenuGlyph(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, glyph, foreColor, backColor);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawMenuGlyph1"]/*' />
+
         /// <devdoc>
         ///     Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
         /// </devdoc>
@@ -1703,7 +1703,7 @@ namespace System.Windows.Forms {
                              (int) glyph, Color.Empty, Color.Empty);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawMenuGlyph2"]/*' />
+
         /// <devdoc>
         ///     Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
         ///     White color is replaced with backColor, Black is replaced with foreColor.
@@ -1713,7 +1713,7 @@ namespace System.Windows.Forms {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_MENU, (int)glyph, foreColor, backColor);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawMixedCheckBox"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 3-state checkbox control in the given rectangle with the given state.
         /// </devdoc>
@@ -1721,13 +1721,13 @@ namespace System.Windows.Forms {
             DrawMixedCheckBox(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawMixedCheckBox1"]/*' />
+
         public static void DrawMixedCheckBox(Graphics graphics, int x, int y, int width, int height, ButtonState state) {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_BUTTON,
                              NativeMethods.DFCS_BUTTON3STATE | (int) state, Color.Empty, Color.Empty);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawRadioButton"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 radio button in the given rectangle with the given state.
         /// </devdoc>
@@ -1735,7 +1735,7 @@ namespace System.Windows.Forms {
             DrawRadioButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawRadioButton1"]/*' />
+
         /// <devdoc>
         ///     Draws a Win32 radio button in the given rectangle with the given state.
         /// </devdoc>
@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms {
                              NativeMethods.DFCS_BUTTONRADIO | ((int)state), Color.Empty, Color.Empty);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawReversibleFrame"]/*' />
+
         /// <devdoc>
         ///      Draws a rectangular frame on the screen.  The operation of this can be
         ///      "reversed" by drawing the same rectangle again.  This is similar to
@@ -1796,7 +1796,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, dc));
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawReversibleLine"]/*' />
+
         /// <devdoc>
         ///      Draws a reversible line on the screen.  A reversible line can
         ///      be erased by just drawing over it again.
@@ -1824,7 +1824,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, dc));
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawScrollButton"]/*' />
+
         /// <devdoc>
         ///     Draws a button for a Win32 scroll bar in the given rectangle with the given state.
         /// </devdoc>
@@ -1832,7 +1832,7 @@ namespace System.Windows.Forms {
             DrawScrollButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, button, state);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawScrollButton1"]/*' />
+
         /// <devdoc>
         ///     Draws a button for a Win32 scroll bar in the given rectangle with the given state.
         /// </devdoc>
@@ -1841,7 +1841,7 @@ namespace System.Windows.Forms {
                              (int)button | (int)state, Color.Empty, Color.Empty);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawSelectionFrame"]/*' />
+
         /// <devdoc>
         ///      Draws a standard selection frame.  A selection frame is a frame that is
         ///      drawn around a selected component at design time.
@@ -1865,7 +1865,7 @@ namespace System.Windows.Forms {
             graphics.Clip = clip;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawSizeGrip"]/*' />
+
         /// <devdoc>
         ///      Draws a size grip at the given location.  The color of the size grip is based
         ///      on the given background color.
@@ -1874,7 +1874,7 @@ namespace System.Windows.Forms {
             DrawSizeGrip(graphics, backColor, bounds.X, bounds.Y, bounds.Width, bounds.Height);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawSizeGrip1"]/*' />
+
         /// <devdoc>
         ///      Draws a size grip at the given location.  The color of the size grip is based
         ///      on the given background color.
@@ -1903,7 +1903,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawStringDisabled"]/*' />
+
         /// <devdoc>
         ///     Draws a string in the style appropriate for disabled items.
         /// </devdoc>
@@ -1958,7 +1958,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawVisualStyleBorder"]/*' />
+
         /// <devdoc>
         ///     Draws a string in the style appropriate for disabled items.
         /// </devdoc>
@@ -1971,7 +1971,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.FillReversibleRectangle"]/*' />
+
         /// <devdoc>
         ///      Draws a filled rectangle on the screen.  The operation of this can be
         ///      "reversed" by drawing the same rectangle again.  This is similar to
@@ -2089,7 +2089,7 @@ namespace System.Windows.Forms {
             return changed;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.GetColorRop"]/*' />
+
         /// <devdoc>
         ///     This makes a choice from a set of raster op codes, based on the color given.  If the
         ///     color is considered to be "dark", the raster op provided by dark will be returned.
@@ -2101,7 +2101,7 @@ namespace System.Windows.Forms {
             return lightROP;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.GetActiveBrush"]/*' />
+
         /// <devdoc>
         ///      Retrieves the brush used to draw active objects.
         /// </devdoc>
@@ -2154,7 +2154,7 @@ namespace System.Windows.Forms {
             return frameBrushActive;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.GetFocusPen"]/*' />
+
         /// <devdoc>
         ///      Retrieves the pen used to draw a focus rectangle around a control.  The focus
         ///      rectangle is typically drawn when the control has keyboard focus.
@@ -2222,7 +2222,7 @@ namespace System.Windows.Forms {
             return odds ? focusPen : focusPenInvert;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.GetSelectedBrush"]/*' />
+
         /// <devdoc>
         ///      Retrieves the brush used to draw selected objects.
         /// </devdoc>
@@ -2276,7 +2276,7 @@ namespace System.Windows.Forms {
             return frameBrushSelected;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.InfinityToOne"]/*' />
+
         /// <devdoc>
         ///      Converts an infinite value to "1".
         /// </devdoc>
@@ -2287,7 +2287,7 @@ namespace System.Windows.Forms {
             return value;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.InvertColor"]/*' />
+
         /// <devdoc>
         ///      Inverts the given color.
         /// </devdoc>
@@ -2295,7 +2295,7 @@ namespace System.Windows.Forms {
             return Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.Light"]/*' />
+
         /// <devdoc>
         ///      Creates a new color that is a object of the given color.
         /// </devdoc>
@@ -2303,7 +2303,7 @@ namespace System.Windows.Forms {
             return new HLSColor(baseColor).Lighter(percOfLightLight);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.Light1"]/*' />
+
         /// <devdoc>
         ///      Creates a new color that is a object of the given color.
         /// </devdoc>
@@ -2311,7 +2311,7 @@ namespace System.Windows.Forms {
             return new HLSColor(baseColor).Lighter(0.5f);
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.LightLight"]/*' />
+
         /// <devdoc>
         ///      Creates a new color that is a object of the given color.
         /// </devdoc>
@@ -2764,7 +2764,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor"]/*' />
+
         /// <devdoc>
         ///     Logic copied from Win2K sources to copy the lightening and
         ///     darkening of colors.
@@ -2785,7 +2785,7 @@ namespace System.Windows.Forms {
 
             private bool isSystemColors_Control;
 
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.HLSColor"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             public HLSColor(Color color) {
@@ -2836,7 +2836,7 @@ namespace System.Windows.Forms {
             }
 
             /* Unused
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.Hue"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             public int Hue {
@@ -2846,7 +2846,7 @@ namespace System.Windows.Forms {
             }
             */
 
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.Luminosity"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             public int Luminosity {
@@ -2856,7 +2856,7 @@ namespace System.Windows.Forms {
             }
 
             /* Unused
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.Saturation"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             public int Saturation {
@@ -2866,7 +2866,7 @@ namespace System.Windows.Forms {
             }
             */
 
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.Darker"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             public Color Darker(float percDarker) {
@@ -2933,7 +2933,7 @@ namespace System.Windows.Forms {
                 return hue << 6 | saturation << 2 | luminosity;
             }
     
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.Lighter"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             public Color Lighter(float percLighter) {
@@ -2978,14 +2978,14 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.NewLuma"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             private int NewLuma(int n, bool scale) {
                 return NewLuma(luminosity, n, scale);
             }
 
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.NewLuma1"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             private int NewLuma(int luminosity, int n, bool scale) {
@@ -3012,7 +3012,7 @@ namespace System.Windows.Forms {
                 return newLum;
             }
 
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.ColorFromHLS"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             private Color ColorFromHLS(int hue, int luminosity, int saturation) {
@@ -3041,7 +3041,7 @@ namespace System.Windows.Forms {
                 return Color.FromArgb(r,g,b);
             }
 
-            /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor.HueToRGB"]/*' />
+
             /// <devdoc>
             /// </devdoc>
             private int HueToRGB(int n1, int n2, int hue) {

@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Drawing.Design;
     using System.Globalization;
     
-    /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn"]/*' />
+
     [
         Designer("System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner, " + AssemblyRef.SystemDesign),
         ToolboxBitmapAttribute(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn.bmp")
@@ -21,13 +21,13 @@ namespace System.Windows.Forms
     {
         private static Type columnType = typeof(DataGridViewComboBoxColumn);
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.DataGridViewComboBoxColumn"]/*' />
+
         public DataGridViewComboBoxColumn() : base(new DataGridViewComboBoxCell())
         {
             ((DataGridViewComboBoxCell)base.CellTemplate).TemplateComboBoxColumn = this;
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.AutoComplete"]/*' />
+
         [
             Browsable(true),
             DefaultValue(true),
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.CellTemplate"]/*' />
+
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.DataSource"]/*' />
+
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatData)),
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.DisplayMember"]/*' />
+
         [
             DefaultValue(""),
             SRCategory(nameof(SR.CatData)),
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.DisplayStyle"]/*' />
+
         [
             DefaultValue(DataGridViewComboBoxDisplayStyle.DropDownButton),
             SRCategory(nameof(SR.CatAppearance)),
@@ -229,7 +229,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly"]/*' />
+
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatAppearance)),
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.DropDownWidth"]/*' />
+
         [
             DefaultValue(1),
             SRCategory(nameof(SR.CatBehavior)),
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.FlatStyle"]/*' />
+
         [
             DefaultValue(FlatStyle.Standard),
             SRCategory(nameof(SR.CatAppearance)),
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.Items"]/*' />
+
         [
             Editor("System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -369,7 +369,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.ValueMember"]/*' />
+
         [
             DefaultValue(""),
             SRCategory(nameof(SR.CatData)),
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.MaxDropDownItems"]/*' />
+
         [
             DefaultValue(DataGridViewComboBoxCell.DATAGRIDVIEWCOMBOBOXCELL_defaultMaxDropDownItems),
             SRCategory(nameof(SR.CatBehavior)),
@@ -451,7 +451,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.Sorted"]/*' />
+
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatBehavior)),
@@ -490,7 +490,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.Clone"]/*' />
+
         public override object Clone()
         {
             DataGridViewComboBoxColumn dataGridViewColumn;
@@ -537,7 +537,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxColumn.uex' path='docs/doc[@for="DataGridViewComboBoxColumn.ToString"]/*' />
+
         /// <devdoc>
         ///    <para></para>
         /// </devdoc>

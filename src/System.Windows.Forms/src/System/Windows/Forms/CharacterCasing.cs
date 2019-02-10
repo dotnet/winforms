@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\CharacterCasing.uex' path='docs/doc[@for="CharacterCasing"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the case of characters in a Textbox control.
@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum CharacterCasing {
 
-        /// <include file='doc\CharacterCasing.uex' path='docs/doc[@for="CharacterCasing.Normal"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The case of
@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Normal = 0,
 
-        /// <include file='doc\CharacterCasing.uex' path='docs/doc[@for="CharacterCasing.Upper"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Converts all characters to uppercase.
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Upper = 1,
 
-        /// <include file='doc\CharacterCasing.uex' path='docs/doc[@for="CharacterCasing.Lower"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Converts all characters to lowercase.

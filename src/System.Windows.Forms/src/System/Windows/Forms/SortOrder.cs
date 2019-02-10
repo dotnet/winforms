@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\SortOrder.uex' path='docs/doc[@for="SortOrder"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies how items in
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum SortOrder {
 
-        /// <include file='doc\SortOrder.uex' path='docs/doc[@for="SortOrder.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The items are
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\SortOrder.uex' path='docs/doc[@for="SortOrder.Ascending"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The items
@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Ascending = 1,
 
-        /// <include file='doc\SortOrder.uex' path='docs/doc[@for="SortOrder.Descending"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The items are

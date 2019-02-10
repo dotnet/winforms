@@ -8,7 +8,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\ArrangeStartingPosition.uex' path='docs/doc[@for="ArrangeStartingPosition"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the starting position that the system uses to
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     ]
     public enum ArrangeStartingPosition {
 
-        /// <include file='doc\ArrangeStartingPosition.uex' path='docs/doc[@for="ArrangeStartingPosition.BottomLeft"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Starts at the lower-left corner of the screen, which is the default position.
@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         BottomLeft = NativeMethods.ARW_BOTTOMLEFT,
 
-        /// <include file='doc\ArrangeStartingPosition.uex' path='docs/doc[@for="ArrangeStartingPosition.BottomRight"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Starts at the lower-right corner of the screen.
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         BottomRight = NativeMethods.ARW_BOTTOMRIGHT,
 
-        /// <include file='doc\ArrangeStartingPosition.uex' path='docs/doc[@for="ArrangeStartingPosition.Hide"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Hides minimized windows by moving them off the visible area of the
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Hide = NativeMethods.ARW_HIDE,
 
-        /// <include file='doc\ArrangeStartingPosition.uex' path='docs/doc[@for="ArrangeStartingPosition.TopLeft"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Starts at the upper-left corner of the screen.
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
 
         TopLeft = NativeMethods.ARW_TOPLEFT,
 
-        /// <include file='doc\ArrangeStartingPosition.uex' path='docs/doc[@for="ArrangeStartingPosition.TopRight"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Starts at the upper-right corner of the screen.

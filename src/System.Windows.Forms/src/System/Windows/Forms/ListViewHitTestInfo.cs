@@ -8,7 +8,7 @@ namespace System.Windows.Forms {
     using System;
     
     
-    /// <include file='doc\ListViewHitTestInfo.uex' path='docs/doc[@for="ListViewHitTestInfo"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the return value for HITTEST on ListView.
@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
         private ListViewItem item;
         private ListViewItem.ListViewSubItem subItem;
 
-        /// <include file='doc\ListViewHitTestInfo.uex' path='docs/doc[@for="ListViewHitTestInfo.ListViewHitTestInfo"]/*' />
+
         /// <devdoc>
         ///     Creates a ListViewHitTestInfo instance.
         /// </devdoc>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\ListViewHitTestInfo.uex' path='docs/doc[@for="ListViewHitTestInfo.Location"]/*' />
+
         /// <devdoc>
         ///     This gives the exact location returned by hit test on listview.
         /// </devdoc>
@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListViewHitTestInfo.uex' path='docs/doc[@for="ListViewHitTestInfo.Item"]/*' />
+
         /// <devdoc>
         ///     This gives the ListViewItem returned by hit test on listview.
         /// </devdoc>
@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListViewHitTestInfo.uex' path='docs/doc[@for="ListViewHitTestInfo.SubItem"]/*' />
+
         /// <devdoc>
         ///     This gives the ListViewSubItem returned by hit test on listview.
         /// </devdoc>

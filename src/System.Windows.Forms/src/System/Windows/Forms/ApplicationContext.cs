@@ -7,7 +7,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.ComponentModel;
 
-    /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext"]/*' />
+
     /// <devdoc>
     ///    ApplicationContext provides contextual information about an application
     ///    thread. Specifically this allows an application author to redifine what
@@ -19,14 +19,14 @@ namespace System.Windows.Forms {
         Form mainForm;
         object userData;
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.ApplicationContext"]/*' />
+
         /// <devdoc>
         ///     Creates a new ApplicationContext with no mainForm.
         /// </devdoc>
         public ApplicationContext() : this(null) {
         }
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.ApplicationContext1"]/*' />
+
         /// <devdoc>
         ///     Creates a new ApplicationContext with the specified mainForm.
         ///     If OnMainFormClosed is not overriden, the thread's message
@@ -36,12 +36,12 @@ namespace System.Windows.Forms {
             this.MainForm = mainForm;
         }
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for=".Finalize"]/*' />
+
         ~ApplicationContext() {
             Dispose(false);
         }
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.MainForm"]/*' />
+
         /// <devdoc>
         ///     Determines the mainForm for this context. This may be changed
         ///     at anytime.
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.Tag"]/*' />
+
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -84,14 +84,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.ThreadExit"]/*' />
+
         /// <devdoc>
         ///     Is raised when the thread's message loop should be terminated.
         ///     This is raised by calling ExitThread.
         /// </devdoc>
         public event EventHandler ThreadExit;
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.Dispose"]/*' />
+
         /// <devdoc>
         ///     Disposes the context. This should dispose the mainForm. This is
         ///     called immediately after the thread's message loop is terminated.
@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.Dispose2"]/*' />
+
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
                 if (mainForm != null) {
@@ -114,7 +114,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.ExitThread"]/*' />
+
         /// <devdoc>
         ///     Causes the thread's message loop to be terminated. This
         ///     will call ExitThreadCore.
@@ -123,7 +123,7 @@ namespace System.Windows.Forms {
             ExitThreadCore();
         }
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.ExitThreadCore"]/*' />
+
         /// <devdoc>
         ///     Causes the thread's message loop to be terminated.
         /// </devdoc>
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ApplicationContext.uex' path='docs/doc[@for="ApplicationContext.OnMainFormClosed"]/*' />
+
         /// <devdoc>
         ///     Called when the mainForm is closed. The default implementation
         ///     of this will call ExitThreadCore.

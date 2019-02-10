@@ -15,25 +15,25 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Collections;
     using Microsoft.Win32;
 
-    /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab"]/*' />
+
     public class PropertiesTab : PropertyTab {
 
 
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.TabName"]/*' />
+
         public override string TabName {
             get {
                 return SR.PBRSToolTipProperties;
             }
         }
         
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.HelpKeyword"]/*' />
+
         public override string HelpKeyword {
             get {
                 return "vs.properties"; // do not localize.
             }
         }
 
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.GetDefaultProperty"]/*' />
+
         public override PropertyDescriptor GetDefaultProperty(object obj) {
                PropertyDescriptor def = base.GetDefaultProperty(obj);
 
@@ -51,12 +51,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
                return def;
         }
 
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.GetProperties"]/*' />
+
         public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) {
                return GetProperties(null, component, attributes);
         }
         
-        /// <include file='doc\PropertiesTab.uex' path='docs/doc[@for="PropertiesTab.GetProperties1"]/*' />
+
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes) {
             if (attributes == null) {
                 attributes = new Attribute[]{BrowsableAttribute.Yes};

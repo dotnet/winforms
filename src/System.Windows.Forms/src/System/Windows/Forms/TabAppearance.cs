@@ -13,28 +13,28 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TabAppearance.uex' path='docs/doc[@for="TabAppearance"]/*' />
+
     /// <devdoc>
     ///     The various tab controls will let you configure their appearance.  This
     ///     enumeration contains the possible values.
     /// </devdoc>
     public enum TabAppearance {
 
-        /// <include file='doc\TabAppearance.uex' path='docs/doc[@for="TabAppearance.Normal"]/*' />
+
         /// <devdoc>
         ///     Indicates that the tabs look like normal tabs typically seen in Property
         ///     page type situations.
         /// </devdoc>
         Normal = 0,
 
-        /// <include file='doc\TabAppearance.uex' path='docs/doc[@for="TabAppearance.Buttons"]/*' />
+
         /// <devdoc>
         ///     Indicates that the tabs look like buttons as seen on the taskbar found
         ///     in Windows 95 or Windows NT.
         /// </devdoc>
         Buttons = 1,
 
-        /// <include file='doc\TabAppearance.uex' path='docs/doc[@for="TabAppearance.FlatButtons"]/*' />
+
         /// <devdoc>
         ///     Indicates that buttons should be draw flat instead of like regular
         ///     windows pushbuttons.

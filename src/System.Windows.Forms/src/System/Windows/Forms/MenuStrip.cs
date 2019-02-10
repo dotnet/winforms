@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip"]/*' />
+
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
      SRDescription(nameof(SR.DescriptionMenuStrip))
@@ -26,7 +26,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.MenuStrip"]/*' />
+
         public MenuStrip() {
             this.CanOverflow = false;
             this.GripStyle = ToolStripGripStyle.Hidden;
@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.DefaultSize"]/*' />
+
         protected override Size DefaultSize {
             get {
                 return new Size(200, 24);
@@ -163,7 +163,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.CreateAccessibilityInstance"]/*' />
+
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new MenuStripAccessibleObject(this);
         }
@@ -245,7 +245,7 @@ namespace System.Windows.Forms {
 
 
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.WndProc"]/*' />
+
         /// <devdoc>
         /// Summary of WndProc.
         /// </devdoc>

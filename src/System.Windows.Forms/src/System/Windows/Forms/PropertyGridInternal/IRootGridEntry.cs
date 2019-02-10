@@ -17,17 +17,17 @@ namespace System.Windows.Forms.PropertyGridInternal {
         using System.Drawing;
         using Microsoft.Win32;
 
-        /// <include file='doc\IRootGridEntry.uex' path='docs/doc[@for="IRootGridEntry"]/*' />
+
         public interface IRootGridEntry{
-                /// <include file='doc\IRootGridEntry.uex' path='docs/doc[@for="IRootGridEntry.BrowsableAttributes"]/*' />
+
                 AttributeCollection BrowsableAttributes {
                      get;
                      set;
                 }
-                /// <include file='doc\IRootGridEntry.uex' path='docs/doc[@for="IRootGridEntry.ResetBrowsableAttributes"]/*' />
+
 
                 void ResetBrowsableAttributes();
-                /// <include file='doc\IRootGridEntry.uex' path='docs/doc[@for="IRootGridEntry.ShowCategories"]/*' />
+
                 void ShowCategories(bool showCategories);
         }
 }

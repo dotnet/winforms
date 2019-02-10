@@ -23,7 +23,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using Message = System.Windows.Forms.Message;
     using System.Drawing.Drawing2D;    
 
-    /// <include file='doc\GridErrorDlg.uex' path='docs/doc[@for="GridErrorDlg"]/*' />
+
     /// <devdoc>
     ///     Implements a dialog that is displayed when an unhandled exception occurs in
     ///     a thread. This dialog's width is defined by the summary message
@@ -102,7 +102,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             detailsBtn.Image = expandImage;
         }
 
-        /// <include file='doc\GridErrorDlg.uex' path='docs/doc[@for="GridErrorDlg.DetailsClick"]/*' />
+
         /// <devdoc>
         ///     Called when the details button is clicked.
         /// </devdoc>

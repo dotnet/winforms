@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System;        
     using System.Globalization;
 
-    /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer"]/*' />
+
     /// <devdoc>
     ///    <para>Implements a Windows-based timer that raises an event at user-defined intervals. This timer is optimized for 
     ///       use in Win Forms
@@ -27,22 +27,22 @@ namespace System.Windows.Forms {
     ]
     public class Timer : Component {
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.interval"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         private int interval;
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.enabled"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         private bool enabled;
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.onTimer"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         internal EventHandler onTimer;
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.timerProcRoot"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         private GCHandle timerRoot;        
@@ -52,14 +52,14 @@ namespace System.Windows.Forms {
         //
         private TimerNativeWindow timerWindow;
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.userData"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         private object userData;
 
         private object syncObj = new object();
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Timer"]/*' />
+
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Timer'/>
         /// class.</para>
@@ -69,7 +69,7 @@ namespace System.Windows.Forms {
             interval = 100;
         }
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Timer1"]/*' />
+
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Timer'/> class with the specified container.</para>
         /// </devdoc>
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
             container.Add(this);
         }
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Tag"]/*' />
+
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Tick"]/*' />
+
         /// <devdoc>
         ///    <para>Occurs when the specified timer
         ///       interval has elapsed and the timer is enabled.</para>
@@ -114,7 +114,7 @@ namespace System.Windows.Forms {
             }
         }        
 
-       /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Dispose"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Disposes of the resources (other than memory) used by the timer.
@@ -132,7 +132,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Enabled"]/*' />
+
         /// <devdoc>
         ///    <para> Indicates whether the timer is
         ///       running.</para>
@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Interval"]/*' />
+
         /// <devdoc>
         ///    <para> 
         ///       Indicates the time, in milliseconds, between timer ticks.</para>
@@ -228,7 +228,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.OnTick"]/*' />
+
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Timer.Tick'/>
         /// event.</para>
@@ -237,7 +237,7 @@ namespace System.Windows.Forms {
             if (onTimer != null) onTimer(this, e);
         }
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Start"]/*' />
+
         /// <devdoc>
         ///    <para>Starts the
         ///       timer.</para>
@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
             Enabled = true;
         }
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.Stop"]/*' />
+
         /// <devdoc>
         ///    <para>Stops the
         ///       timer.</para>
@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
             Enabled = false;
         }
 
-        /// <include file='doc\Timer.uex' path='docs/doc[@for="Timer.ToString"]/*' />
+
         /// <devdoc>
         ///     returns us as a string.
         /// </devdoc>

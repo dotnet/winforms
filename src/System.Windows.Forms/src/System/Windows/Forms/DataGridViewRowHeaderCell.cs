@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell"]/*' />
+
     /// <devdoc>
     ///    <para></para>
     /// </devdoc>
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight = 2;
         private const byte DATAGRIDVIEWROWHEADERCELL_verticalTextMargin = 1;
  
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.DataGridViewRowHeaderCell"]/*' />
+
         public DataGridViewRowHeaderCell()
         {
         }
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.Clone"]/*' />
+
         public override object Clone()
         {
             DataGridViewRowHeaderCell dataGridViewCell;
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
             return dataGridViewCell;
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.CreateAccessibilityInstance"]/*' />
+
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewRowHeaderCellAccessibleObject(this);
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
             return b;
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.GetClipboardContent"]/*' />
+
         protected override object GetClipboardContent(int rowIndex,
                                                       bool firstCell,
                                                       bool lastCell,
@@ -297,7 +297,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.GetContentBounds"]/*' />
+
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -357,7 +357,7 @@ namespace System.Windows.Forms
             return contentBounds;
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.GetErrorIconBounds"]/*' />
+
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -399,7 +399,7 @@ namespace System.Windows.Forms
             return errorBounds;
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.GetErrorText"]/*' />
+
         protected internal override string GetErrorText(int rowIndex)
         {
             if (this.OwningRow == null)
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.GetInheritedContextMenuStrip"]/*' />
+
         public override ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
         {
             if (this.DataGridView != null && (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count))
@@ -436,7 +436,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.GetInheritedStyle"]/*' />
+
         public override DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors)
         {
             Debug.Assert(this.DataGridView != null);
@@ -638,7 +638,7 @@ namespace System.Windows.Forms
             return rightToLeft ? DataGridViewRowHeaderCell.PencilRTLBitmap : DataGridViewRowHeaderCell.PencilLTRBitmap;
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.GetPreferredSize"]/*' />
+
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
             if (this.DataGridView == null)
@@ -691,7 +691,7 @@ namespace System.Windows.Forms
                                                                    flags);
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.GetValue"]/*' />
+
         protected override object GetValue(int rowIndex)
         {
             // We allow multiple rows to share the same row header value. The row header cell's cloning does this.
@@ -703,7 +703,7 @@ namespace System.Windows.Forms
             return this.Properties.GetObject(PropCellValue);
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.Paint"]/*' />
+
         protected override void Paint(Graphics graphics,
             Rectangle clipBounds,
             Rectangle cellBounds,
@@ -1141,7 +1141,7 @@ namespace System.Windows.Forms
             attr.Dispose();
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.SetValue"]/*' />
+
         protected override bool SetValue(int rowIndex, object value)
         {
             object originalValue = GetValue(rowIndex);
@@ -1156,7 +1156,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCell.ToString"]/*' />
+
         /// <devdoc>
         ///    <para></para>
         /// </devdoc>
@@ -1193,15 +1193,15 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject"]/*' />
+
         protected class DataGridViewRowHeaderCellAccessibleObject : DataGridViewCellAccessibleObject
         {
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.DataGridViewRowHeaderCellAccessibleObject"]/*' />
+
             public DataGridViewRowHeaderCellAccessibleObject(DataGridViewRowHeaderCell owner) : base(owner)
             {
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Bounds"]/*' />
+
             public override Rectangle Bounds
             {
                 get
@@ -1218,7 +1218,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.DefaultAction"]/*' />
+
             public override string DefaultAction
             {
                 get
@@ -1235,7 +1235,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Name"]/*' />
+
             public override string Name
             {
                 get
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Parent"]/*' />
+
             public override AccessibleObject Parent
             {
                 get
@@ -1275,7 +1275,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Role"]/*' />
+
             public override AccessibleRole Role
             {
                 get
@@ -1284,7 +1284,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.State"]/*' />
+
             public override AccessibleStates State
             {
                 get
@@ -1311,7 +1311,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Value"]/*' />
+
             public override string Value
             {
                 get
@@ -1320,7 +1320,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.DoDefaultAction"]/*' />
+
             public override void DoDefaultAction()
             {
                 if ((this.Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
@@ -1331,7 +1331,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Navigate"]/*' />
+
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 Debug.Assert(this.Owner.DataGridView.RowHeadersVisible, "if the rows are not visible how did you get the row headers acc obj?");
@@ -1416,7 +1416,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRowHeaderCell.uex' path='docs/doc[@for="DataGridViewRowHeaderCellAccessibleObject.Select"]/*' />
+
             public override void Select(AccessibleSelection flags)
             {
                 if (this.Owner == null)

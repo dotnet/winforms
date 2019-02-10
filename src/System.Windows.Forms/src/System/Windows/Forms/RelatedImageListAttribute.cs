@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\RelatedImageListAttribute.uex' path='docs/doc[@for="RelatedImageListAttribute"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies which imagelist a property relates to. For example ImageListIndex must relate to a

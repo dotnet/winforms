@@ -12,7 +12,7 @@ using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
 
-    /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       This is a rendering class for the CheckBox control. It works downlevel too (obviously
@@ -31,7 +31,7 @@ using Microsoft.Win32;
        private CheckBoxRenderer() {
        }
 
-       /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.RenderMatchingApplicationState"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
@@ -54,7 +54,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.IsBackgroundPartiallyTransparent"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns true if the background corresponding to the given state is partially transparent, else false.
@@ -71,7 +71,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawParentBackground"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
@@ -89,7 +89,7 @@ using Microsoft.Win32;
            }
        }
 
-        /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a CheckBox control.
@@ -118,7 +118,7 @@ using Microsoft.Win32;
            
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox2"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a CheckBox control.
@@ -130,7 +130,7 @@ using Microsoft.Win32;
                       focused, state);
        }
 
-        /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox3"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a CheckBox control.
@@ -168,7 +168,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox4"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a CheckBox control.
@@ -180,7 +180,7 @@ using Microsoft.Win32;
                       image, imageBounds, focused, state);
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox5"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a CheckBox control.
@@ -217,7 +217,7 @@ using Microsoft.Win32;
            }
        }
 
-        /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.GetGlyphSize"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns the size of the CheckBox glyph.

@@ -11,7 +11,7 @@ using System.Windows.Forms.Internal;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <include file='doc\RadioButtonRenderer.uex' path='docs/doc[@for="RadioButtonRenderer"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       This is a rendering class for the RadioButton control. It works downlevel too (obviously
@@ -30,7 +30,7 @@ using Microsoft.Win32;
        private RadioButtonRenderer() {
        }
 
-       /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.RenderMatchingApplicationState"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
@@ -53,7 +53,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\RadioButtonRenderer.uex' path='docs/doc[@for="RadioButtonRenderer.IsBackgroundPartiallyTransparent"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns true if the background corresponding to the given state is partially transparent, else false.
@@ -70,7 +70,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\RadioButtonRenderer.uex' path='docs/doc[@for="RadioButtonRenderer.DrawParentBackground"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
@@ -88,7 +88,7 @@ using Microsoft.Win32;
            }
        }
 
-        /// <include file='doc\RadioButtonRenderer.uex' path='docs/doc[@for="RadioButtonRenderer.DrawRadioButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a RadioButton control.
@@ -111,7 +111,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\RadioButtonRenderer.uex' path='docs/doc[@for="RadioButtonRenderer.DrawRadioButton1"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a RadioButton control.
@@ -123,7 +123,7 @@ using Microsoft.Win32;
                       focused, state);
        }
 
-        /// <include file='doc\RadioButtonRenderer.uex' path='docs/doc[@for="RadioButtonRenderer.DrawRadioButton2"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a RadioButton control.
@@ -155,7 +155,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\RadioButtonRenderer.uex' path='docs/doc[@for="RadioButtonRenderer.DrawRadioButton3"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a RadioButton control.
@@ -169,7 +169,7 @@ using Microsoft.Win32;
 
 
 
-        /// <include file='doc\RadioButtonRenderer.uex' path='docs/doc[@for="RadioButtonRenderer.DrawRadioButton4"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a RadioButton control.
@@ -204,7 +204,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\RadioButtonRenderer.uex' path='docs/doc[@for="RadioButtonRenderer.GetGlyphSize"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns the size of the RadioButton glyph.

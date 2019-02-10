@@ -16,12 +16,12 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <include file='doc\DataGridViewCellStyleConverter.uex' path='docs/doc[@for="DataGridViewCellStyleConverter"]/*' />
+
     /// <devdoc>    
     /// </devdoc>
     public class DataGridViewCellStyleConverter : TypeConverter {
     
-        /// <include file='doc\DataGridViewCellStyleConverter.uex' path='docs/doc[@for="DataGridViewCellStyleConverter.CanConvertTo"]/*' />
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <include file='doc\DataGridViewCellStyleConverter.uex' path='docs/doc[@for="DataGridViewCellStyleConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call

@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
     
-    /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu"]/*' />
+
     /// <devdoc>
     ///     This is the base class for all menu components (MainMenu, MenuItem, and ContextMenu).
     /// </devdoc>
@@ -33,13 +33,13 @@ namespace System.Windows.Forms {
         internal const int CHANGE_MERGE     = 3; // mergeType or mergeOrder changed
         internal const int CHANGE_ITEMADDED = 4; // mergeType or mergeOrder changed
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.FindHandle"]/*' />
+
         /// <devdoc>
         ///     Used by findMenuItem
         /// </devdoc>
         /// <internalonly/>
         public const int FindHandle = 0;
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.FindShortcut"]/*' />
+
         /// <devdoc>
         ///     Used by findMenuItem
         /// </devdoc>
@@ -54,7 +54,7 @@ namespace System.Windows.Forms {
         private object userData;
         private string name;
         
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.Menu"]/*' />
+
         /// <devdoc>
         ///     This is an abstract class.  Instances cannot be created, so the constructor
         ///     is only called from derived classes.
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.Handle"]/*' />
+
         /// <devdoc>
         ///     The HMENU handle corresponding to this menu.
         /// </devdoc>
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.IsParent"]/*' />
+
         /// <devdoc>
         ///     Specifies whether this menu contains any items.
         /// </devdoc>
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MdiListItem"]/*' />
+
         /// <devdoc>
         ///     The MenuItem that contains the list of MDI child windows.
         /// </devdoc>
@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.Name"]/*' />
+
         /// <devdoc>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control - however this
@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItems"]/*' />
+
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.Tag"]/*' />
+
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.ClearHandles"]/*' />
+
         /// <devdoc>
         ///     Notifies Menu that someone called Windows.DeleteMenu on its handle.
         /// </devdoc>
@@ -217,7 +217,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.CloneMenu"]/*' />
+
         /// <devdoc>
         ///     Sets this menu to be an identical copy of another menu.
         /// </devdoc>
@@ -243,7 +243,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.CreateMenuHandle"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -253,7 +253,7 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.CreatePopupMenu();
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.CreateMenuItems"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -266,7 +266,7 @@ namespace System.Windows.Forms {
             }
         }
    
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.DestroyMenuItems"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -282,7 +282,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.Dispose"]/*' />
+
         /// <devdoc>
         ///     Disposes of the component.  Call dispose when the component is no longer needed.
         ///     This method removes the component from its container (if the component has a site)
@@ -315,7 +315,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.FindMenuItem"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -340,7 +340,7 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.FindMergePosition"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -357,7 +357,7 @@ namespace System.Windows.Forms {
             return iMin;
         }
         
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.xFindMergePosition"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -400,7 +400,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.GetContextMenu"]/*' />
+
         /// <devdoc>
         ///     Returns the ContextMenu that contains this menu.  The ContextMenu
         ///     is at the top of this menu's parent chain.
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.GetMainMenu"]/*' />
+
         /// <devdoc>
         ///     Returns the MainMenu item that contains this menu.  The MainMenu
         ///     is at the top of this menu's parent chain.
@@ -435,7 +435,7 @@ namespace System.Windows.Forms {
             return(MainMenu)menuT;
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.ItemsChanged"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -448,7 +448,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MatchKeyToMenuItem"]/*' />
+
         /// <devdoc>
         ///     Walks the menu item collection, using a caller-supplied delegate to find one
         ///     with a matching access key. Walk starts at specified item index and performs one
@@ -487,7 +487,7 @@ namespace System.Windows.Forms {
         /// Delegate type used by MatchKeyToMenuItem
         private delegate bool MenuItemKeyComparer(MenuItem mi, char key);
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MergeMenu"]/*' />
+
         /// <devdoc>
         ///     Merges another menu's items with this one's.  Menu items are merged according to their
         ///     mergeType and mergeOrder properties.  This function is typically used to
@@ -563,7 +563,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.ProcessInitMenuPopup"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -577,7 +577,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.ProcessCmdKey"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -586,7 +586,7 @@ namespace System.Windows.Forms {
             return item != null? item.ShortcutClick(): false;
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.SelectedMenuItemIndex"]/*' />
+
         /// <devdoc>
         ///     Returns index of currently selected menu item in
         ///     this menu, or -1 if no item is currently selected.
@@ -604,7 +604,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.ToString"]/*' />
+
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
@@ -615,7 +615,7 @@ namespace System.Windows.Forms {
             return s + ", Items.Count: " + ItemCount.ToString(CultureInfo.CurrentCulture);
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.WmMenuChar"]/*' />
+
         /// <devdoc>
         ///     Handles the WM_MENUCHAR message, forwarding it to the intended Menu
         ///     object. All the real work is done inside WmMenuCharInternal().
@@ -632,7 +632,7 @@ namespace System.Windows.Forms {
             m.Result = menu.WmMenuCharInternal(menuKey);
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.WmMenuCharInternal"]/*' />
+
         /// <devdoc>
         ///     Handles WM_MENUCHAR to provide access key support for owner-draw menu items (which
         ///     means *all* menu items on a menu when IsImageMarginPresent == true). Attempts to
@@ -667,7 +667,7 @@ namespace System.Windows.Forms {
                    char.ToUpper(mi.Text[0], CultureInfo.CurrentCulture) == key;
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection"]/*' />
+
         [ListBindable(false)]
         public class MenuItemCollection : IList {
             private Menu owner;
@@ -677,12 +677,12 @@ namespace System.Windows.Forms {
             /// issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.MenuItemCollection"]/*' />
+
             public MenuItemCollection(Menu owner) {
                 this.owner = owner;
             }
             
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.this"]/*' />
+
             public virtual MenuItem this[int index] {
                 get {
                     if (index < 0 || index >= owner.ItemCount)
@@ -692,7 +692,7 @@ namespace System.Windows.Forms {
                 // set not supported
             }
             
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.IList.this"]/*' />
+
             /// <internalonly/>
             object IList.this[int index] {
                 get {
@@ -703,7 +703,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.this"]/*' />
+
             /// <devdoc>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
@@ -726,14 +726,14 @@ namespace System.Windows.Forms {
                 }
             }
   
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Count"]/*' />
+
             public int Count {
                 get {
                     return owner.ItemCount;
                 }
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.ICollection.SyncRoot"]/*' />
+
             /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
@@ -741,7 +741,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.ICollection.IsSynchronized"]/*' />
+
             /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
@@ -749,7 +749,7 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.IList.IsFixedSize"]/*' />
+
             /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
@@ -757,7 +757,7 @@ namespace System.Windows.Forms {
                 }
             }
            
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.IsReadOnly"]/*' />
+
             public bool IsReadOnly {
                 get {
                     return false;
@@ -765,7 +765,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Add"]/*' />
+
             /// <devdoc>
             ///     Adds a new MenuItem to the end of this menu with the specified caption.
             /// </devdoc>
@@ -775,7 +775,7 @@ namespace System.Windows.Forms {
                 return item;
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Add1"]/*' />
+
             /// <devdoc>
             ///     Adds a new MenuItem to the end of this menu with the specified caption,
             ///     and click handler.
@@ -786,7 +786,7 @@ namespace System.Windows.Forms {
                 return item;
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Add2"]/*' />
+
             /// <devdoc>
             ///     Adds a new MenuItem to the end of this menu with the specified caption,
             ///     click handler, and items.
@@ -797,7 +797,7 @@ namespace System.Windows.Forms {
                 return item;
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Add3"]/*' />
+
             /// <devdoc>
             ///     Adds a MenuItem to the end of this menu
             ///     MenuItems can only be contained in one menu at a time, and may not be added
@@ -807,7 +807,7 @@ namespace System.Windows.Forms {
                 return Add(owner.ItemCount, item);
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Add4"]/*' />
+
             /// <devdoc>
             ///     Adds a MenuItem to this menu at the specified index.  The item currently at
             ///     that index, and all items after it, will be moved up one slot.
@@ -870,7 +870,7 @@ namespace System.Windows.Forms {
                 return index;
             }
             
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.AddRange"]/*' />
+
             public virtual void AddRange(MenuItem[] items) {
                 if (items == null) {
                     throw new ArgumentNullException(nameof(items));
@@ -880,7 +880,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.IList.Add"]/*' />
+
             /// <internalonly/>
             int IList.Add(object value) {
                 if (value is MenuItem) {
@@ -891,12 +891,12 @@ namespace System.Windows.Forms {
                 }
             }
            
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Contains"]/*' />
+
             public bool Contains(MenuItem value) {
                 return IndexOf(value) != -1;
             }
         
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.IList.Contains"]/*' />
+
             /// <internalonly/>
             bool IList.Contains(object value) {
                 if (value is MenuItem) {
@@ -907,7 +907,7 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.ContainsKey"]/*' />
+
             /// <devdoc>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
             /// </devdoc>
@@ -915,7 +915,7 @@ namespace System.Windows.Forms {
                return IsValidIndex(IndexOfKey(key)); 
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Find"]/*' />
+
             /// <devdoc>
             ///     <para>Searches for Controls by their Name property, builds up an array 
             ///           of all the controls that match. 
@@ -937,7 +937,7 @@ namespace System.Windows.Forms {
                 return stronglyTypedfoundMenuItems;
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.FindInternal"]/*' />
+
             /// <devdoc>
             ///     <para>Searches for Controls by their Name property, builds up an array list
             ///           of all the controls that match. 
@@ -978,7 +978,7 @@ namespace System.Windows.Forms {
                 return foundMenuItems;
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.IndexOf"]/*' />
+
             public int IndexOf(MenuItem value) {
                 for(int index=0; index < Count; ++index) {
                     if (this[index] == value) {
@@ -988,7 +988,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
             
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.IList.IndexOf"]/*' />
+
             /// <internalonly/>
             int IList.IndexOf(object value) {
                 if (value is MenuItem) {
@@ -999,7 +999,7 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.this"]/*' />
+
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms {
                 return -1;
            }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.IList.Insert"]/*' />
+
             /// <internalonly/>
             void IList.Insert(int index, object value) {
                 if (value is MenuItem) {
@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms {
             }
             
 
-           /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.IsValidIndex"]/*' />
+
            /// <devdoc>
            ///     <para>Determines if the index is valid for the collection.</para>
            /// </devdoc>
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms {
            }
 
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Clear"]/*' />
+
             /// <devdoc>
             ///     Removes all existing MenuItems from this menu
             /// </devdoc>
@@ -1074,19 +1074,19 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.CopyTo"]/*' />
+
             public void CopyTo(Array dest, int index) {
                 if (owner.ItemCount > 0) {
                     System.Array.Copy(owner.items, 0, dest, index, owner.ItemCount);
                 }
             }
             
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.GetEnumerator"]/*' />
+
             public IEnumerator GetEnumerator() {
                 return new WindowsFormsUtils.ArraySubsetEnumerator(owner.items, owner.ItemCount);
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.RemoveAt"]/*' />
+
             /// <devdoc>
             ///     Removes the item at the specified index in this menu.  All subsequent
             ///     items are moved up one slot.
@@ -1111,7 +1111,7 @@ namespace System.Windows.Forms {
             
             }
 
-           /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.RemoveByKey"]/*' />
+
            /// <devdoc>
            ///     <para>Removes the menu iteml with the specified key.</para>
            /// </devdoc>
@@ -1122,7 +1122,7 @@ namespace System.Windows.Forms {
                  }
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection.Remove"]/*' />
+
             /// <devdoc>
             ///     Removes the specified item from this menu.  All subsequent
             ///     items are moved down one slot.
@@ -1133,7 +1133,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.IList.Remove"]/*' />
+
             /// <internalonly/>
             void IList.Remove(object value) {
                 if (value is MenuItem) {

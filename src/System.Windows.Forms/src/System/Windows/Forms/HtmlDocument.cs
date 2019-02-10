@@ -17,7 +17,7 @@ using System.Security;
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument"]/*' />
+
     public sealed class HtmlDocument
     {
         internal static object EventClick = new object();
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.ActiveElement"]/*' />
+
         public HtmlElement ActiveElement
         {
             get
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Body"]/*' />
+
         public HtmlElement Body
         {
             get
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Domain"]/*' />
+
         public string Domain
         {
             get
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Title"]/*' />
+
         public string Title
         {
             get
@@ -131,7 +131,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Location"]/*' />
+
         public Uri Url
         {
             get
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Window"]/*' />
+
         public HtmlWindow Window
         {
             get
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.BackColor"]/*' />
+
         public Color BackColor
         {
             get
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.ForeColor"]/*' />
+
         public Color ForeColor
         {
             get
@@ -204,7 +204,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.LinkColor"]/*' />
+
         public Color LinkColor
         {
             get
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.ActiveLinkColor"]/*' />
+
         public Color ActiveLinkColor
         {
             get
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.VisitedLinkColor"]/*' />
+
         public Color VisitedLinkColor
         {
             get
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Focused"]/*' />
+
         public bool Focused
         {
             get
@@ -291,7 +291,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.DomDocument"]/*' />
+
         public object DomDocument
         {
             get
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Cookie"]/*' />
+
         public string Cookie
         {
             get
@@ -313,7 +313,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.RightToLeft"]/*' />
+
         public bool RightToLeft
         {
             get
@@ -346,7 +346,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.All"]/*' />
+
         public HtmlElementCollection All
         {
             get
@@ -356,7 +356,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Links"]/*' />
+
         public HtmlElementCollection Links
         {
             get
@@ -366,7 +366,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Images"]/*' />
+
         public HtmlElementCollection Images
         {
             get
@@ -376,7 +376,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Forms"]/*' />
+
         public HtmlElementCollection Forms
         {
             get
@@ -386,7 +386,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Write"]/*' />
+
         public void Write(string text)
         {
             object[] strs = new object[] { (object)text };
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
             this.NativeHtmlDocument2.ExecCommand(command, showUI, value);
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Focus"]/*' />
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void Focus()
         {
@@ -410,28 +410,28 @@ namespace System.Windows.Forms
             ((UnsafeNativeMethods.IHTMLDocument4)this.NativeHtmlDocument2).Focus();
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.GetElementById"]/*' />
+
         public HtmlElement GetElementById(string id)
         {
             UnsafeNativeMethods.IHTMLElement iHTMLElement = ((UnsafeNativeMethods.IHTMLDocument3)this.NativeHtmlDocument2).GetElementById(id);
             return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.GetElementFromPoint"]/*' />
+
         public HtmlElement GetElementFromPoint(Point point)
         {
             UnsafeNativeMethods.IHTMLElement iHTMLElement = this.NativeHtmlDocument2.ElementFromPoint(point.X, point.Y);
             return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.GetElementsByTagName"]/*' />
+
         public HtmlElementCollection GetElementsByTagName(string tagName)
         {
             UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = ((UnsafeNativeMethods.IHTMLDocument3)this.NativeHtmlDocument2).GetElementsByTagName(tagName);
             return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.OpenNew"]/*' />
+
         public HtmlDocument OpenNew(bool replaceInHistory)
         {
             object name = (object)(replaceInHistory ? "replace" : "");
@@ -441,14 +441,14 @@ namespace System.Windows.Forms
             return iHTMLDocument != null ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.CreateElement"]/*' />
+
         public HtmlElement CreateElement(string elementTag)
         {
             UnsafeNativeMethods.IHTMLElement iHTMLElement = this.NativeHtmlDocument2.CreateElement(elementTag);
             return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.InvokeScript"]/*' />
+
         public object InvokeScript(string scriptName, object[] args)
         {
             object retVal = null;
@@ -505,14 +505,14 @@ namespace System.Windows.Forms
             return retVal;
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.InvokeScript1"]/*' />
+
         public object InvokeScript(string scriptName)
         {
             return InvokeScript(scriptName, null);
         }
 
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.AttachEventHandler"]/*' />
+
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
@@ -522,7 +522,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.DetachEventHandler"]/*' />
+
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
@@ -532,7 +532,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Click"]/*' />
+
         public event HtmlElementEventHandler Click
         {
             add
@@ -545,7 +545,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.ContextMenuShowing"]/*' />
+
         public event HtmlElementEventHandler ContextMenuShowing
         {
             add
@@ -558,7 +558,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Focusing"]/*' />
+
         public event HtmlElementEventHandler Focusing
         {
             add
@@ -571,7 +571,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.LosingFocus"]/*' />
+
         public event HtmlElementEventHandler LosingFocus
         {
             add
@@ -584,7 +584,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseDown"]/*' />
+
         public event HtmlElementEventHandler MouseDown
         {
             add
@@ -597,7 +597,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseLeave"]/*' />
+
         /// <devdoc>
         ///    <para>Occurs when the mouse leaves the document</para>
         /// </devdoc>
@@ -613,7 +613,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseMove"]/*' />
+
         public event HtmlElementEventHandler MouseMove
         {
             add
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseOver"]/*' />
+
         public event HtmlElementEventHandler MouseOver
         {
             add
@@ -640,7 +640,7 @@ namespace System.Windows.Forms
 
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseUp"]/*' />
+
         public event HtmlElementEventHandler MouseUp
         {
             add
@@ -653,7 +653,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Stop"]/*' />
+
         public event HtmlElementEventHandler Stop
         {
             add
@@ -1056,7 +1056,7 @@ namespace System.Windows.Forms
 
             #region operators
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlElement.operatorEQ"]/*' />
+
         [SuppressMessage("Microsoft.Design", "CA1046:DoNotOverrideOperatorEqualsOnReferenceTypes")]
         public static bool operator ==(HtmlDocument left, HtmlDocument right)
         {
@@ -1094,19 +1094,19 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.operatorNE"]/*' />
+
         public static bool operator !=(HtmlDocument left, HtmlDocument right)
         {
             return !(left == right);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.GetHashCode"]/*' />
+
         public override int GetHashCode()
         {
             return htmlDocument2 == null ? 0 : htmlDocument2.GetHashCode();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Equals"]/*' />
+
         public override bool Equals(object obj)
         {
             return (this == (HtmlDocument)obj);

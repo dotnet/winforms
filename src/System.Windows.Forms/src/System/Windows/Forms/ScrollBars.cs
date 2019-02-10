@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ScrollBars.uex' path='docs/doc[@for="ScrollBars"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum ScrollBars {
 
-        /// <include file='doc\ScrollBars.uex' path='docs/doc[@for="ScrollBars.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       No scroll bars are shown.
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None       = 0,
 
-        /// <include file='doc\ScrollBars.uex' path='docs/doc[@for="ScrollBars.Horizontal"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Only horizontal scroll bars are shown.
@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Horizontal = 1,
 
-        /// <include file='doc\ScrollBars.uex' path='docs/doc[@for="ScrollBars.Vertical"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Only vertical scroll bars are shown.
@@ -49,7 +49,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Vertical   = 2,
 
-        /// <include file='doc\ScrollBars.uex' path='docs/doc[@for="ScrollBars.Both"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Both horizontal and vertical scroll bars are shown.

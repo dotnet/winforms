@@ -5,7 +5,7 @@
 namespace System.Windows.Forms {
     using System;
 
-    /// <include file='doc\HelpNavigator.uex' path='docs/doc[@for="HelpNavigator"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Represents the HTML 1.0 Help engine.
@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum HelpNavigator {
 
-        /// <include file='doc\HelpNavigator.uex' path='docs/doc[@for="HelpNavigator.Topic"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the topic referenced by the topic referenced by
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Topic = unchecked((int)0x80000001),
-        /// <include file='doc\HelpNavigator.uex' path='docs/doc[@for="HelpNavigator.TableOfContents"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the contents of the 
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         TableOfContents = unchecked((int)0x80000002),
-        /// <include file='doc\HelpNavigator.uex' path='docs/doc[@for="HelpNavigator.Index"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the index of a specified
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Index = unchecked((int)0x80000003),
-        /// <include file='doc\HelpNavigator.uex' path='docs/doc[@for="HelpNavigator.Find"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the search page
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Find = unchecked((int)0x80000004),
-        /// <include file='doc\HelpNavigator.uex' path='docs/doc[@for="HelpNavigator.AssociateIndex"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the topic referenced by the topic referenced by
@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         AssociateIndex = unchecked((int)0x80000005),
-        /// <include file='doc\HelpNavigator.uex' path='docs/doc[@for="HelpNavigator.KeywordIndex"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the topic referenced by the topic referenced by
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         KeywordIndex = unchecked((int)0x80000006),
-        /// <include file='doc\HelpNavigator.uex' path='docs/doc[@for="HelpNavigator.TopicId"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays the topic referenced by the topic ID

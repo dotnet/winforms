@@ -29,7 +29,7 @@ using System.Drawing.Design;
 using System.Security;
 
 namespace System.Windows.Forms {
-    /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase"]/*' />
+
     /// <devdoc>
     ///     <para>
     /// This class implements the necessary interfaces required for an ActiveX site.
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
             this.host = h;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.Dispose"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Dispose(release the cookie)
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
             Dispose(true);
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.Dispose"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Release the cookie if we're disposing
@@ -86,7 +86,7 @@ namespace System.Windows.Forms {
                 StopEvents();
             }
         }
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.Host"]/*' />
+
         /// <devdoc>
         ///     <para>
         /// Retrieves the WebBrowserBase object set in the constructor.
@@ -105,26 +105,26 @@ namespace System.Windows.Forms {
         //
         // IOleControlSite methods:
         //
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleControlSite.OnControlInfoChanged"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleControlSite.OnControlInfoChanged() {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleControlSite.LockInPlaceActive"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleControlSite.LockInPlaceActive(int fLock) {
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleControlSite.GetExtendedControl"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleControlSite.GetExtendedControl(out object ppDisp) {
             ppDisp = null;
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleControlSite.TransformCoords"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleControlSite.TransformCoords(NativeMethods._POINTL pPtlHimetric, NativeMethods.tagPOINTF pPtfContainer, int dwFlags) {
             if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER)  != 0) {
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleControlSite.TranslateAccelerator"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(ref NativeMethods.MSG pMsg, int grfModifiers) {
             Debug.Assert(!this.Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
@@ -181,13 +181,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleControlSite.OnFocus"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleControlSite.OnFocus(int fGotFocus) {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleControlSite.ShowPropertyFrame"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleControlSite.ShowPropertyFrame() {
             return NativeMethods.E_NOTIMPL;
@@ -196,20 +196,20 @@ namespace System.Windows.Forms {
         //
         // IOleClientSite methods:
         //
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleClientSite.SaveObject"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleClientSite.SaveObject() {
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleClientSite.GetMoniker"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleClientSite.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker) {
             moniker = null;
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleClientSite.GetContainer"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleClientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container) {
             container = this.Host.GetParentContainer();
@@ -217,7 +217,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleClientSite.ShowObject"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleClientSite.ShowObject() {
             if (this.Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive) {
@@ -237,13 +237,13 @@ namespace System.Windows.Forms {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleClientSite.OnShowWindow"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleClientSite.OnShowWindow(int fShow) {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleClientSite.RequestNewObjectLayout"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleClientSite.RequestNewObjectLayout() {
             return NativeMethods.E_NOTIMPL;
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
         //
         // IOleInPlaceSite methods:
         //
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.GetWindow"]/*' />
+
         /// <internalonly/>
         IntPtr UnsafeNativeMethods.IOleInPlaceSite.GetWindow() {
             try
@@ -266,19 +266,19 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.ContextSensitiveHelp"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.ContextSensitiveHelp(int fEnterMode) {
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate() {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate() {
             this.Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
@@ -286,7 +286,7 @@ namespace System.Windows.Forms {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.OnUIActivate"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.OnUIActivate() {
             this.Host.ActiveXState = WebBrowserHelper.AXState.UIActive;
@@ -294,7 +294,7 @@ namespace System.Windows.Forms {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(out UnsafeNativeMethods.IOleInPlaceFrame ppFrame, out UnsafeNativeMethods.IOleInPlaceUIWindow ppDoc,
                                              NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect, NativeMethods.tagOIFI lpFrameInfo) {
@@ -317,13 +317,13 @@ namespace System.Windows.Forms {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.Scroll"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.Scroll(NativeMethods.tagSIZE scrollExtant) {
             return NativeMethods.S_FALSE;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.OnUIDeactivate"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.OnUIDeactivate(int fUndoable) {
             this.Host.GetParentContainer().OnUIDeactivate(this.Host);
@@ -333,7 +333,7 @@ namespace System.Windows.Forms {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceDeactivate"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceDeactivate() {
             if (this.Host.ActiveXState == WebBrowserHelper.AXState.UIActive) {
@@ -345,19 +345,19 @@ namespace System.Windows.Forms {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.DiscardUndoState"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.DiscardUndoState() {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo() {
             return this.Host.AXInPlaceObject.UIDeactivate();
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(NativeMethods.COMRECT lprcPosRect) {
             return this.OnActiveXRectChange(lprcPosRect);
@@ -366,13 +366,13 @@ namespace System.Windows.Forms {
         //
         // ISimpleFrameSite methods:
         //
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.ISimpleFrameSite.PreMessageFilter"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.ISimpleFrameSite.PreMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, ref int pdwCookie) {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.ISimpleFrameSite.PostMessageFilter"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.ISimpleFrameSite.PostMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, int dwCookie) {
             return NativeMethods.S_FALSE;
@@ -381,7 +381,7 @@ namespace System.Windows.Forms {
         //
         // IPropertyNotifySink methods:
         //
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IPropertyNotifySink.OnChanged"]/*' />
+
         /// <internalonly/>
         void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid) {
             // Some controls fire OnChanged() notifications when getting values of some properties.
@@ -405,7 +405,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit"]/*' />
+
         /// <internalonly/>
         int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispid) {
             return NativeMethods.S_OK;

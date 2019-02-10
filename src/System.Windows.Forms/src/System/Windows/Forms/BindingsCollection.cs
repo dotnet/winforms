@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Collections;
     
-    /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection"]/*' />
+
     /// <devdoc>
     ///    <para>Represents a collection of data bindings on a control.</para>
     /// </devdoc>
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
         internal BindingsCollection() {
         }
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.Count"]/*' />
+
         public override int Count {
             get {
                 if (list == null) {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.List"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.this"]/*' />
+
         /// <devdoc>
         /// <para>Gets the <see cref='System.Windows.Forms.Binding'/> at the specified index.</para>
         /// </devdoc>
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.Add"]/*' />
+
         // internalonly
         internal protected void Add(Binding binding) {
             CollectionChangeEventArgs ccevent = new CollectionChangeEventArgs(CollectionChangeAction.Add, binding);
@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
         }
 
         // internalonly
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.AddCore"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             List.Add(dataBinding);
         }
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.CollectionChanging"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Occurs when the collection is about to change.
@@ -101,7 +101,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.CollectionChanged"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Occurs when the collection is changed.
@@ -118,7 +118,7 @@ namespace System.Windows.Forms {
         }
 
         // internalonly
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.Clear"]/*' />
+
         internal protected void Clear() {
             CollectionChangeEventArgs ccevent = new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null);
             OnCollectionChanging(ccevent);
@@ -127,7 +127,7 @@ namespace System.Windows.Forms {
         }
 
         // internalonly
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.ClearCore"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -138,7 +138,7 @@ namespace System.Windows.Forms {
             List.Clear();
         }
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.OnCollectionChanging"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.BindingsCollection.CollectionChanging'/> event.
@@ -150,7 +150,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.OnCollectionChanged"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.BindingsCollection.CollectionChanged'/> event.
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.Remove"]/*' />
+
         // internalonly
         internal protected void Remove(Binding binding) {
             CollectionChangeEventArgs ccevent = new CollectionChangeEventArgs(CollectionChangeAction.Remove, binding);
@@ -172,14 +172,14 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.RemoveAt"]/*' />
+
         // internalonly
         internal protected void RemoveAt(int index) {
             Remove(this[index]);
         }
 
         // internalonly
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.RemoveCore"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -191,7 +191,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\BindingsCollection.uex' path='docs/doc[@for="BindingsCollection.ShouldSerializeMyAll"]/*' />
+
         // internalonly
         internal protected bool ShouldSerializeMyAll() {
             return Count > 0;

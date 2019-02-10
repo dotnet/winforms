@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System;
     using System.Globalization;
 
-    /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter"]/*' />
+
     /// <internalonly/>
     /// <devdoc>
     ///    <para>
@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     internal sealed class StringSorter
     {
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.IgnoreCase"]/*' />
+
         /// <devdoc>
         ///     Ignore case when comparing two strings. When this flag is specified in
         ///     calls to compare() and sort(), two strings are considered equal if they
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public const int IgnoreCase = 0x00000001;
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.IgnoreKanaType"]/*' />
+
         /// <devdoc>
         ///     Do not differentiate between Hiragana and Katakana characters. When this
         ///     flag is specified in calls to compare() and sort(), corresponding
@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public const int IgnoreKanaType = 0x00010000;
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.IgnoreNonSpace"]/*' />
+
         /// <devdoc>
         ///     Ignore nonspacing marks (accents, diacritics, and vowel marks). When
         ///     this flag is specified in calls to compare() and sort(), strings compare
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public const int IgnoreNonSpace = 0x00000002;
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.IgnoreSymbols"]/*' />
+
         /// <devdoc>
         ///     Ignore symbols. When this flag is specified in calls to compare() and
         ///     sort(), strings compare as equal if they differ only in what symbol
@@ -52,7 +52,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public const int IgnoreSymbols = 0x00000004;
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.IgnoreWidth"]/*' />
+
         /// <devdoc>
         ///     Ignore character widths. When this flag is specified in calls to
         ///     compare() and sort(), string comparisons do not differentiate between a
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public const int IgnoreWidth = 0x00020000;
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.StringSort"]/*' />
+
         /// <devdoc>
         ///     Treat punctuation the same as symbols. Typically, strings are compared
         ///     using what is called a "word sort" technique. In a word sort, all
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public const int StringSort = 0x00001000;
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Descending"]/*' />
+
         /// <devdoc>
         ///     Descending sort. When this flag is specified in a call to sort(), the
         ///     strings are sorted in descending order. This flag should not be used in
@@ -93,7 +93,7 @@ namespace System.Windows.Forms {
         private int options;
         private bool descending;
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.StringSorter"]/*' />
+
         /// <devdoc>
         ///     Constructs a StringSorter. Instances are created by the sort() routines,
         ///     but never by the user.
@@ -119,7 +119,7 @@ namespace System.Windows.Forms {
             this.descending = (options & Descending) != 0;
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.ArrayLength"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
                 return array.Length;
         }
         
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Compare"]/*' />
+
         /// <devdoc>
         ///     Compares two strings using the default locale and no additional string
         ///     comparison flags.
@@ -139,7 +139,7 @@ namespace System.Windows.Forms {
             return Compare(SafeNativeMethods.GetThreadLocale(), s1, s2, 0);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Compare1"]/*' />
+
         /// <devdoc>
         ///     Compares two strings using the default locale with the given set of
         ///     string comparison flags.
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
             return Compare(SafeNativeMethods.GetThreadLocale(), s1, s2, options);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Compare2"]/*' />
+
         /// <devdoc>
         ///     Compares two strings using a given locale and a given set of comparison
         ///     flags. If the two strings are of different lengths, they are compared up
@@ -167,7 +167,7 @@ namespace System.Windows.Forms {
             return Compare(culture.LCID, s1, s2, options);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Compare3"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -177,7 +177,7 @@ namespace System.Windows.Forms {
             return string.Compare(s1, s2, false, CultureInfo.CurrentCulture);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.CompareKeys"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -186,7 +186,7 @@ namespace System.Windows.Forms {
             return descending? -result: result;
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.QuickSort"]/*' />
+
         /// <devdoc>
         ///     Implementation of Quicksort algorithm. Within the outer <code>do</code>
         ///     loop, the method recurses on the shorter side and loops on the longer
@@ -227,7 +227,7 @@ namespace System.Windows.Forms {
             } while (left < right);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort"]/*' />
+
         /// <devdoc>
         ///     Sorts an object array based on the string representation of the
         ///     elements. If the <code>items</code> parameter is not a string array, the
@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
             Sort(null, null, items, 0, ArrayLength(items), 0);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort1"]/*' />
+
         /// <devdoc>
         ///     Sorts a range in an object array based on the string representation of
         ///     the elements. If the <code>items</code> parameter is not a string array,
@@ -251,7 +251,7 @@ namespace System.Windows.Forms {
             Sort(null, null, items, index, count, 0);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort2"]/*' />
+
         /// <devdoc>
         ///     Sorts a string array and an object array based on the elements of the
         ///     string array. The arrays are sorted using the default locale.
@@ -260,7 +260,7 @@ namespace System.Windows.Forms {
             Sort(null, keys, items, 0, ArrayLength(items), 0);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort3"]/*' />
+
         /// <devdoc>
         ///     Sorts a range in a string array and a range in an object array based on
         ///     the elements of the string array. The arrays are sorted using the
@@ -270,7 +270,7 @@ namespace System.Windows.Forms {
             Sort(null, keys, items, index, count, 0);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort4"]/*' />
+
         /// <devdoc>
         ///     Sorts an object array based on the string representation of the
         ///     elements. If the <code>items</code> parameter is not a string array, the
@@ -283,7 +283,7 @@ namespace System.Windows.Forms {
             Sort(null, null, items, 0, ArrayLength(items), options);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort5"]/*' />
+
         /// <devdoc>
         ///     Sorts a range in an object array based on the string representation of
         ///     the elements. If the <code>items</code> parameter is not a string array,
@@ -296,7 +296,7 @@ namespace System.Windows.Forms {
             Sort(null, null, items, index, count, options);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort6"]/*' />
+
         /// <devdoc>
         ///     Sorts a string array and an object array based on the elements of the
         ///     string array. The arrays are sorted using the default locale and the
@@ -306,7 +306,7 @@ namespace System.Windows.Forms {
             Sort(null, keys, items, 0, ArrayLength(items), options);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort7"]/*' />
+
         /// <devdoc>
         ///     Sorts a range in a string array and a range in an object array based on
         ///     the elements of the string array. The arrays are sorted using the
@@ -316,7 +316,7 @@ namespace System.Windows.Forms {
             Sort(null, keys, items, index, count, options);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort8"]/*' />
+
         /// <devdoc>
         ///     Sorts an object array based on the string representation of the
         ///     elements. If the <code>items</code> parameter is not a string array, the
@@ -329,7 +329,7 @@ namespace System.Windows.Forms {
             Sort(culture, null, items, 0, ArrayLength(items), options);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort9"]/*' />
+
         /// <devdoc>
         ///     Sorts a range in an object array based on the string representation of
         ///     the elements. If the <code>items</code> parameter is not a string array,
@@ -342,7 +342,7 @@ namespace System.Windows.Forms {
             Sort(culture, null, items, index, count, options);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort10"]/*' />
+
         /// <devdoc>
         ///     Sorts a string array and an object array based on the elements of the
         ///     string array. The arrays are sorted using the given locale and the
@@ -352,7 +352,7 @@ namespace System.Windows.Forms {
             Sort(culture, keys, items, 0, ArrayLength(items), options);
         }
 
-        /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Sort11"]/*' />
+
         /// <devdoc>
         ///     Sorts a range in a string array and a range in an object array based on
         ///     the elements of the string array. Elements in the <code>keys</code>

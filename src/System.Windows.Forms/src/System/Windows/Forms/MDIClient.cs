@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     using System.Threading;
     using System.Windows.Forms;
     
-    /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient"]/*' />
+
     /// <internalonly/>
     /// <devdoc>
     ///    <para> 
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         private ArrayList children = new ArrayList();
 
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.MdiClient"]/*' />
+
         /// <devdoc>
         ///     Creates a new MdiClient.
         /// </devdoc>
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
             Dock = DockStyle.Fill;
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.BackgroundImage"]/*' />
+
         /// <devdoc>
         ///      Use parent's BackgroundImage if our BackgroundImage isn't set.
         /// </devdoc>
@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MDIClient.BackgroundImageLayout"]/*' />
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -91,7 +91,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.CreateParams"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.MdiChildren"]/*' />
+
         /// <devdoc>
         ///     The list of MDI children contained. This list
         ///     will be sorted by the order in which the children were
@@ -142,12 +142,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.CreateControlsInstance"]/*' />
+
         protected override Control.ControlCollection CreateControlsInstance() {
             return new ControlCollection(this);
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.LayoutMdi"]/*' />
+
         /// <devdoc>
         ///     Arranges the MDI child forms according to value, which should be a
         ///     member of the MdiLayout enum.
@@ -173,7 +173,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.OnResize"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -186,7 +186,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.ScaleCore"]/*' />
+
         /// <devdoc>
         ///     Performs the work of scaling the entire control and any child controls.
         /// </devdoc>
@@ -210,7 +210,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ScaleControl"]/*' />
+
         /// <devdoc>
         ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
         /// </devdoc>
@@ -220,7 +220,7 @@ namespace System.Windows.Forms {
             base.ScaleControl(factor, specified);
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.SetBoundsCore"]/*' />
+
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
             if (IsHandleCreated && (site == null || !site.DesignMode)) {
@@ -315,23 +315,23 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.ShouldSerializeBackColor"]/*' />
+
         internal override bool ShouldSerializeBackColor() {
             return BackColor != SystemColors.AppWorkspace;
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.ShouldSerializeLocation"]/*' />
+
         private bool ShouldSerializeLocation() {
             return false;
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.ShouldSerializeSize"]/*' />
+
         internal override bool ShouldSerializeSize() {
             return false;
         }
         
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.WndProc"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -379,7 +379,7 @@ namespace System.Windows.Forms {
             base.OnInvokedSetScrollPosition(sender, e);
         }
 
-        /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.ControlCollection"]/*' />
+
         /// <devdoc>
         ///     Collection of controls...
         /// </devdoc>
@@ -389,13 +389,13 @@ namespace System.Windows.Forms {
 
             /*C#r: protected*/
 
-            /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.ControlCollection.ControlCollection"]/*' />
+
             public ControlCollection(MdiClient owner)
             : base(owner) {
                 this.owner = owner;
             }
 
-            /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.ControlCollection.Add"]/*' />
+
             /// <devdoc>
             ///     Adds a control to the MDI Container. This child must be
             ///     a Form that is marked as an MDI Child to be added to the
@@ -424,7 +424,7 @@ namespace System.Windows.Forms {
                 base.Add(value);
             }
 
-            /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.ControlCollection.Remove"]/*' />
+
             /// <devdoc>
             ///     Removes a child control.
             /// </devdoc>

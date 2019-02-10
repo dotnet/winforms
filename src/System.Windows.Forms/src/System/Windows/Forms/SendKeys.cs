@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
     
-    /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys"]/*' />
+
     /// <devdoc>
     ///    <para>Provides methods for sending keystrokes to an application.</para>
     /// </devdoc>
@@ -87,13 +87,13 @@ namespace System.Windows.Forms {
         private const int  CTRLKEYSCAN   = 0x0200;
         private const int  ALTKEYSCAN    = 0x0400;
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.stopHook"]/*' />
+
         /// <devdoc>
         ///     should we stop using the hook?
         /// </devdoc>
         private static bool stopHook;
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.hhook"]/*' />
+
         /// <devdoc>
         ///     HHOOK
         /// </devdoc>
@@ -101,7 +101,7 @@ namespace System.Windows.Forms {
 
         private static NativeMethods.HookProc hook;
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.events"]/*' />
+
         /// <devdoc>
         ///     vector of events that we have yet to post to the journaling hook.
         /// </devdoc>
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
             messageWindow.CreateControl();
         }
         
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SendKeys"]/*' />
+
         /// <devdoc>
         ///     private constructor to prevent people from creating one of these.  they
         ///     should use public static methods
@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
         private SendKeys() {
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.AddEvent"]/*' />
+
         /// <devdoc>
         ///     adds an event to our list of events for the hook
         /// </devdoc>
@@ -191,7 +191,7 @@ namespace System.Windows.Forms {
             return fStartNewChar;
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.AddMsgsForVK"]/*' />
+
         /// <devdoc>
         ///     given the vk, add the appropriate messages for it
         /// </devdoc>
@@ -203,7 +203,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.CancelMods"]/*' />
+
         /// <devdoc>
         ///     called whenever there is a closing parenthesis, or the end of a
         ///     character.  This generates events for the end of a modifier.
@@ -223,7 +223,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.InstallHook"]/*' />
+
         /// <devdoc>
         ///     install the hook.  quite easy
         /// </devdoc>
@@ -292,7 +292,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.JournalCancel"]/*' />
+
         /// <devdoc>
         ///     tells us to shut down the server, perhaps if we're shutting down and the
         ///     hook is still running
@@ -317,7 +317,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SetKeyboardState(keystate);
         }
         
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.ClearKeyboardState"]/*' />
+
         /// <devdoc>
         ///     before we do a sendkeys, we want to  clear the state
         ///     of a couple of keys [capslock, numlock, scrolllock] so they don't
@@ -334,7 +334,7 @@ namespace System.Windows.Forms {
             SetKeyboardState(keystate);
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.MatchKeyword"]/*' />
+
         /// <devdoc>
         ///     given the string, match the keyword to a VK.  return -1 if it don't match
         ///     nuthin'
@@ -347,7 +347,7 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.OnThreadExit"]/*' />
+
         /// <devdoc>
         ///     This event is raised from Application when each window thread
         ///     termiantes.  It gives us a chance to uninstall our journal
@@ -361,7 +361,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.ParseKeys"]/*' />
+
         /// <devdoc>
         ///     parse the string the user has given us, and generate the appropriate
         ///     events for the journaling hook
@@ -838,7 +838,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.Send"]/*' />
+
         /// <devdoc>
         ///    <para>Sends keystrokes to the active application.</para>
         /// </devdoc>
@@ -925,7 +925,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SendWait"]/*' />
+
         /// <devdoc>
         ///    <para>Sends the given keys to the active application, and then waits for
         ///       the messages to be processed.</para>
@@ -934,7 +934,7 @@ namespace System.Windows.Forms {
             SendWait(keys, null);
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SendWait1"]/*' />
+
         /// <devdoc>
         ///     Sends the given keys to the active application, and then waits for
         ///     the messages to be processed.
@@ -949,7 +949,7 @@ namespace System.Windows.Forms {
             Send(keys, control, true);
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.Flush"]/*' />
+
         /// <devdoc>
         ///    <para>Processes all the Windows messages currently in the message queue.</para>
         /// </devdoc>
@@ -960,7 +960,7 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.UninstallJournalingHook"]/*' />
+
         /// <devdoc>
         ///     cleans up and uninstalls the hook
         /// </devdoc>
@@ -998,7 +998,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SKEvent"]/*' />
+
         /// <devdoc>
         ///     helps us hold information about the various events we're going to journal
         /// </devdoc>
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.KeywordVk"]/*' />
+
         /// <devdoc>
         ///     holds a keyword and the associated VK_ for it
         /// </devdoc>
@@ -1037,7 +1037,7 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SendKeysHookProc"]/*' />
+
         /// <devdoc>
         ///     this class is our callback for the journaling hook we install
         /// </devdoc>

@@ -17,14 +17,14 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <include file='doc\LinkConverter.uex' path='docs/doc[@for="LinkConverter"]/*' />
+
     /// <devdoc>
     ///      <para>A TypeConverter for LinkLabel.Link objects. Access this
     ///      class through the TypeDescriptor. </para>
     /// </devdoc>
     public class LinkConverter : TypeConverter {
 
-        /// <include file='doc\LinkConverter.uex' path='docs/doc[@for="LinkConverter.CanConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
             return base.CanConvertFrom(context, sourceType);
         }
     
-        /// <include file='doc\LinkConverter.uex' path='docs/doc[@for="LinkConverter.CanConvertTo"]/*' />
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -48,7 +48,7 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <include file='doc\LinkConverter.uex' path='docs/doc[@for="LinkConverter.ConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
             return base.ConvertFrom(context, culture, value);
         }
         
-        /// <include file='doc\LinkConverter.uex' path='docs/doc[@for="LinkConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call

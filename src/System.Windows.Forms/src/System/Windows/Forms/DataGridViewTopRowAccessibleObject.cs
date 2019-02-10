@@ -10,7 +10,7 @@ namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridView.DataGridViewTopRowAccessibleObject"]/*' />
+
         [
             System.Runtime.InteropServices.ComVisible(true)
         ]
@@ -19,18 +19,18 @@ namespace System.Windows.Forms
             private int[] runtimeId;
             DataGridView owner;
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.DataGridViewTopRowAccessibleObject1"]/*' />
+
             public DataGridViewTopRowAccessibleObject() : base()
             {
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.DataGridViewTopRowAccessibleObject2"]/*' />
+
             public DataGridViewTopRowAccessibleObject(DataGridView owner) : base()
             {
                 this.owner = owner;
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Bounds"]/*' />
+
             public override Rectangle Bounds
             {
                 get
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Name"]/*' />
+
             public override string Name
             {
                 get
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Owner"]/*' />
+
             public DataGridView Owner
             {
                 get
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Parent"]/*' />
+
             public override AccessibleObject Parent
             {
                 get
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Role"]/*' />
+
             public override AccessibleRole Role
             {
                 get
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Value"]/*' />
+
             public override string Value
             {
                 get
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.GetChild"]/*' />
+
             public override AccessibleObject GetChild(int index)
             {
                 if (this.owner == null)
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.GetChildCount"]/*' />
+
             public override int GetChildCount()
             {
                 if (this.owner == null)
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
                 return result;
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Navigate"]/*' />
+
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 if (this.owner == null)

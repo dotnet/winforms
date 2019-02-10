@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <include file='doc\TreeNodeConverter.uex' path='docs/doc[@for="TreeNodeConverter"]/*' />
+
     /// <devdoc>
     ///      TreeNodeConverter is a class that can be used to convert
     ///      TreeNode objects from one data type to another.  Access this
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class TreeNodeConverter : TypeConverter {
     
-        /// <include file='doc\TreeNodeConverter.uex' path='docs/doc[@for="TreeNodeConverter.CanConvertTo"]/*' />
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <include file='doc\TreeNodeConverter.uex' path='docs/doc[@for="TreeNodeConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call

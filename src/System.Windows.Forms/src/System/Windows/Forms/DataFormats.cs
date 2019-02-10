@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Globalization;
 
-    /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats"]/*' />
+
     /// <devdoc>
     ///    <para>Translates
     ///       between Win Forms text-based
@@ -21,14 +21,14 @@ namespace System.Windows.Forms {
     ///       them to the Windows Registry.</para>
     /// </devdoc>
     public class DataFormats {
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Text"]/*' />
+
         /// <devdoc>
         /// <para>Specifies the standard ANSI text format. This <see langword='static '/> 
         /// field is read-only.</para>
         /// </devdoc>
         public static readonly string Text          = "Text";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.UnicodeText"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the standard Windows Unicode text format. This 
         ///    <see langword='static '/>
@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly string UnicodeText   = "UnicodeText";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Dib"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Windows Device Independent Bitmap (DIB) 
         ///       format. This <see langword='static '/>
@@ -44,20 +44,20 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly string Dib           = "DeviceIndependentBitmap";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Bitmap"]/*' />
+
         /// <devdoc>
         /// <para>Specifies a Windows bitmap format. This <see langword='static '/> field is read-only.</para>
         /// </devdoc>
         public static readonly string Bitmap        = "Bitmap";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.EnhancedMetafile"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Windows enhanced metafile format. This 
         ///    <see langword='static '/> field is read-only.</para>
         /// </devdoc>
         public static readonly string EnhancedMetafile   = "EnhancedMetafile";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.MetafilePict"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Windows metafile format, which Win Forms 
         ///       does not directly use. This <see langword='static '/>
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // Would be a breaking change to rename this
         public static readonly string MetafilePict  = "MetaFilePict";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.SymbolicLink"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Windows symbolic link format, which Win 
         ///       Forms does not directly use. This <see langword='static '/>
@@ -74,7 +74,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly string SymbolicLink          = "SymbolicLink";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Dif"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Windows data interchange format, which Win 
         ///       Forms does not directly use. This <see langword='static '/>
@@ -82,7 +82,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly string Dif           = "DataInterchangeFormat";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Tiff"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Tagged Image File Format (TIFF), which Win 
         ///       Forms does not directly use. This <see langword='static '/>
@@ -90,20 +90,20 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly string Tiff          = "TaggedImageFileFormat";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.OemText"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the standard Windows original equipment 
         ///       manufacturer (OEM) text format. This <see langword='static '/> field is read-only.</para>
         /// </devdoc>
         public static readonly string OemText       = "OEMText";
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Palette"]/*' />
+
         /// <devdoc>
         /// <para>Specifies the Windows palette format. This <see langword='static '/> 
         /// field is read-only.</para>
         /// </devdoc>
         public static readonly string Palette       = "Palette";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.PenData"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Windows pen data format, which consists of 
         ///       pen strokes for handwriting software; Win Forms does not use this format. This
@@ -112,21 +112,21 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly string PenData       = "PenData";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Riff"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Resource Interchange File Format (RIFF) 
         ///       audio format, which Win Forms does not directly use. This <see langword='static '/> field is read-only.</para>
         /// </devdoc>
         public static readonly string Riff          = "RiffAudio";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.WaveAudio"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the wave audio format, which Win Forms does not 
         ///       directly use. This <see langword='static '/> field is read-only.</para>
         /// </devdoc>
         public static readonly string WaveAudio          = "WaveAudio";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.FileDrop"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Windows file drop format, which Win Forms 
         ///       does not directly use. This <see langword='static '/>
@@ -134,28 +134,28 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly string FileDrop         = "FileDrop";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Locale"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Windows culture format, which Win Forms does 
         ///       not directly use. This <see langword='static '/> field is read-only.</para>
         /// </devdoc>
         public static readonly string Locale        = "Locale";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Html"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies text consisting of HTML data. This 
         ///    <see langword='static '/> field is read-only.</para>
         /// </devdoc>
         public static readonly string Html          = "HTML Format";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Rtf"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies text consisting of Rich Text Format (RTF) data. This 
         ///    <see langword='static '/> field is read-only.</para>
         /// </devdoc>
         public static readonly string Rtf       = "Rich Text Format";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.CommaSeparatedValue"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies a comma-separated value (CSV) format, which is a 
         ///       common interchange format used by spreadsheets. This format is not used directly
@@ -164,7 +164,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly string CommaSeparatedValue           = "Csv";
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.StringFormat"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies the Win Forms string class format, which Win 
         ///       Forms uses to store string objects. This <see langword='static '/>
@@ -172,7 +172,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly string StringFormat   = typeof(string).FullName;
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Serializable"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies a format that encapsulates any type of Win Forms 
         ///       object. This <see langword='static '/> field is read-only.</para>
@@ -190,7 +190,7 @@ namespace System.Windows.Forms {
         private DataFormats() {
         }
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.GetFormat"]/*' />
+
         /// <devdoc>
         /// <para>Gets a <see cref='System.Windows.Forms.DataFormats.Format'/> with the Windows Clipboard numeric ID and name for the specified format.</para>
         /// </devdoc>
@@ -225,7 +225,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.GetFormat1"]/*' />
+
         /// <devdoc>
         /// <para>Gets a <see cref='System.Windows.Forms.DataFormats.Format'/> with the Windows Clipboard numeric
         ///    ID and name for the specified ID.</para>
@@ -237,7 +237,7 @@ namespace System.Windows.Forms {
             return InternalGetFormat( null, (ushort)(id & 0xFFFF));
         }
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.InternalGetFormat"]/*' />
+
         /// <devdoc>
         ///     Allows a the new format name to be specified if the requested format is not
         ///     in the list
@@ -275,7 +275,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.EnsureFormatSpace"]/*' />
+
         /// <devdoc>
         ///     ensures that we have enough room in our format list
         /// </devdoc>
@@ -293,7 +293,7 @@ namespace System.Windows.Forms {
             }                   
         }
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.EnsurePredefined"]/*' />
+
         /// <devdoc>
         ///     ensures that the Win32 predefined formats are setup in our format list.  This
         ///     is called anytime we need to search the list
@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Format"]/*' />
+
         /// <devdoc>
         ///    <para>Represents a format type.</para>
         /// </devdoc>
@@ -334,7 +334,7 @@ namespace System.Windows.Forms {
             readonly string name;
             readonly int id;
             
-            /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Format.Name"]/*' />
+
             /// <devdoc>
             ///    <para>
             ///       Specifies the
@@ -348,7 +348,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Format.Id"]/*' />
+
             /// <devdoc>
             ///    <para>
             ///       Specifies the ID
@@ -361,7 +361,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DataFormats.uex' path='docs/doc[@for="DataFormats.Format.Format"]/*' />
+
             /// <devdoc>
             /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataFormats.Format'/> class and specifies whether a
             /// <see langword='Win32 '/> 

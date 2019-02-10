@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.IO;
 
-    /// <include file='doc\CursorConverter.uex' path='docs/doc[@for="CursorConverter"]/*' />
+
     /// <devdoc>
     ///      CursorConverter is a class that can be used to convert
     ///      colors from one data type to another.  Access this
@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
     
         private StandardValuesCollection values;
 
-        /// <include file='doc\CursorConverter.uex' path='docs/doc[@for="CursorConverter.CanConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
             return base.CanConvertFrom(context, sourceType);
         }
 
-        /// <include file='doc\CursorConverter.uex' path='docs/doc[@for="CursorConverter.CanConvertTo"]/*' />
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -49,7 +49,7 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <include file='doc\CursorConverter.uex' path='docs/doc[@for="CursorConverter.ConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
             return base.ConvertFrom(context, culture, value);
         }
 
-        /// <include file='doc\CursorConverter.uex' path='docs/doc[@for="CursorConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -143,7 +143,7 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <include file='doc\CursorConverter.uex' path='docs/doc[@for="CursorConverter.GetProperties"]/*' />
+
         /// <devdoc>
         ///      Retrieves the properties for the available cursors.
         /// </devdoc>
@@ -151,7 +151,7 @@ namespace System.Windows.Forms {
             return typeof(Cursors).GetProperties(BindingFlags.Static | BindingFlags.Public);
         }
 
-        /// <include file='doc\CursorConverter.uex' path='docs/doc[@for="CursorConverter.GetStandardValues"]/*' />
+
         /// <devdoc>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
             return values;
         }
 
-        /// <include file='doc\CursorConverter.uex' path='docs/doc[@for="CursorConverter.GetStandardValuesSupported"]/*' />
+
         /// <devdoc>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.

@@ -18,7 +18,7 @@ namespace System.Windows.Forms.VisualStyles {
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.Win32;
 
-    /// <include file='doc\visualStyleRenderer.uex' path='docs/doc[@for="visualStyleRenderer"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       This class provides full feature parity with UxTheme API.
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.IsSupported"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns true if visual styles are 1) supported by the OS 2) enabled in the client area 
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.IsCombinationDefined"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns true if the element is defined by the current visual style, else false. 
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.VisualStyles {
             return returnVal;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.VisualStyleRenderer"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Constructor takes a VisualStyleElement.
@@ -155,7 +155,7 @@ namespace System.Windows.Forms.VisualStyles {
         public VisualStyleRenderer(VisualStyleElement element) : this(element.ClassName, element.Part, element.State) {
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.VisualStyleRenderer1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Constructor takes weakly typed parameters - left for extensibility (using classes, parts or states
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.VisualStyles {
             this.state = state;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.Class"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns the current _class. Use SetParameters to set.
@@ -184,7 +184,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.Part"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns the current part. Use SetParameters to set.
@@ -196,7 +196,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.State"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns the current state. Use SetParameters to set.
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.Handle"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns the underlying HTheme handle.
@@ -233,7 +233,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.SetParameters"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Used to set a new VisualStyleElement on this VisualStyleRenderer instance.
@@ -247,7 +247,7 @@ namespace System.Windows.Forms.VisualStyles {
             SetParameters(element.ClassName, element.Part, element.State);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.SetParameters"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Used to set the _class, part and state that the VisualStyleRenderer object references. 
@@ -265,7 +265,7 @@ namespace System.Windows.Forms.VisualStyles {
             this.state = state;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawBackground"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -296,7 +296,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawBackground1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawEdge"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -363,7 +363,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawImage"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -386,7 +386,7 @@ namespace System.Windows.Forms.VisualStyles {
             g.DrawImage(image, bounds);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawImage1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.] 
@@ -424,7 +424,7 @@ namespace System.Windows.Forms.VisualStyles {
             //}
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawParentBackground"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Given a graphics object and bounds to draw in, this method effectively asks the passed in 
@@ -453,7 +453,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawText"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -463,7 +463,7 @@ namespace System.Windows.Forms.VisualStyles {
             DrawText(dc, bounds, textToDraw, false);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawText1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -473,7 +473,7 @@ namespace System.Windows.Forms.VisualStyles {
             DrawText(dc, bounds, textToDraw, drawDisabled, TextFormatFlags.HorizontalCenter); 
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawText2"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -498,7 +498,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetBackgroundContentRectangle"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -522,7 +522,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetBackgroundExtent"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -546,7 +546,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetBackgroundRegion"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Computes the region for a regular or partially transparent background that is bounded by a specified 
@@ -584,7 +584,7 @@ namespace System.Windows.Forms.VisualStyles {
 
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetBoolean"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -600,7 +600,7 @@ namespace System.Windows.Forms.VisualStyles {
             return val;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetColor"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -618,7 +618,7 @@ namespace System.Windows.Forms.VisualStyles {
             return ColorTranslator.FromWin32(color);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetEnumValue"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -636,7 +636,7 @@ namespace System.Windows.Forms.VisualStyles {
             return val;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetFilename"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -654,7 +654,7 @@ namespace System.Windows.Forms.VisualStyles {
             return filename.ToString();
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetFont"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -701,7 +701,7 @@ namespace System.Windows.Forms.VisualStyles {
             return font;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetInteger"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -719,7 +719,7 @@ namespace System.Windows.Forms.VisualStyles {
             return val;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetPartSize"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -756,7 +756,7 @@ namespace System.Windows.Forms.VisualStyles {
             return new Size(size.cx, size.cy);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetPartSize1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -783,7 +783,7 @@ namespace System.Windows.Forms.VisualStyles {
             return new Size(size.cx, size.cy);
         } 
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetPoint"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -801,7 +801,7 @@ namespace System.Windows.Forms.VisualStyles {
             return new Point(point.x, point.y);
         }        
         
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetMargins"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -829,7 +829,7 @@ namespace System.Windows.Forms.VisualStyles {
         }
         
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetString"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -847,7 +847,7 @@ namespace System.Windows.Forms.VisualStyles {
             return aString.ToString();
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetTextExtent"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -872,7 +872,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetTextExtent1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -897,7 +897,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetTextMetric"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -918,7 +918,7 @@ namespace System.Windows.Forms.VisualStyles {
             return tm;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.HitTestBackground"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -942,7 +942,7 @@ namespace System.Windows.Forms.VisualStyles {
             return (HitTestCode)htCode;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.HitTestBackground1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -961,7 +961,7 @@ namespace System.Windows.Forms.VisualStyles {
         }
 
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.HitTestBackground1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -985,7 +985,7 @@ namespace System.Windows.Forms.VisualStyles {
             return (HitTestCode)htCode;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.IsBackgroundPartiallyTransparent"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       [See win32 equivalent.]
@@ -995,7 +995,7 @@ namespace System.Windows.Forms.VisualStyles {
             return (SafeNativeMethods.IsThemeBackgroundPartiallyTransparent(new HandleRef(this, Handle), part, state));
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetLastHResult"]/*' />
+
         /// <devdoc>
         ///  This is similar to GetLastError in Win32.  It returns the last HRESULT returned from a native call
         ///  into theme apis.  We eat the errors and let the user handle any errors that occurred.
@@ -1006,7 +1006,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.CreateThemeHandleHashTable"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Instantiates the ThemeHandle cache hashtable.
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms.VisualStyles {
             themeHandles = new Hashtable(numberOfPossibleClasses);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.OnThemeChanged"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Handles the ThemeChanged event. Basically, we need to ensure all per-thread theme handle
@@ -1035,7 +1035,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.RefreshCache"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///     Refreshes this thread's theme handle cache.       
@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms.VisualStyles {
             return GetHandle(className, true);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetHandle"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///     Retrieves a IntPtr theme handle for the given class from the themeHandle cache. If its not 

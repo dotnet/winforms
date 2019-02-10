@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\DataGridState.uex' path='docs/doc[@for="DataGridState"]/*' />
+
     /// <devdoc>
     ///      Encapsulates the state of a DataGrid that changes when the
     ///      user navigates back and forth through ADO.NET data relations.
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
             return dgs;
         }
 
-        /// <include file='doc\DataGridState.uex' path='docs/doc[@for="DataGridState.PushState"]/*' />
+
         /// <devdoc>
         ///      Called by a DataGrid when it wishes to preserve its
         ///      transient state in the current DataGridState object.
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
             this.ListManager.MetaDataChanged -= new EventHandler(DataSource_MetaDataChanged);
         }
 
-        /// <include file='doc\DataGridState.uex' path='docs/doc[@for="DataGridState.PullState"]/*' />
+
         /// <devdoc>
         ///      Called by a grid when it wishes to match its transient
         ///      state with the current DataGridState object.
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DataGridState.uex' path='docs/doc[@for="DataGridState.DataGridStateParentRowAccessibleObject.Navigate"]/*' />
+
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>

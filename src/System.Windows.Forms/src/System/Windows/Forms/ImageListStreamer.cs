@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer"]/*' />
+
     /// <devdoc>
     /// </devdoc>
     [Serializable]
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
             return output;
         }
 
-        /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer.GetObjectData"]/*' />
+
         public void /*cpr: ISerializable*/GetObjectData(SerializationInfo si, StreamingContext context) {
             MemoryStream stream = new MemoryStream();
 
@@ -217,7 +217,7 @@ namespace System.Windows.Forms {
             si.AddValue("Data", Compress(stream.ToArray()));
         }
 
-        /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer.GetNativeImageList"]/*' />
+
         /// <internalonly/>
         internal ImageList.NativeImageList GetNativeImageList() {
             return nativeImageList;
@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
             return SafeNativeMethods.ImageList_Write(new HandleRef(this, imagelistHandle), new UnsafeNativeMethods.ComStreamFromDataStream(stream));
         }
 
-        /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer.GetNativeImageList"]/*' />
+
         /// <devdoc>
         ///     Disposes the native image list handle.
         /// </devdoc>

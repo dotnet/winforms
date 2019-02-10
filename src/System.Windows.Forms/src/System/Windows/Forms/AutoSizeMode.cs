@@ -5,7 +5,7 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\AutoSizeMode.uex' path='docs/doc[@for="AutoSizeMode"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies how the control will behave when its AutoSize property is enabled

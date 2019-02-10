@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\MenuMerge.uex' path='docs/doc[@for="MenuMerge"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the behavior of a <see cref='System.Windows.Forms.MenuItem'/> when it is merged with items in another menu.
@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum MenuMerge {
 
-        /// <include file='doc\MenuMerge.uex' path='docs/doc[@for="MenuMerge.Add"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The <see cref='System.Windows.Forms.MenuItem'/> is added to
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Add        = 0,
 
-        /// <include file='doc\MenuMerge.uex' path='docs/doc[@for="MenuMerge.Replace"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The <see cref='System.Windows.Forms.MenuItem'/> replaces the
@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Replace    = 1,
 
-        /// <include file='doc\MenuMerge.uex' path='docs/doc[@for="MenuMerge.MergeItems"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Subitems of this <see cref='System.Windows.Forms.MenuItem'/> are merged with
@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         MergeItems = 2,
 
-        /// <include file='doc\MenuMerge.uex' path='docs/doc[@for="MenuMerge.Remove"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The <see cref='System.Windows.Forms.MenuItem'/> is not included in a merged menu.

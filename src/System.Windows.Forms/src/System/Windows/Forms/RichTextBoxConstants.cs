@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\RichTextBoxConstants.uex' path='docs/doc[@for="RichTextBoxConstants"]/*' />
+
     /// <devdoc>
     /// </devdoc>
     internal static class RichTextBoxConstants {

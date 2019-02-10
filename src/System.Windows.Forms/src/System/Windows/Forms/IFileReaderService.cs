@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
 
 
     public interface IFileReaderService {
-        /// <include file='doc\IFileReaderService.uex' path='docs/doc[@for="IFileReaderService.OpenFileFromSource"]/*' />
+
         Stream OpenFileFromSource(string relativePath);
     }
 }

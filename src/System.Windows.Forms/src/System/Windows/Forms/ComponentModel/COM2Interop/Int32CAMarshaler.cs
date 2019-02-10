@@ -9,7 +9,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System;
     
 
-    /// <include file='doc\Int32CAMarshaler.uex' path='docs/doc[@for="Int32CAMarshaler"]/*' />
+
     /// <devdoc>
     ///   This class performs marshaling on a CADWORD struct given
     ///   from native code.
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\Int32CAMarshaler.uex' path='docs/doc[@for="Int32CAMarshaler.ItemType"]/*' />
+
         /// <devdoc>
         ///     Returns the type of item this marshaler will
         ///     return in the items array.  In this case, the type is int.
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return new int[Count];
         }
 
-        /// <include file='doc\Int32CAMarshaler.uex' path='docs/doc[@for="Int32CAMarshaler.GetItemFromAddress"]/*' />
+
         /// <devdoc>
         ///     Override this member to perform marshalling of a single item
         ///     given it's native address.

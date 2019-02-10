@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Collections;
     
-    /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard"]/*' />
+
     /// <devdoc>
     ///    <para>Provides methods to place data on and retrieve data from the system clipboard. This class cannot be inherited.</para>
     /// </devdoc>
@@ -79,7 +79,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetDataObject"]/*' />
+
         /// <devdoc>
         /// <para>Places nonpersistent data on the system <see cref='System.Windows.Forms.Clipboard'/>.</para>
         /// </devdoc>
@@ -87,7 +87,7 @@ namespace System.Windows.Forms {
             SetDataObject(data, false);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetDataObject2"]/*' />
+
         /// <devdoc>
         /// <para>Overload that uses default values for retryTimes and retryDelay.</para>
         /// </devdoc>
@@ -95,7 +95,7 @@ namespace System.Windows.Forms {
             SetDataObject(data, copy, 10 /*retryTimes*/, 100 /*retryDelay*/);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetDataObject1"]/*' />
+
         /// <devdoc>
         /// <para>Places data on the system <see cref='System.Windows.Forms.Clipboard'/> and uses copy to specify whether the data 
         ///    should remain on the <see cref='System.Windows.Forms.Clipboard'/>
@@ -164,7 +164,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetDataObject"]/*' />
+
         /// <devdoc>
         ///    <para>Retrieves the data that is currently on the system
         ///    <see cref='System.Windows.Forms.Clipboard'/>.</para>
@@ -221,12 +221,12 @@ namespace System.Windows.Forms {
 
         // <-- WHIDBEY ADDITIONS 
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.Clear"]/*' />
+
         public static void Clear() {
             Clipboard.SetDataObject(new DataObject());
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsAudio"]/*' />
+
         public static bool ContainsAudio() {
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null) {
@@ -236,7 +236,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsData"]/*' />
+
         public static bool ContainsData(string format) {
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null) {
@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsFileDropList"]/*' />
+
         public static bool ContainsFileDropList() {
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null) {
@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsImage"]/*' />
+
         public static bool ContainsImage() {
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null) {
@@ -266,7 +266,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsText"]/*' />
+
         public static bool ContainsText() {
             if (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
                 Environment.OSVersion.Version.Major < 5) 
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsText1"]/*' />
+
         public static bool ContainsText(TextDataFormat format) {
             // valid values are 0x0-0x4 inclusive
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue)){
@@ -293,7 +293,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetAudioStream"]/*' />
+
         public static Stream GetAudioStream() {
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null) {
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetData"]/*' />
+
         public static object GetData(string format) {
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null) {
@@ -313,7 +313,7 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetFileDropList"]/*' />
+
         public static StringCollection GetFileDropList() {
             IDataObject dataObject = Clipboard.GetDataObject();
             StringCollection retVal = new StringCollection();
@@ -328,7 +328,7 @@ namespace System.Windows.Forms {
             return retVal;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetImage"]/*' />
+
         public static Image GetImage() {
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null) {
@@ -338,7 +338,7 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetText"]/*' />
+
         public static string GetText() {
             // Pass in Text format for Win98...
             if (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
@@ -351,7 +351,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetText1"]/*' />
+
         public static string GetText(TextDataFormat format) {
             // valid values are 0x0 to 0x4 inclusive
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
@@ -370,7 +370,7 @@ namespace System.Windows.Forms {
             return string.Empty;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetAudio"]/*' />
+
         public static void SetAudio(byte[] audioBytes) {
             if (audioBytes == null) {
                 throw new ArgumentNullException(nameof(audioBytes));
@@ -378,7 +378,7 @@ namespace System.Windows.Forms {
             SetAudio(new MemoryStream(audioBytes));
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetAudio1"]/*' />
+
         public static void SetAudio(Stream audioStream) {
             if (audioStream == null) {
                 throw new ArgumentNullException(nameof(audioStream));
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
             Clipboard.SetDataObject(dataObject, true);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetData"]/*' />
+
         public static void SetData(string format, object data) {
             //Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
             IDataObject dataObject = new DataObject();
@@ -396,7 +396,7 @@ namespace System.Windows.Forms {
             Clipboard.SetDataObject(dataObject, true);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetFileDropList"]/*' />
+
         public static void SetFileDropList(StringCollection filePaths) {
             if (filePaths == null) {
                 throw new ArgumentNullException(nameof(filePaths));
@@ -430,7 +430,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetImage"]/*' />
+
         public static void SetImage(Image image) {
             if (image == null) {
                 throw new ArgumentNullException(nameof(image));
@@ -440,7 +440,7 @@ namespace System.Windows.Forms {
             Clipboard.SetDataObject(dataObject, true);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetText"]/*' />
+
         public static void SetText(string text) {
             // Pass in Text format for Win98...
             if (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
@@ -453,7 +453,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetText1"]/*' />
+
         public static void SetText(string text, TextDataFormat format) {
             if (string.IsNullOrEmpty(text)) {
                 throw new ArgumentNullException(nameof(text));

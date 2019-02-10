@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
     
-    /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter"]/*' />
+
     public class ListBindingConverter : TypeConverter {
                                             
         private static Type[] ctorTypes = null;  // the list of type of our ctor parameters.
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter.CanConvertTo"]/*' />
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter.CreateInstance"]/*' />
+
         /// <devdoc>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter.GetCreateInstanceSupported"]/*' />
+
         /// <devdoc>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.

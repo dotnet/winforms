@@ -7,10 +7,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\MessageBoxDefaultButton.uex' path='docs/doc[@for="MessageBoxDefaultButton"]/*' />
+
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum MessageBoxDefaultButton {
-        /// <include file='doc\MessageBoxDefaultButton.uex' path='docs/doc[@for="MessageBoxDefaultButton.Button1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the first
@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Button1       = 0x00000000,
-        /// <include file='doc\MessageBoxDefaultButton.uex' path='docs/doc[@for="MessageBoxDefaultButton.Button2"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the second
@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Button2       = 0x00000100,
 
-        /// <include file='doc\MessageBoxDefaultButton.uex' path='docs/doc[@for="MessageBoxDefaultButton.Button3"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Specifies that the third

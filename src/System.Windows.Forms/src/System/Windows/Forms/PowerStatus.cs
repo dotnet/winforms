@@ -4,53 +4,53 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="ACLineStatus"]/*' />
+
     public enum PowerLineStatus
     {
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerLineStatus.Offline"]/*' />
+
         Offline = 0,
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerLineStatus.Online"]/*' />
+
         Online = 1,
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerLineStatus.Unknown"]/*' />
+
         Unknown = 255
     }
 
-    /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus"]/*' />
+
     [Flags]
     public enum BatteryChargeStatus
     {
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.High"]/*' />
+
         High = 1,
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Low"]/*' />
+
         Low = 2,
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Critical"]/*' />
+
         Critical = 4,
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Charging"]/*' />
+
         Charging = 8,
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.NoSystemBattery"]/*' />
+
         NoSystemBattery = 128,
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Unknown"]/*' />
+
         Unknown = 255
     }
 
-    /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerState"]/*' />
+
     public enum PowerState
     {
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerState.Suspend"]/*' />
+
         Suspend = 0,
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerState.Hibernate"]/*' />
+
         Hibernate = 1
     }
 
-    /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus"]/*' />
+
     public class PowerStatus
     {
         private NativeMethods.SYSTEM_POWER_STATUS systemPowerStatus;
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
         internal PowerStatus() {
         }
         
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.ACLineStatus"]/*' />
+
         public PowerLineStatus PowerLineStatus
         {
             get
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryChargeStatus"]/*' />
+
         public BatteryChargeStatus BatteryChargeStatus
         {
             get
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryFullLifetime"]/*' />
+
         public int BatteryFullLifetime
         {
             get
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryLifePercent"]/*' />
+
         public float BatteryLifePercent
         {
             get
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryLifeRemaining"]/*' />
+
         public int BatteryLifeRemaining
         {
             get

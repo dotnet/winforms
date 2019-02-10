@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Runtime.Serialization;
     
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings"]/*' />
+
     /// <devdoc>this is a wrapper class to expose interesting properties of TableLayout</devdoc>
     [
      TypeConverter(typeof(TableLayoutSettingsTypeConverter)),
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.LayoutEngine"]/*' />
+
         public override LayoutEngine LayoutEngine {
             get { return TableLayout.Instance; }
         }
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.CellBorderStyle"]/*' />
+
         /// <devdoc> internal as this is a TableLayoutPanel feature only </devdoc>
         [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
         internal TableLayoutPanelCellBorderStyle CellBorderStyle {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
             get { return TableLayout.GetContainerInfo(Owner).CellBorderWidth; }
         }
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.ColumnCount"]/*' />
+
         /// <devdoc>
         /// This sets the maximum number of columns allowed on this table instead of allocating
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
@@ -118,7 +118,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.RowCount"]/*' />
+
         /// <devdoc>
         /// This sets the maximum number of rows allowed on this table instead of allocating
         /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
@@ -144,7 +144,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.RowStyles"]/*' />
+
         [SRDescription(nameof(SR.GridPanelRowStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.ColumnStyles"]/*' />
+
         [SRDescription(nameof(SR.GridPanelColumnStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -176,7 +176,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.GrowStyle"]/*' />
+
         /// <devdoc>
         ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
         ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
@@ -694,42 +694,42 @@ namespace System.Windows.Forms {
     }
 
 
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="SizeType"]/*' />
+
     public enum SizeType {
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="SizeType.AutoSize"]/*' />
+
         AutoSize,
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="SizeType.Absolute"]/*' />
+
         Absolute,
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="SizeType.Percent"]/*' />
+
         Percent
     }
 
 
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle"]/*' />
+
     public class ColumnStyle : TableLayoutStyle {
 
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle.ColumnStyle"]/*' />
+
         public ColumnStyle() {}
 
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle.ColumnStyle1"]/*' />
+
         public ColumnStyle(SizeType sizeType) {
             this.SizeType = sizeType;
         }
 
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle.ColumnStyle2"]/*' />
+
         public ColumnStyle(SizeType sizeType, float width) {
             this.SizeType = sizeType;
             this.Width = width;
         }
         
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle.Width"]/*' />
+
         public float Width {
             get { return base.Size; }
             set { base.Size = value; }
@@ -737,27 +737,27 @@ namespace System.Windows.Forms {
     }
 
 
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle"]/*' />
+
     public class RowStyle : TableLayoutStyle {
 
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle.RowStyle"]/*' />
+
         public RowStyle() {}
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle.RowStyle1"]/*' />
+
         public RowStyle(SizeType sizeType) {
             this.SizeType = sizeType;
         }
         
     
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle.RowStyle2"]/*' />
+
         public RowStyle(SizeType sizeType, float height) {
             this.SizeType = sizeType;
             this.Height = height;
         }
 
  
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle.Height"]/*' />
+
         public float Height {
             get { return base.Size; }
             set { base.Size = value; }

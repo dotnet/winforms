@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing;
 
-    /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Provides methods and fields to manage the input language.
@@ -23,14 +23,14 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public sealed class InputLanguage {
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.handle"]/*' />
+
         /// <devdoc>
         ///     The HKL handle.
         /// </devdoc>
         /// <internalonly/>
         private readonly IntPtr handle;
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.InputLanguage"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
             this.handle = handle;
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.Culture"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns
@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.CurrentInputLanguage"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the input language for the current thread.
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.DefaultInputLanguage"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns the default input language for the system.
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.Handle"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns the handle for the input language.
@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.InstalledInputLanguages"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns a list of all installed input languages.
@@ -123,7 +123,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.LayoutName"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns
@@ -309,7 +309,7 @@ namespace System.Windows.Forms {
             return null;
         }
         
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.CreateInputLanguageChangedEventArgs"]/*' />
+
         /// <devdoc>
         ///     Creates an InputLanguageChangedEventArgs given a windows message.
         /// </devdoc>
@@ -318,7 +318,7 @@ namespace System.Windows.Forms {
             return new InputLanguageChangedEventArgs(new InputLanguage(m.LParam), unchecked((byte)(long)m.WParam));
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.CreateInputLanguageChangingEventArgs"]/*' />
+
         /// <devdoc>
         ///     Creates an InputLanguageChangingEventArgs given a windows message.
         /// </devdoc>
@@ -333,7 +333,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.Equals"]/*' />
+
         /// <devdoc>
         ///    <para>Specifies whether two input languages are equal.</para>
         /// </devdoc>
@@ -344,7 +344,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.FromCulture"]/*' />
+
         /// <devdoc>
         ///    <para>Returns the input language associated with the specified 
         ///       culture.</para>
@@ -364,7 +364,7 @@ namespace System.Windows.Forms {
             return null;
         }
         
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.GetHashCode"]/*' />
+
         /// <devdoc>
         ///    <para>Hash code for this input language.</para>
         /// </devdoc>

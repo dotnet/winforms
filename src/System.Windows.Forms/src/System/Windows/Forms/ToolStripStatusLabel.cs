@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using Automation;
    
 
-    /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel"]/*' />
+
     /// <devdoc>
     /// A non selectable winbar item
     /// </devdoc>
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         private AutomationLiveSetting liveSetting;
 
 
-        /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.ToolStripStatusLabel"]/*' />
+
         /// <devdoc>
         /// A non selectable winbar item
         /// </devdoc>
@@ -93,7 +93,7 @@ namespace System.Windows.Forms {
        }
 
 
-        /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.BorderStyle"]/*' />
+
         [
         DefaultValue(Border3DStyle.Flat),
         SRDescription(nameof(SR.ToolStripStatusLabelBorderStyleDescr)),
@@ -127,7 +127,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.BorderSides"]/*' />
+
         [
         DefaultValue(ToolStripStatusLabelBorderSides.None),
         SRDescription(nameof(SR.ToolStripStatusLabelBorderSidesDescr)),
@@ -222,7 +222,7 @@ namespace System.Windows.Forms {
 
 
         
-        /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.OnPaint"]/*' />
+
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>

@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\RichTextBoxSelectionAttribute.uex' path='docs/doc[@for="RichTextBoxSelectionAttribute"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies whether any characters in the
@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     public enum RichTextBoxSelectionAttribute {
-        /// <include file='doc\RichTextBoxSelectionAttribute.uex' path='docs/doc[@for="RichTextBoxSelectionAttribute.Mixed"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Some but not all characters.
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Mixed     = -1,
 
-        /// <include file='doc\RichTextBoxSelectionAttribute.uex' path='docs/doc[@for="RichTextBoxSelectionAttribute.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       No characters.
@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None      = 0,
 
-        /// <include file='doc\RichTextBoxSelectionAttribute.uex' path='docs/doc[@for="RichTextBoxSelectionAttribute.All"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       All characters.

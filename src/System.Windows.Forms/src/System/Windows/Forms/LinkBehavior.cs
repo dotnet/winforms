@@ -7,15 +7,15 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System;
 
-    /// <include file='doc\LinkBehavior.uex' path='docs/doc[@for="LinkBehavior"]/*' />
+
     public enum LinkBehavior {
-        /// <include file='doc\LinkBehavior.uex' path='docs/doc[@for="LinkBehavior.SystemDefault"]/*' />
+
         SystemDefault,
-        /// <include file='doc\LinkBehavior.uex' path='docs/doc[@for="LinkBehavior.AlwaysUnderline"]/*' />
+
         AlwaysUnderline,
-        /// <include file='doc\LinkBehavior.uex' path='docs/doc[@for="LinkBehavior.HoverUnderline"]/*' />
+
         HoverUnderline,
-        /// <include file='doc\LinkBehavior.uex' path='docs/doc[@for="LinkBehavior.NeverUnderline"]/*' />
+
         NeverUnderline,
     }
 }

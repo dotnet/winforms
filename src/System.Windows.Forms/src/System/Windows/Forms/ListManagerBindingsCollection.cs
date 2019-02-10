@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Collections;
     
-    /// <include file='doc\ListManagerBindingsCollection.uex' path='docs/doc[@for="ListManagerBindingsCollection"]/*' />
+
     /// <devdoc>
     /// BindingsCollection is a collection of bindings for a Control.  It has Add/Remove capabilities,
     /// as well as an All array property, enumeration, etc.
@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
 
         private BindingManagerBase bindingManagerBase;
         
-        /// <include file='doc\ListManagerBindingsCollection.uex' path='docs/doc[@for="ListManagerBindingsCollection.ListManagerBindingsCollection"]/*' />
+
         /// <devdoc>
         /// ColumnsCollection constructor.  Used only by DataSource.
         /// </devdoc>

@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\Orientation.uex' path='docs/doc[@for="Orientation"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the orientation of controls or elements of controls.
@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     public enum Orientation {
-        /// <include file='doc\Orientation.uex' path='docs/doc[@for="Orientation.Horizontal"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The control or element is oriented horizontally.
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Horizontal = 0,
 
-        /// <include file='doc\Orientation.uex' path='docs/doc[@for="Orientation.Vertical"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The control or element is oriented vertically.

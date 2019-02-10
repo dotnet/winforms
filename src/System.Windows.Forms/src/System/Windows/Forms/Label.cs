@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
     using Automation;
 
 
-    /// <include file='doc\Label.uex' path='docs/doc[@for="Label"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Represents a standard Windows label. </para>
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
         // } End Members
         ///////////////////////////////////////////////////////////////////////
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.Label"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Label'/> class.
@@ -117,7 +117,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.AutoSize"]/*' />
+
         /// <devdoc>
         ///    <para> Indicates whether the control is automatically resized
         ///       to fit its contents. </para>
@@ -144,7 +144,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.AutoSizeChanged"]/*' />
+
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.AutoEllipsis"]/*' />
+
         /// <devdoc>
         ///    <para> This property controls the activation handling of bleedover for the text that
         ///    extends beyond the width of the label. </para>
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BackgroundImage"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -220,7 +220,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BackgroundImageChanged"]/*' />
+
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BackgroundImageLayout"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -251,7 +251,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BackgroundImageLayoutChanged"]/*' />
+
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BorderStyle"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the border style for the control.
@@ -308,7 +308,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.CreateParams"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    Overrides Control.  A Label is a Win32 STATIC control, which we setup here.
@@ -371,21 +371,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.DefaultImeMode"]/*' />
+
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.DefaultMargin"]/*' />
+
         protected override Padding DefaultMargin {
             get {
                 return new Padding(3, 0, 3, 0);
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.DefaultSize"]/*' />
+
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -396,7 +396,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.FlatStyle"]/*' />
+
         [
             SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(FlatStyle.Standard),
@@ -437,7 +437,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.Image"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
@@ -479,7 +479,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ImageIndex"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the index value of the images displayed on the
@@ -525,7 +525,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ImageKey"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the key accessor for the image list.  This specifies the image
@@ -581,7 +581,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ImageList"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the images displayed in a <see cref='System.Windows.Forms.Label'/>.
@@ -631,7 +631,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ImageAlign"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the alignment of the image on the <see cref='System.Windows.Forms.Label'/>.
@@ -695,7 +695,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ImeMode"]/*' />
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -706,7 +706,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ImeModeChanged"]/*' />
+
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
@@ -718,7 +718,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyUp"]/*' />
+
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
@@ -730,7 +730,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyDown"]/*' />
+
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
@@ -742,7 +742,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyPress"]/*' />
+
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
@@ -769,7 +769,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.PreferredHeight"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets the height of the control (in pixels), assuming a
@@ -786,7 +786,7 @@ namespace System.Windows.Forms {
             get { return PreferredSize.Height; }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.PreferredWidth"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets the width of the control (in pixels), assuming a single line
@@ -803,7 +803,7 @@ namespace System.Windows.Forms {
             get { return PreferredSize.Width; }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.RenderTransparent"]/*' />
+
         /// <devdoc>
         ///    <para> Indicates whether
         ///       the container control background is rendered on the <see cref='System.Windows.Forms.Label'/>.</para>
@@ -825,7 +825,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.TabStop"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the user can tab to the
@@ -842,7 +842,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.TabStopChanged"]/*' />
+
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
@@ -854,7 +854,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.TextAlign"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the
@@ -896,7 +896,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.Text"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the text in the Label. Since we can have multiline support
@@ -917,7 +917,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.TextAlignChanged"]/*' />
+
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
             add {
@@ -965,7 +965,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.UseMnemonic"]/*' />
+
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether an ampersand (&amp;) included in the text of
         ///       the control.</para>
@@ -1072,7 +1072,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.CalcImageRenderBounds"]/*' />
+
         protected Rectangle CalcImageRenderBounds(Image image, Rectangle r, ContentAlignment align) {
             Size pointImageSize = image.Size;
 
@@ -1101,7 +1101,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.CreateAccessibilityInstance"]/*' />
+
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new LabelAccessibleObject(this);
         }
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms {
         }
     
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.Dispose"]/*' />
+
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 StopAnimate();
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.DrawImage"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Draws an <see cref='System.Drawing.Image'/> within the specified bounds.
@@ -1188,7 +1188,7 @@ namespace System.Windows.Forms {
         }
 
         /// <internalonly/>
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.GetLines"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       This Function returns the number of lines in the label Text.
@@ -1374,7 +1374,7 @@ namespace System.Windows.Forms {
             return FlatStyle != FlatStyle.System;
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnMouseEnter"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1396,7 +1396,7 @@ namespace System.Windows.Forms {
             base.OnMouseEnter(e);
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Button.OnMouseLeave"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnFontChanged"]/*' />
+
         protected override void OnFontChanged(EventArgs e) {
             MeasureTextCache.InvalidateCache();
             base.OnFontChanged(e);
@@ -1445,7 +1445,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnTextChanged"]/*' />
+
         protected override void OnTextChanged(EventArgs e) {
   
             using(LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text)) {
@@ -1460,7 +1460,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnTextAlignChanged"]/*' />
+
         protected virtual void OnTextAlignChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
             if (eh != null) {
@@ -1473,7 +1473,7 @@ namespace System.Windows.Forms {
             AdjustSize();
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnPaint"]/*' />
+
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1550,14 +1550,14 @@ namespace System.Windows.Forms {
         internal virtual void OnAutoEllipsisChanged(/*EventArgs e*/) {
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnEnabledChanged"]/*' />
+
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
             Animate();
         }
 
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnParentChanged"]/*' />
+
         protected override void OnParentChanged(EventArgs e) {
             base.OnParentChanged(e);
             if (SelfSizing) {
@@ -1573,7 +1573,7 @@ namespace System.Windows.Forms {
             base.OnRightToLeftChanged(e);
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnVisibleChanged"]/*' />
+
         protected override void OnVisibleChanged(EventArgs e) {
             base.OnVisibleChanged(e);
             Animate();
@@ -1591,7 +1591,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ProcessMnemonic"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1615,7 +1615,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.SetBoundsCore"]/*' />
+
         /// <devdoc>
         ///    Overrides Control.setBoundsCore to enforce autoSize.
         /// </devdoc>
@@ -1647,7 +1647,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.SetToolTip"]/*' />
+
         /// <devdoc>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </devdoc>
@@ -1664,7 +1664,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ToString"]/*' />
+
         /// <devdoc>
         ///    Returns a string representation for this control.
         /// </devdoc>
@@ -1674,7 +1674,7 @@ namespace System.Windows.Forms {
             return s + ", Text: " + Text;
         }
 
-        /// <include file='doc\Label.uex' path='docs/doc[@for="Label.WndProc"]/*' />
+
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -1735,7 +1735,7 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\Label.uex' path='docs/doc[@for="Label.LabelImageIndexer"]/*' />
+
     /// <internalonly/>
     /// <devdoc>
     ///    <para>

@@ -17,7 +17,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor"]/*' />
+
     /// <devdoc>
     /// This class wraps a com native property in a property descriptor.
     /// It maintains all information relative to the basic (e.g. ITypeInfo)
@@ -30,20 +30,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     internal class Com2PropertyDescriptor : PropertyDescriptor, ICloneable{
         private EventHandlerList events;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.baseReadOnly"]/*' />
+
         /// <devdoc>
         /// Is this guy read only?
         /// </devdoc>
         private bool baseReadOnly;
         private bool readOnly;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.propertyType"]/*' />
+
         /// <devdoc>
         /// The resoved native type -> clr type
         /// </devdoc>
         private Type propertyType;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.dispid"]/*' />
+
         /// <devdoc>
         /// The dispid. This is also in a DispIDAttiribute, but we
         /// need it a lot.
@@ -53,13 +53,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private TypeConverter   converter;
         private object          editor;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.displayName"]/*' />
+
         /// <devdoc>
         /// The current display name to show for this property
         /// </devdoc>
         private string displayName;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.typeData"]/*' />
+
         /// <devdoc>
         /// This is any extra data needed.  For IDispatch types, it's the GUID of
         /// the interface, etc.
@@ -67,63 +67,63 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private object typeData;
 
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.refreshState"]/*' />
+
         /// <devdoc>
         /// Keeps track of which data members need to be refreshed.
         /// </devdoc>
         private int  refreshState;
         
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.queryRefresh"]/*' />
+
         /// <devdoc>
         /// Should we bother asking if refresh is needed?
         /// </devdoc>
         private bool queryRefresh = false;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.com2props"]/*' />
+
         /// <devdoc>
         /// Our properties manager
         /// </devdoc>
         private Com2Properties com2props;
 
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.baseAttrs"]/*' />
+
         /// <devdoc>
         /// Our original baseline properties
         /// </devdoc>
         private Attribute[] baseAttrs;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.lastValue"]/*' />
+
         /// <devdoc>
         /// Our cached last value -- this is only
         /// for checking if we should ask for a display value
         /// </devdoc>
         private object lastValue;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.typeHide"]/*' />
+
         /// <devdoc>
         /// For Object and dispatch types, we hide them by default.
         /// </devdoc>
         private bool   typeHide;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.canShow"]/*' />
+
         /// <devdoc>
         /// Set if the metadata causes this property to always be hidden
         /// </devdoc>
         private bool   canShow;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.hrHidden"]/*' />
+
         /// <devdoc>
         /// This property is hidden because its get didn't return S_OK
         /// </devdoc>
         private bool   hrHidden;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.inAttrQuery"]/*' />
+
         /// <devdoc>
         /// Set if we are in the process of asking handlers for attributes
         /// </devdoc>
         private bool   inAttrQuery;
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.EventGetDynamicAttributes"]/*' />
+
         /// <devdoc>
         /// Our event signitures.
         /// </devdoc>
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private static readonly Guid GUID_COLOR = new Guid("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
                         
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.oleTypeGuids"]/*' />
+
         /// <devdoc>
         /// Our map of native types that we can map to managed types for editors
         /// </devdoc>
@@ -159,14 +159,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             oleConverters[typeof(UnsafeNativeMethods.IPicture).GUID] = typeof(Com2PictureConverter);
         }
        
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.valueConverter"]/*' />
+
         /// <devdoc>
         /// Should we convert our type?
         /// </devdoc>
         private Com2DataTypeToManagedDataTypeConverter valueConverter;
 
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.Com2PropertyDescriptor"]/*' />
+
         /// <devdoc>
         /// Ctor.
         /// </devdoc>
@@ -249,7 +249,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.Attributes"]/*' />
+
         /// <devdoc>
         ///     Attributes
         /// </devdoc>
@@ -329,7 +329,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.AttributesValid"]/*' />
+
         /// <devdoc>
         ///     Checks if the attributes are valid.  Asks any clients if they
         ///     would like attributes requeried.
@@ -347,7 +347,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.CanShow"]/*' />
+
         /// <devdoc>
         ///     Checks if this item can be shown.
         /// </devdoc>
@@ -358,7 +358,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.ComponentType"]/*' />
+
         /// <devdoc>
         ///     Retrieves the type of the component this PropertyDescriptor is bound to.
         /// </devdoc>
@@ -368,7 +368,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
         
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.Converter"]/*' />
+
         /// <devdoc>
         ///      Retrieves the type converter for this property.
         /// </devdoc>
@@ -392,7 +392,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.ConvertingNativeType"]/*' />
+
         /// <devdoc>
         ///     Retrieves whether this component is applying a type conversion...
         /// </devdoc>
@@ -402,7 +402,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }        
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.DefaultValue"]/*' />
+
         /// <devdoc>
         ///      Retrieves the default value for this property.
         /// </devdoc>
@@ -412,7 +412,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.DISPID"]/*' />
+
         /// <devdoc>
         ///     Retrieves the DISPID for this item
         /// </devdoc>
@@ -422,7 +422,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.DisplayName"]/*' />
+
         /// <devdoc>
         ///     Gets the friendly name that should be displayed to the user in a window like
         ///     the Property Browser.
@@ -439,7 +439,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.DisplayNameValid"]/*' />
+
         /// <devdoc>
         ///     Checks if the property display name is valid
         ///     asks clients if they would like display name requeried.
@@ -472,7 +472,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.IsReadOnly"]/*' />
+
         /// <devdoc>
         ///     Indicates whether this property is read only.
         /// </devdoc>
@@ -498,7 +498,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.PropertyType"]/*' />
+
         /// <devdoc>
         ///     Retrieves the type of the property.
         /// </devdoc>
@@ -514,7 +514,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.ReadOnlyValid"]/*' />
+
         /// <devdoc>
         ///     Checks if the read only state is valid.
         ///     Asks clients if they would like read-only requeried.
@@ -537,7 +537,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.TargetObject"]/*' />
+
         /// <devdoc>
         ///     Gets the Object that this descriptor was created for.
         ///     May be null if the Object's ref has died.
@@ -669,7 +669,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
 
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.CanResetValue"]/*' />
+
         /// <devdoc>
         ///     Indicates whether reset will change the value of the component.  If there
         ///     is a DefaultValueAttribute, then this will return true if getValue returns
@@ -696,7 +696,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return new Com2PropertyDescriptor(this.dispid, this.Name, (Attribute[])this.baseAttrs.Clone(), this.readOnly, this.propertyType, this.typeData, this.hrHidden);
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.CreateOleTypeConverter"]/*' />
+
         /// <devdoc>
         ///     Creates a converter Object, first by looking for a ctor with a Com2ProeprtyDescriptor
         ///     parameter, then using the default ctor if it is not found.
@@ -718,7 +718,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return converter;
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.CreateAttributeCollection"]/*' />
+
         /// <devdoc>
         ///     Creates an instance of the member attribute collection. This can
         ///     be overriden by subclasses to return a subclass of AttributeCollection.
@@ -808,7 +808,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return localEditor;
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.GetDisplayValue"]/*' />
+
         /// <devdoc>
         ///     Gets the value that should be displayed to the user, such as in
         ///     the Property Browser.
@@ -822,7 +822,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return str;
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.GetEditor"]/*' />
+
         /// <devdoc>
         ///      Retrieves an editor of the requested type.
         /// </devdoc>
@@ -852,7 +852,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
           
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.GetNativeValue"]/*' />
+
         /// <devdoc>
         ///     Retrieves the current native value of the property on component,
         ///     invoking the getXXX method.  An exception in the getXXX
@@ -901,7 +901,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.GetNeedsRefresh"]/*' />
+
         /// <devdoc>
         ///     Checks whether the particular item(s) need refreshing.
         /// </devdoc>
@@ -910,7 +910,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.GetValue"]/*' />
+
         /// <devdoc>
         ///     Retrieves the current value of the property on component,
         ///     invoking the getXXX method.  An exception in the getXXX
@@ -937,7 +937,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return lastValue;
         }
         
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.GetTypeConverterAndTypeEditor"]/*' />
+
         /// <devdoc>
         ///     Retrieves the value editor for the property.  If a value editor is passed
         ///     in as a TypeConverterAttribute, that value editor will be instantiated.
@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 typeEditor    = localEditor;
         }
         
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.IsCurrentValue"]/*' />
+
         /// <devdoc>
         ///     Is the given value equal to the last known value for this object?
         /// </devdoc>
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return (value == lastValue || (lastValue != null && lastValue.Equals(value)));
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.OnCanResetValue"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1037,7 +1037,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
         
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.OnGetDisplayName"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             RaiseGetNameItemEvent(EventGetDisplayName, gnie);
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.OnGetDisplayValue"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1053,7 +1053,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             RaiseGetNameItemEvent(EventGetDisplayValue, gnie);
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.OnGetDynamicAttributes"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1071,7 +1071,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
 
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.OnGetIsReadOnly"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1090,7 +1090,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
         
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.OnResetValue"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1098,7 +1098,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             RaiseCom2Event(EventResetValue, e);
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.OnShouldSerializeValue"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.OnShouldRefresh"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1115,7 +1115,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             RaiseGetBoolValueEvent(EventShouldRefresh, gvbe);
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.RaiseGetBoolValueEvent"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1130,7 +1130,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.RaiseCom2Event"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.RaiseGetNameItemEvent"]/*' />
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.ResetValue"]/*' />
+
         /// <devdoc>
         ///     Will reset the default value for this property on the component.  If
         ///     there was a default value passed in as a DefaultValueAttribute, that
@@ -1179,7 +1179,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.SetNeedsRefresh"]/*' />
+
         /// <devdoc>
         ///     Sets whether the particular item(s) need refreshing.
         /// </devdoc>
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.SetValue"]/*' />
+
         /// <devdoc>
         ///     This will set value to be the new value of this property on the
         ///     component by invoking the setXXX method on the component.  If the
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.ShouldSerializeValue"]/*' />
+
         /// <devdoc>
         ///     Indicates whether the value of this property needs to be persisted. In
         ///     other words, it indicates whether the state of the property is distinct
@@ -1344,7 +1344,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             OnShouldSerializeValue(gbv);
             return gbv.Value;
         }
-        /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.Com2PropDescMainConverter"]/*' />
+
         /// <devdoc>
         /// we wrap all value editors in this one so we can intercept
         /// the GetTextFromValue calls for objects that would like

@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design {
 
     using System.Windows.Forms;
 
-    /// <include file='doc\IWinFormsEditorService.uex' path='docs/doc[@for="IWindowsFormsEditorService"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Provides an interface to display Win Forms dialog
@@ -18,20 +18,20 @@ namespace System.Windows.Forms.Design {
     /// </devdoc>
     public interface IWindowsFormsEditorService {
 
-        /// <include file='doc\IWinFormsEditorService.uex' path='docs/doc[@for="IWindowsFormsEditorService.CloseDropDown"]/*' />
+
         /// <devdoc>
         /// <para>Closes a previously opened drop down
         /// list.</para>
         /// </devdoc>
         void CloseDropDown();
     
-        /// <include file='doc\IWinFormsEditorService.uex' path='docs/doc[@for="IWindowsFormsEditorService.DropDownControl"]/*' />
+
         /// <devdoc>
         ///    <para>Displays the specified control in a drop down list.</para>
         /// </devdoc>
         void DropDownControl(Control control);
     
-        /// <include file='doc\IWinFormsEditorService.uex' path='docs/doc[@for="IWindowsFormsEditorService.ShowDialog"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Shows the specified dialog box.

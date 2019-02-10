@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\DialogResult.uex' path='docs/doc[@for="DialogResult"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies identifiers to
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum DialogResult{
 
-        /// <include file='doc\DialogResult.uex' path='docs/doc[@for="DialogResult.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       
@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\DialogResult.uex' path='docs/doc[@for="DialogResult.OK"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         OK = 1,
 
-        /// <include file='doc\DialogResult.uex' path='docs/doc[@for="DialogResult.Cancel"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Cancel = 2,
 
-        /// <include file='doc\DialogResult.uex' path='docs/doc[@for="DialogResult.Abort"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The dialog box return value is
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Abort = 3,
 
-        /// <include file='doc\DialogResult.uex' path='docs/doc[@for="DialogResult.Retry"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The dialog box return value is
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Retry = 4,
 
-        /// <include file='doc\DialogResult.uex' path='docs/doc[@for="DialogResult.Ignore"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The
@@ -87,7 +87,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Ignore = 5,
 
-        /// <include file='doc\DialogResult.uex' path='docs/doc[@for="DialogResult.Yes"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The dialog box return value is
@@ -97,7 +97,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Yes = 6,
 
-        /// <include file='doc\DialogResult.uex' path='docs/doc[@for="DialogResult.No"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The dialog box return value is

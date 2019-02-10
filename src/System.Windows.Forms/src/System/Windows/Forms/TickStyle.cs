@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TickStyle.uex' path='docs/doc[@for="TickStyle"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum TickStyle {
 
-        /// <include file='doc\TickStyle.uex' path='docs/doc[@for="TickStyle.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       No tick marks appear in the control.
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\TickStyle.uex' path='docs/doc[@for="TickStyle.TopLeft"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Tick
@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         TopLeft = 1,
 
-        /// <include file='doc\TickStyle.uex' path='docs/doc[@for="TickStyle.BottomRight"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Tick marks are
@@ -49,7 +49,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         BottomRight = 2,
 
-        /// <include file='doc\TickStyle.uex' path='docs/doc[@for="TickStyle.Both"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Tick

@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///         Encapsulates insertion-mark information    
@@ -26,7 +26,7 @@ namespace System.Windows.Forms {
             this.listView = listView;
         }
 
-        /// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.AppearsAfterItem"]/*' />
+
         /// <devdoc>
         ///     Specifies whether the insertion mark appears
     	///     after the item - otherwise it appears
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
             }
         }
     
-    	/// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.Bounds"]/*' />
+
         /// <devdoc>
         ///     Returns bounds of the insertion-mark.
         /// </devdoc>
@@ -64,7 +64,7 @@ namespace System.Windows.Forms {
             }
         }
     
-    	/// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.Color"]/*' />
+
         /// <devdoc>
         ///     The color of the insertion-mark.
         /// </devdoc>
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
             }
         }
     
-    	/// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.Index"]/*' />
+
         /// <devdoc>
         ///     Item next to which the insertion-mark appears.
         /// </devdoc>
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
             }
         }        
   
-        /// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.Index"]/*' />
+
         /// <devdoc>
         ///     Performs a hit-test at the specified insertion point
     	///     and returns the closest item.

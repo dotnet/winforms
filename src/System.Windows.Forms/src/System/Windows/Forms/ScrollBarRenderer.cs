@@ -10,7 +10,7 @@ using System.Windows.Forms.VisualStyles;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Win32;
 
-    /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       This is a rendering class for the ScrollBar control.
@@ -26,7 +26,7 @@ using Microsoft.Win32;
        private ScrollBarRenderer() {
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.IsSupported"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
@@ -39,7 +39,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawArrowButton"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a ScrollBar arrow button.
@@ -52,7 +52,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawHorizontalThumb"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a horizontal ScrollBar thumb.
@@ -65,7 +65,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-              /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawVerticalThumb"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a vertical ScrollBar thumb.
@@ -78,7 +78,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawHorizontalThumbGrip"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a horizontal ScrollBar thumb grip.
@@ -91,7 +91,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawVerticalThumbGrip"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a vertical ScrollBar thumb grip.
@@ -104,7 +104,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawRightHorizontalTrack"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a horizontal ScrollBar thumb.
@@ -117,7 +117,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawLeftHorizontalTrack"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a horizontal ScrollBar thumb.
@@ -130,7 +130,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
               
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawUpperVerticalTrack"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a vertical ScrollBar thumb in the center of the given bounds.
@@ -143,7 +143,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawLowerVerticalTrack"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a vertical ScrollBar thumb in the center of the given bounds.
@@ -156,7 +156,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.DrawSizeBox"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a ScrollBar size box in the center of the given bounds.
@@ -169,7 +169,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.GetThumbGripSize"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns the size of the ScrollBar thumb grip.
@@ -182,7 +182,7 @@ using Microsoft.Win32;
            return visualStyleRenderer.GetPartSize(g, ThemeSizeType.True);
        }
 
-       /// <include file='doc\ScrollBarRenderer.uex' path='docs/doc[@for="ScrollBarRenderer.GetSizeBoxSize"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns the size of the ScrollBar size box.

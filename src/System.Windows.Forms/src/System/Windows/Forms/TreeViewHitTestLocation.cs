@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the
@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
     ]
     public enum TreeViewHitTestLocations {
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.None"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       No Information.
@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         None = NativeMethods.TVHT_NOWHERE,
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.Image"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       On Image.
@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Image = NativeMethods.TVHT_ONITEMICON,
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.Label"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       On Label.
@@ -48,7 +48,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Label = NativeMethods.TVHT_ONITEMLABEL,
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.Indent"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Indent.
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Indent = NativeMethods.TVHT_ONITEMINDENT,
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.AboveClientArea"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       AboveClientArea.
@@ -64,7 +64,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         AboveClientArea =  NativeMethods.TVHT_ABOVE,
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.BelowClientArea"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       BelowClientArea.
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         BelowClientArea = NativeMethods.TVHT_BELOW,
 
-        /// <include file='doc\TreeViewHitTestInfo.uex' path='docs/doc[@for="TreeViewHitTestInfo.LeftOfClientArea"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       LeftOfClientArea.
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         LeftOfClientArea = NativeMethods.TVHT_TOLEFT,
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.RightOfClientArea"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       RightOfClientArea.
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         RightOfClientArea = NativeMethods.TVHT_TORIGHT,
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.RightOfNode"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       RightOfNode.
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         RightOfLabel =   NativeMethods.TVHT_ONITEMRIGHT,
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.StateImage"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       StateImage.
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         StateImage = NativeMethods.TVHT_ONITEMSTATEICON,
 
-        /// <include file='doc\TreeViewHitTestLocations.uex' path='docs/doc[@for="TreeViewHitTestLocations.PlusMinus"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///      PlusMinus.

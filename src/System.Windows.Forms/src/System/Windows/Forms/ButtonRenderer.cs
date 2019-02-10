@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.VisualStyles;
     using Microsoft.Win32;
 
-    /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       This is a rendering class for the Button control. It works downlevel too (obviously
@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
         private ButtonRenderer() {
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.RenderMatchingApplicationState"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.IsBackgroundPartiallyTransparent"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Returns true if the background corresponding to the given state is partially transparent, else false.
@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.DrawParentBackground"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.DrawButton"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a Button control.
@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.DrawButton1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a Button control.
@@ -139,7 +139,7 @@ namespace System.Windows.Forms {
             DrawButtonForHandle(g, bounds, focused, state, IntPtr.Zero);
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.DrawButton2"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a Button control.
@@ -152,7 +152,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.DrawButton3"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a Button control.
@@ -182,7 +182,7 @@ namespace System.Windows.Forms {
                 }
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.DrawButton4"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a Button control.
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
                 }
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.DrawButton5"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a Button control.
@@ -221,7 +221,7 @@ namespace System.Windows.Forms {
                        image, imageBounds, focused, state);
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.DrawButton6"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Renders a Button control.

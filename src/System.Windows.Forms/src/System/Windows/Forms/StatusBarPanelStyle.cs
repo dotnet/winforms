@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\StatusBarPanelStyle.uex' path='docs/doc[@for="StatusBarPanelStyle"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies whether a panel on
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum StatusBarPanelStyle {
 
-        /// <include file='doc\StatusBarPanelStyle.uex' path='docs/doc[@for="StatusBarPanelStyle.Text"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The panel is
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Text        = 1,
 
-        /// <include file='doc\StatusBarPanelStyle.uex' path='docs/doc[@for="StatusBarPanelStyle.OwnerDraw"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The panel is

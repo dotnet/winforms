@@ -9,7 +9,7 @@ namespace System.Windows.Forms {
     using System;
     using System.Globalization;
     
-    /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell"]/*' />
+
     /// <devdoc>
     ///    <para>Identifies a cell in the grid.</para>
     /// </devdoc>    
@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
         private int rowNumber;
         private int columnNumber;
 
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.ColumnNumber"]/*' />
+
         /// <devdoc>
         /// <para>Gets or sets the number of a column in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
         /// </devdoc>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.RowNumber"]/*' />
+
         /// <devdoc>
         /// <para>Gets or sets the number of a row in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
         /// </devdoc>
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
             }
         }                
         
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.DataGridCell"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridCell'/> class.
@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
             this.columnNumber = c;
         }
         
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.Equals"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the <see cref='System.Windows.Forms.DataGridCell'/> is identical to a second
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
                 return false;
         }
         
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.GetHashCode"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
             return ((~rowNumber * (columnNumber+1)) & 0x00ffff00) >> 8;
        }
 
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.ToString"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets the row number and column number of the cell.

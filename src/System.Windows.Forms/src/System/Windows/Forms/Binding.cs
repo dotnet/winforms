@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Globalization;
 
-    /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Represents a simple binding of a value in a list
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         private DataSourceUpdateMode dataSourceUpdateMode = DataSourceUpdateMode.OnValidation;
         private BindingCompleteEventHandler onComplete = null;
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding"]/*' />
+
         /// <devdoc>
         ///     Initializes a new instance of the <see cref='System.Windows.Forms.Binding'/> class
         ///     that binds a property on the owning control to a property on a data source.
@@ -68,24 +68,24 @@ namespace System.Windows.Forms {
         public Binding(string propertyName, object dataSource, string dataMember) : this(propertyName, dataSource, dataMember, false, 0, null, string.Empty, null) {
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding6"]/*' />
+
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled) : this(propertyName, dataSource, dataMember, formattingEnabled, 0, null, string.Empty, null) {
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding2"]/*' />
+
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, null, string.Empty, null) {
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding3"]/*' />
+
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, string.Empty, null) {
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding5"]/*' />
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'formatString' is an appropriate name, since its a string passed to the Format method
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString, null) {
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding4"]/*' />
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")] // By design (no-one should be subclassing this class)
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'formatString' is an appropriate name, since its a string passed to the Format method
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo) {
@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
             CheckBinding();
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Binding1"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Binding'/> class.
@@ -117,21 +117,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.DataSource"]/*' />
+
         public object DataSource {
             get {
                 return this.bindToObject.DataSource;
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.BindingMemberInfo"]/*' />
+
         public BindingMemberInfo BindingMemberInfo {
             get {
                 return this.bindToObject.BindingMemberInfo;
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.BindableComponent"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets the control to which the binding belongs.
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Control"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets the control to which the binding belongs.
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.IsBinding"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the binding is active.
@@ -226,7 +226,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.BindingManagerBase"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets the <see cref='System.Windows.Forms.BindingManagerBase'/>
@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
             CheckBinding();
         }
         
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.PropertyName"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the property on the control to bind to.
@@ -268,7 +268,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.BindingComplete"]/*' />
+
         public event BindingCompleteEventHandler BindingComplete {
             add {
                 onComplete += value;
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Parse"]/*' />
+
         public event ConvertEventHandler Parse {
             add {
                 onParse += value;
@@ -288,7 +288,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.Format"]/*' />
+
         public event ConvertEventHandler Format {
             add {
                 onFormat += value;
@@ -298,7 +298,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.FormattingEnabled"]/*' />
+
         [DefaultValue(false)]
         public bool FormattingEnabled {
 
@@ -320,7 +320,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.FormatInfo"]/*' />
+
         [DefaultValue(null)]
         public IFormatProvider FormatInfo {
             get {
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.FormatString"]/*' />
+
         public string FormatString {
             get {
                 return this.formatString;
@@ -353,7 +353,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.NullValue"]/*' />
+
         public object NullValue {
             get {
                 return this.nullValue;
@@ -373,7 +373,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.DataSourceNullValue"]/*' />
+
         public object DataSourceNullValue {
             get {
                 return this.dsNullValue;
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.ControlUpdateMode"]/*' />
+
         [DefaultValue(ControlUpdateMode.OnPropertyChanged)]
         public ControlUpdateMode ControlUpdateMode {
             get {
@@ -431,7 +431,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.DataSourceUpdateMode"]/*' />
+
         [DefaultValue(DataSourceUpdateMode.OnValidation)]
         public DataSourceUpdateMode DataSourceUpdateMode {
             get {
@@ -614,7 +614,7 @@ namespace System.Windows.Forms {
             return new BindingCompleteEventArgs(this, state, context, errorText, ex, cancel);
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.OnBindingComplete"]/*' />
+
         protected virtual void OnBindingComplete(BindingCompleteEventArgs e) {
             // This recursion guard will only be in effect if FormattingEnabled because this method
             // is only called if formatting is enabled.
@@ -642,7 +642,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.OnParse"]/*' />
+
         protected virtual void OnParse(ConvertEventArgs cevent) {
             if (onParse != null) {
                 onParse(this, cevent);
@@ -655,7 +655,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.OnFormat"]/*' />
+
         protected virtual void OnFormat(ConvertEventArgs cevent) {
             if (onFormat!= null) {
                 onFormat(this, cevent);
@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.ReadValue"]/*' />
+
         /// <devdoc>
         ///     Reads current value from data source, and sends this to the control.
         /// </devdoc>
@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms {
             PushData(/*force:*/ true);
         }
 
-        /// <include file='doc\ListBinding.uex' path='docs/doc[@for="Binding.WriteValue"]/*' />
+
         /// <devdoc>
         ///     Takes current value from control, and writes this out to the data source.
         /// </devdoc>

@@ -7,7 +7,7 @@ namespace System.Windows.Forms {
     using System;
     using System.Windows.Forms;
 
-    /// <include file='doc\RTLAwareMessageBox.uex' path='docs/doc[@for="RTLAwareMessageBox"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       The Show method displays a message box that can contain text, buttons, and symbols that
@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     internal sealed class RTLAwareMessageBox {
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show6"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.

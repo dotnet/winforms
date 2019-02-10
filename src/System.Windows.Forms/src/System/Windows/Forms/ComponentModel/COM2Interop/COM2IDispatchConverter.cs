@@ -15,7 +15,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     internal class Com2IDispatchConverter : Com2ExtendedTypeConverter{
         Com2PropertyDescriptor propDesc;
 
-        /// <include file='doc\COM2IDispatchConverter.uex' path='docs/doc[@for="Com2IDispatchConverter.none"]/*' />
+
         /// <devdoc>
         ///     What we return textually for null.
         /// </devdoc>
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
              this.allowExpand = allowExpand;
         }
         
-        /// <include file='doc\COM2IDispatchConverter.uex' path='docs/doc[@for="Com2IDispatchConverter.CanConvertFrom"]/*' />
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return false;
         }
         
-        /// <include file='doc\COM2IDispatchConverter.uex' path='docs/doc[@for="Com2IDispatchConverter.CanConvertTo"]/*' />
+
         /// <devdoc>
         ///      Determines if this converter can convert an object to the given destination
         ///      type.
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
         
         
-        /// <include file='doc\COM2IDispatchConverter.uex' path='docs/doc[@for="Com2IDispatchConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return TypeDescriptor.GetProperties(value, attributes);
         }
         
-        /// <include file='doc\COM2IDispatchConverter.uex' path='docs/doc[@for="Com2IDispatchConverter.GetPropertiesSupported"]/*' />
+
         /// <devdoc>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.

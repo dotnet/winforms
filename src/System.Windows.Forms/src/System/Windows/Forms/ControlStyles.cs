@@ -8,7 +8,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System;
 
-    /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       Specifies control functionality.
@@ -17,12 +17,12 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [Flags]
     public enum ControlStyles {
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.ContainerControl"]/*' />
+
         /// <devdoc>
         ///     Indicates whether the control is a container-like control.
         /// </devdoc>
         ContainerControl= 0x00000001,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.UserPaint"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The control paints itself; WM_PAINT and WM_ERASEBKGND messages are not passed 
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         UserPaint       = 0x00000002,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.Opaque"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       If specified, a PaintBackground event will not be raised, OnPaintBackground will not be called,
@@ -41,28 +41,28 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         Opaque          = 0x00000004,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.ResizeRedraw"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The control is completely redrawn when it is resized.
         ///    </para>
         /// </devdoc>
         ResizeRedraw   = 0x00000010,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.FixedWidth"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The control has a fixed width.
         ///    </para>
         /// </devdoc>
         FixedWidth     = 0x00000020,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.FixedHeight"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The control has a fixed height.
         ///    </para>
         /// </devdoc>
         FixedHeight    = 0x00000040,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.StandardClick"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///        If set, windows forms calls OnClick and raises the Click event when the control is clicked
@@ -71,14 +71,14 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         StandardClick        = 0x00000100,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.Selectable"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The control can get the focus.
         ///    </para>
         /// </devdoc>
         Selectable = 0x00000200,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.UserMouse"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       The control does its own mouse processing; WM_MOUSEDOWN, WM_MOUSEMOVE, and WM_MOUSEUP messages are not passed 
@@ -86,7 +86,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         UserMouse       = 0x00000400,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.SupportsTransparentBackColor"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       If the BackColor is set to a color whose alpha component is
@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         SupportsTransparentBackColor          = 0x00000800,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.StandardDoubleClick"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///        If set, windows forms calls OnDoubleClick and raises the DoubleClick event when the control is double clicked.
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         StandardDoubleClick                   = 0x00001000,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.AllPaintingInWmPaint"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///        If true, WM_ERASEBKGND is ignored, and both OnPaintBackground and OnPaint are called directly from
@@ -120,7 +120,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         AllPaintingInWmPaint                  = 0x00002000,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.CacheText"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///         If true, the control keeps a copy of the text rather than going to the hWnd for the
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         CacheText                           = 0x00004000, 
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.EnableNotifyMessage"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///         If true, the OnNotifyMessage method will be called for every message sent to 
@@ -139,7 +139,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         EnableNotifyMessage                 = 0x00008000, 
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.DoubleBuffer"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///         If set, all control painting will be double buffered. You must also
@@ -149,14 +149,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)] // It is recommended that you use the DoubleBuffer property instead.
         DoubleBuffer                        = 0x00010000, 
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.OptimizedDoubleBuffer"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///         If set, all control painting will be double buffered.
         ///    </para>
         /// </devdoc>
         OptimizedDoubleBuffer               = 0x00020000,
-        /// <include file='doc\ControlStyles.uex' path='docs/doc[@for="ControlStyles.UseTextForAccessibility"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///         If this style is set, and there is a value in the control's Text property, that value will be

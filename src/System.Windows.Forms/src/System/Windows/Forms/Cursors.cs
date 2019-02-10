@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
 
 
-    /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors"]/*' />
+
     /// <devdoc>
     ///     Standard cursors
     /// </devdoc>
@@ -89,7 +89,7 @@ namespace System.Windows.Forms {
             //         help        = new Cursor(NativeMethods.IDC_HELP,0);
         }
         
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.AppStarting"]/*' />
+
         public static Cursor AppStarting {
             get {
                 if (appStarting == null)
@@ -98,7 +98,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Arrow"]/*' />
+
         public static Cursor Arrow {
             get {
                 if (arrow == null)
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Cross"]/*' />
+
         public static Cursor Cross {
             get {
                 if (cross == null)
@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Default"]/*' />
+
         public static Cursor Default {
             get {
                 if (defaultCursor == null)
@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.IBeam"]/*' />
+
         public static Cursor IBeam {
             get {
                 if (iBeam == null)
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.No"]/*' />
+
         public static Cursor No {
             get {
                 if (no == null)
@@ -143,7 +143,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeAll"]/*' />
+
         public static Cursor SizeAll {
             get {
                 if (sizeAll == null)
@@ -152,7 +152,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeNESW"]/*' />
+
         public static Cursor SizeNESW {
             get {
                 if (sizeNESW == null)
@@ -161,7 +161,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeNS"]/*' />
+
         public static Cursor SizeNS {
             get {
                 if (sizeNS == null)
@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeNWSE"]/*' />
+
         public static Cursor SizeNWSE {
             get {
                 if (sizeNWSE == null)
@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.SizeWE"]/*' />
+
         public static Cursor SizeWE {
             get {
                 if (sizeWE == null)
@@ -188,7 +188,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.UpArrow"]/*' />
+
         public static Cursor UpArrow {
             get {
                 if (upArrow == null)
@@ -197,7 +197,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.WaitCursor"]/*' />
+
         public static Cursor WaitCursor {
             get {
                 if (wait == null)
@@ -206,7 +206,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Help"]/*' />
+
         public static Cursor Help {
             get {
                 if (help == null)
@@ -215,7 +215,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.HSplit"]/*' />
+
         public static Cursor HSplit {
             get {
                 if (hSplit == null)
@@ -224,7 +224,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.VSplit"]/*' />
+
         public static Cursor VSplit {
             get {
                 if (vSplit == null)
@@ -233,7 +233,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.NoMove2D"]/*' />
+
         public static Cursor NoMove2D {
             get {
                 if (noMove2D == null)
@@ -242,7 +242,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.NoMoveHoriz"]/*' />
+
         public static Cursor NoMoveHoriz {
             get {
                 if (noMoveHoriz == null)
@@ -251,7 +251,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.NoMoveVert"]/*' />
+
         public static Cursor NoMoveVert {
             get {
                 if (noMoveVert == null)
@@ -260,7 +260,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanEast"]/*' />
+
         public static Cursor PanEast {
             get {
                 if (panEast == null)
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanNE"]/*' />
+
         public static Cursor PanNE {
             get {
                 if (panNE == null)
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanNorth"]/*' />
+
         public static Cursor PanNorth {
             get {
                 if (panNorth == null)
@@ -287,7 +287,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanNW"]/*' />
+
         public static Cursor PanNW {
             get {
                 if (panNW == null)
@@ -296,7 +296,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanSE"]/*' />
+
         public static Cursor PanSE {
             get {
                 if (panSE == null)
@@ -305,7 +305,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanSouth"]/*' />
+
         public static Cursor PanSouth {
             get {
                 if (panSouth == null)
@@ -314,7 +314,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanSW"]/*' />
+
         public static Cursor PanSW {
             get {
                 if (panSW == null)
@@ -323,7 +323,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.PanWest"]/*' />
+
         public static Cursor PanWest {
             get {
                 if (panWest == null)
@@ -332,7 +332,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursors.uex' path='docs/doc[@for="Cursors.Hand"]/*' />
+
         public static Cursor Hand {
             get {
                 if (hand == null)

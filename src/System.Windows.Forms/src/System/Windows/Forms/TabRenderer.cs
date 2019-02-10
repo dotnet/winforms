@@ -11,7 +11,7 @@ using System.Windows.Forms.Internal;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer"]/*' />
+
     /// <devdoc>
     ///    <para>
     ///       This is a rendering class for the Tab control.
@@ -27,7 +27,7 @@ using Microsoft.Win32;
        private TabRenderer() {
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.IsSupported"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
@@ -40,7 +40,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.DrawTabItem"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a Tab item.
@@ -55,7 +55,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.DrawTabItem1"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a Tab item.
@@ -73,7 +73,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.DrawTabItem2"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a Tab item.
@@ -83,7 +83,7 @@ using Microsoft.Win32;
            DrawTabItem(g, bounds, tabItemText, font, false, state);
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.DrawTabItem3"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a Tab item.
@@ -95,7 +95,7 @@ using Microsoft.Win32;
                        focused, state);
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.DrawTabItem4"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a Tab item.
@@ -115,7 +115,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.DrawTabItem5"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a Tab item.
@@ -136,7 +136,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.DrawTabItem6"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a Tab item.
@@ -148,7 +148,7 @@ using Microsoft.Win32;
                        image, imageRectangle, focused, state);
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.DrawTabItem7"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a Tab item.
@@ -170,7 +170,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\TabRenderer.uex' path='docs/doc[@for="TabRenderer.DrawTabPage"]/*' />
+
        /// <devdoc>
        ///    <para>
        ///       Renders a TabPage.

@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <include file='doc\ImageIndexConverter.uex' path='docs/doc[@for="ImageIndexConverter"]/*' />
+
     /// <devdoc>
     ///      ImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
 
         private string parentImageListProperty  = "Parent";
         
-        /// <include file='doc\ImageIndexConverter.uex' path='docs/doc[@for="ImageIndexConverter.IncludeNoneAsStandardValue"]/*' />
+
         protected virtual bool IncludeNoneAsStandardValue {
             get {
                 return true;
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ImageIndexConverter.uex' path='docs/doc[@for="ImageIndexConverter.ConvertFrom"]/*' />
+
         /// <devdoc>
         ///    <para>
         ///       Converts the given value object to a 32-bit signed integer object.
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ImageIndexConverter.uex' path='docs/doc[@for="ImageIndexConverter.ConvertTo"]/*' />
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        /// <include file='doc\ImageIndexConverter.uex' path='docs/doc[@for="ImageIndexConverter.GetStandardValues"]/*' />
+
         /// <devdoc>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
@@ -157,7 +157,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ImageIndexConverter.uex' path='docs/doc[@for="ImageIndexConverter.GetStandardValuesExclusive"]/*' />
+
         /// <devdoc>
         ///      Determines if the list of standard values returned from
         ///      GetStandardValues is an exclusive list.  If the list
@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\ImageIndexConverter.uex' path='docs/doc[@for="ImageIndexConverter.GetStandardValuesSupported"]/*' />
+
         /// <devdoc>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.

@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Security;
     using System.Security.Permissions;
 
-    /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar"]/*' />
+
     [DefaultProperty(nameof(Value))]
     public class ToolStripProgressBar : ToolStripControlHost {
 
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
         private Padding scaledDefaultStatusStripMargin = defaultStatusStripMargin;
 
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.ToolStripProgressBar"]/*' />
+
         public ToolStripProgressBar()
             : base(CreateControlInstance()) {
             ToolStripProgressBarControl toolStripProgressBarControl = Control as ToolStripProgressBarControl;
@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
             this.Name = name;
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.ProgressBar"]/*' />
+
         /// <devdoc>
         /// Create a strongly typed accessor for the class
         /// </devdoc>
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.DefaultSize"]/*' />
+
         /// <devdoc>
         /// Specify what size you want the item to start out at
         /// </devdoc>
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.DefaultMargin"]/*' />
+
         /// <devdoc>
         /// Specify how far from the edges you want to be
         /// </devdoc>
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.RightToLeftLayout"]/*' />
+
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -172,7 +172,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Step"]/*' />
+
         /// <devdoc>
         /// Wrap some commonly used properties
         /// </devdoc>
@@ -191,7 +191,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Style"]/*' />
+
         /// <devdoc>
         /// Wrap some commonly used properties
         /// </devdoc>
@@ -210,7 +210,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Text"]/*' />
+
         /// <devdoc>
         /// Hide the property.
         /// </devdoc>
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Value"]/*' />
+
         /// <devdoc>
         /// Wrap some commonly used properties
         /// </devdoc>
@@ -277,12 +277,12 @@ namespace System.Windows.Forms {
             OnRightToLeftLayoutChanged(e);
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.OnRightToLeftLayoutChanged"]/*' />
+
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             RaiseEvent(EventRightToLeftLayoutChanged, e);
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.OnSubscribeControlEvents"]/*' />
+
         protected override void OnSubscribeControlEvents(Control control) {
             ProgressBar bar = control as ProgressBar;
             if (bar != null) {
@@ -294,7 +294,7 @@ namespace System.Windows.Forms {
             base.OnSubscribeControlEvents(control);
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.OnUnsubscribeControlEvents"]/*' />
+
         protected override void OnUnsubscribeControlEvents(Control control) {
 
             ProgressBar bar = control as ProgressBar;
@@ -307,7 +307,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
+
         /// <devdoc>
         /// <para>Hide the event.</para>
         /// </devdoc>
@@ -327,7 +327,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
+
         /// <devdoc>
         /// <para>Hide the event.</para>
         /// </devdoc>
@@ -347,7 +347,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
+
         /// <devdoc>
         /// <para>Hide the event.</para>
         /// </devdoc>
@@ -366,7 +366,7 @@ namespace System.Windows.Forms {
                 base.KeyUp -= value;
             }
         }
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
+
         /// <devdoc>
         /// <para>Hide the event.</para>
         /// </devdoc>
@@ -386,7 +386,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
+
         /// <devdoc>
         /// <para>Hide the event.</para>
         /// </devdoc>
@@ -406,7 +406,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.RightToLeftLayoutChanged"]/*' />
+
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -417,7 +417,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
+
         /// <devdoc>
         /// <para>Hide the event.</para>
         /// </devdoc>
@@ -438,7 +438,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
+
         /// <devdoc>
         /// <para>Hide the event.</para>
         /// </devdoc>
@@ -458,7 +458,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
+
         /// <devdoc>
         /// <para>Hide the event.</para>
         /// </devdoc>
