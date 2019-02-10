@@ -13,7 +13,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.ComponentModel.Design;
     using Microsoft.Win32;
 
-    ///<internalonly/>
     public interface IComPropertyBrowser {
 
         void DropDownDone();
