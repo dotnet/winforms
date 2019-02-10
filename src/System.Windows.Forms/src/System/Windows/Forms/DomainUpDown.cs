@@ -17,7 +17,6 @@ namespace System.Windows.Forms {
     using System.Collections;
     using Microsoft.Win32;
 
-    /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown"]/*' />
     /// <devdoc>
     ///    <para>Represents a Windows up-down control that displays string values.</para>
     /// </devdoc>
@@ -39,7 +38,6 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.domainItems"]/*' />
         /// <devdoc>
         ///     Allowable strings for the domain updown.
         /// </devdoc>
@@ -56,7 +54,6 @@ namespace System.Windows.Forms {
 
         private bool inSort = false;
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDown"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DomainUpDown'/> class.
@@ -70,7 +67,6 @@ namespace System.Windows.Forms {
                 
         // Properties
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.Items"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the collection of objects assigned to the
@@ -94,7 +90,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -114,7 +109,6 @@ namespace System.Windows.Forms {
             remove { base.PaddingChanged -= value; }
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.SelectedIndex"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the index value of the selected item.
@@ -148,7 +142,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.SelectedItem"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the selected item based on the index value
@@ -186,7 +179,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.Sorted"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the item collection is sorted.
@@ -211,7 +203,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.Wrap"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the collection of items continues to
@@ -240,7 +231,6 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.SelectedItemChanged"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the <see cref='System.Windows.Forms.DomainUpDown.SelectedItem'/> property has
@@ -257,7 +247,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.CreateAccessibilityInstance"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    Constructs the new instance of the accessibility object for this control. Subclasses
@@ -267,7 +256,6 @@ namespace System.Windows.Forms {
             return new DomainUpDownAccessibleObject(this);
         }
         
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DownButton"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays the next item in the object collection.
@@ -307,7 +295,6 @@ namespace System.Windows.Forms {
                         
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.MatchIndex"]/*' />
         /// <devdoc>
         ///     Tries to find a match of the supplied text in the domain list.
         ///     If complete is true, a complete match is required for success
@@ -374,7 +361,6 @@ namespace System.Windows.Forms {
             return matchIndex;
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.OnChanged"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -387,7 +373,6 @@ namespace System.Windows.Forms {
             OnSelectedItemChanged(source, e);
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.OnTextBoxKeyPress"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>Handles the <see cref='System.Windows.Forms.Control.KeyPress'/>
@@ -421,7 +406,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.OnSelectedItemChanged"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.DomainUpDown.SelectedItemChanged'/> event.
@@ -435,7 +419,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.SelectIndex"]/*' />
         /// <devdoc>
         ///     Selects the item in the domain list at the given index
         /// </devdoc>
@@ -466,7 +449,6 @@ namespace System.Windows.Forms {
             Debug.Assert(domainIndex >=0 || UserEdit == true, "UserEdit should be true when domainIndex < 0 " + UserEdit);
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.SortDomainItems"]/*' />
         /// <devdoc>
         ///     Sorts the domain values
         /// </devdoc>
@@ -501,7 +483,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.ToString"]/*' />
         /// <devdoc>
         ///     Provides some interesting info about this control in String form.
         /// </devdoc>
@@ -517,7 +498,6 @@ namespace System.Windows.Forms {
             return s;
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.UpButton"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays the previous item in the collection.
@@ -561,7 +541,6 @@ namespace System.Windows.Forms {
             }
         }
        
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.UpdateEditText"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Updates the text in the up-down control to display the selected item.
@@ -590,7 +569,6 @@ namespace System.Windows.Forms {
 
         // DomainUpDown collection class
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownItemCollection"]/*' />
         /// <devdoc>
         /// <para>Encapsulates a collection of objects for use by the <see cref='System.Windows.Forms.DomainUpDown'/>
         /// class.</para>
@@ -603,7 +581,6 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownItemCollection.this"]/*' />
             /// <devdoc>
             /// </devdoc>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -625,7 +602,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownItemCollection.Add"]/*' />
             /// <devdoc>
             /// </devdoc>
             public override int Add(object item) {
@@ -638,7 +614,6 @@ namespace System.Windows.Forms {
                 return ret;
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownItemCollection.Remove"]/*' />
             /// <devdoc>
             /// </devdoc>
             public override void Remove(object item) {
@@ -652,7 +627,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownItemCollection.RemoveAt"]/*' />
             /// <devdoc>
             /// </devdoc>
             public override void RemoveAt(int item) {
@@ -670,7 +644,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownItemCollection.Insert"]/*' />
             /// <devdoc>
             /// </devdoc>
             public override void Insert(int index, object item) {
@@ -681,7 +654,6 @@ namespace System.Windows.Forms {
             }
         } // end class DomainUpDownItemCollection
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownItemCompare"]/*' />
         /// <devdoc>
         /// </devdoc>
         private sealed class DomainUpDownItemCompare : IComparer {
@@ -696,7 +668,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject"]/*' />
         /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
@@ -705,7 +676,6 @@ namespace System.Windows.Forms {
 
             private DomainItemListAccessibleObject itemList;
             
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject"]/*' />
             /// <devdoc>
             /// </devdoc>
             public DomainUpDownAccessibleObject(Control owner) : base(owner) {
@@ -733,7 +703,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject.Role"]/*' />
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;
@@ -751,7 +720,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject.GetChild"]/*' />
             /// <devdoc>
             /// </devdoc>
             public override AccessibleObject GetChild(int index) {
@@ -773,7 +741,6 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject.GetChildCount"]/*' />
             /// <devdoc>
             /// </devdoc>
             public override int GetChildCount() {
@@ -835,7 +802,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject"]/*' />
         /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
@@ -845,13 +811,11 @@ namespace System.Windows.Forms {
             private string name;
             private DomainItemListAccessibleObject parent;
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.DomainItemAccessibleObject"]/*' />
             public DomainItemAccessibleObject(string name, AccessibleObject parent) : base() {
                 this.name = name;
                 this.parent = (DomainItemListAccessibleObject)parent;
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Name"]/*' />
             public override string Name {
                 get {
                     return name;
@@ -861,28 +825,24 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent {
                 get {
                     return parent;
                 }
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Role"]/*' />
             public override AccessibleRole Role {
                 get {
                     return AccessibleRole.ListItem;
                 }
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.State"]/*' />
             public override AccessibleStates State {
                 get {
                     return AccessibleStates.Selectable;
                 }
             }
 
-            /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Value"]/*' />
             public override string Value {
                 get {
                     return name;

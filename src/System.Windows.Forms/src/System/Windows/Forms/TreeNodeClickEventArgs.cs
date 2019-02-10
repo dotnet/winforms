@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\TreeNodeMouseClickEventArgs.uex' path='docs/doc[@for="TreeNodeMouseClickEventArgs"]/*' />
     /// <devdoc>
     /// Provides data for the <see cref='System.Windows.Forms.TreeView.TreeNodeMouseClickEventArgs'/>
     /// or <see cref='System.Windows.Forms.TreeView.OnNodeMouseClick'/> event.

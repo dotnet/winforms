@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn"]/*' />
     /// <devdoc>
     ///    <para> Base class for the columns in a data grid view.</para>
     /// </devdoc>
@@ -52,7 +51,6 @@ namespace System.Windows.Forms
 
         private static readonly int PropDataGridViewColumnValueType = PropertyStore.CreateKey();
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DataGridViewColumn"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewColumn'/> class.
@@ -62,7 +60,6 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DataGridViewColumn3"]/*' />
         public DataGridViewColumn(DataGridViewCell cellTemplate) : base()
         {
             this.fillWeight = DATAGRIDVIEWCOLUMN_defaultFillWeight;
@@ -86,7 +83,6 @@ namespace System.Windows.Forms
             return DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.AutoSizeMode"]/*' />
         [
             SRCategory(nameof(SR.CatLayout)),
             DefaultValue(DataGridViewAutoSizeColumnMode.NotSet),
@@ -193,7 +189,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.CellTemplate"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -211,7 +206,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.CellType"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -231,7 +225,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ContextMenuStrip"]/*' />
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatBehavior)),
@@ -249,7 +242,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DataPropertyName"]/*' />
         [
             Browsable(true),
             DefaultValue(""),
@@ -281,7 +273,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DefaultCellStyle"]/*' />
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -348,7 +339,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DisplayIndex"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -434,7 +424,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Disposed"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -451,7 +440,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DividerWidth"]/*' />
         [
             DefaultValue(0),
             SRCategory(nameof(SR.CatLayout)),
@@ -469,7 +457,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.FillWeight"]/*' />
         [
             SRCategory(nameof(SR.CatLayout)),
             DefaultValue(DATAGRIDVIEWCOLUMN_defaultFillWeight),
@@ -513,7 +500,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Frozen"]/*' />
         [
             DefaultValue(false),
             RefreshProperties(RefreshProperties.All),
@@ -532,7 +518,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.HeaderCell"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -549,7 +534,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.HeaderText"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_ColumnHeaderTextDescr)),
@@ -592,7 +576,6 @@ namespace System.Windows.Forms
             return this.HasHeaderCell && ((DataGridViewColumnHeaderCell) this.HeaderCell).ContainsLocalValue;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.InheritedAutoSizeMode"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -606,7 +589,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.InheritedStyle"]/*' />
         [
             Browsable(false)
         ]
@@ -773,7 +755,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.IsDataBound"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -805,7 +786,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.MinimumWidth"]/*' />
         [
             DefaultValue(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness),
             Localizable(true), 
@@ -825,7 +805,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Name"]/*' />
         [
             Browsable(false)
         ]
@@ -877,7 +856,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ReadOnly"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_ColumnReadOnlyDescr))
@@ -903,7 +881,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Resizable"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_ColumnResizableDescr))
@@ -920,7 +897,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Site"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -937,7 +913,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.SortMode"]/*' />
         [
             DefaultValue(DataGridViewColumnSortMode.NotSortable),
             SRCategory(nameof(SR.CatBehavior)),
@@ -998,7 +973,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ToolTipText"]/*' />
         [
             DefaultValue(""),
             Localizable(true), 
@@ -1038,7 +1012,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ValueType"]/*' />
         [
             Browsable(false),
             DefaultValue(null),
@@ -1057,7 +1030,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Visible"]/*' />
         [
             DefaultValue(true),
             Localizable(true), 
@@ -1076,7 +1048,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Width"]/*' />
         [
             SRCategory(nameof(SR.CatLayout)),
             Localizable(true), 
@@ -1095,7 +1066,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Clone"]/*' />
         public override object Clone()
         {
             // 
@@ -1137,7 +1107,6 @@ namespace System.Windows.Forms
             dataGridViewColumn.FillWeightInternal = this.FillWeight;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             try 
             {
@@ -1195,7 +1164,6 @@ namespace System.Windows.Forms
             return this.autoSizeMode;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.GetPreferredWidth"]/*' />
         public virtual int GetPreferredWidth(DataGridViewAutoSizeColumnMode autoSizeColumnMode, bool fixedHeight)
         {
             if (autoSizeColumnMode == DataGridViewAutoSizeColumnMode.NotSet ||
@@ -1328,7 +1296,6 @@ namespace System.Windows.Forms
             return preferredColumnThickness;
         }
 
-        /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.ToString"]/*' />
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);

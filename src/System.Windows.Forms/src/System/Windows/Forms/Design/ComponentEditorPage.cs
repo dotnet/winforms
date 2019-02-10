@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -19,7 +19,6 @@ namespace System.Windows.Forms.Design {
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage"]/*' />
     /// <devdoc>
     /// <para>Provides a base implementation for a <see cref='System.Windows.Forms.Design.ComponentEditorPage'/>.</para>
     /// </devdoc>
@@ -37,7 +36,6 @@ namespace System.Windows.Forms.Design {
         Icon icon;
         bool commitOnDeactivate;
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.ComponentEditorPage"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Design.ComponentEditorPage'/> class.
@@ -53,7 +51,6 @@ namespace System.Windows.Forms.Design {
         }
 
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.AutoSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Hide the property
@@ -72,7 +69,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
@@ -86,7 +82,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.PageSite"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the page site.</para>
         /// </devdoc>
@@ -94,7 +89,6 @@ namespace System.Windows.Forms.Design {
             get { return pageSite; }
             set { pageSite = value; }
         }
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.Component"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the component to edit.</para>
         /// </devdoc>
@@ -102,7 +96,6 @@ namespace System.Windows.Forms.Design {
             get { return component; }
             set { component = value; }
         }
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.FirstActivate"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether the page is being activated for the first time.</para>
         /// </devdoc>
@@ -110,7 +103,6 @@ namespace System.Windows.Forms.Design {
             get { return firstActivate; }
             set { firstActivate = value; }
         }
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.LoadRequired"]/*' />
         /// <devdoc>
         ///    <para>Indicates whether a load is required previous to editing.</para>
         /// </devdoc>
@@ -118,7 +110,6 @@ namespace System.Windows.Forms.Design {
             get { return loadRequired; }
             set { loadRequired = value; }
         }
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.Loading"]/*' />
         /// <devdoc>
         ///    <para>Indicates if loading is taking place.</para>
         /// </devdoc>
@@ -127,7 +118,6 @@ namespace System.Windows.Forms.Design {
             set { loading = value; }
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.CommitOnDeactivate"]/*' />
         /// <devdoc>
         ///    <para> Indicates whether an editor should apply its
         ///       changes before it is deactivated.</para>
@@ -141,7 +131,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.CreateParams"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the creation parameters for this control.</para>
         /// </devdoc>
@@ -153,7 +142,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.Icon"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the icon for this page.</para>
         /// </devdoc>
@@ -171,7 +159,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.Title"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Gets or sets the title of the page.</para>
@@ -182,7 +169,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.Activate"]/*' />
         /// <devdoc>
         ///     Activates and displays the page.
         /// </devdoc>
@@ -198,7 +184,6 @@ namespace System.Windows.Forms.Design {
             firstActivate = false;
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.ApplyChanges"]/*' />
         /// <devdoc>
         ///    <para>Applies changes to all the components being edited.</para>
         /// </devdoc>
@@ -206,7 +191,6 @@ namespace System.Windows.Forms.Design {
             SaveComponent();
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.Deactivate"]/*' />
         /// <devdoc>
         ///    <para>Deactivates and hides the page.</para>
         /// </devdoc>
@@ -214,7 +198,6 @@ namespace System.Windows.Forms.Design {
             Visible = false;
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.EnterLoadingMode"]/*' />
         /// <devdoc>
         ///    Increments the loading counter, which determines whether a page
         ///    is in loading mode.
@@ -223,7 +206,6 @@ namespace System.Windows.Forms.Design {
             loading++;
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.ExitLoadingMode"]/*' />
         /// <devdoc>
         ///    Decrements the loading counter, which determines whether a page
         ///    is in loading mode.
@@ -233,7 +215,6 @@ namespace System.Windows.Forms.Design {
             loading--;
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.GetControl"]/*' />
         /// <devdoc>
         ///    <para>Gets the control that represents the window for this page.</para>
         /// </devdoc>
@@ -241,7 +222,6 @@ namespace System.Windows.Forms.Design {
             return this;
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.GetSelectedComponent"]/*' />
         /// <devdoc>
         ///    <para>Gets the component that is to be edited.</para>
         /// </devdoc>
@@ -249,7 +229,6 @@ namespace System.Windows.Forms.Design {
             return component;
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.IsPageMessage"]/*' />
         /// <devdoc>
         ///    <para>Processes messages that could be handled by the page.</para>
         /// </devdoc>
@@ -257,7 +236,6 @@ namespace System.Windows.Forms.Design {
             return PreProcessMessage(ref msg);
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.IsFirstActivate"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether the page is being activated for the first time.</para>
         /// </devdoc>
@@ -265,7 +243,6 @@ namespace System.Windows.Forms.Design {
             return firstActivate;
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.IsLoading"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether the page is being loaded.</para>
         /// </devdoc>
@@ -273,13 +250,11 @@ namespace System.Windows.Forms.Design {
             return loading != 0;
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.LoadComponent"]/*' />
         /// <devdoc>
         ///    <para>Loads the component into the page UI.</para>
         /// </devdoc>
         protected abstract void LoadComponent();
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.OnApplyComplete"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Called when the page along with its sibling
@@ -289,7 +264,6 @@ namespace System.Windows.Forms.Design {
             ReloadComponent();
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.ReloadComponent"]/*' />
         /// <devdoc>
         ///    <para>Called when the current component may have changed elsewhere
         ///       and needs to be reloded into the UI.</para>
@@ -300,13 +274,11 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.SaveComponent"]/*' />
         /// <devdoc>
         ///    <para>Saves the component from the page UI.</para>
         /// </devdoc>
         protected abstract void SaveComponent();
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.SetDirty"]/*' />
         /// <devdoc>
         ///    <para>Sets the page to be in dirty state.</para>
         /// </devdoc>
@@ -316,7 +288,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.SetComponent"]/*' />
         /// <devdoc>
         ///    <para>Sets the component to be edited.</para>
         /// </devdoc>
@@ -325,7 +296,6 @@ namespace System.Windows.Forms.Design {
             loadRequired = true;
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.SetSite"]/*' />
         /// <devdoc>
         ///     Sets the site for this page.
         /// </devdoc>
@@ -335,7 +305,6 @@ namespace System.Windows.Forms.Design {
             pageSite.GetControl().Controls.Add(this);
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.ShowHelp"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Provides help information to the help system.</para>
@@ -343,7 +312,6 @@ namespace System.Windows.Forms.Design {
         public virtual void ShowHelp() {
         }
 
-        /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.SupportsHelp"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether the editor supports Help.</para>
         /// </devdoc>

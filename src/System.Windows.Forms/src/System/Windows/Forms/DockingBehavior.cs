@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\DockingBehavior.uex' path='docs/doc[@for="DockingBehavior"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies whether any characters in the
@@ -13,7 +12,6 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     public enum DockingBehavior {
-        /// <include file='doc\DockingBehavior.uex' path='docs/doc[@for="DockingBehavior.Never"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Some but not all characters.
@@ -21,7 +19,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Never     = 0,
 
-        /// <include file='doc\DockingBehavior.uex' path='docs/doc[@for="DockingBehavior.Ask"]/*' />
         /// <devdoc>
         ///    <para>
         ///       No characters.
@@ -29,7 +26,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Ask      = 1,
 
-        /// <include file='doc\DockingBehavior.uex' path='docs/doc[@for="DockingBehavior.AutoDock"]/*' />
         /// <devdoc>
         ///    <para>
         ///       All characters.

@@ -21,7 +21,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using Microsoft.Win32;
 
-    /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Encapsulates a
@@ -57,7 +56,6 @@ namespace System.Windows.Forms {
         internal int flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
         internal int flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButton"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.RadioButton'/>
@@ -78,7 +76,6 @@ namespace System.Windows.Forms {
             SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.AutoCheck"]/*' />
         /// <devdoc>
         /// <para>Gets or sets a value indicating whether the <see cref='System.Windows.Forms.RadioButton.Checked'/>
         /// value and the appearance of
@@ -102,7 +99,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.Appearance"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the appearance of the radio
@@ -145,7 +141,6 @@ namespace System.Windows.Forms {
 
         private static readonly object EVENT_APPEARANCECHANGED = new object();
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.AppearanceChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnAppearanceChangedDescr))]
         public event EventHandler AppearanceChanged {
             add {
@@ -157,7 +152,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.CheckAlign"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -191,7 +185,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.Checked"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the
@@ -224,7 +217,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.DoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
@@ -236,7 +228,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.MouseDoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
@@ -248,7 +239,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.CreateParams"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -276,7 +266,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -346,7 +335,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.TabStop"]/*' />
         [DefaultValue(false)]
         new public bool TabStop {
             get {
@@ -357,7 +345,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.TextAlign"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -379,7 +366,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.CheckedChanged"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the
@@ -397,7 +383,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.CreateAccessibilityInstance"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -409,7 +394,6 @@ namespace System.Windows.Forms {
             return new RadioButtonAccessibleObject(this);
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.OnHandleCreated"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -423,7 +407,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.OnCheckedChanged"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.CheckBox.CheckedChanged'/>
@@ -437,7 +420,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.OnClick"]/*' />
         /// <devdoc>
         ///     We override this to implement the autoCheck functionality.
         /// </devdoc>
@@ -449,7 +431,6 @@ namespace System.Windows.Forms {
             base.OnClick(e);
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.OnEnter"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -479,7 +460,6 @@ namespace System.Windows.Forms {
             base.OnEnter(e);
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.PerformAutoUpdates"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -508,7 +488,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.WipeTabStops"]/*' />
         /// <devdoc>
         ///     Removes tabstops from all radio buttons, other than the one that currently has the focus.
         /// </devdoc>
@@ -551,7 +530,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.OnMouseUp"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -578,7 +556,6 @@ namespace System.Windows.Forms {
             base.OnMouseUp(mevent);
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.PerformClick"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Generates a <see cref='System.Windows.Forms.Control.Click'/> event for the
@@ -597,7 +574,6 @@ namespace System.Windows.Forms {
                 
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.ProcessMnemonic"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>        
@@ -614,7 +590,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
@@ -625,18 +600,15 @@ namespace System.Windows.Forms {
             return s + ", Checked: " + Checked.ToString();
         }
 
-        /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject"]/*' />
         /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]        
         public class RadioButtonAccessibleObject : ButtonBaseAccessibleObject {
 
-            /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.RadioButtonAccessibleObject"]/*' />
             public RadioButtonAccessibleObject(RadioButton owner) : base(owner) {
             }
 
-            /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction {
                 get {
                     string defaultAction = Owner.AccessibleDefaultActionDescription;
@@ -648,7 +620,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.Role"]/*' />
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;
@@ -659,7 +630,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.State"]/*' />
             public override AccessibleStates State {
                 get {
                     if (((RadioButton)Owner).Checked) {
@@ -669,7 +639,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.RadioButtonAccessibleObject.DoDefaultAction"]/*' />
             public override void DoDefaultAction() {
                 ((RadioButton)Owner).PerformClick();
             }

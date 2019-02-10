@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
 
     
-    /// <include file='doc\TextRenderer.uex' path='docs/doc[@for="TextRenderer"]/*' />
     /// <devdoc>
     ///    <para>
     ///     This class provides API for drawing GDI text.
@@ -24,7 +23,6 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <include file='doc\TextRenderer.uex' path='docs/doc[@for="TextRenderer.DrawText"]/*' />
         public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor)
         {
             if (dc == null)
@@ -51,7 +49,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\TextRenderer.uex' path='docs/doc[@for="TextRenderer.DrawText1"]/*' />
         public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor, Color backColor)
         {
             if (dc == null)
@@ -78,7 +75,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\TextRenderer.uex' path='docs/doc[@for="TextRenderer.DrawText2"]/*' />
         public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor, TextFormatFlags flags)
         {
             if (dc == null)
@@ -96,7 +92,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\TextRenderer.uex' path='docs/doc[@for="TextRenderer.DrawText3"]/*' />
         public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor, Color backColor, TextFormatFlags flags)
         {
             if (dc == null)
@@ -114,7 +109,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\TextRenderer.uex' path='docs/doc[@for="TextRenderer.DrawText4"]/*' />
         public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor)
         {
             if (dc == null)
@@ -141,7 +135,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\TextRenderer.uex' path='docs/doc[@for="TextRenderer.DrawText5"]/*' />
         public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor, Color backColor)
         {
             if (dc == null)
@@ -168,7 +161,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\TextRenderer.uex' path='docs/doc[@for="TextRenderer.DrawText6"]/*' />
         public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
         {
             if (dc == null)
@@ -186,7 +178,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\TextRenderer.uex' path='docs/doc[@for="TextRenderer.DrawText7"]/*' />
         public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor, Color backColor, TextFormatFlags flags)
         {
             if (dc == null)

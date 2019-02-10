@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies the display bounds of a ListItem.
@@ -20,7 +19,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum ItemBoundsPortion {
 
-        /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion.Entire"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Both the icon and label
@@ -30,7 +28,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Entire = NativeMethods.LVIR_BOUNDS,
 
-        /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion.Icon"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Only the icon portion.
@@ -38,7 +35,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Icon = NativeMethods.LVIR_ICON,
 
-        /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion.Label"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Only the label portion.
@@ -46,7 +42,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Label = NativeMethods.LVIR_LABEL,
 
-        /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion.ItemOnly"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Both the icon and label portions. In Report view, this

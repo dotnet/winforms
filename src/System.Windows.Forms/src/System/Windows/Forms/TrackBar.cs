@@ -19,7 +19,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Globalization;
     
-    /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar"]/*' />
     /// <devdoc>
     ///     The TrackBar is a scrollable control similar to the ScrollBar, but
     ///     has a different UI.  You can configure ranges through which it should
@@ -62,7 +61,6 @@ namespace System.Windows.Forms {
 
         private bool rightToLeftLayout = false;        
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.TrackBar"]/*' />
         /// <devdoc>
         ///     Creates a new TrackBar control with a default range of 0..10 and
         ///     ticks shown every value.
@@ -74,7 +72,6 @@ namespace System.Windows.Forms {
             requestedDim = PreferredDimension;
         }
         
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.AutoSize"]/*' />
         /// <devdoc>
         ///     Indicates if the control is being auto-sized.  If true, the
         ///     TrackBar will adjust either its height or width [depending on
@@ -115,7 +112,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.AutoSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
@@ -131,7 +127,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -142,7 +137,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -154,7 +148,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -165,7 +158,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -177,7 +169,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.CreateParams"]/*' />
         /// <devdoc>
         ///     This is called when creating a window.  Inheriting classes can override
         ///     this to add extra functionality, but should not forget to first call
@@ -219,7 +210,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.DefaultImeMode"]/*' />
         /// <internalonly/>
         protected override ImeMode DefaultImeMode {
             get {
@@ -227,7 +217,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -238,7 +227,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.DoubleBuffered"]/*' />
         /// <devdoc>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
@@ -253,7 +241,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Font"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
             get {
@@ -264,7 +251,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.FontChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
@@ -276,7 +262,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ForeColor"]/*' />
         /// <devdoc>
         ///     The current foreground color of the TrackBar.  Note that users
         ///     are unable to change this.  It is always Color.WINDOWTEXT
@@ -290,7 +275,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ForeColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
@@ -302,7 +286,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ImeMode"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
@@ -314,7 +297,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ImeModeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
@@ -326,7 +308,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.LargeChange"]/*' />
         /// <devdoc>
         ///     The number of ticks by which the TrackBar will change when an
         ///     event considered a "large change" occurs.  These include, Clicking the
@@ -357,7 +338,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Maximum"]/*' />
         /// <devdoc>
         ///     The upper limit of the range this TrackBar is working with.
         /// </devdoc>
@@ -381,7 +361,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Minimum"]/*' />
         /// <devdoc>
         ///     The lower limit of the range this TrackBar is working with.
         /// </devdoc>
@@ -405,7 +384,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Orientation"]/*' />
         /// <devdoc>
         ///    <para>The orientation for this TrackBar. Valid values are from
         ///       the Orientation enumeration. The control currently supports being
@@ -452,7 +430,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -472,7 +449,6 @@ namespace System.Windows.Forms {
             remove { base.PaddingChanged -= value; }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.PreferredDimension"]/*' />
         /// <devdoc>
         ///     Little private routine that helps with auto-sizing.
         /// </devdoc>
@@ -487,7 +463,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.PreferredDimension"]/*' />
         /// <devdoc>
         ///     Redraw control, if the handle's created
         /// </devdoc>
@@ -503,7 +478,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Trackbar.uex' path='docs/doc[@for="Trackbar.RightToLeftLayout"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -531,7 +505,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.SmallChange"]/*' />
         /// <devdoc>
         ///     The number of ticks by which the TrackBar will change when an
         ///     event considered a "small change" occurs.  These are most commonly
@@ -560,7 +533,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
         public override string Text {
             get {
@@ -571,7 +543,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.TextChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
@@ -583,7 +554,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.TickStyle"]/*' />
         /// <devdoc>
         ///     Indicates how the TrackBar control will draw itself.  This affects
         ///     both where the ticks will be drawn in relation to the moveable thumb,
@@ -614,7 +584,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.TickFrequency"]/*' />
         /// <devdoc>
         ///     Indicates just how many ticks will be drawn.  For a TrackBar with a
         ///     range of 0..100, it might be impractical to draw all 100 ticks for a
@@ -642,7 +611,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Value"]/*' />
         /// <devdoc>
         ///     The current location of the TrackBar thumb.  This value must
         ///     be between the lower and upper limits of the TrackBar range, of course.
@@ -669,7 +637,6 @@ namespace System.Windows.Forms {
             }
         }    
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Click"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click {
@@ -681,7 +648,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.DoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
@@ -693,7 +659,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.MouseClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseClick {
@@ -705,7 +670,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.MouseDoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
@@ -717,7 +681,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -728,7 +691,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Scroll"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TrackBarOnScrollDescr))]
         public event EventHandler Scroll {
             add {
@@ -739,7 +701,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.OnPaint"]/*' />
         /// <devdoc>
         ///     TrackBar Onpaint.
         /// </devdoc>
@@ -754,7 +715,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ValueChanged"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
             add {
@@ -765,7 +725,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.AdjustSize"]/*' />
         /// <devdoc>
         ///     Enforces autoSizing
         /// </devdoc>
@@ -785,7 +744,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BeginInit"]/*' />
         /// <devdoc>
         ///      Handles tasks required when the control is being initialized.
         /// </devdoc>
@@ -815,7 +773,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -833,7 +790,6 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
         
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.EndInit"]/*' />
         /// <devdoc>
         ///      Called when initialization of the control is complete.
         /// </devdoc>
@@ -865,7 +821,6 @@ namespace System.Windows.Forms {
             }
         }                                               
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.IsInputKey"]/*' />
         /// <devdoc>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
         /// </devdoc>
@@ -881,7 +836,6 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
         
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.OnHandleCreated"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -896,7 +850,6 @@ namespace System.Windows.Forms {
             AdjustSize();
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {
@@ -913,7 +866,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.OnScroll"]/*' />
         /// <devdoc>
         ///     Actually fires the "scroll" event.  Inheriting classes should override
         ///     this method in favor of actually adding an EventHandler for this
@@ -925,7 +877,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Trackbar.uex' path='docs/doc[@for="Trackbar.OnMouseWheel"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseWheel'/> event.</para>
         /// </devdoc>
@@ -984,7 +935,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.OnValueChanged"]/*' />
         /// <devdoc>
         ///     Actually fires the "valueChanged" event.
         /// </devdoc>
@@ -994,7 +944,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.OnBackColorChanged"]/*' />
         /// <devdoc>
         ///     This method is called by the control when any property changes. Inheriting
         ///     controls can overide this method to get property change notification on
@@ -1005,13 +954,11 @@ namespace System.Windows.Forms {
             RedrawControl();
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.OnSystemColorsChanged"]/*' />
         protected override void OnSystemColorsChanged (EventArgs e) {
             base.OnSystemColorsChanged (e);
             RedrawControl();
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.SetBoundsCore"]/*' />
         /// <devdoc>
         ///     Overrides Control.setBoundsCore to enforce autoSize.
         /// </devdoc>
@@ -1037,7 +984,6 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.SetRange"]/*' />
         /// <devdoc>
         ///     Lets you set the the entire range for the TrackBar control at once.
         ///     The values passed are both the lower and upper limits to the range
@@ -1112,7 +1058,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
@@ -1123,7 +1068,6 @@ namespace System.Windows.Forms {
             return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + Value.ToString(CultureInfo.CurrentCulture);
         }
 
-        /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.WndProc"]/*' />
         /// <devdoc>
         ///     The button's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call

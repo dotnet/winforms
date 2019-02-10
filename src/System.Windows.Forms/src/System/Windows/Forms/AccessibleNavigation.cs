@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\AccessibleNavigation.uex' path='docs/doc[@for="AccessibleNavigation"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies values for navigating between accessible objects.
@@ -19,7 +18,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum AccessibleNavigation {
 
-        /// <include file='doc\AccessibleNavigation.uex' path='docs/doc[@for="AccessibleNavigation.Down"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Navigation
@@ -30,7 +28,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Down = 0x2,
 
-        /// <include file='doc\AccessibleNavigation.uex' path='docs/doc[@for="AccessibleNavigation.FirstChild"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Navigation to
@@ -40,7 +37,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         FirstChild = 0x7,
 
-        /// <include file='doc\AccessibleNavigation.uex' path='docs/doc[@for="AccessibleNavigation.LastChild"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Navigation to
@@ -50,7 +46,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         LastChild = 0x8,
 
-        /// <include file='doc\AccessibleNavigation.uex' path='docs/doc[@for="AccessibleNavigation.Left"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Navigation
@@ -62,7 +57,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Left = 0x3,
 
-        /// <include file='doc\AccessibleNavigation.uex' path='docs/doc[@for="AccessibleNavigation.Next"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Navigation
@@ -74,7 +68,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Next = 0x5,
         
-        /// <include file='doc\AccessibleNavigation.uex' path='docs/doc[@for="AccessibleNavigation.Previous"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Navigation to the previous logical object, generally
@@ -86,7 +79,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Previous = 0x6,
         
-        /// <include file='doc\AccessibleNavigation.uex' path='docs/doc[@for="AccessibleNavigation.Right"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Navigation to the sibling object
@@ -96,7 +88,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Right = 0x4,
         
-        /// <include file='doc\AccessibleNavigation.uex' path='docs/doc[@for="AccessibleNavigation.Up"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Navigation to a sibling object

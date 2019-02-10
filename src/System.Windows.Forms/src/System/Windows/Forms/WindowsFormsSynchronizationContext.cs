@@ -10,7 +10,6 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext"]/*' />
     /// <summary>
     ///     SynchronizationContext subclass used by the Windows Forms package.
     /// </summary>
@@ -29,7 +28,6 @@ namespace System.Windows.Forms
         private static SynchronizationContext previousSyncContext;
 
 
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.WindowsFormsSynchronizationContext"]/*' />
         public WindowsFormsSynchronizationContext() {
             DestinationThread = Thread.CurrentThread;   //store the current thread to ensure its still alive during an invoke.
             Application.ThreadContext context = Application.ThreadContext.FromCurrent();
@@ -69,7 +67,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.Send"]/*' />
         // This is never called because we decide whether to Send or Post and we always post
         public override void Send(SendOrPostCallback d, object state) {
             Thread destinationThread = DestinationThread;
@@ -84,7 +81,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.Post"]/*' />
         public override void Post(SendOrPostCallback d, object state) {
             Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");
 
@@ -93,12 +89,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.CreateCopy"]/*' />
         public override SynchronizationContext CreateCopy() {
             return new WindowsFormsSynchronizationContext(controlToSendTo, DestinationThread);
         }
 
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.CreateCopy"]/*' />
         // Determines whether we install the WindowsFormsSynchronizationContext when we create a control, or
         // when we start a message loop.  Default: true.
         [EditorBrowsable(EditorBrowsableState.Advanced)]

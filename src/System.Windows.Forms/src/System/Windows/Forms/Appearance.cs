@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\Appearance.uex' path='docs/doc[@for="Appearance"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
     [System.Runtime.InteropServices.ComVisible(true)]
     public enum Appearance {
 
-        /// <include file='doc\Appearance.uex' path='docs/doc[@for="Appearance.Normal"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The default appearance defined by the control
@@ -32,7 +30,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Normal              = 0,
 
-        /// <include file='doc\Appearance.uex' path='docs/doc[@for="Appearance.Button"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The appearance of a Windows

@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\ListViewAlignment.uex' path='docs/doc[@for="ListViewAlignment"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies how items align in the <see cref='System.Windows.Forms.ListView'/>.
@@ -20,7 +19,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum ListViewAlignment {
 
-        /// <include file='doc\ListViewAlignment.uex' path='docs/doc[@for="ListViewAlignment.Default"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When the user moves an
@@ -29,7 +27,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Default = NativeMethods.LVA_DEFAULT,
 
-        /// <include file='doc\ListViewAlignment.uex' path='docs/doc[@for="ListViewAlignment.Top"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Items are aligned to the top of the <see cref='System.Windows.Forms.ListView'/> control.
@@ -37,7 +34,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Top = NativeMethods.LVA_ALIGNTOP,
 
-        /// <include file='doc\ListViewAlignment.uex' path='docs/doc[@for="ListViewAlignment.Left"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Items are aligned to the left of the <see cref='System.Windows.Forms.ListView'/> control.
@@ -45,7 +41,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Left = NativeMethods.LVA_ALIGNLEFT,
 
-        /// <include file='doc\ListViewAlignment.uex' path='docs/doc[@for="ListViewAlignment.SnapToGrid"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Items

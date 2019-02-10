@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\MDIWindowDialog.uex' path='docs/doc[@for="MdiWindowDialog"]/*' />
     /// <devdoc>
     /// </devdoc>
     /// <internalonly/>
@@ -39,7 +38,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MDIWindowDialog.uex' path='docs/doc[@for="MdiWindowDialog.ListItem"]/*' />
         /// <devdoc>
         /// </devdoc>
         private class ListItem {
@@ -80,7 +78,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MDIWindowDialog.uex' path='docs/doc[@for="MdiWindowDialog.components"]/*' />
         /// <devdoc>
         ///     NOTE: The following code is required by the Windows Forms
         ///     designer.  It can be modified using the form editor.  Do not

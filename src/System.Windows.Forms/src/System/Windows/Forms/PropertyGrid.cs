@@ -21,7 +21,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.PropertyGridInternal;
     using Microsoft.Win32;
 
-    /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid"]/*' />
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
@@ -162,7 +161,6 @@ namespace System.Windows.Forms {
         private static object          EventPropertySortChanged = new object();
         private static object          EventSelectedObjectsChanged = new object();
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyGrid"]/*' />
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // the "PropertyGridToolBar" caption is for testing.
                                                                                                         // So we don't have to localize it.
@@ -337,7 +335,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.AutoScroll"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll {
@@ -349,7 +346,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackColor"]/*' />
         public override Color BackColor {
             get {
                 return base.BackColor;
@@ -361,7 +357,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -372,7 +367,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -384,7 +378,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -395,7 +388,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -407,7 +399,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BrowsableAttributes"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -461,7 +452,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CanShowCommands"]/*' />
         /// <devdoc>
         /// true if the commands pane will be can be made visible
         /// for the currently selected objects.  Objects that
@@ -475,7 +465,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CategoryForeColor"]/*' />
         /// <devdoc>
         /// The text used color for category headings. The background color is determined by the LineColor property.
         /// </devdoc>
@@ -496,7 +485,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CommandsBackColor"]/*' />
         /// <devdoc>
         /// The background color for the hot commands region.
         /// </devdoc>
@@ -514,7 +502,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CommandsForeColor"]/*' />
         /// <devdoc>
         /// The forground color for the hot commands region.
         /// </devdoc>
@@ -532,7 +519,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CommandsEnabledLinkColor"]/*' />
         /// <devdoc>
         /// The link color for the hot commands region.
         /// </devdoc>
@@ -549,7 +535,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CommandsActiveLinkColor"]/*' />
         /// <devdoc>
         /// The active link color for the hot commands region.
         /// </devdoc>
@@ -566,7 +551,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CommandsDisabledLinkColor"]/*' />
         /// <devdoc>
         /// The color for the hot commands region when the link is disabled.
         /// </devdoc>
@@ -583,7 +567,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CommandsBorderColor"]/*' />
         /// <devdoc>
         ///    <para>The border color for the hot commands region</para>
         /// </devdoc>
@@ -601,7 +584,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CommandsVisible"]/*' />
         /// <devdoc>
         /// Returns true if the commands pane is currently shown.
         /// </devdoc>
@@ -612,7 +594,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CommandsVisibleIfAvailable"]/*' />
         /// <devdoc>
         /// Returns true if the commands pane will be shown for objects
         /// that expose verbs.
@@ -637,7 +618,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ContextMenuDefaultLocation"]/*' />
         /// <devdoc>
         /// Returns a default location for showing the context menu.  This
         /// location is the center of the active property label in the grid, and
@@ -654,7 +634,6 @@ namespace System.Windows.Forms {
             }
         }
         
-         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.Controls"]/*' />
          /// <devdoc>
         ///     Collection of child controls.
         /// </devdoc>
@@ -669,14 +648,12 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.DefaultSize"]/*' />
         protected override Size DefaultSize {
             get {
                 return new Size(130, 130);
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.DefaultTabType"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -687,7 +664,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.DrawFlatToolbar"]/*' />
         ///<internalonly/>
         protected bool DrawFlatToolbar {
             get {
@@ -703,7 +679,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -714,7 +689,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ForeColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
@@ -760,7 +734,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.HelpBackColor"]/*' />
         /// <devdoc>
         /// The background color for the help region.
         /// </devdoc>
@@ -778,7 +751,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.HelpForeColor"]/*' />
         /// <devdoc>
         /// The forground color for the help region.
         /// </devdoc>
@@ -796,7 +768,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.HelpBorderColor"]/*' />
         /// <devdoc>
         ///    <para>The border color for the help region</para>
         /// </devdoc>
@@ -814,7 +785,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.HelpVisible"]/*' />
         /// <devdoc>
         /// Sets or gets the visiblity state of the help pane.
         /// </devdoc>
@@ -865,7 +835,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedItemWithFocusBackColor"]/*' />
         /// <devdoc>
         ///    <para>Background color for Highlighted text.</para>
         /// </devdoc>
@@ -887,7 +856,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedItemWithFocusForeColor"]/*' />
         /// <devdoc>
         ///    <para>Foreground color for Highlighted (selected) text.</para>
         /// </devdoc>
@@ -909,7 +877,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.DisabledItemForeColor"]/*' />
         /// <devdoc>
         ///    <para>Foreground color for disabled text in the Grid View</para>
         /// </devdoc>
@@ -928,7 +895,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CategorySplitterColor"]/*' />
         /// <devdoc>
         ///    <para>Color for the horizontal splitter line separating property categories.</para>
         /// </devdoc>
@@ -949,7 +915,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CanShowVisualStyleGlyphs"]/*' />
         /// <devdoc>
         ///    <para>Enable/Disable use of VisualStyle glyph for PropertyGrid node expansion.</para>
         /// </devdoc>
@@ -970,7 +935,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.InPropertySet"]/*' />
         /// <internalonly/>
         bool IComPropertyBrowser.InPropertySet {
             get {
@@ -978,7 +942,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.LineColor"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridLineColorDesc)),
@@ -1001,7 +964,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1021,7 +983,6 @@ namespace System.Windows.Forms {
             remove { base.PaddingChanged -= value; }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertySort"]/*' />
         /// <devdoc>
         /// Sets or gets the current property sort type, which can be
         /// PropertySort.Categorized or PropertySort.Alphabetical.
@@ -1074,7 +1035,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabs"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1085,7 +1045,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedObject"]/*' />
         /// <devdoc>
         /// Sets a single Object into the grid to be browsed.  If multiple
         /// objects are being browsed, this property will return the first
@@ -1114,7 +1073,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedObjects"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1352,7 +1310,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedTab"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1366,7 +1323,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedGridItem"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1384,7 +1340,6 @@ namespace System.Windows.Forms {
             }
         }
        
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ShowFocusCues"]/*' />
         ///<internalonly/>        
         protected internal override bool ShowFocusCues {
             get {
@@ -1392,7 +1347,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.Site"]/*' />
         public override ISite Site {
             get {
                 return base.Site;
@@ -1448,7 +1402,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.LargeButtons"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridLargeButtonsDesc)),
@@ -1492,7 +1445,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ToolbarVisible"]/*' />
         /// <devdoc>
         /// Sets or gets the visiblity state of the toolStrip.
         /// </devdoc>
@@ -1534,7 +1486,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ViewBackColor"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridViewBackColorDesc)),
@@ -1550,7 +1501,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ViewForeColor"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridViewForeColorDesc)),
@@ -1567,7 +1517,6 @@ namespace System.Windows.Forms {
             }
         }
   
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ViewBorderColor"]/*' />
         /// <devdoc>
         ///    <para>Border color for the property grid view.</para>
         /// </devdoc>
@@ -1600,7 +1549,6 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.KeyDown"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown {
@@ -1613,7 +1561,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.KeyPress"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress {
@@ -1626,7 +1573,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.KeyUp"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp {
@@ -1638,7 +1584,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseDown"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown {
@@ -1650,7 +1595,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseUp"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp {
@@ -1662,7 +1606,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseMove"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove {
@@ -1674,7 +1617,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseEnter"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter {
@@ -1686,7 +1628,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseLeave"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave {
@@ -1698,7 +1639,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyValueChanged"]/*' />
         /// <devdoc> Event that is fired when a property value is modified.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
         public event PropertyValueChangedEventHandler PropertyValueChanged {
@@ -1710,7 +1650,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.ComComponentNameChanged"]/*' />
         ///<internalonly/>        
         event ComponentRenameEventHandler IComPropertyBrowser.ComComponentNameChanged {
             add {
@@ -1721,7 +1660,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabChanged"]/*' />
         /// <devdoc> Event that is fired when the current view tab is changed, such as changing from Properties to Events</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged {
@@ -1733,7 +1671,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertySortChanged"]/*' />
         /// <devdoc> Event that is fired when the sort mode is changed.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged {
@@ -1745,7 +1682,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedGridItemChanged"]/*' />
         /// <devdoc> Event that is fired when the selected GridItem is changed</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged {
@@ -1757,7 +1693,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelecteObjectsChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
         public event EventHandler SelectedObjectsChanged {
             add {
@@ -1881,7 +1816,6 @@ namespace System.Windows.Forms {
             }
         }        
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CollapseAllGridItems"]/*' />
         /// <devdoc> Collapses all the nodes in the PropertyGrid</devdoc>
         public void CollapseAllGridItems() {
             gridView.RecursivelyExpand(peMain, false, false, -1);
@@ -1946,7 +1880,6 @@ namespace System.Windows.Forms {
             return button;
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.CreatePropertyTab"]/*' />
         protected virtual PropertyTab CreatePropertyTab(Type tabType) {
             return null; 
         }
@@ -2115,7 +2048,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
 
             if (disposing) {
@@ -2274,7 +2206,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.DropDownDone"]/*' />
         /// <internalonly/>
         void IComPropertyBrowser.DropDownDone() {
             GetPropertyGridView().DropDownDone();
@@ -2404,7 +2335,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.EnsurePendingChangesCommitted"]/*' />
         /// <internalonly/>
         bool IComPropertyBrowser.EnsurePendingChangesCommitted() {
 
@@ -2428,7 +2358,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ExpandAllGridItems"]/*' />
         public void ExpandAllGridItems() {
             gridView.RecursivelyExpand(peMain, false, true, PropertyGridView.MaxRecurseExpand);
         }
@@ -2568,7 +2497,6 @@ namespace System.Windows.Forms {
         }
         
  
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.HandleF4"]/*' />
         /// <internalonly/>
         void IComPropertyBrowser.HandleF4() {
             
@@ -2587,7 +2515,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.LoadState"]/*' />
         /// <internalonly/>
         void IComPropertyBrowser.LoadState(RegistryKey optRoot) {
             if (optRoot != null) {
@@ -2653,7 +2580,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.UnsafeNativeMethods.IPropertyNotifySink.OnChanged"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Called when a property on an Ole32 Object changes.
@@ -2798,7 +2724,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnEnabledChanged"]/*' />        
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected override void OnEnabledChanged(EventArgs e) {
@@ -2806,7 +2731,6 @@ namespace System.Windows.Forms {
             Refresh();
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnFontChanged"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected override void OnFontChanged(EventArgs e) {
@@ -2820,7 +2744,6 @@ namespace System.Windows.Forms {
             this.OnMouseWheel(e);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnHandleCreated"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected override void OnHandleCreated(EventArgs e) {
@@ -2832,7 +2755,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnHandleDestroyed"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected override void OnHandleDestroyed(EventArgs e) {
@@ -2840,7 +2762,6 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnGotFocus"]/*' />
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -2860,7 +2781,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ScaleCore"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy) {
             int sx = (int)Math.Round(Left * dx);
@@ -3035,7 +2955,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnMouseDown"]/*' />
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3051,7 +2970,6 @@ namespace System.Windows.Forms {
             base.OnMouseDown(me);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnMouseMove"]/*' />
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3077,7 +2995,6 @@ namespace System.Windows.Forms {
             base.OnMouseMove(me);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnMouseUp"]/*' />
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3113,7 +3030,6 @@ namespace System.Windows.Forms {
             base.OnMouseUp(me);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// Called when a property on an Ole32 Object that is tagged
@@ -3125,7 +3041,6 @@ namespace System.Windows.Forms {
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnResize"]/*' />
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3145,7 +3060,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnComComponentNameChanged"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected void OnComComponentNameChanged(ComponentRenameEventArgs e) {
@@ -3154,7 +3068,6 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnNotifyPropertyValueUIItemsChanged"]/*' />
         // Seems safe - doesn't do anything interesting
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected void OnNotifyPropertyValueUIItemsChanged(object sender, EventArgs e) {
@@ -3162,7 +3075,6 @@ namespace System.Windows.Forms {
             gridView.Invalidate(true);
         }
   
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnPaint"]/*' />
         // Seems safe - doesn't do anything interesting
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnPaint(PaintEventArgs pevent) {
@@ -3209,7 +3121,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnPropertySortChanged"]/*' />
         // Seems safe - just fires an event
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertySortChanged(EventArgs e) {
@@ -3217,7 +3128,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnPropertyTabChanged"]/*' />
         // Seems safe - just fires an event
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertyTabChanged (PropertyTabChangedEventArgs e) {
@@ -3225,7 +3135,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnPropertyValueChanged"]/*' />
         // Seems safe - just fires an event
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertyValueChanged(PropertyValueChangedEventArgs e) {
@@ -3264,7 +3173,6 @@ namespace System.Windows.Forms {
             OnSelectedGridItemChanged(new SelectedGridItemChangedEventArgs(oldEntry, newEntry));
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnSelectedGridItemChanged"]/*' />
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3276,7 +3184,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnSelectedObjectsChanged"]/*' />
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3489,7 +3396,6 @@ namespace System.Windows.Forms {
             OnButtonClick(sender, e);
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnVisibleChanged"]/*' />
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -3596,7 +3502,6 @@ namespace System.Windows.Forms {
 
 */
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ProcessDialogKey"]/*' />
         /// <devdoc>
         /// Returns the last child control that can take focus
         /// </devdoc>
@@ -3729,7 +3634,6 @@ namespace System.Windows.Forms {
             return base.ProcessDialogKey(keyData);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.Refresh"]/*' />
         public override void Refresh() {
             if (GetFlag(RefreshingProperties)) {
                 return;
@@ -3783,7 +3687,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.RefreshTabs"]/*' />
         /// <devdoc>
         /// Refreshes the tabs of the given scope by deleting them and requerying objects and documents
         /// for them.
@@ -4060,7 +3963,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ResetSelectedProperty"]/*' />
         public void ResetSelectedProperty() {
             GetPropertyGridView().Reset();
         }
@@ -4074,7 +3976,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.SaveState"]/*' />
         /// <internalonly/>
         void IComPropertyBrowser.SaveState(RegistryKey optRoot) {
 
@@ -4388,7 +4289,6 @@ namespace System.Windows.Forms {
            }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ShowEventsButton"]/*' />
         protected void ShowEventsButton(bool value) {
             if (viewTabs != null && viewTabs.Length > EVENTS && (viewTabs[EVENTS] is EventsTab)) {
                
@@ -4402,7 +4302,6 @@ namespace System.Windows.Forms {
             UpdatePropertiesViewTabVisibility();            
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SortByPropertyImage"]/*' />
         /// <devdoc>
         /// This 16x16 Bitmap is applied to the button which orders properties alphabetically.
         /// </devdoc>      
@@ -4417,7 +4316,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SortByCategoryImage"]/*' />
         /// <devdoc>
         /// This 16x16 Bitmap is applied to the button which displays properties under the assigned categories.
         /// </devdoc>
@@ -4432,7 +4330,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ShowPropertyPageImage"]/*' />
         /// <devdoc>
         /// This 16x16 Bitmap is applied to the button which displays property page in the designer pane.
         /// </devdoc>
@@ -4664,7 +4561,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.OnSystemColorsChanged"]/*' />
         
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -4704,7 +4600,6 @@ namespace System.Windows.Forms {
             SetupToolbar(true);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.WndProc"]/*' />
         // 
 
 
@@ -4912,7 +4807,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection"]/*' />
         public class PropertyTabCollection : ICollection {
         
             internal static PropertyTabCollection Empty = new PropertyTabCollection(null);
@@ -4923,7 +4817,6 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
             
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.Count"]/*' />
             /// <devdoc>
             ///     Retrieves the number of member attributes.
             /// </devdoc>
@@ -4936,7 +4829,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyTabCollection.ICollection.SyncRoot"]/*' />
             /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
@@ -4944,7 +4836,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyTabCollection.ICollection.IsSynchronized"]/*' />
             /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
@@ -4952,7 +4843,6 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.this"]/*' />
             /// <devdoc>
             ///     Retrieves the member attribute with the specified index.
             /// </devdoc>
@@ -4965,7 +4855,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.AddTabType"]/*' />
             public void AddTabType(Type propertyTabType) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
@@ -4973,7 +4862,6 @@ namespace System.Windows.Forms {
                 owner.AddTab(propertyTabType, PropertyTabScope.Global);
             }
             
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.AddTabType1"]/*' />
             public void AddTabType(Type propertyTabType, PropertyTabScope tabScope) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
@@ -4981,7 +4869,6 @@ namespace System.Windows.Forms {
                 owner.AddTab(propertyTabType, tabScope);
             }
             
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.Clear"]/*' />
             /// <devdoc>
             /// Clears the tabs of the given scope or smaller.
             /// tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
@@ -4994,7 +4881,6 @@ namespace System.Windows.Forms {
             }
             
             
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyTabCollection.ICollection.CopyTo"]/*' />
             /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 if (owner == null) {
@@ -5004,7 +4890,6 @@ namespace System.Windows.Forms {
                     System.Array.Copy(owner.viewTabs, 0, dest, index, owner.viewTabs.Length);
                 }
             }
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.GetEnumerator"]/*' />
             /// <devdoc>
             ///      Creates and retrieves a new enumerator for this collection.
             /// </devdoc>
@@ -5016,7 +4901,6 @@ namespace System.Windows.Forms {
                 return owner.viewTabs.GetEnumerator();
             }
             
-            /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection.RemoveTabType"]/*' />
             public void RemoveTabType(Type propertyTabType) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);

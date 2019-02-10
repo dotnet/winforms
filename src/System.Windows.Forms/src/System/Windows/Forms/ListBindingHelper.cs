@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Collections.Generic;
     using System.Reflection;
 
-    /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper"]/*' />
     /// <devdoc>
     /// </devdoc>
     public static class ListBindingHelper {
@@ -28,7 +27,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetList"]/*' />
         public static object GetList(object list) {
             if (list is IListSource) {
                 return (list as IListSource).GetList();
@@ -38,7 +36,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetList2"]/*' />
         public static object GetList(object dataSource, string dataMember) {
             //
             // The purpose of this method is to find a list, given a 'data source' object and a
@@ -83,7 +80,6 @@ namespace System.Windows.Forms {
             return (currentItem == null) ? null : dmProp.GetValue(currentItem);
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListName"]/*' />
         public static string GetListName(object list, PropertyDescriptor[] listAccessors) {
             string name;
 
@@ -119,7 +115,6 @@ namespace System.Windows.Forms {
             return name;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties"]/*' />
         public static PropertyDescriptorCollection GetListItemProperties(object list) {
             PropertyDescriptorCollection pdc;
 
@@ -145,7 +140,6 @@ namespace System.Windows.Forms {
             return pdc;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties1"]/*' />
         public static PropertyDescriptorCollection GetListItemProperties(object list, PropertyDescriptor[] listAccessors) {
             PropertyDescriptorCollection pdc;
 
@@ -174,7 +168,6 @@ namespace System.Windows.Forms {
             return pdc;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties2"]/*' />
         public static PropertyDescriptorCollection GetListItemProperties(object dataSource, string dataMember, PropertyDescriptor[] listAccessors) {
             dataSource = GetList(dataSource);
 
@@ -203,7 +196,6 @@ namespace System.Windows.Forms {
             return GetListItemProperties(dataSource, listAccessors);
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemType"]/*' />
         public static Type GetListItemType(object list) {
             if (list == null) {
                 return null;
@@ -265,7 +257,6 @@ namespace System.Windows.Forms {
             return instancedObject;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemType2"]/*' />
         public static Type GetListItemType(object dataSource, string dataMember) {
             // No data source
             if (dataSource == null) {

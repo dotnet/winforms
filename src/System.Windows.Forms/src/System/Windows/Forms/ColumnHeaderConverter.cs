@@ -17,12 +17,10 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <include file='doc\ColumnHeaderConverter.uex' path='docs/doc[@for="ColumnHeaderConverter"]/*' />
     /// <devdoc>
     /// </devdoc>
     public class ColumnHeaderConverter : ExpandableObjectConverter {
     
-        /// <include file='doc\ColumnHeaderConverter.uex' path='docs/doc[@for="ColumnHeaderConverter.CanConvertTo"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -34,7 +32,6 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <include file='doc\ColumnHeaderConverter.uex' path='docs/doc[@for="ColumnHeaderConverter.ConvertTo"]/*' />
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call

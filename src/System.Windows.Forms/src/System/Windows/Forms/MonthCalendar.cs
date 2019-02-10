@@ -23,7 +23,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar"]/*' />
     /// <devdoc>
     ///     This control is an encapsulateion of the Windows month calendar control.
     ///     A month calendar control implements a calendar-like user interface, that
@@ -79,14 +78,12 @@ namespace System.Windows.Forms {
         static readonly Color DEFAULT_TRAILING_FORE_COLOR = SystemColors.GrayText;
         private const int MINIMUM_ALLOC_SIZE = 12;  // minimum size to expand the buffer by
         private const int MONTHS_IN_YEAR = 12;
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.INSERT_WIDTH_SIZE"]/*' />
         /// <devdoc>
         ///     This is the arbitrary number of pixels that the Win32 control
         ///     inserts between calendars horizontally, regardless of font.
         /// </devdoc>
         /// <internalonly/>
         private const int   INSERT_WIDTH_SIZE = 6;
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.INSERT_HEIGHT_SIZE"]/*' />
         /// <devdoc>
         ///     This is the arbitrary number of pixels that the Win32 control
         ///     inserts between calendars vertically, regardless of font.
@@ -135,19 +132,16 @@ namespace System.Windows.Forms {
         private NativeMethods.MONTCALENDAR_VIEW_MODE mcCurView = NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_MONTH;
         private NativeMethods.MONTCALENDAR_VIEW_MODE mcOldView = NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_MONTH;
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.monthsOfYear"]/*' />
         /// <devdoc>
         ///     Bitmask for the annually bolded dates.  Months start on January.
         /// </devdoc>
         /// <internalonly/>
         private int[]       monthsOfYear = new int[12];
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.datesToBoldMonthly"]/*' />
         /// <devdoc>
         ///     Bitmask for the dates bolded monthly.
         /// </devdoc>
         /// <internalonly/>
         private int         datesToBoldMonthly = 0;
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.arrayOfDates"]/*' />
         /// <devdoc>
         ///     Lists are slow, so this section can be optimized.
         ///     Implementation is such that inserts are fast, removals are slow.
@@ -162,7 +156,6 @@ namespace System.Windows.Forms {
         private DateRangeEventHandler       onDateSelected;
         private EventHandler                   onRightToLeftLayoutChanged;
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MonthCalendar"]/*' />
         /// <devdoc>
         ///     Creates a new MonthCalendar object.  Styles are the default for a
         ///     regular month calendar control.
@@ -204,7 +197,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.AnnuallyBoldedDates"]/*' />
         /// <devdoc>
         ///     The array of DateTime objects that determines which annual days are shown
         ///     in bold.
@@ -247,7 +239,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackColor"]/*' />
         [SRDescription(nameof(SR.MonthCalendarMonthBackColorDescr))]
         public override Color BackColor {
             get {
@@ -263,7 +254,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -274,7 +264,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -287,7 +276,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -298,7 +286,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -311,7 +298,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BoldedDates"]/*' />
         /// <devdoc>
         ///     The array of DateTime objects that determines which non-recurring
         ///     specified dates are shown in bold.
@@ -345,7 +331,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.CalendarDimensions"]/*' />
         /// <devdoc>
         ///     The number of columns and rows of months that will be displayed
         ///     in the MonthCalendar control.
@@ -365,7 +350,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.CreateParams"]/*' />
         /// <devdoc>
         ///     This is called when creating a window.  Inheriting classes can ovveride
         ///     this to add extra functionality, but should not forget to first call
@@ -392,26 +376,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DefaultImeMode"]/*' />
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DefaultMargin"]/*' />
         protected override Padding DefaultMargin {
             get { return new Padding(9); }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DefaultSize"]/*' />
         protected override Size DefaultSize {
             get {
                 return GetMinReqRect();
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DoubleBuffered"]/*' />
         /// <devdoc>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
@@ -426,7 +406,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.FirstDayOfWeek"]/*' />
         /// <devdoc>
         ///     The first day of the week for the month calendar control.
         /// </devdoc>
@@ -461,7 +440,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ForeColor"]/*' />
         [SRDescription(nameof(SR.MonthCalendarForeColorDescr))]
         public override Color ForeColor {
             get {
@@ -477,7 +455,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -488,7 +465,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ImeModeChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
@@ -500,7 +476,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MaxDate"]/*' />
         /// <devdoc>
         ///     The maximum allowable date that can be selected.  By default, there
         ///     is no maximum date.  The maximum date is not set if max less than the
@@ -525,7 +500,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MaxSelectionCount"]/*' />
         /// <devdoc>
         ///     The maximum number of days that can be selected in a
         ///     month calendar control.  This method does not affect the current
@@ -555,7 +529,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MinDate"]/*' />
         /// <devdoc>
         ///     The minimum allowable date that can be selected.  By default, there
         ///     is no minimum date.  The minimum date is not set if min greater than the
@@ -587,7 +560,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MonthlyBoldedDates"]/*' />
         /// <devdoc>
         ///     The array of DateTime objects that determine which monthly days to bold.
         /// </devdoc>
@@ -628,7 +600,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Now"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -638,7 +609,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -658,7 +628,6 @@ namespace System.Windows.Forms {
             remove { base.PaddingChanged -= value; }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.RightToLeftLayout"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -687,7 +656,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ScrollChange"]/*' />
         /// <devdoc>
         ///     The scroll rate for a month calendar control. The scroll
         ///     rate is the number of months that the control moves its display
@@ -723,7 +691,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SelectionEnd"]/*' />
         /// <devdoc>
         ///    <para>Indicates the end date of the selected range of dates.</para>
         /// </devdoc>
@@ -764,7 +731,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SelectionStart"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates
@@ -808,7 +774,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SelectionRange"]/*' />
         /// <devdoc>
         ///     Retrieves the selection range for a month calendar control.
         /// </devdoc>
@@ -826,7 +791,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ShowToday"]/*' />
         /// <devdoc>
         ///     Indicates whether the month calendar control will display
         ///     the "today" date at the bottom of the control.
@@ -849,7 +813,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ShowTodayCircle"]/*' />
         /// <devdoc>
         ///     Indicates whether the month calendar control will circle
         ///     the "today" date.
@@ -871,7 +834,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ShowWeekNumbers"]/*' />
         /// <devdoc>
         ///     Indicates whether the month calendar control will the display
         ///     week numbers (1-52) to the left of each row of days.
@@ -895,7 +857,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SingleMonthSize"]/*' />
         /// <devdoc>
         ///     The minimum size required to display a full month.  The size
         ///     information is presented in the form of a Point, with the x
@@ -925,7 +886,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Size"]/*' />
         /// <devdoc>
         ///     Unlike most controls, serializing the MonthCalendar's Size is really bad:
         ///     when it's restored at runtime, it uses a a default SingleMonthSize, which 
@@ -945,7 +905,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
             get {
@@ -956,7 +915,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.TextChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
@@ -968,7 +926,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.TodayDate"]/*' />
         /// <devdoc>
         ///     The date shown as "Today" in the Month Calendar control.
         ///     By default, "Today" is the current date at the time
@@ -1009,7 +966,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.TodayDateSet"]/*' />
         /// <devdoc>
         ///     Indicates whether or not the TodayDate property has been explicitly
         ///     set by the user. If TodayDateSet is true, TodayDate will return whatever
@@ -1028,7 +984,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.TitleBackColor"]/*' />
         /// <devdoc>
         ///     The background color displayed in the month calendar's
         ///     title.
@@ -1051,7 +1006,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.TitleForeColor"]/*' />
         /// <devdoc>
         ///     The foreground color used to display text within the month
         ///     calendar's title.
@@ -1074,7 +1028,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.TrailingForeColor"]/*' />
         /// <devdoc>
         ///     The color used to display the previous and following months that
         ///     appear on the current month calendar.
@@ -1097,7 +1050,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.AddAnnuallyBoldedDate"]/*' />
         /// <devdoc>
         ///     Adds a day that will be bolded annually on the month calendar.
         ///     Be sure to call updateBoldedDates() afterwards.
@@ -1107,7 +1059,6 @@ namespace System.Windows.Forms {
             monthsOfYear[date.Month-1] |= 0x00000001<<(date.Day-1);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.AddBoldedDate"]/*' />
         /// <devdoc>
         ///     Adds a day that will be bolded on the month calendar.
         ///     Be sure to call updateBoldedDates() afterwards.
@@ -1118,7 +1069,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.AddMonthlyBoldedDate"]/*' />
         /// <devdoc>
         ///     Adds a day that will be bolded monthly on the month calendar.
         ///     Be sure to call updateBoldedDates() afterwards.
@@ -1129,7 +1079,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Click"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click {
@@ -1141,7 +1090,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DateChanged"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateChangedDescr))]
         public event DateRangeEventHandler DateChanged {
             add {
@@ -1153,7 +1101,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DateSelected"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateSelectedDescr))]
         public event DateRangeEventHandler DateSelected {
             add {
@@ -1164,7 +1111,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
@@ -1176,7 +1122,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MouseClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseClick {
@@ -1188,7 +1133,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MouseDoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
@@ -1200,7 +1144,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnPaint"]/*' />
         /// <devdoc>
         ///     MonthCalendar Onpaint.
         /// </devdoc>
@@ -1215,7 +1158,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -1227,7 +1169,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.AdjustSize"]/*' />
         /// <devdoc>
         ///     Used to auto-size the control.  The requested number of rows and columns are
         ///     restricted by the maximum size of the parent control, hence the requested number
@@ -1239,7 +1180,6 @@ namespace System.Windows.Forms {
             Size = minSize;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BoldDates"]/*' />
         /// <devdoc>
         ///     Event handler that bolds dates indicated by arrayOfDates
         /// </devdoc>
@@ -1266,7 +1206,6 @@ namespace System.Windows.Forms {
                 e.DaysToBold[i] |= monthsOfYear[startMonth % MONTHS_IN_YEAR] | datesToBoldMonthly;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.CompareDayAndMonth"]/*' />
         /// <devdoc>
         ///     Compares only the day and month of each time.
         /// </devdoc>
@@ -1275,7 +1214,6 @@ namespace System.Windows.Forms {
             return(t1.Day == t2.Day && t1.Month == t2.Month);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1294,7 +1232,6 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Dispose"]/*' />
         /// <devdoc>
         ///     Called to cleanup a MonthCalendar.  Normally you do not need
         ///     to call this as the garbage collector will cleanup the buffer
@@ -1316,7 +1253,6 @@ namespace System.Windows.Forms {
             return value.ToString("d", CultureInfo.CurrentCulture);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.GetDisplayRange"]/*' />
         /// <devdoc>
         ///     Retrieves date information that represents the low and high limits of the
         ///     control's display.
@@ -1328,7 +1264,6 @@ namespace System.Windows.Forms {
                 return GetMonthRange(NativeMethods.GMR_DAYSTATE);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.GetHitArea"]/*' />
         /// <devdoc>
         ///     Retrieves the enumeration value corresponding to the hit area.
         /// </devdoc>
@@ -1364,7 +1299,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.GetMinReqRect"]/*' />
         /// <devdoc>
         ///     stub for getMinReqRect (int, boolean)
         /// </devdoc>
@@ -1373,7 +1307,6 @@ namespace System.Windows.Forms {
             return GetMinReqRect(0, false, false);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.GetMinReqRect1"]/*' />
         /// <devdoc>
         ///     Used internally to get the minimum size needed to display the
         ///     MonthCalendar.  This is needed because
@@ -1433,7 +1366,6 @@ namespace System.Windows.Forms {
             return minSize;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.GetMonthRange"]/*' />
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
@@ -1458,7 +1390,6 @@ namespace System.Windows.Forms {
             return range;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.GetPreferredHeight"]/*' />
         /// <devdoc>
         ///     Called by setBoundsCore.  If updateRows is true, then the
         ///     number of rows will be updated according to height.
@@ -1469,7 +1400,6 @@ namespace System.Windows.Forms {
             return preferredSize.Height;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.GetPreferredWidth"]/*' />
         /// <devdoc>
         ///     Called by setBoundsCore.  If updateCols is true, then the
         ///     number of columns will be updated according to width.
@@ -1480,7 +1410,6 @@ namespace System.Windows.Forms {
             return preferredSize.Width;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTest"]/*' />
         /// <devdoc>
         ///     Determines which portion of a month calendar control is at
         ///     at a given point on the screen.
@@ -1512,7 +1441,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTest1"]/*' />
         /// <devdoc>
         ///     Determines which portion of a month calendar control is at
         ///     at a given point on the screen.
@@ -1521,7 +1449,6 @@ namespace System.Windows.Forms {
             return HitTest(point.X, point.Y);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.IsInputKey"]/*' />
         /// <devdoc>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
         /// </devdoc>
@@ -1537,7 +1464,6 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnHandleCreated"]/*' />
         /// <devdoc>
         ///     Overrides Control.OnHandleCreated()
         /// </devdoc>
@@ -1579,7 +1505,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnHandleDestroyed"]/*' />
         /// <devdoc>
         ///     Overrides Control.OnHandleDestroyed()
         /// </devdoc>
@@ -1590,7 +1515,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnDateChanged"]/*' />
         /// <devdoc>
         ///     Fires the event indicating that the currently selected date
         ///     or range of dates has changed.
@@ -1601,7 +1525,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnDateSelected"]/*' />
         /// <devdoc>
         ///     Fires the event indicating that the user has changed his\her selection.
         /// </devdoc>
@@ -1611,25 +1534,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnFontChanged"]/*' />
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             AdjustSize();
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnForeColorChanged"]/*' />
         protected override void OnForeColorChanged(EventArgs e) {
             base.OnForeColorChanged(e);
             SetControlColor(NativeMethods.MCSC_TEXT, ForeColor);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnBackColorChanged"]/*' />
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
             SetControlColor(NativeMethods.MCSC_MONTHBK, BackColor);
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {
@@ -1647,7 +1566,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.RemoveAllAnnuallyBoldedDates"]/*' />
         /// <devdoc>
         ///     Removes all annually bolded days.  Be sure to call updateBoldedDates() afterwards.
         /// </devdoc>
@@ -1658,7 +1576,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.RemoveAllBoldedDates"]/*' />
         /// <devdoc>
         ///     Removes all the bolded days.  Be sure to call updateBoldedDates() afterwards.
         /// </devdoc>
@@ -1666,7 +1583,6 @@ namespace System.Windows.Forms {
             this.arrayOfDates.Clear();
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.RemoveAllMonthlyBoldedDates"]/*' />
         /// <devdoc>
         ///     Removes all monthly bolded days.  Be sure to call updateBoldedDates() afterwards.
         /// </devdoc>
@@ -1675,7 +1591,6 @@ namespace System.Windows.Forms {
             datesToBoldMonthly = 0;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.RemoveAnnuallyBoldedDate"]/*' />
         /// <devdoc>
         ///     Removes an annually bolded date.  If the date is not found in the
         ///     bolded date list, then no action is taken.  If date occurs more than
@@ -1701,7 +1616,6 @@ namespace System.Windows.Forms {
             monthsOfYear[date.Month-1] &= ~(0x00000001<<(date.Day-1));
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.RemoveBoldedDate"]/*' />
         /// <devdoc>
         ///     Removes a bolded date.  If the date is not found in the
         ///     bolded date list, then no action is taken.  If date occurs more than
@@ -1719,7 +1633,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.RemoveMonthlyBoldedDate"]/*' />
         /// <devdoc>
         ///     Removes a monthly bolded date.  If the date is not found in the
         ///     bolded date list, then no action is taken.  If date occurs more than
@@ -1757,7 +1670,6 @@ namespace System.Windows.Forms {
             CalendarDimensions = new Size(1,1);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ResetMaxDate"]/*' />
         /// <devdoc>
         ///     Resets the maximum selectable date.  By default value, there is no
         ///     upper limit.
@@ -1766,7 +1678,6 @@ namespace System.Windows.Forms {
             MaxDate = DateTime.MaxValue;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ResetMinDate"]/*' />
         /// <devdoc>
         ///     Resets the minimum selectable date.  By default value, there is no
         ///     lower limit.
@@ -1780,7 +1691,6 @@ namespace System.Windows.Forms {
             monthlyArrayOfDates.Clear();
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ResetSelectionRange"]/*' />
         /// <devdoc>
         ///     Resets the limits of the selection range.  By default value, the upper
         ///     and lower limit is the current date.
@@ -1801,7 +1711,6 @@ namespace System.Windows.Forms {
             TitleBackColor = DEFAULT_TITLE_BACK_COLOR;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ResetTodayDate"]/*' />
         /// <devdoc>
         ///     Resets the "today"'s date.  By default value, "today" is the
         ///     current date (and is automatically updated when the clock crosses
@@ -1815,7 +1724,6 @@ namespace System.Windows.Forms {
             UpdateTodayDate();
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.RequestBuffer"]/*' />
         /// <devdoc>
         ///     reqSize = # elements in int[] array
         ///
@@ -1849,7 +1757,6 @@ namespace System.Windows.Forms {
             return mdsBuffer;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SetBoundsCore"]/*' />
         /// <devdoc>
         ///     Overrides Control.SetBoundsCore to enforce auto-sizing.
         /// </devdoc>
@@ -1875,7 +1782,6 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SetControlColor"]/*' />
         /// <devdoc>
         ///     If the handle has been created, this applies the color to the control
         /// </devdoc>
@@ -1886,7 +1792,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SetRange"]/*' />
         /// <devdoc>
         ///     Updates the window handle with the min/max ranges if it has been
         ///     created.
@@ -1935,7 +1840,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SetCalendarDimensions"]/*' />
         /// <devdoc>
         ///     Sets the number of columns and rows to display.
         /// </devdoc>
@@ -1968,7 +1872,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SetDate"]/*' />
         /// <devdoc>
         ///     Sets date as the current selected date.  The start and begin of
         ///     the selection range will both be equal to date.
@@ -1985,7 +1888,6 @@ namespace System.Windows.Forms {
             SetSelectionRange(date, date);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SetSelectionRange"]/*' />
         /// <devdoc>
         ///     Sets the selection for a month calendar control to a given date range.
         ///     The selection range will not be set if the selection range exceeds the
@@ -2034,7 +1936,6 @@ namespace System.Windows.Forms {
             SetSelRange(date1, date2);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.SetSelRange"]/*' />
         /// <devdoc>
         ///     Upper must be greater than Lower
         /// </devdoc>
@@ -2102,7 +2003,6 @@ namespace System.Windows.Forms {
             return monthlyArrayOfDates.Count > 0;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ShouldSerializeMaxDate"]/*' />
         /// <devdoc>
         ///     Retrieves true if the maxDate should be persisted in code gen.
         /// </devdoc>
@@ -2110,7 +2010,6 @@ namespace System.Windows.Forms {
             return maxDate != DateTimePicker.MaximumDateTime && maxDate != DateTime.MaxValue;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ShouldSerializeMinDate"]/*' />
         /// <devdoc>
         ///     Retrieves true if the minDate should be persisted in code gen.
         /// </devdoc>
@@ -2118,7 +2017,6 @@ namespace System.Windows.Forms {
             return minDate != DateTimePicker.MinimumDateTime && minDate != DateTime.MinValue;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ShouldSerializeSelectionRange"]/*' />
         /// <devdoc>
         ///     Retrieves true if the selectionRange should be persisted in code gen.
         /// </devdoc>
@@ -2126,7 +2024,6 @@ namespace System.Windows.Forms {
             return !DateTime.Equals(selectionEnd, selectionStart);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ShouldSerializeTodayDate"]/*' />
         /// <devdoc>
         ///     Retrieves true if the todayDate should be persisted in code gen.
         /// </devdoc>
@@ -2134,7 +2031,6 @@ namespace System.Windows.Forms {
             return todayDateSet;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
@@ -2145,7 +2041,6 @@ namespace System.Windows.Forms {
             return s + ", " + SelectionRange.ToString();
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.UpdateBoldedDates"]/*' />
         /// <devdoc>
         ///     Forces month calendar to display the current set of bolded dates.
         /// </devdoc>
@@ -2153,7 +2048,6 @@ namespace System.Windows.Forms {
             RecreateHandle();
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.UpdateTodayDate"]/*' />
         /// <devdoc>
         ///     Updates the current setting for "TODAY" in the MonthCalendar control
         ///     If the today date is set, the control will be set to that. Otherwise,
@@ -2187,7 +2081,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.WmDateChanged"]/*' />
         /// <devdoc>
         ///     Handles the MCN_SELCHANGE notification
         /// </devdoc>
@@ -2211,7 +2104,6 @@ namespace System.Windows.Forms {
             OnDateChanged(new DateRangeEventArgs(start, end));
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.WmDateBold"]/*' />
         /// <devdoc>
         ///     Handles the MCN_GETDAYSTATE notification
         /// </devdoc>
@@ -2229,7 +2121,6 @@ namespace System.Windows.Forms {
             Marshal.StructureToPtr(nmmcds, m.LParam, false);
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.WmCalViewChanged"]/*' />
         /// <devdoc>
         ///     Handles the MCN_VIEWCHANGE  notification
         /// </devdoc>
@@ -2247,7 +2138,6 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.WmDateSelected"]/*' />
         /// <devdoc>
         ///     Handles the MCN_SELECT notification
         /// </devdoc>
@@ -2273,7 +2163,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.WmGetDlgCode"]/*' />
         /// <devdoc>
         ///     Handles the WM_GETDLGCODE message
         /// </devdoc>
@@ -2283,7 +2172,6 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)NativeMethods.DLGC_WANTARROWS;
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.WmReflectCommand"]/*' />
         /// <devdoc>
         ///     Handles the WM_COMMAND messages reflected from the parent control.
         /// </devdoc>
@@ -2310,7 +2198,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.WndProc"]/*' />
         /// <devdoc>
         ///     Overrided wndProc
         /// </devdoc>
@@ -2339,7 +2226,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTestInfo"]/*' />
         /// <devdoc>
         ///     HitTestInfo objects are returned by MonthCalendar in response to the hitTest method.
         ///     HitTestInfo is for informational purposes only; the user should not construct these objects, and
@@ -2350,7 +2236,6 @@ namespace System.Windows.Forms {
             readonly HitArea     hitArea;
             readonly DateTime    time;
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTestInfo.HitTestInfo"]/*' />
             /// <devdoc>
             /// </devdoc>
             /// <internalonly/>
@@ -2360,7 +2245,6 @@ namespace System.Windows.Forms {
                 this.time = time;
             }
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTestInfo.HitTestInfo1"]/*' />
             /// <devdoc>
             ///      This constructor is used when the DateTime member is invalid.
             /// </devdoc>
@@ -2370,7 +2254,6 @@ namespace System.Windows.Forms {
                 this.hitArea = area;
             }
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTestInfo.Point"]/*' />
             /// <devdoc>
             ///     The point that was hit-tested
             /// </devdoc>
@@ -2378,7 +2261,6 @@ namespace System.Windows.Forms {
                 get { return point; }
             }
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTestInfo.HitArea"]/*' />
             /// <devdoc>
             ///     Output member that receives an enumeration value from System.Windows.Forms.MonthCalendar.HitArea
             ///     representing the result of the hit-test operation.
@@ -2387,7 +2269,6 @@ namespace System.Windows.Forms {
                 get { return hitArea; }
             }
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTestInfo.Time"]/*' />
             /// <devdoc>
             ///     The time information specific to the location that was hit-tested.  This value
             ///     will only be valid at certain values of hitArea.
@@ -2396,7 +2277,6 @@ namespace System.Windows.Forms {
                 get { return time; }
             }
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTestInfo.HitAreaHasValidDateTime"]/*' />
             /// <devdoc>
             ///      Determines whether a given HitArea should have a corresponding valid DateTime
             /// </devdoc>
@@ -2412,38 +2292,32 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea"]/*' />
         /// <devdoc>
         /// This enumeration has specific areas of the MonthCalendar control as its enumerated values.
         /// The hitArea member of System.Windows.Forms.Win32.HitTestInfo will be one of these enumerated values, and
         /// indicates which portion of a month calendar is under a specific point.
         /// </devdoc>
         public enum HitArea {
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.Nowhere"]/*' />
             /// <devdoc>
             /// The given point was not on the month calendar control, or it was in an inactive portion of the control.
             /// </devdoc>
             Nowhere = 0,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TitleBackground"]/*' />
             /// <devdoc>
             /// The given point was over the background of a month's title
             /// </devdoc>
             TitleBackground = 1,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TitleMonth"]/*' />
             /// <devdoc>
             /// The given point was in a month's title bar, over a month name
             /// </devdoc>
             TitleMonth = 2,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TitleYear"]/*' />
             /// <devdoc>
             /// The given point was in a month's title bar, over the year value
             /// </devdoc>
             TitleYear = 3,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.NextMonthButton"]/*' />
             /// <devdoc>
             /// The given point was over the button at the top right corner of the control.
             /// If the user clicks here, the month calendar will scroll its display to the next
@@ -2451,7 +2325,6 @@ namespace System.Windows.Forms {
             /// </devdoc>
             NextMonthButton = 4,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.PrevMonthButton"]/*' />
             /// <devdoc>
             /// The given point was over the button at the top left corner of the control. If the
             /// user clicks here, the month calendar will scroll its display to the previous month
@@ -2459,20 +2332,17 @@ namespace System.Windows.Forms {
             /// </devdoc>
             PrevMonthButton = 5,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.CalendarBackground"]/*' />
             /// <devdoc>
             /// The given point was in the calendar's background
             /// </devdoc>
             CalendarBackground = 6,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.Date"]/*' />
             /// <devdoc>
             /// The given point was on a particular date within the calendar, and the time member of
             /// HitTestInfo will be set to the date at the given point.
             /// </devdoc>
             Date = 7,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.NextMonthDate"]/*' />
             /// <devdoc>
             /// The given point was over a date from the next month (partially displayed at the end of
             /// the currently displayed month). If the user clicks here, the month calendar will scroll
@@ -2480,7 +2350,6 @@ namespace System.Windows.Forms {
             /// </devdoc>
             NextMonthDate = 8,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.PrevMonthDate"]/*' />
             /// <devdoc>
             /// The given point was over a date from the previous month (partially displayed at the end
             /// of the currently displayed month). If the user clicks here, the month calendar will scroll
@@ -2488,14 +2357,12 @@ namespace System.Windows.Forms {
             /// </devdoc>
             PrevMonthDate = 9,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.DayOfWeek"]/*' />
             /// <devdoc>
             /// The given point was over a day abbreviation ("Fri", for example). The time member
             /// of HitTestInfo will be set to the corresponding date on the top row.
             /// </devdoc>
             DayOfWeek = 10,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.WeekNumbers"]/*' />
             /// <devdoc>
             /// The given point was over a week number.  This will only occur if the showWeekNumbers
             /// property of MonthCalendar is enabled.  The time member of HitTestInfo will be set to
@@ -2503,14 +2370,12 @@ namespace System.Windows.Forms {
             /// </devdoc>
             WeekNumbers = 11,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TodayLink"]/*' />
             /// <devdoc>
             /// The given point was on the "today" link at the bottom of the month calendar control
             /// </devdoc>
             TodayLink = 12,
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MonthCalendarAccessibleObject"]/*' />
         /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
@@ -2519,13 +2384,11 @@ namespace System.Windows.Forms {
 
             private MonthCalendar calendar;
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.CheckBoxAccessibleObject.MonthCalendarAccessibleObject"]/*' />
             public MonthCalendarAccessibleObject(Control owner)
                 : base(owner) {
                     calendar = owner as MonthCalendar;
             }
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MonthCalendarAccessibleObject.Role"]/*' />
             public override AccessibleRole Role {
                 get {
                     if (calendar != null) {
@@ -2538,7 +2401,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MonthCalendarAccessibleObject.Help"]/*' />
             public override string Help {
                 get {
                     var help = base.Help;
@@ -2554,7 +2416,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MonthCalendarAccessibleObject.Name"]/*' />
             public override string Name {
                 get {
                     string name = base.Name;

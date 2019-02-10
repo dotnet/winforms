@@ -222,7 +222,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ImeMode"]/*' />
         /// <devdoc>
         ///     Specifies a value that determines the IME (Input Method Editor) status of the
         ///     object when that object is selected.
@@ -320,7 +319,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ImeModeChanged"]/*' />
         [WinCategory( "Behavior" ), SRDescription( nameof(SR.ControlOnImeModeChangedDescr) )]
         public event EventHandler ImeModeChanged {
             add {
@@ -615,7 +613,6 @@ namespace System.Windows.Forms {
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnImeModeChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.OnImeModeChanged'/>
         /// event.</para>

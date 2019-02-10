@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -22,7 +22,6 @@ namespace System.Resources {
     using System.ComponentModel.Design;
     using System.Globalization;
     
-    /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader"]/*' />
     /// <devdoc>
     ///     ResX resource reader.
     /// </devdoc>
@@ -115,12 +114,10 @@ namespace System.Resources {
 
         
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for=".Finalize"]/*' />
         ~ResXResourceReader() {
             Dispose(false);
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.BasePath"]/*' />
         /// <devdoc>
         ///     BasePath for relatives filepaths with ResXFileRefs.
         /// </devdoc>
@@ -136,7 +133,6 @@ namespace System.Resources {
             }
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.ResXResourceReader5"]/*' />
         /// <devdoc>
         ///     ResXFileRef's TypeConverter automatically unwraps it, creates the referenced
         ///     object and returns it. This property gives the user control over whether this unwrapping should
@@ -155,7 +151,6 @@ namespace System.Resources {
             }
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.Close"]/*' />
         /// <devdoc>
         ///     Closes and files or streams being used by the reader.
         /// </devdoc>
@@ -164,7 +159,6 @@ namespace System.Resources {
             ((IDisposable)this).Dispose();
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.IDisposable.Dispose"]/*' />
         /// <internalonly/>
         // NOTE: Part of IDisposable - not protected by class level LinkDemand.
         void IDisposable.Dispose() {
@@ -172,7 +166,6 @@ namespace System.Resources {
             Dispose(true);
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.Dispose"]/*' />
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
                 if (fileName != null && stream != null) {
@@ -246,7 +239,6 @@ namespace System.Resources {
 
 
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.FromFileContents"]/*' />
         /// <devdoc>
         ///     Creates a reader with the specified file contents.
         /// </devdoc>
@@ -254,7 +246,6 @@ namespace System.Resources {
             return FromFileContents(fileContents, (ITypeResolutionService)null);
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.FromFileContents1"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///     Creates a reader with the specified file contents.
@@ -266,7 +257,6 @@ namespace System.Resources {
             };
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.FromFileContents1"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///     Creates a reader with the specified file contents.
@@ -278,14 +268,12 @@ namespace System.Resources {
             };
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.IEnumerable.GetEnumerator"]/*' />
         /// <internalonly/>
         // NOTE: Part of IEnumerable - not protected by class level LinkDemand.
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.GetEnumerator"]/*' />
         // NOTE: Part of IResourceReader - not protected by class level LinkDemand.
         public IDictionaryEnumerator GetEnumerator() {
             isReaderDirty = true;
@@ -293,7 +281,6 @@ namespace System.Resources {
             return resData.GetEnumerator();
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.GetMetadataEnumerator"]/*' />
         /// <devdoc>
         ///    Returns a dictionary enumerator that can be used to enumerate the <metadata> elements in the .resx file.
         /// </devdoc>

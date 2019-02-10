@@ -12,16 +12,13 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     
-    /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn"]/*' />
     [ToolboxBitmapAttribute(typeof(DataGridViewCheckBoxColumn), "DataGridViewCheckBoxColumn.bmp")]
     public class DataGridViewCheckBoxColumn : DataGridViewColumn
     {
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.DataGridViewCheckBoxColumn"]/*' />
         public DataGridViewCheckBoxColumn() : this(false)
         {
         }
 
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.DataGridViewCheckBoxColumn2"]/*' />
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors") // Can't think of a workaround.
         ]
@@ -41,7 +38,6 @@ namespace System.Windows.Forms
             this.DefaultCellStyle = defaultCellStyle;
         }
 
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.CellTemplate"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -70,7 +66,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.DefaultCellStyle"]/*' />
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -88,7 +83,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.FalseValue"]/*' />
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatData)),
@@ -129,7 +123,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.FlatStyle"]/*' />
         [
             DefaultValue(FlatStyle.Standard),
             SRCategory(nameof(SR.CatAppearance)),
@@ -169,7 +162,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.IndeterminateValue"]/*' />
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatData)),
@@ -210,7 +202,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.ThreeState"]/*' />
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatBehavior)),
@@ -266,7 +257,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.TrueValue"]/*' />
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatData)),
@@ -348,7 +338,6 @@ namespace System.Windows.Forms
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 
-        /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.ToString"]/*' />
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);

@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ComboBoxStyle.uex' path='docs/doc[@for="ComboBoxStyle"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies the <see cref='System.Windows.Forms.ComboBox'/>
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public enum ComboBoxStyle {
 
-        /// <include file='doc\ComboBoxStyle.uex' path='docs/doc[@for="ComboBoxStyle.Simple"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The text portion is editable. The list portion is
@@ -33,7 +31,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Simple       = 0,
 
-        /// <include file='doc\ComboBoxStyle.uex' path='docs/doc[@for="ComboBoxStyle.DropDown"]/*' />
         /// <devdoc>
         ///    <para>
         ///
@@ -44,7 +41,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         DropDown     = 1,
 
-        /// <include file='doc\ComboBoxStyle.uex' path='docs/doc[@for="ComboBoxStyle.DropDownList"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The

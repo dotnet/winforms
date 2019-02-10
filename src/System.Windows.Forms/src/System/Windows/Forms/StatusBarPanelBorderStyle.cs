@@ -13,20 +13,17 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\StatusBarPanelBorderStyle.uex' path='docs/doc[@for="StatusBarPanelBorderStyle"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies the border style of a panel on the <see cref='System.Windows.Forms.StatusBar'/>.
     ///    </para>
     /// </devdoc>
     public enum StatusBarPanelBorderStyle {
-        /// <include file='doc\StatusBarPanelBorderStyle.uex' path='docs/doc[@for="StatusBarPanelBorderStyle.None"]/*' />
         /// <devdoc>
         ///     No border.
         /// </devdoc>
         None        = 1,
 
-        /// <include file='doc\StatusBarPanelBorderStyle.uex' path='docs/doc[@for="StatusBarPanelBorderStyle.Raised"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A raised border.
@@ -34,7 +31,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         Raised      = 2,
 
-        /// <include file='doc\StatusBarPanelBorderStyle.uex' path='docs/doc[@for="StatusBarPanelBorderStyle.Sunken"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A sunken border.

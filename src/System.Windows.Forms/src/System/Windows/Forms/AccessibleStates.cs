@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies values representing possible states for an accessible object
@@ -21,7 +20,6 @@ namespace System.Windows.Forms {
     [Flags]
     public enum AccessibleStates {
 
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.None"]/*' />
         /// <devdoc>
         ///    <para>
         ///       No state.
@@ -30,7 +28,6 @@ namespace System.Windows.Forms {
         None = 0,
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Unavailable"]/*' />
         /// <devdoc>
         ///    <para>
         ///       An unavailable object.
@@ -39,7 +36,6 @@ namespace System.Windows.Forms {
         Unavailable =     ( 0x1 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Selected"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A selected object.
@@ -48,7 +44,6 @@ namespace System.Windows.Forms {
         Selected =        ( 0x2 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Focused"]/*' />
         /// <devdoc>
         ///    <para>
         ///       An object with the keyboard focus.
@@ -57,7 +52,6 @@ namespace System.Windows.Forms {
         Focused =         ( 0x4 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Pressed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A pressed object.
@@ -66,7 +60,6 @@ namespace System.Windows.Forms {
         Pressed =         ( 0x8 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Checked"]/*' />
         /// <devdoc>
         ///    <para>
         ///       An object with a
@@ -76,7 +69,6 @@ namespace System.Windows.Forms {
         Checked =    ( 0x10 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Mixed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A three-state check box or toolbar button
@@ -88,7 +80,6 @@ namespace System.Windows.Forms {
         Mixed =      ( 0x20 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Indeterminate"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A three-state check box or toolbar button
@@ -100,7 +91,6 @@ namespace System.Windows.Forms {
         Indeterminate =      ( Mixed ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.ReadOnly"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A read-only object.
@@ -109,7 +99,6 @@ namespace System.Windows.Forms {
         ReadOnly =   ( 0x40 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.HotTracked"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object is hot-tracked by
@@ -120,7 +109,6 @@ namespace System.Windows.Forms {
         HotTracked = ( 0x80 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Default"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The
@@ -130,7 +118,6 @@ namespace System.Windows.Forms {
         Default =    ( 0x100 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Expanded"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Children of the object that are items in an outline or tree
@@ -140,7 +127,6 @@ namespace System.Windows.Forms {
         Expanded =   ( 0x200 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Collapsed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Children of the object that are items in an outline or tree structure are
@@ -150,7 +136,6 @@ namespace System.Windows.Forms {
         Collapsed =  ( 0x400 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Busy"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A
@@ -161,7 +146,6 @@ namespace System.Windows.Forms {
         Busy =       ( 0x800 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Floating"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object is not fixed to the boundary of its parent object, and
@@ -171,7 +155,6 @@ namespace System.Windows.Forms {
         Floating =   ( 0x1000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Marqueed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       An object with scrolling
@@ -181,7 +164,6 @@ namespace System.Windows.Forms {
         Marqueed =   ( 0x2000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Animated"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object has a rapidly or constantly changing
@@ -195,7 +177,6 @@ namespace System.Windows.Forms {
         Animated =   ( 0x4000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Invisible"]/*' />
         /// <devdoc>
         ///    <para>
         ///       An object that is currently invisible.
@@ -204,7 +185,6 @@ namespace System.Windows.Forms {
         Invisible =  ( 0x8000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Offscreen"]/*' />
         /// <devdoc>
         ///    <para>
         ///       No on-screen representation. A
@@ -215,7 +195,6 @@ namespace System.Windows.Forms {
         Offscreen =  ( 0x10000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Sizeable"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A sizable object.
@@ -224,7 +203,6 @@ namespace System.Windows.Forms {
         Sizeable =   ( 0x20000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Moveable"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A movable object.
@@ -233,7 +211,6 @@ namespace System.Windows.Forms {
         Moveable =   ( 0x40000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.SelfVoicing"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object or child can use text-to-speech (TTS) to describe itself. A
@@ -245,7 +222,6 @@ namespace System.Windows.Forms {
         SelfVoicing =        ( 0x80000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Focusable"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The object is on the active window
@@ -255,7 +231,6 @@ namespace System.Windows.Forms {
         Focusable =  ( 0x100000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Selectable"]/*' />
         /// <devdoc>
         ///    <para>
         ///       An object that can accept selection.
@@ -264,7 +239,6 @@ namespace System.Windows.Forms {
         Selectable = ( 0x200000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Linked"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A linked object that has not
@@ -274,7 +248,6 @@ namespace System.Windows.Forms {
         Linked =     ( 0x400000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Traversed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A linked object that has previously been selected.
@@ -283,7 +256,6 @@ namespace System.Windows.Forms {
         Traversed =  ( 0x800000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.MultiSelectable"]/*' />
         /// <devdoc>
         ///    <para>
         ///       An object
@@ -293,7 +265,6 @@ namespace System.Windows.Forms {
         MultiSelectable =    ( 0x1000000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.ExtSelectable"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Alters the selection so that all objects
@@ -316,7 +287,6 @@ namespace System.Windows.Forms {
         ExtSelectable =      ( 0x2000000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.AlertLow"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Low-priority information that may not be important to the user.
@@ -325,7 +295,6 @@ namespace System.Windows.Forms {
         AlertLow =  ( 0x4000000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.AlertMedium"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Important information that does not need to be conveyed to the user
@@ -339,7 +308,6 @@ namespace System.Windows.Forms {
         AlertMedium =       ( 0x8000000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.AlertHigh"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Important information that should be conveyed to the user immediately. For
@@ -354,7 +322,6 @@ namespace System.Windows.Forms {
         AlertHigh = ( 0x10000000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Protected"]/*' />
         /// <devdoc>
         ///    <para>
         ///       A password-protected edit control.
@@ -363,7 +330,6 @@ namespace System.Windows.Forms {
         Protected =  ( 0x20000000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.HasPopup"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Object displays a pop-up menu or window when invoked.
@@ -372,7 +338,6 @@ namespace System.Windows.Forms {
         HasPopup =  ( 0x40000000 ),
         
         
-        /// <include file='doc\AccessibleStates.uex' path='docs/doc[@for="AccessibleStates.Valid"]/*' />
         /// <devdoc>
         /// </devdoc>
         [Obsolete("This enumeration value has been deprecated. There is no replacement. http://go.microsoft.com/fwlink/?linkid=14202")]

@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Design;
     using Microsoft.Win32;
 
-    /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies the base class used for displaying
@@ -40,7 +39,6 @@ namespace System.Windows.Forms {
 
         object userData;
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.CommonDialog"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.CommonDialog'/> class.
@@ -49,7 +47,6 @@ namespace System.Windows.Forms {
         public CommonDialog() {
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -67,7 +64,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.HelpRequest"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the user clicks the Help button on a common
@@ -128,7 +124,6 @@ namespace System.Windows.Forms {
 
         */
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.HookProc"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Defines the common dialog box hook
@@ -160,7 +155,6 @@ namespace System.Windows.Forms {
             return IntPtr.Zero;
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.MoveToScreenCenter"]/*' />
         /// <devdoc>
         ///     Centers the given window on the screen. This method is used by the default
         ///     common dialog hook procedure to center the dialog on the screen before it
@@ -176,7 +170,6 @@ namespace System.Windows.Forms {
                                  NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.OnHelpRequest"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.CommonDialog.HelpRequest'/>
@@ -188,7 +181,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.OwnerWndProc"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Defines the owner window procedure that is
@@ -213,7 +205,6 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.CallWindowProc(defOwnerWndProc, hWnd, msg, wparam, lparam);         
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class,
@@ -223,7 +214,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public abstract void Reset();
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.RunDialog"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class,
@@ -232,7 +222,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected abstract bool RunDialog(IntPtr hwndOwner);
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.ShowDialog"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Runs a common dialog box.
@@ -242,7 +231,6 @@ namespace System.Windows.Forms {
             return ShowDialog(null);
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.ShowDialog1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Runs a common dialog box, parented to the given IWin32Window.

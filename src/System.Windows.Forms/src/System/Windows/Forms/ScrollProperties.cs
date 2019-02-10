@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Globalization;
     
-    /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Basic Properties for Scrollbars.
@@ -31,7 +30,6 @@ namespace System.Windows.Forms {
         internal bool smallChangeSetExternally;
         internal bool largeChangeSetExternally;
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.parent"]/*' />
         private ScrollableControl parent;
 
         protected ScrollableControl ParentControl {
@@ -53,12 +51,10 @@ namespace System.Windows.Forms {
         private bool enabled = true;
 
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.ScrollProperties"]/*' />
         protected ScrollProperties(ScrollableControl container)  {
             this.parent = container;
         }
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.Enabled"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a bool value controlling whether the scrollbar is enabled.
@@ -85,7 +81,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.LargeChange"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollProperties.LargeChange'/>
@@ -119,7 +114,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.Maximum"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the upper limit of values of the scrollable range.
@@ -152,7 +146,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.Minimum"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the lower limit of values of the scrollable range.
@@ -205,7 +198,6 @@ namespace System.Windows.Forms {
             get;
         }
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.SmallChange"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the value to be added or subtracted to the
@@ -241,7 +233,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.Value"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a numeric value that represents the current
@@ -273,7 +264,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.Visible"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a bool value controlling whether the scrollbar is showing.
@@ -301,7 +291,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.UpdateScrollInfo"]/*' />
         /// <devdoc>
         ///     Internal helper method
         /// </devdoc>
@@ -320,7 +309,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollProperties.uex' path='docs/doc[@for="ScrollProperties.EnableScroll"]/*' />
         /// <devdoc>
         ///     Internal helper method for enabling or disabling the Vertical Scroll bar.
         /// </devdoc>

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,7 +8,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Diagnostics;
     using System;
     
-    /// <include file='doc\COM2ExtendedBrowsingHandler.uex' path='docs/doc[@for="Com2ExtendedBrowsingHandler"]/*' />
     /// <devdoc>
     /// This is the base class for handlers for COM2 extended browsing interface
     /// such as IPerPropertyBrowsing, etc.
@@ -22,7 +21,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// </devdoc>
     internal abstract class Com2ExtendedBrowsingHandler{
         
-         /// <include file='doc\COM2ExtendedBrowsingHandler.uex' path='docs/doc[@for="Com2ExtendedBrowsingHandler.Interface"]/*' />
          /// <devdoc>
          /// The interface that this handler managers
          /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
@@ -31,7 +29,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             get;
          }    
          
-         /// <include file='doc\COM2ExtendedBrowsingHandler.uex' path='docs/doc[@for="Com2ExtendedBrowsingHandler.SetupPropertyHandlers"]/*' />
          /// <devdoc>
          /// Called to setup the property handlers on a given property
          /// In this method, the handler will add listeners to the events that
@@ -41,7 +38,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             SetupPropertyHandlers(new Com2PropertyDescriptor[]{propDesc});
          }
          
-         /// <include file='doc\COM2ExtendedBrowsingHandler.uex' path='docs/doc[@for="Com2ExtendedBrowsingHandler.SetupPropertyHandlers1"]/*' />
          /// <devdoc>
          /// Called to setup the property handlers on a given properties
          /// In this method, the handler will add listeners to the events that

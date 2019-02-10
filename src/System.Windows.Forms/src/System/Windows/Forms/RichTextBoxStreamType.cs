@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\RichTextBoxStreamType.uex' path='docs/doc[@for="RichTextBoxStreamType"]/*' />
     /// <devdoc>
     ///     Defines the possible kinds of input/output streams used by RichTextBox
     ///     control's load/save mechansim. These stream options are also used the
@@ -19,31 +18,26 @@ namespace System.Windows.Forms {
     ///
     /// </devdoc>
     public enum RichTextBoxStreamType {
-        /// <include file='doc\RichTextBoxStreamType.uex' path='docs/doc[@for="RichTextBoxStreamType.RichText"]/*' />
         /// <devdoc>
         ///     Rich Text Format (RTF).
         /// </devdoc>
         RichText       = 0,
 
-        /// <include file='doc\RichTextBoxStreamType.uex' path='docs/doc[@for="RichTextBoxStreamType.PlainText"]/*' />
         /// <devdoc>
         ///     Text with spaces in place of OLE objects.
         /// </devdoc>
         PlainText      = 1,
 
-        /// <include file='doc\RichTextBoxStreamType.uex' path='docs/doc[@for="RichTextBoxStreamType.RichNoOleObjs"]/*' />
         /// <devdoc>
         ///     RTF with spaces in place of OLE object (valid only for saveFile).
         /// </devdoc>
         RichNoOleObjs = 2,
 
-        /// <include file='doc\RichTextBoxStreamType.uex' path='docs/doc[@for="RichTextBoxStreamType.TextTextOleObjs"]/*' />
         /// <devdoc>
         ///     Text with a text representation of OLE objects (valid only for saveFile).
         /// </devdoc>
         TextTextOleObjs = 3,
 
-        /// <include file='doc\RichTextBoxStreamType.uex' path='docs/doc[@for="RichTextBoxStreamType.UnicodePlainText"]/*' />
         /// <devdoc>
         ///     Text with spaces in place of OLE objects, encoded in Unicode.
         /// </devdoc>

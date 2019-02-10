@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -41,7 +41,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.ComponentType"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class, gets the type of the
@@ -55,7 +54,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.Converter"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the type converter for this property.
@@ -73,7 +71,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.IsLocalizable"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a value
@@ -96,7 +93,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.IsReadOnly"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in
@@ -120,7 +116,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
    
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.PropertyType"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class,
@@ -139,7 +134,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.CanResetValue"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class, indicates whether
@@ -228,7 +222,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return value;
         }
 
-         /// <include file='doc\MemberDescriptor.uex' path='docs/doc[@for="MemberDescriptor.CreateAttributeCollection"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Creates a collection of attributes using the
@@ -248,7 +241,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return propertyOwner;
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.GetEditor"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets an editor of the specified type.
@@ -259,7 +251,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.GetValue"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class, gets the current
@@ -326,7 +317,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return values;
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.ResetValue"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class, resets the
@@ -377,7 +367,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.SetValue"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class, sets the value of
@@ -398,7 +387,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.ShouldSerializeValue"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class, indicates whether the
@@ -427,7 +415,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                SetItems(original);
             }
             
-            /// <include file='doc\MultiSelectPropertyGridEntry.uex' path='docs/doc[@for="MultiSelectPropertyGridEntry.MultiMergeCollection.Count"]/*' />
             /// <devdoc>
             ///     Retrieves the number of items.
             /// </devdoc>
@@ -443,7 +430,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
             
             
-            /// <include file='doc\MultiSelectPropertyGridEntry.uex' path='docs/doc[@for="MultiSelectPropertyGridEntry.MultiMergeCollection.Locked"]/*' />
             /// <devdoc>
             ///     Prevents the contents of the collection from being re-initialized;
             /// </devdoc>
@@ -483,7 +469,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                }
             }
             
-            /// <include file='doc\MultiSelectPropertyGridEntry.uex' path='docs/doc[@for="MultiSelectPropertyGridEntry.MultiMergeCollection.MergeCollection"]/*' />
             /// <devdoc>
             /// Ensures that the new collection equals the exisitng one.
             /// Otherwise, it wipes out the contents of the new collection.

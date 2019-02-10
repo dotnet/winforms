@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using Microsoft.Win32;
 
-    /// <include file='doc\IWindowTarget.uex' path='docs/doc[@for="IWindowTarget"]/*' />
     /// <devdoc>
     ///      This interface defines the communication layer between
     ///      a Control object and the Win32 API.  Each Control object
@@ -22,13 +21,11 @@ namespace System.Windows.Forms {
     /// <internalonly/>
     public interface IWindowTarget {
 
-        /// <include file='doc\IWindowTarget.uex' path='docs/doc[@for="IWindowTarget.OnHandleChange"]/*' />
         /// <devdoc>
         ///      Called when the window handle of the control has changed.
         /// </devdoc>
         void OnHandleChange(IntPtr newHandle);
 
-        /// <include file='doc\IWindowTarget.uex' path='docs/doc[@for="IWindowTarget.OnMessage"]/*' />
         /// <devdoc>
         ///      Called to do control-specific processing for this window.
         /// </devdoc>

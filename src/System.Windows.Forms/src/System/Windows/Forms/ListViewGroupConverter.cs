@@ -17,7 +17,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <include file='doc\ListItemConverter.uex' path='docs/doc[@for="ListViewGroupConverter"]/*' />
     /// <devdoc>
     ///      ListViewGroupConverter is a class that can be used to convert
     ///      ListViewGroup objects from one data type to another.  Access this
@@ -25,7 +24,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     internal class ListViewGroupConverter : TypeConverter {
     
-        /// <include file='doc\ListViewGroupConverter.uex' path='docs/doc[@for="CursorConverter.CanConvertFrom"]/*' />
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -37,7 +35,6 @@ namespace System.Windows.Forms {
             return base.CanConvertFrom(context, sourceType);
         }
 
-        /// <include file='doc\ListViewGroupConverter.uex' path='docs/doc[@for="ListViewGroupConverter.CanConvertTo"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -52,7 +49,6 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <include file='doc\ListViewGroupConverter.uex' path='docs/doc[@for="ListViewGroupConverter.ConvertFrom"]/*' />
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
@@ -81,7 +77,6 @@ namespace System.Windows.Forms {
             return base.ConvertFrom(context, culture, value);
         }
         
-        /// <include file='doc\ListViewGroupConverter.uex' path='docs/doc[@for="ListViewGroupConverter.ConvertTo"]/*' />
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -113,7 +108,6 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        /// <include file='doc\ListViewGroupConverter.uex' path='docs/doc[@for="ListViewGroupConverter.GetStandardValues"]/*' />
         /// <devdoc>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
@@ -135,7 +129,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\ListViewGroupConverter.uex' path='docs/doc[@for="ListViewGroupConverter.GetStandardValuesExclusive"]/*' />
         /// <devdoc>
         ///      Determines if the list of standard values returned from
         ///      GetStandardValues is an exclusive list.  If the list
@@ -148,7 +141,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\ListViewGroupConverter.uex' path='docs/doc[@for="ListViewGroupConverter.GetStandardValuesSupported"]/*' />
         /// <devdoc>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.

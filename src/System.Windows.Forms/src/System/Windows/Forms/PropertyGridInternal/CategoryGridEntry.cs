@@ -64,7 +64,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
           
-        /// <include file='doc\CategoryGridEntry.uex' path='docs/doc[@for="CategoryGridEntry.HasValue"]/*' />
         /// <devdoc>
         /// Returns true if this GridEntry has a value field in the right hand column.
         /// </devdoc>
@@ -178,7 +177,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\CategoryGridEntry.uex' path='docs/doc[@for="CategoryGridEntry.GetChildValueOwner"]/*' />
         /// <devdoc>
         /// Gets the owner of the current value.  This is usually the value of the
         /// root entry, which is the object being browsed

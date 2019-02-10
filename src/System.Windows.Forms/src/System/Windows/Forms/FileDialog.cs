@@ -25,7 +25,6 @@ namespace System.Windows.Forms {
 
     using CharBuffer = System.Windows.Forms.UnsafeNativeMethods.CharBuffer;
 
-    /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Displays a dialog window from which the user can select a file.
@@ -39,7 +38,6 @@ namespace System.Windows.Forms {
 
         private const int FILEBUFSIZE = 8192;
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.EventFileOk"]/*' />
         /// <internalonly/>
         protected static readonly object EventFileOk = new object();
 
@@ -59,7 +57,6 @@ namespace System.Windows.Forms {
         private CharBuffer charBuffer;
         private IntPtr dialogHWnd;
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FileDialog"]/*' />
         /// <devdoc>
         ///    <para>
         ///       In an inherited class,
@@ -75,7 +72,6 @@ namespace System.Windows.Forms {
             Reset();
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.AddExtension"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the
@@ -98,7 +94,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.CheckFileExists"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether
         ///       the dialog box displays a warning if the user specifies a file name that does not exist.</para>
@@ -118,7 +113,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.CheckPathExists"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the
@@ -140,7 +134,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.DefaultExt"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the default file extension.
@@ -168,7 +161,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.DereferenceLinks"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value
@@ -199,7 +191,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FileName"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -236,7 +227,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FileNames"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the file
@@ -267,7 +257,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Filter"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -303,7 +292,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FilterExtensions"]/*' />
         /// <devdoc>
         ///     Extracts the file extensions specified by the current file filter into
         ///     an array of strings.  None of the extensions contain .'s, and the 
@@ -342,7 +330,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FilterIndex"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the index of the filter currently selected in the file dialog box.
@@ -363,7 +350,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.InitialDirectory"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the initial directory displayed by the file dialog
@@ -384,7 +370,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Instance"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -398,7 +383,6 @@ namespace System.Windows.Forms {
             get { return UnsafeNativeMethods.GetModuleHandle(null); }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Options"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -414,7 +398,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.RestoreDirectory"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box restores the current directory before
@@ -436,7 +419,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.ShowHelp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating
@@ -458,7 +440,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.SupportMultipleExtensions"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets whether def or abc.def is the extension of the file filename.abc.def
@@ -481,7 +462,6 @@ namespace System.Windows.Forms {
             }
         } 
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Title"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the file dialog box title.
@@ -502,7 +482,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.ValidateNames"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box accepts only valid
@@ -523,7 +502,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FileOk"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the user clicks on the Open or Save button on a file dialog
@@ -545,7 +523,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.DoFileOk"]/*' />
         /// <devdoc>
         ///     Processes the CDN_FILEOK notification.
         /// </devdoc>
@@ -618,7 +595,6 @@ namespace System.Windows.Forms {
             return fileExists;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.GetMultiselectFiles"]/*' />
         /// <devdoc>
         ///     Extracts the filename(s) returned by the file dialog.
         /// </devdoc>
@@ -645,7 +621,6 @@ namespace System.Windows.Forms {
             return temp;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.GetOption"]/*' />
         /// <devdoc>
         ///     Returns the state of the given option flag.
         /// </devdoc>
@@ -655,7 +630,6 @@ namespace System.Windows.Forms {
             return(options & option) != 0;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.HookProc"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Defines the common dialog box hook procedure that is overridden to add
@@ -737,7 +711,6 @@ namespace System.Windows.Forms {
             return IntPtr.Zero;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.MakeFilterString"]/*' />
         /// <devdoc>
         ///     Converts the given filter string to the format required in an OPENFILENAME_I
         ///     structure.
@@ -766,7 +739,6 @@ namespace System.Windows.Forms {
             return new string(filter);
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.OnFileOk"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.FileDialog.FileOk'/> event.
@@ -777,7 +749,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.ProcessFileNames"]/*' />
         /// <devdoc>
         ///     Processes the filenames entered in the dialog according to the settings
         ///     of the "addExtension", "checkFileExists", "createPrompt", and
@@ -820,7 +791,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.MessageBoxWithFocusRestore"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/>
@@ -845,7 +815,6 @@ namespace System.Windows.Forms {
             return ret;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.PromptFileNotFound"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/>
@@ -871,7 +840,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Resets all properties to their default values.
@@ -890,7 +858,6 @@ namespace System.Windows.Forms {
             this._customPlaces.Clear();
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.RunDialog"]/*' />
         /// <devdoc>
         ///    Implements running of a file dialog.
         /// </devdoc>
@@ -952,14 +919,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.RunFileDialog"]/*' />
         /// <devdoc>
         ///     Implements the actual call to GetOPENFILENAME_I or GetSaveFileName.
         /// </devdoc>
         /// <internalonly/>
         internal abstract bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn);
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.SetOption"]/*' />
         /// <devdoc>
         ///     Sets the given option to the given boolean value.
         /// </devdoc>
@@ -973,7 +938,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.ToString"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>

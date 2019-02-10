@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -15,7 +15,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Windows.Forms.Design;
     using System.Globalization;
 
-    /// <include file='doc\COM2PropertyBuilderUITypeEditor.uex' path='docs/doc[@for="Com2PropertyBuilderUITypeEditor"]/*' />
     /// <devdoc>
     /// </devdoc>
     internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor {
@@ -30,7 +29,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             this.bldrType = type;
         }
 
-        /// <include file='doc\COM2PropertyBuilderUITypeEditor.uex' path='docs/doc[@for="Com2PropertyBuilderUITypeEditor.EditValue"]/*' />
         /// <devdoc>
         ///     Takes the value returned from valueAccess.getValue() and modifies or replaces
         ///     the value, passing the result into valueAccess.setValue().  This is where
@@ -85,7 +83,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return value;
         }
 
-        /// <include file='doc\COM2PropertyBuilderUITypeEditor.uex' path='docs/doc[@for="Com2PropertyBuilderUITypeEditor.GetEditStyle"]/*' />
         /// <devdoc>
         ///      Retrieves the editing style of the Edit method.  If the method
         ///      is not supported, this will return None.

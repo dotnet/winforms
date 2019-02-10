@@ -4,9 +4,7 @@
 
 
 namespace System.Windows.Forms {
-    /// <include file='doc\MessageBoxButtons.uex' path='docs/doc[@for="MessageBoxButtons"]/*' />
     public enum MessageBoxButtons {
-        /// <include file='doc\MessageBoxButtons.uex' path='docs/doc[@for="MessageBoxButtons.OK"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -16,7 +14,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         OK               = 0x00000000,
 
-        /// <include file='doc\MessageBoxButtons.uex' path='docs/doc[@for="MessageBoxButtons.OKCancel"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -27,7 +24,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         OKCancel         = 0x00000001,
 
-        /// <include file='doc\MessageBoxButtons.uex' path='docs/doc[@for="MessageBoxButtons.AbortRetryIgnore"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -38,7 +34,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         AbortRetryIgnore = 0x00000002,
 
-        /// <include file='doc\MessageBoxButtons.uex' path='docs/doc[@for="MessageBoxButtons.YesNoCancel"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -49,7 +44,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         YesNoCancel      = 0x00000003,
 
-        /// <include file='doc\MessageBoxButtons.uex' path='docs/doc[@for="MessageBoxButtons.YesNo"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the
@@ -59,7 +53,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         YesNo            = 0x00000004,
 
-        /// <include file='doc\MessageBoxButtons.uex' path='docs/doc[@for="MessageBoxButtons.RetryCancel"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies that the

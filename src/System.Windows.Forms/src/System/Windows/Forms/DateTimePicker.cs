@@ -20,7 +20,6 @@ namespace System.Windows.Forms {
 
     using Microsoft.Win32;
 
-    /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker"]/*' />
     /// <devdoc>
     ///     Date/DateTime picker control
     /// </devdoc>
@@ -34,22 +33,18 @@ namespace System.Windows.Forms {
     SRDescription(nameof(SR.DescriptionDateTimePicker))
     ]
     public class DateTimePicker : Control {
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultTitleBackColor"]/*' />
         /// <devdoc>
         ///    <para>Specifies the default title back color. This field is read-only.</para>
         /// </devdoc>
         protected static readonly Color DefaultTitleBackColor = SystemColors.ActiveCaption;
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultTitleForeColor"]/*' />
         /// <devdoc>
         ///    <para>Specifies the default foreground color. This field is read-only.</para>
         /// </devdoc>
         protected static readonly Color DefaultTitleForeColor = SystemColors.ActiveCaptionText;
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultMonthBackColor"]/*' />
         /// <devdoc>
         ///    <para>Specifies the default month background color. This field is read-only.</para>
         /// </devdoc>
         protected static readonly Color DefaultMonthBackColor = SystemColors.Window;
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultTrailingForeColor"]/*' />
         /// <devdoc>
         ///    <para>Specifies the default trailing forground color. This field is read-only.</para>
         /// </devdoc>
@@ -68,14 +63,12 @@ namespace System.Windows.Forms {
         // We need to restrict the available dates because of limitations in the comctl
         // DateTime and MonthCalendar controls
         //
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MinDateTime"]/*' />
         /// <devdoc>
         ///    <para>Specifies the minimum date value. This field is read-only.</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MinDateTime = new DateTime(1753, 1, 1);
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MaxDateTime"]/*' />
         /// <devdoc>
         ///    <para>Specifies the maximum date value. This field is read-only.</para>
         /// </devdoc>
@@ -119,7 +112,6 @@ namespace System.Windows.Forms {
 
         private bool                            rightToLeftLayout = false;
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DateTimePicker"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DateTimePicker'/> class.</para>
         /// </devdoc>
@@ -146,7 +138,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
             get {
@@ -162,7 +153,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
@@ -174,7 +164,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -185,7 +174,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
@@ -197,7 +185,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -208,7 +195,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
@@ -220,7 +206,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarForeColor"]/*' />
         /// <devdoc>
         ///     The current value of the CalendarForeColor property.
         /// </devdoc>
@@ -245,7 +230,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarFont"]/*' />
         /// <devdoc>
         ///     The current value of the CalendarFont property.
         /// </devdoc>
@@ -287,7 +271,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarTitleBackColor"]/*' />
         /// <devdoc>
         ///     The current value of the CalendarTitleBackColor property.
         /// </devdoc>
@@ -312,7 +295,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarTitleForeColor"]/*' />
         /// <devdoc>
         ///     The current value of the CalendarTitleForeColor property.
         /// </devdoc>
@@ -337,7 +319,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarTrailingForeColor"]/*' />
         /// <devdoc>
         ///     The current value of the CalendarTrailingForeColor property.
         /// </devdoc>
@@ -362,7 +343,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarMonthBackground"]/*' />
         /// <devdoc>
         ///     The current value of the CalendarMonthBackground property.
         /// </devdoc>
@@ -387,7 +367,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Checked"]/*' />
         /// <devdoc>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.DateTimePicker.Value'/> property has been set.</para>
         /// </devdoc>
@@ -440,7 +419,6 @@ namespace System.Windows.Forms {
             remove { base.Click -= value; }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateParams"]/*' />
         /// <devdoc>
         ///     Returns the CreateParams used to create this window.
         /// </devdoc>
@@ -477,7 +455,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CustomFormat"]/*' />
         /// <devdoc>
         ///     Returns the custom format.
         /// </devdoc>
@@ -507,7 +484,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -518,7 +494,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DoubleBuffered"]/*' />
         /// <devdoc>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
@@ -542,7 +517,6 @@ namespace System.Windows.Forms {
             remove { base.DoubleClick -= value; }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DropDownAlign"]/*' />
         /// <devdoc>
         ///     The current value of the dropDownAlign property.  The calendar
         ///     dropDown can be aligned to the left or right of the control.
@@ -570,7 +544,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -586,7 +559,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ForeColorChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
@@ -598,7 +570,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Format"]/*' />
         /// <devdoc>
         ///     Returns the current value of the format property. This determines the
         ///     style of format the date is displayed in.
@@ -630,7 +601,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.FormatChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
         public event EventHandler FormatChanged {
             add {
@@ -641,7 +611,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimepicker.uex' path='docs/doc[@for="DateTimepicker.Paint"]/*' />
         /// <devdoc>
         ///     DateTimePicker Paint.
         /// </devdoc>
@@ -686,7 +655,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MaxDate"]/*' />
         /// <devdoc>
         ///    <para> Indicates the maximum date and time
         ///       selectable in the control.</para>
@@ -723,7 +691,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MaximumDateTime"]/*' />
         /// <devdoc>
         ///    <para>Specifies the maximum date value. This property is read-only.</para>
         /// </devdoc>
@@ -738,7 +705,6 @@ namespace System.Windows.Forms {
              }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MinDate"]/*' />
         /// <devdoc>
         ///    <para> Indicates the minimum date and time
         ///       selectable in the control.</para>
@@ -783,7 +749,6 @@ namespace System.Windows.Forms {
         // that time.  We do this even for cultures that don't use the Gregorian calendar -- we're not
         // really that worried about calendars for >250 years ago.
         //
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.MinimumDateTime"]/*' />
         /// <devdoc>
         ///    <para>Specifies the minimum date value. This property is read-only.</para>
         /// </devdoc>
@@ -816,7 +781,6 @@ namespace System.Windows.Forms {
             remove { base.MouseDoubleClick -= value; }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -836,7 +800,6 @@ namespace System.Windows.Forms {
             remove { base.PaddingChanged -= value; }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.PreferredHeight"]/*' />
         /// <devdoc>
         ///    <para>Indicates the preferred height of the DateTimePicker control. This property is read-only.</para>
         /// </devdoc>
@@ -860,7 +823,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.RightToLeftLayout"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -891,7 +853,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ShowCheckBox"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates whether a check box is displayed to toggle the NoValueSelected property
@@ -911,7 +872,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ShowUpDown"]/*' />
         /// <devdoc>
         ///    <para> Indicates
         ///       whether an up-down control is used to adjust the time values.</para>
@@ -932,7 +892,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Text"]/*' />
         /// <devdoc>
         ///     Overrides Text to allow for setting of the value via a string.  Also, returns
         ///     a formatted Value when getting the text.  The DateTime class will throw
@@ -955,7 +914,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.TextChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TextChanged {
@@ -967,7 +925,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Value"]/*' />
         /// <devdoc>
         ///    <para>Indicates the DateTime value assigned to the control.</para>
         /// </devdoc>
@@ -1022,7 +979,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CloseUp"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the dropdown calendar is dismissed and disappears.</para>
         /// </devdoc>
@@ -1037,7 +993,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add {
@@ -1048,7 +1003,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ValueChanged"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the value for the control changes.</para>
         /// </devdoc>
@@ -1063,7 +1017,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DropDown"]/*' />
         /// <devdoc>
         ///    <para>Occurs when the drop down calendar is shown.</para>
         /// </devdoc>
@@ -1077,7 +1030,6 @@ namespace System.Windows.Forms {
             }
         }
      
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateAccessibilityInstance"]/*' />
         /// <internalonly/>
         /// <summary>
         /// <para>
@@ -1089,7 +1041,6 @@ namespace System.Windows.Forms {
             return new DateTimePickerAccessibleObject(this);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateHandle"]/*' />
         /// <devdoc>
         ///     Creates the physical window handle.
         /// </devdoc>
@@ -1136,7 +1087,6 @@ namespace System.Windows.Forms {
             SetRange();
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DestroyHandle"]/*' />
         /// <devdoc>
         ///     Destroys the physical window handle.
         /// </devdoc>
@@ -1166,7 +1116,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.IsInputKey"]/*' />
         /// <devdoc>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
         /// </devdoc>
@@ -1182,7 +1131,6 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnCloseUp"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.DateTimePicker.CloseUp'/>
         /// event.</para>
@@ -1191,7 +1139,6 @@ namespace System.Windows.Forms {
             if (onCloseUp != null) onCloseUp(this, eventargs);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnDropDown"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.DateTimePicker.DropDown'/> event.</para>
         /// </devdoc>
@@ -1201,7 +1148,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnFormatChanged"]/*' />
         protected virtual void OnFormatChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_FORMATCHANGED] as EventHandler;
             if (eh != null) {
@@ -1210,7 +1156,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnHandleCreated"]/*' />
         /// <devdoc>
         ///    <para>Add/remove SystemEvents in OnHandleCreated/Destroyed for robustness</para>
         /// </devdoc>
@@ -1220,7 +1165,6 @@ namespace System.Windows.Forms {
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnHandleDestroyed"]/*' />
         /// <devdoc>
         ///    <para>Add/remove SystemEvents in OnHandleCreated/Destroyed for robustness</para>
         /// </devdoc>
@@ -1230,7 +1174,6 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnValueChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.DateTimePicker.ValueChanged'/> event.</para>
         /// </devdoc>
@@ -1240,7 +1183,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {
@@ -1257,7 +1199,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnFontChanged"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    Occurs when a property for the control changes.
@@ -1515,7 +1456,6 @@ namespace System.Windows.Forms {
             return(Format != DateTimePickerFormat.Long);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ToString"]/*' />
         /// <devdoc>
         ///     Returns the control as a string
         /// </devdoc>
@@ -1609,7 +1549,6 @@ namespace System.Windows.Forms {
             OnDropDown(EventArgs.Empty);
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnSystemColorsChanged"]/*' />
         /// <devdoc>
         ///     Handles system color changes
         /// </devdoc>
@@ -1641,7 +1580,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.WndProc"]/*' />
         /// <devdoc>
         ///     Overrided wndProc
         /// </devdoc>
@@ -1704,18 +1642,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject"]/*' />
         /// <internalonly/>
         /// <summary>
         /// </summary>
         [ComVisible(true)]
         public class DateTimePickerAccessibleObject : ControlAccessibleObject {
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.DateTimePickerAccessibleObject"]/*' />
             public DateTimePickerAccessibleObject(DateTimePicker owner) : base(owner) {
             }
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.KeyboardShorcut"]/*' />
             public override string KeyboardShortcut {
                 get {
                     // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShorcut the previous label 
@@ -1743,7 +1678,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.Value"]/*' />
             public override string Value {
                 get {
                     string baseValue = base.Value;
@@ -1754,7 +1688,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.State"]/*' />
             public override AccessibleStates State {
                 get {
                     AccessibleStates state = base.State;
@@ -1768,7 +1701,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject.Role"]/*' />
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;

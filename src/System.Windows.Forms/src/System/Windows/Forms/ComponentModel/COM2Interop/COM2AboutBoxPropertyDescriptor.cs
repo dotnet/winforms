@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -24,7 +24,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                                                                       new ParenthesizePropertyNameAttribute(true)}, true, typeof(string), null, false) {
         }
     
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.ComponentType"]/*' />
         /// <devdoc>
         ///     Retrieves the type of the component this PropertyDescriptor is bound to.
         /// </devdoc>
@@ -35,7 +34,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
         
         
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.Converter"]/*' />
         /// <devdoc>
         ///      Retrieves the type converter for this property.
         /// </devdoc>
@@ -47,7 +45,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return converter;
             }
         }
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.IsReadOnly"]/*' />
         /// <devdoc>
         ///     Indicates whether this property is read only.
         /// </devdoc>
@@ -57,7 +54,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.PropertyType"]/*' />
         /// <devdoc>
         ///     Retrieves the type of the property.
         /// </devdoc>
@@ -67,7 +63,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
         
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.CanResetValue"]/*' />
         /// <devdoc>
         ///     Indicates whether reset will change the value of the component.  If there
         ///     is a DefaultValueAttribute, then this will return true if getValue returns
@@ -80,7 +75,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return false;
         }
     
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.GetEditor"]/*' />
         /// <devdoc>
         ///      Retrieves an editor of the requested type.
         /// </devdoc>
@@ -94,7 +88,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return editor;
         }
 
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.GetValue"]/*' />
         /// <devdoc>
         ///     Retrieves the current value of the property on component,
         ///     invoking the getXXX method.  An exception in the getXXX
@@ -104,7 +97,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return "";
         }
 
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.ResetValue"]/*' />
         /// <devdoc>
         ///     Will reset the default value for this property on the component.  If
         ///     there was a default value passed in as a DefaultValueAttribute, that
@@ -116,7 +108,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override void ResetValue(object component){
         }
 
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.SetValue"]/*' />
         /// <devdoc>
         ///     This will set value to be the new value of this property on the
         ///     component by invoking the setXXX method on the component.  If the
@@ -130,7 +121,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             throw new ArgumentException();
         }
 
-        /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.ShouldSerializeValue"]/*' />
         /// <devdoc>
         ///     Indicates whether the value of this property needs to be persisted. In
         ///     other words, it indicates whether the state of the property is distinct
@@ -147,7 +137,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
         
         public class AboutBoxUITypeEditor : UITypeEditor {
-            /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.AboutBoxUITypeEditor.EditValue"]/*' />
             /// <devdoc>
             ///      Edits the given object value using the editor style provided by
             ///      GetEditorStyle.  A service provider is provided so that any
@@ -174,7 +163,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                      return value;
             }
             
-            /// <include file='doc\COM2AboutBoxPropertyDescriptor.uex' path='docs/doc[@for="Com2AboutBoxPropertyDescriptor.AboutBoxUITypeEditor.GetEditStyle"]/*' />
             /// <devdoc>
             ///      Retrieves the editing style of the Edit method.  If the method
             ///      is not supported, this will return None.

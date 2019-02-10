@@ -7,7 +7,6 @@ namespace System.Windows.Forms
     using System;
     using System.ComponentModel;
 
-    /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem"]/*' />
     /// <devdoc>
     /// <para>Representaion of one row item in the PropertyGrid.  These items represent the
     /// hierarchy of the grid's "tree-like" view and can be used to get information about
@@ -20,7 +19,6 @@ namespace System.Windows.Forms
 
         private object userData;
 
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -38,7 +36,6 @@ namespace System.Windows.Forms
             }
         }
     
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.GridItems"]/*' />
         /// <devdoc>
         /// <para>Retrieves the child GridItems, if any, of this GridItem</para>
         /// </devdoc>
@@ -46,7 +43,6 @@ namespace System.Windows.Forms
             get;
         }
         
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.GridItemType"]/*' />
         /// <devdoc>
         /// <para>Retrieves type of this GridItem, as a value from System.Windows.Forms.GridItemType</para>
         /// </devdoc>
@@ -54,7 +50,6 @@ namespace System.Windows.Forms
             get;
         }
         
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.Label"]/*' />
         /// <devdoc>
         /// <para>Retrieves the text label of this GridItem.  This may be different from the actual PropertyName.
         ///       For GridItemType.Property GridItems, retrieve the PropertyDescriptor and check its Name property.</para>
@@ -63,7 +58,6 @@ namespace System.Windows.Forms
             get;
         }
         
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.Parent"]/*' />
         /// <devdoc>
         /// <para>Retrieves parent GridItem of this GridItem, if any</para>
         /// </devdoc>
@@ -71,7 +65,6 @@ namespace System.Windows.Forms
             get;
         }
         
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.PropertyDescriptor"]/*' />
         /// <devdoc>
         /// <para>If this item is a GridItemType.Property GridItem, this retreives the System.ComponentModel.PropertyDescriptor that is
         ///       associated with this GridItem.  This can be used to retrieve infomration such as property Type, Name, or TypeConverter.</para>
@@ -80,7 +73,6 @@ namespace System.Windows.Forms
             get;
         }
         
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.Value"]/*' />
         /// <devdoc>
         /// <para>Retrieves the current Value of this grid Item.  This may be null. </para>
         /// </devdoc>
@@ -89,7 +81,6 @@ namespace System.Windows.Forms
             // note: we don't do set because of the value class semantics, etc.
         }
         
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.Expandable"]/*' />
         /// <devdoc>
         /// <para>Retreives whether the given property is expandable.</para>
         /// </devdoc>
@@ -99,7 +90,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.Expanded"]/*' />
         /// <devdoc>
         /// <para>Retreives or sets whether the GridItem is in an expanded state.</para>
         /// </devdoc>
@@ -112,7 +102,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\GridItem.uex' path='docs/doc[@for="GridItem.Select"]/*' />
         /// <devdoc>
         /// <para>Attempts to select this GridItem in the PropertyGrid.</para>
         /// </devdoc>

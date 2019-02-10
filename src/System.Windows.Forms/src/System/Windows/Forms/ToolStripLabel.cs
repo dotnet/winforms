@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.ButtonInternal;
     using System.Windows.Forms.Design;    
 
-    /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel"]/*' />
     /// <devdoc>
     /// A non selectable winbar item
     /// </devdoc>
@@ -31,7 +30,6 @@ namespace System.Windows.Forms {
                      
               
 
-        /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.ToolStripLabel"]/*' />
         /// <devdoc>
         /// A non selectable winbar item
         /// </devdoc>
@@ -53,7 +51,6 @@ namespace System.Windows.Forms {
             IsLink = isLink;
         }
 
-        /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.CanSelect"]/*' />
         public override bool CanSelect {
             get { return (IsLink || DesignMode); }
         }
@@ -194,7 +191,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.InvalidateLinkFonts"]/*' />
         /// <devdoc>
         ///     Invalidates the current set of fonts we use when painting
         ///     links.  The fonts will be recreated when needed.
@@ -287,7 +283,6 @@ namespace System.Windows.Forms {
             return new ToolStripLabelAccessibleObject(this);
         }
 
-        /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.OnPaint"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>

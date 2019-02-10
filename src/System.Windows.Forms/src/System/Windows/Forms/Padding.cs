@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Globalization;
 
-    /// <include file='doc\Forms.uex' path='docs/doc[@for="Forms.Padding"]/*' />
     [TypeConverterAttribute(typeof(PaddingConverter))]
     [Serializable]
     public struct Padding {
@@ -23,17 +22,14 @@ namespace System.Windows.Forms {
         private int _right;
         private int _bottom;
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Empty"]/*' />
         public static readonly Padding Empty = new Padding(0);
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Padding"]/*' />
         public Padding(int all) {
             _all = true;
             _top = _left = _right = _bottom = all;
             Debug_SanityCheck();
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Padding"]/*' />
         public Padding(int left, int top, int right, int bottom) {
             _top = top;
             _left = left;
@@ -43,7 +39,6 @@ namespace System.Windows.Forms {
             Debug_SanityCheck();
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.All"]/*' />
         [RefreshProperties(RefreshProperties.All)]
         public int All {
             get {
@@ -58,7 +53,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Bottom"]/*' />
         [RefreshProperties(RefreshProperties.All)]
         public int Bottom {
             get {
@@ -76,7 +70,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Left"]/*' />
         [RefreshProperties(RefreshProperties.All)]
         public int Left {
             get {
@@ -94,7 +87,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Right"]/*' />
         [RefreshProperties(RefreshProperties.All)]
         public int Right {
             get {
@@ -112,7 +104,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Top"]/*' />
         [RefreshProperties(RefreshProperties.All)]
         public int Top {
             get {
@@ -127,7 +118,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Horizontal"]/*' />
         [Browsable(false)]
         public int Horizontal {
             get {
@@ -135,7 +125,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Vertical"]/*' />
         [Browsable(false)]
         public int Vertical {
             get {
@@ -143,7 +132,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Size"]/*' />
         [Browsable(false)]
         public Size Size {
             get {
@@ -161,7 +149,6 @@ namespace System.Windows.Forms {
             return p1 - p2;
         }
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.Equals"]/*' />
         public override bool Equals(object other) {
             if(other is Padding) {            
                 return ((Padding)other) == this;                
@@ -171,7 +158,6 @@ namespace System.Windows.Forms {
 
       
 
-        /// <include file='doc\Size.uex' path='docs/doc[@for="Padding.operator+"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Performs vector addition of two <see cref='System.Windows.Forms.Padding'/> objects.
@@ -182,7 +168,6 @@ namespace System.Windows.Forms {
         
         }
 
-        /// <include file='doc\Size.uex' path='docs/doc[@for="Padding.operator-"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Contracts a <see cref='System.Drawing.Size'/> by another <see cref='System.Drawing.Size'/>
@@ -193,7 +178,6 @@ namespace System.Windows.Forms {
             return new Padding(p1.Left - p2.Left, p1.Top - p2.Top, p1.Right - p2.Right, p1.Bottom - p2.Bottom );
         }
 
-        /// <include file='doc\Size.uex' path='docs/doc[@for="Padding.operator=="]/*' />
         /// <devdoc>
         ///    Tests whether two <see cref='System.Windows.Forms.Padding'/> objects
         ///    are identical.
@@ -202,7 +186,6 @@ namespace System.Windows.Forms {
             return p1.Left == p2.Left && p1.Top == p2.Top && p1.Right == p2.Right && p1.Bottom == p2.Bottom; 
         }
         
-        /// <include file='doc\Size.uex' path='docs/doc[@for="Padding.operator!="]/*' />
         /// <devdoc>
         ///    <para>
         ///       Tests whether two <see cref='System.Windows.Forms.Padding'/> objects are different.
@@ -214,7 +197,6 @@ namespace System.Windows.Forms {
         
         public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
 
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.ToString"]/*' />
         public override string ToString() {
             return "{Left=" + Left.ToString(CultureInfo.CurrentCulture) + ",Top=" + Top.ToString(CultureInfo.CurrentCulture) + ",Right=" + Right.ToString(CultureInfo.CurrentCulture) + ",Bottom=" + Bottom.ToString(CultureInfo.CurrentCulture) + "}";
         }

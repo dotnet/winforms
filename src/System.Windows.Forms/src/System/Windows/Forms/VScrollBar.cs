@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\VScrollBar.uex' path='docs/doc[@for="VScrollBar"]/*' />
     /// <devdoc>
     ///    <para>Represents
     ///       a standard Windows vertical scroll bar.</para>
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
 
         private const int VERTICAL_SCROLLBAR_HEIGHT = 80;
 
-        /// <include file='doc\VScrollBar.uex' path='docs/doc[@for="VScrollBar.CreateParams"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -44,7 +42,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\VScrollBar.uex' path='docs/doc[@for="VScrollBar.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -60,7 +57,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\VScrollBar.uex' path='docs/doc[@for="VScrollBar.RightToLeft"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -72,7 +68,6 @@ namespace System.Windows.Forms {
             set {
             }
         }
-        /// <include file='doc\VScrollBar.uex' path='docs/doc[@for="VScrollBar.RightToLeftChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {

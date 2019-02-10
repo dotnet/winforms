@@ -9,20 +9,17 @@ namespace System.Windows.Forms {
     using System.Security;
     using System.Security.Permissions;
 
-    /// <include file='doc\OSFeature.uex' path='docs/doc[@for="OSFeature"]/*' />
     /// <devdoc>
     ///    <para>Provides operating-system specific feature queries.</para>
     /// </devdoc>
     public class OSFeature : FeatureSupport {
 
-        /// <include file='doc\OSFeature.uex' path='docs/doc[@for="OSFeature.LayeredWindows"]/*' />
         /// <devdoc>
         ///    <para>Represents the layered, top-level windows feature. This
         ///    <see langword='static'/> field is read-only.</para>
         /// </devdoc>
         public static readonly object LayeredWindows = new object();
         
-        /// <include file='doc\OSFeature.uex' path='docs/doc[@for="OSFeature.Themes"]/*' />
         /// <devdoc>
         ///    <para>Determines if the OS supports themes</para>
         /// </devdoc>
@@ -33,7 +30,6 @@ namespace System.Windows.Forms {
         private static bool themeSupportTested = false;
         private static bool themeSupport = false;
 
-        /// <include file='doc\OSFeature.uex' path='docs/doc[@for="OSFeature.OSFeature"]/*' />
         /// <internalonly/>
         /// <devdoc>
         ///    <para>
@@ -44,7 +40,6 @@ namespace System.Windows.Forms {
         protected OSFeature() {
         }
 
-        /// <include file='doc\OSFeature.uex' path='docs/doc[@for="OSFeature.Feature"]/*' />
         /// <devdoc>
         /// <para>Represents the <see langword='static'/> instance of <see cref='System.Windows.Forms.OSFeature'/> to use for feature queries. This property is read-only.</para>
         /// </devdoc>
@@ -57,7 +52,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\OSFeature.uex' path='docs/doc[@for="OSFeature.GetVersionPresent"]/*' />
         /// <devdoc>
         ///    <para>Retrieves the version of the specified feature currently available on the system.</para>
         /// </devdoc>
@@ -109,7 +103,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\OSFeature.uex' path='docs/doc[@for="OSFeature.IsPresent"]/*' />
         /// <devdoc>
         ///    <para>Retrieves whether SystemParameterType is supported on the Current OS version.</para>
         /// </devdoc>

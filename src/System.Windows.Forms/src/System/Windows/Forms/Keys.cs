@@ -81,7 +81,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         LineFeed       = 0x0A,
 
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Clear"]/*' />
         /// The CLEAR key.
         /// </devdoc>
         Clear          = 0x0C,

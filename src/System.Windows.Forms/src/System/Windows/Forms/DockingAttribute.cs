@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies how a control should be docked by default when added through the designer.
@@ -14,7 +13,6 @@ namespace System.Windows.Forms {
     public sealed class DockingAttribute : Attribute {
         private DockingBehavior dockingBehavior;
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.DockingAttribute"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Default constructor.
@@ -24,7 +22,6 @@ namespace System.Windows.Forms {
             this.dockingBehavior = DockingBehavior.Never;
         }
         
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.DockingAttribute1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Constructor.
@@ -34,7 +31,6 @@ namespace System.Windows.Forms {
             this.dockingBehavior = dockingBehavior;
         }
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.Default"]/*' />
         /// <devdoc>
         /// <para>
         ///    Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
@@ -43,7 +39,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly DockingAttribute Default = new DockingAttribute();
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.DockingBehavior"]/*' />
         /// <devdoc>
         ///    <para>
         ///       DockingBehavior property.
@@ -55,7 +50,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.Equals"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
@@ -69,12 +63,10 @@ namespace System.Windows.Forms {
             return (other != null) && other.DockingBehavior == this.dockingBehavior;
         }
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.GetHashCode"]/*' />
         public override int GetHashCode() {
             return dockingBehavior.GetHashCode();
         }
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.IsDefaultAttribute"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>

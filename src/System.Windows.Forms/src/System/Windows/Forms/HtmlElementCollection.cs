@@ -16,7 +16,6 @@ using System.Net;
 using System.Collections;
 
 namespace System.Windows.Forms {
-    /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection"]/*' />
     public sealed class HtmlElementCollection : ICollection {
         private UnsafeNativeMethods.IHTMLElementCollection htmlElementCollection;
         private HtmlElement[] elementsArray;
@@ -48,7 +47,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.this"]/*' />
         public HtmlElement this[int index] {
             get {
                 //do some bounds checking here...
@@ -70,7 +68,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.this1"]/*' />
         public HtmlElement this[string elementId] {
             get {
                 if (this.NativeHtmlElementCollection != null) {
@@ -94,7 +91,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.GetElementsByName"]/*' />
         public HtmlElementCollection GetElementsByName(string name) {
             int count = this.Count;
             HtmlElement[] temp = new HtmlElement[count];    // count is the maximum # of matches
@@ -120,7 +116,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.Count"]/*' />
         /// <devdoc>
         ///     Returns the total number of elements in the collection.
         /// </devdoc>
@@ -138,7 +133,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.ICollection.IsSynchronized"]/*' />
         /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
@@ -146,7 +140,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.ICollection.SyncRoot"]/*' />
         /// <internalonly/>
         object ICollection.SyncRoot {
             get {
@@ -154,7 +147,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.ICollection.CopyTo"]/*' />
         /// <internalonly/>
         void ICollection.CopyTo(Array dest, int index) {
             int count = this.Count;
@@ -163,7 +155,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.GetEnumerator"]/*' />
         /// <internalonly/>
         public IEnumerator GetEnumerator() {
             HtmlElement[] htmlElements = new HtmlElement[this.Count];

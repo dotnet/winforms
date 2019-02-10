@@ -17,7 +17,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
 
 
-    /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents the image used to paint the mouse pointer.
@@ -87,7 +86,6 @@ namespace System.Windows.Forms {
             LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)));
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Cursor1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Cursor'/> class with the specified handle.
@@ -102,7 +100,6 @@ namespace System.Windows.Forms {
             this.ownHandle = false;
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Cursor2"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Cursor'/>
@@ -124,7 +121,6 @@ namespace System.Windows.Forms {
             LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)));
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Cursor3"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Cursor'/> class from the specified resource.
@@ -133,7 +129,6 @@ namespace System.Windows.Forms {
         public Cursor(Type type, string resource) : this(type.Module.Assembly.GetManifestResourceStream(type,resource)) {
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Cursor4"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Cursor'/> class from the
@@ -147,7 +142,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Clip"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -185,7 +179,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Current"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -215,7 +208,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Handle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -231,7 +223,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Handle"]/*' />
         /// <devdoc>
         ///    <para>
         ///     returns the "hot" location of the cursor.
@@ -272,7 +263,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Position"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a <see cref='System.Drawing.Point'/> that specifies the current cursor
@@ -290,7 +280,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Size"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -310,7 +299,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CurSor.uex' path='docs/doc[@for="CurSor.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -328,7 +316,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.CopyHandle"]/*' />
         /// <devdoc>
         ///    Duplicates this the Win32 handle of this <see cref='System.Windows.Forms.Cursor'/>.
         /// </devdoc>
@@ -348,7 +335,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Dispose"]/*' />
         /// <devdoc>
         ///     Cleans up the resources allocated by this object.  Once called, the cursor
         ///     object is no longer useful.
@@ -481,7 +467,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Draw"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Draws this <see cref='System.Windows.Forms.Cursor'/> to a <see cref='System.Drawing.Graphics'/>.
@@ -491,7 +476,6 @@ namespace System.Windows.Forms {
             DrawImageCore(g, Rectangle.Empty, targetRect, false);
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.DrawStretched"]/*' />
         /// <devdoc>
         ///    Draws this <see cref='System.Windows.Forms.Cursor'/> to a <see cref='System.Drawing.Graphics'/>.
         /// </devdoc>
@@ -499,7 +483,6 @@ namespace System.Windows.Forms {
             DrawImageCore(g, Rectangle.Empty, targetRect, true);
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Finalize"]/*' />
         /// <devdoc>
         ///    Cleans up Windows resources for this object.
         /// </devdoc>
@@ -507,7 +490,6 @@ namespace System.Windows.Forms {
             Dispose(false);
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.ISerializable.GetObjectData"]/*' />
         /// <devdoc>
         /// ISerializable private implementation
         /// </devdoc>
@@ -525,7 +507,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Hide"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Hides the cursor. For every call to Cursor.hide() there must be a
@@ -649,7 +630,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Show"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays the cursor. For every call to Cursor.show() there must have been
@@ -660,7 +640,6 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.ShowCursor(true);
         }
 
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.ToString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves a human readable string representing this
@@ -679,7 +658,6 @@ namespace System.Windows.Forms {
             return "[Cursor: " + s + "]";
         }
         
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.operatorEQ"]/*' />
         public static bool operator ==(Cursor left, Cursor right) {
             if (object.ReferenceEquals(left, null) != object.ReferenceEquals(right, null)) {
                 return false;
@@ -693,18 +671,15 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.operatorNE"]/*' />
         public static bool operator !=(Cursor left, Cursor right) {
             return !(left == right);
         }
         
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.GetHashCode"]/*' />
         public override int GetHashCode() {
             // Handle is a 64-bit value in 64-bit machines, uncheck here to avoid overflow exceptions.
             return unchecked((int)handle);
         }
         
-        /// <include file='doc\Cursor.uex' path='docs/doc[@for="Cursor.Equals"]/*' />
         public override bool Equals(object obj) {
             if (!(obj is Cursor)) {
                 return false;

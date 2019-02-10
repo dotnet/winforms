@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     
 
-    /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides pop-up or online Help for controls.
@@ -41,7 +40,6 @@ namespace System.Windows.Forms {
 
         private object userData;
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.HelpProvider"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.HelpProvider'/> class.
@@ -50,7 +48,6 @@ namespace System.Windows.Forms {
         public HelpProvider() {
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.HelpNamespace"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a string indicating the name of the Help
@@ -73,7 +70,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -91,7 +87,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.CanExtend"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Determines if the help provider can offer it's extender properties
@@ -102,7 +97,6 @@ namespace System.Windows.Forms {
             return(target is Control);
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.GetHelpKeyword"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the Help Keyword displayed when the
@@ -118,7 +112,6 @@ namespace System.Windows.Forms {
             return(string)keywords[ctl];
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.GetHelpNavigator"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the contents of the pop-up help window for the specified
@@ -135,7 +128,6 @@ namespace System.Windows.Forms {
             return (nav == null) ? HelpNavigator.AssociateIndex : (HelpNavigator)nav;
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.GetHelpString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the contents of the pop-up help window for the specified
@@ -151,7 +143,6 @@ namespace System.Windows.Forms {
             return(string)helpStrings[ctl];
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.GetShowHelp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves a value indicating whether Help displays for
@@ -172,7 +163,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.OnControlHelp"]/*' />
         /// <devdoc>
         ///     Handles the help event for any bound controls.
         /// </devdoc>
@@ -238,7 +228,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.OnQueryAccessibilityHelp"]/*' />
         /// <devdoc>
         ///     Handles the help event for any bound controls.
         /// </devdoc>
@@ -251,7 +240,6 @@ namespace System.Windows.Forms {
             e.HelpNamespace = HelpNamespace;
         }    
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.SetHelpString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies
@@ -268,7 +256,6 @@ namespace System.Windows.Forms {
             UpdateEventBinding(ctl);
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.SetHelpKeyword"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies the Help keyword to display when
@@ -285,7 +272,6 @@ namespace System.Windows.Forms {
             UpdateEventBinding(ctl);
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.SetHelpNavigator"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies the Help keyword to display when
@@ -303,7 +289,6 @@ namespace System.Windows.Forms {
             SetShowHelp(ctl, true);
             UpdateEventBinding(ctl);
         }
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.SetShowHelp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies whether Help is displayed for a given control.
@@ -314,7 +299,6 @@ namespace System.Windows.Forms {
             UpdateEventBinding(ctl);
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.ShouldSerializeShowHelp"]/*' />
         /// <devdoc>
         ///    Used by the designer
         /// </devdoc>
@@ -323,7 +307,6 @@ namespace System.Windows.Forms {
             return showHelp.ContainsKey(ctl);
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.ResetShowHelp"]/*' />
         /// <devdoc>
         ///    Used by the designer
         /// </devdoc>
@@ -332,7 +315,6 @@ namespace System.Windows.Forms {
             showHelp.Remove(ctl);
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.UpdateEventBinding"]/*' />
         /// <devdoc>
         ///     Binds/unbinds event handlers to ctl
         /// </devdoc>
@@ -350,7 +332,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HelpProvider.uex' path='docs/doc[@for="HelpProvider.ToString"]/*' />
         /// <devdoc>
         ///    Returns a string representation for this control.
         /// </devdoc>

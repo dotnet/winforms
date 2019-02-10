@@ -24,7 +24,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Provides a low-level encapsulation of a window handle
@@ -133,7 +132,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.Finalize"]/*' />
         /// <devdoc>
         ///     Override's the base object's finalize method.
         /// </devdoc>
@@ -204,7 +202,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.Handle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the handle for this window.
@@ -551,7 +548,6 @@ namespace System.Windows.Forms {
             return wndProcFlags;
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.AssignHandle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Assigns a handle to this
@@ -615,7 +611,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.Callback"]/*' />
         /// <devdoc>
         ///     Window message callback method. Control arrives here when a window
         ///     message is sent to this Window. This method packages the window message
@@ -649,7 +644,6 @@ namespace System.Windows.Forms {
             return m.Result;
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.CheckReleased"]/*' />
         /// <devdoc>
         ///     Raises an exception if the window handle is not zero.
         /// </devdoc>
@@ -660,7 +654,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.CreateHandle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Creates a window handle for this
@@ -734,7 +727,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.DebuggableCallback"]/*' />
         /// <devdoc>
         ///     Window message callback method. Control arrives here when a window
         ///     message is sent to this Window. This method packages the window message
@@ -765,7 +757,6 @@ namespace System.Windows.Forms {
             return m.Result;
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.DefWndProc"]/*' />
         /// <devdoc>
         ///     Invokes the default window procedure associated with this Window. It is
         ///     an error to call this method when the Handle property is zero.
@@ -792,7 +783,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.DestroyHandle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Destroys the
@@ -876,7 +866,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.FromHandle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves the window associated with the specified
@@ -990,7 +979,6 @@ namespace System.Windows.Forms {
             return hashcode;
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.OnHandleChange"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Specifies a notification method that is called when the handle for a
@@ -1000,7 +988,6 @@ namespace System.Windows.Forms {
         protected virtual void OnHandleChange() {
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.OnShutdown"]/*' />
         /// <devdoc>
         ///     On class load, we connect an event to Application to let us know when
         ///     the process or domain terminates.  When this happens, we attempt to
@@ -1058,7 +1045,6 @@ namespace System.Windows.Forms {
             WindowClass.DisposeCache();
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.OnThreadException"]/*' />
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class,
@@ -1069,7 +1055,6 @@ namespace System.Windows.Forms {
         protected virtual void OnThreadException(Exception e) {
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.ReleaseHandle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Releases the handle associated with this window.
@@ -1361,7 +1346,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.WndProc"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Invokes the default window procedure associated with
@@ -1396,7 +1380,6 @@ namespace System.Windows.Forms {
 #endif
         }
 
-        /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.WindowClass"]/*' />
         /// <devdoc>
         ///     WindowClass encapsulates a window class.
         /// </devdoc>
@@ -1430,7 +1413,6 @@ namespace System.Windows.Forms {
                 return targetWindow.Callback(hWnd, msg, wparam, lparam);
             }
 
-            /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.WindowClass.Create"]/*' />
             /// <devdoc>
             ///     Retrieves a WindowClass object for use.  This will create a new
             ///     object if there is no such class/style available, or retrun a
@@ -1463,7 +1445,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.WindowClass.DisposeCache"]/*' />
             /// <devdoc>
             ///     Disposes our window class cache.  This doesn't free anything
             ///     from the actual cache; it merely attempts to unregister
@@ -1497,7 +1478,6 @@ namespace System.Windows.Forms {
                 return b.ToString();
             }
 
-            /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.WindowClass.RegisterClass"]/*' />
             /// <devdoc>
             ///     Once the classname and style bits have been set, this can
             ///     be called to register the class.
@@ -1605,7 +1585,6 @@ namespace System.Windows.Forms {
                 registered = true;
             }
 
-            /// <include file='doc\NativeWindow.uex' path='docs/doc[@for="NativeWindow.WindowClass.UnregisterClass"]/*' />
             /// <devdoc>
             ///     Unregisters this window class.  Unregistration is not a
             ///     last resort; the window class may be re-registered through

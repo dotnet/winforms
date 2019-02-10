@@ -241,7 +241,6 @@ namespace System.Windows.Forms {
         // =        Methods
         // =------------------------------------------------------------------
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.AddParent"]/*' />
         /// <devdoc>
         ///      Adds a DataGridState object to the top of the list of parents.
         /// </devdoc>
@@ -277,7 +276,6 @@ namespace System.Windows.Forms {
             gridLinePen.Dispose();
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.GetTopParent"]/*' />
         /// <devdoc>
         ///      Retrieves the top most parent in the list of parents.
         /// </devdoc>
@@ -288,7 +286,6 @@ namespace System.Windows.Forms {
             return(DataGridState)(((ICloneable)(parents[parentsCount-1])).Clone());
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.IsEmpty"]/*' />
         /// <devdoc>
         ///      Determines if there are any parent rows contained in this object.
         /// </devdoc>
@@ -296,7 +293,6 @@ namespace System.Windows.Forms {
             return parentsCount == 0;
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.PopTop"]/*' />
         /// <devdoc>
         ///      Similar to GetTopParent() but also removes it.
         /// </devdoc>
@@ -530,7 +526,6 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.Paint"]/*' />
         /// <devdoc>
         ///      Paints the parent rows
         /// </devdoc>
@@ -976,7 +971,6 @@ namespace System.Windows.Forms {
             return cx;
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.PaintText"]/*' />
         /// <devdoc>
         ///      Draws on the screen the text. It is used only to paint the Table Name and the column Names
         ///      Returns the width of bounding rectangle that was passed in
@@ -1126,7 +1120,6 @@ namespace System.Windows.Forms {
                 return owner.parentsCount;
             }
 
-            /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.DataGridParentRowsAccessibleObject.GetFocused"]/*' />
             /// <devdoc>
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
@@ -1168,7 +1161,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.DataGridParentRowsAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
