@@ -125,16 +125,19 @@ namespace System.Windows.Forms {
                 return (SolidBrush)SystemBrushes.ActiveCaption;
             }
         }
+        
         internal static Pen DefaultTextBorderPen {
             get {
                 return new Pen(SystemColors.ActiveCaptionText);
             }
         }
+        
         internal static SolidBrush DefaultForeBrush {
             get {
                 return (SolidBrush)SystemBrushes.ActiveCaptionText;
             }
         }
+        
         internal Color BackColor {
             get {
                 return backBrush.Color;
@@ -157,7 +160,6 @@ namespace System.Windows.Forms {
                 return events;
             }
         }
-
 
         internal Font Font {
             get {
@@ -377,8 +379,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         private Bitmap GetBitmap(string bitmapName) {
             Bitmap b = null;
             try {
@@ -391,8 +391,6 @@ namespace System.Windows.Forms {
             return b;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         private Bitmap GetBackButtonBmp(bool alignRight) {
             if (alignRight) {
                 if (leftButtonBitmap_bidi == null)
@@ -405,8 +403,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         private Bitmap GetDetailsBmp() {
             if (magnifyingGlassBitmap == null)
                 magnifyingGlassBitmap = GetBitmap("DataGridCaption.Details.bmp");

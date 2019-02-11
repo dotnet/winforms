@@ -136,8 +136,8 @@ namespace System.Experimental.Gdi
         /// </devdoc>
         public IntPtr Hdc
         {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get
             {
                 if( this.hDC == IntPtr.Zero )
@@ -170,8 +170,8 @@ namespace System.Experimental.Gdi
         // we also track which objects are currently selected in the DeviceContext.  When 
         // a currently selected object is disposed, it is first replaced in the DC and then
         // deleted.
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         private void CacheInitialState()
         {
             Debug.Assert(this.hDC != IntPtr.Zero, "Cannot get initial state without a valid HDC");
@@ -181,8 +181,8 @@ namespace System.Experimental.Gdi
             hCurrentFont  = hInitialFont  = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(this, hDC), IntNativeMethods.OBJ_FONT);
         }
 
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         public void DeleteObject(IntPtr handle, GdiObjectType type) {
             IntPtr handleToDelete = IntPtr.Zero;
             switch (type) {
@@ -239,8 +239,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Constructor to contruct a DeviceContext object from an existing Win32 device context handle.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         private DeviceContext(IntPtr hDC, DeviceContextType dcType)
         { 
             this.hDC    = hDC;
@@ -261,8 +261,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     CreateDC creates a DeviceContext object wrapping an hdc created with the Win32 CreateDC function.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static DeviceContext CreateDC(string driverName, string deviceName, string fileName, HandleRef devMode)
         {
             // Note: All input params can be null but not at the same time.  See MSDN for information.
@@ -274,8 +274,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     CreateIC creates a DeviceContext object wrapping an hdc created with the Win32 CreateIC function.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static DeviceContext CreateIC(string driverName, string deviceName, string fileName, HandleRef devMode)
         {
             // Note: All input params can be null but not at the same time.  See MSDN for information.
@@ -287,8 +287,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Creates a DeviceContext object wrapping a memory DC compatible with the specified device.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static DeviceContext FromCompatibleDC(IntPtr hdc)
         { 
    
@@ -307,8 +307,8 @@ namespace System.Experimental.Gdi
         ///     Used for wrapping an existing hdc.  In this case, this object doesn't own the hdc
         ///     so calls to GetHdc/ReleaseHdc don't PInvoke into GDI.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static DeviceContext FromHdc(IntPtr hdc)
         { 
             Debug.Assert( hdc != IntPtr.Zero, "hdc == 0" );
@@ -415,8 +415,8 @@ namespace System.Experimental.Gdi
         ///     as a wrapper around an hdc that is always available, and for performance reasons since it caches the hdc 
         ///     if used in this way.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         IntPtr IDeviceContext.GetHdc()
         {
             if (this.hDC == IntPtr.Zero)
@@ -463,8 +463,8 @@ namespace System.Experimental.Gdi
         /// </devdoc>
         public DeviceContextGraphicsMode GraphicsMode
         {
-            [ResourceExposure(ResourceScope.None)]
-            [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+            
+            
             get
             {
                 return (DeviceContextGraphicsMode) IntUnsafeNativeMethods.GetGraphicsMode( new HandleRef( this, this.Hdc ) );
@@ -480,8 +480,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Sets the dc graphics mode and returns the old value.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         public DeviceContextGraphicsMode SetGraphicsMode(DeviceContextGraphicsMode newMode)
         {
             return (DeviceContextGraphicsMode) IntUnsafeNativeMethods.SetGraphicsMode( new HandleRef( this, this.Hdc ), unchecked((int) newMode));
@@ -551,8 +551,8 @@ namespace System.Experimental.Gdi
         ///     A saved state can be restored by using the RestoreHdc method.
         ///     See MSDN for more details. 
         /// </devdoc>
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         public int SaveHdc() 
         {
             HandleRef hdc = new HandleRef( this, this.Hdc);
@@ -589,8 +589,8 @@ namespace System.Experimental.Gdi
         ///         - The SelectClipRgn function assumes that the coordinates for a region are specified in device units. 
         ///         - To remove a device-context's clipping region, specify a NULL region handle. 
         /// </devdoc>
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         public void SetClip(WindowsRegion region)
         {
             HandleRef hdc = new HandleRef(this, this.Hdc);
@@ -603,8 +603,8 @@ namespace System.Experimental.Gdi
         ///     Creates a new clipping region from the intersection of the current clipping region and 
         ///     the specified rectangle. 
         ///</devdoc>
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         public void IntersectClip(WindowsRegion wr)
         {
             //if the incoming windowsregion is infinite, there is no need to do any intersecting.
@@ -632,8 +632,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Modifies the viewport origin for a device context using the specified horizontal and vertical offsets in logical units.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         public void TranslateTransform(int dx, int dy) 
         {
             IntNativeMethods.POINT orgn = new IntNativeMethods.POINT();
@@ -642,8 +642,8 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         /// </summary>
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         public override bool Equals(object obj)
         {
             DeviceContext other = obj as DeviceContext;
@@ -665,8 +665,8 @@ namespace System.Experimental.Gdi
         /// <summary>
         ///     This allows collections to treat DeviceContext objects wrapping the same HDC as the same objects.
         /// </summary>
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         public override int GetHashCode()
         {
             return this.Hdc.GetHashCode();

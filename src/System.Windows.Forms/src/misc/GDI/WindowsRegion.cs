@@ -48,16 +48,16 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsRegion(Rectangle rect) {
             CreateRegion(rect);
         }
 
         /// <devdoc>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsRegion(int x, int y, int width, int height) {
             CreateRegion(new Rectangle(x,y,width, height));
         }
@@ -105,8 +105,8 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public object Clone() {
             // WARNING: WindowsRegion currently supports rectangulare regions only, if the WindowsRegion was created
             //          from an HRegion and it is not rectangular this method won't work as expected.
@@ -126,8 +126,8 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         private void CreateRegion(Rectangle rect) {
             Debug.Assert(nativeHandle == IntPtr.Zero, "nativeHandle should be null, we're leaking handle");
             this.nativeHandle = IntSafeNativeMethods.CreateRectRgn(rect.X, rect.Y, rect.X+rect.Width, rect.Y+rect.Height);

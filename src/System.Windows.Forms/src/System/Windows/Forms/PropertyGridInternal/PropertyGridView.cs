@@ -315,8 +315,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         private static Bitmap GetBitmapFromIcon(string iconName, int iconsWidth, int iconsHeight) {
             Size desiredSize = new Size(iconsWidth, iconsHeight);
             Icon icon = new Icon(BitmapSelector.GetResourceStream(typeof(PropertyGrid), iconName), desiredSize);
@@ -1079,8 +1079,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return new PropertyGridViewAccessibleObject(this, ownerGrid);
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         private Bitmap CreateResizedBitmap(string icon, int width, int height) {
             Bitmap bitmap = null;
             var scaledIconWidth = width;
@@ -5556,8 +5556,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// so we do some GDI+ magic to take that glyph and mirror it.  That way we can still share the code (in case it changes for theming, etc),
             /// not have any special cases, and possibly solve world hunger.  
             /// </devdoc>
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             private Bitmap GetSizeGripGlyph(Graphics g) {
                 if (this.sizeGripGlyph != null) {
                     return sizeGripGlyph;
@@ -7026,8 +7026,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             ///     Sets up the needed windows hooks to catch messages.
             /// </devdoc>
             /// <internalonly/>
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             private void HookMouse() {
                 GC.KeepAlive(this);
                 // Locking 'this' here is ok since this is an internal class.

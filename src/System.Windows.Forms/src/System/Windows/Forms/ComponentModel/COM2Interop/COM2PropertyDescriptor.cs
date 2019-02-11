@@ -66,7 +66,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// </devdoc>
         private object typeData;
 
-
         /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.refreshState"]/*' />
         /// <devdoc>
         /// Keeps track of which data members need to be refreshed.
@@ -84,7 +83,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Our properties manager
         /// </devdoc>
         private Com2Properties com2props;
-
 
         /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.baseAttrs"]/*' />
         /// <devdoc>
@@ -133,17 +131,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private static readonly object EventGetDisplayName         = new object();
         private static readonly object EventGetDisplayValue        = new object();
         private static readonly object EventGetIsReadOnly          = new object();
-        
-        
         private static readonly object EventGetTypeConverterAndTypeEditor   = new object();
-        
         private static readonly object EventShouldSerializeValue = new object();
         private static readonly object EventCanResetValue      = new object();
         private static readonly object EventResetValue         = new object();
 
         private static readonly Guid GUID_COLOR = new Guid("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
                         
-
         /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.oleTypeGuids"]/*' />
         /// <devdoc>
         /// Our map of native types that we can map to managed types for editors
@@ -164,7 +158,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Should we convert our type?
         /// </devdoc>
         private Com2DataTypeToManagedDataTypeConverter valueConverter;
-
 
         /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.Com2PropertyDescriptor"]/*' />
         /// <devdoc>
@@ -356,7 +349,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return this.canShow;
             }
         }
-
 
         /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.ComponentType"]/*' />
         /// <devdoc>
@@ -579,7 +571,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-
         public event GetBoolValueEventHandler QueryCanResetValue {
             add {
                 Events.AddHandler(EventCanResetValue, value);
@@ -607,7 +598,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-
         public event GetNameItemEventHandler QueryGetDisplayName {
             add {
                 Events.AddHandler(EventGetDisplayName, value);
@@ -616,7 +606,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 Events.RemoveHandler(EventGetDisplayName, value);
             }
         }
-
 
         public event GetNameItemEventHandler QueryGetDisplayValue {
             add {
@@ -627,7 +616,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-
         public event GetBoolValueEventHandler QueryGetIsReadOnly {
             add {
                 Events.AddHandler(EventGetIsReadOnly, value);
@@ -636,7 +624,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 Events.RemoveHandler(EventGetIsReadOnly, value);
             }
         }
-
 
         public event GetTypeConverterAndTypeEditorEventHandler QueryGetTypeConverterAndTypeEditor {
             add {
@@ -647,7 +634,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
         
-
         public event Com2EventHandler QueryResetValue {
             add {
                 Events.AddHandler(EventResetValue, value);
@@ -657,7 +643,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-
         public event GetBoolValueEventHandler QueryShouldSerializeValue {
             add {
                 Events.AddHandler(EventShouldSerializeValue, value);
@@ -666,8 +651,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 Events.RemoveHandler(EventShouldSerializeValue, value);
             }
         }
-
-
 
         /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.CanResetValue"]/*' />
         /// <devdoc>
@@ -916,8 +899,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     invoking the getXXX method.  An exception in the getXXX
         ///     method will pass through.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
         public override object GetValue(object component) {
             lastValue = GetNativeValue(component);
             // do we need to convert the type?
@@ -1069,8 +1050,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-
-
         /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.OnGetIsReadOnly"]/*' />
         /// <devdoc>
         ///     Raises the appropriate event
@@ -1201,8 +1180,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     property so that getXXX following a setXXX should return the value
         ///     passed in if no exception was thrown in the setXXX call.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
         public override void SetValue(object component, object value) {
 
             if (this.readOnly) {
@@ -1440,7 +1417,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         public GetNameItemEvent(object defName) {
             this.nameItem = defName;
-
         }
 
         public object Name
@@ -1463,16 +1439,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
     }
 
-
     internal delegate void GetNameItemEventHandler(Com2PropertyDescriptor sender, GetNameItemEvent gnievent);
-
 
     internal class GetBoolValueEvent : EventArgs {
         private bool value;
 
         public GetBoolValueEvent(bool defValue) {
             this.value= defValue;
-
         }
 
         public bool Value{

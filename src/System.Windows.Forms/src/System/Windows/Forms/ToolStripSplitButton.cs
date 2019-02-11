@@ -694,8 +694,8 @@ namespace System.Windows.Forms {
             
             
             public override Image Image {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     if ((owner.DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) {
                         return owner.Image;

@@ -33,8 +33,8 @@ namespace System.Windows.Forms.Design {
         ///    <para>Gets or sets a bitmap to display in the property tab.</para>
         /// </devdoc>
         public virtual Bitmap Bitmap {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 if (!checkedBmp && bitmap == null) {
                     string bmpName = GetType().Name + ".bmp";

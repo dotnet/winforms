@@ -107,9 +107,7 @@ namespace System.Windows.Forms.ButtonInternal {
 
             return Color.FromArgb(a3, r3, g3, b3);
         }
-
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process | ResourceScope.Machine, ResourceScope.Machine)]
+        
         internal static Brush CreateDitherBrush(Color color1, Color color2) {
 
             // Note: Don't dispose the bitmap here. The texture brush will take ownership
@@ -128,8 +126,6 @@ namespace System.Windows.Forms.ButtonInternal {
         /// <devdoc>
         ///     Get StringFormat object for rendering text using GDI+ (Graphics).
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
         internal virtual StringFormat CreateStringFormat() {
             return ControlPaint.CreateStringFormat( Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic );
         }
@@ -166,7 +162,6 @@ namespace System.Windows.Forms.ButtonInternal {
             }
         }
         
-
         private void Draw3DBorderHighContrastRaised(Graphics g, ref Rectangle bounds, ColorData colors) {
             bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
             bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast && AccessibilityImprovements.Level1;
@@ -446,7 +441,6 @@ namespace System.Windows.Forms.ButtonInternal {
                 Point p3 = new Point(r.Left     , r.Bottom - 1);  // bottom inner left.
                 Point p4 = new Point(r.Right - 1, r.Bottom - 1);  // inner bottom right.
 
-
                 // top, left
                 WindowsPen pen = up ? new WindowsPen(wg.DeviceContext, colors.highlight) : new WindowsPen(wg.DeviceContext, colors.buttonShadow);
 
@@ -573,7 +567,6 @@ namespace System.Windows.Forms.ButtonInternal {
                 imageBounds.X = imageStart.X + 1;
                 imageBounds.Y = imageStart.Y + 1;
             }
-
 
             try {
                 if (!Control.Enabled)
@@ -788,7 +781,6 @@ namespace System.Windows.Forms.ButtonInternal {
 
                 colors.windowFrame = foreColor;
 
-
                 /* debug * /
                 colors.buttonFace = Color.Yellow;
                 colors.buttonShadow = Color.Blue;
@@ -798,7 +790,6 @@ namespace System.Windows.Forms.ButtonInternal {
                 colors.windowFrame = Color.Red;
                 colors.windowText = Color.Green;
                 / * debug */
-
 
                 if (colors.buttonFace.GetBrightness() < .5) {
                     colors.constrastButtonShadow = colors.lowHighlight;
@@ -904,8 +895,6 @@ namespace System.Windows.Forms.ButtonInternal {
             ///     we cache the flags that make it up and create it on demand so it can be disposed by calling code.
             /// </devdoc>
             public StringFormat StringFormat {
-                [ResourceExposure(ResourceScope.Process)]
-                [ResourceConsumption(ResourceScope.Process)]
                 get {
                     StringFormat format = new StringFormat();
 
@@ -1142,7 +1131,6 @@ namespace System.Windows.Forms.ButtonInternal {
                         layout.focus.Width--;
                     }
                 }
-
 
                 return layout;
             }
@@ -1450,7 +1438,6 @@ namespace System.Windows.Forms.ButtonInternal {
                 //else skip calling MeasureText, it should return 0,0
 
                 return LayoutUtils.FlipSizeIf(verticalText, textSize);
-               
             }
 
 #if DEBUG
