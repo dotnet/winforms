@@ -25,7 +25,7 @@ roadmap][core-roadmap].
 |Designer support in Visual Studio|Update to VS 2019|                   |
 
 If you'd like to contribute to WinForms, please take a look at our [Contributing
-Guide](contributing.md).
+Guide](Documentation/contributing.md).
 
 ## Shorter-Term Feature Backlog
 
@@ -45,4 +45,4 @@ Guide](contributing.md).
 
 [comment]: <> (URI Links)
 
-[core-roadmap]: https://github.com/dotnet/core/blob/master/roadmap.md
+[core-roadmap]: roadmap.md
