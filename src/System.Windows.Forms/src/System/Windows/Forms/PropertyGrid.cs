@@ -1648,6 +1648,7 @@ namespace System.Windows.Forms {
             }
         }
 
+        event ComponentRenameEventHandler IComPropertyBrowser.ComComponentNameChanged {
             add {
                 Events.AddHandler(EventComComponentNameChanged, value);
             }
