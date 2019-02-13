@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28016.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\tests\IntegrationTests\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src\System.Windows.Forms\src\System.Windows.Forms.csproj", "{0D23A41B-2626-4703-9E4A-87C07F69B0B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Ref", "src\System.Windows.Forms\ref\System.Windows.Forms.Ref.csproj", "{334C343B-9D39-498E-89D8-B6526028FD5C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Tests", "src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj", "{AB38E262-F206-4820-8F29-23C5F72A4A16}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\tests\IntegrationTests\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Private.Winforms", "pkg\Microsoft.Private.Winforms.csproj", "{F133342A-3040-4005-A2F0-7685AA7CB82D}"
 EndProject
