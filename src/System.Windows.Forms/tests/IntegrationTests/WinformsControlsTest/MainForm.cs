@@ -92,7 +92,7 @@ namespace WinformsControlsTest
 
         private void ShowExceptionDialogButton_Click(object sender, EventArgs e)
         {
-            (new ThreadExceptionDialog(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated."))).Show();
+            (new ThreadExceptionDialog(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated."))).ShowDialog();
         }
     }
 }

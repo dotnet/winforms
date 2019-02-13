@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Func.Tests
                 }
                 currentDirectory = Directory.GetParent(currentDirectory).FullName;
             }
-            throw new DirectoryNotFoundException($"No {seek} ancestor folder was found in {codeBasePath}.");           
+            throw new DirectoryNotFoundException($"No {seek} folder was found among siblings of subfolders of {codeBasePath}.");           
         }
 
         /// <summary>
