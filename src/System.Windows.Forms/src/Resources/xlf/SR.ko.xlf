@@ -1114,7 +1114,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
-        <target state="new">{0} selected</target>
+        <target state="translated">{0}이(가) 선택됨</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -2854,7 +2854,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
         <source>DataGridView EditingPanel UI Automation provider</source>
-        <target state="needs-review-translation">DataGridView EditingPanel UI Automation 공급자</target>
+        <target state="translated">DataGridView EditingPanel UI 자동화 공급자</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange">

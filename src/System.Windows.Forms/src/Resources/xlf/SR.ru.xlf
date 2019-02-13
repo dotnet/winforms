@@ -1114,7 +1114,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
-        <target state="new">{0} selected</target>
+        <target state="translated">Выбрано: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -2854,7 +2854,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
         <source>DataGridView EditingPanel UI Automation provider</source>
-        <target state="needs-review-translation">Поставщик UI Automation DataGridView EditingPanel</target>
+        <target state="translated">Поставщик автоматизации пользовательского интерфейса для EditingPanel в DataGridView</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange">

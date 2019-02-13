@@ -1114,7 +1114,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
-        <target state="new">{0} selected</target>
+        <target state="translated">Wybrano: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
