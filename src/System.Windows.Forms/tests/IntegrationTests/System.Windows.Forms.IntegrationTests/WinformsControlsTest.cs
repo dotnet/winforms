@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -240,6 +240,24 @@ namespace System.Windows.Forms.Func.Tests
         {
             var process = TestHelpers.StartProcess(GetPathToTestFromBin());
             TestHelpers.PressTabsOnProcess(process, 13);
+            TestHelpers.PressEnterOnProcess(process);
+
+            Assert.False(process.HasExited);
+
+            process.Kill();
+            process.WaitForExit();
+
+            Assert.True(process.HasExited);
+        }
+
+        [Fact]
+        public void WinformsControlsTest_ThreadExceptionDialogTest()
+        {
+            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            TestHelpers.PressTabsOnProcess(process, 15);
+            TestHelpers.PressEnterOnProcess(process);
+
+            TestHelpers.PressTabsOnProcess(process, 2);
             TestHelpers.PressEnterOnProcess(process);
 
             Assert.False(process.HasExited);

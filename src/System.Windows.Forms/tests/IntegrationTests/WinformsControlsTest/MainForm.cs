@@ -74,16 +74,6 @@ namespace WinformsControlsTest
             (new PropertyGrid()).Show();
         }
 
-        private void MenuForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkedListViewButton_Click(object sender, EventArgs e)
-        {
-            // (new CheckedListView()).Show();
-        }
-
         private void listViewButton_Click(object sender, EventArgs e)
         {
             (new ListViewTest()).Show();
@@ -98,6 +88,11 @@ namespace WinformsControlsTest
         {
             var dialog = new FolderBrowserDialog();
             dialog.ShowDialog();
+        }
+
+        private void ShowExceptionDialogButton_Click(object sender, EventArgs e)
+        {
+            (new ThreadExceptionDialog(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated."))).ShowDialog();
         }
     }
 }
