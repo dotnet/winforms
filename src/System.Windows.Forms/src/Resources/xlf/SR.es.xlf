@@ -1114,7 +1114,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
-        <target state="new">{0} selected</target>
+        <target state="translated">{0} seleccionados</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -2854,7 +2854,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
         <source>DataGridView EditingPanel UI Automation provider</source>
-        <target state="needs-review-translation">Proveedor de UI Automation de EditingPanel en DataGridView</target>
+        <target state="translated">Proveedor de automatización de la interfaz de usuario de DataGridView para EditingPanel</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange">
@@ -8749,7 +8749,7 @@
       </trans-unit>
       <trans-unit id="PropertyGridPropertyValueSelectedFormat">
         <source>{0} selected.</source>
-        <target state="translated">Se ha seleccionado {0}.</target>
+        <target state="translated">{0} seleccionado.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridRemotedObject">
