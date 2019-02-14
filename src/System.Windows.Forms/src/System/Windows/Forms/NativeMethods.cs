@@ -3679,11 +3679,11 @@ namespace System.Windows.Forms {
             }
 
             [DllImport(ExternDll.Oleaut32,CharSet=CharSet.Auto)]
-            [ResourceExposure(ResourceScope.None)]
+            
             private static extern IntPtr SysAllocString([In, MarshalAs(UnmanagedType.LPWStr)]string s);
 
             [DllImport(ExternDll.Oleaut32,CharSet=CharSet.Auto)]
-            [ResourceExposure(ResourceScope.None)]
+            
             private static extern void SysFreeString(IntPtr pbstr);
 
             public void SetLong(long lVal) {
@@ -5300,7 +5300,7 @@ namespace System.Windows.Forms {
             }
     
             [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]
-            [ResourceExposure(ResourceScope.None)]
+            
             private static extern int lstrlen(string s);
         }
     

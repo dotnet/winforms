@@ -133,8 +133,8 @@ namespace System.Windows.Forms
 
 
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         public Stream OpenFile()
         {
             string filename = FileNamesInternal[0];

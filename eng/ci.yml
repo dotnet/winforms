@@ -100,35 +100,39 @@ jobs:
       - checkout: self
         clean: true
 
-      # Restore and build
+      # Build and rename binlog
       - script: eng\cibuild.cmd
           -prepareMachine
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -build
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Build.binlog          
         displayName: Build
 
-      # Run unit tests
+      # Run unit tests and rename binlog
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
-        displayName: Run Unit Tests
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
+        displayName: Run Unit Tests     
 
-      # Run integration tests
+      # Run integration tests and rename binlog
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -integrationTest
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
         displayName: Run Integration Tests
 
-      # Create Nuget package, sign, and publish
+      # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -pack
           -sign $(_SignArgs)
           -publish $(_PublishArgs)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
         displayName: Pack, Sign, and Publish
 
       # Perform some internal-build-only tasks
@@ -141,4 +145,9 @@ jobs:
             targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
           displayName: Publish package to build artifacts
           continueOnError: true
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+
+        # Run component governance detection (only for release; only for internal)
+        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+          displayName: Component Governance Detection
           condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -109,6 +109,45 @@ namespace System.Windows.Forms {
         public TextBox TextBox {
             get{
                 return Control as TextBox;
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected override AccessibleObject CreateAccessibilityInstance() {
+            if (AccessibilityImprovements.Level3) {
+                return new ToolStripTextBoxAccessibleObject(this);
+            }
+
+            return base.CreateAccessibilityInstance();
+        }
+
+        [System.Runtime.InteropServices.ComVisible(true)]
+        internal class ToolStripTextBoxAccessibleObject : ToolStripItemAccessibleObject {
+            private ToolStripTextBox ownerItem = null;
+
+            public ToolStripTextBoxAccessibleObject(ToolStripTextBox ownerItem) : base(ownerItem) {
+              this.ownerItem = ownerItem;
+            }
+         
+            public override AccessibleRole Role {
+               get {
+                   AccessibleRole role = Owner.AccessibleRole;
+                   if (role != AccessibleRole.Default) {
+                       return role;
+                   }
+
+                   return AccessibleRole.Text;
+               }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
+                    direction == UnsafeNativeMethods.NavigateDirection.LastChild) {
+                    return this.ownerItem.TextBox.AccessibilityObject;
+                }
+
+                // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
+                return base.FragmentNavigate(direction);
             }
         }
 
@@ -666,6 +705,12 @@ namespace System.Windows.Forms {
                    set { ownerItem = value; }
                 }
 
+                internal override bool SupportsUiaProviders {
+                    get {
+                        return AccessibilityImprovements.Level3;
+                    }
+                }
+
                 private void InvalidateNonClient() {
                     if (!IsPopupTextBox) {
                         return;
@@ -775,6 +820,14 @@ namespace System.Windows.Forms {
                     }
                 }
 
+                protected override AccessibleObject CreateAccessibilityInstance() {
+                    if (AccessibilityImprovements.Level3) {
+                        return new ToolStripTextBoxControlAccessibleObject(this);
+                    }
+
+                    return base.CreateAccessibilityInstance();
+                }
+
                 protected override void Dispose(bool disposing) {
                     if(disposing) {
                         HookStaticEvents(false);
@@ -845,6 +898,56 @@ namespace System.Windows.Forms {
                 }
         }
 
+
+        private class ToolStripTextBoxControlAccessibleObject : Control.ControlAccessibleObject {
+            public ToolStripTextBoxControlAccessibleObject(ToolStripTextBoxControl toolStripTextBoxControl) : base(toolStripTextBoxControl) {
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
+                get {
+                    var toolStripTextBoxControl = this.Owner as ToolStripTextBoxControl;
+                    if (toolStripTextBoxControl != null) {
+                        return toolStripTextBoxControl.Owner.Owner.AccessibilityObject;
+                    }
+
+                    return base.FragmentRoot;
+                }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+                switch (direction) {
+                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                        var toolStripTextBoxControl = Owner as ToolStripTextBoxControl;
+                        if (toolStripTextBoxControl != null) {
+                            return toolStripTextBoxControl.Owner.AccessibilityObject.FragmentNavigate(direction);
+                        }
+                        break;
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            internal override object GetPropertyValue(int propertyID) {
+                switch (propertyID) {
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_EditControlTypeId;
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return (State & AccessibleStates.Focused) == AccessibleStates.Focused;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsPatternSupported(int patternId) {
+                if (patternId == NativeMethods.UIA_ValuePatternId) {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+        }
         
     }
 

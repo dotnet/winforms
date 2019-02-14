@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -101,6 +101,18 @@ namespace System.Windows.Forms.PropertyGridInternal {
             get {
                 return base.PropertyDepth - 1;
             }
+        }
+
+        /// <summary>
+        /// Gets the accessibility object for the current category grid entry.
+        /// </summary>
+        /// <returns></returns>
+        protected override GridEntryAccessibleObject GetAccessibilityObject() {
+            if (AccessibilityImprovements.Level3) {
+                return new CategoryGridEntryAccessibleObject(this);
+            }
+
+            return base.GetAccessibilityObject();
         }
 
         protected override Brush GetBackgroundBrush(Graphics g) {
@@ -228,6 +240,53 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         internal override bool NotifyChildValue(GridEntry pe, int type) {
             return parentPE.NotifyChildValue(pe, type);
+        }
+
+        /// <summary>
+        /// Defines the Category Grid Entry accessible object that is derived from Grid Entry accessible object.
+        /// </summary>
+        [Runtime.InteropServices.ComVisible(true)]
+        internal class CategoryGridEntryAccessibleObject : GridEntryAccessibleObject {
+
+            private CategoryGridEntry _owningCategoryGridEntry;
+
+            /// <summary>
+            /// Initializes new instance of CategoryGridEntryAccessibleObject.
+            /// </summary>
+            /// <param name="owningCategoryGridEntry">The owning Category Grid Entry object.</param>
+            public CategoryGridEntryAccessibleObject(CategoryGridEntry owningCategoryGridEntry) : base(owningCategoryGridEntry) {
+                _owningCategoryGridEntry = owningCategoryGridEntry;
+            }
+
+            /// <summary>
+            /// Returns the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+                PropertyGridView.PropertyGridViewAccessibleObject parent = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+
+                switch (direction) {
+                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                        return Parent;
+                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                        return parent.GetNextCategory(_owningCategoryGridEntry);
+                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                        return parent.GetPreviousCategory(_owningCategoryGridEntry);
+                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        return parent.GetFirstChildProperty(_owningCategoryGridEntry);
+                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        return parent.GetLastChildProperty(_owningCategoryGridEntry);
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            public override AccessibleRole Role {
+                get {
+                    return AccessibleRole.ButtonDropDownGrid;
+                }
+            }
         }
     }
 

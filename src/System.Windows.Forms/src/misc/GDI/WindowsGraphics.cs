@@ -71,8 +71,8 @@ namespace System.Experimental.Gdi
         ///     This object is suitable for performing text measuring but not for drawing into it because it does 
         ///     not have a backup bitmap.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsGraphics CreateMeasurementWindowsGraphics()
         {
             DeviceContext dc = DeviceContext.FromCompatibleDC(IntPtr.Zero);
@@ -87,8 +87,8 @@ namespace System.Experimental.Gdi
         ///     This object is suitable for performing text measuring but not for drawing into it because it does 
         ///     not have a backup bitmap.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsGraphics CreateMeasurementWindowsGraphics(IntPtr screenDC)
         {
             DeviceContext dc = DeviceContext.FromCompatibleDC(screenDC);
@@ -109,8 +109,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.FromHwnd"]/*' />
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsGraphics FromHdc(IntPtr hDc)
         {
             Debug.Assert( hDc != IntPtr.Zero, "null hDc" );
@@ -145,16 +145,16 @@ namespace System.Experimental.Gdi
         ///     Please note that this only applies the HDC created graphics, for Bitmap derived graphics, GetHdc creates a new DIBSection and 
         ///     things get a lot more complicated.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsGraphics FromGraphics(Graphics g)
         {
             ApplyGraphicsProperties properties = ApplyGraphicsProperties.All;
             return WindowsGraphics.FromGraphics(g, properties);
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsGraphics FromGraphics(Graphics g, ApplyGraphicsProperties properties)
         {
             Debug.Assert( g != null, "null Graphics object." );
@@ -244,7 +244,7 @@ namespace System.Experimental.Gdi
 
         /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.Dispose"]/*' />
         // Okay to suppress.
-        //"WindowsGraphics object does not own the Graphics object.  For instance in a control’s Paint event we pass the 
+        //"WindowsGraphics object does not own the Graphics object.  For instance in a controlï¿½s Paint event we pass the 
         //GraphicsContainer object to TextRenderer, which uses WindowsGraphics; 
         //if the Graphics object is disposed then further painting will be broken."
         [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
@@ -255,8 +255,8 @@ namespace System.Experimental.Gdi
         }
 
         [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+        
+        
         internal void Dispose(bool disposing)
         {
             if (this.dc != null )
@@ -295,8 +295,8 @@ namespace System.Experimental.Gdi
         }
 
         /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.GetHdc"]/*' />
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public IntPtr GetHdc()
         {
             return this.dc.Hdc;

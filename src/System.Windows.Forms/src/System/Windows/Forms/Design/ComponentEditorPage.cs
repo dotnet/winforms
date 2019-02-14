@@ -158,8 +158,8 @@ namespace System.Windows.Forms.Design {
         ///    <para>Gets or sets the icon for this page.</para>
         /// </devdoc>
         public Icon Icon {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 if (icon == null) {
                     icon = new Icon(typeof(ComponentEditorPage), "ComponentEditorPage.ico");

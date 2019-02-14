@@ -75,7 +75,6 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_APPLICATIONEXIT = new object();
         private static readonly object EVENT_THREADEXIT      = new object();
 
-    
         // Constant string used in Application.Restart()
         private const string IEEXEC = "ieexec.exe";
 
@@ -167,16 +166,12 @@ namespace System.Windows.Forms {
         ///       key for the application data that is shared among all users.</para>
         /// </devdoc>
         public static RegistryKey CommonAppDataRegistry {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
             get {
                 return Registry.LocalMachine.CreateSubKey(CommonAppDataRegistryKeyName);
             }
         }
 
         internal static string CommonAppDataRegistryKeyName {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
             get {
                 string template = @"Software\{0}\{1}\{2}";
                 return string.Format(CultureInfo.CurrentCulture, template,
@@ -222,8 +217,6 @@ namespace System.Windows.Forms {
             // NOTE   : Don't obsolete these. GetDataPath isn't on SystemInformation, and it
             //        : provides the Win2K logo required adornments to the directory (Company\Product\Version)
             //
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.AppDomain | ResourceScope.Machine)]
             get {
 #if CLICKONCE
                 try {
@@ -249,8 +242,6 @@ namespace System.Windows.Forms {
         ///    <para>Gets the company name associated with the application.</para>
         /// </devdoc>
         public static string CompanyName {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
             get {
                 lock(internalSyncObject) {
                     if (companyName == null) {
@@ -318,7 +309,6 @@ namespace System.Windows.Forms {
             }
         }
 
-
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.CurrentInputLanguage"]/*' />
         /// <devdoc>
         ///    <para>Gets or
@@ -347,12 +337,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         /// 
-
-
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
         public static string ExecutablePath {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
             get {
                 if (executablePath == null) {
                     Assembly asm = Assembly.GetEntryAssembly();
@@ -410,8 +396,7 @@ namespace System.Windows.Forms {
             // NOTE   : Don't obsolete these. GetDataPath isn't on SystemInformation, and it
             //        : provides the Win2K logo required adornments to the directory (Company\Product\Version)
             //
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine | ResourceScope.AppDomain)]
+            
             get {
 #if CLICKONCE
                 try {
@@ -499,12 +484,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static string ProductName {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
             get {
                 lock(internalSyncObject) {
                     if (productName == null) {
-
                         // custom attribute
                         //
                         Assembly entryAssembly = Assembly.GetEntryAssembly();
@@ -563,8 +545,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static string ProductVersion {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
             get {
                 lock(internalSyncObject) {
                     if (productVersion == null) {
@@ -646,8 +626,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
 
         /// 
-
-
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
         public static string StartupPath {
             get {
@@ -698,8 +676,7 @@ namespace System.Windows.Forms {
             // NOTE   : Don't obsolete these. GetDataPath isn't on SystemInformation, and it
             //        : provides the Win2K logo required adornments to the directory (Company\Product\Version)
             //
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine | ResourceScope.AppDomain)]
+            
             get {
 #if CLICKONCE
                 try {
@@ -726,8 +703,6 @@ namespace System.Windows.Forms {
         ///       the application data specific to the roaming user.</para>
         /// </devdoc>
         public static RegistryKey UserAppDataRegistry {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine | ResourceScope.AppDomain)]
             get {
                 string template = @"Software\{0}\{1}\{2}";
                 return Registry.CurrentUser.CreateSubKey(string.Format(CultureInfo.CurrentCulture, template, CompanyName, ProductName, ProductVersion));
@@ -791,7 +766,6 @@ namespace System.Windows.Forms {
                     SafeNativeMethods.EnumWindows(callback, IntPtr.Zero);
 
                     GC.KeepAlive(callback);
-
                 }
             }
         }
@@ -1165,8 +1139,6 @@ namespace System.Windows.Forms {
         ///     Retrieves the FileVersionInfo associated with the main module for
         ///     the application.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         private static FileVersionInfo GetAppFileVersionInfo() {
             lock (internalSyncObject) {
                 if (appFileVersion == null) {
@@ -1206,8 +1178,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Locates a thread context given a window handle.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
         private static ThreadContext GetContextForHandle(HandleRef handle) {
 
             int pid;
@@ -1223,8 +1193,6 @@ namespace System.Windows.Forms {
         ///     basePath + CompanyName + ProducName + ProductVersion. This
         ///     will also create the directory if it doesn't exist.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         private static string GetDataPath(string basePath) {
             string template = @"{0}\{1}\{2}\{3}";
 
@@ -2020,8 +1988,6 @@ namespace System.Windows.Forms {
                         return false;
                     }
 
-
-
                     requestingComponent = entry.component;
 
                     this.activeComponent = requestingComponent;
@@ -2335,8 +2301,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Creates a new thread context object.
             /// </devdoc>
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             public ThreadContext() {
                 IntPtr address = IntPtr.Zero;
 
@@ -2970,8 +2934,6 @@ namespace System.Windows.Forms {
             ///     Retrieves a ThreadContext object for the current thread
             /// </devdoc>
             /// <internalonly/>
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             internal static ThreadContext FromCurrent() {
                 ThreadContext context = currentThreadContext;
 
@@ -2987,8 +2949,6 @@ namespace System.Windows.Forms {
             ///     Retrieves a ThreadContext object for the given thread ID
             /// </devdoc>
             /// <internalonly/>
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             internal static ThreadContext FromId(int id) {
                 ThreadContext context = (ThreadContext)contextHash[(object)id];
                 if (context == null && id == SafeNativeMethods.GetCurrentThreadId()) {
@@ -3030,8 +2990,6 @@ namespace System.Windows.Forms {
             ///     Retrieves the culture for this thread.
             /// </devdoc>
             /// <internalonly/>
-            [ResourceExposure(ResourceScope.AppDomain)]
-            [ResourceConsumption(ResourceScope.AppDomain)]
             internal CultureInfo GetCulture() {
                 if (culture == null || culture.LCID != SafeNativeMethods.GetThreadLocale())
                     culture = new CultureInfo(SafeNativeMethods.GetThreadLocale());
@@ -3539,7 +3497,6 @@ namespace System.Windows.Forms {
                 return filtered;
             }
 
-
             /// <devdoc>
             ///     Message filtering routine that is called before dispatching a message.
             ///     If this returns true, the message is already processed.  If it returns
@@ -3650,8 +3607,6 @@ namespace System.Windows.Forms {
             ///     Sets the culture for this thread.
             /// </devdoc>
             /// <internalonly/>
-            [ResourceExposure(ResourceScope.AppDomain)]
-            [ResourceConsumption(ResourceScope.AppDomain)]
             internal void SetCulture(CultureInfo culture) {
                 if (culture != null && culture.LCID != SafeNativeMethods.GetThreadLocale()) {
                     SafeNativeMethods.SetThreadLocale(culture.LCID);
@@ -3696,7 +3651,6 @@ namespace System.Windows.Forms {
             /// </devdoc>
             bool UnsafeNativeMethods.IMsoComponent.FDebugMessage(IntPtr hInst, int msg, IntPtr wparam, IntPtr lparam)
             {
-
                 return false;
             }
 

@@ -18,22 +18,17 @@ namespace System.Windows.Forms
         internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
 
         [DllImport(ExternDll.Kernel32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Ansi)]
-        [ResourceExposure(ResourceScope.Process)]
         public static extern IntPtr GetProcAddress(HandleRef hModule, string lpProcName);
         [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.Process)]
         public static extern IntPtr GetModuleHandle(string modName);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true, BestFitMapping = false)]
-        [ResourceExposure(ResourceScope.Machine)]
         private static extern IntPtr LoadLibraryEx(string lpModuleName, IntPtr hFile, uint dwFlags);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
-        [ResourceExposure(ResourceScope.Machine)]
         private static extern IntPtr LoadLibrary(string libname);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool FreeLibrary(HandleRef hModule);
 
         /// <summary>

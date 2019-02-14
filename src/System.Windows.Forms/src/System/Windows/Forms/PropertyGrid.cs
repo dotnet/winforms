@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -202,7 +202,7 @@ namespace System.Windows.Forms {
                 separator1 = CreateSeparatorButton();
                 separator2 = CreateSeparatorButton();
 
-                toolStrip = new ToolStrip();
+                toolStrip = AccessibilityImprovements.Level3 ? new PropertyGridToolStrip(this) : new ToolStrip();
                 toolStrip.SuspendLayout();
                 toolStrip.ShowItemToolTips = true;
                 toolStrip.AccessibleName = SR.PropertyGridToolbarAccessibleName;
@@ -750,6 +750,15 @@ namespace System.Windows.Forms {
                }
             }
         }
+
+        /// <summary>
+        /// Gets the help control accessibility object.
+        /// </summary>
+        internal AccessibleObject HelpAccessibleObject {
+            get {
+                return doccomment.AccessibilityObject;
+            }
+        }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.HelpBackColor"]/*' />
         /// <devdoc>
@@ -826,6 +835,33 @@ namespace System.Windows.Forms {
                 OnLayoutInternal(false);
                 Invalidate();
                 doccomment.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets the hot commands control accessible object.
+        /// </summary>
+        internal AccessibleObject HotCommandsAccessibleObject {
+            get {
+                return hotcommands.AccessibilityObject;
+            }
+        }
+
+        /// <summary>
+        /// Gets the main entry accessible object.
+        /// </summary>
+        internal AccessibleObject GridViewAccessibleObject {
+            get {
+                return gridView.AccessibilityObject;
+            }
+        }
+
+        /// <summary>
+        /// Gets the value indicating whether the main entry is visible.
+        /// </summary>
+        internal bool GridViewVisible {
+            get {
+                return gridView != null && gridView.Visible;
             }
         }
 
@@ -1381,6 +1417,15 @@ namespace System.Windows.Forms {
             }
         }
 
+        /// <summary>
+        /// Gets the value indicating whether the Property grid is sorted by categories.
+        /// </summary>
+        internal bool SortedByCategories {
+            get {
+                return (PropertySort & PropertySort.Categorized) != 0;
+            }
+        }
+
         [Browsable(false), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
@@ -1435,6 +1480,15 @@ namespace System.Windows.Forms {
                 OnLayoutInternal(false);
                 Invalidate();
                 toolStrip.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets the toolbar control accessibility object.
+        /// </summary>
+        internal AccessibleObject ToolbarAccessibleObject {
+            get {
+                return toolStrip.AccessibilityObject;
             }
         }
 
@@ -1860,6 +1914,18 @@ namespace System.Windows.Forms {
         #if DEBUG
             internal bool inGridViewCreate = false;
         #endif
+
+        /// <summary>
+        /// Constructs the new instance of the accessibility object for current PropertyGrid control.
+        /// </summary>
+        /// <returns></returns>
+        protected override AccessibleObject CreateAccessibilityInstance() {
+            if (AccessibilityImprovements.Level3) {
+                return new PropertyGridAccessibleObject(this);
+            }
+
+            return base.CreateAccessibilityInstance();
+        }
 
         private /*protected virtual*/ PropertyGridView CreateGridView(IServiceProvider sp) {
 #if DEBUG
@@ -2448,6 +2514,31 @@ namespace System.Windows.Forms {
                 peDefault = (GridEntry)currentPropEntries[0];
             }
             return peDefault;
+        }
+
+        /// <summary>
+        /// Gets the element from point.
+        /// </summary>
+        /// <param name="point">The point where to search the element.</param>
+        /// <returns>The element found in the current point.</returns>
+        internal Control GetElementFromPoint(Point point) {
+            if (ToolbarAccessibleObject.Bounds.Contains(point)) {
+                return toolStrip;
+            }
+
+            if (GridViewAccessibleObject.Bounds.Contains(point)) {
+                return gridView;
+            }
+
+            if (HotCommandsAccessibleObject.Bounds.Contains(point)) {
+                return hotcommands;
+            }
+
+            if (HelpAccessibleObject.Bounds.Contains(point)) {
+                return doccomment;
+            }
+
+            return null;
         }
 
         private object GetUnwrappedObject(int index) {
@@ -3164,7 +3255,7 @@ namespace System.Windows.Forms {
                     this.AccessibilityObject.RaiseAutomationNotification(
                         Automation.AutomationNotificationKind.ActionCompleted,
                         Automation.AutomationNotificationProcessing.All,
-                        string.Format(CultureInfo.CurrentCulture, string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value)));
+                        string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value));
                 }
             }
         }
@@ -4525,6 +4616,10 @@ namespace System.Windows.Forms {
             }
         }
 
+        /// <summary>
+        /// Indicates whether or not the control supports UIA Providers via
+        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        /// </summary>
         internal override bool SupportsUiaProviders {
             get {
                 return AccessibilityImprovements.Level3;
@@ -5135,5 +5230,287 @@ namespace System.Windows.Forms {
         }
     }
 
+    /// <summary>
+    /// Represents the PropertyGrid accessibility object.
+    /// Is used only in Accessibility Improvements of level3 to show correct accessible hierarchy.
+    /// </summary>
+    [ComVisible(true)]
+    internal class PropertyGridAccessibleObject : Control.ControlAccessibleObject {
+
+        private PropertyGrid _owningPropertyGrid;
+
+        /// <summary>
+        /// Initializes new instance of PropertyGridAccessibleObject
+        /// </summary>
+        /// <param name="owningPropertyGrid">The PropertyGrid owning control.</param>
+        public PropertyGridAccessibleObject(PropertyGrid owningPropertyGrid) : base(owningPropertyGrid) {
+            _owningPropertyGrid = owningPropertyGrid;
+        }
+
+        /// <summary>
+        /// Return the child element at the specified point, if one exists,
+        /// otherwise return this element if the point is on this element,
+        /// otherwise return null.
+        /// </summary>
+        /// <param name="x">x coordinate of point to check</param>
+        /// <param name="y">y coordinate of point to check</param>
+        /// <returns>Return the child element at the specified point, if one exists,
+        /// otherwise return this element if the point is on this element,
+        /// otherwise return null.
+        /// </returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) {
+            Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
+
+            var element = _owningPropertyGrid.GetElementFromPoint(clientPoint);
+            if (element != null) {
+                return element.AccessibilityObject;
+            }
+
+            return base.ElementProviderFromPoint(x, y);
+        }
+
+        /// <summary>
+        /// Request to return the element in the specified direction.
+        /// </summary>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction.</returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+            switch(direction) {
+                case UnsafeNativeMethods.NavigateDirection.Parent:
+                    return null;
+                case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    return GetChildFragment(0);
+                case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    var childFragmentCount = GetChildFragmentCount();
+                    if (childFragmentCount > 0) {
+                        return GetChildFragment(childFragmentCount - 1);
+                    }
+                    break;
+            }
+
+            return base.FragmentNavigate(direction);
+        }
+
+        /// <summary>
+        /// Request to return the element in the specified direction regarding the provided child element.
+        /// </summary>
+        /// <param name="childFragment">The child element regarding which the target element is searched.</param>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction.</returns>
+        internal UnsafeNativeMethods.IRawElementProviderFragment ChildFragmentNavigate(AccessibleObject childFragment, UnsafeNativeMethods.NavigateDirection direction) {
+            switch(direction) {
+                case UnsafeNativeMethods.NavigateDirection.Parent:
+                    return this;
+                case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    int fragmentCount = GetChildFragmentCount();
+                    int childFragmentIndex = GetChildFragmentIndex(childFragment);
+                    int nextChildFragmentIndex = childFragmentIndex + 1;
+                    if (fragmentCount > nextChildFragmentIndex) {
+                        return GetChildFragment(nextChildFragmentIndex);
+                    }
+
+                    return null;
+                case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    fragmentCount = GetChildFragmentCount();
+                    childFragmentIndex = GetChildFragmentIndex(childFragment);
+                    if (childFragmentIndex > 0) {
+                        return GetChildFragment(childFragmentIndex - 1);
+                    }
+
+                    return null;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Return the element that is the root node of this fragment of UI.
+        /// </summary>
+        internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
+            get {
+                return this;
+            }
+        }
+
+        /// <summary>
+        /// Gets the accessible child corresponding to the specified index.</para>
+        /// </summary>
+        /// <param name="index">The child index.</param>
+        /// <returns>The accessible child.</returns>
+        internal AccessibleObject GetChildFragment(int index) {
+            if (index < 0) {
+                return null;
+            }
+            
+            if (_owningPropertyGrid.ToolbarVisible) {
+                if (index == 0) {
+                    return _owningPropertyGrid.ToolbarAccessibleObject;
+                }
+
+                index--;
+            }
+
+            if (_owningPropertyGrid.GridViewVisible) {
+                if (index == 0) {
+                    return _owningPropertyGrid.GridViewAccessibleObject;
+                }
+
+                index--;
+            }
+            
+            if (_owningPropertyGrid.CommandsVisible) {
+                if (index == 0) {
+                    return _owningPropertyGrid.HotCommandsAccessibleObject;
+                }
+
+                index--;
+            }
+            
+            if (_owningPropertyGrid.HelpVisible) {
+                if (index == 0) {
+                    return _owningPropertyGrid.HelpAccessibleObject;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the number of children belonging to an accessible object.
+        /// </summary>
+        /// <returns>The number of children.</returns>
+        internal int GetChildFragmentCount() {
+            int childCount = 0;
+
+            if (_owningPropertyGrid.ToolbarVisible) {
+                childCount++;
+            }
+
+            if (_owningPropertyGrid.GridViewVisible) {
+                childCount++;
+            }
+
+            if (_owningPropertyGrid.CommandsVisible) {
+                childCount++;
+            }
+
+            if (_owningPropertyGrid.HelpVisible) {
+                childCount++;
+            }
+
+            return childCount;
+        }
+
+        /// <summary>
+        /// Return the element in this fragment which has the keyboard focus,
+        /// </summary>
+        /// <returns>Return the element in this fragment which has the keyboard focus,
+        /// if any; otherwise return null.</returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus() {
+            return GetFocused();
+        }
+
+        /// <summary>
+        /// Gets the child control index.
+        /// </summary>
+        /// <param name="controlAccessibleObject">The control accessible object which index should be found.</param>
+        /// <returns>The child accessible index or -1 if not found.</returns>
+        internal int GetChildFragmentIndex(AccessibleObject controlAccessibleObject) {
+            int childFragmentCount = GetChildFragmentCount();
+            for (int i = 0; i < childFragmentCount; i++) {
+                var childFragment = GetChildFragment(i);
+                if (childFragment == controlAccessibleObject) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+    }
+
+    /// <summary>
+    /// Represents the PropertyGrid inner ToolStrip control.
+    /// Is used starting with Accessibility Improvements of level 3.
+    /// </summary>
+    internal class PropertyGridToolStrip : ToolStrip {
+
+        private PropertyGrid _parentPropertyGrid;
+
+        /// <summary>
+        /// Initializes new instance of PropertyGridToolStrip control.
+        /// </summary>
+        /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
+        public PropertyGridToolStrip(PropertyGrid parentPropertyGrid) {
+            _parentPropertyGrid = parentPropertyGrid;
+        }
+
+        /// <summary>
+        /// Indicates whether or not the control supports UIA Providers via
+        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        /// </summary>
+        internal override bool SupportsUiaProviders {
+            get {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Constructs the new instance of the accessibility object for this control.
+        /// </summary>
+        /// <returns>The accessibility object for this control.</returns>
+        protected override AccessibleObject CreateAccessibilityInstance() {
+            return new PropertyGridToolStripAccessibleObject(this, _parentPropertyGrid);
+        }
+    }
+
+    /// <summary>
+    /// Represents the PropertyGridToolStrip control accessibility object.
+    /// </summary>
+    [ComVisible(true)]
+    internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject {
+
+        private PropertyGrid _parentPropertyGrid;
+
+        /// <summary>
+        /// Constructs new instance of PropertyGridToolStripAccessibleObject
+        /// </summary>
+        /// <param name="owningPropertyGridToolStrip">The PropertyGridToolStrip owning control.</param>
+        /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
+        public PropertyGridToolStripAccessibleObject(PropertyGridToolStrip owningPropertyGridToolStrip, PropertyGrid parentPropertyGrid) : base(owningPropertyGridToolStrip) {
+            _parentPropertyGrid = parentPropertyGrid;
+        }
+
+        /// <summary>
+        /// Request to return the element in the specified direction.
+        /// </summary>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction.</returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+            var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
+            if (propertyGridAccessibleObject != null) {
+                var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                if (navigationTarget != null) {
+                    return navigationTarget;
+                }
+            }
+
+            return base.FragmentNavigate(direction);
+        }
+
+        /// <summary>
+        /// Request value of specified property from an element.
+        /// </summary>
+        /// <param name="propertyId">Identifier indicating the property to return</param>
+        /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
+        internal override object GetPropertyValue(int propertyID) {
+            if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                return NativeMethods.UIA_ToolBarControlTypeId;
+            } else if (propertyID == NativeMethods.UIA_NamePropertyId) {
+                return Name;
+            }
+
+            return base.GetPropertyValue(propertyID);
+        }
+    }
 }
 

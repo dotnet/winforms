@@ -7,10 +7,8 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-
     using System;
     using System.Runtime.InteropServices;
-    
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Drawing;
@@ -55,7 +53,6 @@ namespace System.Windows.Forms {
         private static Bitmap starBmp = null;
         protected const int xOffset = 3;
         protected const int yOffset = 2;
-
 
         /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGridRow"]/*' />
         /// <devdoc>
@@ -209,8 +206,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets the bitmap associated with the row.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetBitmap(string bitmapName) {
             Bitmap b = null;
             try {
@@ -261,8 +256,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets or sets the bitmap displayed in the row header of a new row.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetStarBitmap() {
             if (starBmp == null)
                 starBmp = GetBitmap("DataGridRow.star.bmp");
@@ -274,8 +267,6 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the bitmap displayed in the row header that indicates a row can 
         ///       be edited.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetPencilBitmap() {
             if (pencilBmp == null)
                 pencilBmp = GetBitmap("DataGridRow.pencil.bmp");
@@ -286,8 +277,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets or sets the bitmap displayed on a row with an error.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetErrorBitmap() {
             if (errorBmp == null)
                 errorBmp = GetBitmap("DataGridRow.error.bmp");
@@ -295,16 +284,12 @@ namespace System.Windows.Forms {
             return errorBmp;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetLeftArrowBitmap() {
             if (leftArrow == null)
                 leftArrow = GetBitmap("DataGridRow.left.bmp");
             return leftArrow;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetRightArrowBitmap() {
             if (rightArrow == null)
                 rightArrow = GetBitmap("DataGridRow.right.bmp");
@@ -846,7 +831,6 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-
             /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGridRowAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.entry.
@@ -1055,6 +1039,5 @@ namespace System.Windows.Forms {
             }
 
         }
-
     }
 }

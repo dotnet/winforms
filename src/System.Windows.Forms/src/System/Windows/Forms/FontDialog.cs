@@ -214,8 +214,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDfontDescr))
         ]
         public Font Font {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get {
                 Font result = font;
                 if (result == null)

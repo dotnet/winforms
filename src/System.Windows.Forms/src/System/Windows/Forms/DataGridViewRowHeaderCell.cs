@@ -185,8 +185,8 @@ namespace System.Windows.Forms
             return rightToLeft ? DataGridViewRowHeaderCell.LeftArrowStarBitmap : DataGridViewRowHeaderCell.RightArrowStarBitmap;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         private static Bitmap GetBitmapFromIcon(string iconName)
         {
             Size desiredSize = new Size(iconsWidth, iconsHeight);

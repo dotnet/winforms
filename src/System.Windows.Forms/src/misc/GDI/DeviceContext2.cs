@@ -176,8 +176,8 @@ namespace System.Experimental.Gdi
         
         public WindowsFont Font
         {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get
             {
 #if OPTIMIZED_MEASUREMENTDC                

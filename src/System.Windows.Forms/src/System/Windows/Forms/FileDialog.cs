@@ -393,8 +393,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /* SECURITYUNDONE : should require EventQueue permission */
         protected virtual IntPtr Instance {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get { return UnsafeNativeMethods.GetModuleHandle(null); }
         }
 
@@ -605,8 +605,8 @@ namespace System.Windows.Forms {
 
 
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         internal static bool FileExists(string fileName)
         {
             bool fileExists = false;

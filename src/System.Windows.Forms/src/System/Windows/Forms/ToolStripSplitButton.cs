@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -393,7 +393,10 @@ namespace System.Windows.Forms {
         }
 
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level1) {
+            if (AccessibilityImprovements.Level3) {
+                return new ToolStripSplitButtonUiaProvider(this);
+            }
+            else if (AccessibilityImprovements.Level1) {
                 return new ToolStripSplitButtonExAccessibleObject(this);
             }
             else {
@@ -691,8 +694,8 @@ namespace System.Windows.Forms {
             
             
             public override Image Image {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     if ((owner.DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) {
                         return owner.Image;
@@ -844,15 +847,72 @@ namespace System.Windows.Forms {
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
                 switch (direction) {
                     case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                        return ownerItem.DropDownItems.Count > 0 ? ownerItem.DropDown.Items[0].AccessibilityObject : null;
+                        return DropDownItemsCount > 0 ? ownerItem.DropDown.Items[0].AccessibilityObject : null;
                     case UnsafeNativeMethods.NavigateDirection.LastChild:
-                        return ownerItem.DropDownItems.Count > 0 ? ownerItem.DropDown.Items[ownerItem.DropDown.Items.Count - 1].AccessibilityObject : null;
+                        return DropDownItemsCount > 0 ? ownerItem.DropDown.Items[ownerItem.DropDown.Items.Count - 1].AccessibilityObject : null;
                 }
                 return base.FragmentNavigate(direction);
+            }
+
+            private int DropDownItemsCount {
+                get {
+                    // Do not expose child items when the drop-down is collapsed to prevent Narrator from announcing
+                    // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
+                    // in scan mode (CAPSLOCK + Space)
+                    if (AccessibilityImprovements.Level3 && ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed) {
+                        return 0;
+                    }
+
+                    return ownerItem.DropDownItems.Count;
+                }
+            }
+        }
+
+        internal class ToolStripSplitButtonUiaProvider : ToolStripDropDownItemAccessibleObject {
+            private ToolStripSplitButton _owner;
+            private ToolStripSplitButtonExAccessibleObject _accessibleObject;
+
+            public ToolStripSplitButtonUiaProvider(ToolStripSplitButton owner) : base(owner) {
+                _owner = owner;
+                _accessibleObject = new ToolStripSplitButtonExAccessibleObject(owner);
+            }
+
+            public override void DoDefaultAction() {
+                _accessibleObject.DoDefaultAction();
+            }
+
+            internal override object GetPropertyValue(int propertyID) {
+                return _accessibleObject.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsIAccessibleExSupported() {
+                return true;
+            }
+
+            internal override bool IsPatternSupported(int patternId) {
+                return _accessibleObject.IsPatternSupported(patternId);
+            }
+
+            internal override void Expand() {
+                DoDefaultAction();
+            }
+
+            internal override void Collapse() {
+                _accessibleObject.Collapse();
+            }
+
+            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState {
+                get {
+                    return _accessibleObject.ExpandCollapseState;
+                }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+                return _accessibleObject.FragmentNavigate(direction);
             }
         }
     }
 }
-    
+
 
 

@@ -4,117 +4,117 @@
     <body>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
-        <target state="new">Anchor Editor</target>
+        <target state="translated">アンカー エディター</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">下</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">左</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">右</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">上</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
-        <target state="new">Color Picker</target>
+        <target state="translated">カラー ピッカー</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorPaletteTab">
         <source>Custom</source>
-        <target state="new">Custom</target>
+        <target state="translated">カスタム</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
-        <target state="new">Web</target>
+        <target state="translated">Web</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">
         <source>System</source>
-        <target state="new">System</target>
+        <target state="translated">システム</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
-        <target state="new">Dock Picker</target>
+        <target state="translated">ピッカーのドッキング</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">下</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorFillAccName">
         <source>Fill</source>
-        <target state="new">Fill</target>
+        <target state="translated">塗りつぶし</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">左</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorNoneAccName">
         <source>None</source>
-        <target state="new">None</target>
+        <target state="translated">なし</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">右</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">上</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericFileFilter">
         <source>All Files(*.*)|*.*</source>
-        <target state="new">All Files(*.*)|*.*</target>
+        <target state="translated">すべてのファイル (*.*)|*.*</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericOpenFile">
         <source>Open File</source>
-        <target state="new">Open File</target>
+        <target state="translated">ファイルを開く</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
-        <target state="new">Winforms Designer is not supported on this platform.</target>
+        <target state="translated">Windows フォーム デザイナーは、このプラットフォームではサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
-        <target state="new">(Unknown)</target>
+        <target state="translated">(不明)</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">
         <source>Bitmap files</source>
-        <target state="new">Bitmap files</target>
+        <target state="translated">ビットマップ ファイル</target>
         <note />
       </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
-        <target state="new">All image files</target>
+        <target state="translated">すべてのイメージ ファイル</target>
         <note />
       </trans-unit>
       <trans-unit id="metafileFileDescription">
         <source>Metafiles</source>
-        <target state="new">Metafiles</target>
+        <target state="translated">メタファイル</target>
         <note />
       </trans-unit>
     </body>
