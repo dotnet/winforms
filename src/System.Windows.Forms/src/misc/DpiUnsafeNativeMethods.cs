@@ -71,7 +71,8 @@ namespace System.Windows.Forms
             {
                 return AreDpiAwarenessContextsEqual((DpiAwarenessContext)dpiContextA, (DpiAwarenessContext)dpiContextB);
             }
-
+            
+            // legacy OS that does not have this API available.
             return false;
         }
 
@@ -85,11 +86,8 @@ namespace System.Windows.Forms
             {
                 return GetThreadDpiAwarenessContext();
             }
-            else
-            {
-                // legacy OS that does not have this API available.
-                return null;
-            }
+            // legacy OS that does not have this API available.
+            return null;            
         }
 
         /// <summary>
@@ -106,11 +104,8 @@ namespace System.Windows.Forms
                 }
                 return SetThreadDpiAwarenessContext((DpiAwarenessContext)dpiContext);
             }
-            else
-            {
-                // legacy OS that does not have this API available.
-                return null;
-            }
+            // legacy OS that does not have this API available.
+            return null;
         }
 
         /// <summary>
@@ -123,11 +118,8 @@ namespace System.Windows.Forms
             {
                 return GetWindowDpiAwarenessContext(hwnd);
             }
-            else
-            {
-                // legacy OS that does not have this API available.
-                return null;
-            }
+            // legacy OS that does not have this API available.
+            return null;            
         }
     }
 }
