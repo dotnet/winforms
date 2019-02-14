@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using Xunit.Abstractions;
 
 namespace System.Windows.Forms.Tests
 {
@@ -11,14 +12,11 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void PropertyGridAccessibleObject_Ctor_Default()
         {
-            const string propertyGridAccessibleName = "Properties";
-
             PropertyGrid propertyGrid = new PropertyGrid();
-            propertyGrid.AccessibleName = propertyGridAccessibleName;
 
             var accessibleObject = new PropertyGridAccessibleObject(propertyGrid);
             Assert.NotNull(accessibleObject.Owner);
-            Assert.Equal(propertyGridAccessibleName, accessibleObject.Name);
+            Assert.Equal(propertyGrid, accessibleObject.Owner);
         }
     }
 }

@@ -29,12 +29,9 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ToolStripAccessibleObject_TestData))]
         public void ToolStripAccessibleObject_FragmentNavigate_FirstChild_ThumbButton(AccessibleObject accessibleObject)
         {
-            const int UIA_ControlTypePropertyId = 30003;
-            const int UIA_ThumbControlTypeId = 50027;
-
             var firstChild = accessibleObject.FragmentNavigate(UnsafeNativeMethods.NavigateDirection.FirstChild);
             Assert.NotNull(firstChild);
-            Assert.Equal(UIA_ThumbControlTypeId, firstChild.GetPropertyValue(UIA_ControlTypePropertyId));
+            Assert.Equal(NativeConstants.UIA_ThumbControlTypeId, firstChild.GetPropertyValue(NativeConstants.UIA_ControlTypePropertyId));
         }
     }
 }
