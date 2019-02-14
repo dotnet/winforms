@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Tests
             var myText = guid.ToString();
             var myBlob = new System.IO.MemoryStream(guid.ToByteArray());
             var unicodeText = "Euro char: \u20AC";
-            var data = new System.Windows.Forms.DataObject();
+            var data = new DataObject();
             data.SetData(myTextFormat, myText);
             data.SetData(myBlobFormat, myBlob);
             data.SetText(unicodeText);
