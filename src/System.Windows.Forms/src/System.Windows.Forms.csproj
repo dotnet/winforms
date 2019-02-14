@@ -22,6 +22,8 @@
 
   <ItemGroup>
     <Compile Include="..\..\Common\src\ApiHelper.cs" Link="Common\ApiHelper.cs" />
+    <Compile Include="..\..\Common\src\ClientUtils.cs" Link="Common\ClientUtils.cs" />
+    <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -23,7 +23,7 @@
     using System.Diagnostics;
 
     // Miscellaneous utilities
-    static public class ClientUtils {
+    static internal class ClientUtils {
 
 // ExecutionEngineException is obsolete and shouldn't be used (to catch, throw or reference) anymore.
 // Pragma added to prevent converting the "type is obsolete" warning into build error.

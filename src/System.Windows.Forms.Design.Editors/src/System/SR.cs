@@ -14,8 +14,10 @@ namespace System.Windows.Forms.Design.Editors.System
         internal static global::System.Resources.ResourceManager ResourceManager => s_resourceManager ?? (s_resourceManager = new global::System.Resources.ResourceManager(typeof(SR)));
 
         internal static global::System.Globalization.CultureInfo Culture { get; set; }
-        
+
         internal static string GetResourceString(string resourceKey, string defaultValue = null) => ResourceManager.GetString(resourceKey, Culture);
+
+        internal static string RTL => GetResourceString("RTL");
 
         internal static string CollectionEditorCantRemoveItem = GetResourceString("CollectionEditorCantRemoveItem");
 

@@ -4,7 +4,12 @@
 
 
 namespace System.Windows.Forms {
-    using System;
+    #if WINFORMS_NAMESPACE
+        using System = System;
+    #else
+        using System = System.Windows.Forms.Design.Editors.System;
+    #endif
+
     using System.Windows.Forms;
 
     /// <include file='doc\RTLAwareMessageBox.uex' path='docs/doc[@for="RTLAwareMessageBox"]/*' />
@@ -15,7 +20,7 @@ namespace System.Windows.Forms {
     ///       for this dll have been localized to a RTL language.
     ///    </para>
     /// </devdoc>
-    public sealed class RTLAwareMessageBox {
+    internal sealed class RTLAwareMessageBox {
 
         /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show6"]/*' />
         /// <devdoc>
@@ -38,7 +43,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static bool IsRTLResources {
             get {
-                return SR.RTL != "RTL_False";
+                return System.SR.RTL != "RTL_False";
             }
         }
     }
