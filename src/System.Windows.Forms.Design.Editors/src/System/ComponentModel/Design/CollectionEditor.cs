@@ -14,7 +14,7 @@ using System.Reflection;
 using System.Windows.Forms.VisualStyles;
 using System.Globalization;
 
-namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
+namespace System.Windows.Forms.Design.Editors
 {
     /// <devdoc>
     ///    Provides a generic editor for most any collection.
@@ -290,13 +290,12 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
         /// <devdoc>
         ///    Edits the specified object value using the editor style  provided by <see cref='System.ComponentModel.Design.CollectionEditor.GetEditStyle'/>.
         /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
+        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider != null)
             {
                 IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
                 if (edSvc != null)
                 {
                     _currentContext = context;
@@ -304,7 +303,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     // child modal dialog -launching in System Aware mode 
                     CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(() => CreateCollectionForm());
                     ITypeDescriptorContext lastContext = _currentContext;
-                    //localCollectionForm.EditValue = value;
+                    localCollectionForm.EditValue = value;
                     _ignoreChangingEvents = false;
                     _ignoreChangedEvents = false;
                     DesignerTransaction trans = null;
@@ -319,7 +318,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                         {
                             if (host != null)
                             {
-                                trans = host.CreateTransaction(SR.GetResourceString(SR.CollectionEditorUndoBatchDesc, CollectionItemType.Name));
+                                trans = host.CreateTransaction(System.SR.GetResourceString(System.SR.CollectionEditorUndoBatchDesc, CollectionItemType.Name));
                             }
                         }
                         catch (CheckoutException cxe)
@@ -373,8 +372,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     }
                 }
             }
-
-
             return value;
         }
 
@@ -393,29 +390,28 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             // that is being inherited from another class. 
             // If it is, then we do not want to place it in the collection editor.  If the inheritance service
             // chose not to site the component, that indicates it should be hidden from  the user.
-            IInheritanceService iSvc = null;
-            bool checkISvc = false;
+            IInheritanceService inheritanceService = null;
+            bool isInheritanceServiceInitialized = false;
 
             foreach (object o in items)
             {
                 if (o is IComponent comp && comp.Site == null)
                 {
-                    if (!checkISvc)
+                    if (!isInheritanceServiceInitialized)
                     {
-                        checkISvc = true;
+                        isInheritanceServiceInitialized = true;
                         if (Context != null)
                         {
-                            iSvc = (IInheritanceService)Context.GetService(typeof(IInheritanceService));
+                            inheritanceService = (IInheritanceService)Context.GetService(typeof(IInheritanceService));
                         }
                     }
 
-                    if (iSvc != null && iSvc.GetInheritanceAttribute(comp).Equals(InheritanceAttribute.InheritedReadOnly))
+                    if (inheritanceService != null && inheritanceService.GetInheritanceAttribute(comp).Equals(InheritanceAttribute.InheritedReadOnly))
                     {
                         return true;
                     }
                 }
             }
-
             return false;
         }
 
@@ -443,7 +439,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
             }
 
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         /// <devdoc>
@@ -868,7 +864,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     DpiHelper.ScaleButtonImageLogicalToDevice(_downButton);
                     DpiHelper.ScaleButtonImageLogicalToDevice(_upButton);
                 }
-                Text = SR.GetResourceString(SR.CollectionEditorCaption, CollectionItemType.Name);
+                Text = System.SR.GetResourceString(System.SR.CollectionEditorCaption, CollectionItemType.Name);
 
                 HookEvents();
 
@@ -1704,7 +1700,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 _listbox.Invalidate();
 
                 // also update the string above the grid.
-                _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
+                _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
             }
 
             /// <devdoc>
@@ -1741,7 +1737,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                             }
                             else
                             {
-                                throw new Exception(SR.GetResourceString(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
+                                throw new Exception(System.SR.GetResourceString(System.SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
                             }
                         }
                         catch (Exception ex)
@@ -1909,11 +1905,11 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     if ((selectedItemCount == 1) || (selectedItemCount == -1))
                     {
                         // handle both single select listboxes and a single item selected in a multi-select listbox
-                        _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
+                        _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
                     }
                     else
                     {
-                        _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorPropertiesMultiSelect);
+                        _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorPropertiesMultiSelect);
                     }
 
                     if (_editor.IsAnyObjectInheritedReadOnly(items))
@@ -1923,7 +1919,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                         _removeButton.Enabled = false;
                         _upButton.Enabled = false;
                         _downButton.Enabled = false;
-                        _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorInheritedReadOnlySelection);
+                        _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorInheritedReadOnlySelection);
                     }
                     else
                     {
@@ -1933,7 +1929,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
                 else
                 {
-                    _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorPropertiesNone);
+                    _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorPropertiesNone);
                     _propertyBrowser.SelectedObject = null;
                 }
             }
@@ -2282,8 +2278,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
         /// </devdoc>
         internal class FilterListBox : ListBox
         {
-
-
             private PropertyGrid _grid;
             private Message _lastKeyDown;
 

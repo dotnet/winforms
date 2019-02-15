@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using System.Drawing.Design;
 
-namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
+namespace System.Windows.Forms.Design.Editors
 {
     [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors")]
     public abstract class ObjectSelectorEditor : UITypeEditor
