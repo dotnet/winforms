@@ -66,31 +66,5 @@ namespace System.Windows.Forms.Tests
             Assert.True(dataObject.GetDataPresent(format, autoConvert: false));
             Assert.Equal(input, dataObject.GetData(format, autoConvert: false));
         }
-        [WinFormsFact]
-        private void DataObject_CustomFormats()
-        {
-            var myTextFormat = "MyTextFormat";
-            var myBlobFormat = "MyBlobFormat";
-            var guid = Guid.NewGuid();
-            var myText = guid.ToString();
-            var myBlob = new System.IO.MemoryStream(guid.ToByteArray());
-            var unicodeText = "Euro char: \u20AC";
-            var data = new System.Windows.Forms.DataObject();
-            data.SetData(myTextFormat, myText);
-            data.SetData(myBlobFormat, myBlob);
-            data.SetText(unicodeText);
-            System.Windows.Forms.Clipboard.SetDataObject(data);
-            var copiedDataObject = System.Windows.Forms.Clipboard.GetDataObject();
-            var copiedText = copiedDataObject.GetData(myTextFormat) as string;
-            var copiedBlob = copiedDataObject.GetData(myBlobFormat) as System.IO.MemoryStream;
-            var copiedUnicodeText = System.Windows.Forms.Clipboard.GetText();
-            Assert.NotNull(copiedText);
-            Assert.Equal(copiedText, myText);
-            Assert.NotNull(copiedBlob);
-            Assert.Equal(copiedBlob.Length, myBlob.Length);
-            Assert.Equal(new Guid(copiedBlob.ToArray()), guid);
-            Assert.NotNull(copiedUnicodeText);
-            Assert.Equal(copiedUnicodeText, unicodeText);
-        }
     }
 }
