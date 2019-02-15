@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             SubObjectSelector = subObjectSelector;
         }
         
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
+        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (null != provider)

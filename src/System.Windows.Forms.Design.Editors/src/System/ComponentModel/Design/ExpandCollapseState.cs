@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
 {
     [ComVisible(true)]
     [Guid("76d12d7e-b227-4417-9ce2-42642ffa896a")]
-    public enum ExpandCollapseState
+    internal enum ExpandCollapseState
     {
         Collapsed = 0,
         Expanded = 1,

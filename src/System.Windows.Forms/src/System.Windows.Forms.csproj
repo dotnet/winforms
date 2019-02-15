@@ -24,6 +24,7 @@
     <Compile Include="..\..\Common\src\ApiHelper.cs" Link="Common\ApiHelper.cs" />
     <Compile Include="..\..\Common\src\ClientUtils.cs" Link="Common\ClientUtils.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
+    <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="Common\DpiHelper.DpiAwarenessContext.cs" />
   </ItemGroup>
 
   <ItemGroup>

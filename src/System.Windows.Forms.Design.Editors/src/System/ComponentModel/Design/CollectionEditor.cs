@@ -115,7 +115,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             if (value is IComponent comp)
             {
                 // Make sure the component is not being inherited -- we can't delete these!
-                //
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(comp)[typeof(InheritanceAttribute)];
                 if (ia != null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
                 {
@@ -250,8 +249,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
             }
 
-            // Couldn't find anything.  Return Object
-
             Debug.Fail("Collection " + CollectionType.FullName + " contains no Item or Items property so we cannot display and edit any values");
             return typeof(object);
         }
@@ -304,10 +301,8 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 {
                     _currentContext = context;
 
-                    // Always create a new CollectionForm.  We used to do reuse the form in V1 and Everett
-                    // but this implies that the form will never be disposed.
                     // child modal dialog -launching in System Aware mode 
-                    //CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(() => CreateCollectionForm());
+                    CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(() => CreateCollectionForm());
                     ITypeDescriptorContext lastContext = _currentContext;
                     //localCollectionForm.EditValue = value;
                     _ignoreChangingEvents = false;
@@ -343,18 +338,18 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                             cs.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
                         }
 
-                        //if (localCollectionForm.ShowEditorDialog(edSvc) == DialogResult.OK)
-                        //{
-                        //    value = localCollectionForm.EditValue;
-                       //}
-                        //else
-                        //{
+                        if (localCollectionForm.ShowEditorDialog(edSvc) == DialogResult.OK)
+                        {
+                            value = localCollectionForm.EditValue;
+                        }
+                        else
+                        {
                             commitChange = false;
-                        //}
+                        }
                     }
                     finally
                     {
-                        //localCollectionForm.EditValue = null;
+                        localCollectionForm.EditValue = null;
                         _currentContext = lastContext;
                         if (trans != null)
                         {
@@ -374,7 +369,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                             cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
                         }
 
-                        //localCollectionForm.Dispose();
+                        localCollectionForm.Dispose();
                     }
                 }
             }
@@ -386,7 +381,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
         /// <devdoc>
         ///    Gets the editing style of the Edit method.
         /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
+        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.Modal;
@@ -394,13 +389,10 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
 
         private bool IsAnyObjectInheritedReadOnly(object[] items)
         {
-            // If the object implements IComponent, and is not sited, check with
-            // the inheritance service (if it exists) to see if this is a component
-            // that is being inherited from another class.  If it is, then we do
-            // not want to place it in the collection editor.  If the inheritance service
-            // chose not to site the component, that indicates it should be hidden from 
-            // the user.
-
+            // If the object implements IComponent, and is not sited, check with the inheritance service (if it exists) to see if this is a component
+            // that is being inherited from another class. 
+            // If it is, then we do not want to place it in the collection editor.  If the inheritance service
+            // chose not to site the component, that indicates it should be hidden from  the user.
             IInheritanceService iSvc = null;
             bool checkISvc = false;
 
@@ -434,9 +426,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
         {
             if (editValue != null)
             {
-                // We look to see if the value implements ICollection, and if it does, 
-                // we set through that.
-                //
+                // We look to see if the value implements ICollection, and if it does, we set through that.
                 if (editValue is Collections.ICollection)
                 {
                     ArrayList list = new ArrayList();
@@ -469,7 +459,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
         }
 
         /// <devdoc>
-        /// reflect any change events to the instance object
+        ///     Reflect any change events to the instance object
         /// </devdoc>
         private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
         {
@@ -481,7 +471,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
         }
 
         /// <devdoc>
-        ///  reflect any changed events to the instance object
+        ///     Reflect any changed events to the instance object
         /// </devdoc>
         private void OnComponentChanging(object sender, ComponentChangingEventArgs e)
         {
@@ -506,9 +496,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
         {
             if (editValue != null)
             {
-                // We look to see if the value implements IList, and if it does, 
-                // we set through that.
-                //
+                // We look to see if the value implements IList, and if it does, we set through that.
                 Debug.Assert(editValue is Collections.IList, "editValue is not an IList");
                 if (editValue is Collections.IList list)
                 {
@@ -636,9 +624,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
                 else
                 {
-                    // Fix for Dev10 bug 462144. We need to pass the unhandled characters 
-                    // (including Keys.Space) on to base.OnKeyDown when it's not to
-                    // drop the split menu
+                    // Fix for Dev10 bug 462144. We need to pass the unhandled characters (including Keys.Space) on to base.OnKeyDown when it's not to drop the split menu
                     base.OnKeyDown(kevent);
                 }
             }
@@ -781,7 +767,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 if (Focused)
                 {
                     bounds.Inflate(-4, -4);
-                    //ControlPaint.DrawFocusRectangle(g, bounds);
                 }
             }
 
@@ -838,11 +823,8 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
         }
 
-
-
         /// <devdoc>
-        ///      This is the collection editor's default implementation of a
-        ///      collection form.
+        ///      This is the collection editor's default implementation of a collection form.
         /// </devdoc>
         private class CollectionEditorCollectionForm : CollectionForm
         {
@@ -852,17 +834,12 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             private const int PAINT_INDENT = 26;
             private static readonly double s_lOG10 = Math.Log(10);
 
-            // Manipulation of the collection.
-            //
             private ArrayList _createdItems;
             private ArrayList _removedItems;
             private ArrayList _originalItems;
 
-            // Calling Editor
             private readonly CollectionEditor _editor;
 
-            // Dialog UI
-            //
             private FilterListBox _listbox;
             private SplitButton _addButton;
             private Button _removeButton;
@@ -878,11 +855,8 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             private TableLayoutPanel _overArchingTableLayoutPanel;
             private TableLayoutPanel _addRemoveTableLayoutPanel;
 
-            // Prevent flicker when switching selection
             private int _suspendEnabledCount = 0;
 
-            // our flag for if something changed
-            //
             private bool _dirty;
 
             public CollectionEditorCollectionForm(CollectionEditor editor) : base(editor)
@@ -898,8 +872,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
 
                 HookEvents();
 
-
-
                 Type[] newItemTypes = NewItemTypes;
                 if (newItemTypes.Length > 1)
                 {
@@ -912,7 +884,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                         _addDownMenu.Items.Add(new TypeMenuItem(newItemTypes[i], addDownMenuClick));
                     }
                 }
-
                 AdjustListBoxItemHeight();
             }
 
@@ -937,7 +908,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                             }
                         }
                     }
-
                     return true;
                 }
             }
@@ -951,8 +921,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
 
             /// <devdoc>
-            ///      Processes a click of the drop down type menu.  This creates a 
-            ///      new instance.
+            ///      Processes a click of the drop down type menu.  This creates a new instance.
             /// </devdoc>
             private void AddDownMenu_click(object sender, EventArgs e)
             {
@@ -999,12 +968,9 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
                 else
                 {
-                    // othewise go through the entire list
                     UpdateItemWidths(null);
                 }
 
-                // Select the last item
-                //
                 SuspendEnabledUpdates();
                 try
                 {
@@ -1025,7 +991,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                         _listbox.SelectedIndex = _listbox.Items.Count - 1;
                     }
                 }
-
                 finally
                 {
                     ResumeEnabledUpdates(true);
@@ -1150,8 +1115,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
             
             /// <devdoc>
-            ///      Performs a create instance and then adds the instance to
-            ///      the list box.
+            ///      Performs a create instance and then adds the instance to the list box.
             /// </devdoc>
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void CreateAndAddInstance(Type type)
@@ -1205,7 +1169,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
                 finally
                 {
-
                     ResumeEnabledUpdates(true);
                 }
             }
@@ -1270,15 +1233,11 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 _overArchingTableLayoutPanel.SuspendLayout();
                 _addRemoveTableLayoutPanel.SuspendLayout();
                 SuspendLayout();
-                // 
-                // membersLabel
-                // 
+
                 resources.ApplyResources(_membersLabel, "membersLabel");
                 _membersLabel.Margin = new Padding(0, 0, 3, 3);
                 _membersLabel.Name = "membersLabel";
-                // 
-                // listbox
-                // 
+
                 resources.ApplyResources(_listbox, "listbox");
                 _listbox.SelectionMode = (CanSelectMultipleInstances() ? SelectionMode.MultiExtended : SelectionMode.One);
                 _listbox.DrawMode = DrawMode.OwnerDrawFixed;
@@ -1286,69 +1245,49 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 _listbox.Margin = new Padding(0, 3, 3, 3);
                 _listbox.Name = "listbox";
                 _overArchingTableLayoutPanel.SetRowSpan(_listbox, 2);
-                // 
-                // upButton
-                // 
+
                 resources.ApplyResources(_upButton, "upButton");
                 _upButton.Name = "upButton";
-                // 
-                // downButton
-                // 
+
                 resources.ApplyResources(_downButton, "downButton");
                 _downButton.Name = "downButton";
-                // 
-                // propertiesLabel
-                // 
+
                 resources.ApplyResources(_propertiesLabel, "propertiesLabel");
                 _propertiesLabel.AutoEllipsis = true;
                 _propertiesLabel.Margin = new Padding(0, 0, 3, 3);
                 _propertiesLabel.Name = "propertiesLabel";
-                // 
-                // propertyBrowser
-                // 
+
                 resources.ApplyResources(_propertyBrowser, "propertyBrowser");
                 _propertyBrowser.CommandsVisibleIfAvailable = false;
                 _propertyBrowser.Margin = new Padding(3, 3, 0, 3);
                 _propertyBrowser.Name = "propertyBrowser";
                 _overArchingTableLayoutPanel.SetRowSpan(_propertyBrowser, 3);
-                // 
-                // addButton
-                // 
+
                 resources.ApplyResources(_addButton, "addButton");
                 _addButton.Margin = new Padding(0, 3, 3, 3);
                 _addButton.Name = "addButton";
-                // 
-                // removeButton
-                // 
+
                 resources.ApplyResources(_removeButton, "removeButton");
                 _removeButton.Margin = new Padding(3, 3, 0, 3);
                 _removeButton.Name = "removeButton";
-                // 
-                // okButton
-                // 
+
                 resources.ApplyResources(_okButton, "okButton");
                 _okButton.DialogResult = DialogResult.OK;
                 _okButton.Margin = new Padding(0, 3, 3, 0);
                 _okButton.Name = "okButton";
-                // 
-                // cancelButton
-                // 
+
                 resources.ApplyResources(_cancelButton, "cancelButton");
                 _cancelButton.DialogResult = DialogResult.Cancel;
                 _cancelButton.Margin = new Padding(3, 3, 0, 0);
                 _cancelButton.Name = "cancelButton";
-                // 
-                // okCancelTableLayoutPanel
-                // 
+
                 resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
                 _overArchingTableLayoutPanel.SetColumnSpan(_okCancelTableLayoutPanel, 3);
                 _okCancelTableLayoutPanel.Controls.Add(_okButton, 0, 0);
                 _okCancelTableLayoutPanel.Controls.Add(_cancelButton, 1, 0);
                 _okCancelTableLayoutPanel.Margin = new Padding(3, 3, 0, 0);
                 _okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
-                // 
-                // overArchingTableLayoutPanel
-                // 
+
                 resources.ApplyResources(_overArchingTableLayoutPanel, "overArchingTableLayoutPanel");
                 _overArchingTableLayoutPanel.Controls.Add(_downButton, 1, 2);
                 _overArchingTableLayoutPanel.Controls.Add(_addRemoveTableLayoutPanel, 0, 3);
@@ -1359,17 +1298,13 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 _overArchingTableLayoutPanel.Controls.Add(_okCancelTableLayoutPanel, 0, 4);
                 _overArchingTableLayoutPanel.Controls.Add(_upButton, 1, 1);
                 _overArchingTableLayoutPanel.Name = "overArchingTableLayoutPanel";
-                // 
-                // addRemoveTableLayoutPanel
-                // 
+
                 resources.ApplyResources(_addRemoveTableLayoutPanel, "addRemoveTableLayoutPanel");
                 _addRemoveTableLayoutPanel.Controls.Add(_addButton, 0, 0);
                 _addRemoveTableLayoutPanel.Controls.Add(_removeButton, 2, 0);
                 _addRemoveTableLayoutPanel.Margin = new Padding(0, 3, 3, 3);
                 _addRemoveTableLayoutPanel.Name = "addRemoveTableLayoutPanel";
-                // 
-                // CollectionEditor
-                // 
+
                 AcceptButton = _okButton;
                 resources.ApplyResources(this, "$this");
                 AutoScaleMode = AutoScaleMode.Font;
@@ -1392,8 +1327,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
 
             private void UpdateItemWidths(ListItem item)
             {
-                // VSWhidbey#384112: Its neither safe nor accurate to perform these width
-                // calculations prior to normal listbox handle creation. So we nop in this case now.
+                // VSWhidbey#384112: Its neither safe nor accurate to perform these width calculations prior to normal listbox handle creation. So we nop in this case now.
                 if (!_listbox.IsHandleCreated)
                 {
                     return;
@@ -1441,7 +1375,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     int c = _listbox.Items.Count;
                     int maxC = (c > 1) ? c - 1 : c;
                     // We add the +4 is a fudge factor...
-                    //
                     SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), _listbox.Font);
 
                     int charactersInNumber = ((int)(Math.Log((double)maxC) / s_lOG10) + 1);// Luckily, this is never called if count = 0
@@ -1505,8 +1438,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
 
                     try
                     {
-                        g.DrawString(itemText, Font, textBrush,
-                                     new Rectangle(e.Bounds.X + offset, e.Bounds.Y, e.Bounds.Width - offset, e.Bounds.Height));
+                        g.DrawString(itemText, Font, textBrush, new Rectangle(e.Bounds.X + offset, e.Bounds.Y, e.Bounds.Width - offset, e.Bounds.Height));
                     }
 
                     finally
@@ -1518,7 +1450,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     }
 
                     // Check to see if we need to change the horizontal extent of the listbox
-                    //                                    
                     int width = offset + (int)g.MeasureString(itemText, Font).Width;
                     if (width > e.Bounds.Width && _listbox.HorizontalExtent < width)
                     {
@@ -1577,8 +1508,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                         return;
                     }
 
-                    // Now apply the changes to the actual value.
-                    //
                     if (_dirty)
                     {
                         object[] items = new object[_listbox.Items.Count];
@@ -1590,9 +1519,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                         Items = items;
                     }
 
-
-                    // Now destroy any existing items we had.
-                    //
                     if (_removedItems != null && _dirty)
                     {
                         object[] deadItems = _removedItems.ToArray();
@@ -1624,13 +1550,11 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
 
             /// <devdoc>
-            /// reflect any change events to the instance object
+            ///     Reflect any change events to the instance object
             /// </devdoc>
             private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
             {
-
-                // see if this is any of the items in our list...this can happen if
-                // we launched a child editor
+                // see if this is any of the items in our list...this can happen if we launched a child editor
                 if (!_dirty && _originalItems != null)
                 {
                     foreach (object item in _originalItems)
@@ -1664,7 +1588,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 _originalItems.Clear();
 
                 // Now update the list box.
-                //
                 _listbox.Items.Clear();
                 _propertyBrowser.Site = new PropertyGridSite(Context, _propertyBrowser);
                 if (EditValue != null)
@@ -1705,8 +1628,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
 
             /// <devdoc>
-            ///     Performs the actual add of new items.  This is invoked by the
-            ///     add button as well as the insert key on the list box.
+            ///     Performs the actual add of new items.  This is invoked by the add button as well as the insert key on the list box.
             /// </devdoc>
             private void PerformAdd()
             {
@@ -1714,9 +1636,8 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
 
             /// <devdoc>
-            ///     Performs a remove by deleting all items currently selected in
-            ///     the list box.  This is called by the delete button as well as
-            ///     the delete key on the list box.
+            ///     Performs a remove by deleting all items currently selected in the list box.
+            ///     This is called by the delete button as well as the delete key on the list box.
             /// </devdoc>
             private void PerformRemove()
             {
@@ -1727,8 +1648,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     SuspendEnabledUpdates();
                     try
                     {
-
-                        // single object selected or multiple ?
                         if (_listbox.SelectedItems.Count > 1)
                         {
                             ArrayList toBeDeleted = new ArrayList(_listbox.SelectedItems);
@@ -1741,7 +1660,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                         {
                             RemoveInternal((ListItem)_listbox.SelectedItem);
                         }
-                        // set the new selected index
                         if (index < _listbox.Items.Count)
                         {
                             _listbox.SelectedIndex = index;
@@ -1781,8 +1699,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     ResumeEnabledUpdates(false);
                 }
 
-                // if a property changes, invalidate the grid in case
-                // it affects the item's name.
+                // if a property changes, invalidate the grid in case it affects the item's name.
                 UpdateItemWidths(null);
                 _listbox.Invalidate();
 
@@ -1802,7 +1719,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     _editor.OnItemRemoving(item.Value);
 
                     _dirty = true;
-                    //ListItem item = (ListItem)listbox.Items[index];
 
                     if (_createdItems != null && _createdItems.Contains(item.Value))
                     {
@@ -1833,10 +1749,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                             DisplayError(ex);
                         }
                     }
-                    // othewise go through the entire list
                     UpdateItemWidths(null);
-
-
                 }
             }
             
@@ -1856,8 +1769,8 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
 
             /// <devdoc>
-            /// used to prevent flicker when playing with the list box selection
-            /// call resume when done.  Calls to UpdateEnabled will return silently until Resume is called
+            /// used to prevent flicker when playing with the list box selection call resume when done.
+            /// Calls to UpdateEnabled will return silently until Resume is called
             /// </devdoc>
             private void ResumeEnabledUpdates(bool updateNow)
             {
@@ -1875,8 +1788,8 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
             }
             /// <devdoc>
-            /// used to prevent flicker when playing with the list box selection
-            /// call resume when done.  Calls to UpdateEnabled will return silently until Resume is called
+            /// used to prevent flicker when playing with the list box selection call resume when done.
+            /// Calls to UpdateEnabled will return silently until Resume is called
             /// </devdoc>
             private void SuspendEnabledUpdates()
             {
@@ -1908,7 +1821,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
                 finally
                 {
-
                     if (cs != null)
                     {
                         cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
@@ -1951,7 +1863,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
                 finally
                 {
-
                     ResumeEnabledUpdates(true);
                 }
 
@@ -1980,9 +1891,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     object[] items;
 
                     // If we are to create new instances from the items, then we must wrap them in an outer object.
-                    // otherwise, the user will be presented with a batch of read only properties, which isn't terribly
-                    // useful.
-                    //
+                    // otherwise, the user will be presented with a batch of read only properties, which isn't terribly useful.
                     if (IsImmutable)
                     {
                         items = new object[] { new SelectionWrapper(CollectionType, CollectionItemType, _listbox, _listbox.SelectedItems) };
@@ -2038,9 +1947,8 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
 
             /// <devdoc>
-            ///     This class implements a custom type descriptor that is used to provide properties for the set of
-            ///     selected items in the collection editor.  It provides a single property that is equivalent
-            ///     to the editor's collection item type.
+            ///     This class implements a custom type descriptor that is used to provide properties for the set of selected items in the collection editor.
+            ///     It provides a single property that is equivalent to the editor's collection item type.
             /// </devdoc>
             private class SelectionWrapper : PropertyDescriptor, ICustomTypeDescriptor
             {
@@ -2052,9 +1960,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 private object _value;
 
                 public SelectionWrapper(Type collectionType, Type collectionItemType, Control control, ICollection collection) :
-                base("Value",
-                     new Attribute[] { new CategoryAttribute(collectionItemType.Name) }
-                    )
+                base("Value", new Attribute[] { new CategoryAttribute(collectionItemType.Name) })
                 {
                     _collectionType = collectionType;
                     _collectionItemType = collectionItemType;
@@ -2065,9 +1971,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                     Debug.Assert(collection.Count > 0, "We should only be wrapped if there is a selection");
                     _value = this;
 
-                    // In a multiselect case, see if the values are different.  If so,
-                    // NULL our value to represent indeterminate.
-                    //
+                    // In a multiselect case, see if the values are different.  If so, NULL our value to represent indeterminate.
                     foreach (ListItem li in collection)
                     {
                         if (_value == this)
@@ -2139,8 +2043,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
 
                 /// <devdoc>
-                ///    When overridden in a derived class, indicates whether resetting the <paramref name="component "/>will change the value of the
-                ///    <paramref name="component"/>.
+                ///    When overridden in a derived class, indicates whether resetting the <paramref name="component "/>will change the value of the <paramref name="component"/>.
                 /// </devdoc>
                 public override bool CanResetValue(object component)
                 {
@@ -2194,8 +2097,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
 
                 /// <devdoc>
-                ///     Retrieves the class name for this object.  If null is returned,
-                ///     the type name is used.
+                ///     Retrieves the class name for this object.  If null is returned, the type name is used.
                 /// </devdoc>
                 string ICustomTypeDescriptor.GetClassName()
                 {
@@ -2243,10 +2145,9 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
 
                 /// <devdoc>
-                ///     Retrieves an array of events that the given component instance
-                ///     provides.  This may differ from the set of events the class
-                ///     provides.  If the component is sited, the site may add or remove
-                ///     additional events.
+                ///     Retrieves an array of events that the given component instance provides.
+                ///     This may differ from the set of events the class provides.
+                ///     If the component is sited, the site may add or remove additional events.
                 /// </devdoc>
                 EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
                 {
@@ -2254,11 +2155,10 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
 
                 /// <devdoc>
-                ///     Retrieves an array of events that the given component instance
-                ///     provides.  This may differ from the set of events the class
-                ///     provides.  If the component is sited, the site may add or remove
-                ///     additional events.  The returned array of events will be
-                ///     filtered by the given set of attributes.
+                ///     Retrieves an array of events that the given component instance provides.
+                ///     This may differ from the set of events the class provides.
+                ///     If the component is sited, the site may add or remove additional events.
+                ///     The returned array of events will be filtered by the given set of attributes.
                 /// </devdoc>
                 EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
                 {
@@ -2266,10 +2166,9 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
 
                 /// <devdoc>
-                ///     Retrieves an array of properties that the given component instance
-                ///     provides.  This may differ from the set of properties the class
-                ///     provides.  If the component is sited, the site may add or remove
-                ///     additional properties.
+                ///     Retrieves an array of properties that the given component instance provides.
+                ///     This may differ from the set of properties the class provides.
+                ///     If the component is sited, the site may add or remove additional properties.
                 /// </devdoc>
                 PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
                 {
@@ -2277,11 +2176,10 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
 
                 /// <devdoc>
-                ///     Retrieves an array of properties that the given component instance
-                ///     provides.  This may differ from the set of properties the class
-                ///     provides.  If the component is sited, the site may add or remove
-                ///     additional properties.  The returned array of properties will be
-                ///     filtered by the given set of attributes.
+                ///     Retrieves an array of properties that the given component instance provides.
+                ///     This may differ from the set of properties the class provides.
+                ///     If the component is sited, the site may add or remove additional properties.
+                ///     The returned array of properties will be filtered by the given set of attributes.
                 /// </devdoc>
                 PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
                 {
@@ -2289,11 +2187,10 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
 
                 /// <devdoc>
-                ///     Retrieves the object that directly depends on this value being edited.  This is
-                ///     generally the object that is required for the PropertyDescriptor's GetValue and SetValue
-                ///     methods.  If 'null' is passed for the PropertyDescriptor, the ICustomComponent
-                ///     descripotor implemementation should return the default object, that is the main
-                ///     object that exposes the properties and attributes,
+                ///     Retrieves the object that directly depends on this value being edited.
+                ///     This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
+                ///     If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object, 
+                ///     that is the main object that exposes the properties and attributes
                 /// </devdoc>
                 object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
                 {
@@ -2302,8 +2199,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
 
             /// <devdoc>
-            ///      ListItem class.  This is a single entry in our list box.  It contains the value we're editing
-            ///      as well as accessors for the type converter and UI editor.
+            ///      ListItem class.  This is a single entry in our list box.  It contains the value we're editing as well as accessors for the type converter and UI editor.
             /// </devdoc>
             private class ListItem
             {
@@ -2359,8 +2255,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             }
 
             /// <devdoc>
-            ///      Menu items we attach to the drop down menu if there are multiple
-            ///      types the collection editor can create.
+            ///      Menu items we attach to the drop down menu if there are multiple types the collection editor can create.
             /// </devdoc>
             private class TypeMenuItem : ToolStripMenuItem
             {
@@ -2717,7 +2612,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
             protected abstract void OnEditValueChanged();
         }
 
-
         internal class PropertyGridSite : ISite
         {
 
@@ -2731,27 +2625,21 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 _comp = comp;
             }
 
-            /** The component sited by this component site. */
             /// <devdoc>
             ///    When implemented by a class, gets the component associated with the <see cref='System.ComponentModel.ISite'/>.
             /// </devdoc>
             public IComponent Component { get { return _comp; } }
 
-            /** The container in which the component is sited. */
             /// <devdoc>
             /// When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.
             /// </devdoc>
             public IContainer Container { get { return null; } }
 
-            /** Indicates whether the component is in design mode. */
             /// <devdoc>
             ///    When implemented by a class, determines whether the component is in design mode.
             /// </devdoc>
             public bool DesignMode { get { return false; } }
 
-            /** 
-             * The name of the component.
-             */
             /// <devdoc>
             ///    When implemented by a class, gets or sets the name of the component associated with the <see cref='System.ComponentModel.ISite'/>.
             /// </devdoc>
@@ -2777,7 +2665,6 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
                 }
                 return null;
             }
-
         }
     }
 }
