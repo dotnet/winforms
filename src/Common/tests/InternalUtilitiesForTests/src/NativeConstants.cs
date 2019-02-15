@@ -7,7 +7,6 @@ namespace System
     public static class NativeConstants
     {
         public const int UIA_ControlTypePropertyId = 30003;
-
         public const int UIA_ThumbControlTypeId = 50027;
     }
 }
