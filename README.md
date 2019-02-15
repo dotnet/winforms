@@ -17,7 +17,7 @@ This repository contains WinForms for .NET Core. It does not contain the .NET Fr
 
 ## Getting started
 
-* [.NET Core SDK 3.0 Preview][.net-core-sdk-3.0-preview]
+* [.NET Core 3.0 SDK Preview][.net-core-3.0-sdk-preview]
 * [Getting started instructions][getting-started]
 * [Contributing guide][contributing]
 * [Porting guide][porting-guidelines]
@@ -85,7 +85,7 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [developing]: Documentation/developer-guide.md
 
 [wpf]: https://github.com/dotnet/wpf
-[.net-core-sdk-3.0-preview]: https://dotnet.microsoft.com/download/dotnet-core/3.0
+[.net-core-3.0-sdk-preview]: https://dotnet.microsoft.com/download/dotnet-core/3.0
 [corefx-contributing]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md
 [issue-new]: https://github.com/dotnet/winforms/issues/new
 [developer-community]: https://developercommunity.visualstudio.com/spaces/61/index.html
