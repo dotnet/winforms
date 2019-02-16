@@ -11210,6 +11210,11 @@ For more information, contact your system administrator or the application autho
         <target state="translated">Zeigt an, ob sich der Strukturknoten in einem aktivierten Zustand befindet.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">Der Parameter muss den Typ TreeNode haben.</target>

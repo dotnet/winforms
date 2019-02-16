@@ -11210,6 +11210,11 @@ For more information, contact your system administrator or the application autho
         <target state="translated">指示树节点是否处于选中状态。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">参数必须是 TreeNode 类型。</target>
