@@ -198,17 +198,17 @@ namespace System.Windows.Forms {
             return GetListItemProperties(dataSource, listAccessors);
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemType"]/*' />
-        public static Type GetListItemType(object list) {
-            if (list == null) {
+        public static Type GetListItemType(object list)
+        {
+            if (list == null)
+            {
                 return null;
             }
 
-            Type itemType = null;
-
             // special case for IListSource
-            if ((list is Type) && (typeof(IListSource).IsAssignableFrom(list as Type))) {
-                list = CreateInstanceOfType(list as Type);
+            if (list is Type listAsType && typeof(IListSource).IsAssignableFrom(listAsType))
+            {
+                list = CreateInstanceOfType(listAsType);
             }
 
             list = GetList(list);
@@ -220,24 +220,22 @@ namespace System.Windows.Forms {
             Type listType = (list is Type) ? (list as Type) : list.GetType();
             object listInstance = (list is Type) ? null : list;
 
-            if (typeof(Array).IsAssignableFrom(listType)) {
-                itemType = listType.GetElementType();
-            }
-            else {
-                PropertyInfo indexer = GetTypedIndexer(listType);
-
-                if (indexer != null) {
-                    itemType = indexer.PropertyType;
-                }
-                else if (listInstance is IEnumerable) {
-                    itemType = GetListItemTypeByEnumerable(listInstance as IEnumerable);
-                }
-                else {
-                    itemType = listType;
-                }
+            if (typeof(Array).IsAssignableFrom(listType))
+            {
+                return listType.GetElementType();
             }
 
-            return itemType;
+            PropertyInfo indexer = GetTypedIndexer(listType);
+            if (indexer != null)
+            {
+                return indexer.PropertyType;
+            }
+            else if (listInstance is IEnumerable enumerable)
+            {
+                return GetListItemTypeByEnumerable(enumerable);
+            }
+            
+            return listType;
         }
 
         // Create an object of the given type. Throw an exception if this fails.
@@ -424,10 +422,6 @@ namespace System.Windows.Forms {
             // At this point, things can be simplified because:
             //   We know target is _not_ a list
             //   We have an instance
-
-            PropertyDescriptorCollection pdc;
-
-            // Get the value of the first listAccessor
             if (listAccessors.Length > startIndex)
             {
                 if (listAccessors[startIndex] == null)
@@ -438,31 +432,31 @@ namespace System.Windows.Forms {
                 // Get the value (e.g. given Foo with property Bar, this gets Foo.Bar)
                 object value = listAccessors[startIndex].GetValue(target);
 
-                if (value == null) {
+                if (value == null)
+                {
                     // It's null - we can't walk down by Instance so use Type
-                    pdc = GetListItemPropertiesByType(listAccessors[startIndex].PropertyType, listAccessors, startIndex);
+                    return GetListItemPropertiesByType(listAccessors[startIndex].PropertyType, listAccessors, startIndex);
                 }
-                else {
+                else
+                {
                     PropertyDescriptor[] accessors = null;
 
-                    if (listAccessors.Length > startIndex + 1) {
+                    if (listAccessors.Length > startIndex + 1)
+                    {
                         int accessorsCount = listAccessors.Length - (startIndex + 1);
                         accessors = new PropertyDescriptor[accessorsCount];
-                        for (int i = 0; i < accessorsCount; ++i) {
+                        for (int i = 0; i < accessorsCount; ++i)
+                        {
                             accessors[i] = listAccessors[startIndex + 1 + i];
                         }
                     }
 
                     // We've got the instance of Bar - now get it's shape
-                    pdc = GetListItemProperties(value, accessors);
+                    return GetListItemProperties(value, accessors);
                 }
             }
-            else {
-                // Fallback to TypeDescriptor
-                pdc = TypeDescriptor.GetProperties(target, BrowsableAttributeList);
-            }
-
-            return pdc;
+            
+            return TypeDescriptor.GetProperties(target, BrowsableAttributeList);
         }
 
         // returns true if 'type' can be treated as a list
