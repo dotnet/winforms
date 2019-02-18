@@ -1611,14 +1611,9 @@ namespace System.Windows.Forms {
         {
             TreeNode node = this;
 
-            if (candidateToAdd == this)
+            while (node != null)
             {
-                throw new ArgumentException(SR.TreeNodeCircularReference);
-            }
-
-            while (node.parent != null)
-            {
-                if (node.parent == candidateToAdd)
+                if (node == candidateToAdd)
                 {
                     throw new ArgumentException(SR.TreeNodeCircularReference);
                 }
