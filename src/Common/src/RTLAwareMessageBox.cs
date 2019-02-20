@@ -5,9 +5,9 @@
 
 namespace System.Windows.Forms {
     #if WINFORMS_NAMESPACE
-        using System;
+        using System = System;
     #else
-        using System.Windows.Forms.Design.Editors.System;
+        using System = System.Windows.Forms.Design.Editors.System;
     #endif
 
     using System.Windows.Forms;
