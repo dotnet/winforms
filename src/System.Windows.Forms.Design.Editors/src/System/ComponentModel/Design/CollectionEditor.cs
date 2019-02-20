@@ -16,9 +16,9 @@ using System.Globalization;
 
 namespace System.Windows.Forms.Design.Editors
 {
-    /// <devdoc>
+    /// <summary>
     ///    Provides a generic editor for most any collection.
-    /// </devdoc>
+    /// </summary>
     public class CollectionEditor : UITypeEditor
     { 
         private readonly Type _type;
@@ -29,24 +29,24 @@ namespace System.Windows.Forms.Design.Editors
         private bool _ignoreChangedEvents;
         private bool _ignoreChangingEvents;
 
-        /// <devdoc>
+        /// <summary>
         ///       Useful for derived classes to do processing when cancelling changes
-        /// </devdoc>
+        /// </summary>
         protected virtual void CancelChanges()
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor'/> class using the specified collection type.
-        /// </devdoc>
+        /// </summary>
         public CollectionEditor(Type type)
         {
             _type = type;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Gets or sets the data type of each item in the collection.
-        /// </devdoc>
+        /// </summary>
         protected Type CollectionItemType
         {
             get
@@ -59,9 +59,9 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Gets or sets the type of the collection.
-        /// </devdoc>
+        /// </summary>
         protected Type CollectionType
         {
             get
@@ -70,9 +70,9 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Gets or sets a type descriptor that indicates the current context.
-        /// </devdoc>
+        /// </summary>
         protected ITypeDescriptorContext Context
         {
             get
@@ -81,9 +81,9 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Gets or sets the available item types that can be created for this collection.
-        /// </devdoc>
+        /// </summary>
         protected Type[] NewItemTypes
         {
             get
@@ -96,9 +96,9 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
-        /// </devdoc>
+        /// </summary>
         protected virtual string HelpTopic
         {
             get
@@ -107,9 +107,9 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Gets or sets a value indicating whether original members of the collection can be removed.
-        /// </devdoc>
+        /// </summary>
         protected virtual bool CanRemoveInstance(object value)
         {
             if (value is IComponent comp)
@@ -125,34 +125,34 @@ namespace System.Windows.Forms.Design.Editors
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Gets or sets a value indicating whether multiple collection members can be selected.
-        /// </devdoc>
+        /// </summary>
         protected virtual bool CanSelectMultipleInstances()
         {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Creates a new form to show the current collection.
-        /// </devdoc>
+        /// </summary>
         protected virtual CollectionForm CreateCollectionForm()
         {
             return new CollectionEditorCollectionForm(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Creates a new instance of the specified collection item type.
-        /// </devdoc>
+        /// </summary>
         protected virtual object CreateInstance(Type itemType)
         {
             return CollectionEditor.CreateInstance(itemType, (IDesignerHost)GetService(typeof(IDesignerHost)), null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       This Function gets the object from the givem object. The input is an arrayList returned as an Object.
         ///       The output is a arraylist which contains the individual objects that need to be created.
-        /// </devdoc>
+        /// </summary>
         protected virtual IList GetObjectsFromInstance(object instance)
         {
             ArrayList ret = new ArrayList
@@ -192,9 +192,9 @@ namespace System.Windows.Forms.Design.Editors
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the display text for the given list item.
-        /// </devdoc>
+        /// </summary>
         protected virtual string GetDisplayText(object value)
         {
             string text;
@@ -234,9 +234,9 @@ namespace System.Windows.Forms.Design.Editors
             return text;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Gets an instance of the data type this collection contains.
-        /// </devdoc>
+        /// </summary>
         protected virtual Type CreateCollectionItemType()
         {
             PropertyInfo[] props = TypeDescriptor.GetReflectionType(CollectionType).GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -253,17 +253,17 @@ namespace System.Windows.Forms.Design.Editors
             return typeof(object);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Gets the data types this collection editor can create.
-        /// </devdoc>
+        /// </summary>
         protected virtual Type[] CreateNewItemTypes()
         {
             return new Type[] { CollectionItemType };
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Destroys the specified instance of the object.
-        /// </devdoc>
+        /// </summary>
         protected virtual void DestroyInstance(object instance)
         {
             if (instance is IComponent compInstance)
@@ -287,9 +287,9 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Edits the specified object value using the editor style  provided by <see cref='System.ComponentModel.Design.CollectionEditor.GetEditStyle'/>.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -318,7 +318,7 @@ namespace System.Windows.Forms.Design.Editors
                         {
                             if (host != null)
                             {
-                                trans = host.CreateTransaction(System.SR.GetResourceString(System.SR.CollectionEditorUndoBatchDesc, CollectionItemType.Name));
+                                trans = host.CreateTransaction(System.SR.GetFormattedString(System.SR.CollectionEditorUndoBatchDesc, CollectionItemType.Name));
                             }
                         }
                         catch (CheckoutException cxe)
@@ -375,9 +375,9 @@ namespace System.Windows.Forms.Design.Editors
             return value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Gets the editing style of the Edit method.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -415,9 +415,9 @@ namespace System.Windows.Forms.Design.Editors
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Converts the specified collection into an array of objects.
-        /// </devdoc>
+        /// </summary>
         protected virtual object[] GetItems(object editValue)
         {
             if (editValue != null)
@@ -442,9 +442,9 @@ namespace System.Windows.Forms.Design.Editors
             return Array.Empty<object>();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Gets the requested service, if it is available.
-        /// </devdoc>
+        /// </summary>
         protected object GetService(Type serviceType)
         {
             if (Context != null)
@@ -454,9 +454,9 @@ namespace System.Windows.Forms.Design.Editors
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Reflect any change events to the instance object
-        /// </devdoc>
+        /// </summary>
         private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
         {
             if (!_ignoreChangedEvents && sender != Context.Instance)
@@ -466,9 +466,9 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Reflect any changed events to the instance object
-        /// </devdoc>
+        /// </summary>
         private void OnComponentChanging(object sender, ComponentChangingEventArgs e)
         {
             if (!_ignoreChangingEvents && sender != Context.Instance)
@@ -478,16 +478,16 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Removes the item from the column header from the listview column header collection
-        /// </devdoc>
+        /// </summary>
         internal virtual void OnItemRemoving(object item)
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Sets the specified collection to have the specified array of items.
-        /// </devdoc>
+        /// </summary>
         protected virtual object SetItems(object editValue, object[] value)
         {
             if (editValue != null)
@@ -506,9 +506,9 @@ namespace System.Windows.Forms.Design.Editors
             return editValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Called when the help button is clicked.
-        /// </devdoc>
+        /// </summary>
         protected virtual void ShowHelp()
         {
             if (GetService(typeof(IHelpService)) is IHelpService helpService)
@@ -819,9 +819,9 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      This is the collection editor's default implementation of a collection form.
-        /// </devdoc>
+        /// </summary>
         private class CollectionEditorCollectionForm : CollectionForm
         {
 
@@ -864,7 +864,7 @@ namespace System.Windows.Forms.Design.Editors
                     DpiHelper.ScaleButtonImageLogicalToDevice(_downButton);
                     DpiHelper.ScaleButtonImageLogicalToDevice(_upButton);
                 }
-                Text = System.SR.GetResourceString(System.SR.CollectionEditorCaption, CollectionItemType.Name);
+                Text = System.SR.GetFormattedString(System.SR.CollectionEditorCaption, CollectionItemType.Name);
 
                 HookEvents();
 
@@ -908,17 +908,17 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Adds a new element to the collection.
-            /// </devdoc>
+            /// </summary>
             private void AddButton_click(object sender, EventArgs e)
             {
                 PerformAdd();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Processes a click of the drop down type menu.  This creates a new instance.
-            /// </devdoc>
+            /// </summary>
             private void AddDownMenu_click(object sender, EventArgs e)
             {
                 if (sender is TypeMenuItem typeMenuItem)
@@ -927,9 +927,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///      This Function adds the individual objects to the ListBox.
-            /// </devdoc>
+            /// </summary>
             private void AddItems(IList instances)
             {
 
@@ -998,12 +998,12 @@ namespace System.Windows.Forms.Design.Editors
                 _listbox.ItemHeight = Font.Height + SystemInformation.BorderSize.Width * 2;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Determines whether removal of a specific list item should be permitted.
             ///     Used to determine enabled/disabled state of the Remove (X) button.
             ///     Items added after editor was opened may always be removed.
             ///     Items that existed before editor was opened require a call to CanRemoveInstance.
-            /// </devdoc>
+            /// </summary>
             private bool AllowRemoveInstance(object value)
             {
                 if (_createdItems != null && _createdItems.Contains(value))
@@ -1041,9 +1041,9 @@ namespace System.Windows.Forms.Design.Editors
                 return (int)Math.Ceiling(size.Width) + w + pic + SystemInformation.BorderSize.Width * 4;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Aborts changes made in the editor.
-            /// </devdoc>
+            /// </summary>
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void CancelButton_click(object sender, EventArgs e)
             {
@@ -1110,9 +1110,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///      Performs a create instance and then adds the instance to the list box.
-            /// </devdoc>
+            /// </summary>
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void CreateAndAddInstance(Type type)
             {
@@ -1132,9 +1132,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Moves the selected item down one.
-            /// </devdoc>
+            /// </summary>
             private void DownButton_click(object sender, EventArgs e)
             {
                 try
@@ -1180,12 +1180,12 @@ namespace System.Windows.Forms.Design.Editors
                 _editor.ShowHelp();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the display text for the given list item (if any). The item determines its own display text
             ///     through its ToString() method, which delegates to the GetDisplayText() override on the parent CollectionEditor.
             ///     This means in theory that the text can change at any time (ie. its not fixed when the item is added to the list).
             ///     The item returns its display text through ToString() so that the same text will be reported to Accessibility clients.
-            /// </devdoc>
+            /// </summary>
             private string GetDisplayText(ListItem item)
             {
                 return (item == null) ? string.Empty : item.ToString();
@@ -1357,9 +1357,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This draws a row of the listbox.
-            /// </devdoc>
+            /// </summary>
             private void Listbox_drawItem(object sender, DrawItemEventArgs e)
             {
                 if (e.Index != -1)
@@ -1454,9 +1454,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Handles keypress events for the list box.
-            /// </devdoc>
+            /// </summary>
             private void Listbox_keyDown(object sender, KeyEventArgs kevent)
             {
                 switch (kevent.KeyData)
@@ -1470,17 +1470,17 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Event that fires when the selected list box index changes.
-            /// </devdoc>
+            /// </summary>
             private void Listbox_selectedIndexChanged(object sender, EventArgs e)
             {
                 UpdateEnabled();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Event that fires when the list box's window handle is created.
-            /// </devdoc>
+            /// </summary>
             private void Listbox_handleCreated(object sender, EventArgs e)
             {
                 // VSWhidbey#384112: Since we no longer perform width calculations prior to handle
@@ -1488,9 +1488,9 @@ namespace System.Windows.Forms.Design.Editors
                 UpdateItemWidths(null);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Commits the changes to the editor.
-            /// </devdoc>
+            /// </summary>
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void OKButton_click(object sender, EventArgs e)
             {
@@ -1545,9 +1545,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Reflect any change events to the instance object
-            /// </devdoc>
+            /// </summary>
             private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
             {
                 // see if this is any of the items in our list...this can happen if we launched a child editor
@@ -1565,10 +1565,10 @@ namespace System.Windows.Forms.Design.Editors
 
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      This is called when the value property in the CollectionForm has changed.
             ///      In it you should update your user interface to reflect the current value.
-            /// </devdoc>
+            /// </summary>
             protected override void OnEditValueChanged()
             {
                 if (!Visible)
@@ -1623,18 +1623,18 @@ namespace System.Windows.Forms.Design.Editors
                 AdjustListBoxItemHeight();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Performs the actual add of new items.  This is invoked by the add button as well as the insert key on the list box.
-            /// </devdoc>
+            /// </summary>
             private void PerformAdd()
             {
                 CreateAndAddInstance(NewItemTypes[0]);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Performs a remove by deleting all items currently selected in the list box.
             ///     This is called by the delete button as well as the delete key on the list box.
-            /// </devdoc>
+            /// </summary>
             private void PerformRemove()
             {
                 int index = _listbox.SelectedIndex;
@@ -1672,9 +1672,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      When something in the properties window changes, we update pertinent text here.
-            /// </devdoc>
+            /// </summary>
             private void PropertyGrid_propertyValueChanged(object sender, PropertyValueChangedEventArgs e)
             {
 
@@ -1700,12 +1700,12 @@ namespace System.Windows.Forms.Design.Editors
                 _listbox.Invalidate();
 
                 // also update the string above the grid.
-                _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
+                _propertiesLabel.Text = System.SR.GetFormattedString(System.SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Used to actually remove the items, one by one.
-            /// </devdoc>
+            /// </summary>
             [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private void RemoveInternal(ListItem item)
             {
@@ -1737,7 +1737,7 @@ namespace System.Windows.Forms.Design.Editors
                             }
                             else
                             {
-                                throw new Exception(System.SR.GetResourceString(System.SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
+                                throw new Exception(System.SR.GetFormattedString(System.SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
                             }
                         }
                         catch (Exception ex)
@@ -1749,9 +1749,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///      Removes the selected item.
-            /// </devdoc>
+            /// </summary>
             private void RemoveButton_click(object sender, EventArgs e)
             {
                 PerformRemove();
@@ -1764,10 +1764,10 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// used to prevent flicker when playing with the list box selection call resume when done.
             /// Calls to UpdateEnabled will return silently until Resume is called
-            /// </devdoc>
+            /// </summary>
             private void ResumeEnabledUpdates(bool updateNow)
             {
                 _suspendEnabledCount--;
@@ -1783,18 +1783,18 @@ namespace System.Windows.Forms.Design.Editors
                     BeginInvoke(new MethodInvoker(UpdateEnabled));
                 }
             }
-            /// <devdoc>
+            /// <summary>
             /// used to prevent flicker when playing with the list box selection call resume when done.
             /// Calls to UpdateEnabled will return silently until Resume is called
-            /// </devdoc>
+            /// </summary>
             private void SuspendEnabledUpdates()
             {
                 _suspendEnabledCount++;
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Called to show the dialog via the IWindowsFormsEditorService 
-            /// </devdoc>
+            /// </summary>
             protected internal override DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
                 IComponentChangeService cs = null;
@@ -1825,9 +1825,9 @@ namespace System.Windows.Forms.Design.Editors
                 return result;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Moves an item up one in the list box.
-            /// </devdoc>
+            /// </summary>
             private void UpButton_click(object sender, EventArgs e)
             {
                 int index = _listbox.SelectedIndex;
@@ -1864,9 +1864,9 @@ namespace System.Windows.Forms.Design.Editors
 
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Updates the set of enabled buttons.
-            /// </devdoc>
+            /// </summary>
             private void UpdateEnabled()
             {
                 if (_suspendEnabledCount > 0)
@@ -1905,7 +1905,7 @@ namespace System.Windows.Forms.Design.Editors
                     if ((selectedItemCount == 1) || (selectedItemCount == -1))
                     {
                         // handle both single select listboxes and a single item selected in a multi-select listbox
-                        _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
+                        _propertiesLabel.Text = System.SR.GetFormattedString(System.SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
                     }
                     else
                     {
@@ -1934,18 +1934,18 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      When the form is first shown, update controls due to the edit value changes which happened when the form is invisible.
-            /// </devdoc>
+            /// </summary>
             private void Form_Shown(object sender, EventArgs e)
             {
                 OnEditValueChanged();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This class implements a custom type descriptor that is used to provide properties for the set of selected items in the collection editor.
             ///     It provides a single property that is equivalent to the editor's collection item type.
-            /// </devdoc>
+            /// </summary>
             private class SelectionWrapper : PropertyDescriptor, ICustomTypeDescriptor
             {
                 private readonly Type _collectionType;
@@ -2005,9 +2005,9 @@ namespace System.Windows.Forms.Design.Editors
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///       When overridden in a derived class, gets the type of the component this property is bound to.
-                /// </devdoc>
+                /// </summary>
                 public override Type ComponentType
                 {
                     get
@@ -2016,9 +2016,9 @@ namespace System.Windows.Forms.Design.Editors
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///       When overridden in a derived class, gets a value indicating whether this property is read-only.
-                /// </devdoc>
+                /// </summary>
                 public override bool IsReadOnly
                 {
                     get
@@ -2027,9 +2027,9 @@ namespace System.Windows.Forms.Design.Editors
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///       When overridden in a derived class, gets the type of the property.
-                /// </devdoc>
+                /// </summary>
                 public override Type PropertyType
                 {
                     get
@@ -2038,32 +2038,32 @@ namespace System.Windows.Forms.Design.Editors
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///    When overridden in a derived class, indicates whether resetting the <paramref name="component "/>will change the value of the <paramref name="component"/>.
-                /// </devdoc>
+                /// </summary>
                 public override bool CanResetValue(object component)
                 {
                     return false;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///       When overridden in a derived class, gets the current value of the property on a component.
-                /// </devdoc>
+                /// </summary>
                 public override object GetValue(object component)
                 {
                     return _value;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///       When overridden in a derived class, resets the value for this property of the component.
-                /// </devdoc>
+                /// </summary>
                 public override void ResetValue(object component)
                 {
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///       When overridden in a derived class, sets the value of the component to a different value.
-                /// </devdoc>
+                /// </summary>
                 public override void SetValue(object component, object value)
                 {
                     _value = value;
@@ -2076,127 +2076,127 @@ namespace System.Windows.Forms.Design.Editors
                     OnValueChanged(component, EventArgs.Empty);
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///       When overridden in a derived class, indicates whether the value of this property needs to be persisted.
-                /// </devdoc>
+                /// </summary>
                 public override bool ShouldSerializeValue(object component)
                 {
                     return false;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves an array of member attributes for the given object.
-                /// </devdoc>
+                /// </summary>
                 AttributeCollection ICustomTypeDescriptor.GetAttributes()
                 {
                     return TypeDescriptor.GetAttributes(_collectionItemType);
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves the class name for this object.  If null is returned, the type name is used.
-                /// </devdoc>
+                /// </summary>
                 string ICustomTypeDescriptor.GetClassName()
                 {
                     return _collectionItemType.Name;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves the name for this object.  If null is returned, the default is used.
-                /// </devdoc>
+                /// </summary>
                 string ICustomTypeDescriptor.GetComponentName()
                 {
                     return null;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///      Retrieves the type converter for this object.
-                /// </devdoc>
+                /// </summary>
                 TypeConverter ICustomTypeDescriptor.GetConverter()
                 {
                     return null;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves the default event.
-                /// </devdoc>
+                /// </summary>
                 EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
                 {
                     return null;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves the default property.
-                /// </devdoc>
+                /// </summary>
                 PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
                 {
                     return this;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///      Retrieves the an editor for this object.
-                /// </devdoc>
+                /// </summary>
                 object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
                 {
                     return null;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves an array of events that the given component instance provides.
                 ///     This may differ from the set of events the class provides.
                 ///     If the component is sited, the site may add or remove additional events.
-                /// </devdoc>
+                /// </summary>
                 EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
                 {
                     return EventDescriptorCollection.Empty;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves an array of events that the given component instance provides.
                 ///     This may differ from the set of events the class provides.
                 ///     If the component is sited, the site may add or remove additional events.
                 ///     The returned array of events will be filtered by the given set of attributes.
-                /// </devdoc>
+                /// </summary>
                 EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
                 {
                     return EventDescriptorCollection.Empty;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves an array of properties that the given component instance provides.
                 ///     This may differ from the set of properties the class provides.
                 ///     If the component is sited, the site may add or remove additional properties.
-                /// </devdoc>
+                /// </summary>
                 PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
                 {
                     return _properties;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves an array of properties that the given component instance provides.
                 ///     This may differ from the set of properties the class provides.
                 ///     If the component is sited, the site may add or remove additional properties.
                 ///     The returned array of properties will be filtered by the given set of attributes.
-                /// </devdoc>
+                /// </summary>
                 PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
                 {
                     return _properties;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves the object that directly depends on this value being edited.
                 ///     This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
                 ///     If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object, 
                 ///     that is the main object that exposes the properties and attributes
-                /// </devdoc>
+                /// </summary>
                 object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
                 {
                     return this;
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      ListItem class.  This is a single entry in our list box.  It contains the value we're editing as well as accessors for the type converter and UI editor.
-            /// </devdoc>
+            /// </summary>
             private class ListItem
             {
                 private object _value;
@@ -2250,9 +2250,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Menu items we attach to the drop down menu if there are multiple types the collection editor can create.
-            /// </devdoc>
+            /// </summary>
             private class TypeMenuItem : ToolStripMenuItem
             {
                 readonly Type _itemType;
@@ -2273,9 +2273,9 @@ namespace System.Windows.Forms.Design.Editors
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      List box filled with ListItem objects representing the collection.
-        /// </devdoc>
+        /// </summary>
         internal class FilterListBox : ListBox
         {
             private PropertyGrid _grid;
@@ -2370,9 +2370,9 @@ namespace System.Windows.Forms.Design.Editors
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       The <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> provides a modal dialog for editing the contents of a collection.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors")] //breaking change
         protected abstract class CollectionForm : Form
         {
@@ -2387,17 +2387,17 @@ namespace System.Windows.Forms.Design.Editors
             private const short EditableYes = 1;
             private const short EditableNo = 2;
             
-            /// <devdoc>
+            /// <summary>
             ///       Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> class.
-            /// </devdoc>
+            /// </summary>
             public CollectionForm(CollectionEditor editor)
             {
                 _editor = editor;
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Gets or sets the data type of each item in the collection.
-            /// </devdoc>
+            /// </summary>
             protected Type CollectionItemType
             {
                 get
@@ -2406,9 +2406,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Gets or sets the type of the collection.
-            /// </devdoc>
+            /// </summary>
             protected Type CollectionType
             {
                 get
@@ -2450,9 +2450,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Gets or sets a type descriptor that indicates the current context.
-            /// </devdoc>
+            /// </summary>
             protected ITypeDescriptorContext Context
             {
                 get
@@ -2461,9 +2461,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///    Gets or sets the value of the item being edited.
-            /// </devdoc>
+            /// </summary>
             public object EditValue
             {
                 get
@@ -2477,9 +2477,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Gets or sets the array of items this form is to display.
-            /// </devdoc>
+            /// </summary>
             protected object[] Items
             {
                 get
@@ -2520,9 +2520,9 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Gets or sets the available item types that can be created for this collection.
-            /// </devdoc>
+            /// </summary>
             protected Type[] NewItemTypes
             {
                 get
@@ -2531,41 +2531,41 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///    Gets or sets a value indicating whether original members of the collection can be removed.
-            /// </devdoc>
+            /// </summary>
             protected bool CanRemoveInstance(object value)
             {
                 return _editor.CanRemoveInstance(value);
             }
             
-            /// <devdoc>
+            /// <summary>
             ///    Gets or sets a value indicating whether multiple collection members can be selected.
-            /// </devdoc>
+            /// </summary>
             protected virtual bool CanSelectMultipleInstances()
             {
                 return _editor.CanSelectMultipleInstances();
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Creates a new instance of the specified collection item type.
-            /// </devdoc>
+            /// </summary>
             protected object CreateInstance(Type itemType)
             {
                 return _editor.CreateInstance(itemType);
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Destroys the specified instance of the object.
-            /// </devdoc>
+            /// </summary>
             protected void DestroyInstance(object instance)
             {
                 _editor.DestroyInstance(instance);
             }
             
-            /// <devdoc>
+            /// <summary>
             ///    Displays the given exception to the user.
-            /// </devdoc>
+            /// </summary>
             protected virtual void DisplayError(Exception e)
             {
                 IUIService uis = (IUIService)GetService(typeof(IUIService));
@@ -2584,25 +2584,25 @@ namespace System.Windows.Forms.Design.Editors
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Gets the requested service, if it is available.
-            /// </devdoc>
+            /// </summary>
             protected override object GetService(Type serviceType)
             {
                 return _editor.GetService(serviceType);
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       Called to show the dialog via the IWindowsFormsEditorService
-            /// </devdoc>
+            /// </summary>
             protected internal virtual DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
                 return edSvc.ShowDialog(this);
             }
             
-            /// <devdoc>
+            /// <summary>
             ///       This is called when the value property in the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> has changed.
-            /// </devdoc>
+            /// </summary>
             protected abstract void OnEditValueChanged();
         }
 
@@ -2619,24 +2619,24 @@ namespace System.Windows.Forms.Design.Editors
                 _comp = comp;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    When implemented by a class, gets the component associated with the <see cref='System.ComponentModel.ISite'/>.
-            /// </devdoc>
+            /// </summary>
             public IComponent Component { get { return _comp; } }
 
-            /// <devdoc>
+            /// <summary>
             /// When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.
-            /// </devdoc>
+            /// </summary>
             public IContainer Container { get { return null; } }
 
-            /// <devdoc>
+            /// <summary>
             ///    When implemented by a class, determines whether the component is in design mode.
-            /// </devdoc>
+            /// </summary>
             public bool DesignMode { get { return false; } }
 
-            /// <devdoc>
+            /// <summary>
             ///    When implemented by a class, gets or sets the name of the component associated with the <see cref='System.ComponentModel.ISite'/>.
-            /// </devdoc>
+            /// </summary>
             public string Name
             {
                 get { return null; }

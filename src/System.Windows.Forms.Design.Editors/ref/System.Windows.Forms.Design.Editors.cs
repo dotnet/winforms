@@ -226,7 +226,6 @@ namespace System.Windows.Forms.Design.Editors
         public class SelectorNode : TreeNode
         {
             public SelectorNode(string label, object value) : base(label) { }
-
         }
     }
 }

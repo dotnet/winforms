@@ -15,20 +15,22 @@ namespace System.Windows.Forms.Design.Editors.System
 
         internal static string GetResourceString(string resourceKey, string defaultValue = null) => ResourceManager.GetString(resourceKey, Culture);
 
+        internal static string GetFormattedString(string resourceKey, string param) => string.Format(GetResourceString(resourceKey), param);
+
         internal static string RTL => GetResourceString("RTL");
 
-        internal static string CollectionEditorCantRemoveItem = GetResourceString("CollectionEditorCantRemoveItem");
+        internal static string CollectionEditorCantRemoveItem = "CollectionEditorCantRemoveItem";
 
-        internal static string CollectionEditorCaption = GetResourceString("CollectionEditorCaption");
+        internal static string CollectionEditorCaption = "CollectionEditorCaption";
 
-        internal static string CollectionEditorInheritedReadOnlySelection = GetResourceString("CollectionEditorInheritedReadOnlySelection");
+        internal static string CollectionEditorInheritedReadOnlySelection = "CollectionEditorInheritedReadOnlySelection";
         
-        internal static string CollectionEditorProperties = GetResourceString("CollectionEditorProperties");
+        internal static string CollectionEditorProperties = "CollectionEditorProperties";
 
-        internal static string CollectionEditorPropertiesMultiSelect = GetResourceString("CollectionEditorPropertiesMultiSelect");
+        internal static string CollectionEditorPropertiesMultiSelect = "CollectionEditorPropertiesMultiSelect";
 
-        internal static string CollectionEditorPropertiesNone = GetResourceString("CollectionEditorPropertiesNone");
+        internal static string CollectionEditorPropertiesNone = "CollectionEditorPropertiesNone";
 
-        internal static string CollectionEditorUndoBatchDesc = GetResourceString("CollectionEditorUndoBatchDesc");
+        internal static string CollectionEditorUndoBatchDesc = "CollectionEditorUndoBatchDesc";
     }
 }

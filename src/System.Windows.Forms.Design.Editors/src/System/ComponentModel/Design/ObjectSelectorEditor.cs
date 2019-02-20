@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using System.Drawing.Design;
 
-namespace System.Windows.Forms.Design.Editors
+namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
 {
     [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors")]
     public abstract class ObjectSelectorEditor : UITypeEditor
@@ -61,9 +61,9 @@ namespace System.Windows.Forms.Design.Editors
             return value;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Modify a WinForms TreeView control to use the new Explorer style theme
-        /// </devdoc>
+        /// </summary>
         /// <param name="treeView">The tree view control to modify</param>
         public static void ApplyTreeViewThemeStyles(TreeView treeView)
         {
