@@ -973,6 +973,7 @@ namespace System.Windows.Forms
             try
             {
                 var span = new Span<byte>(ptr.ToPointer(), size);
+                stream.Position = 0;
                 stream.Read(span);
             }
             finally
