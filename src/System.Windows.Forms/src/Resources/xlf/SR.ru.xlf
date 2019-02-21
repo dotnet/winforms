@@ -3971,7 +3971,9 @@
         <source>Exception occurred in the DataGridView.
 
 To replace this default dialog box, handle the DataError event.</source>
-        <target state="needs-review-translation">Исключение в DataGridView.\r\n\r\nЧтобы заменить это диалоговое окно по умолчанию, обработайте событие DataError.</target>
+        <target state="translated">Исключение в DataGridView.
+
+Чтобы заменить это окно, включите обработку события DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
@@ -3980,7 +3982,11 @@ To replace this default dialog box, handle the DataError event.</source>
 {0}
 
 To replace this default dialog please handle the DataError event.</source>
-        <target state="needs-review-translation">Исключение в DataGridView:\r\n\r\n{0}\r\n\r\nЧтобы заменить это диалоговое окно по умолчанию, обработайте событие DataError.</target>
+        <target state="translated">Исключение в DataGridView:
+
+{0}
+
+Для замены этого окна по умолчанию обработайте событие DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5077,7 +5083,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
 
 {0}.</source>
-        <target state="needs-review-translation">Необрабатываемое исключение в компоненте приложения. При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу.\r\n\r\n{0}.</target>
+        <target state="translated">Необрабатываемое исключение в компоненте приложения. При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5089,7 +5097,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {0}.</source>
-        <target state="needs-review-translation">Необрабатываемое исключение в приложении. При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу. При нажатии кнопки "Выход" приложение немедленно завершит работу.\r\n\r\n{0}.</target>
+        <target state="translated">Необрабатываемое исключение в приложении. При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу. При нажатии кнопки "Выход" приложение немедленно завершит работу.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5107,21 +5117,29 @@ To replace this default dialog please handle the DataError event.</source>
 debugging. Contact the application author for more
 information.
 </source>
-        <target state="needs-review-translation">Приложение не поддерживает оперативную (JIT) отладку Windows Forms.\r\nДля получения дополнительной информации свяжитесь с разработчиком\r\nприложения.\r\n</target>
+        <target state="translated">Приложение не поддерживает оперативную (JIT) отладку Windows Forms.
+Для получения дополнительной информации свяжитесь с разработчиком
+приложения.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
         <source>Application does not support just-in-time (JIT)
 debugging. See the end of this message for details.
 </source>
-        <target state="needs-review-translation">Приложение не поддерживает оперативную (JIT)\r\nотладку. Подробная информацию приводится в конце данного сообщения.\r\n</target>
+        <target state="translated">Приложение не поддерживает оперативную (JIT)
+отладку. Подробная информацию приводится в конце данного сообщения.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
         <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Подробная информация об использовании оперативной \r\n(JIT) отладки вместо данного диалогового окна содержится в конце этого сообщения.\r\n</target>
+        <target state="translated">Подробная информация об использовании оперативной 
+(JIT) отладки вместо данного диалогового 
+окна содержится в конце этого сообщения.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5135,7 +5153,11 @@ just-in-time (JIT) debugging instead of this dialog box.
     Win32 Version: {2}
     CodeBase: {3}
 </source>
-        <target state="needs-review-translation">{0}\r\n    Версия сборки: {1}\r\n    Версия Win32: {2}\r\n    CodeBase: {3}\r\n</target>
+        <target state="translated">{0}
+    Версия сборки: {1}
+    Версия Win32: {2}
+    CodeBase: {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5147,13 +5169,16 @@ just-in-time (JIT) debugging instead of this dialog box.
         <source>
 ************** {0} **************
 </source>
-        <target state="needs-review-translation">\r\n************** {0} **************\r\n</target>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
         <source>----------------------------------------
 </source>
-        <target state="needs-review-translation">----------------------------------------\r\n</target>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
@@ -5172,7 +5197,11 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="needs-review-translation">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для выдачи соответствующего разрешения данному приложению обратитесь к системному администратору или используйте конфигуратор Microsoft .NET Framework.\r\n\r\nПри нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу.\r\n\r\n{1}.</target>
+        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для выдачи соответствующего разрешения данному приложению обратитесь к системному администратору или используйте конфигуратор Microsoft .NET Framework.
+
+При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
@@ -5181,7 +5210,11 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="needs-review-translation">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для выдачи соответствующего разрешения данному приложению обратитесь к системному администратору или используйте конфигуратор Microsoft .NET Framework.\r\n\r\nПри нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу. При нажатии кнопки "Выход" приложение немедленно завершит работу.\r\n\r\n{1}.</target>
+        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для получения соответствующего разрешения для данного приложения обратитесь к системному администратору или используйте конфигуратор Microsoft .NET Framework.
+
+При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу. При нажатии кнопки "Выход" приложение немедленно завершит работу.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5297,13 +5330,15 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FileDialogCreatePrompt">
         <source>File {0} does not exist.
 Do you want to create it?</source>
-        <target state="needs-review-translation">Файл {0} не существует.\r\nВы хотите создать его?</target>
+        <target state="translated">Файл {0} не существует.
+Создать его?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
         <source>File {0} does not exist.
 Verify that the correct file name was given.</source>
-        <target state="needs-review-translation">Файл {0} не существует.\r\nУбедитесь в правильности указанного имени файла.</target>
+        <target state="translated">Файл {0} не существует.
+Убедитесь в правильности указанного имени файла.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5324,7 +5359,8 @@ Verify that the correct file name was given.</source>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
-        <target state="needs-review-translation">Файл {0} уже существует.\r\nВы хотите заменить его?</target>
+        <target state="translated">Файл {0} уже существует.
+Заменить его?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5459,7 +5495,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
         <source>A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.</source>
-        <target state="translated">Значение, указывающее, следует ли использовать значение свойства Description как заголовок диалогового окна для диалогововых окон в стиле Vista. Это свойство не влияет на диалоговые окна в старом стиле.</target>
+        <target state="translated">Значение, указывающее, следует ли использовать значение свойства Description как заголовок диалогового окна для диалоговых окон в стиле Vista. Это свойство не влияет на диалоговые окна в старом стиле.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormAcceptButtonDescr">
@@ -5921,7 +5957,9 @@ Do you want to replace it?</source>
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
 Stack trace where the illegal operation occurred was:
 {1}"</source>
-        <target state="needs-review-translation">Недопустимая операция в нескольких потоках: попытка доступа к элементу управления "{0}" не из того потока, в котором он был создан.\r\nТрассировка стека, в котором произошла недопустимая операция:\r\n{1}"</target>
+        <target state="translated">Недопустимая операция в нескольких потоках: попытка доступа к элементу управления '{0}' не из того потока, в котором он был создан.
+Трассировка стека, в котором произошла недопустимая операция:
+{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -9313,7 +9351,9 @@ Stack trace where the illegal operation occurred was:
         <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">Окно работает в защищенном режиме. Некоторые функции пользовательского интерфейса могут быть отключены по соображениям безопасности. \r\n\r\nДля получения подробной информации свяжитесь с вашим системным администратором или автором данного приложения.</target>
+        <target state="translated">Окно работает в защищенном режиме. Некоторые функции пользовательского интерфейса могут быть отключены по соображениям безопасности. 
+
+Для получения подробной информации свяжитесь с вашим системным администратором или автором данного приложения.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
@@ -9395,14 +9435,18 @@ For more information, contact your system administrator or the application autho
         <source>{0}
 
 {1}</source>
-        <target state="needs-review-translation">{0}\r\n\r\n{1}</target>
+        <target state="translated">{0}
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityUnrestrictedText">
         <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">Окно работает в незащищенном режиме. Хотя главное окно работает в незащищенном режиме, некоторые функции могут быть отключены по соображениям безопасности. \r\n\r\nДля получения подробной информации свяжитесь с вашим системным администратором или автором данного приложения.</target>
+        <target state="translated">Окно работает в незащищенном режиме. Хотя главное окно работает в незащищенном режиме, некоторые функции могут быть отключены по соображениям безопасности. 
+
+Для получения подробной информации свяжитесь с вашим системным администратором или автором данного приложения.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityVersionColumn">
@@ -10022,7 +10066,7 @@ For more information, contact your system administrator or the application autho
       </trans-unit>
       <trans-unit id="TextBoxPlaceholderTextDescr">
         <source>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </source>
-        <target state="translated">Задает текст заполнителя PlaceholderText элемента управления TextBox. PlaceholderText отображается в элементе управления, когда свойство Text имеет значение NULL или является пустым. PlaceholderText может использоваться для информирования пользователя о том, какие входные данные ожидает элемент управления.</target>
+        <target state="translated">Задает текст заполнителя PlaceholderText для элемента управления TextBox. Текст заполнителя PlaceholderText отображается в элементе управления, когда свойство Text имеет значение NULL или является пустым. Текст заполнителя PlaceholderText можно использовать для информирования пользователя о том, какие входные данные ожидаются элементом управления. </target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxPreferredHeightDescr">
@@ -11668,13 +11712,15 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to install this application?</source>
-        <target state="needs-review-translation">Издатель не может быть проверен.\r\nВы уверены, что хотите установить данное приложение?</target>
+        <target state="translated">Издатель не может быть проверен.
+Вы уверены, что хотите установить данное приложение?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to run this application?</source>
-        <target state="needs-review-translation">Издатель не может быть проверен.\r\nВы уверены, что хотите запустить данное приложение?</target>
+        <target state="translated">Издатель не может быть проверен.
+Вы уверены, что хотите запустить данное приложение?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Publisher">
