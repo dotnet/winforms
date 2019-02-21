@@ -789,7 +789,7 @@
       </trans-unit>
       <trans-unit id="CatLayout">
         <source>Layout</source>
-        <target state="translated">版面配置</target>
+        <target state="translated">配置</target>
         <note />
       </trans-unit>
       <trans-unit id="CatMouse">
@@ -3971,7 +3971,9 @@
         <source>Exception occurred in the DataGridView.
 
 To replace this default dialog box, handle the DataError event.</source>
-        <target state="needs-review-translation">在 DataGridView 中發生例外狀況。\r\n\r\n若要取代此預設對話方塊，請處理 DataError 事件。</target>
+        <target state="translated">在 DataGridView 中發生例外狀況。
+
+若要取代此預設對話方塊，請處理 DataError 事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
@@ -3980,7 +3982,11 @@ To replace this default dialog box, handle the DataError event.</source>
 {0}
 
 To replace this default dialog please handle the DataError event.</source>
-        <target state="needs-review-translation">在 DataGridView 中發生下列例外狀況:\r\n\r\n{0}\r\n\r\n若要取代此預設對話方塊，請處理 DataError 事件。</target>
+        <target state="translated">在 DataGridView 中發生下列例外狀況:
+
+{0}
+
+若要取代此預設對話方塊，請處理 DataError 事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5077,7 +5083,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
 
 {0}.</source>
-        <target state="needs-review-translation">應用程式中的元件發生未處理的例外狀況。如果您按一下 [繼續]，應用程式會忽略此錯誤並嘗試繼續。\r\n\r\n{0}。</target>
+        <target state="translated">您的應用程式中的元件發生未處理的例外狀況。如果您按一下 [繼續]，應用程式會忽略此錯誤並嘗試繼續。
+
+{0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5089,7 +5097,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {0}.</source>
-        <target state="needs-review-translation">應用程式發生未處理的例外狀況。如果您按一下 [繼續]，應用程式會忽略錯誤並嘗試繼續。如果您按一下 [結束]，則會立即關閉應用程式。\r\n\r\n{0}。</target>
+        <target state="translated">您的應用程式發生未處理的例外狀況。如果您按一下 [繼續]，應用程式會忽略錯誤並嘗試繼續。如果您按一下 [結束]，則會立即關閉應用程式。
+
+{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5107,21 +5117,28 @@ To replace this default dialog please handle the DataError event.</source>
 debugging. Contact the application author for more
 information.
 </source>
-        <target state="needs-review-translation">應用程式不支援 Windows Forms Just-In-Time (JIT)\r\n偵錯。如需詳細\r\n資訊，請連絡應用程式的作者。\r\n</target>
+        <target state="translated">應用程式不支援 Windows Form JIT (Just-In-Time) 
+偵錯功能。如需詳細資訊，請洽詢該應用程式
+的作者。
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
         <source>Application does not support just-in-time (JIT)
 debugging. See the end of this message for details.
 </source>
-        <target state="needs-review-translation">應用程式不支援 Just-In-Time (JIT)\r\n偵錯。如需詳細資料，請參閱本訊息的結尾處。\r\n</target>
+        <target state="translated">應用程式不支援 Just-In-Time (JIT) 偵錯功能。
+如需詳細資料，請參閱本訊息結尾處。
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
         <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">如需叫用 \r\nJust-In-Time (JIT) 偵錯的詳細資料，請參閱本訊息結尾處 (而非這個對話方塊)。\r\n</target>
+        <target state="translated">如需叫用 Just-In-Time (JIT) 偵錯的詳細資料，
+請參閱本訊息結尾處 (而非這個對話方塊) 的資訊。
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5135,7 +5152,11 @@ just-in-time (JIT) debugging instead of this dialog box.
     Win32 Version: {2}
     CodeBase: {3}
 </source>
-        <target state="needs-review-translation">{0}\r\n    組件版本: {1}\r\n    Win32 版本: {2}\r\n    CodeBase: {3}\r\n</target>
+        <target state="translated">{0}
+    組件版本: {1}
+    Win32 版本: {2}
+    程式碼庫: {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5147,13 +5168,16 @@ just-in-time (JIT) debugging instead of this dialog box.
         <source>
 ************** {0} **************
 </source>
-        <target state="needs-review-translation">\r\n************** {0} **************\r\n</target>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
         <source>----------------------------------------
 </source>
-        <target state="needs-review-translation">----------------------------------------\r\n</target>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
@@ -5172,7 +5196,11 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="needs-review-translation">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請連絡您的系統管理員，或使用 Microsoft .NET Framework 組態工具。\r\n\r\n如果您按一下 [繼續]，應用程式將會略過此錯誤，然後嘗試繼續執行。\r\n\r\n{1}。</target>
+        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET Framework 組態工具進行相關的設定。
+
+如果您按一下 [繼續]，應用程式將會略過此錯誤，然後試著繼續執行。
+
+{1}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
@@ -5181,7 +5209,11 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="needs-review-translation">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請連絡您的系統管理員，或使用 Microsoft .NET Framework 組態工具。\r\n\r\n如果您按一下 [繼續]，應用程式將會略過此錯誤，然後嘗試繼續執行。如果您按一下 [結束]，應用程式就會立即關閉。\r\n\r\n{1}。</target>
+        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET Framework 組態工具進行相關的設定。
+
+如果您按一下 [繼續]，應用程式將會略過此錯誤，然後試著繼續執行。如果您按下 [結束]，應用程式將立即關閉。
+
+{1}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5297,13 +5329,15 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FileDialogCreatePrompt">
         <source>File {0} does not exist.
 Do you want to create it?</source>
-        <target state="needs-review-translation">檔案 {0} 不存在。\r\n要予以建立嗎?</target>
+        <target state="translated">檔案 {0} 不存在。
+要建立嗎?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
         <source>File {0} does not exist.
 Verify that the correct file name was given.</source>
-        <target state="needs-review-translation">檔案 {0} 不存在。\r\n請驗證已提供正確的檔案名稱。</target>
+        <target state="translated">檔案 {0} 不存在。
+請確定已經提供正確的檔名。</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5324,7 +5358,8 @@ Verify that the correct file name was given.</source>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
-        <target state="needs-review-translation">檔案 {0} 已經存在。\r\n要予以取代嗎?</target>
+        <target state="translated">檔案 {0} 已經存在。
+您要取代它嗎?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5921,7 +5956,9 @@ Do you want to replace it?</source>
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
 Stack trace where the illegal operation occurred was:
 {1}"</source>
-        <target state="needs-review-translation">跨執行緒作業無效: 存取控制項 '{0}' 時所使用的執行緒與建立控制項的執行緒不同。\r\n發生不合法作業的堆疊追蹤為:\r\n{1}"</target>
+        <target state="translated">跨執行緒作業無效: 存取控制項 '{0}' 時所使用的執行緒與建立控制項的執行緒不同。
+發生不合法作業的堆疊追蹤為:
+{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -9313,7 +9350,9 @@ Stack trace where the illegal operation occurred was:
         <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">視窗是在受限制模式中執行。基於安全性原因，可能會停用一些 UI 功能。\r\n\r\n如需詳細資訊，請連絡您的系統管理員或應用程式作者。</target>
+        <target state="translated">視窗是在受限制模式中執行。基於安全性原因，可能會停用一些 UI 功能。
+
+如需詳細資訊，請聯繫您的系統管理員或應用程式作者。</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
@@ -9395,14 +9434,18 @@ For more information, contact your system administrator or the application autho
         <source>{0}
 
 {1}</source>
-        <target state="needs-review-translation">{0}\r\n\r\n{1}</target>
+        <target state="translated">{0}
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityUnrestrictedText">
         <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">視窗是在不受限制模式中執行。雖然主要視窗為不受限制執行，但基於安全性原因可能會停用一些功能。\r\n\r\n如需詳細資訊，請連絡您的系統管理員或應用程式作者。</target>
+        <target state="translated">視窗是在不受限制模式中執行。雖然主要視窗是不受限制執行，但基於安全性原因可能會停用一些功能。
+
+如需詳細資訊，請聯繫您的系統管理員或應用程式作者。</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityVersionColumn">
@@ -10022,7 +10065,7 @@ For more information, contact your system administrator or the application autho
       </trans-unit>
       <trans-unit id="TextBoxPlaceholderTextDescr">
         <source>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </source>
-        <target state="translated">指定 TextBox 控制項的 PlaceholderText。當 Text 屬性為 null 或空白時，PlaceholderText 會顯示在控制項中，可用來引導使用者提供控制器預期的輸入。 </target>
+        <target state="translated">指定 TextBox 控制項的 PlaceholderText。當 Text 屬性為 Null 或空白時，PlaceholderText 會顯示在控制項中，可用來引導使用者提供控制器預期的輸入。 </target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxPreferredHeightDescr">
@@ -11668,13 +11711,15 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to install this application?</source>
-        <target state="needs-review-translation">無法驗證發行者。\r\n確定要安裝這個應用程式嗎?</target>
+        <target state="translated">無法驗證發行者。
+您確定要安裝這個應用程式嗎?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to run this application?</source>
-        <target state="needs-review-translation">無法驗證發行者。\r\n確定要執行這個應用程式嗎?</target>
+        <target state="translated">無法驗證發行者。
+您確定要執行這個應用程式嗎?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Publisher">

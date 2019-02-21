@@ -3971,7 +3971,9 @@
         <source>Exception occurred in the DataGridView.
 
 To replace this default dialog box, handle the DataError event.</source>
-        <target state="needs-review-translation">V ovládacím prvku DataGridView došlo k výjimce.\r\n\r\nPokud chcete toto výchozí dialogové okno nahradit, nastavte popisovač události DataError.</target>
+        <target state="translated">V ovládacím prvku DataGridView došlo k výjimce.
+
+Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
@@ -3980,7 +3982,11 @@ To replace this default dialog box, handle the DataError event.</source>
 {0}
 
 To replace this default dialog please handle the DataError event.</source>
-        <target state="needs-review-translation">V ovládacím prvku DataGridView došlo k následující výjimce:\r\n\r\n{0}\r\n\r\nPokud chcete toto výchozí dialogové okno nahradit, nastavte prosím popisovač události DataError.</target>
+        <target state="translated">V ovládacím prvku DataGridView došlo k následující výjimce:
+
+{0}
+
+Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5077,7 +5083,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
 
 {0}.</source>
-        <target state="needs-review-translation">V součásti vaší aplikace došlo k neošetřené výjimce. Pokud kliknete na Pokračovat, bude aplikace tuto chybu ignorovat a pokusí se pokračovat.\r\n\r\n{0}.</target>
+        <target state="translated">V součásti aplikace došlo k neošetřené výjimce. Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5089,7 +5097,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {0}.</source>
-        <target state="needs-review-translation">V součásti vaší aplikace došlo k neošetřené výjimce. Pokud kliknete na Pokračovat, bude aplikace tuto chybu ignorovat a pokusí se pokračovat. Pokud kliknete na Konec, aplikace se okamžitě zavře.\r\n\r\n{0}.</target>
+        <target state="translated">V součásti aplikace došlo k neošetřené výjimce. Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat. Pokud kliknete na tlačítko Konec, bude aplikace okamžitě ukončena.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5107,21 +5117,28 @@ To replace this default dialog please handle the DataError event.</source>
 debugging. Contact the application author for more
 information.
 </source>
-        <target state="needs-review-translation">Aplikace nepodporuje ladění JIT (Just In Time) formulářů\r\nsystému Windows. Další informace získáte od autora\r\naplikace.\r\n</target>
+        <target state="translated">Aplikace nepodporuje ladění JIT (Just In Time) formulářů
+systému Windows. Další informace získáte od autora
+aplikace.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
         <source>Application does not support just-in-time (JIT)
 debugging. See the end of this message for details.
 </source>
-        <target state="needs-review-translation">Aplikace nepodporuje ladění JIT.\r\nDalší podrobnosti jsou uvedeny na konci této zprávy.\r\n</target>
+        <target state="translated">Aplikace nepodporuje ladění JIT.
+Další informace jsou uvedeny na konci této zprávy.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
         <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Podrobnosti o vyvolání ladění JIT najdete na konci této zprávy,\r\nnikoli v tomto dialogovém okně.\r\n</target>
+        <target state="translated">Informace o vyvolání ladění JIT najdete na konci této zprávy,
+nikoli v tomto dialogovém okně.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5135,7 +5152,11 @@ just-in-time (JIT) debugging instead of this dialog box.
     Win32 Version: {2}
     CodeBase: {3}
 </source>
-        <target state="needs-review-translation">{0}\r\n    Verze sestavení: {1}\r\n    Verze Win32: {2}\r\n    Základ kódu: {3}\r\n</target>
+        <target state="translated">{0}
+    Verze sestavení: {1}
+    Verze Win32: {2}
+    Základ kódu (CodeBase): {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5147,13 +5168,16 @@ just-in-time (JIT) debugging instead of this dialog box.
         <source>
 ************** {0} **************
 </source>
-        <target state="needs-review-translation">\r\n************** {0} **************\r\n</target>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
         <source>----------------------------------------
 </source>
-        <target state="needs-review-translation">----------------------------------------\r\n</target>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
@@ -5172,7 +5196,11 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="needs-review-translation">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Pokud chcete této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET Framework.\r\n\r\nPokud kliknete na Pokračovat, bude aplikace tuto chybu ignorovat a pokusí se pokračovat.\r\n\r\n{1}.</target>
+        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET Framework.
+
+Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
@@ -5181,7 +5209,11 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="needs-review-translation">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Pokud chcete této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET Framework.\r\n\r\nPokud kliknete na Pokračovat, bude aplikace tuto chybu ignorovat a pokusí se pokračovat. Pokud kliknete na Konec, aplikace se okamžitě zavře.\r\n\r\n{1}.</target>
+        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET Framework.
+
+Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat. Pokud kliknete na tlačítko Konec, bude aplikace okamžitě ukončena.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5297,13 +5329,15 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FileDialogCreatePrompt">
         <source>File {0} does not exist.
 Do you want to create it?</source>
-        <target state="needs-review-translation">Soubor {0} neexistuje.\r\nChcete ho vytvořit?</target>
+        <target state="translated">Soubor {0} neexistuje.
+Chcete jej vytvořit?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
         <source>File {0} does not exist.
 Verify that the correct file name was given.</source>
-        <target state="needs-review-translation">Soubor {0} neexistuje.\r\nOvěřte, jestli byl zadán správný název souboru.</target>
+        <target state="translated">Soubor {0} neexistuje.
+Ověřte, zda byl zadán správný název souboru.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5324,7 +5358,8 @@ Verify that the correct file name was given.</source>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
-        <target state="needs-review-translation">Soubor {0} už existuje.\r\nChcete ho nahradit?</target>
+        <target state="translated">Soubor {0} již existuje.
+Chcete jej nahradit?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5921,7 +5956,9 @@ Do you want to replace it?</source>
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
 Stack trace where the illegal operation occurred was:
 {1}"</source>
-        <target state="needs-review-translation">Operace mezi vlákny není platná: Přístup k ovládacímu prvku {0} proběhl z jiného vlákna než z vlákna, v rámci kterého byl vytvořen.\r\nTrasování zásobníku, kde došlo k neplatné operaci:\r\n{1}"</target>
+        <target state="translated">Operace mezi vlákny není platná: Přístup k ovládacímu prvku {0} proběhl z jiného vlákna než z vlákna, v rámci kterého byl vytvořen.
+Trasování zásobníku, kde došlo k neplatné operaci:
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -9313,7 +9350,9 @@ Stack trace where the illegal operation occurred was:
         <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">Okno je spuštěno v omezeném režimu. Některé funkce uživatelského rozhraní budou pravděpodobně z důvodů zabezpečení zakázány. \r\n\r\nDalší informace získáte u správce systému nebo autora aplikace.</target>
+        <target state="translated">Okno je spuštěno v omezeném režimu. Některé funkce uživatelského rozhraní budou pravděpodobně z důvodů zabezpečení zakázány.
+
+Další informace získáte u správce systému nebo autora aplikace.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
@@ -9395,14 +9434,18 @@ For more information, contact your system administrator or the application autho
         <source>{0}
 
 {1}</source>
-        <target state="needs-review-translation">{0}\r\n\r\n{1}</target>
+        <target state="translated">{0}
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityUnrestrictedText">
         <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">Okno je spuštěno v neomezeném režimu. Přestože na hlavní okno nejsou uplatňována omezení, některé funkce budou pravděpodobně z důvodů zabezpečení zakázány. \r\n\r\nDalší informace získáte u správce systému nebo autora aplikace.</target>
+        <target state="translated">Okno je spuštěno v neomezeném režimu. Přestože na hlavní okno nejsou uplatňována omezení, některé funkce budou pravděpodobně z důvodů zabezpečení zakázány.
+
+Další informace získáte u správce systému nebo autora aplikace.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityVersionColumn">
@@ -11668,13 +11711,15 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to install this application?</source>
-        <target state="needs-review-translation">Vydavatele nelze ověřit.\r\nOpravdu chcete tuto aplikaci nainstalovat?</target>
+        <target state="translated">Vydavatele nelze ověřit.
+Opravdu chcete tuto aplikaci nainstalovat?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to run this application?</source>
-        <target state="needs-review-translation">Vydavatele nelze ověřit.\r\nOpravdu chcete tuto aplikaci spustit?</target>
+        <target state="translated">Vydavatele nelze ověřit.
+Opravdu chcete tuto aplikaci spustit?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Publisher">
