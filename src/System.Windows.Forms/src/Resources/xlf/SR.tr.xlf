@@ -769,7 +769,7 @@
       </trans-unit>
       <trans-unit id="CatFocus">
         <source>Focus</source>
-        <target state="translated">Odak</target>
+        <target state="translated">Odaklama</target>
         <note />
       </trans-unit>
       <trans-unit id="CatFolderBrowsing">
@@ -789,7 +789,7 @@
       </trans-unit>
       <trans-unit id="CatLayout">
         <source>Layout</source>
-        <target state="translated">Düzen</target>
+        <target state="translated">Yerleşim</target>
         <note />
       </trans-unit>
       <trans-unit id="CatMouse">
@@ -3971,7 +3971,9 @@
         <source>Exception occurred in the DataGridView.
 
 To replace this default dialog box, handle the DataError event.</source>
-        <target state="needs-review-translation">DataGridView'da özel durum oluştu.\r\n\r\nBu varsayılan iletişim kutusunu değiştirmek için DataError olayını işleyin.</target>
+        <target state="translated">DataGridView'da özel durum oluştu.
+
+Bu iletişim kutusunu değiştirmek için, DataError olayını işleyin.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
@@ -3980,7 +3982,11 @@ To replace this default dialog box, handle the DataError event.</source>
 {0}
 
 To replace this default dialog please handle the DataError event.</source>
-        <target state="needs-review-translation">DataGridView'da aşağıdaki özel durum oluştu:\r\n\r\n{0}\r\n\r\nBu varsayılan iletişim kutusunu değiştirmek için lütfen DataError olayını işleyin.</target>
+        <target state="translated">DataGridView'da aşağıdaki özel durum oluştu:
+
+{0}
+
+Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayını işleyin.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5077,7 +5083,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
 
 {0}.</source>
-        <target state="needs-review-translation">Uygulamanızdaki bir bileşende işlenmemiş özel durum oluştu. Devam'a tıklarsanız uygulama bu hatayı yoksayar ve devam etmeye çalışır.\r\n\r\n{0}.</target>
+        <target state="translated">Uygulamanızdaki bir bileşende işlenmemiş özel durum oluştu. Devam'ı tıklatırsanız, uygulama bu hatayı yok sayar ve devam etmeyi dener.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5089,7 +5097,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {0}.</source>
-        <target state="needs-review-translation">Uygulamanızda işlenmemiş özel durum oluştu. Devam'a tıklarsanız uygulama bu hatayı yoksayar ve devam etmeye çalışır. Çıkış'a tıklarsanız uygulama hemen kapatılır.\r\n\r\n{0}.</target>
+        <target state="translated">Uygulamanızda işlenmemiş özel durum oluştu. Devam'ı tıklatırsanız, uygulama bu hatayı yok sayar ve devam etmeyi dener. Çıkış'ı tıklatırsanız, uygulama hemen kapatılır.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5107,21 +5117,28 @@ To replace this default dialog please handle the DataError event.</source>
 debugging. Contact the application author for more
 information.
 </source>
-        <target state="needs-review-translation">Uygulama Windows Forms tam zamanında (JIT) hata ayıklamayı\r\ndesteklemiyor. Daha fazla bilgi için uygulama\r\ngeliştiricisine başvurun.\r\n</target>
+        <target state="translated">Uygulama Windows Forms JIT hata ayıklamayı desteklemiyor.
+Daha fazla bilgi için uygulama geliştiricisine
+başvurun.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
         <source>Application does not support just-in-time (JIT)
 debugging. See the end of this message for details.
 </source>
-        <target state="needs-review-translation">Uygulama tam zamanında (JIT) hata ayıklamayı\r\ndesteklemiyor. Ayrıntılı bilgi için bu iletinin sonuna bakın.\r\n</target>
+        <target state="translated">Uygulama JIT hata ayıklamayı desteklemiyor.
+Ayrıntılı bilgi için bu iletinin sonuna bakın.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
         <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Bu iletişim kutusu yerine tam zamanında (JIT) hata \r\nayıklamayı çağırma hakkında detaylı bilgi için bu iletinin sonuna bakın.\r\n</target>
+        <target state="translated">Bu iletişim kutusu yerine JIT hata ayıklamayı çağırma
+hakkında detaylı bilgi için bu iletinin sonuna bakın.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5135,7 +5152,11 @@ just-in-time (JIT) debugging instead of this dialog box.
     Win32 Version: {2}
     CodeBase: {3}
 </source>
-        <target state="needs-review-translation">{0}\r\n    Bütünleştirilmiş Kod Sürümü: {1}\r\n    Win32 Sürümü: {2}\r\n    CodeBase: {3}\r\n</target>
+        <target state="translated">{0}
+    Bütünleştirilmiş Kod Sürümü: {1}
+    Win32 Sürümü: {2}
+    CodeBase: {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5147,13 +5168,16 @@ just-in-time (JIT) debugging instead of this dialog box.
         <source>
 ************** {0} **************
 </source>
-        <target state="needs-review-translation">\r\n************** {0} **************\r\n</target>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
         <source>----------------------------------------
 </source>
-        <target state="needs-review-translation">----------------------------------------\r\n</target>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
@@ -5172,7 +5196,11 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="needs-review-translation">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.\r\n\r\nDevam'a tıklarsanız uygulama bu hatayı yoksayar ve devam etmeye çalışır.\r\n\r\n{1}.</target>
+        <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.
+
+Devam'ı tıklatırsanız, uygulama bu hatayı yoksayar ve devam etmeye çalışır.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
@@ -5181,7 +5209,11 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="needs-review-translation">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.\r\n\r\nDevam'a tıklarsanız uygulama bu hatayı yoksayar ve devam etmeye çalışır. Çıkış'a tıklarsanız uygulama hemen kapatılır.\r\n\r\n{1}.</target>
+        <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.
+
+Devam'ı tıklatırsanız, uygulama bu hatayı yoksayar ve devam etmeye çalışır. Çıkış'ı tıklatırsanız, uygulama hemen kapatılır.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5297,13 +5329,15 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FileDialogCreatePrompt">
         <source>File {0} does not exist.
 Do you want to create it?</source>
-        <target state="needs-review-translation">{0} dosyası yok.\r\nOluşturmak istiyor musunuz?</target>
+        <target state="translated">{0} dosyası yok.
+Oluşturmak istiyor musunuz?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
         <source>File {0} does not exist.
 Verify that the correct file name was given.</source>
-        <target state="needs-review-translation">{0} dosyası yok.\r\nDoğru dosya adının verildiğinden emin olun.</target>
+        <target state="translated">{0} dosyası yok.
+Doğru dosya adının verildiğinden emin olun.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5324,7 +5358,8 @@ Verify that the correct file name was given.</source>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
-        <target state="needs-review-translation">{0} dosyası zaten var.\r\nBunu değiştirmek istiyor musunuz?</target>
+        <target state="translated">{0} dosyası zaten var.
+Bunu değiştirmek istiyor musunuz?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5921,7 +5956,9 @@ Do you want to replace it?</source>
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
 Stack trace where the illegal operation occurred was:
 {1}"</source>
-        <target state="needs-review-translation">İş parçacıkları arası işlem geçerli değil: '{0}' denetimine, oluşturulduğu iş parçacığı dışında başka bir iş parçacığından erişildi.\r\nGeçersiz işlemin gerçekleştiği yığın izi:\r\n{1}"</target>
+        <target state="translated">Çapraz iş parçacığı işlemi geçerli değil: '{0}' denetimine oluşturulduğu iş parçacığı dışında başka bir iş parçacığından erişildi.
+Geçersiz işlemin gerçekleştiği yığın izi:
+{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -9313,7 +9350,9 @@ Stack trace where the illegal operation occurred was:
         <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">Pencere kısıtlanmış modda çalışıyor. Bazı kullanıcı arabirimi özellikleri güvenlik nedeniyle devre dışı olabilir. \r\n\r\nDaha fazla bilgi için sistem yöneticinize veya uygulama yazarına başvurun.</target>
+        <target state="translated">Pencere sınırlı modda çalışıyor. Bazı kullanıcı arabirimi özellikleri güvenlik nedeniyle devre dışı olabilir. 
+
+Daha fazla bilgi için sistem yöneticinize veya uygulama geliştiriciye başvurun.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
@@ -9395,14 +9434,18 @@ For more information, contact your system administrator or the application autho
         <source>{0}
 
 {1}</source>
-        <target state="needs-review-translation">{0}\r\n\r\n{1}</target>
+        <target state="translated">{0}
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityUnrestrictedText">
         <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">Pencere kısıtlanmamış modda çalışıyor. Ana pencerenin kısıtlanmamış bir şekilde çalışmasına rağmen bazı özellikler güvenlik nedeniyle devre dışı olabilir. \r\n\r\nDaha fazla bilgi için sistem yöneticinize veya uygulama yazarına başvurun.</target>
+        <target state="translated">Pencere kısıtlanmamış modda çalışıyor. Ana pencerenin sınırsız çalışmasına rağmen, bazı özellikler güvenlik nedeniyle devre dışı olabilir. 
+
+Daha fazla bilgi için sistem yöneticinize veya uygulama geliştiriciye başvurun.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityVersionColumn">
@@ -11668,13 +11711,15 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to install this application?</source>
-        <target state="needs-review-translation">Yayımcı doğrulanamıyor.\r\nBu uygulamayı yüklemek istediğinizden emin misiniz?</target>
+        <target state="translated">Yayımcı doğrulanamıyor.
+Bu uygulamayı kaldırmak istediğinizden emin misiniz?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to run this application?</source>
-        <target state="needs-review-translation">Yayımcı doğrulanamıyor.\r\nBu uygulamayı çalıştırmak istediğinizden emin misiniz?</target>
+        <target state="translated">Yayımcı doğrulanamıyor.
+Bu uygulamayı çalıştırmak istediğinizden emin misiniz?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Publisher">

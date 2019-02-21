@@ -789,7 +789,7 @@
       </trans-unit>
       <trans-unit id="CatLayout">
         <source>Layout</source>
-        <target state="translated">Mise en page</target>
+        <target state="translated">Disposition</target>
         <note />
       </trans-unit>
       <trans-unit id="CatMouse">
@@ -3971,7 +3971,9 @@
         <source>Exception occurred in the DataGridView.
 
 To replace this default dialog box, handle the DataError event.</source>
-        <target state="needs-review-translation">Une exception s'est produite dans DataGridView.\r\n\r\nPour remplacer cette boîte de dialogue par défaut, traitez l'événement DataError.</target>
+        <target state="translated">Une exception s'est produite dans le DataGridView.
+
+Pour remplacer cette boîte de dialogue par défaut, gérez l'événement DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
@@ -3980,7 +3982,11 @@ To replace this default dialog box, handle the DataError event.</source>
 {0}
 
 To replace this default dialog please handle the DataError event.</source>
-        <target state="needs-review-translation">L'exception suivante s'est produite dans DataGridView :\r\n\r\n{0}\r\n\r\nPour remplacer cette boîte de dialogue par défaut, traitez l'événement DataError.</target>
+        <target state="translated">L'exception suivante s'est produite dans le DataGridView :
+
+{0}
+
+Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5077,7 +5083,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
 
 {0}.</source>
-        <target state="needs-review-translation">Une exception non prise en charge s'est produite dans un composant de votre application. Si vous cliquez sur Continuer, votre application ignore cette erreur et tente de continuer.\r\n\r\n{0}.</target>
+        <target state="translated">Une exception non gérée s'est produite dans un composant de votre application. Si vous cliquez sur Continuer, votre application va ignorer cette erreur et essayer de continuer.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5089,7 +5097,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {0}.</source>
-        <target state="needs-review-translation">Une exception non prise en charge s'est produite dans votre application. Si vous cliquez sur Continuer, l'application ignore cette erreur et tente de continuer. Si vous cliquez sur Quitter, l'application se ferme immédiatement.\r\n\r\n{0}.</target>
+        <target state="translated">Une exception non gérée s'est produite dans votre application. Si vous cliquez sur Continuer, l'application va ignorer cette erreur et essayer de continuer. Si vous cliquez sur Quitter, l'application va s'arrêter immédiatement.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5107,21 +5117,28 @@ To replace this default dialog please handle the DataError event.</source>
 debugging. Contact the application author for more
 information.
 </source>
-        <target state="needs-review-translation">L'application ne prend pas en charge le débogage juste-à-temps (JIT)\r\nWindows Forms. Contactez l'auteur de l'application pour plus\r\nd'informations.\r\n</target>
+        <target state="translated">L'application ne prend pas en charge le débogage juste-à-temps (JIT)
+Windows Forms. Contactez l'auteur de l'application pour plus
+d'informations.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
         <source>Application does not support just-in-time (JIT)
 debugging. See the end of this message for details.
 </source>
-        <target state="needs-review-translation">L'application ne prend pas en charge le débogage\r\njuste-à-temps (JIT). Consultez la fin de ce message pour plus de détails.\r\n</target>
+        <target state="translated">L'application ne prend pas en charge le débogage
+juste-à-temps (JIT). Consultez la fin de ce message pour plus de détails.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
         <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Consultez la fin de ce message pour plus de détails sur l'appel du débogage\r\njuste-à-temps (JIT) au lieu de cette boîte de dialogue.\r\n</target>
+        <target state="translated">Consultez la fin de ce message pour plus de détails sur l'appel du débogage
+juste-à-temps (JIT) à la place de cette boîte de dialogue.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5135,7 +5152,11 @@ just-in-time (JIT) debugging instead of this dialog box.
     Win32 Version: {2}
     CodeBase: {3}
 </source>
-        <target state="needs-review-translation">{0}\r\n    Version d'assembly : {1}\r\n    Version Win32 : {2}\r\n    CodeBase : {3}\r\n</target>
+        <target state="translated">{0}
+    Version de l'assembly : {1}
+    Version Win32 : {2}
+    CodeBase : {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5147,13 +5168,16 @@ just-in-time (JIT) debugging instead of this dialog box.
         <source>
 ************** {0} **************
 </source>
-        <target state="needs-review-translation">\r\n************** {0} **************\r\n</target>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
         <source>----------------------------------------
 </source>
-        <target state="needs-review-translation">----------------------------------------\r\n</target>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
@@ -5172,7 +5196,11 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="needs-review-translation">L'application a essayé d'effectuer une opération interdite par la stratégie de sécurité. Pour accorder à cette application l'autorisation nécessaire, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Framework Configuration.\r\n\r\nSi vous cliquez sur Continuer, l'application ignore cette erreur et tente de continuer.\r\n\r\n{1}.</target>
+        <target state="translated">L'application a essayé d'effectuer une opération qui est interdite par la stratégie de sécurité. Pour accorder à cette application les autorisations requises, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Framework Configuration.
+
+Si vous cliquez sur Continuer, l'application va ignorer cette erreur et essayer de continuer.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
@@ -5181,7 +5209,11 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="needs-review-translation">L'application a essayé d'effectuer une opération interdite par la stratégie de sécurité. Pour accorder à cette application l'autorisation nécessaire, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Framework Configuration.\r\n\r\nSi vous cliquez sur Continuer, l'application ignore cette erreur et tente de continuer. Si vous cliquez sur Quitter, l'application se ferme immédiatement.\r\n\r\n{1}.</target>
+        <target state="translated">L'application a essayé d'effectuer une opération qui est interdite par la stratégie de sécurité. Pour accorder à cette application les autorisations requises, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Framework Configuration.
+
+Si vous cliquez sur Continuer, l'application va ignorer cette erreur et essayer de continuer. Si vous cliquez sur Quitter, l'application va s'arrêter immédiatement.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5297,13 +5329,15 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FileDialogCreatePrompt">
         <source>File {0} does not exist.
 Do you want to create it?</source>
-        <target state="needs-review-translation">Le fichier {0} n'existe pas.\r\nVoulez-vous le créer ?</target>
+        <target state="translated">Le fichier {0} n'existe pas.
+Voulez-vous le créer ?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
         <source>File {0} does not exist.
 Verify that the correct file name was given.</source>
-        <target state="needs-review-translation">Le fichier {0} n'existe pas.\r\nVérifiez que le nom de fichier indiqué est correct.</target>
+        <target state="translated">Le fichier {0} n'existe pas.
+Vérifiez que le nom de fichier correct a été indiqué.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5324,7 +5358,8 @@ Verify that the correct file name was given.</source>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
-        <target state="needs-review-translation">Le fichier {0} existe déjà.\r\nVoulez-vous le remplacer ?</target>
+        <target state="translated">Le fichier {0} existe déjà.
+Voulez-vous le remplacer ?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5459,7 +5494,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
         <source>A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.</source>
-        <target state="translated">Valeur qui indique s'il faut utiliser la valeur de la propriété Description comme titre des boîtes de dialogue de style Vista. Cette propriété n'a pas d'effet sur les anciennes boîtes de dialogue de style.</target>
+        <target state="translated">Valeur qui indique si la valeur de la propriété Description doit être utilisée en tant que titre de boîte de dialogue pour les boîtes de dialogue de style Vista. Cette propriété n'a aucun effet sur les boîtes de dialogue de style antérieur.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormAcceptButtonDescr">
@@ -5921,7 +5956,9 @@ Do you want to replace it?</source>
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
 Stack trace where the illegal operation occurred was:
 {1}"</source>
-        <target state="needs-review-translation">Opération inter-threads non valide : le contrôle '{0}' a été consulté par un thread autre que celui sur lequel il a été créé.\r\nCette opération non conforme s'est produite sur la trace de pile :\r\n{1}"</target>
+        <target state="translated">Opération inter-threads non valide : le contrôle '{0}' a fait l'objet d'un accès à partir d'un thread autre que celui sur lequel il a été créé.
+Cette opération non conforme s'est produite sur la trace de la pile :
+{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -9313,7 +9350,9 @@ Stack trace where the illegal operation occurred was:
         <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">La fenêtre s'exécute en mode restreint. Certaines fonctionnalités d'interface utilisateur peuvent être désactivées pour des raisons de sécurité. \r\n\r\nPour plus d'informations, contactez votre administrateur système ou l'auteur de l'application.</target>
+        <target state="translated">Cette fenêtre s'exécute en mode restreint. Certaines fonctionnalités de l'interface utilisateur (UI) peuvent être désactivées pour des raisons de sécurité. 
+
+Pour plus d'informations, contactez votre administrateur système ou l'auteur de l'application.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
@@ -9395,14 +9434,18 @@ For more information, contact your system administrator or the application autho
         <source>{0}
 
 {1}</source>
-        <target state="needs-review-translation">{0}\r\n\r\n{1}</target>
+        <target state="translated">{0}
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityUnrestrictedText">
         <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
 
 For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">La fenêtre s'exécute en mode non restreint. Même si la fenêtre principale s'exécute en mode non restreint, certaines fonctionnalités risquent d'être désactivées pour des raisons de sécurité. \r\n\r\nPour plus d'informations, contactez votre administrateur système ou l'auteur de l'application.</target>
+        <target state="translated">Cette fenêtre s'exécute en mode non restreint. Bien que la fenêtre principale s'exécute en mode non restreint, certaines fonctionnalités peuvent être désactivées pour des raisons de sécurité. 
+
+Pour plus d'informations, contactez votre administrateur système ou l'auteur de l'application.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityVersionColumn">
@@ -10022,7 +10065,7 @@ For more information, contact your system administrator or the application autho
       </trans-unit>
       <trans-unit id="TextBoxPlaceholderTextDescr">
         <source>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </source>
-        <target state="translated">Spécifie le PlaceholderText du contrôle TextBox. Le PlaceholderText s'affiche dans le contrôle quand la propriété Text est null ou vide et peut servir à guider l'utilisateur pour savoir quelle entrée est attendue par le contrôle.</target>
+        <target state="translated">Spécifie le PlaceholderText du contrôle TextBox. PlaceholderText s'affiche dans le contrôle quand la propriété Text a une valeur null ou vide. Il permet d'orienter l'utilisateur vers l'entrée attendue par le contrôle. </target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxPreferredHeightDescr">
@@ -11668,13 +11711,15 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to install this application?</source>
-        <target state="needs-review-translation">L'éditeur ne peut pas être vérifié.\r\nVoulez-vous vraiment installer cette application ?</target>
+        <target state="translated">L'éditeur ne peut pas être vérifié.
+Voulez-vous vraiment installer cette application ?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
         <source>Publisher cannot be verified.
 Are you sure you want to run this application?</source>
-        <target state="needs-review-translation">L'éditeur ne peut pas être vérifié.\r\nVoulez-vous vraiment exécuter cette application ?</target>
+        <target state="translated">L'éditeur ne peut pas être vérifié.
+Voulez-vous vraiment exécuter cette application ?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Publisher">
