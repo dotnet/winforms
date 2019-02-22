@@ -1270,7 +1270,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
                 
               
@@ -1981,7 +1981,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit))
                 {
-                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RightToLeft));
                 }
                 
                 RightToLeft oldValue = RightToLeft;
@@ -3389,6 +3389,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
+        [ExcludeFromCodeCoverage]
         private void ResetToolTipText() {
             toolTipText = null;
         }
@@ -3524,6 +3525,7 @@ namespace System.Windows.Forms {
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializeImageTransparentColor() {
             return ImageTransparentColor != Color.Empty;
         }
@@ -3532,15 +3534,18 @@ namespace System.Windows.Forms {
         ///     Returns true if the backColor should be persisted in code gen.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         internal virtual bool ShouldSerializeBackColor() {
             Color backColor = Properties.GetColor(PropBackColor);
             return !backColor.IsEmpty;
         }
 
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializeDisplayStyle() {
             return DisplayStyle != DefaultDisplayStyle;
         }
         
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializeToolTipText() {
             return !string.IsNullOrEmpty(toolTipText);
         }
@@ -3548,6 +3553,7 @@ namespace System.Windows.Forms {
         ///     Returns true if the foreColor should be persisted in code gen.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         internal virtual bool ShouldSerializeForeColor() {
             Color foreColor = Properties.GetColor(PropForeColor);
             return !foreColor.IsEmpty;
@@ -3557,6 +3563,7 @@ namespace System.Windows.Forms {
         ///     Returns true if the font should be persisted in code gen.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         internal virtual bool ShouldSerializeFont() {
             bool found;
             object font = Properties.GetObject(PropFont, out found);
@@ -3567,6 +3574,7 @@ namespace System.Windows.Forms {
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Padding'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializePadding() {
             return  (Padding != DefaultPadding);
         }         
@@ -3574,6 +3582,7 @@ namespace System.Windows.Forms {
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Margin'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializeMargin() {
             return  (Margin != DefaultMargin);
         }               
@@ -3581,6 +3590,7 @@ namespace System.Windows.Forms {
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Visible'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializeVisible() {
             return  !state[stateVisible]; // only serialize if someone turned off visiblilty
         }
@@ -3588,6 +3598,7 @@ namespace System.Windows.Forms {
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Image'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializeImage() {
             return  (Image != null) && (ImageIndexer.ActualIndex < 0);
         }    
@@ -3595,6 +3606,7 @@ namespace System.Windows.Forms {
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Image'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializeImageKey() {
             return  (Image != null) && (ImageIndexer.ActualIndex >= 0) && (ImageIndexer.Key != null && ImageIndexer.Key.Length != 0);
         }
@@ -3602,6 +3614,7 @@ namespace System.Windows.Forms {
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Image'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializeImageIndex() {
             return  (Image != null) &&  (ImageIndexer.ActualIndex >= 0) && (ImageIndexer.Index != -1);
         }
@@ -3609,6 +3622,7 @@ namespace System.Windows.Forms {
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.RightToLeft'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [ExcludeFromCodeCoverage]
         internal virtual bool ShouldSerializeRightToLeft() {
             bool found = false;
             int rightToLeft = Properties.GetInteger(PropRightToLeft, out found);
@@ -3618,6 +3632,7 @@ namespace System.Windows.Forms {
             return (rightToLeft != (int)DefaultRightToLeft);
         }
 
+        [ExcludeFromCodeCoverage]
         private bool ShouldSerializeTextDirection() {
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
             if (Properties.ContainsObject(ToolStripItem.PropTextDirection)) {
