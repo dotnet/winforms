@@ -18,6 +18,9 @@
     <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19118.6</SystemWindowsExtensionsPackageVersion>
   </PropertyGroup>
   <PropertyGroup>
+    <MicrosoftNETCorePlatformsVersion>3.0.0-preview4.19118.1</MicrosoftNETCorePlatformsVersion>
+  </PropertyGroup>
+  <PropertyGroup>
     <AccessibilityPackageVersion>4.6.0-alpha-27122-5</AccessibilityPackageVersion>
     <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
