@@ -545,7 +545,6 @@ namespace System.Windows.Forms.Layout {
 
             SetLayoutState(element, state);
 
-            Debug.Assert(xGetAnchor(element) == value, "Error detected setting Anchor.");
             Debug.Assert(GetLayoutState(element)[_dockModeSection] == (int) DockAnchorMode.Anchor,
                 "xSetAnchor did not set mode to Anchor.");
         }   

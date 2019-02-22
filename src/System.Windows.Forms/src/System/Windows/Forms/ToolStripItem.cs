@@ -226,7 +226,6 @@ namespace System.Windows.Forms {
                     Properties.SetObject(PropAccessibility, accessibleObject);
                 }
                 
-                Debug.Assert(accessibleObject != null, "Failed to create accessibility object");
                 return accessibleObject;
             }
         }
@@ -2720,7 +2719,6 @@ namespace System.Windows.Forms {
         //
 
         private void HandleClick(System.EventArgs e) {  
-            Debug.Assert(Enabled, "Who called me when I am disabled?");
             Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] HandleClick");      
 
             try {
@@ -3929,8 +3927,6 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.ToolStripItemAccessibleObject"]/*' />
             public ToolStripItemAccessibleObject(ToolStripItem ownerItem) {
-
-                Debug.Assert(ownerItem != null, "Cannot construct a ToolStripItemAccessibleObject with a null ownerItem");
                 if (ownerItem == null) {
                     throw new ArgumentNullException(nameof(ownerItem));
                 }
