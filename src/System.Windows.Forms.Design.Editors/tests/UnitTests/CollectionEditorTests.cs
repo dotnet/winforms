@@ -27,6 +27,7 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design.Tests
             Assert.True(underTest.CanRemove("some string"));
             Assert.True(underTest.CanRemove(1234));
             Assert.Equal("net.ComponentModel.CollectionEditor", underTest.GetHelpTopic());
+            Assert.Equal("my string", underTest.GetItemDisplayText("my string"));
         }
 
         private TestCollectionEditor GetNewEditor()
@@ -58,6 +59,11 @@ namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design.Tests
             public string GetHelpTopic()
             {
                 return base.HelpTopic;
+            }
+
+            public string GetItemDisplayText(object value)
+            {
+                return base.GetDisplayText(value);
             }
         }
     }
