@@ -16,8 +16,6 @@
     <SystemCodeDomPackageVersion>4.6.0-preview4.19118.6</SystemCodeDomPackageVersion>
     <SystemSecurityPermissionsPackageVersion>4.6.0-preview4.19118.6</SystemSecurityPermissionsPackageVersion>
     <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19118.6</SystemWindowsExtensionsPackageVersion>
-  </PropertyGroup>
-  <PropertyGroup>
     <MicrosoftNETCorePlatformsVersion>3.0.0-preview4.19118.1</MicrosoftNETCorePlatformsVersion>
   </PropertyGroup>
   <PropertyGroup>
