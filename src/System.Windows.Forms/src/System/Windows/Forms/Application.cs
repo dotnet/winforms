@@ -709,7 +709,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal static bool UseVisualStyles {
+        public static bool UseVisualStyles {
             get {
                 return useVisualStyles;
             }
