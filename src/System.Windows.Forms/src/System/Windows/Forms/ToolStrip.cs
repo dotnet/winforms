@@ -3250,6 +3250,10 @@ namespace System.Windows.Forms {
        
         internal void OnDefaultFontChanged() {
             defaultFont = null;
+            if (DpiHelper.IsPerMonitorV2Awareness) {
+                ToolStripManager.CurrentDpi = DeviceDpi;
+                defaultFont = ToolStripManager.DefaultFont;
+            }
             if (!IsFontSet()) {
                 OnFontChanged(EventArgs.Empty);
             }
