@@ -7431,4 +7431,7 @@ Are you sure you want to run this application?</value>
   <data name="TextBoxPlaceholderTextDescr" xml:space="preserve">
     <value>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </value>
   </data>
+  <data name="TreeNodeCircularReference" xml:space="preserve">
+    <value>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</value>
+  </data>
 </root>

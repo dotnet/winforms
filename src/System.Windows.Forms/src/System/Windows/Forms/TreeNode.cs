@@ -1603,6 +1603,23 @@ namespace System.Windows.Forms {
             return total;
         }
 
+        /// <devdoc>
+        ///     Check for any circular reference in the ancestors chain.
+        /// </devdoc>
+        internal void CheckParentingCycle(TreeNode candidateToAdd)
+        {
+            TreeNode node = this;
+
+            while (node != null)
+            {
+                if (node == candidateToAdd)
+                {
+                    throw new ArgumentException(SR.TreeNodeCircularReference);
+                }
+                node = node.parent;
+            }
+        }
+
         /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.InsertNodeAt"]/*' />
         /// <devdoc>
         ///     Helper function to add node at a given index after all validation has been done

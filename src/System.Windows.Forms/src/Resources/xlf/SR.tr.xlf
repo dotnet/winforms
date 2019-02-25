@@ -11253,6 +11253,11 @@ Daha fazla bilgi için sistem yöneticinize veya uygulama geliştiriciye başvur
         <target state="translated">Ağaç düğümünün işaretli durumda olup olmadığını gösterir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">Parametrenin TreeNode türünde olması gerekir.</target>
