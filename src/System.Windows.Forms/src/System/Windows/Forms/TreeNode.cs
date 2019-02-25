@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1603,7 +1603,6 @@ namespace System.Windows.Forms {
             return total;
         }
 
-        /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.CheckParentingCycle"]/*' />
         /// <devdoc>
         ///     Check for any circular reference in the ancestors chain.
         /// </devdoc>
