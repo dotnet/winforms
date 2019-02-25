@@ -2,27 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
     public class TableLayoutControlCollectionTests
     {
-        public static IEnumerable<object[]> Ctor_TableLayoutPanel_TestData()
+        [Fact]
+        public void TableLayoutControlCollection_Ctor_TableLayoutPanel()
         {
-            yield return new object[] { new TableLayoutPanel() };
-            yield return new object[] { null };
-        }
-
-        [Theory]
-        [MemberData(nameof(Ctor_TableLayoutPanel_TestData))]
-        public void TableLayoutControlCollection_Ctor_TableLayoutPanel(TableLayoutPanel container)
-        {
+            var container = new TableLayoutPanel();
             var collection = new TableLayoutControlCollection(container);
             Assert.Equal(container, collection.Container);
             Assert.Equal(container, collection.Owner);
             Assert.Empty(collection);
+        }
+
+        [Fact]
+        public void TableLayoutControlCollection_NullContainer_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>("container", () => new TableLayoutControlCollection(null));
         }
 
         [Theory]
@@ -65,20 +64,12 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TableLayoutControlCollection_Add_NullControl_ThrowsNullReferenceException()
+        public void TableLayoutControlCollection_Add_NullControl_ThrowsArgumentNullException()
         {
             var container = new TableLayoutPanel();
             var collection = new TableLayoutControlCollection(container);
-            Assert.Throws<NullReferenceException>(() => collection.Add(null, 1, 2));
+            Assert.Throws<ArgumentNullException>("control", () => collection.Add(null, 1, 2));
             Assert.Empty(collection);
-        }
-
-        [Fact]
-        public void TableLayoutControlCollection_Add_NullContainer_ThrowsNullReferenceExceptio()
-        {
-            var collection = new TableLayoutControlCollection(null);
-            var control = new Control();
-            Assert.Throws<NullReferenceException>(() => collection.Add(control, -2, 2));
         }
     }
 }

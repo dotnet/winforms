@@ -140,13 +140,17 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues) {
+        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
+        {
+            if (propertyValues == null)
+            {
+                throw new ArgumentNullException(nameof(propertyValues));
+            }
 
             return new TableLayoutPanelCellPosition(
                 (int)propertyValues["Column"],
                 (int)propertyValues["Row"]
-             );
-        
+            );
         }
         
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) {
