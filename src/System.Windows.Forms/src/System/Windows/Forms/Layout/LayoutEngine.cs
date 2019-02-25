@@ -4,44 +4,56 @@
 
 //#define LAYOUT_PERFWATCH
 
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 
-namespace System.Windows.Forms.Layout {
-    using System;
-    using System.Collections;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Security.Permissions;
-
-    /// <include file='doc\LayoutEngine.uex' path='docs/doc[@for="LayoutEngine"]/*' />
-    public abstract class LayoutEngine {        
-        internal IArrangedElement CastToArrangedElement(object obj) {
-            IArrangedElement element = obj as IArrangedElement;
-            if(obj == null) {
+namespace System.Windows.Forms.Layout
+{
+    public abstract class LayoutEngine
+    {        
+        internal IArrangedElement CastToArrangedElement(object obj)
+        {
+            if (!(obj is IArrangedElement element))
+            {
                 throw new NotSupportedException(string.Format(SR.LayoutEngineUnsupportedType, obj.GetType()));
             }
             return element;
         }
 
-        internal virtual Size GetPreferredSize(IArrangedElement container, Size proposedConstraints) { return Size.Empty; }
+        internal virtual Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
+        {
+            return Size.Empty;
+        }
     
-        /// <include file='doc\LayoutEngine.uex' path='docs/doc[@for="LayoutEngine.InitLayout"]/*' />
-        public virtual void InitLayout(object child, BoundsSpecified specified) {
+        public virtual void InitLayout(object child, BoundsSpecified specified)
+        {
+            if (child == null)
+            {
+                throw new ArgumentNullException(nameof(child));
+            }
+
             InitLayoutCore(CastToArrangedElement(child), specified);
         }
 
-        internal virtual void InitLayoutCore(IArrangedElement element, BoundsSpecified bounds) {}
+        internal virtual void InitLayoutCore(IArrangedElement element, BoundsSpecified bounds)
+        {
+        }
 
-        internal virtual void ProcessSuspendedLayoutEventArgs(IArrangedElement container, LayoutEventArgs args) {}
+        internal virtual void ProcessSuspendedLayoutEventArgs(IArrangedElement container, LayoutEventArgs args)
+        {
+        }
 
 #if LAYOUT_PERFWATCH
-private static int LayoutWatch = 100;
+        private const int LayoutWatch = 100;
 #endif
-        /// <include file='doc\LayoutEngine.uex' path='docs/doc[@for="LayoutEngine.Layout"]/*' />        
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs) {
+        public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs)
+        {
+            if (container == null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
 
 #if LAYOUT_PERFWATCH
             Debug.WriteLine(container.GetType().Name + "::Layout("
@@ -55,7 +67,8 @@ private static int LayoutWatch = 100;
 
 #if LAYOUT_PERFWATCH
             sw.Stop();
-            if (sw.ElapsedMilliseconds > LayoutWatch && Debugger.IsAttached) {
+            if (sw.ElapsedMilliseconds > LayoutWatch && Debugger.IsAttached)
+            {
                 Debugger.Break();
             }
             Debug.Unindent();
@@ -64,6 +77,9 @@ private static int LayoutWatch = 100;
             return parentNeedsLayout;
         }
 
-        internal virtual bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs) { return false; }
+        internal virtual bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
+        {
+            return false;
+        }
     }
 }
