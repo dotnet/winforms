@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Ctor_NullCultureInfo_ThrowsNullReferenceException()
         {
-            Assert.Throws<NullReferenceException>(() => new InputLanguageChangingEventArgs((CultureInfo)null, true));
+            Assert.Throws<ArgumentNullException>("culture", () => new InputLanguageChangingEventArgs((CultureInfo)null, true));
         }
 
         [Fact]
