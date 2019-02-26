@@ -11,6 +11,9 @@
       <GenerateSource>true</GenerateSource>
       <Namespace>System.Windows.Forms.Design.Editors.Resources</Namespace>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CollectionEditor.resx">
+      <Namespace>System.Windows.Forms.Design.Editors</Namespace>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

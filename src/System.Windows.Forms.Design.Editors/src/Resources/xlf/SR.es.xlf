@@ -132,6 +132,11 @@
         <target state="translated">Winforms Designer no se admite en esta plataforma.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="new">RTL_False</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
         <target state="translated">(Se desconoce)</target>
