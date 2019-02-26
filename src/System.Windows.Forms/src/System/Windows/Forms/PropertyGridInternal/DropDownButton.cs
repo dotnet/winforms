@@ -209,8 +209,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, ButtonBaseAdapter.LayoutData layout) {
-             ControlPaint.DrawImageReplaceColor(graphics, image, imageBounds, Color.Black, SystemInformation.HighContrast && (this.Control.MouseIsOver || this.Control.Focused) ? SystemColors.HighlightText : Control.ForeColor);
-             //ControlPaint.DrawImageColorized(graphics, image, imageBounds , Control.ForeColor);
+             ControlPaint.DrawImageReplaceColor(graphics, image, imageBounds, Color.Black, this.IsHighContrastHighlighted3() && !this.Control.MouseIsDown ? SystemColors.HighlightText : Control.ForeColor);
         } 
     }
 

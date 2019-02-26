@@ -80,6 +80,11 @@ namespace System.Windows.Forms.ButtonInternal {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected bool IsHighContrastHighlighted3() {
+            return AccessibilityImprovements.Level3 && IsHighContrastHighlightedInternal();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsHighContrastHighlightedInternal() {
             return SystemInformation.HighContrast && Application.RenderWithVisualStyles &&
                 (Control.Focused || Control.MouseIsOver || (Control.IsDefault && Control.Enabled));
