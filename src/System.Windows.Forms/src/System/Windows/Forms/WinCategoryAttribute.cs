@@ -40,12 +40,20 @@ namespace System.Windows.Forms {
         protected override string GetLocalizedString(string value) {
             string localizedValue = base.GetLocalizedString(value);
             if (localizedValue == null) {
-                localizedValue = (string)SR.GetObject("WinFormsCategory" + value);
+                localizedValue = (string)GetSRObject("WinFormsCategory" + value);
             }
             // This attribute is internal, and we should never have a missing resource string.
             //
             Debug.Assert(localizedValue != null, "All Windows Forms category attributes should have localized strings.  Category '" + value + "' not found.");
             return localizedValue;
+        }
+
+        private static object GetSRObject(string name)
+        {
+            object resourceObject = null;
+            try { resourceObject = SR.ResourceManager.GetObject(name); }
+            catch (System.Resources.MissingManifestResourceException) { }
+            return resourceObject;
         }
     }
 }

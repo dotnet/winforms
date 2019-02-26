@@ -4,11 +4,8 @@
 
 
 namespace System.Windows.Forms {
-    #if WINFORMS_NAMESPACE
-        using SR = System.SR;
-    #else
-        using SR = System.Windows.Forms.Design.Editors.Resources.SR;
-    #endif
+
+    using System.Resources;
 
     /// <summary>
     ///       The Show method displays a message box that can contain text, buttons, and symbols that inform and instruct the user.
