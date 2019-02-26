@@ -9,7 +9,7 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
-      <Namespace>System.Windows.Forms.Design.Editors.Resources</Namespace>
+      <Namespace>System</Namespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\CollectionEditor.resx">
       <Namespace>System.ComponentModel.Design</Namespace>
