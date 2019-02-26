@@ -10,8 +10,6 @@ namespace System.Windows.Forms {
         using SR = System.Windows.Forms.Design.Editors.Resources.SR;
     #endif
 
-    using System.Windows.Forms;
-
     /// <summary>
     ///       The Show method displays a message box that can contain text, buttons, and symbols that inform and instruct the user.
     ///       This MessageBox will be RTL, if the resources for this dll have been localized to a RTL language.
