@@ -132,6 +132,11 @@
         <target state="translated">Конструктор Windows Forms не поддерживается на этой платформе.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="new">RTL_False</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
         <target state="translated">(Неизвестный)</target>

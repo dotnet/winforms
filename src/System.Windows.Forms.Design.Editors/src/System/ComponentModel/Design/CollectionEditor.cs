@@ -321,7 +321,7 @@ namespace System.ComponentModel.Design
                         {
                             if (host != null)
                             {
-                                trans = host.CreateTransaction(string.Format(SR.GetResourceString(SR.CollectionEditorUndoBatchDesc), CollectionItemType.Name));
+                                trans = host.CreateTransaction(string.Format(SR.CollectionEditorUndoBatchDesc, CollectionItemType.Name));
                             }
                         }
                         catch (CheckoutException cxe)
@@ -867,7 +867,7 @@ namespace System.ComponentModel.Design
                     DpiHelper.ScaleButtonImageLogicalToDevice(_downButton);
                     DpiHelper.ScaleButtonImageLogicalToDevice(_upButton);
                 }
-                Text = string.Format(SR.GetResourceString(SR.CollectionEditorCaption), CollectionItemType.Name);
+                Text = string.Format(SR.CollectionEditorCaption, CollectionItemType.Name);
 
                 HookEvents();
 
@@ -1703,7 +1703,7 @@ namespace System.ComponentModel.Design
                 _listbox.Invalidate();
 
                 // also update the string above the grid.
-                _propertiesLabel.Text = string.Format(SR.GetResourceString(SR.CollectionEditorProperties), GetDisplayText((ListItem)_listbox.SelectedItem));
+                _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
             }
 
             /// <summary>
@@ -1740,7 +1740,7 @@ namespace System.ComponentModel.Design
                             }
                             else
                             {
-                                throw new Exception(string.Format(SR.GetResourceString(SR.CollectionEditorCantRemoveItem), GetDisplayText(item)));
+                                throw new Exception(string.Format(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
                             }
                         }
                         catch (Exception ex)
@@ -1908,11 +1908,11 @@ namespace System.ComponentModel.Design
                     if ((selectedItemCount == 1) || (selectedItemCount == -1))
                     {
                         // handle both single select listboxes and a single item selected in a multi-select listbox
-                        _propertiesLabel.Text = string.Format(SR.GetResourceString(SR.CollectionEditorProperties), GetDisplayText((ListItem)_listbox.SelectedItem));
+                        _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
                     }
                     else
                     {
-                        _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorPropertiesMultiSelect);
+                        _propertiesLabel.Text = SR.CollectionEditorPropertiesMultiSelect;
                     }
 
                     if (_editor.IsAnyObjectInheritedReadOnly(items))
@@ -1922,7 +1922,7 @@ namespace System.ComponentModel.Design
                         _removeButton.Enabled = false;
                         _upButton.Enabled = false;
                         _downButton.Enabled = false;
-                        _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorInheritedReadOnlySelection);
+                        _propertiesLabel.Text = SR.CollectionEditorInheritedReadOnlySelection;
                     }
                     else
                     {
@@ -1932,7 +1932,7 @@ namespace System.ComponentModel.Design
                 }
                 else
                 {
-                    _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorPropertiesNone);
+                    _propertiesLabel.Text = SR.CollectionEditorPropertiesNone;
                     _propertyBrowser.SelectedObject = null;
                 }
             }

@@ -132,6 +132,11 @@
         <target state="translated">Winforms 디자이너는 이 플랫폼에서 지원되지 않습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="new">RTL_False</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
         <target state="translated">(알 수 없음)</target>

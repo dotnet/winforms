@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.Drawing.Design;
 using System.Windows.Forms;
+using System.ComponentModel.Design;
 
 namespace WinformsControlsTest
 {
@@ -17,6 +14,25 @@ namespace WinformsControlsTest
         public PropertyGrid()
         {
             InitializeComponent();
+            propertyGrid1.SelectedObject = new UserControlWithObjectCollectioEditor();
         }
     }
+
+    public partial class UserControlWithObjectCollectioEditor : UserControl
+    {
+        public UserControlWithObjectCollectioEditor()
+        {
+            AutoScaleMode = AutoScaleMode.Font;
+        }
+
+        [Editor(typeof(CollectionEditor), typeof(UITypeEditor))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public int[] SomeCollection
+        {
+            get { return new int[] { 1, 2, 3 }; }
+            set { }
+        }
+    }
+
 }

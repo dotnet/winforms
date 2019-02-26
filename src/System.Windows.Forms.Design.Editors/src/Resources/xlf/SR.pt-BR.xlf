@@ -132,6 +132,11 @@
         <target state="translated">O Designer de Formulários do Windows não é compatível com esta plataforma.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="new">RTL_False</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
         <target state="translated">(Desconhecido)</target>

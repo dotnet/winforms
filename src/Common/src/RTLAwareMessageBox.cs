@@ -5,9 +5,9 @@
 
 namespace System.Windows.Forms {
     #if WINFORMS_NAMESPACE
-        using System = System;
+        using SR = System.SR;
     #else
-        using System = System.Windows.Forms.Design.Editors.System;
+        using SR = System.Windows.Forms.Design.Editors.Resources.SR;
     #endif
 
     using System.Windows.Forms;
@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
         /// </summary>
         public static bool IsRTLResources {
             get {
-                return System.SR.RTL != "RTL_False";
+                return SR.RTL != "RTL_False";
             }
         }
     }
