@@ -247,7 +247,7 @@ namespace System.Windows.Forms.Layout.Tests
         {
             var converter = new TableLayoutSettingsTypeConverter();
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
-            settings.SetColumnSpan(null, 1);
+            Assert.Throws<ArgumentNullException>("control", () => settings.SetColumnSpan(null, 1));
             string result = Assert.IsType<string>(converter.ConvertTo(settings, typeof(string)));
             Assert.Equal(@"<?xml version=""1.0"" encoding=""utf-16""?><TableLayoutSettings><Controls /><Columns Styles="""" /><Rows Styles="""" /></TableLayoutSettings>", result);
         }

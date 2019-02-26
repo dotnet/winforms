@@ -132,16 +132,16 @@
         <PackagePath>$(_packagePath)</PackagePath>
       </TfmSpecificPackageFile>
 
+      <!-- Commenting out until we decide to use XML files in the package -->
       <!-- Get xml files -->
-      <TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).xml">
+      <!--<TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).xml">
+        <PackagePath>$(_packagePath)%(RecursiveDir)</PackagePath>
+      </TfmSpecificPackageFile>-->
+
+      <!-- Get resource dlls -->
+      <TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).resources.dll">
         <PackagePath>$(_packagePath)%(RecursiveDir)</PackagePath>
       </TfmSpecificPackageFile>
-
-      <!-- commenting out until we decide to use them in the WindowsDesktop package -->
-      <!-- Get resource dlls -->
-      <!--TfmSpecificPackageFile Include="$(_baseDirectory)**\$(_baseFileName).resources.dll">
-        <PackagePath>$(_packagePath)%(RecursiveDir)</PackagePath>
-      </TfmSpecificPackageFile-->
 
     </ItemGroup>
   </Target>

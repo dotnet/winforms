@@ -41,14 +41,13 @@ namespace WinformsControlsTest
             this.menuesButton = new System.Windows.Forms.Button();
             this.panelsButton = new System.Windows.Forms.Button();
             this.splitterButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.ComboBoxesButton = new System.Windows.Forms.Button();
             this.mdiParent = new System.Windows.Forms.Button();
             this.propertyGrid = new System.Windows.Forms.Button();
             this.listViewButton = new System.Windows.Forms.Button();
             this.DateTimePickerButton = new System.Windows.Forms.Button();
             this.FolderBrowserDialogButton = new System.Windows.Forms.Button();
+            this.ShowExceptionDialogButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonsButton
@@ -140,24 +139,6 @@ namespace WinformsControlsTest
             this.splitterButton.Text = "Splitter";
             this.splitterButton.UseVisualStyleBackColor = true;
             this.splitterButton.Click += new System.EventHandler(this.splitterButton_Click);
-            //// 
-            //// label1
-            //// 
-            //this.label1.AutoSize = true;
-            //this.label1.Location = new System.Drawing.Point(383, 13);
-            //this.label1.Name = "label1";
-            //this.label1.Size = new System.Drawing.Size(44, 13);
-            //this.label1.TabIndex = 10;
-            //this.label1.Text = "Broken:";
-            //// 
-            //// label2
-            //// 
-            //this.label2.AutoSize = true;
-            //this.label2.Location = new System.Drawing.Point(74, 12);
-            //this.label2.Name = "label2";
-            //this.label2.Size = new System.Drawing.Size(50, 13);
-            //this.label2.TabIndex = 11;
-            //this.label2.Text = "Working:";
             // 
             // ComboBoxesButton
             // 
@@ -221,19 +202,28 @@ namespace WinformsControlsTest
             this.FolderBrowserDialogButton.UseVisualStyleBackColor = true;
             this.FolderBrowserDialogButton.Click += new System.EventHandler(this.folderBrowserDialogButton_Click);
             // 
+            // ShowExceptionDialogButton
+            // 
+            this.ShowExceptionDialogButton.Location = new System.Drawing.Point(13, 261);
+            this.ShowExceptionDialogButton.Name = "ShowExceptionDialogButton";
+            this.ShowExceptionDialogButton.Size = new System.Drawing.Size(259, 23);
+            this.ShowExceptionDialogButton.TabIndex = 19;
+            this.ShowExceptionDialogButton.Text = "ThreadException dialog";
+            this.ShowExceptionDialogButton.UseVisualStyleBackColor = true;
+            this.ShowExceptionDialogButton.Click += new System.EventHandler(this.ShowExceptionDialogButton_Click);
+            // 
             // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(578, 402);
+            this.Controls.Add(this.ShowExceptionDialogButton);
             this.Controls.Add(this.FolderBrowserDialogButton);
             this.Controls.Add(this.DateTimePickerButton);
             this.Controls.Add(this.listViewButton);
             this.Controls.Add(this.propertyGrid);
             this.Controls.Add(this.mdiParent);
             this.Controls.Add(this.ComboBoxesButton);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.splitterButton);
             this.Controls.Add(this.panelsButton);
             this.Controls.Add(this.menuesButton);
@@ -245,7 +235,6 @@ namespace WinformsControlsTest
             this.Controls.Add(this.buttonsButton);
             this.Name = "MenuForm";
             this.Text = "MenuForm";
-            this.Load += new System.EventHandler(this.MenuForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,14 +252,14 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button menuesButton;
         private System.Windows.Forms.Button panelsButton;
         private System.Windows.Forms.Button splitterButton;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button ComboBoxesButton;
         private System.Windows.Forms.Button mdiParent;
         private System.Windows.Forms.Button propertyGrid;
         private System.Windows.Forms.Button listViewButton;
         private System.Windows.Forms.Button DateTimePickerButton;
         private System.Windows.Forms.Button FolderBrowserDialogButton;
+        private System.Windows.Forms.Button ShowExceptionDialogButton;
+
     }
 }
 

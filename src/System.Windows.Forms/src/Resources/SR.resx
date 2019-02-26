@@ -2176,10 +2176,16 @@
     <value>DataGridView Default Error Dialog</value>
   </data>
   <data name="DataGridView_ErrorMessageText_NoException" xml:space="preserve">
-    <value>Exception occurred in the DataGridView.\r\n\r\nTo replace this default dialog box, handle the DataError event.</value>
+    <value>Exception occurred in the DataGridView.
+
+To replace this default dialog box, handle the DataError event.</value>
   </data>
   <data name="DataGridView_ErrorMessageText_WithException" xml:space="preserve">
-    <value>The following exception occurred in the DataGridView:\r\n\r\n{0}\r\n\r\nTo replace this default dialog please handle the DataError event.</value>
+    <value>The following exception occurred in the DataGridView:
+
+{0}
+
+To replace this default dialog please handle the DataError event.</value>
   </data>
   <data name="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell" xml:space="preserve">
     <value>First displayed cell cannot be set to a header or shared cell.</value>
@@ -3145,13 +3151,17 @@
     <value>&amp;Continue</value>
   </data>
   <data name="ExDlgContinueErrorText" xml:space="preserve">
-    <value>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{0}.</value>
+    <value>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
+
+{0}.</value>
   </data>
   <data name="ExDlgDetailsText" xml:space="preserve">
     <value>Error Text</value>
   </data>
   <data name="ExDlgErrorText" xml:space="preserve">
-    <value>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{0}.</value>
+    <value>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{0}.</value>
   </data>
   <data name="ExDlgHelp" xml:space="preserve">
     <value>&amp;Help</value>
@@ -3160,31 +3170,45 @@
     <value>Exception Text</value>
   </data>
   <data name="ExDlgMsgFooterNonSwitchable" xml:space="preserve">
-    <value>Application does not support Windows Forms just-in-time (JIT)\r\ndebugging. Contact the application author for more\r\ninformation.\r\n</value>
+    <value>Application does not support Windows Forms just-in-time (JIT)
+debugging. Contact the application author for more
+information.
+</value>
   </data>
   <data name="ExDlgMsgFooterSwitchable" xml:space="preserve">
     <value />
   </data>
   <data name="ExDlgMsgHeaderNonSwitchable" xml:space="preserve">
-    <value>Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</value>
+    <value>Application does not support just-in-time (JIT)
+debugging. See the end of this message for details.
+</value>
   </data>
   <data name="ExDlgMsgHeaderSwitchable" xml:space="preserve">
-    <value>See the end of this message for details on invoking \r\njust-in-time (JIT) debugging instead of this dialog box.\r\n</value>
+    <value>See the end of this message for details on invoking 
+just-in-time (JIT) debugging instead of this dialog box.
+</value>
   </data>
   <data name="ExDlgMsgJITDebuggingSection" xml:space="preserve">
     <value>JIT Debugging</value>
   </data>
   <data name="ExDlgMsgLoadedAssembliesEntry" xml:space="preserve">
-    <value>{0}\r\n    Assembly Version: {1}\r\n    Win32 Version: {2}\r\n    CodeBase: {3}\r\n</value>
+    <value>{0}
+    Assembly Version: {1}
+    Win32 Version: {2}
+    CodeBase: {3}
+</value>
   </data>
   <data name="ExDlgMsgLoadedAssembliesSection" xml:space="preserve">
     <value>Loaded Assemblies</value>
   </data>
   <data name="ExDlgMsgSectionSeperator" xml:space="preserve">
-    <value>\r\n************** {0} **************\r\n</value>
+    <value>
+************** {0} **************
+</value>
   </data>
   <data name="ExDlgMsgSeperator" xml:space="preserve">
-    <value>----------------------------------------\r\n</value>
+    <value>----------------------------------------
+</value>
   </data>
   <data name="ExDlgOk" xml:space="preserve">
     <value>OK</value>
@@ -3193,10 +3217,18 @@
     <value>&amp;Quit</value>
   </data>
   <data name="ExDlgSecurityContinueErrorText" xml:space="preserve">
-    <value>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{1}.</value>
+    <value>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue.
+
+{1}.</value>
   </data>
   <data name="ExDlgSecurityErrorText" xml:space="preserve">
-    <value>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{1}.</value>
+    <value>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{1}.</value>
   </data>
   <data name="ExDlgShowDetails" xml:space="preserve">
     <value>&amp;Details</value>
@@ -3259,10 +3291,12 @@
     <value>Too many files selected. Select fewer files and try again.</value>
   </data>
   <data name="FileDialogCreatePrompt" xml:space="preserve">
-    <value>File {0} does not exist.\r\nDo you want to create it?</value>
+    <value>File {0} does not exist.
+Do you want to create it?</value>
   </data>
   <data name="FileDialogFileNotFound" xml:space="preserve">
-    <value>File {0} does not exist.\r\nVerify that the correct file name was given.</value>
+    <value>File {0} does not exist.
+Verify that the correct file name was given.</value>
   </data>
   <data name="FileDialogInvalidFileName" xml:space="preserve">
     <value>File {0} is not a valid file name.</value>
@@ -3274,7 +3308,8 @@
     <value>Filter index not valid.</value>
   </data>
   <data name="FileDialogOverwritePrompt" xml:space="preserve">
-    <value>File {0} already exists.\r\nDo you want to replace it?</value>
+    <value>File {0} already exists.
+Do you want to replace it?</value>
   </data>
   <data name="FileDialogSubLassFailure" xml:space="preserve">
     <value>Attempt to subclass a list box did not succeed. Not enough memory is available.</value>
@@ -3622,7 +3657,9 @@
     <value>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.</value>
   </data>
   <data name="IllegalCrossThreadCallWithStack" xml:space="preserve">
-    <value>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.\r\nStack trace where the illegal operation occurred was:\r\n{1}"</value>
+    <value>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
+Stack trace where the illegal operation occurred was:
+{1}"</value>
   </data>
   <data name="IllegalState" xml:space="preserve">
     <value>Internal state of the {1} class is not valid.</value>
@@ -5626,7 +5663,9 @@
     <value>Security</value>
   </data>
   <data name="SecurityRestrictedText" xml:space="preserve">
-    <value>Window is running in a restricted mode. Some UI features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</value>
+    <value>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</value>
   </data>
   <data name="SecurityRestrictedWindowTextMixedZone" xml:space="preserve">
     <value>Mixed Zone</value>
@@ -5674,10 +5713,14 @@
     <value>Source: {0}</value>
   </data>
   <data name="SecurityToolTipTextFormat" xml:space="preserve">
-    <value>{0}\r\n\r\n{1}</value>
+    <value>{0}
+
+{1}</value>
   </data>
   <data name="SecurityUnrestrictedText" xml:space="preserve">
-    <value>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</value>
+    <value>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</value>
   </data>
   <data name="SecurityVersionColumn" xml:space="preserve">
     <value>Assembly Version</value>
@@ -7051,10 +7094,12 @@
     <value>MoreInformationLink</value>
   </data>
   <data name="TrustManagerPromptUI_NoPublisherInstallQuestion" xml:space="preserve">
-    <value>Publisher cannot be verified.\r\nAre you sure you want to install this application?</value>
+    <value>Publisher cannot be verified.
+Are you sure you want to install this application?</value>
   </data>
   <data name="TrustManagerPromptUI_NoPublisherRunQuestion" xml:space="preserve">
-    <value>Publisher cannot be verified.\r\nAre you sure you want to run this application?</value>
+    <value>Publisher cannot be verified.
+Are you sure you want to run this application?</value>
   </data>
   <data name="TrustManagerPromptUI_Close" xml:space="preserve">
     <value>Close</value>
@@ -7385,5 +7430,8 @@
   </data>
   <data name="TextBoxPlaceholderTextDescr" xml:space="preserve">
     <value>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </value>
+  </data>
+  <data name="TreeNodeCircularReference" xml:space="preserve">
+    <value>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</value>
   </data>
 </root>
