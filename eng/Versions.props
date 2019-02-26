@@ -16,6 +16,7 @@
     <SystemCodeDomPackageVersion>4.6.0-preview3.19120.9</SystemCodeDomPackageVersion>
     <SystemSecurityPermissionsPackageVersion>4.6.0-preview3.19120.9</SystemSecurityPermissionsPackageVersion>
     <SystemWindowsExtensionsPackageVersion>4.6.0-preview3.19120.9</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCorePlatformsVersion>4.6.0-preview3.19120.9</MicrosoftNETCorePlatformsVersion>
   </PropertyGroup>
   <PropertyGroup>
     <AccessibilityPackageVersion>4.6.0-alpha-27122-5</AccessibilityPackageVersion>
