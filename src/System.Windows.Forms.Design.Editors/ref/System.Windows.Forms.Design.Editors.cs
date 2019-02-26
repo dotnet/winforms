@@ -151,7 +151,7 @@ namespace System.Windows.Forms.Design
         public override System.Drawing.Design.UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) { throw null; }
     }
 }
-namespace System.Windows.Forms.Design.Editors
+namespace System.ComponentModel.Design
 {
     [System.CLSCompliantAttribute(false)]
     public partial class CollectionEditor : System.Drawing.Design.UITypeEditor
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.Design.Editors
         protected object GetService(Type serviceType) { throw null; }
         protected virtual object SetItems(object editValue, object[] value) { throw null; }
         protected virtual void ShowHelp() { }
-        protected abstract class CollectionForm : Form
+        protected abstract class CollectionForm : System.Windows.Forms.Form
         {
             public CollectionForm(CollectionEditor editor) { }
             protected Type CollectionItemType { get { throw null; } }
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.Design.Editors
             protected void DestroyInstance(object instance) { }
             protected virtual void DisplayError(Exception e) { }
             protected override object GetService(Type serviceType) { throw null; }
-            protected internal virtual DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc) { throw null; }
+            protected internal virtual System.Windows.Forms.DialogResult ShowEditorDialog(System.Windows.Forms.Design.IWindowsFormsEditorService edSvc) { throw null; }
             protected abstract void OnEditValueChanged();
         }
     }
@@ -204,26 +204,26 @@ namespace System.Windows.Forms.Design.Editors
         public ObjectSelectorEditor() { }
         public ObjectSelectorEditor(bool subObjectSelector) { }
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) { throw null; }
-        public static void ApplyTreeViewThemeStyles(TreeView treeView) { }
+        public static void ApplyTreeViewThemeStyles(System.Windows.Forms.TreeView treeView) { }
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) { throw null; }
         public bool EqualsToValue(object value) { throw null; }
         protected virtual void FillTreeWithData(Selector selector, ITypeDescriptorContext context, IServiceProvider provider) { }
         public virtual void SetValue(object value) { }
-        public class Selector : TreeView
+        public class Selector : System.Windows.Forms.TreeView
         {
             public Selector(ObjectSelectorEditor editor) { }
             public SelectorNode AddNode(string label, object value, SelectorNode parent) { throw null; }
             public void Clear() { }
-            protected void OnAfterSelect(object sender, TreeViewEventArgs e) { }
-            protected override void OnKeyDown(KeyEventArgs e) { }
-            protected override void OnKeyPress(KeyPressEventArgs e) { }
-            protected override void OnNodeMouseClick(TreeNodeMouseClickEventArgs e) { }
-            public bool SetSelection(object value, TreeNodeCollection nodes) { throw null; }
-            public void Start(IWindowsFormsEditorService edSvc, object value) { }
+            protected void OnAfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e) { }
+            protected override void OnKeyDown(System.Windows.Forms.KeyEventArgs e) { }
+            protected override void OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) { }
+            protected override void OnNodeMouseClick(System.Windows.Forms.TreeNodeMouseClickEventArgs e) { }
+            public bool SetSelection(object value, System.Windows.Forms.TreeNodeCollection nodes) { throw null; }
+            public void Start(System.Windows.Forms.Design.IWindowsFormsEditorService edSvc, object value) { }
             public void Stop() { }
-            protected override void WndProc(ref Message m) { }
+            protected override void WndProc(ref System.Windows.Forms.Message m) { }
         }
-        public class SelectorNode : TreeNode
+        public class SelectorNode : System.Windows.Forms.TreeNode
         {
             public SelectorNode(string label, object value) : base(label) { }
         }
