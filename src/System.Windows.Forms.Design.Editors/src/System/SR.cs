@@ -15,8 +15,6 @@ namespace System.Windows.Forms.Design.Editors.System
 
         internal static string GetResourceString(string resourceKey, string defaultValue = null) => ResourceManager.GetString(resourceKey, Culture);
 
-        internal static string GetFormattedString(string resourceKey, string param) => string.Format(GetResourceString(resourceKey), param);
-
         internal static string RTL => GetResourceString("RTL");
 
         internal static string CollectionEditorCantRemoveItem = "CollectionEditorCantRemoveItem";

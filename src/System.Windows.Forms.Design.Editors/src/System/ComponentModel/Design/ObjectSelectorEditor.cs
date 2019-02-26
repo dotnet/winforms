@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
-
 using System.Drawing.Design;
-
-namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+namespace System.ComponentModel.Design
 {
     [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors")]
     public abstract class ObjectSelectorEditor : UITypeEditor

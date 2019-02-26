@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Reflection;
 using Xunit;
 
-namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design.Tests
+namespace System.ComponentModel.Design.Tests
 {
     public class CollectionEditorTests
     {

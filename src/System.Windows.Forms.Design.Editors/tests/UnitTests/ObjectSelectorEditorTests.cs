@@ -5,7 +5,7 @@
 using System.Drawing.Design;
 using Xunit;
 
-namespace System.Windows.Forms.Design.Editors.System.ComponentModel.Design.Tests
+namespace System.ComponentModel.Design.Tests
 {
     public class ObjectSelectorEditorTests
     {

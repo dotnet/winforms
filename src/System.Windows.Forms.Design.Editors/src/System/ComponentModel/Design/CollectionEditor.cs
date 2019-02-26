@@ -2,19 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Runtime.InteropServices;
-using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Reflection;
-using System.Windows.Forms.VisualStyles;
 using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using System.Windows.Forms.Design.Editors.Resources;
+using System.Windows.Forms.VisualStyles;
 
-namespace System.Windows.Forms.Design.Editors
+namespace System.ComponentModel.Design
 {
     /// <summary>
     ///    Provides a generic editor for most any collection.
@@ -318,7 +321,7 @@ namespace System.Windows.Forms.Design.Editors
                         {
                             if (host != null)
                             {
-                                trans = host.CreateTransaction(System.SR.GetFormattedString(System.SR.CollectionEditorUndoBatchDesc, CollectionItemType.Name));
+                                trans = host.CreateTransaction(string.Format(SR.GetResourceString(SR.CollectionEditorUndoBatchDesc), CollectionItemType.Name));
                             }
                         }
                         catch (CheckoutException cxe)
@@ -864,7 +867,7 @@ namespace System.Windows.Forms.Design.Editors
                     DpiHelper.ScaleButtonImageLogicalToDevice(_downButton);
                     DpiHelper.ScaleButtonImageLogicalToDevice(_upButton);
                 }
-                Text = System.SR.GetFormattedString(System.SR.CollectionEditorCaption, CollectionItemType.Name);
+                Text = string.Format(SR.GetResourceString(SR.CollectionEditorCaption), CollectionItemType.Name);
 
                 HookEvents();
 
@@ -1700,7 +1703,7 @@ namespace System.Windows.Forms.Design.Editors
                 _listbox.Invalidate();
 
                 // also update the string above the grid.
-                _propertiesLabel.Text = System.SR.GetFormattedString(System.SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
+                _propertiesLabel.Text = string.Format(SR.GetResourceString(SR.CollectionEditorProperties), GetDisplayText((ListItem)_listbox.SelectedItem));
             }
 
             /// <summary>
@@ -1737,7 +1740,7 @@ namespace System.Windows.Forms.Design.Editors
                             }
                             else
                             {
-                                throw new Exception(System.SR.GetFormattedString(System.SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
+                                throw new Exception(string.Format(SR.GetResourceString(SR.CollectionEditorCantRemoveItem), GetDisplayText(item)));
                             }
                         }
                         catch (Exception ex)
@@ -1905,11 +1908,11 @@ namespace System.Windows.Forms.Design.Editors
                     if ((selectedItemCount == 1) || (selectedItemCount == -1))
                     {
                         // handle both single select listboxes and a single item selected in a multi-select listbox
-                        _propertiesLabel.Text = System.SR.GetFormattedString(System.SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
+                        _propertiesLabel.Text = string.Format(SR.GetResourceString(SR.CollectionEditorProperties), GetDisplayText((ListItem)_listbox.SelectedItem));
                     }
                     else
                     {
-                        _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorPropertiesMultiSelect);
+                        _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorPropertiesMultiSelect);
                     }
 
                     if (_editor.IsAnyObjectInheritedReadOnly(items))
@@ -1919,7 +1922,7 @@ namespace System.Windows.Forms.Design.Editors
                         _removeButton.Enabled = false;
                         _upButton.Enabled = false;
                         _downButton.Enabled = false;
-                        _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorInheritedReadOnlySelection);
+                        _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorInheritedReadOnlySelection);
                     }
                     else
                     {
@@ -1929,7 +1932,7 @@ namespace System.Windows.Forms.Design.Editors
                 }
                 else
                 {
-                    _propertiesLabel.Text = System.SR.GetResourceString(System.SR.CollectionEditorPropertiesNone);
+                    _propertiesLabel.Text = SR.GetResourceString(SR.CollectionEditorPropertiesNone);
                     _propertyBrowser.SelectedObject = null;
                 }
             }
