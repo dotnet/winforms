@@ -4,6 +4,8 @@
 
 using System;
 using System.Windows.Forms;
+using System.Threading;
+using System.Globalization;
 
 namespace WinformsControlsTest
 {
@@ -18,6 +20,7 @@ namespace WinformsControlsTest
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException); //UnhandledExceptionMode.ThrowException
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
             try
             {
                 Application.Run(new MainForm());

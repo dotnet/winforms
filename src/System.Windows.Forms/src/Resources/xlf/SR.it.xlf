@@ -3968,13 +3968,25 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_NoException">
-        <source>Exception occurred in the DataGridView.\r\n\r\nTo replace this default dialog box, handle the DataError event.</source>
-        <target state="translated">Si è verificata un'eccezione in DataGridView.\r\n\r\nPer sostituire questa finestra di dialogo predefinita, gestire l'evento DataError.</target>
+        <source>Exception occurred in the DataGridView.
+
+To replace this default dialog box, handle the DataError event.</source>
+        <target state="translated">Si è verificata un'eccezione in DataGridView.
+
+Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
-        <source>The following exception occurred in the DataGridView:\r\n\r\n{0}\r\n\r\nTo replace this default dialog please handle the DataError event.</source>
-        <target state="translated">In DataGridView si è verificata l'eccezione seguente:\r\n\r\n{0}\r\n\r\nPer sostituire questa finestra di dialogo predefinita, gestire l'evento DataError.</target>
+        <source>The following exception occurred in the DataGridView:
+
+{0}
+
+To replace this default dialog please handle the DataError event.</source>
+        <target state="translated">Si è verificata la seguente eccezione in DataGridView:
+
+{0}
+
+Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5068,8 +5080,12 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgContinueErrorText">
-        <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{0}.</source>
-        <target state="translated">Si è verificata un'eccezione non gestita in un componente dell'applicazione. Se si fa clic su Continua, l'applicazione ignorerà l'errore e proverà a proseguire.\r\n\r\n{0}.</target>
+        <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
+
+{0}.</source>
+        <target state="translated">Eccezione non gestita in un componente dell'applicazione. Fare clic su Continua per ignorare l'errore e tentare di proseguire.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5078,8 +5094,12 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgErrorText">
-        <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{0}.</source>
-        <target state="translated">Si è verificata un'eccezione non gestita nell'applicazione. Se si fa clic su Continua, l'applicazione ignorerà l'errore e proverà a proseguire. Se si fa clic su Esci, l'applicazione verrà chiusa immediatamente.\r\n\r\n{0}.</target>
+        <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{0}.</source>
+        <target state="translated">Eccezione non gestita nell'applicazione. Fare clic su Continua per ignorare l'errore e tentare di proseguire. Fare clic su Esci per arrestare l'applicazione immediatamente.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5093,18 +5113,32 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgFooterNonSwitchable">
-        <source>Application does not support Windows Forms just-in-time (JIT)\r\ndebugging. Contact the application author for more\r\ninformation.\r\n</source>
-        <target state="translated">L'applicazione non supporta il debug JIT\r\ndi Windows Form. Per altre informazioni, contattare l'autore\r\ndell'applicazione.\r\n</target>
+        <source>Application does not support Windows Forms just-in-time (JIT)
+debugging. Contact the application author for more
+information.
+</source>
+        <target state="translated">L'applicazione non supporta il debug JIT
+di Windows Form. Per ulteriori informazioni, contattare l'autore
+dell'applicazione.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
-        <source>Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</source>
-        <target state="translated">L'applicazione non supporta il debug JIT.\r\nPer altre informazioni, vedere la parte finale di questo messaggio.\r\n</target>
+        <source>Application does not support just-in-time (JIT)
+debugging. See the end of this message for details.
+</source>
+        <target state="translated">L'applicazione non supporta il debug JIT.
+Ulteriori informazioni sono riportate in fondo al messaggio.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking \r\njust-in-time (JIT) debugging instead of this dialog box.\r\n</source>
-        <target state="translated">Per altre informazioni su come richiamare il debug JIT invece \r\ndi questa finestra di dialogo, vedere la parte finale di questo messaggio.\r\n</target>
+        <source>See the end of this message for details on invoking 
+just-in-time (JIT) debugging instead of this dialog box.
+</source>
+        <target state="translated">Le informazioni su come richiamare il debug JIT (Just-In-Time) anziché questa finestra
+sono riportate in fondo al messaggio.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5113,8 +5147,16 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
-        <source>{0}\r\n    Assembly Version: {1}\r\n    Win32 Version: {2}\r\n    CodeBase: {3}\r\n</source>
-        <target state="translated">{0}\r\n    Versione assembly: {1}\r\n    Versione Win32: {2}\r\n    Base di codice: {3}\r\n</target>
+        <source>{0}
+    Assembly Version: {1}
+    Win32 Version: {2}
+    CodeBase: {3}
+</source>
+        <target state="translated">{0}
+    Versione assembly: {1}
+    Versione Win32: {2}
+    Base di codice: {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5123,13 +5165,19 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSectionSeperator">
-        <source>\r\n************** {0} **************\r\n</source>
-        <target state="translated">\r\n************** {0} **************\r\n</target>
+        <source>
+************** {0} **************
+</source>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
-        <source>----------------------------------------\r\n</source>
-        <target state="translated">----------------------------------------\r\n</target>
+        <source>----------------------------------------
+</source>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
@@ -5143,13 +5191,29 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{1}.</source>
-        <target state="translated">L'applicazione ha provato a eseguire un'operazione non consentita dai criteri di sicurezza. Per concedere all'applicazione l'autorizzazione necessaria, contattare l'amministratore di sistema oppure usare lo strumento Microsoft .NET Framework Configuration.\r\n\r\nSe si sceglie Continua, l'errore verrà ignorato e l'applicazione proverà a continuare.\r\n\r\n{1}.</target>
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue.
+
+{1}.</source>
+        <target state="translated">L'applicazione ha tentato di eseguire un'operazione non consentita dai criteri di sicurezza. Per attribuire all'applicazione l'autorizzazione necessaria, rivolgersi all'amministratore del sistema oppure utilizzare lo strumento .NET Framework Configuration.
+
+Se si sceglie Continua, l'errore verrà ignorato e l'applicazione tenterà di continuare. Se si sceglie Chiudi, l'applicazione verrà chiusa immediatamente.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{1}.</source>
-        <target state="translated">L'applicazione ha provato a eseguire un'operazione non consentita dai criteri di sicurezza. Per concedere all'applicazione l'autorizzazione necessaria, contattare l'amministratore di sistema oppure usare lo strumento Microsoft .NET Framework Configuration.\r\n\r\nSe si sceglie Continua, l'errore verrà ignorato e l'applicazione proverà a continuare. Se si sceglie Chiudi, l'applicazione verrà chiusa immediatamente.\r\n\r\n{1}.</target>
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{1}.</source>
+        <target state="translated">L'applicazione ha tentato di eseguire un'operazione non consentita dai criteri di sicurezza. Per attribuire all'applicazione l'autorizzazione necessaria, rivolgersi all'amministratore del sistema oppure utilizzare lo strumento .NET Framework Configuration.
+
+Se si sceglie Continua, l'errore verrà ignorato e l'applicazione tenterà di continuare. Se si sceglie Chiudi, l'applicazione verrà chiusa immediatamente.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5263,13 +5327,17 @@
         <note />
       </trans-unit>
       <trans-unit id="FileDialogCreatePrompt">
-        <source>File {0} does not exist.\r\nDo you want to create it?</source>
-        <target state="translated">Il file {0} non esiste.\r\nCrearlo?</target>
+        <source>File {0} does not exist.
+Do you want to create it?</source>
+        <target state="translated">Il file {0} non esiste.
+Crearlo?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
-        <source>File {0} does not exist.\r\nVerify that the correct file name was given.</source>
-        <target state="translated">Il file {0} non esiste.\r\nVerificare di aver specificato il nome file corretto.</target>
+        <source>File {0} does not exist.
+Verify that the correct file name was given.</source>
+        <target state="translated">Il file {0} non esiste.
+Verificare che si sia specificato il nome di file corretto.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5288,8 +5356,10 @@
         <note />
       </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
-        <source>File {0} already exists.\r\nDo you want to replace it?</source>
-        <target state="translated">Il file {0} esiste già.\r\nSostituirlo?</target>
+        <source>File {0} already exists.
+Do you want to replace it?</source>
+        <target state="translated">Il file {0} esiste già.
+Sostituirlo?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5883,8 +5953,12 @@
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCallWithStack">
-        <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.\r\nStack trace where the illegal operation occurred was:\r\n{1}"</source>
-        <target state="translated">L'operazione cross-thread non è valida: l'accesso al controllo '{0}' è stato eseguito da un thread diverso da quello da cui è stata eseguita la creazione.\r\nL'analisi dello stack nel punto in cui si è verificata l'operazione non valida è:\r\n{1}"</target>
+        <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
+Stack trace where the illegal operation occurred was:
+{1}"</source>
+        <target state="translated">Operazione cross-thread non valida: è stato eseguito l'accesso al controllo '{0}' da un thread diverso da quello da cui è stata eseguita la creazione.
+Traccia dello stack da cui si è verificata l'operazione non valida:
+{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -9273,8 +9347,12 @@
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedText">
-        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</source>
-        <target state="translated">La finestra non è in esecuzione in modalità restricted. Alcune funzionalità dell'interfaccia utente potrebbero essere disabilitate per motivi di sicurezza. \r\n\r\nPer altre informazioni, contattare l'amministratore di sistema o l'autore dell'applicazione.</target>
+        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</source>
+        <target state="translated">La finestra è in esecuzione in modalità limitata. Alcune caratteristiche dell'interfaccia utente potrebbero non essere disponibili per ragioni di sicurezza.
+
+Per ulteriori informazioni, contattare l'amministratore del sistema o l'autore dell'applicazione.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
@@ -9353,13 +9431,21 @@
         <note />
       </trans-unit>
       <trans-unit id="SecurityToolTipTextFormat">
-        <source>{0}\r\n\r\n{1}</source>
-        <target state="translated">{0}\r\n\r\n{1}</target>
+        <source>{0}
+
+{1}</source>
+        <target state="translated">{0}
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityUnrestrictedText">
-        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</source>
-        <target state="translated">La finestra è in esecuzione in modalità unrestricted, ma alcune funzionalità potrebbero essere comunque disabilitate per motivi di sicurezza. \r\n\r\nPer altre informazioni, contattare l'amministratore di sistema o l'autore dell'applicazione.</target>
+        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</source>
+        <target state="translated">La finestra è in esecuzione in modalità non limitata. Ciononostante, alcune caratteristiche potrebbero non essere disponibili per ragioni di sicurezza.
+
+Per ulteriori informazioni, contattare l'amministratore del sistema o l'autore dell'applicazione.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityVersionColumn">
@@ -11167,6 +11253,11 @@
         <target state="translated">Indica se il nodo della struttura ad albero è selezionato.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">Il parametro deve essere di tipo TreeNode.</target>
@@ -11623,13 +11714,17 @@
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
-        <source>Publisher cannot be verified.\r\nAre you sure you want to install this application?</source>
-        <target state="translated">Non è possibile verificare l'editore.\r\nInstallare questa applicazione?</target>
+        <source>Publisher cannot be verified.
+Are you sure you want to install this application?</source>
+        <target state="translated">Impossibile verificare l'editore.
+Installare l'applicazione?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
-        <source>Publisher cannot be verified.\r\nAre you sure you want to run this application?</source>
-        <target state="translated">Non è possibile verificare l'editore.\r\nEseguire questa applicazione?</target>
+        <source>Publisher cannot be verified.
+Are you sure you want to run this application?</source>
+        <target state="translated">Impossibile verificare l'editore.
+Eseguire l'applicazione?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Publisher">

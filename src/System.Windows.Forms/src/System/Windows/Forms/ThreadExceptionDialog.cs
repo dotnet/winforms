@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,14 +14,10 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Globalization;
 
-    /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog"]/*' />
-    /// <internalonly/>
-    /// <devdoc>
-    ///    <para>
-    ///       Implements a dialog box that is displayed when an unhandled exception occurs in
-    ///       a thread.
-    ///    </para>
-    /// </devdoc>
+    /// <summary>
+    ///  Implements a dialog box that is displayed when an unhandled exception occurs in
+    ///  a thread.
+    /// </summary>
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -81,13 +77,9 @@ namespace System.Windows.Forms {
         private Bitmap collapseImage = null;
         private bool detailsVisible = false;
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.ThreadExceptionDialog"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.ThreadExceptionDialog'/> class.
-        ///       
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///    Initializes a new instance of the <see cref='System.Windows.Forms.ThreadExceptionDialog'/> class.      
+        /// </summary>
         public ThreadExceptionDialog(Exception t) {
 
             if (DpiHelper.IsScalingRequirementMet) {
@@ -112,14 +104,14 @@ namespace System.Windows.Forms {
                 scaledExceptionMessageVerticalPadding = LogicalToDeviceUnits(EXCEPTIONMESSAGEVERTICALPADDING);
             }
 
-            string messageRes;
+            string messageFormat;
             string messageText;
             Button[] buttons;
             bool detailAnchor = false;
 
             WarningException w = t as WarningException;
             if (w != null) {
-                messageRes = SR.ExDlgWarningText;
+                messageFormat = SR.ExDlgWarningText;
                 messageText = w.Message;
                 if (w.HelpUrl == null) {
                     buttons = new Button[] {continueButton};
@@ -135,19 +127,19 @@ namespace System.Windows.Forms {
                 
                 if (Application.AllowQuit) {
                     if (t is System.Security.SecurityException) {
-                        messageRes = "ExDlgSecurityErrorText";
+                        messageFormat = SR.ExDlgSecurityErrorText;
                     }
                     else {
-                        messageRes = "ExDlgErrorText";
+                        messageFormat = SR.ExDlgErrorText;
                     }
                     buttons = new Button[] {detailsButton, continueButton, quitButton};
                 }
                 else {
                     if (t is System.Security.SecurityException) {
-                        messageRes = "ExDlgSecurityContinueErrorText";
+                        messageFormat = SR.ExDlgSecurityContinueErrorText;
                     }
                     else {
-                        messageRes = "ExDlgContinueErrorText";
+                        messageFormat = SR.ExDlgContinueErrorText;
                     }
                     buttons = new Button[] {detailsButton, continueButton};
                 }
@@ -157,10 +149,10 @@ namespace System.Windows.Forms {
                 messageText = t.GetType().Name;
             }
             if (t is System.Security.SecurityException) {
-                messageText = string.Format(messageRes, t.GetType().Name, Trim(messageText));
+                messageText = string.Format(messageFormat, t.GetType().Name, Trim(messageText));
             }
             else {
-                messageText = string.Format(messageRes, Trim(messageText));
+                messageText = string.Format(messageFormat, Trim(messageText));
             }
 
             StringBuilder detailsTextBuilder = new StringBuilder();
@@ -184,7 +176,6 @@ namespace System.Windows.Forms {
                 string fileVer = SR.NotAvailable;
 
                 try {
-                        
                     if (name.EscapedCodeBase != null && name.EscapedCodeBase.Length > 0) {
                         Uri codeBase = new Uri(name.EscapedCodeBase);
                         if (codeBase.Scheme == "file") {
@@ -289,9 +280,9 @@ namespace System.Windows.Forms {
             if (detailAnchor) {
                 b = detailsButton;
 
-                expandImage = new Bitmap(this.GetType(), DownBitmapName);
+                expandImage = new Bitmap(GetType(), DownBitmapName);
                 expandImage.MakeTransparent();
-                collapseImage = new Bitmap(this.GetType(), UpBitmapName);
+                collapseImage = new Bitmap(GetType(), UpBitmapName);
                 collapseImage.MakeTransparent();
 
                 if (DpiHelper.IsScalingRequirementMet)
@@ -336,13 +327,13 @@ namespace System.Windows.Forms {
             if (expandImage != null) {
                 expandImage.Dispose();
             }
-            expandImage = new Bitmap(this.GetType(), DownBitmapName);
+            expandImage = new Bitmap(GetType(), DownBitmapName);
             expandImage.MakeTransparent();
 
             if (collapseImage != null) {
                 collapseImage.Dispose();
             }
-            collapseImage = new Bitmap(this.GetType(), UpBitmapName);
+            collapseImage = new Bitmap(GetType(), UpBitmapName);
             collapseImage.MakeTransparent();
 
             ScaleBitmapLogicalToDevice(ref expandImage);

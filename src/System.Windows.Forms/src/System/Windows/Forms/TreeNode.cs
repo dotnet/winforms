@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1601,6 +1601,23 @@ namespace System.Windows.Forms {
                     total += children[i].GetNodeCount(true);
             }
             return total;
+        }
+
+        /// <devdoc>
+        ///     Check for any circular reference in the ancestors chain.
+        /// </devdoc>
+        internal void CheckParentingCycle(TreeNode candidateToAdd)
+        {
+            TreeNode node = this;
+
+            while (node != null)
+            {
+                if (node == candidateToAdd)
+                {
+                    throw new ArgumentException(SR.TreeNodeCircularReference);
+                }
+                node = node.parent;
+            }
         }
 
         /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.InsertNodeAt"]/*' />

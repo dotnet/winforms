@@ -17,17 +17,17 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void LayoutEngine_InitLayout_InvalidChild_Nop()
+        public void LayoutEngine_InitLayout_InvalidChild_ThrowsNotSupportedException()
         {
             var engine = new SubLayoutEngine();
-            engine.InitLayout("child", BoundsSpecified.All);
+            Assert.Throws<NotSupportedException>(() => engine.InitLayout("child", BoundsSpecified.All));
         }
 
         [Fact]
-        public void LayoutEngine_InitLayout_NullChild_ThrowsNullReferenceException()
+        public void LayoutEngine_InitLayout_NullChild_ThrowsArgumentNullException()
         {
             var engine = new SubLayoutEngine();
-            Assert.Throws<NullReferenceException>(() => engine.InitLayout(null, BoundsSpecified.All));
+            Assert.Throws<ArgumentNullException>("child", () => engine.InitLayout(null, BoundsSpecified.All));
         }
 
         [Fact]
@@ -41,14 +41,14 @@ namespace System.Windows.Forms.Layout.Tests
         public void LayoutEngine_Layout_InvalidContainer_Nop()
         {
             var engine = new SubLayoutEngine();
-            engine.Layout("container", new LayoutEventArgs(new Component(), "affectedProperty"));
+            Assert.Throws<NotSupportedException>(() => engine.Layout("container", new LayoutEventArgs(new Component(), "affectedProperty")));
         }
 
         [Fact]
-        public void LayoutEngine_Layout_NullContainer_ThrowsNullReferenceException()
+        public void LayoutEngine_Layout_NullContainer_ThrowsArgumentNullException()
         {
             var engine = new SubLayoutEngine();
-            Assert.Throws<NullReferenceException>(() => engine.Layout(null, new LayoutEventArgs(new Component(), "affectedProperty")));
+            Assert.Throws<ArgumentNullException>("container", () => engine.Layout(null, new LayoutEventArgs(new Component(), "affectedProperty")));
         }
 
         private class SubLayoutEngine : LayoutEngine

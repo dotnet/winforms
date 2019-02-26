@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,6 +10,7 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper"]/*' />
     /// <devdoc>
@@ -99,8 +100,8 @@ namespace System.Windows.Forms {
                 Type type;
                 // We always resolve via type in this case (not an instance)
                 if ((null == listAccessors) || (listAccessors.Length == 0)) {
-                    Type listAsType = list as Type;
-                    if (listAsType != null) {
+                    if (list is Type listAsType)
+                    {
                         type = listAsType;
                     }
                     else {
@@ -109,8 +110,7 @@ namespace System.Windows.Forms {
                 }
                 else {
                     // We don't walk down - always use type name
-                    PropertyDescriptor pd = listAccessors[0];
-                    type = pd.PropertyType;
+                    type = listAccessors[0].PropertyType;
                 }
 
                 name = GetListNameFromType(type);
@@ -145,33 +145,27 @@ namespace System.Windows.Forms {
             return pdc;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties1"]/*' />
-        public static PropertyDescriptorCollection GetListItemProperties(object list, PropertyDescriptor[] listAccessors) {
-            PropertyDescriptorCollection pdc;
-
-            if ((null == listAccessors) || (listAccessors.Length == 0)) {
-                pdc = GetListItemProperties(list);
+        public static PropertyDescriptorCollection GetListItemProperties(object list, PropertyDescriptor[] listAccessors)
+        {
+            if (listAccessors == null || listAccessors.Length == 0)
+            {
+                return GetListItemProperties(list);
             }
-            else {
-                if (list is Type) {
-                    pdc = GetListItemPropertiesByType(list as Type, listAccessors);
-                }
-                else {
-                    object target = GetList(list);
-
-                    if (target is ITypedList) {
-                        pdc = (target as ITypedList).GetItemProperties(listAccessors);
-                    }
-                    else if (target is IEnumerable) {
-                        pdc = GetListItemPropertiesByEnumerable(target as IEnumerable, listAccessors);
-                    }
-                    else {
-                        pdc = GetListItemPropertiesByInstance(target, listAccessors, 0);
-                    }
-                }
+            else if (list is Type type)
+            {
+                return GetListItemPropertiesByType(type, listAccessors, 0);
             }
 
-            return pdc;
+            object target = GetList(list);
+
+            if (target is ITypedList typedList) {
+                return typedList.GetItemProperties(listAccessors);
+            }
+            else if (target is IEnumerable enumerable) {
+                return GetListItemPropertiesByEnumerable(enumerable, listAccessors, 0);
+            }
+            
+            return GetListItemPropertiesByInstance(target, listAccessors, 0);
         }
 
         /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties2"]/*' />
@@ -241,6 +235,7 @@ namespace System.Windows.Forms {
         }
 
         // Create an object of the given type. Throw an exception if this fails.
+        [ExcludeFromCodeCoverage]
         private static object CreateInstanceOfType(Type type) {
             object instancedObject = null;
             Exception instanceException = null;
@@ -320,19 +315,6 @@ namespace System.Windows.Forms {
             return name;
         }
 
-        private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type, PropertyDescriptor[] listAccessors) {
-            PropertyDescriptorCollection pdc = null;
-
-            if ((null == listAccessors) || (listAccessors.Length == 0)) {
-                pdc = GetListItemPropertiesByType(type);
-            }
-            else {
-                pdc = GetListItemPropertiesByType(type, listAccessors, 0);
-            }
-
-            return pdc;
-        }
-
         private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type, PropertyDescriptor[] listAccessors, int startIndex) {
             PropertyDescriptorCollection pdc = null;
             Type subType = listAccessors[startIndex].PropertyType;
@@ -410,31 +392,15 @@ namespace System.Windows.Forms {
             return pdc;
         }
 
-        private static PropertyDescriptorCollection GetListItemPropertiesByEnumerable(IEnumerable enumerable, PropertyDescriptor[] listAccessors) {
-            PropertyDescriptorCollection pdc = null;
-
-            if ((null == listAccessors) || (listAccessors.Length == 0)) {
-                pdc = GetListItemPropertiesByEnumerable(enumerable);
-            }
-            else  {
-                ITypedList typedList = enumerable as ITypedList;
-                if (typedList != null) {
-                    pdc = typedList.GetItemProperties(listAccessors);
-                }
-                else {
-                    // Walk the tree
-                    pdc = GetListItemPropertiesByEnumerable(enumerable, listAccessors, 0);
-                }
-            }
-            return pdc;
-        }
-
         private static Type GetListItemTypeByEnumerable(IEnumerable iEnumerable) {
             object instance = GetFirstItemByEnumerable(iEnumerable);
             return (instance != null) ? instance.GetType() : typeof(object);
         }
 
-        private static PropertyDescriptorCollection GetListItemPropertiesByInstance(object target, PropertyDescriptor[] listAccessors, int startIndex) {
+        private static PropertyDescriptorCollection GetListItemPropertiesByInstance(object target, PropertyDescriptor[] listAccessors, int startIndex)
+        {
+            Debug.Assert(listAccessors != null);
+
             // At this point, things can be simplified because:
             //   We know target is _not_ a list
             //   We have an instance
@@ -442,7 +408,8 @@ namespace System.Windows.Forms {
             PropertyDescriptorCollection pdc;
 
             // Get the value of the first listAccessor
-            if (listAccessors != null && listAccessors.Length > startIndex) {
+            if (listAccessors.Length > startIndex)
+            {
                 // Get the value (e.g. given Foo with property Bar, this gets Foo.Bar)
                 object value = listAccessors[startIndex].GetValue(target);
 
@@ -606,7 +573,7 @@ namespace System.Windows.Forms {
                 else {
                     pdc = TypeDescriptor.GetProperties(instance, BrowsableAttributeList);
 
-                    if (!(enumerable is IList) && (pdc == null || pdc.Count == 0)) {
+                    if (!(enumerable is IList) && pdc.Count == 0) {
                         pdc = TypeDescriptor.GetProperties(enumerable, BrowsableAttributeList);
                     }
                 }

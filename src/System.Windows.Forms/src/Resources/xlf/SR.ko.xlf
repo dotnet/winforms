@@ -3968,13 +3968,25 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_NoException">
-        <source>Exception occurred in the DataGridView.\r\n\r\nTo replace this default dialog box, handle the DataError event.</source>
-        <target state="translated">DataGridView에서 예외가 발생했습니다.\r\n\r\n이 기본 대화 상자를 바꾸려면 DataError 이벤트를 처리하세요.</target>
+        <source>Exception occurred in the DataGridView.
+
+To replace this default dialog box, handle the DataError event.</source>
+        <target state="translated">DataGridView에서 예외가 발생했습니다.
+
+이 기본 대화 상자를 바꾸려면 DataError 이벤트를 처리하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
-        <source>The following exception occurred in the DataGridView:\r\n\r\n{0}\r\n\r\nTo replace this default dialog please handle the DataError event.</source>
-        <target state="translated">DataGridView에서 다음 예외가 발생했습니다.\r\n\r\n{0}\r\n\r\n이 기본 대화 상자를 바꾸려면 DataError 이벤트를 처리하세요.</target>
+        <source>The following exception occurred in the DataGridView:
+
+{0}
+
+To replace this default dialog please handle the DataError event.</source>
+        <target state="translated">DataGridView에서 다음 예외가 발생했습니다.
+
+{0}
+
+이 기본 대화 상자를 바꾸려면 DataError 이벤트를 처리하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5068,8 +5080,12 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgContinueErrorText">
-        <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{0}.</source>
-        <target state="translated">애플리케이션의 구성 요소에서 처리되지 않은 예외가 발생했습니다. [계속]을 클릭하면 애플리케이션에서 이 오류를 무시하고 계속합니다.\r\n\r\n{0}.</target>
+        <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
+
+{0}.</source>
+        <target state="translated">응용 프로그램의 구성 요소에서 처리되지 않은 예외가 발생했습니다. [계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다.
+
+{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5078,8 +5094,12 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgErrorText">
-        <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{0}.</source>
-        <target state="translated">애플리케이션에서 처리되지 않은 예외가 발생했습니다. [계속]을 클릭하면 애플리케이션에서 이 오류를 무시하고 계속합니다. [끝내기]를 클릭하면 애플리케이션이 즉시 닫힙니다.\r\n\r\n{0}.</target>
+        <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{0}.</source>
+        <target state="translated">응용 프로그램에서 처리되지 않은 예외가 발생했습니다. [계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다. [끝내기]를 클릭하면 응용 프로그램이 즉시 닫힙니다.
+
+{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5093,18 +5113,32 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgFooterNonSwitchable">
-        <source>Application does not support Windows Forms just-in-time (JIT)\r\ndebugging. Contact the application author for more\r\ninformation.\r\n</source>
-        <target state="translated">애플리케이션이 Windows Forms JIT(Just-In-Time) 디버깅을 지원하지 않습니다.\r\n자세한 내용은 애플리케이션 작성자에게\r\n문의하세요.\r\n</target>
+        <source>Application does not support Windows Forms just-in-time (JIT)
+debugging. Contact the application author for more
+information.
+</source>
+        <target state="translated">응용 프로그램에서는 Windows JIT(Just In Time) 디버깅을 지원하지
+않습니다. 자세한 내용은 응용 프로그램 작성자에게 
+문의하십시오.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
-        <source>Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</source>
-        <target state="translated">애플리케이션이 JIT(Just-In-Time) 디버깅을 지원하지 않습니다.\r\n자세한 내용은 이 메시지의 뒷부분을 참조하세요.\r\n</target>
+        <source>Application does not support just-in-time (JIT)
+debugging. See the end of this message for details.
+</source>
+        <target state="translated">응용 프로그램에서 Windows JIT(Just In Time) 디버깅을 지원하지
+않습니다. 자세한 내용은 이 메시지의 뒷부분을 참조하십시오.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking \r\njust-in-time (JIT) debugging instead of this dialog box.\r\n</source>
-        <target state="translated">이 대화 상자 대신 JIT(Just-In-Time) 디버깅을 호출하는\r\n방법에 대한 자세한 내용은 이 메시지의 뒷부분을 참조하세요.\r\n</target>
+        <source>See the end of this message for details on invoking 
+just-in-time (JIT) debugging instead of this dialog box.
+</source>
+        <target state="translated">이 대화 상자 대신 JIT(Just-in-time) 디버깅을 호출하는
+방법에 대한 자세한 내용은 이 메시지의 뒷부분을 참조하십시오.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5113,8 +5147,16 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
-        <source>{0}\r\n    Assembly Version: {1}\r\n    Win32 Version: {2}\r\n    CodeBase: {3}\r\n</source>
-        <target state="translated">{0}\r\n    어셈블리 버전: {1}\r\n    Win32 버전: {2}\r\n    CodeBase: {3}\r\n</target>
+        <source>{0}
+    Assembly Version: {1}
+    Win32 Version: {2}
+    CodeBase: {3}
+</source>
+        <target state="translated">{0}
+    어셈블리 버전: {1}
+    Win32 버전: {2}
+    코드베이스: {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5123,13 +5165,19 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSectionSeperator">
-        <source>\r\n************** {0} **************\r\n</source>
-        <target state="translated">\r\n************** {0} **************\r\n</target>
+        <source>
+************** {0} **************
+</source>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
-        <source>----------------------------------------\r\n</source>
-        <target state="translated">----------------------------------------\r\n</target>
+        <source>----------------------------------------
+</source>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
@@ -5143,13 +5191,29 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{1}.</source>
-        <target state="translated">애플리케이션이 보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 애플리케이션에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET Framework 구성 도구를 사용하세요.\r\n\r\n[계속]을 클릭하면 애플리케이션이 이 오류를 무시하고 계속합니다.\r\n\r\n{1}.</target>
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue.
+
+{1}.</source>
+        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 응용 프로그램에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET Framework 구성 도구를 사용하십시오.
+
+[계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다.
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{1}.</source>
-        <target state="translated">애플리케이션이 보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 애플리케이션에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET Framework 구성 도구를 사용하세요.\r\n\r\n[계속]을 클릭하면 애플리케이션이 이 오류를 무시하고 계속합니다. [끝내기]를 클릭하면 애플리케이션이 즉시 닫힙니다.\r\n\r\n{1}</target>
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{1}.</source>
+        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 응용 프로그램에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET Framework 구성 도구를 사용하십시오.
+
+[계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다. [끝내기]를 클릭하면 응용 프로그램이 즉시 닫힙니다.
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5263,13 +5327,17 @@
         <note />
       </trans-unit>
       <trans-unit id="FileDialogCreatePrompt">
-        <source>File {0} does not exist.\r\nDo you want to create it?</source>
-        <target state="translated">{0} 파일이 없습니다.\r\n만드시겠습니까?</target>
+        <source>File {0} does not exist.
+Do you want to create it?</source>
+        <target state="translated">{0} 파일이 없습니다.
+새로 만드시겠습니까?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
-        <source>File {0} does not exist.\r\nVerify that the correct file name was given.</source>
-        <target state="translated">{0} 파일이 없습니다.\r\n파일 이름이 올바른지 확인하세요.</target>
+        <source>File {0} does not exist.
+Verify that the correct file name was given.</source>
+        <target state="translated">{0} 파일이 없습니다.
+파일 이름이 올바른지 확인하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5288,8 +5356,10 @@
         <note />
       </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
-        <source>File {0} already exists.\r\nDo you want to replace it?</source>
-        <target state="translated">{0} 파일이 이미 있습니다.\r\n바꾸시겠습니까?</target>
+        <source>File {0} already exists.
+Do you want to replace it?</source>
+        <target state="translated">{0} 파일이 이미 있습니다.
+바꾸시겠습니까?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5424,7 +5494,7 @@
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
         <source>A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.</source>
-        <target state="translated">Vista 스타일 대화 상자의 대화 상자 제목으로 설명 속성 값을 사용할지 여부를 나타내는 값입니다. 이 속성은 이전 스타일 대화 상자에 영향을 미치지 않습니다.</target>
+        <target state="translated">Vista 스타일 대화 상자의 대화 상자 제목으로 Description 속성 값을 사용할지 여부를 나타내는 값입니다. 이 속성은 이전 스타일 대화 상자에 영향을 미치지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormAcceptButtonDescr">
@@ -5883,8 +5953,12 @@
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCallWithStack">
-        <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.\r\nStack trace where the illegal operation occurred was:\r\n{1}"</source>
-        <target state="translated">크로스 스레드 작업이 잘못되었습니다. '{0}' 컨트롤이 자신이 만들어진 스레드가 아닌 스레드에서 액세스되었습니다.\r\n잘못된 작업이 발생한 곳의 스택 추적은 다음과 같습니다.\r\n{1}"</target>
+        <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
+Stack trace where the illegal operation occurred was:
+{1}"</source>
+        <target state="translated">크로스 스레드 작업이 잘못되었습니다. '{0}' 컨트롤이 자신이 만들어진 스레드가 아닌 스레드에서 액세스되었습니다.
+잘못된 작업이 발생한 곳의 스택 추적은 다음과 같습니다.
+{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -9273,8 +9347,12 @@
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedText">
-        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</source>
-        <target state="translated">창이 제한 모드에서 실행 중입니다. 보안상의 이유로 일부 UI 기능을 사용하지 못할 수 있습니다. \r\n\r\n자세한 내용은 시스템 관리자 또는 애플리케이션 작성자에게 문의하세요.</target>
+        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</source>
+        <target state="translated">창이 제한 모드에서 실행 중입니다. 보안상의 이유로 일부 UI 기능을 사용하지 못할 수 있습니다. 
+
+자세한 내용은 시스템 관리자 또는 응용 프로그램 작성자에게 문의하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
@@ -9353,13 +9431,21 @@
         <note />
       </trans-unit>
       <trans-unit id="SecurityToolTipTextFormat">
-        <source>{0}\r\n\r\n{1}</source>
-        <target state="translated">{0}\r\n\r\n{1}</target>
+        <source>{0}
+
+{1}</source>
+        <target state="translated">{0}
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityUnrestrictedText">
-        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</source>
-        <target state="translated">창이 무제한 모드에서 실행 중입니다. 주 창이 무제한 모드에서 실행 중이지만 보안상의 이유로 일부 기능을 사용하지 못할 수 있습니다. \r\n\r\n자세한 내용은 시스템 관리자 또는 애플리케이션 작성자에게 문의하세요.</target>
+        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</source>
+        <target state="translated">창이 무제한 모드에서 실행 중입니다. 주 창이 무제한 모드에서 실행 중이지만 보안상의 이유로 일부 기능을 사용하지 못할 수 있습니다. 
+
+자세한 내용은 시스템 관리자 또는 응용 프로그램 작성자에게 문의하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityVersionColumn">
@@ -9979,7 +10065,7 @@
       </trans-unit>
       <trans-unit id="TextBoxPlaceholderTextDescr">
         <source>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </source>
-        <target state="translated">TextBox 컨트롤의 PlaceholderText를 지정합니다. PlaceholderText는 텍스트 속성이 null이거나 비어 있을 때 컨트롤에 표시되며, 예상되는 컨트롤 입력을 사용자에게 안내하는 데 사용됩니다. </target>
+        <target state="translated">TextBox 컨트롤의 PlaceholderText를 지정합니다. PlaceholderText는 Text 속성이 null이거나 비어 있을 때 컨트롤에 표시되며, 예상되는 컨트롤 입력을 사용자에게 안내하는 데 사용됩니다. </target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxPreferredHeightDescr">
@@ -11167,6 +11253,11 @@
         <target state="translated">트리 노드가 선택되어 있는지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">매개 변수는 TreeNode 형식이어야 합니다.</target>
@@ -11623,13 +11714,17 @@
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
-        <source>Publisher cannot be verified.\r\nAre you sure you want to install this application?</source>
-        <target state="translated">게시자를 확인할 수 없습니다.\r\n이 애플리케이션을 설치하시겠습니까?</target>
+        <source>Publisher cannot be verified.
+Are you sure you want to install this application?</source>
+        <target state="translated">게시자를 확인할 수 없습니다.
+이 응용 프로그램을 설치하시겠습니까?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
-        <source>Publisher cannot be verified.\r\nAre you sure you want to run this application?</source>
-        <target state="translated">게시자를 확인할 수 없습니다.\r\n이 애플리케이션을 실행하시겠습니까?</target>
+        <source>Publisher cannot be verified.
+Are you sure you want to run this application?</source>
+        <target state="translated">게시자를 확인할 수 없습니다.
+이 응용 프로그램을 실행하시겠습니까?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Publisher">

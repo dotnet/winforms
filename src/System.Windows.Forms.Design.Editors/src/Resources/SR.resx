@@ -207,4 +207,7 @@
   <data name="CollectionEditorUndoBatchDesc" xml:space="preserve">
     <value>Add or remove {0} objects</value>
   </data>
+  <data name="RTL" xml:space="preserve">
+    <value>RTL_False</value>
+  </data>
 </root>
