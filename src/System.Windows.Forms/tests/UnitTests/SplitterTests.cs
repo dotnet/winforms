@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class SplitterTest
+    public class SplitterTests
     {
         [Fact]
         public void SplitterTest_Constructor()
