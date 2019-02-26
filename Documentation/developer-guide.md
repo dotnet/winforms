@@ -27,7 +27,7 @@ You first need to [Fork][fork] and [Clone][clone] this WinForms repository. This
 
 2. [Debug](debugging.md) the change, as needed.
 
-3. [Test](testing.md)the change, to validate quality.
+3. [Test](testing.md) the change, to validate quality.
 
 ## More Information
 
