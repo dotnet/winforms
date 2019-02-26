@@ -33,6 +33,10 @@
       <Uri>https://github.com/dotnet/corefx</Uri>
       <Sha>4a4d07fd4e3fd888c7654c59967777212ce6dca4</Sha>
     </Dependency>
+    <Dependency Name="Microsoft.NETCore.Platforms" Version="4.6.0-preview3.19120.9">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>4a4d07fd4e3fd888c7654c59967777212ce6dca4</Sha>
+    </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
     <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19112.3">
