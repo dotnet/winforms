@@ -9,6 +9,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+
 namespace System.ComponentModel.Design
 {
     [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors")]
