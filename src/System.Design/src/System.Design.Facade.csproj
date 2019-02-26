@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms.Design.Editors\ref\System.Windows.Forms.Design.Editors.Ref.csproj" />
     <ProjectReference Include="..\..\System.Windows.Forms.Design\ref\System.Windows.Forms.Design.Ref.csproj" />
   </ItemGroup>
