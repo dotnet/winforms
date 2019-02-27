@@ -19,16 +19,26 @@ namespace System.ComponentModel.Design
         protected object prevValue = null;
         protected object currValue = null;
         private Selector _selector = null;
-
+        
+        /// <summary>
+        ///     Default constructor for ObjectSelectorEditor
+        /// </summary>
         public ObjectSelectorEditor()
         {
         }
 
+        /// <summary>
+        ///     Constructor for ObjectSelectorEditor which sets SubObjectSelector equal to parameter subObjectSelector
+        /// </summary>
         public ObjectSelectorEditor(bool subObjectSelector)
         {
             SubObjectSelector = subObjectSelector;
         }
         
+        /// <summary>
+        ///     Edits the given object value using the editor style
+        ///     provided by ObjectSelectorEditor.GetEditStyle.
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -97,7 +107,7 @@ namespace System.ComponentModel.Design
             return UITypeEditorEditStyle.DropDown;
         }
         
-        public bool EqualsToValue(object value)
+        protected bool EqualsToValue(object value)
         {
             if (value == currValue)
                 return true;
@@ -124,6 +134,9 @@ namespace System.ComponentModel.Design
             private IWindowsFormsEditorService _edSvc = null;
             public bool clickSeen = false;
 
+            /// <summary>
+            /// Constructor for Selector, takes ObjectSelectorEditor
+            /// </summary>
             public Selector(ObjectSelectorEditor editor)
             {
                 CreateHandle();
@@ -140,6 +153,10 @@ namespace System.ComponentModel.Design
                 AfterSelect += new TreeViewEventHandler(OnAfterSelect);
             }
             
+            /// <summary>
+            ///     Adds a Node with given label and value to the parent, provided the parent is not null;
+            ///     Otherwise, adds that node to the Nodes TreeNodeCollection. Returns the new node.
+            /// </summary>
             public SelectorNode AddNode(string label, object value, SelectorNode parent)
             {
                 SelectorNode newNode = new SelectorNode(label, value);
@@ -155,6 +172,9 @@ namespace System.ComponentModel.Design
                 return newNode;
             }
 
+            /// <summary>
+            ///     Returns true if the given node was selected; false otherwise.
+            /// </summary>
             private bool ChooseSelectedNodeIfEqual()
             {
                 if (_editor != null && _edSvc != null)
@@ -169,6 +189,9 @@ namespace System.ComponentModel.Design
                 return false;
             }
             
+            /// <summary>
+            ///     Clears the TreeNodeCollection and sets clickSeen to false
+            /// </summary>
             public void Clear()
             {
                 clickSeen = false;
@@ -226,6 +249,9 @@ namespace System.ComponentModel.Design
                 base.OnNodeMouseClick(e);
             }
             
+            /// <summary>
+            ///     Sets the selection
+            /// </summary>
             public bool SetSelection(object value, TreeNodeCollection nodes)
             {
                 TreeNode[] treeNodes;
@@ -265,6 +291,9 @@ namespace System.ComponentModel.Design
                 return false;
             }
             
+            /// <summary>
+            ///     Sets the internal IWindowsFormsEditorService to the given edSvc, and calls SetSelection on the given value
+            /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
                 _edSvc = edSvc;
@@ -272,6 +301,9 @@ namespace System.ComponentModel.Design
                 SetSelection(value, Nodes);
             }
             
+            /// <summary>
+            ///     Sets the internal IWindowsFormsEditorService to null
+            /// </summary>
             public void Stop()
             {
                 _edSvc = null;
@@ -311,6 +343,9 @@ namespace System.ComponentModel.Design
         {
             public object value = null;
             
+            /// <summary>
+            ///     Sets label and value to given.
+            /// </summary>
             public SelectorNode(string label, object value) : base(label)
             {
                 this.value = value;
