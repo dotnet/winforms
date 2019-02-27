@@ -14,13 +14,13 @@ namespace WinformsControlsTest
         public PropertyGrid()
         {
             InitializeComponent();
-            propertyGrid1.SelectedObject = new UserControlWithObjectCollectioEditor();
+            propertyGrid1.SelectedObject = new UserControlWithObjectCollectionEditor();
         }
     }
 
-    public partial class UserControlWithObjectCollectioEditor : UserControl
+    public partial class UserControlWithObjectCollectionEditor : UserControl
     {
-        public UserControlWithObjectCollectioEditor()
+        public UserControlWithObjectCollectionEditor()
         {
             AutoScaleMode = AutoScaleMode.Font;
         }
