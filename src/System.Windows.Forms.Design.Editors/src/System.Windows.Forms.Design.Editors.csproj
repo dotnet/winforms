@@ -12,6 +12,8 @@
       <Namespace>System</Namespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\CollectionEditor.resx">
+      <!-- Unncessary because CollectionEditor.resx only contains properties; not string constants -->
+      <!--GenerateSource>true</GenerateSource-->
       <Namespace>System.ComponentModel.Design</Namespace>
     </EmbeddedResource>
   </ItemGroup>
