@@ -32,7 +32,4 @@
     </ItemGroup>
   </Target>
 
-  <!-- https://github.com/dotnet/arcade/issues/1374 -->
-  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="EnsureBuildToolsRuntime" />
-
 </Project>
