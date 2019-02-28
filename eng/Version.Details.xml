@@ -39,17 +39,17 @@
       <Uri>https://github.com/dotnet/corefx</Uri>
       <Sha>5aeccae0ab98af86e56043c1017474b7c05358e0</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19127.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha></Sha>
+      <Sha>479b7335ec4d197c401abf9949bf409b81839611</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.GenFacades" Version="">
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="1.0.0-beta.19127.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha></Sha>
+      <Sha>479b7335ec4d197c401abf9949bf409b81839611</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="">
+    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="2.4.0-beta.19127.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha></Sha>
+      <Sha>479b7335ec4d197c401abf9949bf409b81839611</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>

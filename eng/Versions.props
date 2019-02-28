@@ -2,6 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <VersionPrefix>4.8.0</VersionPrefix>
+    <!-- version in our package name #.#.#-below.#####.## -->
     <PreReleaseVersionLabel>preview4</PreReleaseVersionLabel>
     <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp3.0 yet -->
     <UsingToolMicrosoftNetCompilers>false</UsingToolMicrosoftNetCompilers>
@@ -18,14 +19,16 @@
     <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19127.6</SystemWindowsExtensionsPackageVersion>
     <MicrosoftNETCorePlatformsVersion>3.0.0-preview4.19127.6</MicrosoftNETCorePlatformsVersion>
   </PropertyGroup>
+  <!-- Arcade dependencies -->
+  <PropertyGroup>
+    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19127.5</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.0-beta.19127.5</MicrosoftDotNetXUnitExtensionsPackageVersion>
+  </PropertyGroup>
+  <!-- Additional dependencies -->
   <PropertyGroup>
     <AccessibilityPackageVersion>4.6.0-alpha-27122-5</AccessibilityPackageVersion>
     <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
-    <MicrosoftDotNetGenFacadesPackageVersion></MicrosoftDotNetGenFacadesPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <MicrosoftDotNetXUnitExtensionsPackage></MicrosoftDotNetXUnitExtensionsPackage>
   </PropertyGroup>
 </Project>
