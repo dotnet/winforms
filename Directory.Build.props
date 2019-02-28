@@ -20,4 +20,17 @@
     <DebugType>Full</DebugType>
   </PropertyGroup>
 
+  <!-- For the purposes of generating code coverage as part of the build -->
+  <PropertyGroup Condition="'$(Coverage)' == 'true'">
+      <CollectCoverage>true</CollectCoverage>
+      <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> <!-- required due to https://github.com/tonerdo/coverlet/issues/72 -->
+      <CoverletOutputFormat>opencover</CoverletOutputFormat>
+      <CoverletOutput>$(BaseOutputPath)$(PlatformConfig)\coverage\$(MSBuildProjectName).coverage</CoverletOutput>
+      <Include>[System.Windows.Forms]*</Include>
+      <!-- Exclude only Obsolete and tagged with ExcludeFromCodeCoverage !!Avoid using this!! -->
+      <Exclude />
+      <ExcludeByAttribute>Obsolete,ExcludeFromCodeCoverage</ExcludeByAttribute>
+      <ExcludeByFile />
+  </PropertyGroup>
+
 </Project>
