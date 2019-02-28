@@ -107,7 +107,7 @@ namespace System.ComponentModel.Design
             return UITypeEditorEditStyle.DropDown;
         }
         
-        protected bool EqualsToValue(object value)
+        protected internal bool EqualsToValue(object value)
         {
             if (value == currValue)
                 return true;
