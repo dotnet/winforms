@@ -155,11 +155,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettings_GetColumnSpan_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_GetColumnSpan_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.GetColumnSpan("control"));
+            Assert.Throws<NotSupportedException>(() => settings.GetColumnSpan("control"));
         }
         
         [Fact]
@@ -201,29 +201,31 @@ namespace System.Windows.Forms.Layout.Tests
             Assert.Equal(2, settings.GetColumnSpan(control));
         }
 
-        [Fact]
-        public void TableLayoutSettings_SetColumnSpan_NullControl_ThrowsNullReferenceException()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void TableLayoutSettings_SetColumnSpan_NullControl_ThrowsArgumentNullException(int value)
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.SetColumnSpan(null, 1));
+            Assert.Throws<ArgumentNullException>("control", () => settings.SetColumnSpan(null, value));
         }
 
         [Fact]
-        public void TableLayoutSettings_SetColumnSpan_NullControlStub_GetReturnsExpected()
+        public void TableLayoutSettings_SetColumnSpan_NullControlStub_ThrowsArgumentNullException()
         {
             var converter = new TableLayoutSettingsTypeConverter();
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
-            settings.SetColumnSpan(null, 1);
+            Assert.Throws<ArgumentNullException>("control", () => settings.SetColumnSpan(null, 1));
             Assert.Throws<ArgumentNullException>("control", () => settings.GetColumnSpan(null));
         }
 
         [Fact]
-        public void TableLayoutSettings_SetColumnSpan_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_SetColumnSpan_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.SetColumnSpan("control", 1));
+            Assert.Throws<NotSupportedException>(() => settings.SetColumnSpan("control", 1));
         }
 
         [Fact]
@@ -254,11 +256,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettings_GetRowSpan_NullControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_GetRowSpan_NullControl_ThrowsArgumentNullException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.GetRowSpan(null));
+            Assert.Throws<ArgumentNullException>("control", () => settings.GetRowSpan(null));
         }
 
         [Fact]
@@ -270,11 +272,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettings_GetRowSpan_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_GetRowSpan_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.GetRowSpan("control"));
+            Assert.Throws<NotSupportedException>(() => settings.GetRowSpan("control"));
         }
 
         [Fact]
@@ -321,14 +323,15 @@ namespace System.Windows.Forms.Layout.Tests
         public void TableLayoutSettings_SetRowSpan_NullControl_ThrowsArgumentNullException(TableLayoutSettings settings)
         {
             Assert.Throws<ArgumentNullException>("control", () => settings.SetRowSpan(null, 1));
+            Assert.Throws<ArgumentNullException>("control", () => settings.SetRowSpan(null, 0));
         }
 
         [Fact]
-        public void TableLayoutSettings_SetRowSpan_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_SetRowSpan_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.SetRowSpan("control", 1));
+            Assert.Throws<NotSupportedException>(() => settings.SetRowSpan("control", 1));
         }
 
         [Fact]
@@ -366,11 +369,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettings_GetRow_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_GetRow_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.GetRow("control"));
+            Assert.Throws<NotSupportedException>(() => settings.GetRow("control"));
         }
 
         [Fact]
@@ -422,11 +425,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettings_SetRow_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_SetRow_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.SetRow("control", 1));
+            Assert.Throws<NotSupportedException>(() => settings.SetRow("control", 1));
         }
 
         [Fact]
@@ -461,11 +464,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettings_GetCellPosition_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_GetCellPosition_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.GetCellPosition("control"));
+            Assert.Throws<NotSupportedException>(() => settings.GetCellPosition("control"));
         }
 
         [Fact]
@@ -533,11 +536,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettings_SetCellPosition_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_SetCellPosition_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.SetCellPosition("control", new TableLayoutPanelCellPosition()));
+            Assert.Throws<NotSupportedException>(() => settings.SetCellPosition("control", new TableLayoutPanelCellPosition()));
         }
 
         [Fact]
@@ -565,11 +568,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettings_GetColumn_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_GetColumn_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.GetColumn("control"));
+            Assert.Throws<NotSupportedException>(() => settings.GetColumn("control"));
         }
 
         [Fact]
@@ -614,11 +617,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettings_SetColumn_NullControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_SetColumn_NullControl_ThrowsArgumentNullException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.SetColumn(null, 1));
+            Assert.Throws<ArgumentNullException>("control", () => settings.SetColumn(null, 1));
         }
 
         [Fact]
@@ -626,15 +629,15 @@ namespace System.Windows.Forms.Layout.Tests
         {
             var converter = new TableLayoutSettingsTypeConverter();
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
-            Assert.Throws<ArgumentNullException>("key", () => settings.SetColumn(null, 1));
+            Assert.Throws<ArgumentNullException>("control", () => settings.SetColumn(null, 1));
         }
 
         [Fact]
-        public void TableLayoutSettings_SetColumn_InvalidControl_ThrowsNullReferenceException()
+        public void TableLayoutSettings_SetColumn_InvalidControl_ThrowsNotSupportedException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<NullReferenceException>(() => settings.SetColumn("control", 1));
+            Assert.Throws<NotSupportedException>(() => settings.SetColumn("control", 1));
         }
 
         [Fact]

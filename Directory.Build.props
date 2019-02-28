@@ -2,8 +2,6 @@
 <Project>
   <PropertyGroup>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
   </PropertyGroup>
   
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />

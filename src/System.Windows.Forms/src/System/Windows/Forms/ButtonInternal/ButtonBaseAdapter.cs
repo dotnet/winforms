@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -77,6 +77,11 @@ namespace System.Windows.Forms.ButtonInternal {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected bool IsHighContrastHighlighted2() {
             return AccessibilityImprovements.Level2 && IsHighContrastHighlightedInternal();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected bool IsHighContrastHighlighted3() {
+            return AccessibilityImprovements.Level3 && IsHighContrastHighlightedInternal();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

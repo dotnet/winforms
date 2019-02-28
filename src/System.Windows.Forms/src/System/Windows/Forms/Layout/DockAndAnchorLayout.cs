@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -514,7 +514,7 @@ namespace System.Windows.Forms.Layout {
                    // calling this will respect Control.DefaultPadding.
                    containerPadding = control.Padding;
                 }
-                else { // not likely to happen but�
+                else { // not likely to happen but…
                    containerPadding = CommonProperties.GetPadding(container, Padding.Empty);
                 }
 

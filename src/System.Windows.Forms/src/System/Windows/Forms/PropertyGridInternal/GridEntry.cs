@@ -1292,11 +1292,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
         internal virtual void EditPropertyValue(PropertyGridView iva) {
             if (UITypeEditor != null) {
                 try {
-                    // this is another icky part.  since edit value can push a modal loop
+                    // Since edit value can push a modal loop
                     // there is a chance that this gridentry will be zombied before
-                    // it returns.  make sure we're not disposed.
+                    // it returns.  Make sure we're not disposed.
                     //
-                    object originalValue = this.PropertyValue;
+                    object originalValue = PropertyValue;
                     object value = UITypeEditor.EditValue(this, (IServiceProvider)(ITypeDescriptorContext)this, originalValue);
 
                     if (Disposed) {

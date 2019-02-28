@@ -11253,6 +11253,11 @@ Další informace získáte u správce systému nebo autora aplikace.</target>
         <target state="translated">Označuje, zda je uzel stromové struktury v zaškrtnutém stavu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">Parametr musí být typu TreeNode.</target>

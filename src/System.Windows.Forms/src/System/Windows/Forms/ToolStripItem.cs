@@ -2528,7 +2528,7 @@ namespace System.Windows.Forms {
         }
   
         internal void FireEvent(ToolStripItemEventType met) {
-            FireEvent(new System.EventArgs(), met);
+            FireEvent(EventArgs.Empty, met);
         }
         internal void FireEvent(EventArgs e, ToolStripItemEventType met) {
 
@@ -2887,12 +2887,12 @@ namespace System.Windows.Forms {
                         }
                     }
                     if (shouldFireDoubleClick) {
-                        HandleDoubleClick(new System.EventArgs());
+                        HandleDoubleClick(EventArgs.Empty);
                         // If we actually fired DoubleClick - reset the lastClickTime.
                         lastClickTime = 0;
                     } 
                     else {
-                        HandleClick(new System.EventArgs());
+                        HandleClick(EventArgs.Empty);
                     }
                 }
 

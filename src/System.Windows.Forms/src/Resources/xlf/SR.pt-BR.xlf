@@ -11253,6 +11253,11 @@ Para obter mais informações, contate o administrador do sistema ou o autor do 
         <target state="translated">Indica se o nó de árvore está no estado de ativação.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">O parâmetro deve ser do tipo TreeNode.</target>

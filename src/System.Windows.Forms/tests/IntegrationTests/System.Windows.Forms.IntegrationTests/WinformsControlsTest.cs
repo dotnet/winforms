@@ -219,6 +219,27 @@ namespace System.Windows.Forms.Func.Tests
             Assert.True(process.HasExited);
         }
 
+        [Fact]
+        public void WinformsControlsTest_PropertyGrid_CollectionEditorTest()
+        {
+            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            TestHelpers.PressTabsOnProcess(process, 11);
+            TestHelpers.PressEnterOnProcess(process);
+
+            TestHelpers.PressTabOnProcess(process);
+            TestHelpers.PressRightOnProcess(process); // once   
+            TestHelpers.PressRightOnProcess(process); // twice
+            TestHelpers.PressTabsOnProcess(process, 2);
+            TestHelpers.PressEnterOnProcess(process);
+
+            Assert.False(process.HasExited);
+
+            process.Kill();
+            process.WaitForExit();
+
+            Assert.True(process.HasExited);
+        }
+
         // [Fact]
         // Commenting this out until this is fixed
         // public void WinformsControlsTest_ListViewTest()
