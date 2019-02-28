@@ -5,8 +5,10 @@
     <AssemblyName>System.Windows.Forms.Design.Editors.Tests</AssemblyName>
   </PropertyGroup>
 
-  <ItemGroup>    
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
     <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
+    <PackageReference Include="coverlet.msbuild" Version="2.5.1" />
   </ItemGroup>
 
   <ItemGroup>
