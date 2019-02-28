@@ -1404,19 +1404,22 @@ namespace System.Windows.Forms {
 
             internal bool CustomBackColor {
                 get {
-                    return style != null && !style.backColor.IsEmpty;
+                    Debug.Assert(style != null, "Should have checked CustomStyle");
+                    return !style.backColor.IsEmpty;
                 }
             }
 
             internal bool CustomFont {
                 get {
-                    return style != null && style.font != null;
+                    Debug.Assert(style != null, "Should have checked CustomStyle");
+                    return style.font != null;
                 }
             }
 
             internal bool CustomForeColor {
                 get {
-                    return style != null && !style.foreColor.IsEmpty;
+                    Debug.Assert(style != null, "Should have checked CustomStyle");
+                    return !style.foreColor.IsEmpty;
                 }
             }
 

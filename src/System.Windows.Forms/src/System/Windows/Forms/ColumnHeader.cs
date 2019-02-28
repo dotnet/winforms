@@ -497,10 +497,7 @@ namespace System.Windows.Forms {
 
             public override ImageList ImageList {
                 get {
-                    if (owner != null && owner.ListView != null) {
-                        return owner.ListView.SmallImageList;
-                    }
-                    return null;
+                    return owner.ListView?.SmallImageList;
                 }
                 set {
                     Debug.Assert(false, "We should never set the image list");
