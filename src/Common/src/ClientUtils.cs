@@ -16,11 +16,11 @@
 #endif
 {
     using System;
-    using System.Reflection;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
     using System.Collections;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.Reflection;
 
     // Miscellaneous utilities
     static internal class ClientUtils {
