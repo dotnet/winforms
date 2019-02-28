@@ -45,9 +45,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/corefx</Uri>
       <Sha>5aeccae0ab98af86e56043c1017474b7c05358e0</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19127.5">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19127.8">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>479b7335ec4d197c401abf9949bf409b81839611</Sha>
+      <Sha>f393a6b6b2df0854e051f314977137d31855b6c8</Sha>
     </Dependency>
     <Dependency Name="Microsoft.DotNet.GenFacades" Version="1.0.0-beta.19127.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
