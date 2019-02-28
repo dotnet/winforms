@@ -208,7 +208,7 @@ namespace System.Windows.Forms.Func.Tests
         /// <seealso cref="ExternalTestHelpers.TryGetForegroundWindow()"/>
         /// <seealso cref="System.Windows.Forms.SendKeys.SendWait(string)"/>
         /// <seealso cref="System.Threading.Thread.Sleep(int)"/>
-        internal static bool PressOnProcess(Process process, string keys)
+        public static bool PressOnProcess(Process process, string keys)
         {
             if (null == process)
             {
