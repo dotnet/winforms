@@ -227,8 +227,8 @@ namespace System.Windows.Forms.Func.Tests
             TestHelpers.PressEnterOnProcess(process);
 
             TestHelpers.PressTabOnProcess(process);
-            TestHelpers.PressOnProcess(process, "{RIGHT}");
-            TestHelpers.PressOnProcess(process, "{RIGHT}");
+            TestHelpers.PressRightOnProcess(process); // once   
+            TestHelpers.PressRightOnProcess(process); // twice
             TestHelpers.PressTabsOnProcess(process, 2);
             TestHelpers.PressEnterOnProcess(process);
 
