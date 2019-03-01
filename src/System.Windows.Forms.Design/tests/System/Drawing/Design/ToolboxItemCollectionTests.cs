@@ -7,18 +7,12 @@
  namespace System.Drawing.Design.Tests	
 {	
     public class ToolboxItemCollectionTests	
-    {	
-        private ToolboxItemCollection CreateToolboxItemCollection()	
-        {	
-            ToolboxItem[]  tools = { new ToolboxItem(), new ToolboxItem() };	
-
-             return new ToolboxItemCollection(tools);	
-        }	
-
+    {
         [Fact]
-        public void TestToolboxItemCollection_Throw_NotImplemented_Exception()
+        public void TestToolboxItemCollection_Creation()
         {
-            Assert.Throws<System.NotImplementedException>(() => CreateToolboxItemCollection());         
+            ToolboxItem[] tools = { new ToolboxItem(), new ToolboxItem() };
+            ToolboxItemCollection underTest = new ToolboxItemCollection(tools);
         }
     }	
 }

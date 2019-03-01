@@ -9,10 +9,10 @@
     public class ToolboxItemTests	
     {	
         [Fact]
-        public void TestToolBoxItem_Non_Default_Throw_NotImplemented_Exception()
+        public void TestToolBoxItem_Constructor()
         {
             var type = typeof(Bitmap);
-            Assert.Throws<System.NotImplementedException>(() => new ToolboxItem(type));
+            ToolboxItem undertest = new ToolboxItem(type);
         }	
     }	
 }

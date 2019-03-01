@@ -1060,7 +1060,7 @@ namespace System.Drawing.Design
 
             private void CheckSerializable(object value)
             {
-                if (value != null && !value.GetType().IsSerializable)
+                if (value != null && !(value.GetType().IsSerializable || value is ISerializable))
                 {
                     throw new ArgumentException(string.Format(SR.ToolboxItemValueNotSerializable, value.GetType().FullName));
                 }
