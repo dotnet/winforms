@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabControlTest
+    public class TabControlTests
     {
         [Fact]
         public void TabControlTest_Constructor()
