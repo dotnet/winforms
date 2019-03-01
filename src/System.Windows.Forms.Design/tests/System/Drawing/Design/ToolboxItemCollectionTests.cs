@@ -9,7 +9,7 @@
     public class ToolboxItemCollectionTests	
     {
         [Fact]
-        public void TestToolboxItemCollection_Creation()
+        public void ToolboxItemCollection_Creation()
         {
             ToolboxItem item1 = new ToolboxItem(typeof(Bitmap));
             ToolboxItem item2 = new ToolboxItem(typeof(string));

@@ -9,7 +9,7 @@
     public class ToolboxItemTests	
     {	
         [Fact]
-        public void TestToolBoxItem_Constructor()
+        public void ToolBoxItem_Constructor()
         {
             var type = typeof(Bitmap);
             ToolboxItem underTest = new ToolboxItem(type);
@@ -21,7 +21,7 @@
         }
 
         [Fact]
-        public void TestToolBoxItem_Lock()
+        public void ToolBoxItem_Lock()
         {
             var type = typeof(Bitmap);
             ToolboxItem underTest = new ToolboxItem(type);
@@ -31,7 +31,7 @@
         }
 
         [Fact]
-        public void TestToolBoxItem_Equals()
+        public void ToolBoxItem_Equals()
         {
             var type = typeof(Bitmap);
             ToolboxItem underTest = new ToolboxItem(type);
