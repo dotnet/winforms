@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,25 +11,16 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing;
     using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Runtime.InteropServices;
     using System.Globalization;
 
-    /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog"]/*' />
-    /// <internalonly/>
-    /// <devdoc>
-    ///    <para>
-    ///       Implements a dialog box that is displayed when an unhandled exception occurs in
-    ///       a thread.
-    ///    </para>
-    /// </devdoc>
+    /// <summary>
+    ///  Implements a dialog box that is displayed when an unhandled exception occurs in
+    ///  a thread.
+    /// </summary>
     [
         ComVisible(true),
-        ClassInterface(ClassInterfaceType.AutoDispatch),
-        SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        UIPermission(SecurityAction.Assert, Window=UIPermissionWindow.AllWindows)]
+        ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ThreadExceptionDialog : Form {
 
         private const string DownBitmapName = "down.bmp";
@@ -86,13 +77,9 @@ namespace System.Windows.Forms {
         private Bitmap collapseImage = null;
         private bool detailsVisible = false;
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.ThreadExceptionDialog"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.ThreadExceptionDialog'/> class.
-        ///       
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///    Initializes a new instance of the <see cref='System.Windows.Forms.ThreadExceptionDialog'/> class.      
+        /// </summary>
         public ThreadExceptionDialog(Exception t) {
 
             if (DpiHelper.IsScalingRequirementMet) {
@@ -117,14 +104,14 @@ namespace System.Windows.Forms {
                 scaledExceptionMessageVerticalPadding = LogicalToDeviceUnits(EXCEPTIONMESSAGEVERTICALPADDING);
             }
 
-            string messageRes;
+            string messageFormat;
             string messageText;
             Button[] buttons;
             bool detailAnchor = false;
 
             WarningException w = t as WarningException;
             if (w != null) {
-                messageRes = SR.ExDlgWarningText;
+                messageFormat = SR.ExDlgWarningText;
                 messageText = w.Message;
                 if (w.HelpUrl == null) {
                     buttons = new Button[] {continueButton};
@@ -139,20 +126,20 @@ namespace System.Windows.Forms {
                 detailAnchor = true;
                 
                 if (Application.AllowQuit) {
-                    if (t is SecurityException) {
-                        messageRes = "ExDlgSecurityErrorText";
+                    if (t is System.Security.SecurityException) {
+                        messageFormat = SR.ExDlgSecurityErrorText;
                     }
                     else {
-                        messageRes = "ExDlgErrorText";
+                        messageFormat = SR.ExDlgErrorText;
                     }
                     buttons = new Button[] {detailsButton, continueButton, quitButton};
                 }
                 else {
-                    if (t is SecurityException) {
-                        messageRes = "ExDlgSecurityContinueErrorText";
+                    if (t is System.Security.SecurityException) {
+                        messageFormat = SR.ExDlgSecurityContinueErrorText;
                     }
                     else {
-                        messageRes = "ExDlgContinueErrorText";
+                        messageFormat = SR.ExDlgContinueErrorText;
                     }
                     buttons = new Button[] {detailsButton, continueButton};
                 }
@@ -161,11 +148,11 @@ namespace System.Windows.Forms {
             if (messageText.Length == 0) {
                 messageText = t.GetType().Name;
             }
-            if (t is SecurityException) {
-                messageText = string.Format(messageRes, t.GetType().Name, Trim(messageText));
+            if (t is System.Security.SecurityException) {
+                messageText = string.Format(messageFormat, t.GetType().Name, Trim(messageText));
             }
             else {
-                messageText = string.Format(messageRes, Trim(messageText));
+                messageText = string.Format(messageFormat, Trim(messageText));
             }
 
             StringBuilder detailsTextBuilder = new StringBuilder();
@@ -183,35 +170,23 @@ namespace System.Windows.Forms {
             detailsTextBuilder.Append(newline);
             detailsTextBuilder.Append(newline);
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgLoadedAssembliesSection));
-            new FileIOPermission(PermissionState.Unrestricted).Assert();
-            try {
-                foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies()) {
-                    AssemblyName name = asm.GetName();
-                    string fileVer = SR.NotAvailable;
 
-                    try {
-                        
-                        // 
+            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies()) {
+                AssemblyName name = asm.GetName();
+                string fileVer = SR.NotAvailable;
 
-
-
-
-
-                        if (name.EscapedCodeBase != null && name.EscapedCodeBase.Length > 0) {
-                            Uri codeBase = new Uri(name.EscapedCodeBase);
-                            if (codeBase.Scheme == "file") {
-                                fileVer = FileVersionInfo.GetVersionInfo(NativeMethods.GetLocalPath(name.EscapedCodeBase)).FileVersion;
-                            }
+                try {
+                    if (name.EscapedCodeBase != null && name.EscapedCodeBase.Length > 0) {
+                        Uri codeBase = new Uri(name.EscapedCodeBase);
+                        if (codeBase.Scheme == "file") {
+                            fileVer = FileVersionInfo.GetVersionInfo(NativeMethods.GetLocalPath(name.EscapedCodeBase)).FileVersion;
                         }
                     }
-                    catch(System.IO.FileNotFoundException){
-                    }
-                    detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
-                    detailsTextBuilder.Append(separator);
                 }
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
+                catch(System.IO.FileNotFoundException){
+                }
+                detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
+                detailsTextBuilder.Append(separator);
             }
             
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgJITDebuggingSection));
@@ -249,22 +224,14 @@ namespace System.Windows.Forms {
             int width = textSize.Width + scaledPaddingWidth;
             int buttonTop = Math.Max(textSize.Height, scaledMaxTextHeight) + scaledPaddingHeight;
 
-            // 
-
-
-            IntSecurity.GetParent.Assert();
-            try {
-                Form activeForm = Form.ActiveForm;
-                if (activeForm == null || activeForm.Text.Length == 0) {
-                    Text = SR.ExDlgCaption;
-                }
-                else {
-                    Text = string.Format(SR.ExDlgCaption2, activeForm.Text);
-                }
+            Form activeForm = Form.ActiveForm;
+            if (activeForm == null || activeForm.Text.Length == 0) {
+                Text = SR.ExDlgCaption;
             }
-            finally {
-                CodeAccessPermission.RevertAssert();
+            else {
+                Text = string.Format(SR.ExDlgCaption2, activeForm.Text);
             }
+
             AcceptButton = continueButton;
             CancelButton = continueButton;
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -278,7 +245,7 @@ namespace System.Windows.Forms {
             pictureBox.Location = new Point(scaledPictureWidth/8, scaledPictureHeight/8);
             pictureBox.Size = new Size(scaledPictureWidth*3/4, scaledPictureHeight*3/4);
             pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            if (t is SecurityException) {
+            if (t is System.Security.SecurityException) {
                 pictureBox.Image = SystemIcons.Information.ToBitmap();
             }
             else {
@@ -313,9 +280,9 @@ namespace System.Windows.Forms {
             if (detailAnchor) {
                 b = detailsButton;
 
-                expandImage = new Bitmap(this.GetType(), DownBitmapName);
+                expandImage = new Bitmap(GetType(), DownBitmapName);
                 expandImage.MakeTransparent();
-                collapseImage = new Bitmap(this.GetType(), UpBitmapName);
+                collapseImage = new Bitmap(GetType(), UpBitmapName);
                 collapseImage.MakeTransparent();
 
                 if (DpiHelper.IsScalingRequirementMet)
@@ -360,13 +327,13 @@ namespace System.Windows.Forms {
             if (expandImage != null) {
                 expandImage.Dispose();
             }
-            expandImage = new Bitmap(this.GetType(), DownBitmapName);
+            expandImage = new Bitmap(GetType(), DownBitmapName);
             expandImage.MakeTransparent();
 
             if (collapseImage != null) {
                 collapseImage.Dispose();
             }
-            collapseImage = new Bitmap(this.GetType(), UpBitmapName);
+            collapseImage = new Bitmap(GetType(), UpBitmapName);
             collapseImage.MakeTransparent();
 
             ScaleBitmapLogicalToDevice(ref expandImage);

@@ -1206,8 +1206,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     
     // just so we can recognize a variant properly...
     /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2Variant"]/*' />
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class Com2Variant {
     }
 }

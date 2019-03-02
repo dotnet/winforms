@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
+  
   <PropertyGroup>
     <IsFacadeAssembly Condition="'$(IsFacadeAssembly)'=='' AND ($(MSBuildProjectName.EndsWith('.Facade')))">true</IsFacadeAssembly>
   </PropertyGroup>
@@ -31,8 +31,4 @@
       <Reference Remove="@(Reference)"  Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'" />
     </ItemGroup>
   </Target>
-
-  <!-- https://github.com/dotnet/arcade/issues/1374 -->
-  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="EnsureBuildToolsRuntime" />
-
 </Project>

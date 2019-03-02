@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -20,8 +20,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
 
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Globalization;
 
     /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList"]/*' />
@@ -418,8 +416,8 @@ namespace System.Windows.Forms {
         //Creates a bitmap from the original image source..
         //
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         private Bitmap CreateBitmap(Original original, out bool ownsBitmap) {
             Color transparent = transparentColor;
             ownsBitmap = false;
@@ -676,8 +674,7 @@ namespace System.Windows.Forms {
         ///     copy of the original image.
         /// </devdoc>
         // NOTE: forces handle creation, so doesn't return things from the original list
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine | ResourceScope.Process, ResourceScope.Machine | ResourceScope.Process)]
+        
         private Bitmap GetBitmap(int index) {
             if (index < 0 || index >= Images.Count)
                 throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
@@ -698,7 +695,6 @@ namespace System.Windows.Forms {
                     Bitmap tmpBitmap = null;
                     BitmapData bmpData = null;
                     BitmapData targetData = null;
-                    IntSecurity.ObjectFromWin32Handle.Assert();
                     try {
                         tmpBitmap = Bitmap.FromHbitmap(imageInfo.hbmImage);
                         // 
@@ -716,7 +712,6 @@ namespace System.Windows.Forms {
                             CopyBitmapData(bmpData, targetData);
                         }                        
                     } finally {
-                        CodeAccessPermission.RevertAssert();
                         if(tmpBitmap != null) {
                             if(bmpData != null) {
                                 tmpBitmap.UnlockBits(bmpData);
@@ -904,13 +899,7 @@ namespace System.Windows.Forms {
             internal NativeImageList(IntPtr himl) {
                 this.himl = himl;
 #if DEBUG
-                new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                try {
-                    callStack = Environment.StackTrace;
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                callStack = Environment.StackTrace;
 #endif
             }
 
@@ -1042,7 +1031,7 @@ namespace System.Windows.Forms {
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Count"]/*' />
             [Browsable(false)]
             public int Count {
-                [ResourceExposure(ResourceScope.None)]
+                
                 get {
                     Debug.Assert(owner != null, "ImageCollection has no owner (ImageList)");
 
@@ -1105,8 +1094,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.this"]/*' />
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public Image this[int index] {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     if (index < 0 || index >= Count)
                         throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
@@ -1157,8 +1146,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.this"]/*' />
             /// <internalonly/>
             object IList.this[int index] {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return this[index];
                 }
@@ -1177,8 +1166,8 @@ namespace System.Windows.Forms {
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
             public Image this[string key] {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     // We do not support null and empty string as valid keys.
                     if ((key == null) || (key.Length == 0)){

@@ -1,34 +1,22 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnNodeMouseHover'/> event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.TreeView.OnNodeMouseHover'/> event.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class TreeNodeMouseHoverEventArgs : EventArgs {
-        readonly TreeNode node;
-
-        /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs.TreeNodeMouseHoverEventArgs"]/*' />
-        public TreeNodeMouseHoverEventArgs(TreeNode node) {
-            this.node = node;
+    [ComVisible(true)]
+    public class TreeNodeMouseHoverEventArgs : EventArgs
+    {
+        public TreeNodeMouseHoverEventArgs(TreeNode node)
+        {
+            Node = node;
         }
         
-        /// <include file='doc\TreeNodeMouseHoverEvent.uex' path='docs/doc[@for="TreeNodeMouseHoverEventArgs.Node"]/*' />
-        public TreeNode Node {
-            get { return node; }
-        }
+        public TreeNode Node { get; }
     }
 }

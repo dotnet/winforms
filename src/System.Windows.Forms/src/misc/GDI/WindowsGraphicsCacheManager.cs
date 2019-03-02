@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -89,8 +89,8 @@ namespace System.Experimental.Gdi
         /// </devdoc>
         public static WindowsGraphics MeasurementGraphics
         {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get
             {
                 if (measurementGraphics == null || measurementGraphics.DeviceContext == null /*object disposed*/)
@@ -120,16 +120,16 @@ namespace System.Experimental.Gdi
         ///     Get the cached WindowsFont associated with the specified font if one exists, otherwise create one and
         ///     add it to the cache.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsFont GetWindowsFont(Font font)
         {    
             return GetWindowsFont(font, WindowsFontQuality.Default);
         }
 
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsFont GetWindowsFont(Font font, WindowsFontQuality fontQuality)
         {
             if( font == null )

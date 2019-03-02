@@ -4,7 +4,6 @@ TypesMustExist : Type 'System.ComponentModel.Design.ActiveDesignSurfaceChangedEv
 TypesMustExist : Type 'System.ComponentModel.Design.ArrayEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.BinaryEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.ByteViewer' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.CollectionEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.ComponentActionsType' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DateTimeEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionHeaderItem' does not exist in the implementation but it does exist in the contract.
@@ -41,7 +40,6 @@ TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandsChangedEventHand
 TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandsChangedType' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandService' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.MultilineStringEditor' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.ObjectSelectorEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.ProjectTargetFrameworkAttribute' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.UndoEngine' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Data.DataSourceDescriptor' does not exist in the implementation but it does exist in the contract.

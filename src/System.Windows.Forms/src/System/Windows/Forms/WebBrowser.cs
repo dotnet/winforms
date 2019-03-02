@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,8 +10,6 @@ using System.Drawing;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Printing;
 using System.Windows.Forms;
-using System.Security.Permissions;
-using System.Security;
 using System.Runtime.InteropServices;
 using System.Net;
 using System.Text;
@@ -27,8 +25,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
-    PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust"),
-    PermissionSetAttribute(SecurityAction.InheritanceDemand, Name="FullTrust"),
     DefaultProperty(nameof(Url)), DefaultEvent(nameof(DocumentCompleted)),
     Docking(DockingBehavior.AutoDock),
     SRDescription(nameof(SR.DescriptionWebBrowser)),
@@ -70,7 +66,6 @@ namespace System.Windows.Forms {
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser'/> control.
         ///     </para>
         /// </devdoc>
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public WebBrowser() : base("8856f961-340a-11d0-a96b-00c04fd705a2") {
                 CheckIfCreatedInIE();
     
@@ -181,8 +176,6 @@ namespace System.Windows.Forms {
         /// If true, there is navigation history such that calling GoBack() will succeed.
         /// Defaults to false.  After that it's value is kept up to date by hooking the
         /// DWebBrowserEvents2:CommandStateChange.
-        /// Requires WebPermission for Url specified by Document.Domain (indirect access
-        /// to user browsing stats).
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -214,8 +207,6 @@ namespace System.Windows.Forms {
         /// If true, there is navigation history such that calling GoForward() will succeed.
         /// Defaults to false.  After that it's value is kept up to date by hooking the
         /// DWebBrowserEvents2:CommandStateChange.
-        /// Requires WebPermission for Url specified by Document.Domain (indirect access
-        /// to user browsing stats).
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -246,7 +237,6 @@ namespace System.Windows.Forms {
         ///     <para>
         /// The HtmlDocument for page hosted in the html page.  If no page is loaded, it returns null.
         /// Maps to IWebBrowser2:Document.
-        /// Requires WebPermission for Url specified by Document.Domain.
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -268,7 +258,6 @@ namespace System.Windows.Forms {
                             if (!string.IsNullOrEmpty(href))
                             {
                                 Uri url = new Uri(href);
-                                WebBrowser.EnsureUrlConnectPermission(url);  // Security check
                                 return new HtmlDocument (ShimManager, iHTMLDocument2 as UnsafeNativeMethods.IHTMLDocument);
                             }
                         }
@@ -358,7 +347,6 @@ namespace System.Windows.Forms {
         ///     <para>
         /// The title of the html page currently loaded. If none are loaded, returns empty string.
         /// Maps to IWebBrowser2:LocationName.
-        /// Requires WebPermission for Url specified by Document.Domain.
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -389,7 +377,6 @@ namespace System.Windows.Forms {
         ///     <para>
         /// A string containing the MIME type of the document hosted in the browser control.
         /// If none are loaded, returns empty string.  Maps to IHTMLDocument2:mimeType.
-        /// Requires WebPermission for Url specified by Document.Domain.
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -416,8 +403,6 @@ namespace System.Windows.Forms {
         ///     <para>
         /// Initially set to WebBrowserEncryptionLevel.Insecure.
         /// After that it's kept up to date by hooking the DWebBrowserEvents2:SetSecureLockIcon.
-        /// Requires WebPermission for Url specified by Document.Domain (indirect access
-        /// to user browsing stats).
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -434,8 +419,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     <para>
         /// True if the browser is engaged in navigation or download.  Maps to IWebBrowser2:Busy.
-        /// Requires WebPermission for Url specified by Document.Domain (indirect access
-        /// to user browsing stats).
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -551,8 +534,6 @@ namespace System.Windows.Forms {
         ///     <para>
         /// Gets the ReadyState of the browser control. (ex.. document loading vs. load complete).
         /// Maps to IWebBrowser2:ReadyState.
-        /// Requires WebPermission for Url specified by Document.Domain (indirect access
-        /// to user browsing stats).
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -574,8 +555,6 @@ namespace System.Windows.Forms {
         /// There is no direct WebBrowser property that maps to this. This property is
         /// initially an empty string.  After that the value is kept up to date via the
         /// DWebBrowserEvents2:StatusTextChange event.  
-        /// Requires WebPermission for Url specified by Document.Domain (indirect access
-        /// to user browsing stats).
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -607,7 +586,7 @@ namespace System.Windows.Forms {
         public Uri Url {
             get {
                 string urlString = this.AxIWebBrowser2.LocationURL;
-                //NOTE: If we weren't going to require FullTrust, we'd need to require permissions here
+
                 if (string.IsNullOrEmpty(urlString))
                 {
                     return null;
@@ -845,8 +824,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void Print() {
-            IntSecurity.DefaultPrinting.Demand();
-
             object nullObjectArray = null;
             try
             {
@@ -947,8 +924,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowPageSetupDialog() {
-            IntSecurity.SafePrinting.Demand();
-
             object nullObjectArray = null;
             try {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PAGESETUP, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
@@ -968,8 +943,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowPrintDialog() {
-            IntSecurity.SafePrinting.Demand();
-
             object nullObjectArray = null;
             
             try {
@@ -989,8 +962,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowPrintPreviewDialog() {
-            IntSecurity.SafePrinting.Demand();
-
             object nullObjectArray = null;
             
             try {
@@ -1031,8 +1002,6 @@ namespace System.Windows.Forms {
         ///     </para>
         /// </devdoc>
         public void ShowSaveAsDialog() {
-            IntSecurity.FileDialogSaveFile.Demand();
-
             object nullObjectArray = null;
             
             try {
@@ -1511,14 +1480,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
-        internal static void EnsureUrlConnectPermission(Uri url) {
-            //
-            WebPermission permission = new WebPermission(NetworkAccess.Connect, url.AbsoluteUri);
-            permission.Demand();
-        }
-
         private string ReadyNavigateToUrl(string urlString) {
             if (string.IsNullOrEmpty(urlString)) {
                 urlString = "about:blank";
@@ -1685,8 +1646,7 @@ namespace System.Windows.Forms {
         /// method in the WebBrowser class. 
         ///     </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         ComVisible(false)]
+        [ComVisible(false)]
         protected class WebBrowserSite : WebBrowserSiteBase, UnsafeNativeMethods.IDocHostUIHandler
         {
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.WebBrowserSite"]/*' />
@@ -1695,7 +1655,6 @@ namespace System.Windows.Forms {
             /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser.WebBrowserSite'/> class.
             ///     </para>
             /// </devdoc>
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             public WebBrowserSite(WebBrowser host) : base(host) {
             }
 

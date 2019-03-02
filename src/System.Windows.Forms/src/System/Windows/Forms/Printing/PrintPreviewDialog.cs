@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -15,8 +15,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Windows.Forms.Design;
     using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Runtime.Versioning;
 
     /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog"]/*' />
@@ -315,8 +313,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Icon Icon {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return base.Icon;
             }
@@ -1602,7 +1600,6 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
 
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
            if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None) {
                 Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -1623,7 +1620,6 @@ namespace System.Windows.Forms {
         ///       This is breaking from Everett.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessTabKey(bool forward) {
             if (this.ActiveControl == this.previewControl)
             {

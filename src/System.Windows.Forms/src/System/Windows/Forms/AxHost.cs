@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -24,8 +24,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Runtime.Serialization;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Threading;
     using System.Windows.Forms.ComponentModel;
     using System.Windows.Forms.ComponentModel.Com2Interop;
@@ -47,8 +45,6 @@ namespace System.Windows.Forms {
     DesignTimeVisible(false),
     DefaultEvent(nameof(Enter)),
     Designer("System.Windows.Forms.Design.AxHostDesigner, " + AssemblyRef.SystemDesign),
-    PermissionSet(SecurityAction.LinkDemand, Name="FullTrust"),
-    PermissionSet(SecurityAction.InheritanceDemand, Name="FullTrust")
     ]
     public abstract class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor {
 
@@ -277,7 +273,6 @@ namespace System.Windows.Forms {
         ///    <para>Creates a new instance of a control which wraps an activeX control given by the
         ///       clsid and flags parameters.</para>
         /// </devdoc>
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         protected AxHost(string clsid, int flags) : base() {
             if (Application.OleRequired() != ApartmentState.STA) {
                 throw new ThreadStateException(string.Format(SR.AXMTAThread, clsid));
@@ -1858,14 +1853,12 @@ namespace System.Windows.Forms {
         ///     pre-processing of a character includes checking whether the character
         ///     is a mnemonic of another control.
         /// </devdoc>
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool IsInputChar(char charCode) {
             return true;
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessDialogKey"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) 
         {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
@@ -1969,7 +1962,6 @@ namespace System.Windows.Forms {
         ///     to the ActiveX control.
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "In AxHost.ProcessMnemonic: " + (int)charCode);
             if (CanSelect) {
@@ -2151,9 +2143,6 @@ namespace System.Windows.Forms {
         ]
         public ContainerControl ContainingControl {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
-
                 if (containingControl == null) {
                     containingControl = FindContainerControlInternal();
                 }
@@ -2870,29 +2859,23 @@ namespace System.Windows.Forms {
             
             bool singleThreaded = true;
 
-            new RegistryPermission(PermissionState.Unrestricted).Assert();
             try {
-                try {
-                    using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString() + "\\InprocServer32", /*writable*/false)) {
-                        object value = rk.GetValue("ThreadingModel");
+                using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString() + "\\InprocServer32", /*writable*/false)) {
+                    object value = rk.GetValue("ThreadingModel");
 
-                        if (value != null && value is string) {
-                            if (value.Equals("Both") 
-                                || value.Equals("Apartment") 
-                                || value.Equals("Free")) {
+                    if (value != null && value is string) {
+                        if (value.Equals("Both") 
+                            || value.Equals("Apartment") 
+                            || value.Equals("Free")) {
 
-                                singleThreaded = false;
-                            }
+                            singleThreaded = false;
                         }
                     }
                 }
-                catch (Exception t) {
-                    Debug.Fail(t.ToString());
-                    throw new InvalidOperationException(SR.AXNoThreadInfo);
-                }
             }
-            finally {
-                System.Security.CodeAccessPermission.RevertAssert();
+            catch (Exception t) {
+                Debug.Fail(t.ToString());
+                throw new InvalidOperationException(SR.AXNoThreadInfo);
             }
 
             if (singleThreaded) {
@@ -3106,12 +3089,10 @@ namespace System.Windows.Forms {
                 // nop...  windows forms wrapper will override...
         }
 
-
         private bool CanShowPropertyPages() {
             if (GetOcState() < OC_RUNNING) return false;
             return(GetOcx() is NativeMethods.ISpecifyPropertyPages);
         }
-
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HasPropertyPages"]/*' />
         public bool HasPropertyPages() {
@@ -3221,8 +3202,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        [ResourceExposure(ResourceScope.Process)]        
-        [ResourceConsumption(ResourceScope.Process)]
         internal override IntPtr InitializeDCForWmCtlColor (IntPtr dc, int msg)
         {
             if (isMaskEdit) {
@@ -3507,8 +3486,6 @@ namespace System.Windows.Forms {
         }       
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie"]/*' />
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class ConnectionPointCookie {
             private UnsafeNativeMethods.IConnectionPoint connectionPoint;
             private int cookie;
@@ -3570,7 +3547,6 @@ namespace System.Windows.Forms {
                     }
                 }
 
-
                 if (connectionPoint == null || cookie == 0) {
                     if (connectionPoint != null) {
                         Marshal.ReleaseComObject(connectionPoint);
@@ -3581,13 +3557,7 @@ namespace System.Windows.Forms {
                     }
                 }
 #if DEBUG
-                new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                try {
-                    callStack = Environment.StackTrace;
-                }
-                finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
-                }
+                callStack = Environment.StackTrace;
 #endif
             }
 
@@ -3667,8 +3637,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="InvalidActiveXStateException"]/*' />
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class InvalidActiveXStateException : Exception {
             private string name;
             private ActiveXInvokeKind kind;
@@ -3874,7 +3842,6 @@ namespace System.Windows.Forms {
 
             // IOleControlSite methods:
 
-
             int UnsafeNativeMethods.IOleControlSite.OnControlInfoChanged() {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnControlInfoChanged");
                 return NativeMethods.S_OK;
@@ -3968,7 +3935,6 @@ namespace System.Windows.Forms {
             }
 
             // IOleClientSite methods:
-
             int UnsafeNativeMethods.IOleClientSite.SaveObject() {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SaveObject");
                 return NativeMethods.E_NOTIMPL;
@@ -3985,7 +3951,6 @@ namespace System.Windows.Forms {
                 container = host.GetParentContainer();
                 return NativeMethods.S_OK;
             }
-
 
             int UnsafeNativeMethods.IOleClientSite.ShowObject() {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ShowObject");
@@ -4038,8 +4003,6 @@ namespace System.Windows.Forms {
             // IOleInPlaceSite methods:
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OleInterfaces.GetWindow"]/*' />
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             IntPtr UnsafeNativeMethods.IOleInPlaceSite.GetWindow() {
                 try {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetWindow");
@@ -4157,7 +4120,7 @@ namespace System.Windows.Forms {
             }
 
             // IPropertyNotifySink methods
-
+                
             void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid) {
                 // Some controls fire OnChanged() notifications when getting values of some properties.
                 // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
@@ -4300,7 +4263,6 @@ namespace System.Windows.Forms {
             TransitionDownTo(OC_PASSIVE);
         }
 
-
         private bool GetControlEnabled() {
             try {
                 return IsHandleCreated;
@@ -4422,7 +4384,6 @@ namespace System.Windows.Forms {
             }
         }
 
-
         private static NativeMethods.COMRECT FillInRect(NativeMethods.COMRECT dest, Rectangle source) {
             dest.left = source.X;
             dest.top = source.Y;
@@ -4432,9 +4393,6 @@ namespace System.Windows.Forms {
         }
 
         private AxContainer GetParentContainer() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-            IntSecurity.GetParent.Demand();
-
             if (container == null) {
                 container = AxContainer.FindContainerForControl(this);
             }
@@ -4530,7 +4488,6 @@ namespace System.Windows.Forms {
             return iPerPropertyBrowsing;
         }
 
-
         // Mapping functions:
 
 #if false
@@ -4574,8 +4531,6 @@ namespace System.Windows.Forms {
         ///     Maps from a System.Drawing.Image to an OLE IPicture
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected static object GetIPictureFromPicture(Image image) {
             if (image == null) return null;
             object pictdesc = GetPICTDESCFromPicture(image);
@@ -4587,8 +4542,6 @@ namespace System.Windows.Forms {
         ///     Maps from a System.Drawing.Cursor to an OLE IPicture
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected static object GetIPictureFromCursor(Cursor cursor) {
             if (cursor == null) return null;
             NativeMethods.PICTDESCicon pictdesc = new NativeMethods.PICTDESCicon(Icon.FromHandle(cursor.Handle));
@@ -4600,8 +4553,6 @@ namespace System.Windows.Forms {
         ///     Maps from a System.Drawing.Image to an OLE IPictureDisp
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected static object GetIPictureDispFromPicture(Image image) {
             if (image == null) return null;
             object pictdesc = GetPICTDESCFromPicture(image);
@@ -4613,8 +4564,6 @@ namespace System.Windows.Forms {
         ///     Maps from an OLE IPicture to a System.Drawing.Image
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected static Image GetPictureFromIPicture(object picture) {
             if (picture == null) return null;
             IntPtr hPal = IntPtr.Zero;
@@ -4635,8 +4584,6 @@ namespace System.Windows.Forms {
         ///     Maps from an OLE IPictureDisp to a System.Drawing.Image
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected static Image GetPictureFromIPictureDisp(object picture) {
             if (picture == null) return null;
             IntPtr hPal = IntPtr.Zero;
@@ -4652,8 +4599,6 @@ namespace System.Windows.Forms {
             return GetPictureFromParams(pict, pict.Handle, type, hPal, pict.Width, pict.Height);
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         private static Image GetPictureFromParams(object pict, IntPtr handle, int type, IntPtr paletteHandle, int width, int height) {
             switch (type) {
                 case NativeMethods.Ole.PICTYPE_ICON:
@@ -4992,8 +4937,6 @@ namespace System.Windows.Forms {
             }
         }
 
-
-
         /// <devdoc>
         /// </devdoc>
         internal class EnumUnknown : UnsafeNativeMethods.IEnumUnknown {
@@ -5059,7 +5002,6 @@ namespace System.Windows.Forms {
                 ppenum = new EnumUnknown(arr, loc);
             }
         }
-
 
         /// <devdoc>
         /// </devdoc>
@@ -5226,7 +5168,6 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-
 
             private void LockComponents() {
                 lockCount++;
@@ -5664,7 +5605,6 @@ namespace System.Windows.Forms {
                     ppmkOut[0] = null;
                  return NativeMethods.E_NOTIMPL;
             }
-
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.EnumObjects"]/*' />
             int UnsafeNativeMethods.IOleContainer.EnumObjects(int grfFlags, out UnsafeNativeMethods.IEnumUnknown ppenum) {
@@ -6176,8 +6116,6 @@ namespace System.Windows.Forms {
         ///      class through the TypeDescriptor.
         /// </devdoc>
         /// <internalonly/>
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class StateConverter : TypeConverter {
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.CanConvertFrom"]/*' />
@@ -6263,8 +6201,6 @@ namespace System.Windows.Forms {
             TypeConverterAttribute(typeof(TypeConverter)),
             Serializable
         ]
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]        
         [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]        
         public class State : ISerializable {
             private int VERSION = 1;
@@ -6533,7 +6469,6 @@ namespace System.Windows.Forms {
             /// </devdoc>
             /// <internalonly/>
             void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
-                IntSecurity.UnmanagedCode.Demand();
                 MemoryStream stream = new MemoryStream();
                 Save(stream);
 
@@ -6604,8 +6539,6 @@ namespace System.Windows.Forms {
         protected delegate void AboutBoxDelegate();
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxComponentEditor"]/*' />
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         [ComVisible(false)]
         public class AxComponentEditor : WindowsFormsComponentEditor {
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxComponentEditor.EditComponent"]/*' />
@@ -6645,10 +6578,6 @@ namespace System.Windows.Forms {
             private  const int         FlagIgnoreCanAccessProperties = 0x00000008;
             private  const int         FlagSettingValue              = 0x00000010;
             
-            
-
-            
-
             [
                 SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Shipped in Everett
             ]
@@ -6894,7 +6823,6 @@ namespace System.Windows.Forms {
                 if (owner.GetOcx() == null) {
                     return;
                 }
-                    
 
                 try {
                     NativeMethods.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
@@ -6916,7 +6844,6 @@ namespace System.Windows.Forms {
                             Debug.Fail("An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid=" +
                                        dispid + "), object type=" + new ComNativeDescriptor().GetClassName(ppb));
                         }
-
 
                         if (hr != NativeMethods.S_OK) {
                             hasStrings = false;

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -15,8 +15,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
     using System.Globalization;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\ToolStripManager.uex' path='docs/doc[@for="ToolStripManager"]/*' />
     public sealed class ToolStripManager {
@@ -117,7 +115,6 @@ namespace System.Windows.Forms {
         /// <devdoc> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </devdoc>        
-        [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
         public static ToolStrip FindToolStrip(string toolStripName) {
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++) {
@@ -134,7 +131,6 @@ namespace System.Windows.Forms {
         /// <devdoc> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </devdoc>        
-        [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
         internal static ToolStrip FindToolStrip(Form owningForm, string toolStripName)
         {
             ToolStrip result = null;
@@ -435,7 +431,6 @@ namespace System.Windows.Forms {
                 }
                 return defaultRenderer;
             }
-            [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
             set {
                 /// 
 
@@ -491,7 +486,6 @@ namespace System.Windows.Forms {
                 }
                 return ToolStripManagerRenderMode.Custom;
             }
-            [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
             set {
 
                 /// 
@@ -520,7 +514,6 @@ namespace System.Windows.Forms {
             get {
                 return visualStylesEnabledIfPossible && Application.RenderWithVisualStyles;
             }
-            [UIPermission(SecurityAction.Demand, Window = UIPermissionWindow.AllWindows)]
             set {
                 bool oldVis = VisualStylesEnabled;
                 visualStylesEnabledIfPossible = value;
@@ -1327,7 +1320,7 @@ namespace System.Windows.Forms {
                        try {
                            callingStack = Environment.StackTrace;
                        }
-                       catch (SecurityException) {
+                       catch (System.Security.SecurityException) {
                        }
 #endif
                 }

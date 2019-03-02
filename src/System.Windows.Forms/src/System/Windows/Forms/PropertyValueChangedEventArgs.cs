@@ -1,44 +1,25 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-    using System;
-    using System.ComponentModel;
-
-    /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    /// The event class that is created when a property
-    /// in the grid is modified by the user.
+    /// The event class that is created when a property in the grid is modified by the user.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class PropertyValueChangedEventArgs : EventArgs {
-        private readonly GridItem changedItem;
-        private object oldValue;
-                /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs.PropertyValueChangedEventArgs"]/*' />
-                /// <devdoc>
-        /// Constructor
-        /// </devdoc>
-        public PropertyValueChangedEventArgs(GridItem changedItem, object oldValue) {
-            this.changedItem = changedItem;
-            this.oldValue = oldValue;
+    [ComVisible(true)]
+    public class PropertyValueChangedEventArgs : EventArgs
+    {
+        public PropertyValueChangedEventArgs(GridItem changedItem, object oldValue)
+        {
+            ChangedItem = changedItem;
+            OldValue = oldValue;
         }
 
-        /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs.ChangedItem"]/*' />
-        public GridItem ChangedItem {
-            get {
-                return changedItem;
-            }
-        }
+        public GridItem ChangedItem { get; }
         
-        /// <include file='doc\PropertyValueChangedEvent.uex' path='docs/doc[@for="PropertyValueChangedEventArgs.OldValue"]/*' />
-        public object OldValue {
-            get {
-                return oldValue;
-            }
-        }
+        public object OldValue { get; }
     }
 }

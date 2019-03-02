@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
-    using System.Security;
     using System.Globalization;
     
     /// <devdoc> this is the menu that merges into the MdiWindowListItem
@@ -140,27 +139,18 @@ namespace System.Windows.Forms {
              Form[] forms = mdiParent.MdiChildren;
              
              if (forms != null) {
-                // 
+                using (MdiWindowDialog dialog = new MdiWindowDialog()) {
+                    dialog.SetItems(mdiParent.ActiveMdiChild, forms);
+                    DialogResult result = dialog.ShowDialog();
+                    if (result == DialogResult.OK) {
 
-
-                IntSecurity.AllWindows.Assert();
-                try {
-                    using (MdiWindowDialog dialog = new MdiWindowDialog()) {
-                        dialog.SetItems(mdiParent.ActiveMdiChild, forms);
-                        DialogResult result = dialog.ShowDialog();
-                        if (result == DialogResult.OK) {
-
-                            // AllWindows Assert above allows this...
-                            //
-                            dialog.ActiveChildForm.Activate();
-                            if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused) {
-                                dialog.ActiveChildForm.ActiveControl.Focus();
-                            }
+                        // AllWindows Assert above allows this...
+                        //
+                        dialog.ActiveChildForm.Activate();
+                        if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused) {
+                            dialog.ActiveChildForm.ActiveControl.Focus();
                         }
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
                 }
             }
         }
@@ -173,20 +163,10 @@ namespace System.Windows.Forms {
                 Form boundForm = windowListItem.MdiForm;
             
                 if (boundForm != null) {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        boundForm.Activate();
-                        if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused) {
-                            boundForm.ActiveControl.Focus();
-                        }
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-                        
+                    boundForm.Activate();
+                    if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused) {
+                        boundForm.ActiveControl.Focus();
+                    }                       
                 }
             }
         }

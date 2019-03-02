@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -437,13 +437,6 @@ namespace System.Windows.Forms {
             if (showHelp && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0) {
                 throw new ArgumentException(SR.CantShowMBServiceWithHelp, "options");
             }
-
-            // demand if not safe known options.
-            if ((options & ~(MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading)) != 0) {                
-                IntSecurity.UnmanagedCode.Demand();
-            }
-
-            IntSecurity.SafeSubWindows.Demand();
 
             int style = (showHelp) ? HELP_BUTTON : 0; 
             style |= (int) buttons | (int) icon | (int) defaultButton | (int) options;

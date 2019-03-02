@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters;
-    using System.Security.Permissions;
 
 
     /// <include file='doc\OwnerDrawPropertyBag.uex' path='docs/doc[@for="OwnerDrawPropertyBag"]/*' />
@@ -119,7 +118,6 @@ namespace System.Windows.Forms {
         /// ISerializable private implementation
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)]        
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             si.AddValue("BackColor", BackColor);
             si.AddValue("ForeColor", ForeColor);

@@ -1,48 +1,29 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.ListView.OnItemDrag'/> event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.ListView.OnItemDrag'/> event.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class ItemDragEventArgs : EventArgs {
-        readonly MouseButtons button;
-        readonly object item;
-
-        /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.ItemDragEventArgs"]/*' />
-        public ItemDragEventArgs(MouseButtons button) {
-            this.button = button;
-            this.item = null;
+    [ComVisible(true)]
+    public class ItemDragEventArgs : EventArgs
+    {
+        public ItemDragEventArgs(MouseButtons button) : this(button, null)
+        {
         }
         
-        /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.ItemDragEventArgs1"]/*' />
-        public ItemDragEventArgs(MouseButtons button, object item) {
-            this.button = button;
-            this.item = item;
+        public ItemDragEventArgs(MouseButtons button, object item)
+        {
+            Button = button;
+            Item = item;
         }
         
-        /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.Button"]/*' />
-        public MouseButtons Button {
-            get { return button; }
-        }
+        public MouseButtons Button { get; }
 
-        /// <include file='doc\ItemDragEvent.uex' path='docs/doc[@for="ItemDragEventArgs.Item"]/*' />
-        public object Item {
-            get { return item; }
-        }
+        public object Item { get; }
     }
 }

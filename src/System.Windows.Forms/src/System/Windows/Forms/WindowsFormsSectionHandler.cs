@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -19,11 +19,7 @@ namespace System.Windows.Forms {
             WindowsFormsSection section = null;
 
             try {
-#if CAS
-                section = (WindowsFormsSection) System.Configuration.PrivilegedConfigurationManager.GetSection("system.windows.forms");
-#else 
                 section = (WindowsFormsSection) System.Configuration.ConfigurationManager.GetSection("system.windows.forms") ?? new WindowsFormsSection();
-#endif
             }
             catch {
                 Debug.Fail("Exception loading config for windows forms");

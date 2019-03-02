@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Common diagnostic rules for all non-shipping projects" Description="Enables/disable rules specific to all non-shipping projects." ToolsVersion="14.0">
+  <Include Path=".\Shipping.ruleset" Action="Default" />
+</RuleSet>

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Xunit;
 
@@ -156,12 +157,37 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<string> GetNullOrEmptyStringTheoryData()
+        {
+            var data = new TheoryData<string>();
+            data.Add(null);
+            data.Add(string.Empty);
+            return data;
+        }
+
         public static TheoryData<IntPtr> GetIntPtrTheoryData()
         {
             var data = new TheoryData<IntPtr>();
             data.Add((IntPtr)(-1));
             data.Add(IntPtr.Zero);
             data.Add((IntPtr)1);
+            return data;
+        }
+
+        public static TheoryData<Color> GetColorTheoryData()
+        {
+            var data = new TheoryData<Color>();
+            data.Add(Color.Red);
+            data.Add(Color.Blue);
+            data.Add(Color.Black);
+            return data;
+        }
+
+        public static TheoryData<Type> GetTypeWithNullTheoryData()
+        {
+            var data = new TheoryData<Type>();
+            data.Add(null);
+            data.Add(typeof(int));
             return data;
         }
 

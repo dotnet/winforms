@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Runtime.Versioning;
     using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms.Layout;
     
     /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost"]/*' />
@@ -160,6 +159,12 @@ namespace System.Windows.Forms {
             }
         }
 
+        internal AccessibleObject ControlAccessibilityObject {
+            get {
+                return Control?.AccessibilityObject;
+            }
+        }
+
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.DefaultSize"]/*' />
         /// <devdoc>
         /// Deriving classes can override this to configure a default size for their control.
@@ -285,8 +290,8 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override Image Image {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return base.Image;
             }
@@ -985,14 +990,11 @@ namespace System.Windows.Forms {
 
 
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
             // Control will get this from being in the control collection.
             return false;
         }
 
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
             if (control != null) {
@@ -1003,7 +1005,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ProcessDialogKey"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessDialogKey(Keys keyData) {
             // Control will get this from being in the control collection.
             return false;

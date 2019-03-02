@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,8 +16,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using System.ComponentModel.Design.Serialization;
-    using System.Security.Permissions;
-    using System.Security;
     using System.Globalization;
     using System.Windows.Forms.Internal;
 
@@ -836,11 +834,8 @@ namespace System.Windows.Forms {
                     Region rgn = new Region(bounds);  // create region 
                     rgn.Exclude(regionRect);          // exclude the center part
 
-                    // set it into the toolstripdropdown�s region
-                    IntSecurity.ChangeWindowRegionForTopLevel.Assert();
-                    this.Region = rgn;     
-                    // RevertAssert automatically called here when exiting function.
-                 
+                    // set it into the toolstripdropdown’s region
+                    this.Region = rgn;                
                 }
                 
                 // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs 
@@ -892,7 +887,6 @@ namespace System.Windows.Forms {
                     ForceSynchronousPaint();
                 }
 
-                [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 protected override void WndProc(ref Message m){                
                     if (m.Msg == NativeMethods.WM_NCHITTEST){
                         m.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
@@ -1136,22 +1130,16 @@ namespace System.Windows.Forms {
                     if (RowsInternal.IndexOf(row) > 0) {
                         // When joining a new row, move the cursor to to the location of
                         // the grip, otherwise budging the mouse can pull it down into the next row.
-                        IntSecurity.AdjustCursorPosition.Assert();
-                        try {
-                            Point cursorLoc = toolStripToDrag.PointToScreen(toolStripToDrag.GripRectangle.Location);
-                            if (Orientation == Orientation.Vertical) {
-                                cursorLoc.X += toolStripToDrag.GripRectangle.Width /2;
-                                cursorLoc.Y = Cursor.Position.Y;
-                            }
-                            else {
-                                cursorLoc.Y += toolStripToDrag.GripRectangle.Height /2;
-                                cursorLoc.X = Cursor.Position.X;                                
-                            }
-                            Cursor.Position = cursorLoc;
+                        Point cursorLoc = toolStripToDrag.PointToScreen(toolStripToDrag.GripRectangle.Location);
+                        if (Orientation == Orientation.Vertical) {
+                            cursorLoc.X += toolStripToDrag.GripRectangle.Width /2;
+                            cursorLoc.Y = Cursor.Position.Y;
                         }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
+                        else {
+                            cursorLoc.Y += toolStripToDrag.GripRectangle.Height /2;
+                            cursorLoc.X = Cursor.Position.X;                                
                         }
+                        Cursor.Position = cursorLoc;
                     }
                 }
 

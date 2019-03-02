@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Threading;
     using System.Windows.Forms.Layout;
     using System.ComponentModel.Design.Serialization;
@@ -1618,6 +1617,12 @@ namespace System.Windows.Forms {
             }
         }
 
+        internal override bool SupportsUiaProviders {
+            get {
+                return AccessibilityImprovements.Level3;
+            }
+        }
+
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Renderer"]/*' />
         /// <devdoc>
         /// The renderer is used to paint the hwndless winbar items.  If someone wanted to
@@ -2802,7 +2807,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <param name=m></param>
         /// <param name=keyData></param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
 
             if (ToolStripManager.IsMenuKey(keyData)) {
@@ -2864,7 +2868,6 @@ namespace System.Windows.Forms {
         /// on the form. For the arrow keys,
         /// !!!
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             bool retVal = false;
 
@@ -2953,7 +2956,6 @@ namespace System.Windows.Forms {
         ///    Else 
         ///    change the selection from the current selected item to the first item that matched.
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             // menus and toolbars only take focus on ALT
             if (!CanProcessMnemonic()) {
@@ -3479,7 +3481,7 @@ namespace System.Windows.Forms {
 
                     if (lastMouseActiveItem != null) {
                         Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}",  (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
-                        item.FireEvent(new System.EventArgs(), ToolStripItemEventType.MouseEnter);
+                        item.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseEnter);
                     }
                     // 
 
@@ -4481,14 +4483,7 @@ namespace System.Windows.Forms {
 
                 if (item != currentlyActiveTooltipItem && ToolTip != null) {
 
-                    // 
-                    IntSecurity.AllWindows.Assert();
-                    try {
-                        ToolTip.Hide(this);
-                    }
-                    finally {
-                         System.Security.CodeAccessPermission.RevertAssert();
-                    }
+                    ToolTip.Hide(this);
 
                     if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
                         ToolTip.Active = false;
@@ -4510,17 +4505,10 @@ namespace System.Windows.Forms {
 
                             cursorLocation = WindowsFormsUtils.ConstrainToScreenBounds(new Rectangle(cursorLocation, onePixel)).Location;
 
-                            // 
-                            IntSecurity.AllWindows.Assert();
-                            try {                                           
-                                ToolTip.Show(currentlyActiveTooltipItem.ToolTipText,
-                                         this,
-                                         PointToClient(cursorLocation),
-                                         ToolTip.AutoPopDelay);                           
-                            }
-                            finally {
-                                System.Security.CodeAccessPermission.RevertAssert();
-                            }
+                            ToolTip.Show(currentlyActiveTooltipItem.ToolTipText,
+                                        this,
+                                        PointToClient(cursorLocation),
+                                        ToolTip.AutoPopDelay);                           
                         }
                     }
                 }
@@ -4595,7 +4583,6 @@ namespace System.Windows.Forms {
         /// Summary of WndProc.
         /// </devdoc>
         /// <param name=m></param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             if (m.Msg == NativeMethods.WM_SETFOCUS) {
@@ -4811,15 +4798,109 @@ namespace System.Windows.Forms {
                         count++;
                     }
                 }
-                if (owner.Grip.Visible){
+                if (owner.Grip.Visible) {
                     count++;
                 }
                 if (owner.CanOverflow && owner.OverflowButton.Visible) {
                     count++;
                 }
                 return count;
+            }
 
+            internal AccessibleObject GetChildFragment(int fragmentIndex, bool getOverflowItem = false) {
 
+                var items = getOverflowItem ? owner.OverflowItems : owner.DisplayedItems;
+                int childFragmentCount = items.Count;
+
+                if (!getOverflowItem && owner.CanOverflow && owner.OverflowButton.Visible && fragmentIndex == childFragmentCount - 1) {
+                    return owner.OverflowButton.AccessibilityObject;
+                }
+
+                for (int index = 0; index < childFragmentCount; index++) {
+                    var item = items[index];
+                    if (item.Available && item.Alignment == ToolStripItemAlignment.Left && fragmentIndex == index) {
+                        var controlHostItem = item as ToolStripControlHost;
+                        if (controlHostItem != null) {
+                            return controlHostItem.ControlAccessibilityObject;
+                        }
+
+                        return item.AccessibilityObject;
+                    }
+                }
+
+                for (int index = 0; index < childFragmentCount; index++) {
+                    var item = owner.Items[index];
+                    if (item.Available && item.Alignment == ToolStripItemAlignment.Right && fragmentIndex == index) {
+                        var controlHostItem = item as ToolStripControlHost;
+                        if (controlHostItem != null) {
+                            return controlHostItem.ControlAccessibilityObject;
+                        }
+
+                        return item.AccessibilityObject;
+                    }
+                }
+
+                return null;
+            }
+
+            internal int GetChildOverflowFragmentCount() {
+                if (owner == null || owner.OverflowItems == null) {
+                    return -1;
+                }
+
+                return owner.OverflowItems.Count;
+            }
+
+            internal int GetChildFragmentCount() {
+                if (owner == null || owner.DisplayedItems == null) {
+                    return -1;
+                }
+
+                return owner.DisplayedItems.Count;
+            }
+
+            internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child) {
+                if (owner == null || owner.Items == null) {
+                    return -1;
+                }
+
+                if (child.Owner == owner.Grip) {
+                    return 0;
+                }
+
+                ToolStripItemCollection items;
+                var placement = child.Owner.Placement;
+
+                if (owner is ToolStripOverflow) {
+                    // Overflow items in ToolStripOverflow host are in DisplayedItems collection.
+                    items = owner.DisplayedItems;
+                }
+                else {
+                    if (owner.CanOverflow && owner.OverflowButton.Visible && child.Owner == owner.OverflowButton) {
+                        return GetChildFragmentCount() - 1;
+                    }
+
+                    // Items can be either in DisplayedItems or in OverflowItems (if overflow)
+                    items = (placement == ToolStripItemPlacement.Main) ? owner.DisplayedItems : owner.OverflowItems;
+                }
+
+                // First we walk through the head aligned items.
+                for (int index = 0; index < items.Count; index++) {
+                    var item = items[index];
+                    if (item.Available && item.Alignment == ToolStripItemAlignment.Left && child.Owner == items[index]) {
+                        return index;
+                    }
+                }
+
+                // If we didn't find it, then we walk through the tail aligned items.
+                for (int index = 0; index < items.Count; index++) {
+                    var item = items[index];
+                    if (item.Available && item.Alignment == ToolStripItemAlignment.Right && child.Owner == items[index]) {
+                        return index;
+                    }
+                }
+
+                return -1;
             }
 
             internal int GetChildIndex(ToolStripItem.ToolStripItemAccessibleObject child) {
@@ -4871,6 +4952,43 @@ namespace System.Windows.Forms {
                     }
                     return AccessibleRole.ToolBar;
                 }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
+                get {
+                    return this;
+                }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+                if (AccessibilityImprovements.Level3) {
+                    switch (direction) {
+                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                            int childCount = GetChildFragmentCount();
+                            if (childCount > 0) {
+                                return this.GetChildFragment(0);
+                            }
+                            break;
+                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                            childCount = GetChildFragmentCount();
+                            if (childCount > 0) {
+                                return this.GetChildFragment(childCount - 1);
+                            }
+                            break;
+                    }
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            internal override object GetPropertyValue(int propertyID) {
+                if (AccessibilityImprovements.Level3) {
+                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                        return NativeMethods.UIA_ToolBarControlTypeId;
+                    }
+                }
+
+                return base.GetPropertyValue(propertyID);
             }
 
         }
@@ -4973,8 +5091,8 @@ namespace System.Windows.Forms {
         private Size cachedHDCSize = Size.Empty;
         private HandleRef cachedItemBitmap = NativeMethods.NullHandleRef;
         // this DC is cached and should only be deleted on Dispose or when the size changes.
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public HandleRef GetCachedItemDC(HandleRef toolStripHDC, Size bitmapSize) {
 
                if ((cachedHDCSize.Width < bitmapSize.Width)

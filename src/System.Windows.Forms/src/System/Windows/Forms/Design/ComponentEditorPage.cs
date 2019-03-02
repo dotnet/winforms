@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,6 @@ namespace System.Windows.Forms.Design {
     using System.Diagnostics;
 
     using System;
-    using System.Security.Permissions;
     using System.Drawing;
     using System.Windows.Forms;
     using System.Windows.Forms.ComponentModel;
@@ -28,7 +27,6 @@ namespace System.Windows.Forms.Design {
      ClassInterface(ClassInterfaceType.AutoDispatch),
      System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors") // Shipped in Everett
     ]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     public abstract class ComponentEditorPage : Panel {
 
         IComponentEditorPageSite pageSite;
@@ -148,7 +146,6 @@ namespace System.Windows.Forms.Design {
         ///    <para>Gets or sets the creation parameters for this control.</para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.Style &= ~(NativeMethods.WS_BORDER | NativeMethods.WS_OVERLAPPED | NativeMethods.WS_DLGFRAME);
@@ -161,8 +158,8 @@ namespace System.Windows.Forms.Design {
         ///    <para>Gets or sets the icon for this page.</para>
         /// </devdoc>
         public Icon Icon {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 if (icon == null) {
                     icon = new Icon(typeof(ComponentEditorPage), "ComponentEditorPage.ico");

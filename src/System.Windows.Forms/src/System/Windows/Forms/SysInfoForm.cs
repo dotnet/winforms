@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -82,33 +82,30 @@ namespace System.Windows.Forms {
             ArrayList list = new ArrayList();
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            new ReflectionPermission(PermissionState.Unrestricted).Assert();
-            try {
-                foreach (Assembly assembly in assemblies) {
-                    Module[] modules = assembly.GetLoadedModules();
+            foreach (Assembly assembly in assemblies) {
+                Module[] modules = assembly.GetLoadedModules();
 
-                    foreach (Module module in modules) {
+                foreach (Module module in modules) {
 
-                        if (module != null) {
-                            foreach (Type type in module.GetTypes()) {
+                    if (module != null) {
+                        foreach (Type type in module.GetTypes()) {
 
-                                if (type != null) {
-                                    MemberInfo[] members = type.FindMembers(MemberTypes.Field, 
-                                                                            BindingFlags.Static 
-                                                                            | BindingFlags.Public 
-                                                                            | BindingFlags.NonPublic, 
-                                                                            new MemberFilter(Filter), 
-                                                                            null);
+                            if (type != null) {
+                                MemberInfo[] members = type.FindMembers(MemberTypes.Field, 
+                                                                        BindingFlags.Static 
+                                                                        | BindingFlags.Public 
+                                                                        | BindingFlags.NonPublic, 
+                                                                        new MemberFilter(Filter), 
+                                                                        null);
 
-                                    foreach (MemberInfo member in members) {
+                                foreach (MemberInfo member in members) {
 
-                                        if (member != null) {
-                                            FieldInfo field = member as FieldInfo;
-                                            if (field != null) {
-                                                object value = field.GetValue(null);
-                                                if (value != null)
-                                                    list.Add(value);
-                                            }
+                                    if (member != null) {
+                                        FieldInfo field = member as FieldInfo;
+                                        if (field != null) {
+                                            object value = field.GetValue(null);
+                                            if (value != null)
+                                                list.Add(value);
                                         }
                                     }
                                 }
@@ -116,9 +113,6 @@ namespace System.Windows.Forms {
                         }
                     }
                 }
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
             }
             return(Switch[]) list.ToArray(typeof(Switch));
         }
@@ -365,13 +359,7 @@ namespace System.Windows.Forms {
             this.switchLabel = new Label();
             this.bugReportPanel = new Panel();
 
-            new PermissionSet(PermissionState.Unrestricted).Assert();
-            try {
-                this.appProps = new PropertyGrid();
-            }
-            finally {
-                CodeAccessPermission.RevertAssert();
-            }
+            this.appProps = new PropertyGrid();
 
             //@design this.TrayLargeIcon = false;
             //@design this.TrayAutoArrange = true;
@@ -556,8 +544,8 @@ namespace System.Windows.Forms {
 
             [Category("Entry Assembly")]
             public string CodeBase {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return assemblyName.CodeBase;
                 }
@@ -565,8 +553,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string MyDocuments {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                 }
@@ -574,8 +562,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string UserAppDataPath {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.UserAppDataPath;
                 }
@@ -583,8 +571,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string CommonUserAppDataPath {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.CommonAppDataPath;
                 }
@@ -592,8 +580,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string LocalUserAppDataPath {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.LocalUserAppDataPath;
                 }
@@ -601,8 +589,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string CompanyName {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.CompanyName;
                 }
@@ -610,8 +598,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string AppBase {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
                 }
@@ -619,8 +607,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string ConfigurationFile {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
                 }
@@ -628,8 +616,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string ProductName {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.ProductName;
                 }
@@ -637,8 +625,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string ProductVersion {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.ProductVersion;
                 }
@@ -667,8 +655,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string ExecutablePath {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.ExecutablePath;
                 }

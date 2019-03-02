@@ -1,48 +1,28 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\LinkClickEvent.uex' path='docs/doc[@for="LinkClickedEventArgs"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.RichTextBox.LinkClicked'/> event.
-    ///    </para>
+    /// Provides data for the <see cref='System.Windows.Forms.RichTextBox.LinkClicked'/> event.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class LinkClickedEventArgs : EventArgs {
-        private string linkText;
-
-        /// <include file='doc\LinkClickEvent.uex' path='docs/doc[@for="LinkClickedEventArgs.LinkText"]/*' />
+    [ComVisible(true)]
+    public class LinkClickedEventArgs : EventArgs
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Gets the text of the link being clicked.
-        ///    </para>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.LinkClickedEventArgs'/> class.
         /// </devdoc>
-        public string LinkText {
-            get {
-                return linkText;
-            }
+        public LinkClickedEventArgs(string linkText)
+        {
+            LinkText = linkText;
         }
 
-        /// <include file='doc\LinkClickEvent.uex' path='docs/doc[@for="LinkClickedEventArgs.LinkClickedEventArgs"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.LinkClickedEventArgs'/> class.
-        ///    </para>
+        /// Gets the text of the link being clicked.
         /// </devdoc>
-        public LinkClickedEventArgs(string linkText) {
-            this.linkText = linkText;
-        }
+        public string LinkText { get; }
     }
 }
-

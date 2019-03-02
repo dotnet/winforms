@@ -9,12 +9,13 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
-      <Namespace>System.Windows.Forms.Design.Editors.Resources</Namespace>
+      <Namespace>System</Namespace>
     </EmbeddedResource>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
+    <EmbeddedResource Update="Resources\CollectionEditor.resx">
+      <!-- Unncessary because CollectionEditor.resx only contains properties; not string constants -->
+      <!--GenerateSource>true</GenerateSource-->
+      <Namespace>System.ComponentModel.Design</Namespace>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,9 @@
 
   <ItemGroup>
     <Compile Include="..\..\Common\src\ApiHelper.cs" Link="Common\ApiHelper.cs" />
+    <Compile Include="..\..\Common\src\ClientUtils.cs" Link="Common\ClientUtils.cs" />
+    <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
+    <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="Common\DpiHelper.DpiAwarenessContext.cs" />
   </ItemGroup>
 
 </Project>

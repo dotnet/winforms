@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.ComponentModel.Design;    
     using System.Drawing;
@@ -18,7 +17,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Collections.Specialized;
     using System.Drawing.Design;
-    using System.Security;
     using System.Windows.Forms.VisualStyles;
     
     /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox"]/*' />
@@ -98,6 +96,7 @@ namespace System.Windows.Forms {
         private AutoCompleteStringCollection autoCompleteCustomSource;
         private bool fromHandleCreate = false;
         private StringSource stringSource = null;
+        private string placeholderText;
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.TextBox"]/*' />
         public TextBox(){
@@ -190,13 +189,6 @@ namespace System.Windows.Forms {
                 }
                 if (value == AutoCompleteSource.ListItems) {
                     throw new NotSupportedException(SR.TextBoxAutoCompleteSourceNoItems);
-                }
-
-                if (value != AutoCompleteSource.None && value != AutoCompleteSource.CustomSource)
-                {
-                    FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
-                    fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-                    fiop.Demand();
                 }
 
                 autoCompleteSource = value;
@@ -310,7 +302,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 switch (characterCasing) {
@@ -692,7 +683,6 @@ namespace System.Windows.Forms {
         /// keyData - bitmask containing one or more keys
         /// </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
             bool returnValue = base.ProcessCmdKey(ref m, keyData);
             if (!returnValue && this.Multiline && !LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBox 
@@ -797,7 +787,7 @@ namespace System.Windows.Forms {
                             int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle) , (int)AutoCompleteSource | mode);
                         }
                     }
-                    catch (SecurityException) {
+                    catch (System.Security.SecurityException) {
                         // If we don't have full trust, degrade gracefully. Allow the control to
                         // function without auto-complete. Allow the app to continue running.
                     }
@@ -827,25 +817,95 @@ namespace System.Windows.Forms {
         private void WmPrint(ref Message m) {
             base.WndProc(ref m);
             if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D) {
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    using (Graphics g = Graphics.FromHdc(m.WParam)) {
-                        Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
-                        using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
-                            g.DrawRectangle(pen, rect);
-                        }
-                        rect.Inflate(-1, -1);
-                        g.DrawRectangle(SystemPens.Window, rect);
+                using (Graphics g = Graphics.FromHdc(m.WParam)) {
+                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder)) {
+                        g.DrawRectangle(pen, rect);
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                    rect.Inflate(-1, -1);
+                    g.DrawRectangle(SystemPens.Window, rect);
                 }
             }
         }
-	
-	//-------------------------------------------------------------------------------------------------
         
+        /// <summary>
+        ///  Gets or sets the text that is displayed when the control has no Text and is not on focus.
+        /// </summary>
+        [
+        Localizable(true),
+        DefaultValue(null),
+        SRDescription(nameof(SR.TextBoxPlaceholderTextDescr))
+        ]
+        public string PlaceholderText
+        {
+            get
+            {
+                return placeholderText;
+            }
+            set
+            {
+                if (placeholderText != value)
+                {
+                    placeholderText = value;
+                    Invalidate();
+                }
+            }
+        }
+
+
+        //-------------------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Draws the PlaceholderText in the client area of the TextBox using the default font and color.
+        /// </summary>
+        private void DrawPlaceholderText(Graphics graphics)
+        {
+            TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top |
+                                    TextFormatFlags.EndEllipsis;
+            Rectangle rectangle = ClientRectangle;
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                flags |= TextFormatFlags.RightToLeft;
+                switch (TextAlign)
+                {
+                    case HorizontalAlignment.Center:
+                        flags = flags | TextFormatFlags.HorizontalCenter;
+                        rectangle.Offset(0, 1);
+                        break;
+                    case HorizontalAlignment.Left:
+                        flags = flags | TextFormatFlags.Right;
+                        rectangle.Offset(1, 1);
+                        break;
+                    case HorizontalAlignment.Right:
+                        flags = flags | TextFormatFlags.Left;
+                        rectangle.Offset(0, 1);
+                        break;
+                }
+            }
+            else
+            {
+                flags &= ~TextFormatFlags.RightToLeft;
+                switch (TextAlign)
+                {
+                    case HorizontalAlignment.Center:
+                        flags = flags | TextFormatFlags.HorizontalCenter;
+                        rectangle.Offset(0, 1);
+                        break;
+                    case HorizontalAlignment.Left:
+                        flags = flags | TextFormatFlags.Left;
+                        rectangle.Offset(1, 1);
+                        break;
+                    case HorizontalAlignment.Right:
+                        flags = flags | TextFormatFlags.Right;
+                        rectangle.Offset(0, 1);
+                        break;
+                }
+            }
+
+            TextRenderer.DrawText(graphics, PlaceholderText, Font, rectangle, SystemColors.GrayText, BackColor, flags);
+        }
+
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.WndProc"]/*' />
         /// <internalonly/>
         /// <devdoc>
@@ -853,7 +913,6 @@ namespace System.Windows.Forms {
         ///    to add extra functionality, but should not forget to call
         ///    base.wndProc(m); to ensure the combo continues to function properly.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 // Work around a very obscure Windows issue.
@@ -878,8 +937,32 @@ namespace System.Windows.Forms {
                     base.WndProc(ref m);
                     break;
             }
-            
+
+            if ((m.Msg == NativeMethods.WM_PAINT || m.Msg == NativeMethods.WM_KILLFOCUS) &&
+                 !this.GetStyle(ControlStyles.UserPaint) &&
+                   string.IsNullOrEmpty(this.Text) &&
+                   !this.Focused)
+            {
+                using (Graphics g = this.CreateGraphics())
+                {
+                    DrawPlaceholderText(g);
+                }
+            }
         }
-        
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            if (string.IsNullOrEmpty(Text))
+            {
+                AccessibleObject accessibleObject = base.CreateAccessibilityInstance();
+                accessibleObject.Value = PlaceholderText;
+                return accessibleObject;
+            }
+            else
+            {
+                return base.CreateAccessibilityInstance();
+            }
+        }
+
     }
 }
