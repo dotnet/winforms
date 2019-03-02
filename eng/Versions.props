@@ -21,8 +21,8 @@
   </PropertyGroup>
   <!-- Arcade-updated dependencies -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19128.3</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.0-beta.19128.3</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19151.5</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.0-beta.19151.5</MicrosoftDotNetXUnitExtensionsPackageVersion>
   </PropertyGroup>
   <!-- Additional dependencies -->
   <PropertyGroup>
