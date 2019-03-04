@@ -121,6 +121,7 @@ namespace System.Windows.Forms
                     }
                     catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
                     {
+                        // Not all objects provide a default action.
                     }
                 }
 
@@ -911,7 +912,7 @@ namespace System.Windows.Forms
 
         uint UnsafeNativeMethods.ILegacyIAccessibleProvider.Role => (uint)Role;
 
-        uint UnsafeNativeMethods.ILegacyIAccessibleProvider.State => (uint)this.State;
+        uint UnsafeNativeMethods.ILegacyIAccessibleProvider.State => (uint)State;
 
         string UnsafeNativeMethods.ILegacyIAccessibleProvider.Value => Value;
 
@@ -1035,7 +1036,7 @@ namespace System.Windows.Forms
                 ValidateChildID(ref childID);
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.AccDoDefaultAction: this = " +
-                    this.ToString() + ", childID = " + childID.ToString());
+                    ToString() + ", childID = " + childID.ToString());
 
                 // If the default action is to be performed on self, do it.
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
@@ -1061,6 +1062,7 @@ namespace System.Windows.Forms
                 }
                 catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
                 {
+                    // Not all objects provide a default action.
                 }
             }
         }
@@ -1073,7 +1075,7 @@ namespace System.Windows.Forms
             if (IsClientObject)
             {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.AccHitTest: this = " +
-                    this.ToString());
+                    ToString());
 
                 AccessibleObject obj = HitTest(xLeft, yTop);
                 if (obj != null)
@@ -1116,7 +1118,7 @@ namespace System.Windows.Forms
                 ValidateChildID(ref childID);
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.AccLocation: this = " +
-                    this.ToString() + ", childID = " + childID.ToString());
+                    ToString() + ", childID = " + childID.ToString());
 
                 // Use the Location function's return value if available
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
@@ -1180,7 +1182,7 @@ namespace System.Windows.Forms
                 ValidateChildID(ref childID);
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.AccNavigate: this = " +
-                    this.ToString() + ", navdir = " + navDir.ToString(CultureInfo.InvariantCulture) + ", childID = " + childID.ToString());
+                    ToString() + ", navdir = " + navDir.ToString(CultureInfo.InvariantCulture) + ", childID = " + childID.ToString());
 
                 // Use the Navigate function's return value if available
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
@@ -1229,7 +1231,7 @@ namespace System.Windows.Forms
                 ValidateChildID(ref childID);
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.AccSelect: this = " +
-                    this.ToString() + ", flagsSelect = " + flagsSelect.ToString(CultureInfo.InvariantCulture) + ", childID = " + childID.ToString());
+                    ToString() + ", flagsSelect = " + flagsSelect.ToString(CultureInfo.InvariantCulture) + ", childID = " + childID.ToString());
 
                 // If the selection is self, do it.
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
@@ -1275,6 +1277,7 @@ namespace System.Windows.Forms
                 }
                 catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
                 {
+                    // Not all objects provide a default action.
                 }
                 return;
             }
@@ -1290,7 +1293,7 @@ namespace System.Windows.Forms
                 ValidateChildID(ref childID);
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.GetAccChild: this = " +
-                    this.ToString() + ", childID = " + childID.ToString());
+                    ToString() + ", childID = " + childID.ToString());
 
                 // Return self for CHILDID_SELF
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
@@ -1343,7 +1346,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.accHildCount: this = " + this.ToString() + ", returning " + childCount.ToString(CultureInfo.InvariantCulture));
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.accHildCount: this = " + ToString() + ", returning " + childCount.ToString(CultureInfo.InvariantCulture));
 
                 return childCount;
             }
@@ -1380,6 +1383,7 @@ namespace System.Windows.Forms
                 }
                 catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
                 {
+                    // Not all objects provide a default action.
                 }
             }
 
@@ -1450,7 +1454,7 @@ namespace System.Windows.Forms
                 if (IsClientObject)
                 {
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.GetAccFocus: this = " +
-                        this.ToString());
+                        ToString());
 
                     AccessibleObject obj = GetFocused();
                     if (obj != null)
@@ -1602,7 +1606,7 @@ namespace System.Windows.Forms
             {
                 ValidateChildID(ref childID);
 
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.get_accName: this = " + this.ToString() +
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.get_accName: this = " + ToString() +
                     ", childID = " + childID.ToString());
 
                 // Return the name property if available
@@ -1646,7 +1650,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.accParent: this = " + this.ToString());
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.accParent: this = " + ToString());
                 AccessibleObject parent = Parent;
                 if (parent != null)
                 {
@@ -1700,7 +1704,7 @@ namespace System.Windows.Forms
                 if (IsClientObject)
                 {
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.GetAccSelection: this = " +
-                        this.ToString());
+                        ToString());
 
                     AccessibleObject obj = GetSelected();
                     if (obj != null)
@@ -1734,7 +1738,7 @@ namespace System.Windows.Forms
                 ValidateChildID(ref childID);
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.GetAccState: this = " +
-                    this.ToString() + ", childID = " + childID.ToString());
+                    ToString() + ", childID = " + childID.ToString());
 
                 // Return the state property if available
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
@@ -1881,7 +1885,7 @@ namespace System.Windows.Forms
             }
 
             // Otherwise delegate to the parent object
-            AccessibleObject parent = this.Parent;
+            AccessibleObject parent = Parent;
             if (parent is UnsafeNativeMethods.IOleWindow parentWindow)
             {
                 return parentWindow.GetWindow(out hwnd);
@@ -1905,7 +1909,7 @@ namespace System.Windows.Forms
             }
 
             // Otherwise delegate to the parent object
-            AccessibleObject parent = this.Parent;
+            AccessibleObject parent = Parent;
             if (parent is UnsafeNativeMethods.IOleWindow parentWindow)
             {
                 parentWindow.ContextSensitiveHelp(fEnterMode);
@@ -2005,6 +2009,7 @@ namespace System.Windows.Forms
                 }
                 catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
                 {
+                    // Not all objects provide the select function.
                 }
             }
         }
@@ -2390,11 +2395,11 @@ namespace System.Windows.Forms
             {
                 // The activityId can be any string. It cannot be null. It is not used currently.
                 result = UnsafeNativeMethods.UiaRaiseNotificationEvent(
-                            this,
-                            notificationKind,
-                            notificationProcessing,
-                            notificationText,
-                            string.Empty);
+                    this,
+                    notificationKind,
+                    notificationProcessing,
+                    notificationText,
+                    string.Empty);
             }
             catch (EntryPointNotFoundException)
             {
@@ -2455,7 +2460,7 @@ namespace System.Windows.Forms
 
         internal virtual void ScrollIntoView()
         {
-            Debug.Fail($"{nameof(this.ScrollIntoView)}() is not overriden");
+            Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
         }
 
         private class EnumVariantObject : UnsafeNativeMethods.IEnumVariant
