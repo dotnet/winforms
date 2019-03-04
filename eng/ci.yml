@@ -50,8 +50,10 @@ jobs:
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
         - name: _HelixStagingDir
           value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+        - name: _HelixToken
+          value: ''
 
-        # Override some values if we're building internally
+        # Override some values if we're building internally (not public)
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
           # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
@@ -84,6 +86,8 @@ jobs:
           # When ready, change value to 'Windows.10.Amd64'
           - name: _HelixAgentPool
             value: 'Windows.10.Amd64'
+          - name: _HelixToken
+            value: '$(helix-token)'
 
       strategy:
         matrix:
@@ -116,7 +120,7 @@ jobs:
           HelixType: 'tests/default/'      
           HelixBuild: $(Build.BuildNumber)
           HelixTargetQueues: $(_HelixAgentPool)
-          HelixAccessToken: $(helix-token)
+          HelixAccessToken: $(_HelixToken)
           XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj'
           # This needs to be whatever tfm will work for our test projects for `dotnet publish`
           XUnitPublishTargetFramework: netcoreapp3.0
