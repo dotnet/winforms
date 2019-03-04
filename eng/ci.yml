@@ -115,7 +115,7 @@ jobs:
       # Run unit tests on Helix
       - template: /eng/common/templates/steps/send-to-helix.yml
         parameters:
-          HelixSource: $(repoName)
+          HelixSource: ${{ parameters.repoName }}
           HelixType: 'tests/default/'      
           HelixBuild: $(Build.BuildNumber)
           HelixTargetQueues: $(_HelixAgentPool)
