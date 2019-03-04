@@ -43,7 +43,7 @@ jobs:
 
         # needed for helix jobs
         - name: _HelixAgentPool
-          value: 'Windows.10.Amd64.Open'
+          value: 'Windows.81.Amd64.Open'
         - name: _WinformsControlsTestBinDir
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
         - name: _WinformsFuncTestBinDir
@@ -84,7 +84,7 @@ jobs:
           # The win10 pool isn't ready for us yet, so using Windows.81.Amd64 in the meantime
           # When ready, change value to 'Windows.10.Amd64'
           - name: _HelixAgentPool
-            value: 'Windows.10.Amd64'
+            value: 'Windows.81.Amd64'
           - name: _HelixToken
             value: '$(helix-token)'
 
@@ -130,6 +130,7 @@ jobs:
           DotNetCliVersion: '3.0.100-preview-010184'  # MUST be official release: https://dotnet.microsoft.com/download/dotnet-core/3.0 ; does not need to match sdk we build against
           #EnableXUnitReporter: true
           WaitForWorkItemCompletion: true
+          DisplayNamePrefix: 'Send Unit Tests to Helix'
           condition: succeeded()
           continueOnError: false
 
