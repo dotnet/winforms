@@ -1,8 +1,8 @@
 parameters:
-  # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp-vs2019
-  # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
-  runAsPublic: true
+  # This section is required because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
+  agentPool: dotnet-external-temp-vs2019 
+  runAsPublic: true                      
+  repoName: dotnet/winforms              
 
 jobs:
 - template: /eng/common/templates/jobs/jobs.yml
@@ -13,7 +13,6 @@ jobs:
     enablePublishTestResults: true
     enablePublishBuildAssets: true
     enableTelemetry: true
-    helixRepo: dotnet/winforms
 
     jobs:
     - job: Windows_NT
@@ -68,9 +67,8 @@ jobs:
           - name: _PublishBlobFeedUrl
             value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
-          # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
-          # until the agent is running on the machine. They can be overridden any time before they are resolved,
-          # like in the job matrix below (see Build_Debug)
+          # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved until the agent
+          # is running on the machine. They can be overridden any time before they are resolved, like in the job matrix below (see Build_Debug)
           - name: _SignArgs
             value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
           - name: _PublishArgs
@@ -116,12 +114,12 @@ jobs:
       # Run unit tests on Helix
       - template: /eng/common/templates/steps/send-to-helix.yml
         parameters:
-          HelixSource: $(_HelixSource)
+          HelixSource: $(repoName)
           HelixType: 'tests/default/'      
           HelixBuild: $(Build.BuildNumber)
           HelixTargetQueues: $(_HelixAgentPool)
-          HelixAccessToken: $(_HelixToken)
-          Creator: $(helixRepo) # for external (no access token)
+          HelixAccessToken: $(_HelixToken)            # only defined for internal CI
+          Creator: $(repoName)                        # required for public / external (when there is no access token)
           XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj'
           XUnitPublishTargetFramework: netcoreapp3.0  # Whatever tfm will work for our test projects for `dotnet publish`
           XUnitRuntimeTargetFramework: netcoreapp2.0  # Whatever tfm to pick from the xunit package, it must exist in that package or the helix job will fail
