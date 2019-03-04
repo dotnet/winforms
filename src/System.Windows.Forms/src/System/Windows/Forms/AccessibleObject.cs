@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         private IAccessible systemIAccessible = null;
 
         /// <devdoc>
-        /// Specifies the  <see langword='NativeMethods.IEnumVariant '/>used by this
+        /// Specifies the <see cref='NativeMethods.IEnumVariant'/> used by this
         /// <see cref='System.Windows.Forms.AccessibleObject'/> .
         /// </devdoc>
         private UnsafeNativeMethods.IEnumVariant systemIEnumVariant = null;

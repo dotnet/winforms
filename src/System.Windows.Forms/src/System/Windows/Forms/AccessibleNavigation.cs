@@ -31,8 +31,8 @@ namespace System.Windows.Forms
         Left = 0x3,
 
         /// <devdoc>
-        /// Navigation to the next logical object, generally from a sibling
-        /// object to the starting object.
+        /// Navigation to the next logical object, generally from the starting
+        /// object to a sibling object.
         /// </devdoc>
         Next = 0x5,
         

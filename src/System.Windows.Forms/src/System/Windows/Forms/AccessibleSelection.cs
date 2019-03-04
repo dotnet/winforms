@@ -20,8 +20,8 @@ namespace System.Windows.Forms
         ///    <para>
         /// Assigns focus to an object and makes it the anchor, which is the
         /// starting point for the selection. Can be combined with
-        /// <see langword='TakeSelection'/>, <see langword='ExtendSelection'/>,
-        /// <see langword='AddSelection'/>, or  <see langword='RemoveSelection'/>.
+        /// <see cref='TakeSelection'/>, <see cref='ExtendSelection'/>,
+        /// <see cref='AddSelection'/>, or  <see cref='RemoveSelection'/>.
         /// </devdoc>
         TakeFocus = 1,
 
